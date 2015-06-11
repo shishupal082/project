@@ -1,0 +1,10 @@
+Install python
+To check create 1 file hello_world.py and copy following code
+
+/*****************/
+print("hello world")
+/*****************/
+
+now install pip set path
+then try 
+pip install django

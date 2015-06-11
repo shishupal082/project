@@ -1,0 +1,23 @@
+Coffin==0.3.7
+Jinja2==2.6
+simplejson==2.6.2
+
+Django==1.5.1
+requests==0.14.1
+reportlab==2.6
+xhtml2pdf==0.0.4
+pyPdf==1.13
+django-pipeline==1.2.24
+Beaker==1.6.4
+coverage==3.6
+bugsnag==1.1.0
+Pillow==2.0.0
+pylint==0.27.0
+MySQL-python==1.2.4
+python-memcached==1.48
+jsonschema==2.0.0
+Sphinx==1.2b1
+django-storages==1.1.8
+boto==2.9.8
+
+pip install -r path/to/this_file
