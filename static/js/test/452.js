@@ -4,7 +4,7 @@ function startApp(btn){
 		console.log("App alredy bootstraped.");
 		return;
 	}
-	var html = '<div class="container" ng-app="AngularApp"><div class="js-controller" ng-controller="AppController"><div><div><button ng-click="checkNewController()">NG added</button></div></div></div></div>';
+	var html = '<div class="container" ng-app="AngularApp"><div class="js-controller" ng-controller="AppController"><div><div><button ng-click="checkNewController($event)">NG added</button></div></div></div></div>';
 	btn.parents(".js-controller").append(html);
 	App = angular.module("AngularApp", []);
 	App.run(function($rootScope) {
@@ -13,7 +13,7 @@ function startApp(btn){
 	App.controller("AppController", ['$scope', '$rootScope',function($scope, $rootScope) {
 		$scope.added = false;
 		$scope.html = "";
-		$scope.checkNewController = function(){
+		$scope.checkNewController = function(e){
 			console.log("New Controller working.");
 		};
 	}]);

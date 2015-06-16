@@ -501,6 +501,13 @@
             "452"
         ]
     },
+    "453": {
+        "html": "templates/angularjs/453_angularjs_http.html",
+        "js": [
+            "angular_1.3.14",
+            "453"
+        ]
+    },
     "500": {
         "html": "pvt/500_test_html.html"
     },
