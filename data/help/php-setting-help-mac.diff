@@ -42,8 +42,8 @@
 >     Require all granted
 > </Directory>
 > 
-> DocumentRoot "/Users/<user>/workspace/ola_app_api"
-> <Directory "/Users/<user>/workspace/ola_app_api">
+> DocumentRoot "/Users/<user>/workspace/<project_2>"
+> <Directory "/Users/<user>/workspace/<project_2>">
 >     Options FollowSymLinks Multiviews
 >     MultiviewsMatch Any
 >     AllowOverride All
