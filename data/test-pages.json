@@ -489,7 +489,6 @@
     "451": {
         "html": "templates/angularjs/451_dynamic_template_angularjs.html",
         "js": [
-            "jquery",
             "angular_1.3.14",
             "451"
         ]
