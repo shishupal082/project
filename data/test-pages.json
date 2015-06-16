@@ -494,6 +494,14 @@
             "451"
         ]
     },
+    "452": {
+        "html": "templates/angularjs/452_dynamic_template_angularjs.html",
+        "js": [
+            "jquery",
+            "angular_1.3.14",
+            "452"
+        ]
+    },
     "500": {
         "html": "pvt/500_test_html.html"
     },

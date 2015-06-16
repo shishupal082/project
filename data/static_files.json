@@ -27,13 +27,15 @@
 		"create_new_map" : "js/create_new_map.js",
 		"angularjs" : "libs/angular.min.js",
 		"angular_1.3.14" : "libs/angular_1.3.14.js",
+		"angular_sanitize_1.3.14" : "libs/angular_sanitize_1.3.14",
 		"g_ss" : "js/g_ss.js",
 		"g_map" : "js/g_map.js",
 		"combobox" : "js/plugins/combobox.js",
 		"305" : "js/test/305.js",
 		"342" : "js/test/342.js",
 		"359" : "js/test/359.js",
-		"451" : "js/test/451.js"
+		"451" : "js/test/451.js",
+		"452" : "js/test/452.js"
 	},
 	"online_js":{
 		"jquery" : "http://code.jquery.com/jquery.js",
