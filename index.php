@@ -64,6 +64,7 @@ define('APPPATH', $application_folder.'/');
 $template_folder = 'templates';
 $templates_folder = 'templates';
 $static_folder = '/static';
+$app_folder = '/app';
 $php_path = 'php';
 
 $data_folder = 'data';
@@ -75,6 +76,7 @@ define('TEMPLATESPATH', $templates_folder.'/');
 define('STATICPATH', $static_folder.'/');
 define('DATAPATH',$data_folder.'/');
 define('PVTPATH',$pvt_folder.'/');
+define('APP',$app_folder.'/');
 
 require_once BASEPATH.'core/CodeIgniter.php';
 
