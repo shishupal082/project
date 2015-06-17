@@ -1,6 +1,7 @@
 <?php
-
+define('CONFIG_FILE', $_SERVER['ENVIRONMENT_FILE']);
 define('ENVIRONMENT', $_SERVER['ENVIRONMENT']);
+
 switch (ENVIRONMENT){
 	case 'development':
 		error_reporting(E_ALL^E_DEPRECATED);
@@ -13,6 +14,9 @@ switch (ENVIRONMENT){
 		exit('The application environment is not set correctly.');
 	break;
 }
+$env_config = parse_ini_file(CONFIG_FILE, true);
+define('EMAIL',$env_config['USER']['email']);
+define('PHONE',$env_config['USER']['phone']);
 
 $system_path = 'php/system';
 $application_folder = 'php/application';

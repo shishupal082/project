@@ -70,6 +70,9 @@
         "js": [
             "less_min",
             "jquery"
+        ],
+        "css": [
+            "bootstrap-v3.1.1"
         ]
     },
     "315": {

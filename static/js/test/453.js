@@ -59,4 +59,12 @@ App.controller("AppController", ['$scope', '$rootScope', '$http', function($scop
 			console.log(data);
 		});
 	};
+	$scope.submitRegex = function(e){
+		var req, request;
+		req = {method: 'POST', url: '/api/validateRegex', data: {"str":"username", "regex" : "name"}};
+		request = $http(req);
+		request.success(function(data, status, headers, config){
+			console.log(data);
+		});
+	};
 }]);
