@@ -1,0 +1,15 @@
+<!DOCTYPE>
+<html>
+<head></head>
+<body>
+	<div>
+		<form action="/xss/checkdata" method="POST">
+			<input type="file" name="userfile">
+			<input type="submit" value="Submit">
+		</form>
+	</div>
+	<div>
+		<?php if(count($this->data)){echo json_encode($this->data);}?>
+	</div>
+</body>
+</html>

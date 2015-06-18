@@ -20,8 +20,8 @@ define('PHONE',$env_config['USER']['phone']);
 define('LOG_PATH', $env_config['USER']['log_path']);
 define('DB_HOST_NAME', $env_config['DB']["hostname"]);
 define('DB_USER_NAME', $env_config['DB']["username"]);
-define('DB_PASSWORD', $env_config['DB'][""]);
-define('DB_DATABASE', $env_config['DB']["tests"]);
+define('DB_PASSWORD', $env_config['DB']["password"]);
+define('DB_DATABASE', $env_config['DB']["database"]);
 
 $system_path = 'php/system';
 $application_folder = 'php/application';
@@ -69,7 +69,6 @@ define('APPPATH', $application_folder.'/');
 $template_folder = 'templates';
 $templates_folder = 'templates';
 $static_folder = '/static';
-$app_folder = '/app';
 $php_path = 'php';
 
 $data_folder = 'data';
@@ -81,7 +80,6 @@ define('TEMPLATESPATH', $templates_folder.'/');
 define('STATICPATH', $static_folder.'/');
 define('DATAPATH',$data_folder.'/');
 define('PVTPATH',$pvt_folder.'/');
-define('APP',$app_folder.'/');
 
 require_once BASEPATH.'core/CodeIgniter.php';
 

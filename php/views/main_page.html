@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <?php 
+        echo $less["index-less"]; 
+        echo $js["yui"]; 
+        echo $js["test-app"];
+        echo $js["test-headerview"];
+        echo $less["docs"];     // it needs to remove from here.
+        echo $css["bootstrap"];
+        echo $js["less_min"];
+    ?>
+    <title>Index</title>
+</head>
+<body>
+<div class="wrap-div">
+    <div id="testConatainer"></div>
+    <div id="myModal" class="modal hide fade widget" data-widget="Modal"></div>
+</div>
+<script type="text/x-template" id="t-TestHeader">
+    <div id="index" class="index">
+        <div class="index-control">
+            <button class="toggle_index my-btn neg-active">Show Index</button><button class="my-btn refresh">Refresh</button>
+        </div>
+        <hr class="hrline">
+        <ul>
+            {{#data }}
+                <li {{#if index_class}}class="{{index_class}}"{{/if}}><a href="{{href}}" title="{{title}}" initialize="{{initialize}}" class="my-btn {{#if selected}}active{{/if}}"><i class="{{icon_class}}"></i><span>{{buttons_UI}}</span></a></li>
+            {{/data}}
+        </ul>
+    </div>
+</script>
+<script type="text/javascript">
+    var TEST_ID = "<?php echo $id ?>";
+    Y = YUI().use('test-app',function(Y){
+        Y.testApp = new Y.TestApp({
+            container    : '#testConatainer',
+            viewContainer: '#testConatainer',
+            transitions : false,
+            test_id : TEST_ID
+        });   
+        Y.testApp.dispatch();
+    });
+</script>
+</body>
+</html>

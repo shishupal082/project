@@ -1,0 +1,26 @@
+<style type="text/css">
+	a {
+		color: #0088cc;
+		margin-right: 27px;
+	}
+</style>
+<div class="" style="margin:100px 100px 0 100px;">
+	<div><b>Requested Page Does Not Found Please click on below link.</b></div>
+	<div style="word-break: break-all;">
+<?php
+$mapper = $this->all_html_page;
+foreach ($mapper as $key => $value) {
+	if($key != "00" and $key != "not-found")
+  		echo '<a alt="hello" href="/test/id/'.$key.'">'.$key.'</a>';
+}  
+?>
+</div>
+<a href="http://coenraets.org/blog/2011/12/tutorial-html-templates-with-mustache-js/">Mustache</a>
+<a href="http://handlebarsjs.com/block_helpers.html">Hanlde bars</a>
+<a href="http://jsfiddle.net/dCa49/1/">JS fiddle</a>
+</div>
+<script type="text/javascript">
+	alert("Click on link.");
+</script>
+
+
