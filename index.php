@@ -17,6 +17,11 @@ switch (ENVIRONMENT){
 $env_config = parse_ini_file(CONFIG_FILE, true);
 define('EMAIL',$env_config['USER']['email']);
 define('PHONE',$env_config['USER']['phone']);
+define('LOG_PATH', $env_config['USER']['log_path']);
+define('DB_HOST_NAME', $env_config['DB']["hostname"]);
+define('DB_USER_NAME', $env_config['DB']["username"]);
+define('DB_PASSWORD', $env_config['DB'][""]);
+define('DB_DATABASE', $env_config['DB']["tests"]);
 
 $system_path = 'php/system';
 $application_folder = 'php/application';
