@@ -19,4 +19,7 @@ class App extends CI_Controller {
 	public function feederV2() {
 		$this->load->view("app/F1feeder/f1feederV2");
 	}
+	public function multiple_view() {
+		$this->load->view("app/multiple_view");
+	}
 }
