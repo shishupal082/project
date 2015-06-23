@@ -1,9 +1,10 @@
 "use strict";
 (function(){
 	angular.module('APP.controllers', []).
-	controller('EventController', function($scope, $location) {
+	controller('EventController', function($scope, $location, $rootScope) {
 		$scope.renderView = function(name){
 			$location.path(name);
+			$rootScope.name = "Version directive change";
 		};
 	}).
 	controller('MultipleViewController', ['$scope',  function($scope) {
