@@ -5,13 +5,20 @@ class App extends CI_Controller {
 		$this->_name = "Api";
 	}
 	public function login() {
-		$this->load->view("app/header");
 		$this->load->view("app/login");
-		$this->load->view("app/footer");
 	}
-	public function loginGetUser() {
-		$data = array("status" => "SUCCESS", "name" => "username", "data" => $_POST);
-		echo json_encode($data);
+	public function loginUser() {
+		$obj = $_POST;
+		log_message_prod("Submit login details : ".json_encode($obj));
+		if(isset($obj["username"]) && $obj["username"] == EMAIL){
+			$this->load->view("app/login_success");
+			return;
+		}
+		if(!isset($obj["username"]) || !isset($obj["password"])){
+			redirect("http://php.dev/app/login");
+			return;
+		}
+		$this->load->view("app/login_failure");
 	}
 	public function feederV1() {
 		$this->load->view("app/F1feeder/f1feeder");
