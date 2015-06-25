@@ -7,6 +7,9 @@ class App extends CI_Controller {
 	public function login() {
 		$this->load->view("app/login");
 	}
+	public function loginV2() {
+		$this->load->view("app/login_v2");
+	}
 	public function loginUser() {
 		$obj = $_POST;
 		log_message_prod("Submit login details : ".json_encode($obj));

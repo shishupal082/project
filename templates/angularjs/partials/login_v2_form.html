@@ -1,0 +1,31 @@
+<div class="container">
+	<h2>Login Page</h2>
+	<div>
+		<form novalidate action="/app/loginUser" method="POST" name="form"  ng-submit="Login($event)">
+			<table>
+				<tr>
+					<td>Username :</td>
+					<td><input type="text" ng-model="user.username" name="username" value="" /></td>
+					<td class="error">{{errors.username}}</td>
+				</tr>
+				<tr>
+					<td>Password :</td>
+					<td><input type="password" ng-model="user.password" autocomplete="off" name="password" /></td>
+					<td class="error">{{errors.password}}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="checkbox" id="remember_me" name="remember_me" />
+						<label for="remember_me">Remember me</label></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Login" /></td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
