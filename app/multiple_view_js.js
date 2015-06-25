@@ -18,10 +18,11 @@
 	});
 	angular.module('APP', ['APP.controllers','APP.directives','ngRoute']).
     config(['$routeProvider', function($routeProvider) {
-	    $routeProvider.
-	    	when("/email", {templateUrl: "/templates/angularjs/partials/multiple_view_email.html", controller: "MultipleViewController"}).
-	    	when("/name", {templateUrl: "/templates/angularjs/partials/multiple_view_name.html", controller: "MultipleViewController"});
-//	    	otherwise({redirectTo: '/name'});
+    		$routeProvider.
+	    when("/email", {templateUrl: "/templates/angularjs/partials/multiple_view_email.html", controller: "MultipleViewController"}).
+	    	when("/name", {templateUrl: "/templates/angularjs/partials/multiple_view_name.html", controller: "MultipleViewController"}).
+	    	otherwise({templateUrl: "/templates/angularjs/partials/multiple_view_default.html", controller: "MultipleViewController"});
+//	    otherwise({redirectTo: '/name'});
     }]);
 	angular.module('APP').run(function($rootScope) {
 		$rootScope.name = "AngularApp";
