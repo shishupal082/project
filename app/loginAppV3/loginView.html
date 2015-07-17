@@ -1,0 +1,11 @@
+<center>
+	<form novalidate name="loginForm" method="post" action="/app/loginUser" ng-submit="Login($event, loginForm)">
+		<div>
+			<h1>Enter login details</h1>
+			<div>{{formError}}</div>
+			<div user-directive type="email"></div>
+			<div user-directive type="password"></div>
+			<div><input type="submit" value="submit"></div>
+		</div>
+	</form>
+</center>
