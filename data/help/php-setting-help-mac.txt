@@ -13,7 +13,7 @@ DocumentRoot "/Library/WebServer/Documents" => < DocumentRoot "/User/<user>/work
 
 enable => Include /private/etc/apache2/extra/httpd-vhosts.conf
 
-# open /etc/apache2/extra/httpd-vhost.conf
+# open /etc/apache2/extra/httpd-vhosts.conf
 # comment existing vhost tag => <VirtualHost *:80> to </VirtualHost>
 # Add the following code at the end
 
