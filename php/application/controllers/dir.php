@@ -9,20 +9,35 @@ class Dir extends CI_Controller {
 	public function index(){
 		echo "Dir Controller";
 	}
-	public function img(){
-		$dir = $this->directory->dirToArray(DOCUMENT_ROOT."/static/img/");
-		echo json_encode($dir);
-	}
-	public function imgUrl(){
-		$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT."/static/img/", "/static/img/");
-		echo json_encode($urlArray);
-	}
-	public function imgLink(){
-		$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT."/static/img/", "/static/img/");
-		$link = "";
-		foreach ($urlArray as $index => $value) {
-			$link .= '<a href="'.$value.'">'.$value.'</a><br>';
+	public function path(){
+		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
+			$path = $_GET["path"];
+			$dirArray = $this->directory->dirToArray(DOCUMENT_ROOT.$path);
+			echo json_encode($dirArray);
+		}else{
+			echo("undefined input params");
 		}
-		echo $link;
+	}
+	public function pathUrl(){
+		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
+			$path = $_GET["path"];
+			$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT.$path, $path);
+			echo json_encode($urlArray);
+		}else{
+			echo("undefined input params");
+		}
+	}
+	public function pathLink(){
+		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
+			$path = $_GET["path"];
+			$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT.$path, $path);
+			$link = "";
+			foreach ($urlArray as $index => $value) {
+				$link .= '<a href="'.$value.'">'.$value.'</a><br>';
+			}
+			echo count($urlArray) ? $link : "undefined directory";
+		}else{
+			echo("undefined input params");
+		}
 	}
 }

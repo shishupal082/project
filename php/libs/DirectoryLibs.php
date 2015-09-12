@@ -6,7 +6,10 @@ class DirectoryLibs extends Libs{
 		$this->urlArray = array();
 	}
 	public function dirToArray($dir) { 
-		$result = array(); 
+		$result = array();
+		if(!file_exists($dir)){
+			return $result;
+		}
 		$cdir = scandir($dir);
 		foreach ($cdir as $key => $value) {
 			if (!in_array($value,array(".",".."))) {
