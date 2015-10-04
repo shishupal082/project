@@ -5,7 +5,7 @@ var Apis = (function(){
 		// 	console.log("get result ", result);
   //     		callback(result);
   //   	}.bind(this));
-    	var data = {"user":"shishupal"},
+    	var data = {},
     		ajax_object = {
 	    		url : "/todoapi/get",
 	    		data : data,
