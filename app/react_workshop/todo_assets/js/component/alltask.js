@@ -1,7 +1,13 @@
 var AllTask = React.createClass({
+	componentDidMount:function(){
+		Actions.loadAlltodos();
+		console.log("AllTask componentDidMount");
+	},
 	render : function(){
-		var todoItem = <TodoList todoList={this.props.todoList} isComplete={false}></TodoList>;
-		var compltedItem = <TodoList todoList={this.props.todoList} isComplete={true}></TodoList>;;
+		var pendingStatusList = ["pending", "in_progress"];
+		var completedStatusList = ["completed"];
+		var todoItem = <TodoList todoList={this.props.todoList} statusList={pendingStatusList}></TodoList>;
+		var compltedItem = <TodoList todoList={this.props.todoList} statusList={completedStatusList}></TodoList>;;
 		return (<div className="container"><div className="row">
 			<div className="col-md-6">
 				<div><h3>Todo List</h3></div>

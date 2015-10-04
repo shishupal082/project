@@ -20,15 +20,15 @@
   "devDependencies": {
     "autoprefixer": "^5.2.0",
     "gulp-bower": "0.0.10",
-    "gulp-concat": "^2.6.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0",
     "gulp-import-css": "^0.1.2",
     "gulp-minify-css": "^1.2.1",
     "gulp-postcss": "^5.1.10",
     "main-bower-files": "^2.9.0",
     "postcss-focus": "^0.1.1",
     "postcss-pxtorem": "^2.3.0",
-    "sc5-styleguide": "^0.3.26",
-    "reactify": "^1.1.1"
+    "reactify": "^1.1.1",
+    "sc5-styleguide": "^0.3.26"
   }
 }

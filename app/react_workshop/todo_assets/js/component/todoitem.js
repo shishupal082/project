@@ -4,24 +4,36 @@ var TodoItem = React.createClass({
 	},
 	getInitialState : function(){
 		return {
-			name : this.props.todo.name,
-			isComplete : this.props.todo.isComplete,
-			status : this.props.todo.isComplete ? "done" : "pending"
+			todo_id : this.props.todo.todo_id,
+			todo_name : this.props.todo.todo_name,
+			status : this.props.todo.status
 		};
 	},
-	todoAction : function(){
-		this.props.todo.isComplete = !this.props.todo.isComplete;
-		this.props.todo.status = this.state.isComplete ? "done" : "pending";
+	toggleAction : function(){
+		this.props.todo.todo_id = this.props.todo.todo_id;
+		this.props.todo.todo_name = this.props.todo.todo_name;
+		this.props.todo.status = this.state.status == "completed" ? "pending" : "completed";
 		this.setState(this.props.todo);
+		Actions.updateTodo(this.props.todo);
 		renderBody();
 	},
 	render : function(){
-		var todoName = this.state.name;
+		var todoId = this.state.todo_id;
+		var todoName = this.state.todo_name;
 		var todoStatus = this.state.status;
 		var className = "list-group-item ";
+		var btnStatusClassName = "btn ";
 		className = className + todoStatus;
+		if(todoStatus == "completed"){
+			btnStatusClassName = btnStatusClassName + "btn-success";
+		}else{
+			btnStatusClassName = btnStatusClassName + "btn-default";
+		}
 		return (
-			<li className={className} onClick={this.todoAction}>{todoName} {todoStatus}</li>
+			<li className={className}>
+				<button type="button" className={btnStatusClassName} onClick={this.toggleAction}>{todoStatus}</button>
+				{todoId} {todoName}
+			</li>
 		);
 	}
 });

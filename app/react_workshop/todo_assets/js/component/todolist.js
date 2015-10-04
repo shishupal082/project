@@ -3,7 +3,7 @@ var TodoList = React.createClass({
 		var todoArray = this.props.todoList;
 		var todoItem = [], self = this;
 		todoItem = todoArray.map(function(el, index, arr){
-			if(el.isComplete === self.props.isComplete){
+			if(self.props.statusList.indexOf(el.status) != -1){
 				return <TodoItem todo={el}></TodoItem>;
 			}
 			return false;
