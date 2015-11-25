@@ -309,7 +309,7 @@
         "html": "templates/google_map/349_dragable_map.html",
         "js": [
             "jquery",
-            "online_js map_3",
+            "online_js map_2",
             "g_map"
         ]
     },
@@ -513,6 +513,15 @@
     },
     "500": {
         "html": "pvt/500_test_html.html"
+    },
+    "600": {
+        "html": "templates/date/600_dateUtils.html",
+        "js" : [
+            "test_helper"
+        ],
+        "css" : [
+            "style"
+        ]
     },
     "3100": {
         "html": "php/views/main_page.html"

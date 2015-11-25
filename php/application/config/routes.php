@@ -18,7 +18,7 @@
 |	$route['404_override'] = 'errors/page_missing';
 */
 
-$route['default_controller'] = "welcome";
+$route['default_controller'] = "home";
 $route['404_override'] = 'error';
 
 $route['services/ip-address'] = "services/ip_address";

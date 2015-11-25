@@ -1,7 +1,7 @@
 <?php
 define('CONFIG_FILE', $_SERVER['ENVIRONMENT_FILE']);
 define('ENVIRONMENT', $_SERVER['ENVIRONMENT']);
-
+define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 switch (ENVIRONMENT){
 	case 'development':
 		error_reporting(E_ALL^E_DEPRECATED);
@@ -14,14 +14,27 @@ switch (ENVIRONMENT){
 		exit('The application environment is not set correctly.');
 	break;
 }
+
 $env_config = parse_ini_file(CONFIG_FILE, true);
 define('EMAIL',$env_config['USER']['email']);
+define('PASSWORD',$env_config['USER']['password']);
 define('PHONE',$env_config['USER']['phone']);
 define('LOG_PATH', $env_config['USER']['log_path']);
 define('DB_HOST_NAME', $env_config['DB']["hostname"]);
 define('DB_USER_NAME', $env_config['DB']["username"]);
 define('DB_PASSWORD', $env_config['DB']["password"]);
 define('DB_DATABASE', $env_config['DB']["database"]);
+define('RECAPTCHA_SITE_KEY', $env_config['RECAPTCHA']["site_key"]);
+define('RECAPTCHA_SECRET_KEY', $env_config['RECAPTCHA']["secret_key"]);
+define('PASSWORDENCYPTIONKEY', $env_config['PASSWORD']["key"]);
+define('PASSWORDENCYPTIONBIT', $env_config['PASSWORD']["bit"]);
+
+define('FACEBOOKAPPID', $env_config['FACEBOOKAPI']["app_id"]);
+define('FACEBOOKSECRETKEY', $env_config['FACEBOOKAPI']["secret_key"]);
+define('FACEBOOKAPIVERSION', $env_config['FACEBOOKAPI']["api_version"]);
+
+define('MONGO_HOST_PORT', $env_config['MONGODB']["host_port"]);
+define('MONGO_DATABASE', $env_config['MONGODB']["database"]);
 
 $system_path = 'php/system';
 $application_folder = 'php/application';

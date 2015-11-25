@@ -51,7 +51,7 @@ angular.module("app.controllers", []).controller("LoginController", ['$scope', '
     };
     setTimeout(function(){
     		$scope.validation_raedy = true;
-    }, 500);
+    }, 5000);
 }]);
 angular.module('app', ["app.controllers"]);
 angular.module('app').run(function($rootScope) {

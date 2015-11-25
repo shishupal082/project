@@ -1,6 +1,8 @@
-<div>
+<div class="form-group" 
+		ng-class='{ "has-focus": form.username.hasFocus,
+		"has-success": form.username.$valid,
+		"has-error": form.username.$invalid && (form.$submitted || form.username.$touched),
+		"is-empty": !form.username.$viewValue }'>
 	<label for="username">Username</label>
-</div>
-<div>
-	<input type="email" id="username" ng-model="user.username" name="username"/>
+	<input type="email" name="username" ng-model="user.username" ng-focus='form.username.hasFocus=true', ng-blur='form.username.hasFocus=false' autocomplete="off">
 </div>
