@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <title>App Dashboard</title>
+    <link rel="stylesheet" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div>
+				<ul class="nav nav-pills">
+					<li role="presentation"><a href="#">Home</a></li>
+					<li role="presentation"><a href="#/test">Test</a></li>
+					<li role="presentation"><a href="#/app">App</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div ng-view></div>
+			<div class="{{backButtonClass}}">
+				<ul class="nav nav-pills">
+					<li role="presentation"><a href="{{backUrl}}" title="{{backUrlTitle}}">Back</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+    <script src="/static/libs/jquery.js"></script>
+    <script src="/static/libs/angular/angular_1.3.14.js"></script>
+    <script src="/static/libs/angular/angular-route_1.3.15.js"></script>
+    <script src="/app/dashboard/app.js"></script>
+</body>
+</html>

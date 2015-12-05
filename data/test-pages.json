@@ -1,7 +1,4 @@
 {
-    "300": {
-        "html": "php/views/300_url_index.html"
-    },
     "301": {
         "html": "templates/front_end/301_javascript.html",
         "js": [
@@ -30,6 +27,9 @@
             "online_js g_map_api",
             "g_map",
             "305"
+        ],
+        "css": [
+            "bootstrap-v3.1.1"
         ]
     },
     "306": {
@@ -554,8 +554,5 @@
         "css": [
             "bootstrap"
         ]
-    },
-    "not-found": {
-        "html": "php/views/300_url_index.html"
     }
 }
