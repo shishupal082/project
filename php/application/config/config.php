@@ -6,6 +6,7 @@ define('TIME_ZONE','Asia/Calcutta');
 define('DATE_FORMATE','d/m/Y');
 date_default_timezone_set(TIME_ZONE);
 
+define('RequestId',(string)time());
 
 /*
 |--------------------------------------------------------------------------

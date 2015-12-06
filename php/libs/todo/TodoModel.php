@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-include_once "php/libs/helper/DbHelper.php";
-class TodoModel extends DbHelper{
+// include_once "php/libs/helper/DbHelper.php";
+class TodoModel{
 	protected $_name = "TodoModel";
 	private $table = "todo";
 	private $isConnected = FALSE;

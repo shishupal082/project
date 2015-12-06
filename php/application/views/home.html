@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<base href="<?php echo base_url();?>">
+	<meta name="environment" content="<?php echo ENVIRONMENT; ?>">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+<style type="text/css">
+td{vertical-align: top;}
+</style>
+</head>
+<body oncontextmenu="return true">
+	<div class="wrap-div">
+		<div class="container">
+			<div class="row" style="text-align: center;">
+				<div class="col-md-2 col-md-offset-4"><h2>Home</h2></div>
+				<div class="col-md-1"><span class="h2 load_count"><?php echo isset($load_count) ? $load_count : "";?></span></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<table style="width: 83.33333333%; margin-left : auto; margin-right: auto; text-align: left;">
+						<tr>
+							<td>
+								<ul class="list-unstyled">
+									<li><a href="/links.html">Available links</a></li>
+									<li><a target="_blank" href="http://shoutout.wix.com/so/bKwg_eDn#/main">My website</a></li>
+									<li><a target="_blank" href="https://www.wix.com/">Site provider</a></li>
+									<li><a target="_blank" href="https://regex101.com/">Regex compiler</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a href="https://www.youtube.com/watch?v=M-mQtZ6dzjI">AD MTS baby worn</a></li>
+									<li><a href="https://www.youtube.com/watch?v=f8cnnDarARk">AD Castrol</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="https://www.facebook.com/">Facebook</a></li>
+									<li><a target="_blank" href="https://accounts.google.com/ServiceLogin">Gmail Accounts</a></li>
+									<li><a target="_blank" href="https://mail.google.com/">Gmail</a></li>
+									<li><a target="_blank" href="https://mail.google.com/mail/u/1">Gmail 1</a></li>
+									<li><a target="_blank" href="https://mail.google.com/mail/u/2">Gmail 2</a></li>
+									<li><a target="_blank" href="https://drive.google.com/">Google drive</a></li>
+									<li><a target="_blank" href="https://github.com/login">GitHub Login</a></li>
+									<li><a target="_blank" href="https://news.google.co.in/">Google News</a></li>
+									<li><a target="_blank" href="http://in.yahoo.com/">Yahoo India</a></li>
+									<li><a target="_blank" href="https://www.irctc.co.in/">IRCTC login</a></li>
+									<li><a target="_blank" href="https://netbanking.hdfcbank.com/netbanking/">HDFC net banking</a></li>
+									<li><a target="_blank" href="https://www.iobnet.co.in/ibanking/login.do">IOB net banking</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="http://www.cricbuzz.com/">Cricbuzz</a></li>
+									<li><a target="_blank" href="http://www.espncricinfo.com/">Cricinfo</a></li>
+									<li><a target="_blank" href="http://www.cricbuzz.com/cricket-series/2223/icc-cricket-world-cup-2015/points-table">Points Table</a></li>
+									<li><a target="_blank" href="http://www.cricbuzz.com/includes/ads/schedule/wc_2015/wc2015_loader_2.swf?19JANU">Points Table SWF</a></li>
+									<li><a target="_blank" href="http://www.cricbuzz.com/cricket-series/2223/icc-cricket-world-cup-2015/matches">Fixture</a></li>
+									<li><a target="_blank" href="http://www.indianrail.gov.in/">Indian Rail</a></li>
+									<li><a target="_blank" href="http://www.iiita.ac.in/">IIITA</a></li>
+									<li><a target="_blank" href="http://convocation.iiita.ac.in/">Convocation</a></li>
+									<li><a target="_blank" href="https://www.youtube.com/">YouTube</a></li>
+									<li><a target="_blank" href="https://www.youtube.com/watch?v=XC-tGLfMsHw">Ram bhajan</a></li>
+									<li><a target="_blank" href="http://wps.pearsoned.com/ghatak_be_1/178/45711/11702052.cw/content/index.html">EDC</a></li>
+									<li><a target="_blank" href="http://www.wolframalpha.com/input/?i=root+locus+plot+for+transfer+function+1%2Fs">Root locus</a></li>
+									<li><a target="_blank" href="www.ssyoutube.com">Youtube + some other download</a>
+									</li>
+									<li><a target="_blank" href="http://en.savefrom.net/">Enter link to download</a></li>
+								</ul>
+							</td>
+							<td>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="http://www.google.co.in/">
+											<div><font size="7">G</font><font color="#FF0000" size="5">O</font><font color="#00FF00" size="5">O</font><font size="7">G</font><font color="#00FF00" size="5">L</font><font color="#FF0000" size="5">E</font></div>
+										</a>
+									</li>
+									<br>
+								</ul>
+								<?php 
+									if(file_exists(PVTPATH."links/pvt_link.html")){
+										include(PVTPATH."links/pvt_link.html");
+									}
+								?>
+							</td>
+							<td>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="http://api.rubyonrails.org/">rails api</a></li>
+									<li><a target="_blank" href="https://scotch.io/tutorials/getting-started-with-redis-in-php">Redis with PHP</a></li>
+									<li><a target="_blank" href="http://guides.rubyonrails.org/getting_started.html">Getting started with ror</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="http://docs.moodle.org/25/en/Manual_install_on_Windows_7_with_Apache_and_MySQL">Manual install apache</a></li>
+									<li><a href="http://pro.jsonlint.com/">json lint pro</a></li>
+									<li><a href="http://jsonviewer.stack.hu/">json viewer</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a href="http://www.shabdkosh.com/">Shabdkosh</a></li>
+									<li><a href="https://in.news.yahoo.com/photos/narendra-modi-s-cabinet-who-is-likely-to-get-what-slideshow/">Indian ministries</a></li>
+									<li><a href="http://www.dnaindia.com/india/report-here-s-the-complete-list-of-narendra-modi-s-ministers-and-their-portfolios-1991617">Indian ministries</a></li>
+									<li><a href="http://www.mytreedb.com/blog/a-33-high_quality_ajax_loader_images.html">Ajax loader image</a></li>
+									<li><a href="http://www.revillweb.com/tutorials/bootstrap-tutorial/">Bootstrap tutorial</a></li>
+									<li><a href="http://www.iplt20.com/">IPL-T20</a></li>
+									<li><a href="http://www.tutorialspoint.com/html5/html5_websocket.htm">Websocket</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a href="http://www.pagalguy.com/cat/questions/absolute-values-29336170/level-1-29336191">CAT aptitude</a></li>
+									<li><a href="http://phrogz.net/programmingruby/frameset.html">Learning Ruby</a></li>
+									<li><a href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fwww.google.com%2F">Css validatore</a></li>
+									<li><a href="http://www.englishforeveryone.org/Topics/Reading-Comprehension.htm">English paragraph</a></li>
+								</ul>
+								<?php
+									if(file_exists(PVTPATH."links/ts_link.html")){
+										include(PVTPATH."links/ts_link.html");
+									}
+								?>
+							</td>
+							<td>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="/pvt-window">window</a></li>
+									<li><a target="_blank" href="webpage">webpage</a></li>
+									<li><a target="_blank" href="/pvt/data/server_info.json">Server Info</a></li>
+									<li><a target="_blank" href="/static/img">map path</a></li>
+									<li><a target="_blank" href="/datas/what-to-do.json">To do</a></li>
+									<li><a target="_blank" href="http://www.vaaah.com/php/view/PaymentGateways/21/EBS-payment-gateway-integration-using-PHP">PHP ebs integration</a></li>
+									<li><a target="_blank" href="http://jqueryvalidation.org/jQuery.validator.addClassRules/">validator.addClassRules</a></li>
+									<li><a target="_blank" href="http://jqueryvalidation.org/validate/">Jquery validate</a></li>
+									<li><a target="_blank" href="http://jqueryvalidation.org/min-method/">Jquery validate min</a></li>
+									<li><a target="_blank" href="http://www.vogella.com/tutorials/REST/article.html">Java jersey</a></li>
+									<li><a target="_blank" href="http://computing.dcu.ie/~humphrys/Notes/Networks/data.hamming.html">hamming code</a></li>
+									<li><a target="_blank" href="http://www.timeanddate.com/calendar/">Calender</a></li>
+								</ul>
+								<?php
+									if(file_exists(PVTPATH."links/gss_link.html")){
+										include(PVTPATH."links/gss_link.html");
+									}
+								?>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<ul class="list-unstyled">
+									<li><a target="_blank" href="http://www.ptable.com/">Periodic table</a></li>
+									<li><a target="_blank" href="http://www.gktoday.in/">GK today</a></li>
+									<li><a target="_blank" href="http://questions.gktoday.in/category/geography/">Indian Geography</a></li>
+									<li><a target="_blank" href="http://geography.about.com/od/indiamaps/">India maps</a></li>
+									<li><a target="_blank" href="http://www.mapsofindia.com/games/india-map-puzzle.html">India Map puzzles</a></li>
+									<li><a href="http://www.mapsofindia.com/">Maps of india</a></li>
+									<li><a href="http://www.mapsofindia.com/india/">Maps of India individuals</a></li>
+									<li><a href="https://plus.google.com/+CurrentaffairspdfBlogspotcom/posts">Current affairs</a></li>
+								</ul>
+							</td>
+							<td colspan="3">
+								<ul class="list-unstyled">
+									<li><a href="http://questions.gktoday.in/category/geography/page/1/">Geography/page/1</a></li>
+									<li><a href="http://questions.gktoday.in/category/geography/page/2/">Page 2</a></li>
+									<li><a href="http://www.mapsofindia.com/games/iknowmyindia.html">mapsofindia</a></li>
+									<li><a href="http://online.seterra.net/en/ex/106">Click on states</a></li>
+									<li><a href="http://www.syvum.com/cgi/online/hangman.cgi/squizzes/country/india/indgeog1.tdf?0">Hangon quiz</a></li>
+									<li><a href="http://www.syvum.com/squizzes/country/india/">India quiz</a></li>
+									<li><a href="http://online.seterra.net/en">English language Map Game</a></li>
+									<li><a href="https://www.youtube.com/watch?v=QlrAOyOqe2Q">Android setup</a></li>
+									<li><a href="https://www.youtube.com/watch?v=A_qaarY4_lY">Android firts app</a></li>
+									<li><a href="https://shop.vodafone.in/shop/checkout/order/cart_thank-you.jsp?_requestid=114172">Recharge voucher code ebay.in</a></li>
+									<li><a href="http://www.engineering.careers360.com/psu-hiring-through-gate-2014">PSU through gate</a></li>
+									<li><a href="https://github.com/angular/angular-seed/blob/master/app/js/app.js">Angular app seed</a></li>
+									<li><a href="https://github.com/learn-and-apply/uss/blob/master/src/static/js/services/services.js">Angular app v2</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a href="http://www.browserstack.com/">Browser stack</a></li>
+									<li><a href="http://www.programmingsimplified.com/c/source-code/c-program-linear-search">C source code</a></li>
+									<li><a href="http://india-wris.nrsc.gov.in/wrpinfo/index.php?title=Hydro_Electric_Projects_in_Karnataka">Hydro electic project in KR</a></li>
+								</ul>
+								<ul class="list-unstyled">
+									<li><a href="http://whocallsme.com/Phone-Number.aspx/0037127971156#p786909685605688855">Who calls me</a></li>
+									<li><a href="resource://r2d2b2g-at-mozilla-dot-org/r2d2b2g/data/content/index.html">Firefox OS</a></li>
+									<li><a href="https://www.facebook.com/iasaspirantspage/posts/823600611015276">Earth quake</a></li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
