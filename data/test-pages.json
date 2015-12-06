@@ -185,6 +185,12 @@
             "jquery"
         ]
     },
+    "331": {
+        "html": "templates/front_end/331_current_lat_lng.html",
+        "css": [
+            "bootstrap-v3.1.1"
+        ]
+    },
     "332": {
         "html": "templates/jquery/332_ui_datepicker.html",
         "js": [

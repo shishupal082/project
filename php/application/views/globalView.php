@@ -16,7 +16,7 @@
 	<div class="wrap-div"><?php if($Test->isValidId){
 		include($Test->htmlFilePath);
 	}else{
-		echo $Test->html;
+		include_once("links.html");
 	} ?></div>
 </body>
 </html>

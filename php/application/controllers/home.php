@@ -5,6 +5,6 @@ class Home extends CI_Controller {
 		$this->_name = "Home";
 	}
 	public function _remap() {
-		$this->load->view("home");
+		$this->load->view("home.html");
 	}
 }
