@@ -53,3 +53,6 @@ sudo ln -s /usr/local/etc/php/5.5/conf.d/ext-mcrypt.ini /Library/Server/Web/Conf
 Finally, restart apache: sudo apachectl restart.
 
 Reference - http://akrabat.com/setting-up-php-mysql-on-os-x-yosemite/
+
+If still not working =>
+Check apache syntax error => sudo apachectl configtest
