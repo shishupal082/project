@@ -86,7 +86,7 @@ class Todolibs {
 		if(isset($object["deleted"])){
 			$params["deleted"] = $object["deleted"] ? 1 : 0;
 		}
-		$status = $this->todoModel->update($this, $params);
+		$status = $this->todoModel->updateV2($this, $params);
 		$data = array("status" => $status);
 		return $data;
 	}
