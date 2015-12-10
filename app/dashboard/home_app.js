@@ -4,6 +4,9 @@
     var app = angular.module('app', []);
     app.run(['$rootScope', function ($rootScope) {
         $rootScope.name = "AngularApp";
+        $rootScope.getBlockStyle = function(){
+            return "display:block;";
+        };
     }]);
 }());
 
@@ -11,9 +14,7 @@
     var injectParams = ['$scope', '$rootScope'];
     var HomeController = function ($scope, $rootScope) {
         $scope.load_count = 101;
-        $scope.getLoadCountStyle = function(){
-            return "display:block";
-        };
+        $scope.getLoadCountStyle = $rootScope.getBlockStyle;
     };
     HomeController.$inject = injectParams;
     angular.module('app').controller('HomeController', HomeController);
