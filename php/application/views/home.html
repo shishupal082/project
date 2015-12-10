@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<base href="<?php echo base_url();?>">
@@ -11,12 +11,14 @@
 td{vertical-align: top; width: 25%;}
 </style>
 </head>
-<body oncontextmenu="return true">
+<body oncontextmenu="return true" ng-controller="HomeController">
 	<div class="wrap-div">
 		<div class="container">
 			<div class="row" style="text-align: center;">
 				<div class="col-md-2 col-md-offset-4"><h2>Home</h2></div>
-				<div class="col-md-1"><span class="h2 load_count"><?php echo isset($load_count) ? $load_count : "";?></span></div>
+				<div class="col-md-1">
+					<h2 id="loadCount" style="display:none; {{getLoadCountStyle(this)}}">{{load_count}}</h2>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12">
@@ -73,11 +75,7 @@ td{vertical-align: top; width: 25%;}
 									</li>
 									<br>
 								</ul>
-								<?php 
-									if(file_exists(PVTPATH."links/pvt_link.html")){
-										include(PVTPATH."links/pvt_link.html");
-									}
-								?>
+								<div pvt-links></div>
 							</td>
 							<td>
 								<ul class="list-unstyled">
@@ -105,11 +103,7 @@ td{vertical-align: top; width: 25%;}
 									<li><a href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fwww.google.com%2F">Css validatore</a></li>
 									<li><a href="http://www.englishforeveryone.org/Topics/Reading-Comprehension.htm">English paragraph</a></li>
 								</ul>
-								<?php
-									if(file_exists(PVTPATH."links/ts_link.html")){
-										include(PVTPATH."links/ts_link.html");
-									}
-								?>
+								<div ts-links></div>
 							</td>
 							<td>
 								<ul class="list-unstyled">
@@ -126,11 +120,7 @@ td{vertical-align: top; width: 25%;}
 									<li><a target="_blank" href="http://computing.dcu.ie/~humphrys/Notes/Networks/data.hamming.html">hamming code</a></li>
 									<li><a target="_blank" href="http://www.timeanddate.com/calendar/">Calender</a></li>
 								</ul>
-								<?php
-									if(file_exists(PVTPATH."links/gss_link.html")){
-										include(PVTPATH."links/gss_link.html");
-									}
-								?>
+								<div gss-links></div>
 							</td>
 						</tr>
 						<tr>
@@ -179,5 +169,7 @@ td{vertical-align: top; width: 25%;}
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript" src="/static/libs/angular/angular_1.3.14.js"></script>
+	<script src="/app/dashboard/home_app.js"></script>
 </body>
 </html>
