@@ -16,7 +16,8 @@
         };
     };
     HomeController.$inject = injectParams;
-    angular.module('app').controller('HomeController', HomeController).directive('pvtLinks', function() {
+    angular.module('app').controller('HomeController', HomeController);
+    angular.module('app').directive('pvtLinks', function() {
       return {
         templateUrl: '/pvt/links/pvt_link.html'
       };
