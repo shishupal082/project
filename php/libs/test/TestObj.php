@@ -48,7 +48,7 @@ class TestObj extends Obj{
                     }
                 }
             }else if(isset($jsFiles[$strFilePath[0]])){
-                array_push($this->jsFilesPath, STATICPATH.$jsFiles[$strFilePath[0]]);
+                array_push($this->jsFilesPath, $jsFiles[$strFilePath[0]]);
             }else{
                 continue;
             }
