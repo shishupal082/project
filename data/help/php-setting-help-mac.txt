@@ -31,6 +31,15 @@ enable => Include /private/etc/apache2/extra/httpd-vhosts.conf
         ErrorLog "/private/var/log/apache2/project-error.log"
         CustomLog "/private/var/log/apache2/project-access.log" common
 </VirtualHost>
+or comment above and add below lines
+
+<Directory "/Users/<user>/workspace/self_serve">
+        Options FollowSymLinks Multiviews
+        MultiviewsMatch Any
+        AllowOverride All
+        Require all granted
+</Directory>
+
 # Add env_config.ini to home directory /Users/<user>/
 # Give permission to log => chmod 777 to log directory
 # open /etc/hosts and add the following code
@@ -56,3 +65,12 @@ Reference - http://akrabat.com/setting-up-php-mysql-on-os-x-yosemite/
 
 If still not working =>
 Check apache syntax error => sudo apachectl configtest
+
+//Aerospike setup
+
+1.install composer by "curl -sS https://getcomposer.org/installer | php -- --filename=composer"
+2. php composer require aerospike/aerospike-client-php "*"
+3. cd vendor/aerospike/aerospike-client-php/src/aerospike
+4.find . -name "*.sh" -exec chmod +x {} \;
+5../build.sh
+6. add aerospike.so file in php.ini
