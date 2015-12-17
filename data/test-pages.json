@@ -189,17 +189,19 @@
         "html": "templates/front_end/331_current_lat_lng.html",
         "css": [
             "bootstrap-v3.1.1"
-        ]
+        ],
+        "keyword":"current_lat_lng, current_city, current_location ...."
     },
     "332": {
         "html": "templates/jquery/332_ui_datepicker.html",
         "js": [
             "jquery",
-            "jquery_ui_1."
+            "jquery_ui_1.8.16"
         ],
         "css": [
             "jquery_ui_css_1.8.16"
-        ]
+        ],
+        "keyword":"jquery ui datepicker, ...."
     },
     "333": {
         "html": "templates/front_end/333_image.html",
