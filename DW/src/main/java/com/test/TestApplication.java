@@ -1,5 +1,6 @@
 package com.test;
 
+import com.test.resources.HomeResources;
 import com.test.resources.TestResources;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -16,6 +17,7 @@ public class TestApplication extends BaseApplication<TestConfiguration> {
     @Override
     public void run(TestConfiguration testConfiguration, Environment environment) throws Exception{
         environment.jersey().register(new TestResources(testConfiguration.getTestConfig()));
+        environment.jersey().register(new HomeResources());
     }
     public static void main(String[] args) throws Exception {
         new TestApplication().run(args[0], args[1]);
