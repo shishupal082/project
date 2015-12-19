@@ -1,0 +1,21 @@
+logging:
+  level: INFO
+  loggers:
+    com.test: ERROR
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      logFormat: "%d [%thread] %-5level %c{15} - [%X{X-Transaction-Key} - %X{X-Request-Key}] - %msg%n%rEx"
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8080
+    type: http
+  rootPath: /api/*
+testConfig:
+  common:
+    configName: Helloworld
