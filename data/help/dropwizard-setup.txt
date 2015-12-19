@@ -1,0 +1,9 @@
+Create new project =>
+1) Project => meven =>
+add => artifact-id (com.test) and group-id (test-api) and version 1.0-SNAPSHOT
+add => project name (Test) and project direvctory
+2) Add dependencies for fropwizard in pom.xml
+3) add run time configuration (Run => Edit configuration)
+mainclass => Path of application class
+programm argument => server yml_file_path env
+working directory => let it by default
