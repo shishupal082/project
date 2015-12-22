@@ -12,7 +12,7 @@ import io.dropwizard.setup.Environment;
 
 public class TestApplication extends BaseApplication<TestConfiguration> {
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/templates/", "/", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/", "templates/index.html"));
     }
     @Override
     public void run(TestConfiguration testConfiguration, Environment environment) throws Exception{
