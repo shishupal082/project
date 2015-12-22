@@ -55,6 +55,7 @@
 		"bootstrap" : "/static/libs/bootstrap/bootstrap-v2.2.2/css/bootstrap.css",
 		"chosen_css" : "/static/libs/chosen/chosen.css",
 		"jquery_ui_css_1.8.16" : "/static/libs/jquery_ui/jquery-ui-1.8.16.css",
-		"style" : "/static/css/style.css"
+		"style" : "/static/css/style.css",
+		"online_bootstrap_3.3.6.css" : "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css"
 	}
 }
