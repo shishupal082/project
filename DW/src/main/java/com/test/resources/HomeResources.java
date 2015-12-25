@@ -14,7 +14,7 @@ import java.util.Map;
 public class HomeResources {
     public HomeResources(){}
     @GET
-    public Map<String, String> getConfig(){
+    public Map<String, String> home(){
         Map<String, String> map = new HashMap<String, String>();
         map.put("url", "home");
         return  map;

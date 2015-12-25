@@ -1,11 +1,14 @@
 package com.test.service;
 
+import com.test.domain.Todo.Todo;
 import com.test.domain.test.DateResponse;
 import com.test.utils.DateUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by shishupal.kumar on 22/12/15.
@@ -23,5 +26,10 @@ public class TestService {
         dateResponse.setIst(dateFormat.format(date));
         dateResponse.setGmt(dateUtils.convertIstToGmt(dateResponse.getIst()));
         return dateResponse;
+    }
+    public List<Todo> getTodos(){
+        List<Todo> todos = new ArrayList<Todo>();
+        todos.add(new Todo());
+        return todos;
     }
 }

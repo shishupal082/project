@@ -1,6 +1,7 @@
 package com.test.resources;
 
 import com.test.config.TestConfig;
+import com.test.domain.Todo.Todo;
 import com.test.domain.test.DateResponse;
 import com.test.service.TestService;
 import org.apache.log4j.Logger;
@@ -12,6 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 
@@ -41,5 +44,12 @@ public class TestResources {
         logger.info("DateResponse getDate");
         DateResponse dateResponse = testService.getCurrentDate();
         return  dateResponse;
+    }
+    @Path("/getTodos")
+    @GET
+    public List<Todo> getTodos(){
+        logger.info("getTodos");
+        List<Todo> Todos = testService.getTodos();
+        return  Todos;
     }
 }
