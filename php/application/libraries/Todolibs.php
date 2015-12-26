@@ -67,8 +67,8 @@ class Todolibs {
 			log_message_prod("$this->_name : update : user not found.");
 			return $data;
 		}
-		if(isset($object["todo_id"])){
-			$params["todo_id"] = $object["todo_id"];
+		if(isset($object["id"])){
+			$params["id"] = $object["id"];
 		}else{
 			log_message_prod("$this->_name : update : todo_id not found.");
 			return $data;
@@ -83,10 +83,14 @@ class Todolibs {
 		if(isset($object["status"])){
 			$params["status"] = $object["status"];
 		}
+		if(isset($object["type"])){
+			$params["type"] = $object["type"];
+		}
 		if(isset($object["deleted"])){
 			$params["deleted"] = $object["deleted"] ? 1 : 0;
 		}
-		$status = $this->todoModel->updateV2($this, $params);
+		// $status = $this->todoModel->updateV2($this, $params);
+		$status = $this->todoModel->updateV3($this->ci, $params);
 		$data = array("status" => $status);
 		return $data;
 	}
