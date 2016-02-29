@@ -2,15 +2,15 @@ package com.test.resources;
 
 import com.test.config.TestConfig;
 import com.test.domain.Todo.Todo;
+import com.test.domain.test.DateRequest;
 import com.test.domain.test.DateResponse;
 import com.test.service.TestService;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +42,12 @@ public class TestResources {
     @GET
     public DateResponse getDate(){
         logger.info("DateResponse getDate");
+        DateResponse dateResponse = testService.getCurrentDate();
+        return  dateResponse;
+    }
+    @Path("/date/post")
+    @POST
+    public DateResponse getDateFromPost(@Context final HttpServletRequest request, final DateRequest dateRequest){
         DateResponse dateResponse = testService.getCurrentDate();
         return  dateResponse;
     }

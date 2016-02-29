@@ -1,5 +1,7 @@
 package com.test.resources;
 
+import com.test.services.Add;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
@@ -17,6 +19,8 @@ public class HomeResources {
     public Map<String, String> home(){
         Map<String, String> map = new HashMap<String, String>();
         map.put("url", "home");
+        Integer sum = Add.add(3,4);
+        map.put("sum_of_two_number", sum.toString());
         return  map;
     }
 }

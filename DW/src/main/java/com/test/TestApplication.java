@@ -1,5 +1,7 @@
 package com.test;
 
+import com.test.filter.RequestFilter;
+import com.test.resources.DataResource;
 import com.test.resources.HomeResources;
 import com.test.resources.TestResources;
 import com.test.resources.ViewResources;
@@ -17,9 +19,12 @@ public class TestApplication extends BaseApplication<TestConfiguration> {
     }
     @Override
     public void run(TestConfiguration testConfiguration, Environment environment) throws Exception{
+        RequestFilter requestFilter = new RequestFilter();
+        environment.jersey().register(requestFilter);
         environment.jersey().register(new TestResources(testConfiguration.getTestConfig()));
         environment.jersey().register(new HomeResources());
         environment.jersey().register(new ViewResources());
+        environment.jersey().register(new DataResource(requestFilter));
     }
     public static void main(String[] args) throws Exception {
         new TestApplication().run(args[0], args[1]);
