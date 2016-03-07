@@ -25,7 +25,7 @@ public class DataResource {
 	@GET
 	@Path("/str_to_array")
 	public Map<String, String> home(){
-		String data = "{\"name\":\"shishupal\",\"data\":\"{\"name\":\"shishupal\"}\"}\"";
+		String data = "{\"name\":\"user\",\"data\":\"{\"name\":\"user\"}\"}\"";
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("details", data);
 		return  map;
