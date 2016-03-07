@@ -11,4 +11,12 @@
 
     <artifactId>app</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.test</groupId>
+            <artifactId>test-sum-two-number</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
