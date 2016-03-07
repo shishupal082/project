@@ -2,11 +2,12 @@ package com.test.resources;
 
 import com.test.config.TestConfig;
 import com.test.domain.Todo.Todo;
+import com.test.domain.UserAgentInfo;
 import com.test.domain.test.DateRequest;
 import com.test.domain.test.DateResponse;
 import com.test.service.TestService;
+
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -14,8 +15,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -24,6 +26,7 @@ import java.util.Map;
 @Path("/test")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Slf4j
 public class TestResources {
     private TestConfig testConfig;
     private TestService testService = new TestService();
@@ -31,7 +34,7 @@ public class TestResources {
         this.testConfig = testConfig;
     }
     private static final Logger logger = Logger.getLogger(TestResources.class);
-    @Path("/getConfig")
+    @Path("/get_config")
     @GET
     public Map<String, String> getConfig(){
         Map<String, String> map = new HashMap<String, String>();
@@ -51,11 +54,20 @@ public class TestResources {
         DateResponse dateResponse = testService.getCurrentDate();
         return  dateResponse;
     }
-    @Path("/getTodos")
+    @Path("/get_todos")
     @GET
     public List<Todo> getTodos(){
-        logger.info("getTodos");
-        List<Todo> Todos = testService.getTodos();
-        return  Todos;
+        logger.info("getTodos : in");
+        List<Todo> todos = testService.getTodos();
+        log.info("getTodos : out : response : {}", todos.toString());
+        return  todos;
+    }
+    @Path("/user_agent_info")
+    @GET
+    public UserAgentInfo getAppStatus(@Context final HttpServletRequest httpServletRequest){
+        log.info("getAppStatus : in");
+        final UserAgentInfo userAgentInfo = testService.getUserAgentInfo(httpServletRequest);
+        log.info("getAppStatus : out : response : {}", userAgentInfo.toString());
+        return  userAgentInfo;
     }
 }

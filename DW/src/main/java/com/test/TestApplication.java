@@ -5,6 +5,8 @@ import com.test.resources.DataResource;
 import com.test.resources.HomeResources;
 import com.test.resources.TestResources;
 import com.test.resources.ViewResources;
+
+import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -13,7 +15,7 @@ import io.dropwizard.setup.Environment;
  * Created by shishupal.kumar on 19/12/15.
  */
 
-public class TestApplication extends BaseApplication<TestConfiguration> {
+public class TestApplication extends Application<TestConfiguration> {
     public void initialize(Bootstrap<TestConfiguration> bootstrap) {
         bootstrap.addBundle(new AssetsBundle("/assets/", "/", "templates/index.html"));
     }

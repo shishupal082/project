@@ -6,10 +6,14 @@
 
     <groupId>com.test</groupId>
     <artifactId>test-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>sum-two-number</module>
+        <module>app</module>
+    </modules>
     <properties>
         <dropwizard.version>0.8.1</dropwizard.version>
-        <lombok.version>1.16.6</lombok.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,14 +29,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
+            <version>1.16.6</version>
             <scope>provided</scope>
         </dependency>
-        <!--  User Agent Parsing Utility -->
         <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>1.18</version>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
     </dependencies>
     <build>
