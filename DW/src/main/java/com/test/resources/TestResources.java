@@ -1,5 +1,8 @@
 package com.test.resources;
 
+import com.test.common.TestConstants;
+import com.test.common.TestErrorCodes;
+import com.test.common.TestException;
 import com.test.config.TestConfig;
 import com.test.domain.Todo.Todo;
 import com.test.domain.UserAgentInfo;
@@ -69,5 +72,12 @@ public class TestResources {
         final UserAgentInfo userAgentInfo = testService.getUserAgentInfo(httpServletRequest);
         log.info("getAppStatus : out : response : {}", userAgentInfo.toString());
         return  userAgentInfo;
+    }
+    @Path("/exception")
+    @GET
+    public void throwException(@Context final HttpServletRequest httpServletRequest,
+                                        @QueryParam("status_code") final Integer statusCode){
+        log.info("throwException : in");
+        throw new TestException(TestErrorCodes.BAD_REQUEST_ERROR);
     }
 }

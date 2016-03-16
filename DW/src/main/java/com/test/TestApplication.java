@@ -1,5 +1,6 @@
 package com.test;
 
+import com.test.common.TestExceptionMapper;
 import com.test.filter.RequestFilter;
 import com.test.resources.DataResource;
 import com.test.resources.HomeResources;
@@ -22,6 +23,7 @@ public class TestApplication extends Application<TestConfiguration> {
     @Override
     public void run(TestConfiguration testConfiguration, Environment environment) throws Exception{
         RequestFilter requestFilter = new RequestFilter();
+        environment.jersey().register(new TestExceptionMapper());
         environment.jersey().register(requestFilter);
         environment.jersey().register(new TestResources(testConfiguration.getTestConfig()));
         environment.jersey().register(new HomeResources());
