@@ -1,9 +1,11 @@
 package com.test.resources;
 
-import com.test.common.TestConstants;
 import com.test.common.TestErrorCodes;
 import com.test.common.TestException;
 import com.test.config.TestConfig;
+import com.test.domain.Day;
+import com.test.domain.Festival;
+import com.test.domain.Month;
 import com.test.domain.Todo.Todo;
 import com.test.domain.UserAgentInfo;
 import com.test.domain.test.DateRequest;
@@ -72,6 +74,20 @@ public class TestResources {
         final UserAgentInfo userAgentInfo = testService.getUserAgentInfo(httpServletRequest);
         log.info("getAppStatus : out : response : {}", userAgentInfo.toString());
         return  userAgentInfo;
+    }
+    @Path("/festival")
+    @GET
+    public Map<String, String> getFestivalDetails(@Context final HttpServletRequest httpServletRequest){
+        Festival festival = Festival.Holi;
+        log.info("getFestivalDetails : in");
+        Map<String, String> resoponse = new HashMap<>();
+        resoponse.put("festival_name", festival.getFestivalName());
+        resoponse.put("year", festival.getYear().toString());
+        resoponse.put("month", festival.getMonth().getFullName());
+        resoponse.put("date", festival.getDate().toString());
+        resoponse.put("day", festival.getDay().getFullName());
+        log.info("getFestivalDetails : out : response : {}", resoponse.toString());
+        return  resoponse;
     }
     @Path("/exception")
     @GET
