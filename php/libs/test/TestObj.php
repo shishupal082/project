@@ -8,11 +8,21 @@ class TestObj extends Obj{
     public $htmlFilePath = "";
     public $jsFilesPath = array();
     public $cssFilesPath = array();
+    private $title;
     public function __construct($controller, $id = 0) {
         $this->_name = "TestObj";
         $this->controller = $controller;
         $this->id = $id;
         $this->loadDependencies();
+        $this->setTitle("Test ".(string)$id);
+    }
+    public function getTitle(){
+        return $this->title;
+    }
+    public function setTitle($title){
+        if (is_string($title)) {
+            $this->title = $title;
+        }
     }
     private function loadDependencies(){
         $allData = JsonUtils::getJsonFile(DATAPATH."test-pages.json");

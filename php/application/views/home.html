@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Home</title>
 	<link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+<?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
 <style type="text/css">
 td{vertical-align: top; width: 25%;}
 </style>
@@ -18,9 +19,6 @@ td{vertical-align: top; width: 25%;}
 				<div class="col-md-2 col-md-offset-4">
 					<h2>Home</h2>
 					<a href="/page/home">page js</a>
-				</div>
-				<div class="col-md-1">
-					<h2 id="loadCount" style="display:none; {{getLoadCountStyle(this)}}">{{load_count}}</h2>
 				</div>
 			</div>
 			<div class="row">
@@ -81,7 +79,7 @@ td{vertical-align: top; width: 25%;}
 									</li>
 									<br>
 								</ul>
-								<div pvt-links></div>
+								<div pvt-links-directive></div>
 							</td>
 							<td>
 								<ul class="list-unstyled">
@@ -110,7 +108,7 @@ td{vertical-align: top; width: 25%;}
 									<li><a href="http://jigsaw.w3.org/css-validator/validator?uri=http%3A%2F%2Fwww.google.com%2F">Css validatore</a></li>
 									<li><a href="http://www.englishforeveryone.org/Topics/Reading-Comprehension.htm">English paragraph</a></li>
 								</ul>
-								<div ts-links></div>
+								<div ts-links-directive></div>
 							</td>
 							<td>
 								<ul class="list-unstyled">
@@ -134,7 +132,7 @@ td{vertical-align: top; width: 25%;}
 									<li><a target="_blank" href="http://jasonwatmore.com/post/2015/03/10/AngularJS-User-Registration-and-Login-Example.aspx">AngularJS User Registration and Login Example</a></li>
 									<li><a target="_blank" href="http://weblogs.asp.net/dwahlin/using-an-angularjs-factory-to-interact-with-a-restful-service">Angular components</a></li>
 								</ul>
-								<div gss-links></div>
+								<div gss-links-directive></div>
 							</td>
 						</tr>
 						<tr>
@@ -181,7 +179,7 @@ td{vertical-align: top; width: 25%;}
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<div personal-qoates></div>
+					<div personal-qoates-directive></div>
 				</div>
 			</div>
 		</div>

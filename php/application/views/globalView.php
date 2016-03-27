@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo $Test->getTitle(); log_message_prod($Test->getTitle());?></title>
+<?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
 <?php
     $cssFilesPath = $Test->cssFilesPath;
     foreach($cssFilesPath as $index => $value){
