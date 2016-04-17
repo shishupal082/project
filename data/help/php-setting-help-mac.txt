@@ -33,7 +33,7 @@ enable => Include /private/etc/apache2/extra/httpd-vhosts.conf
 </VirtualHost>
 or comment above and add below lines
 
-<Directory "/Users/<user>/workspace/self_serve">
+<Directory "/Users/<user>/workspace/project">
         Options FollowSymLinks Multiviews
         MultiviewsMatch Any
         AllowOverride All
