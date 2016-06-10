@@ -18,6 +18,15 @@ class Dir extends CI_Controller {
 			echo("undefined input params");
 		}
 	}
+	public function path_size(){
+		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
+			$path = $_GET["path"];
+			$dirArray = $this->directory->dirToArrayV2(DOCUMENT_ROOT.$path);
+			echo json_encode($dirArray);
+		}else{
+			echo("undefined input params");
+		}
+	}
 	public function pathUrl(){
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];

@@ -22,6 +22,42 @@ class DirectoryLibs extends Libs{
 		}
 		return $result;
 	}
+	private function getFolderSize($dir) {
+		$size = 0;
+	    foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
+	        $size += is_file($each) ? filesize($each) : $this->getFolderSize($each);
+	    }
+	    return $size;
+	}
+	public function dirToArrayV2($dir) {
+		$result = array();
+		if(!file_exists($dir)){
+			return $result;
+		}
+		$cdir = scandir($dir);
+		foreach ($cdir as $key => $value) {
+			if (!in_array($value, array(".","..",".DS_Store"))) {
+				$tempValue = array();
+				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
+					$tempValue["size"] = $this->getFolderSize($dir.$value);
+					$tempValue["type"] = "directory";
+				} else {
+					$tempValue["size"] = filesize($dir.$value);
+					$tempValue["type"] = "file";
+				}
+				if ($tempValue["size"] > 1000*1000) {
+					$tempValue["size"] = (string)(($tempValue["size"]/1000)/1000)." mb";
+				} else if($tempValue["size"] > 1000) {
+					$tempValue["size"] = (string)($tempValue["size"]/1000)." kb";
+				} else {
+					$tempValue["size"] = (string)($tempValue["size"])." bytes";
+				}
+				$tempValue["name"] = $value;
+				array_push($result, $tempValue);
+			}
+		}
+		return $result;
+	}
 	private function createUrlArray($dirToArray, $dir){
 		if(!is_array($dirToArray)){
 			if(is_string($dirToArray)){
