@@ -37,7 +37,7 @@ class DirectoryLibs extends Libs{
 		$cdir = scandir($dir);
 		foreach ($cdir as $key => $value) {
 			if (!in_array($value, array(".","..",".DS_Store"))) {
-				$tempValue = array();
+				$tempValue = array("unit" => "bytes");
 				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
 					$tempValue["size"] = $this->getFolderSize($dir.$value);
 					$tempValue["type"] = "directory";
@@ -46,11 +46,11 @@ class DirectoryLibs extends Libs{
 					$tempValue["type"] = "file";
 				}
 				if ($tempValue["size"] > 1000*1000) {
-					$tempValue["size"] = (string)(($tempValue["size"]/1000)/1000)." mb";
+					$tempValue["size"] = (($tempValue["size"]/1000)/1000);
+					$tempValue["unit"] = "mb";
 				} else if($tempValue["size"] > 1000) {
-					$tempValue["size"] = (string)($tempValue["size"]/1000)." kb";
-				} else {
-					$tempValue["size"] = (string)($tempValue["size"])." bytes";
+					$tempValue["size"] = ($tempValue["size"]/1000);
+					$tempValue["unit"] = "kb";
 				}
 				$tempValue["name"] = $value;
 				array_push($result, $tempValue);
