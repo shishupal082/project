@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+</head>
+<body>
+    <center><h1>Console Based chat server!</h1></center>
+    <div>
+        <ul>
+            <li>socket.emit("chat_message", "Hello World");</li>
+        </ul>
+    </div>
+    <div><b id="socket_id"></b></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('connect', function(){
+            document.getElementById("socket_id").innerText = this.id;
+        });
+        socket.on('disconnect', function(){
+            document.getElementById("socket_id").innerText = "Connecting...";
+        });
+        socket.on('chat_message', function(msg){
+            console.log(msg);
+        });
+    </script>
+</body>
+</html>

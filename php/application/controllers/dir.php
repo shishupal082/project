@@ -2,6 +2,7 @@
 include_once 'php/libs/DirectoryLibs.php';
 class Dir extends CI_Controller {
 	private $_name = "Dir";
+	private $basePath = DOCUMENT_ROOT;
 	public function __construct() {
 		parent::__construct();
 		$this->directory = new DirectoryLibs();
@@ -12,7 +13,8 @@ class Dir extends CI_Controller {
 	public function path(){
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];
-			$dirArray = $this->directory->dirToArray(DOCUMENT_ROOT.$path);
+			$basePath = isset($_GET["base_path"]) ? $_GET["base_path"] : $this->basePath;
+			$dirArray = $this->directory->dirToArray($basePath.$path);
 			echo json_encode($dirArray);
 		}else{
 			echo("undefined input params");
@@ -21,7 +23,8 @@ class Dir extends CI_Controller {
 	public function path_size(){
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];
-			$dirArray = $this->directory->dirToArrayV2(DOCUMENT_ROOT.$path);
+			$basePath = isset($_GET["base_path"]) ? $_GET["base_path"] : $this->basePath;
+			$dirArray = $this->directory->dirToArrayV2($basePath.$path);
 			echo json_encode($dirArray);
 		}else{
 			echo("undefined input params");
@@ -30,7 +33,8 @@ class Dir extends CI_Controller {
 	public function pathUrl(){
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];
-			$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT.$path, $path);
+			$basePath = isset($_GET["base_path"]) ? $_GET["base_path"] : $this->basePath;
+			$urlArray = $this->directory->dirToUrlArray($basePath.$path, $path);
 			echo json_encode($urlArray);
 		}else{
 			echo("undefined input params");
@@ -39,7 +43,8 @@ class Dir extends CI_Controller {
 	public function pathLink(){
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];
-			$urlArray = $this->directory->dirToUrlArray(DOCUMENT_ROOT.$path, $path);
+			$basePath = isset($_GET["base_path"]) ? $_GET["base_path"] : $this->basePath;
+			$urlArray = $this->directory->dirToUrlArray($basePath.$path, $path);
 			$link = "";
 			foreach ($urlArray as $index => $value) {
 				$link .= '<a href="'.$value.'">'.$value.'</a><br>';
