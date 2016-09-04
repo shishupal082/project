@@ -39,3 +39,7 @@ Object extention using create prototype method
 Youtube api
 Google map api
 Recaptcha
+
+Live pages
+[V1](http://shoutout.wix.com/so/bKwg_eDn#/main)
+[V2](http://shoutout.wix.com/so/dLRsUAKh#/main)
