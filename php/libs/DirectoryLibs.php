@@ -17,6 +17,8 @@ class DirectoryLibs extends Libs{
 				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
 					if ($recursive === TRUE) {
 						$result[$value] = $this->dirToArray($dir . DIRECTORY_SEPARATOR . $value); 
+					} else {
+						$result[] = $value;
 					}
 				} else {
 					$result[] = $value;
