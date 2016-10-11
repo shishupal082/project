@@ -44,7 +44,8 @@ class Dir extends CI_Controller {
 		if(isset($_GET["path"]) && is_string($_GET["path"]) && strlen($_GET["path"])){
 			$path = $_GET["path"];
 			$basePath = isset($_GET["base_path"]) ? $_GET["base_path"] : $this->basePath;
-			$urlArray = $this->directory->dirToUrlArray($basePath.$path, $path);
+			$isRecursive = isset($_GET["recursive"]) && $_GET["recursive"] == "false" ? FALSE : TRUE;
+			$urlArray = $this->directory->dirToUrlArray($basePath.$path, $path, $isRecursive);
 			$link = "";
 			foreach ($urlArray as $index => $value) {
 				$link .= '<a href="'.$value.'">'.$value.'</a><br>';

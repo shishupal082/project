@@ -5,18 +5,21 @@ class DirectoryLibs extends Libs{
 		parent::__construct();
 		$this->urlArray = array();
 	}
-	public function dirToArray($dir) { 
+	public function dirToArray($dir, $recursive = TRUE) { 
 		$result = array();
 		if(!file_exists($dir)){
 			return $result;
 		}
 		$cdir = scandir($dir);
+		log_message_prod("Scandir : ".$dir);
 		foreach ($cdir as $key => $value) {
 			if (!in_array($value,array(".",".."))) {
-				if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
-					$result[$value] = $this->dirToArray($dir . DIRECTORY_SEPARATOR . $value); 
+				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
+					if ($recursive === TRUE) {
+						$result[$value] = $this->dirToArray($dir . DIRECTORY_SEPARATOR . $value); 
+					}
 				} else {
-					$result[] = $value; 
+					$result[] = $value;
 				}
 			}
 		}
@@ -74,8 +77,8 @@ class DirectoryLibs extends Libs{
 		}
 		return TRUE;
 	}
-	public function dirToUrlArray($dir, $relativePath) { 
-		$dirToArray = $this->dirToArray($dir);
+	public function dirToUrlArray($dir, $relativePath, $recursive = TRUE) { 
+		$dirToArray = $this->dirToArray($dir, $recursive);
 		$this->createUrlArray($dirToArray, $relativePath);
 		return $this->urlArray;
 	}
