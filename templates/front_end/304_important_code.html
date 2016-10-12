@@ -1,0 +1,349 @@
+<div class="code">
+<h5>Clear title continuosly</h5>
+title = (function(){
+	function Title(){
+		this.remove_title = true;
+		this.titleModified();
+		this.registerEvt();
+	}
+	Title.prototype.titleModified = function(evt, source){
+		console.log("Title Modified, source : "+source);
+		if(this.remove_title){
+			document.getElementsByTagName("title")[0].innerHTML = ""
+		}
+	};
+	Title.prototype.registerEvt = function(){
+		var self = this;
+		var titleEl = document.getElementsByTagName("title")[0];
+		var docEl = document.documentElement;
+		if (docEl && docEl.addEventListener) {
+		    docEl.addEventListener("DOMSubtreeModified", function(evt) {
+		        var t = evt.target;
+		        if (t === titleEl || (t.parentNode && t.parentNode === titleEl)) {
+		            self.titleModified(evt, "custom event");
+		        }
+		    }, false);
+		} else {
+		    document.onpropertychange = function() {
+		        if (window.event.propertyName == "title") {
+		            self.titleModified(evt, "default change");
+		        }
+		    };
+		}
+	};
+	return Title;
+})();
+t = new title();
+</div>
+<h5>Unblock right click</h5>
+DocumentWrapper = (function(){
+	function Document(){
+		this.unblockRightClick();
+		this.enableSelectOption();
+	}
+	Document.prototype.unblockRightClick = function(evt, source){
+		document.oncontextmenu = function(e) {return true}
+	};
+	Document.prototype.enableSelectOption = function(){
+		document.onselectstart = function(e) {return true}
+	};
+	return Document;
+})();
+d = new DocumentWrapper();
+</div>
+<div class="code">
+	<h5>Php default function</h5>
+	<ul>
+		<li>filesize([filepath])</li>
+	</ul>
+	<h5>Javascript default function</h5>
+	<ul>
+		<li>alert([string or number])</li>
+		<li>
+			<h5>Function that return status</h5>
+			<ul>
+				<li>isNaN([string or number])</li>
+				<li>isFinite(value)</li>
+				<li>confirm([string])</li>
+			</ul>
+		</li>
+		<li>
+			<h5>Function that return value</h5>
+			<ul>
+				<li>prompt("Hello","default")</li>
+				<li>String([---])</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<h5>JS function</h5>
+<div class="code">
+<ul>
+	<li>array.filter(function(el, index, array){return true/false;});</li>
+	<li>array.map(function(el, index, array){return el;});</li>
+	<li>array.forEach(function(el, index, array){});//it is similar to for loop but break does't work</li>
+	<li>array.every(function(el, index, array){return true;//(for continue)});</li>
+	<li>array.some(function(el, index, array){return false;//(for continue)});</li>
+	<li>array.indexOf(search_element);</li>
+	<li>array.sort();</li>
+	<li>array.reverse();</li>
+</ul>
+</div>
+<h5>Convert .serialize() to json in jquery </h5>
+<div class="code">
+$.fn.serializeObject = function()
+{
+   var o = {};
+   var a = this.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
+</div>
+<h5>JS cookies</h5>
+<div class="code cookies">
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toGMTString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i < ca.length; i++) {
+        var c = ca[i];
+        while(c.charAt(0)==' '){
+			c = c.substring(1);
+        }
+        if(c.indexOf(name) != -1){
+			return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie(cname) {
+	cname = cname ? cname : "username";
+    var user = getCookie(cname);
+    if (user != "") {
+        alert("Welcome again " + user);
+    } else {
+        user = prompt("Please enter your name:", "");
+        if (user != "" && user != null) {
+            setCookie(cname, user, 5);
+        }
+    }
+}
+</div>
+<h5>Load js dynamic file</h5>
+<div class="code load-dynamic-js-file">
+var a = document.createElement("script");
+a.type="text/javascript";
+a.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js";
+a.onload = function(){
+	alert("File loaded!");
+};
+document.body.appendChild(a);
+</div>
+<h5>api call </h5>
+<div class="code ajax_request">
+var api_call = {
+	pure_ajax : function(){
+		$.ajax({
+			url: "your url",
+			type: "GET, POST"
+			data: "string, list, object",
+		}).success(function(response){
+			console.log(response);
+		}).fail(function(response){
+			console.log(response);
+		});
+	},
+	_ajax : function(cfg){
+		var ajax_object = cfg["ajax_object"],
+			callback = cfg["callback"],
+			self = this,
+			data = cfg["data"];
+
+		var request = $.ajax(ajax_object);
+
+		request.success(function(response){
+			callback(response, "success",self, data);
+		});
+		request.fail(function(response){
+			callback(response, "fail",self, data);
+		});	
+	},
+	_submit_form_callback : function(response, status, self){
+		console.log(response);
+	},
+	submit_form : function(data){
+
+		var data = data,
+			url = "/connect/post_valentine",
+			callback = this._submit_form_callback,
+			ajax_object = {};
+
+		ajax_object["url"] = url;
+		ajax_object["data"] = data;
+		ajax_object["type"] = "POST";
+		ajax_object["contentType"] = "multipart/form-data";
+		var cfg = {"ajax_object":ajax_object, "callback" : callback};
+		this._ajax(cfg);
+	}
+};
+</div>
+<h5>convert_key_value_to_json</h5>
+<div class="code convert_key_value_to_json">
+function convert_key_value_to_json (key_str, value){
+    var keys = key_str.split("."),
+        data = value,
+        key, obj = {};
+
+    for(var i = keys.length-1;i>=0;i--){
+        key = keys[i];
+        obj = {};
+        obj[key] = data;
+        data = obj;
+    }
+    return data;
+}
+</div>
+<div class="code finding_geolocation">
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"
+[script]
+var _location = {
+	curret_location : {},
+	exact_position : {}
+};
+if (navigator.geolocation){
+	navigator.geolocation.getCurrentPosition(function(position){
+		position.latitude = position.coords.latitude.toFixed(5);
+		position.longitude = position.coords.longitude.toFixed(5);
+		_location.exact_position = position;
+	});
+}
+else{
+	console.log("Geolocation is not supported by this browser.");	
+}
+jQuery.getJSON('http://freegeoip.net/json/', function(location) {
+  	_location.curret_location = location;
+});
+[/script]
+</div>
+<div class="code finding_geolocation">
+var b = navigator.geolocation;
+if(b){
+	b.getCurrentPosition(function (c) {
+	    alert(new Date(c.timestamp));
+	}, function (c) {
+		alert(c.message);
+	});
+}else{
+	alert("navigator.geolocation not found.");
+}
+</div>
+<div>
+var validate = {
+	field : function(current_field, val){
+		var value = val.trim(),
+			regex = current_field.attr("data-regex"),
+			pattern = new RegExp(regex),
+			min_length = current_field.attr("data-minlength");
+
+		var flag = pattern.test(value);
+
+		if(min_length){
+			flag = !flag ? flag : (value.length >= Number(min_length));
+		}
+		if(flag){
+			current_field.removeClass("error");
+			return true;
+		}
+		current_field.val("");
+		current_field.addClass("error");
+		return flag;
+	}
+};
+</div>
+<div>
+var widget = {
+	form_data : {},
+	_update_data : function(key_str, value){
+
+	    var keys = key_str.split("."),
+	        data = value,
+	        key, obj = {};
+
+	    for(var i = keys.length-1;i>=0;i--){
+	        key = keys[i];
+            obj = {};
+            obj[key] = data;
+            data = obj;
+	    }
+	    $.extend(true, this.form_data, data);
+	},
+	_set_field_data : function(field, field_type){
+		var current_fields = field.find(field_type+"[name]"),
+	        current_field, current_data, key_str, value, status;
+
+	    for(var i=0; i < current_fields.length ; i++){
+	        current_field = $(current_fields[i]);
+	        key_str = current_field.attr("name");
+	        value = current_field.val();
+	        status = validate.field(current_field, value);
+	        this._update_data(key_str, value);
+	    }
+	    return true;
+	},
+	"SELECT" : function(field){
+	    var status = this._set_field_data(field, "select");
+	    return {"status":status};
+	},
+	"TEXTAREA" : function(field){
+		var status = this._set_field_data(field, "textarea"),
+			data_id = field.find("textarea[name]").attr("name");
+
+ 		return {"status":status, "msg": data_id + " Field Can not be blank."};
+	},
+	"INPUT" : function(field){
+
+	    var status = this._set_field_data(field, "input"),
+	    	data_id = field.find("input[name]").attr("name");
+
+	    return {"status":status, "msg": data_id + " Field Can not be blank."};
+	},
+	"FILE" : function(field){
+		var input_file = field.find("input[type=file]"),
+			key_str = input_file.attr("name"),
+			file = input_file.get(0).files[0],
+			file_size_kb = "", return_data ;
+
+		if(file){
+			file_size_kb = file.size/100;
+			if(file_size_kb > 1000 ){
+				this._update_data(key_str, file);
+				return_data = {"status" : "success", "msg" : ""};
+				input_file.removeClass("error");
+			}else{
+				input_file.addClass("error");
+				return_data = {"status" : false, "msg" : "File Size Excced."};
+			}
+		}else{
+			input_file.addClass("error");
+			return_data = {"status" : false, "msg" : "Image is comuplasory to upload."};
+		}
+		return return_data;
+	}
+};
+</div>
