@@ -1,0 +1,207 @@
+<style type="text/css">
+li code{
+    display : block;
+    white-space : initial;
+}
+</style>
+<div class="container">
+	<div class="span5">
+		<h2>ECLIPSE</h2>
+		<ul>
+			<li><code tabindex="1">project => properties => formatter</code></li>
+		</ul>
+		<h2>Elastic search</h2>
+		<ul>
+			<li>To run elastic search on console</li>
+			<li>elasticsearch</li>
+		</ul>
+		<h2>Unix</h2>
+		<ul>
+			<li><code tabindex="1">mysql.server start</code></li>
+			<li><code tabindex="1">sudo chown -R mysql /usr/local/var/mysql/</code></li>
+			<li><code tabindex="1">sudo rm -rf /var/db/receipts/com.mysql.*</code></li>
+			<li><code tabindex="1">sudo find / | grep -i mysql</code></li>
+			<li><code tabindex="1">mysql_secure_installation</code></li>
+			<li><code tabindex="1">mysql.server start</code></li>
+			<li><code tabindex="1">ERROR 1045 (28000): Access denied for user 'user'@'localhost' (using password: NO)</code></li>
+			<li><code tabindex="1">mysql.server start</code></li>
+			<li><code tabindex="1">ln -s /Applications/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock</code></li>
+			<li><code tabindex="1">sudo mysql.server start</code></li>
+			<li><code tabindex="1">cd /Volumes (To go into pendrive / external drive)</code></li>
+			<li><code tabindex="1">du -ch | grep total (To find total size of current directory)</code></li>
+			<li><code tabindex="1">du -ch folder_name | grep total</code></li></li>
+			<li><code tabindex="1">du -h filename (get filesize)</code></li></li>
+			<li><code tabindex="1">ps -ef | grep 'rails'</code></li>
+			<li><code tabindex="1">sudo kill -9 4770</code></li>
+			<li><code tabindex="1">sudo chmod 777 folder_name</code></li>
+			<li><code tabindex="1">ps -eaf | grep jetty</code></li>
+			<li><code tabindex="1">hostname</code></li>
+		</ul>
+		<h2>Logs</h2>
+		<ul>
+			<li><code>Or operation => \|</code></li>
+			<li><code>And operation => .*</code></li>
+			<li><code>zgrep 'Captcha.*KDJ' log-2015-12-18*.gz</code></li>
+			<li><code>grep "debug" -i log-2015-12-20.php</code></li>
+			<li><code>grep -o '^.*2015-04-04 12:\d+:\d+.*string' log-file-path</code></li>
+			<li><code>grep -o 'ERROR.*12:.*string' log-file-path</code></li>
+			<li><code>tail -f log-file-path | grep  'ERROR.*string1\|or second string\|or third string'</code></li>
+		</ul>
+		<h2>Mysql</h2>
+		<ul>
+			<li><code tabindex="1">show databases;</code></li>
+			<li><code tabindex="1">show tables;</code></li>
+			<li><code tabindex="1">mysql -hlocalhost -uroot -proot</code></li>
+			<li><code tabindex="1">mysql -hlocalhost -uroot -proot -A tests</code></li>
+			<li><code tabindex="1">show tables;</code></li>
+			<li><code tabindex="1">desc [table_name];</code></li>
+			<li><code tabindex="1">select * from [table_name];</code></li>
+			<li><code tabindex="1">select * from [table_name] where [column_name] is NULL;</code></li>
+			<li><code tabindex="1"> INSERT INTO book (id, name, email) values(1,"name","name@domain.com");</code></li>
+			<li><code tabindex="1">UPDATE book SET id=2 where id=0;</code></li>
+			<li><code tabindex="1">DELETE FROM book where id=0;</code></li>
+			<li><code tabindex="1">ALTER TABLE book MODIFY  id INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD INDEX (id);</code></li>
+			<li><code tabindex="1">ALTER TABLE book ADD item_id INT;</code></li>
+			<li><code tabindex="1">ALTER TABLE [table_name] ADD [new_column] varchar(100) DEFAULT NULL AFTER [old_column];</code></li>
+			<li><code tabindex="1">ALTER TABLE book ALTER COLUMN item_id SET DEFAULT 0;</code></li>
+		</ul>
+		<h2>Dropwizrd setup</h2>
+		<ul>
+			<li><code tabindex="1">mvn dependency:tree</code></li>
+			<li><code tabindex="1">mvn clean compile</code></li>
+			<li><code tabindex="1">mvn clean install</code></li>
+			<li><code tabindex="1">mvn clean package</code></li>
+			<li><code tabindex="1">cp ~/Downloads/settings.xml ~/.m2/</code></li>
+			<li><code tabindex="1">rm -rf ~/.m2/repository/*</code></li>
+			<li><code tabindex="1">ls -la /Library/Java/JavaVirtualMachines/ jdk1.8.0_65.jdk/Contents/Home/</code></li>
+			<li><code tabindex="1">source ~/.bash_profile (To enable newly added JAVA_HOME path)</code></li>
+			<li><code tabindex="1">cd target</code></li>
+		</ul>
+		<h2>DW project setup</h2>
+		<ul>
+			<li>create meven project</li>
+		</ul>
+		<h5>Maven cli class error on runtime</h5>
+		<ul>
+			<li></li>
+		</ul>
+		<h2>Ruby</h2>
+		<ul>
+			<li><b>Run server</b></li>
+			<li><code tabindex="1">rails s</code></li>
+			<li><code tabindex="1">rails s -p 3055</code></li>
+			<li><b>Find all defined url</b></li>
+			<li><code tabindex="1">rake routes</code></li>
+			<li><b>some more</b></li>
+			<li><code tabindex="1">bundle</code></li>
+			<li><code tabindex="1">RAILS_ENV=development rails c</code></li>
+			<li>Reset DB</li>
+			<li><code tabindex="1">rake db:reset</code></li>
+			<li><code tabindex="1">rake db:migrate</code></li>
+			<li>Add Column to existing table</li>
+			<li><code tabindex="1">rails generate migration add_--column--_to_--table-- --greet--:string</code></li>
+			<li><b>Ruby from command line</b></li>
+			<li><code tabindex="1">irb (then enter)</code></li>
+			<li><code tabindex="1">ruby filename.rb (run from file)</code></li>
+		</ul>
+		<ul>
+			<li><b>Ruby on sanitra</b></li>
+			<li><code>RACK_ENV=staging ruby main.rb </code></li>
+		</ul>
+	</div>
+	<div class="content span6">
+		<h2>PHP</h2>
+		<ul>
+			<li><b>Alert through php</b></li>
+			<li><code tabindex="1">echo '[script type="text/javascript"]alert("Hello World : ' . $to . '")script]';</code></li>
+			<li><b>start log</b></li>
+			<li><code tabindex="1">tail -f log-file-path</code></li>
+			<li><b>check syntax error</b></li>
+			<li><code tabindex="1">php -l "file path"</code></li>
+		</ul>
+		<h2>Git</h2>
+		<ul>
+			<li><b>Reset to specific commit</b></li>
+			<li>git reset --hard 2879bd74e0c7c3b9213cea3ceb312540eb850e24</li>
+
+			<li><b>Git Pull</b></li>
+			<li>git pull origin [branch name]</li>
+
+			<li><b>Commit steps</b></li>
+			<li>git stash</li>
+			<li>git stash apply stash@{0}</li>
+			<li>git add .</li>
+			<li>git commit -m ""</li>
+			<li>git push origin [branch name]</li>
+			<li><b>Craete new branch</b></li>
+			<li>git branch "branch_name"</li>
+			<li><b>Craete new branch and add file to new branch</b></li>
+			<li>git checkout -b track_code</li>
+			<li>git commit --amend -m "New commit message"</li>
+			<li>git tag v1.3.3</li>
+			<li>git push --tags</li>
+			<li>git reset HEAD~1</li>
+			<li>(Undo git commit) git reset filename</li>
+		</ul>
+		<h2>Padrino</h2>
+		<ul>
+			<li>#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!</li>
+			<li>[[ -s "/Users/user/.gvm/bin/gvm-init.sh" ]] && source "/Users/user/.gvm/bin/gvm-init.sh"</li>
+			<li>bundle update eventmachine</li>
+			<li>bundle install</li>
+			<li><code>redis-server</code></li>
+			<li><code>mongod</code></li>
+			<li><code>padrino s</code></li>
+			<li><code>padrino c</code></li>
+			<li><code>padrino start</code></li>
+			<li><code>sudo service mongod stop</code></li>
+			<li><code>sudo mongod --master</code></li>
+			<li><code>rm -rf ~/dbpath</code></li>
+			<li><code>mkdir ~/dbpath</code></li>
+			<li><code>mongod --dbpath ~/dbpath/</code></li>
+		</ul>
+		<h2>Apache</h2>
+		<ul>
+			<li><code>apachectl configtest</code></li>
+			<li><code>Go to : /etc/apache2</code></li>
+			<li><code>look into : sites-available and sites-enabled</code></li>
+			<li><code>for enabled project : sudo a2ensite project_folder_name</code></li>
+			<li><code>for disable project : sudo a2dissite project_folder_name</code></li>
+			<li><code>For add new domain : /sudo vi /etc/hosts</code></li>
+			<li><code>sudo apachectl -k restart</code></li>
+			<li><code>sudo apachectl restart</code></li>
+			<li><code>pidof apache2</code></li>
+			<li><code>sudo kill -9 #pid</code></li>
+			<li><code>sudo service apache2 start</code></li>
+			<li><code>sudo service nginx restart</code></li>
+		</ul>
+		<h4>Quick server change</h4>
+		<ul>
+			<li><code>sudo a2dissite default.conf</code></li>
+			<li><code>sudo vi /etc/apache2/sites-available/default.conf</code></li>
+			<li><code>sudo a2ensite default.conf</code></li>
+		</ul>
+		<h4>Angular JS</h4>
+		<ul>
+			<li>
+				<div>app.js</div>
+				<div>
+					<ul>
+						<li>It will have all the dependencies and routing rules.</li>
+					</ul>
+				</div>
+			</li>
+			<li>controller.js</li>
+			<li>services ??</li>
+			<li>factory ?? it will have api services.</li>
+		</ul>
+		<ul>
+			<li>ng-app</li>
+			<li>ng-controller</li>
+			<li>ng-view</li>
+			<li>ng-repeat</li>
+			<li>ng-click</li>
+			<li>ng-if</li>
+		</ul>
+	</div>
+</div>
