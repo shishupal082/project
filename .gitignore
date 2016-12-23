@@ -1,1 +1,12 @@
-c/a.out
+*/a.out
+*/*/a.out
+*/*/*/a.out
+*/*/*/*/a.out
+
+*/*/node_modules/*
+
+
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+*/*/*/.DS_Store
