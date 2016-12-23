@@ -55,4 +55,12 @@ class Dir extends CI_Controller {
 			echo("undefined input params");
 		}
 	}
+	public function duplicate(){
+		$urlArray = $this->directory->duplicateFile();
+		$link = "";
+		foreach ($urlArray as $index => $value) {
+			$link .= '<a href="'.$value.'">'.$value.'</a><br>';
+		}
+		echo count($urlArray) ? $link : "undefined directory";
+	}
 }

@@ -84,4 +84,17 @@ class DirectoryLibs extends Libs{
 		$this->createUrlArray($dirToArray, $relativePath);
 		return $this->urlArray;
 	}
+	public function duplicateFile() {
+		$dirToArray1 = $this->dirToArray(DOCUMENT_ROOT."/pvt/org", FALSE);
+		$dirToArray2 = $this->dirToArray(DOCUMENT_ROOT."/pvt/recovered", FALSE);
+		$dirToArray = array();
+		foreach ($dirToArray2 as $key => $value) {
+			if(in_array($value, $dirToArray1)) {
+			} else {
+				array_push($dirToArray, $value);
+			}
+		}
+		$this->createUrlArray($dirToArray, "/pvt/recovered/");
+		return $this->urlArray;
+	}
 }
