@@ -1,0 +1,4 @@
+1|Subject 1|OPEN|LOW|CITY_WORK|Do something 1
+2|Subject 2|PENDING|NORMAL|DAILY_WORK|Do something 2
+3|Subject 3|SOLVED|HIGH|OFFICE_WORK|Do something 3
+4|Subject 4|PENDING|URGENT|DAILY_WORK|Do something 4
