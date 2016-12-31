@@ -1,6 +1,8 @@
 package com.todo.parser;
 
 import com.todo.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,6 +13,7 @@ import java.util.*;
  * Created by shishupalkumar on 30/12/16.
  */
 public class FileParser implements TodoDbParser {
+    private static Logger logger = LoggerFactory.getLogger(TodoDbParser.class);
     public TodoDatabase getTodoDatabase() {
         Map<Integer, Todo> todoMap = getTodoMap();
         Map<String, TodoUser> todoUserMap = getTodoUserMap();
@@ -29,7 +32,8 @@ public class FileParser implements TodoDbParser {
     }
     private Map<Integer, Todo> getTodoMap() {
         Map<Integer, Todo> todoMap = new HashMap<Integer, Todo>();
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/todo.data");
+        String filename = "todo.data";
+        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/" + filename);
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
@@ -39,6 +43,7 @@ public class FileParser implements TodoDbParser {
                 Iterator<String> itr = tokens.iterator();
                 Todo todo = new Todo();
                 if (tokens.size() < 6) {
+                    logger.info("Invalid line in {} : {}",filename, line);
                     continue;
                 }
                 todo.setId(Integer.parseInt(itr.next()));
