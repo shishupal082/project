@@ -3,6 +3,7 @@ package com.todo;
 import com.todo.model.TodoDatabase;
 import com.todo.parser.FileParser;
 import com.todo.parser.TodoDbParser;
+import com.todo.response.TodoActionResponse;
 import com.todo.response.TodoResponse;
 import com.todo.services.TodoService;
 import org.apache.log4j.PropertyConfigurator;
@@ -21,13 +22,15 @@ public class TodoApplication {
         PropertyConfigurator.configure("log4j.properties");
         TodoDbParser todoDbParser = new FileParser();
         TodoDatabase todoDatabase = todoDbParser.getTodoDatabase();
-        logger.info("Todos : {}", todoDatabase.getTodoMap());
-        logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
-        logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
-        logger.info("TodoComment : {}", todoDatabase.getTodoCommentMap());
-        logger.info("TodoUpdate : {}", todoDatabase.getTodoUpdateMap());
+//        logger.info("Todos : {}", todoDatabase.getTodoMap());
+//        logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
+//        logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
+//        logger.info("TodoComment : {}", todoDatabase.getTodoCommentMap());
+//        logger.info("TodoUpdate : {}", todoDatabase.getTodoUpdateMap());
         TodoService todoService = new TodoService(todoDatabase);
         TodoResponse todoResponse = todoService.getTodoById("1");
-        logger.info("TodoResponse for id={} : {}", 1, todoResponse);
+//        logger.info("TodoResponse for todoId={} : {}", 1, todoResponse);
+        List<TodoActionResponse> todoActionResponses = todoService.getTodoActionByTodoId("1");
+        logger.info("TodoActionResponse for todoId={} : {}", 1, todoActionResponses);
     }
 }

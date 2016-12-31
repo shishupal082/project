@@ -1,7 +1,6 @@
 package com.todo.services;
 
-import com.todo.model.Todo;
-import com.todo.model.TodoDatabase;
+import com.todo.model.*;
 import com.todo.response.TodoActionResponse;
 import com.todo.response.TodoResponse;
 
@@ -23,7 +22,43 @@ public class TodoService {
         todoResponse.setTodo(todoMap.get(Integer.parseInt(todoId)));
         return todoResponse;
     }
-    public List<TodoActionResponse> getTodoActionByTodoId(final String todoId) {
+    private TodoComment getTodoCommentByUpdateId(Integer updateId) {
+        Map<Integer, TodoComment> todoCommentMap = todoDatabase.getTodoCommentMap();
+        for (TodoComment todoComment : todoCommentMap.values()) {
+            if (todoComment.getUpdateId().equals(updateId)) {
+                return todoComment;
+            }
+        }
         return null;
+    }
+    private List<TodoEvent> getTodoEventByUpdateId(Integer updateId) {
+        Map<Integer, TodoEvent> todoEventMap = todoDatabase.getTodoEventMap();
+        List<TodoEvent> todoEvents = new ArrayList<TodoEvent>();
+        for (TodoEvent todoEvent : todoEventMap.values()) {
+            if (todoEvent.getUpdateId().equals(updateId)) {
+                todoEvents.add(todoEvent);
+            }
+        }
+        return todoEvents;
+    }
+    public List<TodoActionResponse> getTodoActionByTodoId(final String todoId) {
+        List<TodoActionResponse> todoActionResponses = new ArrayList<TodoActionResponse>();
+        Map<Integer, TodoUpdate> todoUpdateMap = todoDatabase.getTodoUpdateMap();
+        for (TodoUpdate todoUpdate : todoUpdateMap.values()) {
+            if (todoUpdate.getTodoId() == Integer.parseInt(todoId)) {
+                TodoActionResponse todoActionResponse = new TodoActionResponse();
+                todoActionResponse.setUpdateId(todoUpdate.getId());
+                TodoComment todoComment = getTodoCommentByUpdateId(todoUpdate.getId());
+                List<TodoEvent> todoEvents = getTodoEventByUpdateId(todoUpdate.getId());
+                todoActionResponse.setTodoEvents(todoEvents);
+                if (todoComment != null) {
+                    todoActionResponse.setComment(todoComment);
+                }
+                if (todoComment != null || todoEvents.size() > 0) {
+                    todoActionResponses.add(todoActionResponse);
+                }
+            }
+        }
+        return todoActionResponses;
     }
 }
