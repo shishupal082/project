@@ -29,7 +29,7 @@ public class TodoApplication {
 //        logger.info("TodoUpdate : {}", todoDatabase.getTodoUpdateMap());
         TodoService todoService = new TodoService(todoDatabase);
         TodoResponse todoResponse = todoService.getTodoById("1");
-//        logger.info("TodoResponse for todoId={} : {}", 1, todoResponse);
+        logger.info("TodoResponse for todoId={} : {}", 1, todoResponse);
         List<TodoActionResponse> todoActionResponses = todoService.getTodoActionByTodoId("1");
         logger.info("TodoActionResponse for todoId={} : {}", 1, todoActionResponses);
     }

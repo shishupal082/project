@@ -37,8 +37,8 @@ public class FileParser implements TodoDbParser {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            String line;
+            while ((line=bufferedReader.readLine()) != null) {
                 List<String> tokens = this.tokanizeLine(line, "|");
                 Iterator<String> itr = tokens.iterator();
                 Todo todo = new Todo();
@@ -53,7 +53,6 @@ public class FileParser implements TodoDbParser {
                 todo.setType(TodoType.valueOf(itr.next()));
                 todo.setDescription(itr.next());
                 todoMap.put(todo.getId(), todo);
-                line = bufferedReader.readLine();
             }
         } catch (IOException ioe) {
             //
@@ -66,8 +65,8 @@ public class FileParser implements TodoDbParser {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            String line;
+            while ((line=bufferedReader.readLine()) != null) {
                 List<String> tokens = this.tokanizeLine(line, "|");
                 Iterator<String> itr = tokens.iterator();
                 TodoUser todoUser = new TodoUser();
@@ -79,7 +78,6 @@ public class FileParser implements TodoDbParser {
                 todoUser.setEmail(itr.next());
                 todoUser.setFull_name(itr.next());
                 todoUserMap.put(todoUser.getUserId(), todoUser);
-                line = bufferedReader.readLine();
             }
         } catch (IOException ioe) {
             //
@@ -92,8 +90,8 @@ public class FileParser implements TodoDbParser {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            String line;
+            while ((line=bufferedReader.readLine()) != null) {
                 List<String> tokens = this.tokanizeLine(line, "|");
                 Iterator<String> itr = tokens.iterator();
                 TodoEvent todoEvent = new TodoEvent();
@@ -107,7 +105,6 @@ public class FileParser implements TodoDbParser {
                 todoEvent.setValue(itr.next());
                 todoEvent.setPreviousValue(itr.hasNext() ? itr.next() : null);
                 todoEventMap.put(todoEvent.getId(), todoEvent);
-                line = bufferedReader.readLine();
             }
         } catch (IOException ioe) {
             //
@@ -121,8 +118,8 @@ public class FileParser implements TodoDbParser {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            String line;
+            while ((line=bufferedReader.readLine()) != null) {
                 List<String> tokens = this.tokanizeLine(line, "|");
                 Iterator<String> itr = tokens.iterator();
                 TodoComment todoComment = new TodoComment();
@@ -133,7 +130,6 @@ public class FileParser implements TodoDbParser {
                 todoComment.setUpdateId(Integer.parseInt(itr.next()));
                 todoComment.setComment(itr.next());
                 todoCommentMap.put(todoComment.getId(), todoComment);
-                line = bufferedReader.readLine();
             }
         } catch (IOException ioe) {
             //
@@ -146,8 +142,8 @@ public class FileParser implements TodoDbParser {
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(filePath));
-            String line = bufferedReader.readLine();
-            while (line != null) {
+            String line;
+            while ((line=bufferedReader.readLine()) != null) {
                 List<String> tokens = this.tokanizeLine(line, "|");
                 Iterator<String> itr = tokens.iterator();
                 TodoUpdate todoUpdate = new TodoUpdate();
@@ -158,7 +154,6 @@ public class FileParser implements TodoDbParser {
                 todoUpdate.setTodoId(Integer.parseInt(itr.next()));
                 todoUpdate.setTodoUpdateType(TodoUpdateType.valueOf(itr.next()));
                 todoUpdateMap.put(todoUpdate.getId(), todoUpdate);
-                line = bufferedReader.readLine();
             }
         } catch (IOException ioe) {
             //
