@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="HelloWorld" level="project" />
+    <orderEntry type="library" name="java-calculator-1.0.0.rc16" level="project" />
+    <orderEntry type="library" name="step2-1.0-SNAPSHOT" level="project" />
   </component>
 </module>
