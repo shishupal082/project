@@ -71,7 +71,9 @@ li code{
 			<li><code tabindex="1">sudo chmod 777 folder_name</code></li>
 			<li><code tabindex="1">ls -ltr</code></li>
 			<li><code tabindex="1">ll</code></li>
-			<li><code>cp "*-2016-12-01*" destination_folder</code></li>
+			<li><code>cp *-2016-12-01-* destination_folder</code></li>
+			<li><code>cp *-2016-12-01-* destination_folder</code></li>
+			<li><code>find . -name "*-2017-*" | wc -l (Count)</code></li>
 		</ul>
 		<h2>Logs</h2>
 		<ul>
@@ -116,6 +118,16 @@ li code{
 		<h2>DW project setup</h2>
 		<ul>
 			<li>create meven project</li>
+			<li>Edit configuration</li>
+			<li>
+				<ul>
+					<li>Main class : com.todo.Application (Main class path after src/java)</li>
+					<li>VM options : </li>
+					<li>Programm argument : server yml path (Under resources folder)</li>
+					<li>Working directory : Static path till todo folder before src</li>
+					<li>Environment variables : </li>
+				</ul>
+			</li>
 		</ul>
 		<h5>Maven cli class error on runtime</h5>
 		<ul>
