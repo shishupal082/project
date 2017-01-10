@@ -1,5 +1,3 @@
-echo $(date +"%I:%M:%S") : "Dependencies added"
-
 mvn clean install
 echo $(date +"%I:%M:%S") : "Adding dependencies"
 cp ../../../../program_files/jars/step2-1.0-SNAPSHOT.jar target/
