@@ -1,0 +1,4 @@
+Event table,Update id,event_type,field_name,value,previous_value
+1,1,create,status,OPEN,
+2,1,create,priority,LOW,
+3,4,change,status,SOLVED,OPEN

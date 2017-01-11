@@ -1,0 +1,6 @@
+Update table,todoId,update_type (user/todo),user_id
+1,1,todo,xyz
+2,1,todo,xyz
+3,2,todo,xyz
+4,1,todo,xyz
+5,2,todo,xyz
