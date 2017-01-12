@@ -1,5 +1,6 @@
 package com.todo.parser;
 
+import com.todo.config.TodoFileConfig;
 import com.todo.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,19 @@ import java.util.*;
  */
 public class FileParser implements TodoDbParser {
     private static Logger logger = LoggerFactory.getLogger(TodoDbParser.class);
-    public TodoDatabase getTodoDatabase() {
+    private TodoFileConfig todoFileConfig;
+    private String todoDataFileName;
+    private String todoUserFileName;
+    private String todoEventFileName;
+    private String todoCommentFileName;
+    private String todoUpdateFileName;
+    public TodoDatabase getTodoDatabase(TodoFileConfig todoFileConfigs) {
+        this.todoFileConfig = todoFileConfigs;
+        todoUpdateFileName = todoFileConfig.getTodoUpdateFileName();
+        todoDataFileName = todoFileConfig.getTodoFileName();
+        todoUserFileName = todoFileConfig.getTodoUserFileName();
+        todoEventFileName = todoFileConfig.getTodoEventFileName();
+        todoCommentFileName = todoFileConfig.getTodoCommentFileName();
         Map<Integer, Todo> todoMap = getTodoMap();
         Map<String, TodoUser> todoUserMap = getTodoUserMap();
         Map<Integer, TodoEvent> todoEventMap = getTodoEventMap();
@@ -22,7 +35,8 @@ public class FileParser implements TodoDbParser {
         Map<Integer, TodoUpdate> todoUpdateMap = getTodoUpdateMap();
         return new TodoDatabase(todoMap, todoUserMap, todoEventMap, todoCommentMap, todoUpdateMap);
     }
-    private List<String> tokanizeLine (String line, String delimator){
+    private List<String> tokanizeLine (String line){
+        String delimator = todoFileConfig.getDelimator();
         List<String> lst = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(line, delimator);
         while (st.hasMoreElements()){
@@ -32,18 +46,16 @@ public class FileParser implements TodoDbParser {
     }
     private Map<Integer, Todo> getTodoMap() {
         Map<Integer, Todo> todoMap = new HashMap<Integer, Todo>();
-        String filename = "todo.data";
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/" + filename);
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
+            bufferedReader = new BufferedReader(new FileReader(todoDataFileName));
             String line;
             while ((line=bufferedReader.readLine()) != null) {
-                List<String> tokens = this.tokanizeLine(line, "|");
+                List<String> tokens = this.tokanizeLine(line);
                 Iterator<String> itr = tokens.iterator();
                 Todo todo = new Todo();
                 if (tokens.size() < 6) {
-                    logger.info("Invalid line in {} : {}",filename, line);
+                    logger.info("Invalid line in {} : {}",todoDataFileName, line);
                     continue;
                 }
                 todo.setId(Integer.parseInt(itr.next()));
@@ -61,13 +73,12 @@ public class FileParser implements TodoDbParser {
     }
     private Map<String, TodoUser> getTodoUserMap() {
         Map<String, TodoUser> todoUserMap = new HashMap<String, TodoUser>();
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/user.data");
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
+            bufferedReader = new BufferedReader(new FileReader(todoUserFileName));
             String line;
             while ((line=bufferedReader.readLine()) != null) {
-                List<String> tokens = this.tokanizeLine(line, "|");
+                List<String> tokens = this.tokanizeLine(line);
                 Iterator<String> itr = tokens.iterator();
                 TodoUser todoUser = new TodoUser();
                 if (tokens.size() < 4) {
@@ -86,13 +97,12 @@ public class FileParser implements TodoDbParser {
     }
     private Map<Integer, TodoEvent> getTodoEventMap() {
         Map<Integer, TodoEvent> todoEventMap = new HashMap<Integer, TodoEvent>();
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/event.data");
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
+            bufferedReader = new BufferedReader(new FileReader(todoEventFileName));
             String line;
             while ((line=bufferedReader.readLine()) != null) {
-                List<String> tokens = this.tokanizeLine(line, "|");
+                List<String> tokens = this.tokanizeLine(line);
                 Iterator<String> itr = tokens.iterator();
                 TodoEvent todoEvent = new TodoEvent();
                 if (tokens.size() < 4) {
@@ -100,7 +110,8 @@ public class FileParser implements TodoDbParser {
                 }
                 todoEvent.setId(Integer.parseInt(itr.next()));
                 todoEvent.setUpdateId(Integer.parseInt(itr.next()));
-                todoEvent.setType(TodoEventType.valueOf(itr.next()));
+                String previousValue = itr.next();
+                todoEvent.setType(previousValue != null ? TodoEventType.valueOf(previousValue.toUpperCase()) : null);
                 todoEvent.setFieldName(itr.next());
                 todoEvent.setValue(itr.next());
                 todoEvent.setPreviousValue(itr.hasNext() ? itr.next() : null);
@@ -114,13 +125,12 @@ public class FileParser implements TodoDbParser {
 
     private Map<Integer, TodoComment> getTodoCommentMap() {
         Map<Integer, TodoComment> todoCommentMap = new HashMap<Integer, TodoComment>();
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/comment.data");
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
+            bufferedReader = new BufferedReader(new FileReader(todoCommentFileName));
             String line;
             while ((line=bufferedReader.readLine()) != null) {
-                List<String> tokens = this.tokanizeLine(line, "|");
+                List<String> tokens = this.tokanizeLine(line);
                 Iterator<String> itr = tokens.iterator();
                 TodoComment todoComment = new TodoComment();
                 if (tokens.size() < 3) {
@@ -138,13 +148,12 @@ public class FileParser implements TodoDbParser {
     }
     private Map<Integer, TodoUpdate> getTodoUpdateMap() {
         Map<Integer, TodoUpdate> todoUpdateMap = new HashMap<Integer, TodoUpdate>();
-        String filePath = System.getProperty("user.dir").concat("/src/main/java/com/todo/parser/update_details.data");
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(filePath));
+            bufferedReader = new BufferedReader(new FileReader(todoUpdateFileName));
             String line;
             while ((line=bufferedReader.readLine()) != null) {
-                List<String> tokens = this.tokanizeLine(line, "|");
+                List<String> tokens = this.tokanizeLine(line);
                 Iterator<String> itr = tokens.iterator();
                 TodoUpdate todoUpdate = new TodoUpdate();
                 if (tokens.size() < 4) {
@@ -152,7 +161,7 @@ public class FileParser implements TodoDbParser {
                 }
                 todoUpdate.setId(Integer.parseInt(itr.next()));
                 todoUpdate.setTodoId(Integer.parseInt(itr.next()));
-                todoUpdate.setTodoUpdateType(TodoUpdateType.valueOf(itr.next()));
+                todoUpdate.setTodoUpdateType(TodoUpdateType.valueOf(itr.next().toUpperCase()));
                 todoUpdateMap.put(todoUpdate.getId(), todoUpdate);
             }
         } catch (IOException ioe) {

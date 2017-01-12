@@ -1,20 +1,17 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.TodoConfig;
+import com.todo.config.TodoFileConfig;
 import com.todo.model.TodoDatabase;
 import com.todo.parser.FileParser;
 import com.todo.parser.TodoDbParser;
-import com.todo.response.TodoActionResponse;
 import com.todo.response.TodoResponse;
 import com.todo.services.TodoService;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  * Created by shishupalkumar on 12/01/17.
@@ -25,9 +22,11 @@ import java.util.List;
 
 public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
-    public TodoResource (TodoConfiguration todoConfiguration, TodoConfig todoConfig) {
+    private TodoFileConfig todoFileConfig;
+    public TodoResource (TodoConfiguration todoConfiguration, TodoFileConfig todoFileConfig) {
+        this.todoFileConfig = todoFileConfig;
         TodoDbParser todoDbParser = new FileParser();
-        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase();
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
         logger.info("Todos : {}", todoDatabase.getTodoMap());
         logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
         logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
@@ -47,7 +46,7 @@ public class TodoResource {
             throw new NumberFormatException("Invalid Todo Id : " + todoId);
         }
         TodoDbParser todoDbParser = new FileParser();
-        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase();
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
         TodoService todoService = new TodoService(todoDatabase);
         TodoResponse todoResponse = todoService.getTodoById(todoIndex.toString());
         logger.info("getTodoResponseById : Out : {}", todoResponse);

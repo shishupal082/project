@@ -26,3 +26,11 @@ server:
 testConfig:
   common:
     configName: TestConfig
+
+todoFileConfig:
+  delimator: ","
+  todoFileName: meta-data/todo.csv
+  todoUserFileName: meta-data/user.csv
+  todoEventFileName: meta-data/event.csv
+  todoUpdateFileName: meta-data/update_details.csv
+  todoCommentFileName: meta-data/comment.csv

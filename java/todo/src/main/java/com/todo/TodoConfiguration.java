@@ -1,7 +1,7 @@
 package com.todo;
 
 import com.todo.config.TestConfig;
-import com.todo.config.TodoConfig;
+import com.todo.config.TodoFileConfig;
 import io.dropwizard.Configuration;
 import lombok.Data;
 
@@ -12,15 +12,15 @@ import lombok.Data;
 public class TodoConfiguration extends Configuration {
     private TestConfig testConfig;
 
-    public TodoConfig getTodoConfig() {
-        return todoConfig;
+    public TodoFileConfig getTodoFileConfig() {
+        return todoFileConfig;
     }
 
-    public void setTodoConfig(TodoConfig todoConfig) {
-        this.todoConfig = todoConfig;
+    public void setTodoFileConfig(TodoFileConfig todoFileConfig) {
+        this.todoFileConfig = todoFileConfig;
     }
 
-    private TodoConfig todoConfig;
+    private TodoFileConfig todoFileConfig;
 
     public TestConfig getTestConfig() {
         return testConfig;
