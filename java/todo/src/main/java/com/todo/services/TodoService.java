@@ -3,6 +3,8 @@ package com.todo.services;
 import com.todo.model.*;
 import com.todo.response.TodoActionResponse;
 import com.todo.response.TodoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Map;
  */
 public class TodoService {
     private TodoDatabase todoDatabase;
+    private static Logger logger = LoggerFactory.getLogger(TodoService.class);
     public TodoService(TodoDatabase todoDatabase) {
         this.todoDatabase = todoDatabase;
     }

@@ -4,10 +4,13 @@ logging:
     com.todo: INFO
   appenders:
     - type: console
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      threshold: ALL
+      timeZone: UTC
     - type: file
       threshold: ALL
       timeZone: UTC
-      logFormat: "%d [%thread] %-5level %c{15} - [%X{X-Transaction-Key} - %X{X-Request-Key}] - %msg%n%rEx"
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
       currentLogFilename: /var/log/todo/application.log
       archivedLogFilenamePattern: /var/log/todo/application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 5
