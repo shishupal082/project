@@ -22,9 +22,9 @@ import java.util.List;
 @Path("/api/todo/v1")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Slf4j
+
 public class TodoResource {
-    public static Logger logger = LoggerFactory.getLogger(TodoResource.class);
+    private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     public TodoResource (TodoConfiguration todoConfiguration, TodoConfig todoConfig) {
         TodoDbParser todoDbParser = new FileParser();
         TodoDatabase todoDatabase = todoDbParser.getTodoDatabase();
