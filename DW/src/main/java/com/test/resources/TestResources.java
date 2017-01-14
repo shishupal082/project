@@ -3,9 +3,7 @@ package com.test.resources;
 import com.test.common.TestErrorCodes;
 import com.test.common.TestException;
 import com.test.config.TestConfig;
-import com.test.domain.Day;
 import com.test.domain.Festival;
-import com.test.domain.Month;
 import com.test.domain.Todo.Todo;
 import com.test.domain.UserAgentInfo;
 import com.test.domain.test.DateRequest;
@@ -80,7 +78,7 @@ public class TestResources {
     public Map<String, String> getFestivalDetails(@Context final HttpServletRequest httpServletRequest){
         Festival festival = Festival.Holi;
         log.info("getFestivalDetails : in");
-        Map<String, String> resoponse = new HashMap<>();
+        Map<String, String> resoponse = new HashMap<String, String>();
         resoponse.put("festival_name", festival.getFestivalName());
         resoponse.put("year", festival.getYear().toString());
         resoponse.put("month", festival.getMonth().getFullName());

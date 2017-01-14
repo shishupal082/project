@@ -3,9 +3,7 @@ package com.test;
 import com.test.common.TestExceptionMapper;
 import com.test.filter.RequestFilter;
 import com.test.resources.DataResource;
-import com.test.resources.HomeResources;
 import com.test.resources.TestResources;
-import com.test.resources.ViewResources;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -26,8 +24,6 @@ public class TestApplication extends Application<TestConfiguration> {
         environment.jersey().register(new TestExceptionMapper());
         environment.jersey().register(requestFilter);
         environment.jersey().register(new TestResources(testConfiguration.getTestConfig()));
-        environment.jersey().register(new HomeResources());
-        environment.jersey().register(new ViewResources());
         environment.jersey().register(new DataResource(requestFilter));
     }
     public static void main(String[] args) throws Exception {
