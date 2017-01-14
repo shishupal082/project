@@ -3,8 +3,8 @@ package com.step1.step1.service;
 /**
  * Created by shishupalkumar on 10/01/17.
  */
-public class MessageService {
+public class S1MessageService {
     public static String getMessage() {
-        return "Hello World";
+        return "S1MessageService : getMessage : Hello World";
     }
 }

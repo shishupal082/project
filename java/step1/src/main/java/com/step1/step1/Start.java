@@ -1,6 +1,7 @@
 package com.step1.step1;
 
-import com.step1.step1.service.MessageService;
+import com.step1.step1.service.S1MessageService;
+import com.step2.service.S2MessageService;
 import com.step2.DateLibrary;
 import cucumber.examples.java.calculator.DateCalculator;
 
@@ -11,8 +12,9 @@ import java.util.Date;
  */
 public class Start {
     public static void main(String[] args) {
-        System.out.println("Step1 Start");
-        System.out.println(MessageService.getMessage());
+        S2MessageService s2MessageService = new S2MessageService();
+        System.out.println(s2MessageService.getMessage());
+        System.out.println(S1MessageService.getMessage());
         DateLibrary dateLibrary = new DateLibrary();
         System.out.println(dateLibrary.getDateStringNow());
 
