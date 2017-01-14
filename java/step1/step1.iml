@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="step1-1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.step2:step2:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: info.cukes:java-calculator:1.0.0.RC16" level="project" />
   </component>
