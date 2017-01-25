@@ -1,4 +1,8 @@
 To run this application
 
-Copy target/todo-1.0-SNAPSHOT.jar and meta-data folder
+java -jar target/todo-*-SNAPSHOT.jar server meta-data/env_config.yml
+
+or,
+
+Copy target/todo-1.0-SNAPSHOT.jar in meta-data folder
 then run => sh meta-data/run.sh
