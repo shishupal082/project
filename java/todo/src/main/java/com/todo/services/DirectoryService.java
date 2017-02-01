@@ -4,7 +4,7 @@ import com.todo.config.TodoDirectoryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +29,26 @@ public class DirectoryService {
         }
         return allFileLink;
     }
-    public ArrayList<String> getAllFiles(String folderPath, boolean removeFolderPath) {
+    public BufferedReader getFile(ArrayList<String> folderPath, String fileName) throws FileNotFoundException {
+        BufferedReader bufferedReader = null;
+        for (String folder : folderPath) {
+            try {
+                bufferedReader = new BufferedReader(
+                    new FileReader(folder + fileName));
+                logger.info("File : {}, found in : {}",fileName, folder);
+                break;
+            } catch (IOException ioe) {
+                logger.info("File : {}, not found in : {}",fileName, folder);
+            }
+        }
+        if (bufferedReader == null) {
+            logger.info("File : {}, not found in folderPath : {} : throws : FileNotFoundException",
+                fileName, folderPath);
+            throw new FileNotFoundException("File not found");
+        }
+        return bufferedReader;
+    }
+    public ArrayList<String> getAllFiles(String folderPath, String staticFolderPath, boolean removeFolderPath) {
         ArrayList<String> allFileList = new ArrayList<String>();
         String filePath = "";
         String[] fileParent;
@@ -40,7 +59,7 @@ public class DirectoryService {
                 for (File file : listOfFiles) {
                     if (file.isFile()) {
                         if (removeFolderPath) {
-                            fileParent = file.getPath().split(todoDirectoryConfig.getRelativePath(), 2);
+                            fileParent = file.getPath().split(staticFolderPath, 2);
                             if (fileParent.length > 1) {
                                 filePath = fileParent[1];
                             } else {
@@ -51,7 +70,7 @@ public class DirectoryService {
                         }
                         allFileList.add(filePath);
                     } else if (file.isDirectory()){
-                        allFileList.addAll(getAllFiles(file.getPath(), removeFolderPath));
+                        allFileList.addAll(getAllFiles(file.getPath(), staticFolderPath, removeFolderPath));
                     } else {
                         logger.info("Unknown file type present : {}", file.getName());
                     }

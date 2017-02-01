@@ -36,5 +36,6 @@ todoFileConfig:
   todoCommentFileName: meta-data/comment.csv
 
 todoDirectoryConfig:
-  supportedGetFile: [txt, js, data, csv, dat, html]
-  relativePath: meta-data/files/
+  supportedGetFile: [txt, js, css, less, data, csv, dat, html]
+  skipLineBreakFile: [html, htm]
+  relativePath: [meta-data/files/]

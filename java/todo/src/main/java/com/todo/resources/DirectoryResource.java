@@ -10,7 +10,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -34,7 +33,10 @@ public class DirectoryResource {
     public Response getAll() {
         logger.info("getAll : In");
         String res = "";
-        ArrayList<String> allFiles = directoryService.getAllFiles(todoDirectoryConfig.getRelativePath(), true);
+        ArrayList<String> allFiles = new ArrayList<String>();
+        for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+            allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
+        }
         allFiles = directoryService.createLink(allFiles, true);
         for (String fileName : allFiles) {
             res += fileName + "<br>";
@@ -62,29 +64,36 @@ public class DirectoryResource {
     public Response getFile(@QueryParam("name") String fileName) {
         logger.info("getFile : In : fileName : {}", fileName);
         String fileData = null;
+        String line;
         BufferedReader bufferedReader = null;
         try {
             String[] fileArray = fileName.split("\\.");
-            if (fileArray.length > 1 &&
-                todoDirectoryConfig.getSupportedGetFile().contains(fileArray[fileArray.length - 1])) {
-                bufferedReader = new BufferedReader(
-                    new FileReader(todoDirectoryConfig.getRelativePath() + fileName));
-                String line;
-                fileData = "";
-                while ((line=bufferedReader.readLine()) != null) {
-                    fileData += line + "<br>";
+            if (fileArray.length > 1) {
+                String fileExt = fileArray[fileArray.length - 1];
+                if (todoDirectoryConfig.getSupportedGetFile().contains(fileExt)) {
+                    bufferedReader = directoryService.getFile(todoDirectoryConfig.getRelativePath(), fileName);
+                    fileData = "";
+                    while ((line=bufferedReader.readLine()) != null) {
+                        if (todoDirectoryConfig.getSkipLineBreakFile().contains(fileExt)) {
+                            fileData += line;
+                        } else {
+                            fileData += line + "<br>";
+                        }
+                    }
+                } else {
+                    fileData = "Unsupported file format";
                 }
             } else {
                 fileData = "Unsupported file format";
             }
         } catch (IOException ioe) {
-            logger.info("Error parsing file : ", fileData);
             fileData = "File not found";
+            logger.info("Error parsing file : {} : {} : IOE", fileName, fileData);
         } catch (Exception e) {
             fileData = "Invalid arguments";
-            logger.info("Error parsing file : ", fileData);
+            logger.info("Error parsing file : {} : {}", fileName, fileData);
         }
-        logger.info("getFile : Out : {}", fileData);
+        logger.info("getFile : Out : {}", fileName);
         return Response.ok(fileData).build();
     }
 }
