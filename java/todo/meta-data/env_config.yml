@@ -11,7 +11,7 @@ logging:
       threshold: ALL
       timeZone: UTC
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      currentLogFilename: /var/log/todo/application.log
+      currentLogFilename: meta-data/logs/application.log
       archivedLogFilenamePattern: /var/log/todo/application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 5
 
@@ -34,3 +34,7 @@ todoFileConfig:
   todoEventFileName: meta-data/event.csv
   todoUpdateFileName: meta-data/update_details.csv
   todoCommentFileName: meta-data/comment.csv
+
+todoDirectoryConfig:
+  supportedGetFile: [txt, js, data, csv, dat]
+  relativePath: meta-data/files/

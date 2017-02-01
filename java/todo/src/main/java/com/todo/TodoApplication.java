@@ -1,6 +1,7 @@
 package com.todo;
 
 import com.todo.filters.LogFilter;
+import com.todo.resources.DirectoryResource;
 import com.todo.resources.TodoResource;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -25,6 +26,8 @@ public class TodoApplication extends Application<TodoConfiguration> {
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
+        environment.jersey().register(new DirectoryResource(todoConfiguration,
+            todoConfiguration.getTodoDirectoryConfig()));
     }
     public static void main(String[] args) throws Exception {
         new TodoApplication().run(args[0], args[1]);
