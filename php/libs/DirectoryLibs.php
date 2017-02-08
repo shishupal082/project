@@ -12,7 +12,7 @@ class DirectoryLibs extends Libs{
 		}
 		$cdir = scandir($dir);
 		log_message_prod("Scandir : ".$dir);
-		foreach ($cdir as $key => $value) {
+		foreach ($cdir as $index => $value) {
 			if (!in_array($value,array(".",".."))) {
 				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
 					if ($recursive === TRUE) {
@@ -25,6 +25,7 @@ class DirectoryLibs extends Libs{
 				}
 			}
 		}
+		log_message_prod($result);
 		return $result;
 	}
 	private function getFolderSize($dir) {
@@ -40,7 +41,8 @@ class DirectoryLibs extends Libs{
 			return $result;
 		}
 		$cdir = scandir($dir);
-		foreach ($cdir as $key => $value) {
+		log_message_prod("Scandir : ".$dir);
+		foreach ($cdir as $index => $value) {
 			if (!in_array($value, array(".","..",".DS_Store"))) {
 				$tempValue = array("unit" => "bytes");
 				if (is_dir($dir.DIRECTORY_SEPARATOR.$value)) {
@@ -63,26 +65,45 @@ class DirectoryLibs extends Libs{
 		}
 		return $result;
 	}
-	private function createUrlArray($dirToArray, $dir){
+	private function getUrl($currentPath, $recursive) {
+		if ($recursive) {
+			return $currentPath;
+		}
+		$url = "/dir/pathLink?recursive=false&path=".$currentPath;
+		return $url;
+	}
+	private function createUrlArray($dirToArray, $dir, $recursive = FALSE){
 		if(!is_array($dirToArray)){
 			if(is_string($dirToArray)){
-				array_push($this->urlArray, $dir.$dirToArray);
+				array_push($this->urlArray, $this->getUrl($dir.$dirToArray, $recursive));
 			}
 			return TRUE;
 		}
 		foreach ($dirToArray as $key => $value) {
 			if(is_string($value)){
-				array_push($this->urlArray, $dir.$value);
+				array_push($this->urlArray, $this->getUrl($dir.$value, $recursive));
 			}else{
-				$this->createUrlArray($value, $dir.$key."/");
+				$this->createUrlArray($value, $dir.$key."/", $recursive);
 			}
 		}
 		return TRUE;
 	}
-	public function dirToUrlArray($dir, $relativePath, $recursive = TRUE) { 
-		$dirToArray = $this->dirToArray($dir, $recursive);
-		$this->createUrlArray($dirToArray, $relativePath);
-		return $this->urlArray;
+	public function dirToUrlArray($dir, $relativePath, $recursive = TRUE) {
+		if ($recursive) {
+			$dirToArray = $this->dirToArray($dir, $recursive);
+			$this->createUrlArray($dirToArray, $relativePath, $recursive);
+			return $this->urlArray;
+		}
+		$urlArray = array();
+		$dirToArrayV2 = $this->dirToArrayV2($dir, $recursive);
+		foreach ($dirToArrayV2 as $index => $value) {
+			if ($value["type"] == "file") {
+				array_push($urlArray, $relativePath.$value["name"]);
+			} else {
+				array_push($urlArray, $this->getUrl($relativePath.$value["name"]."/", $recursive));
+			}
+		}
+		return $urlArray;
 	}
 	public function duplicateFile() {
 		$dirToArray1 = $this->dirToArray(DOCUMENT_ROOT."/pvt/org", FALSE);
@@ -94,7 +115,7 @@ class DirectoryLibs extends Libs{
 				array_push($dirToArray, $value);
 			}
 		}
-		$this->createUrlArray($dirToArray, "/pvt/recovered/");
+		$this->createUrlArray($dirToArray, "/pvt/recovered/", FALSE);
 		return $this->urlArray;
 	}
 }
