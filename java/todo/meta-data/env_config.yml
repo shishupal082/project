@@ -39,5 +39,5 @@ todoFileConfig:
 todoDirectoryConfig:
   supportedGetFile: [txt, yml, yaml, js, css, less, data, csv, dat, html, htm]
   skipLineBreakFile: [html, htm]
-  relativePath: [meta-data/files/]
+  relativePath: [meta-data/files/, ../../templates/common/]
   yamlObject: meta-data/files/yaml_object.yaml

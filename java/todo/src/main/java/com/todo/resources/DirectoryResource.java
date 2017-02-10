@@ -38,6 +38,7 @@ public class DirectoryResource {
         String res = "";
         ArrayList<String> allFiles = new ArrayList<String>();
         for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+            logger.info("Searching files in : {}", folderPath);
             allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
         }
         allFiles = directoryService.createLink(allFiles, true);
@@ -115,6 +116,7 @@ public class DirectoryResource {
         ArrayList<String> allFiles = new ArrayList<String>();
         ArrayList<String> allFilesV2 = new ArrayList<String>();
         for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+            logger.info("Finding files in : {}", folderPath);
             allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
         }
         for (String str : requiredFileTypes) {

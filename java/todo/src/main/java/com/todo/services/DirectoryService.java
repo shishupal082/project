@@ -57,7 +57,7 @@ public class DirectoryService {
         }
         return allFileLink;
     }
-    public BufferedReader getFile(ArrayList<String> folderPath, String fileName) throws FileNotFoundException {
+    public BufferedReader getFile(ArrayList<String> folderPath, String fileName) throws TodoException {
         BufferedReader bufferedReader = null;
         for (String folder : folderPath) {
             try {
@@ -70,9 +70,9 @@ public class DirectoryService {
             }
         }
         if (bufferedReader == null) {
-            logger.info("File : {}, not found in folderPath : {} : throws : FileNotFoundException",
-                fileName, folderPath);
-            throw new FileNotFoundException("File not found");
+            logger.info("File : {}, not found in folderPath : {} : throws : {}",
+                fileName, folderPath, ErrorCodes.FILE_NOT_FOUND.getErrorString());
+            throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
         }
         return bufferedReader;
     }
@@ -83,6 +83,7 @@ public class DirectoryService {
         try {
             File folder = new File(folderPath);
             File[] listOfFiles = folder.listFiles();
+            logger.info("Files in folder : {}, {}", folderPath, listOfFiles);
             if (listOfFiles != null) {
                 for (File file : listOfFiles) {
                     if (file.isFile()) {
@@ -103,6 +104,8 @@ public class DirectoryService {
                         logger.info("Unknown file type present : {}", file.getName());
                     }
                 }
+            } else {
+                logger.info("No files found in folder : {}, listOfFiles=null", folderPath);
             }
         } catch (Exception e) {
             logger.info("Error fetching folder from : {}", folderPath);

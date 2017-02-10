@@ -9,7 +9,7 @@
         "html": "templates/front_end/302_vertical_alignment.html"
     },
     "303": {
-        "html": "templates/front_end/303_command.html",
+        "html": "templates/common/303_command.html",
         "css": [
             "bootstrap"
         ]
