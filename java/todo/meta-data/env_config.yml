@@ -12,6 +12,7 @@ logging:
       timeZone: UTC
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
       currentLogFilename: /log/todo/application.log
+#      currentLogFilename: meta-data/log/todo/application.log
       archivedLogFilenamePattern: /log/todo/application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 5
 
@@ -36,6 +37,7 @@ todoFileConfig:
   todoCommentFileName: meta-data/comment.csv
 
 todoDirectoryConfig:
-  supportedGetFile: [txt, js, css, less, data, csv, dat, html]
+  supportedGetFile: [txt, yml, yaml, js, css, less, data, csv, dat, html, htm]
   skipLineBreakFile: [html, htm]
   relativePath: [meta-data/files/]
+  yamlObject: meta-data/files/yaml_object.yaml

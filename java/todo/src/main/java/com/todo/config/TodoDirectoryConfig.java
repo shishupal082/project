@@ -9,6 +9,7 @@ public class TodoDirectoryConfig {
     private ArrayList<String> relativePath;
     private ArrayList<String> supportedGetFile;
     private ArrayList<String> skipLineBreakFile;
+    private String yamlObject;
 
     public ArrayList<String> getRelativePath() {
         return relativePath;
@@ -32,5 +33,13 @@ public class TodoDirectoryConfig {
 
     public void setSkipLineBreakFile(ArrayList<String> skipLineBreakFile) {
         this.skipLineBreakFile = skipLineBreakFile;
+    }
+
+    public String getYamlObject() {
+        return yamlObject;
+    }
+
+    public void setYamlObject(String yamlObject) {
+        this.yamlObject = yamlObject;
     }
 }

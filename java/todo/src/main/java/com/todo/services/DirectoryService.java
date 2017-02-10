@@ -1,6 +1,11 @@
 package com.todo.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.config.TodoDirectoryConfig;
+import com.todo.model.YamlObject;
+import com.todo.utils.ErrorCodes;
+import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +20,29 @@ public class DirectoryService {
     private TodoDirectoryConfig todoDirectoryConfig;
     public DirectoryService(TodoDirectoryConfig todoDirectoryConfig) {
         this.todoDirectoryConfig = todoDirectoryConfig;
+    }
+    public ArrayList<String> filterFiles(ArrayList<String> allFiles, String fileType) {
+        ArrayList<String> filteredFiles = new ArrayList<String>();
+        for (String fileName : allFiles) {
+            String[] fileNameArray = fileName.split("\\.");
+            if (fileNameArray.length > 0) {
+                if (fileNameArray[fileNameArray.length - 1].equals(fileType)) {
+                    filteredFiles.add(fileName);
+                }
+            }
+        }
+        return filteredFiles;
+    }
+    public YamlObject getYamlObject() throws TodoException {
+        YamlObject yamlObject = null;
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            yamlObject = mapper.readValue(new File(todoDirectoryConfig.getYamlObject()), YamlObject.class);
+        } catch (IOException ioe) {
+            logger.info("IOE : for file : {}", todoDirectoryConfig.getYamlObject());
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        return yamlObject;
     }
     public ArrayList<String> createLink(ArrayList<String> allFiles, boolean isRelative) {
         ArrayList<String> allFileLink = new ArrayList<String>();

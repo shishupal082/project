@@ -2,7 +2,10 @@ package com.todo.resources;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.TodoDirectoryConfig;
+import com.todo.model.YamlObject;
 import com.todo.services.DirectoryService;
+import com.todo.utils.StringUtils;
+import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +32,7 @@ public class DirectoryResource {
     }
     @Path("/v1/getAll")
     @GET
-    @Produces("text/html")
+    @Produces(MediaType.TEXT_HTML)
     public Response getAll() {
         logger.info("getAll : In");
         String res = "";
@@ -60,7 +63,7 @@ public class DirectoryResource {
 //    }
     @Path("/v1/get")
     @GET
-    @Produces("text/html")
+    @Produces(MediaType.TEXT_HTML)
     public Response getFile(@QueryParam("name") String fileName) {
         logger.info("getFile : In : fileName : {}", fileName);
         String fileData = null;
@@ -95,5 +98,41 @@ public class DirectoryResource {
         }
         logger.info("getFile : Out : {}", fileName);
         return Response.ok(fileData).build();
+    }
+    @Path("/v1/filter")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response getFilteredFiles(@QueryParam("type") String fileTypes) {
+        logger.info("getFilteredFiles : In : fileType : {}", fileTypes);
+        String res = "";
+        ArrayList<String> requiredFileTypes = StringUtils.tokanizeString(fileTypes, ",");
+        for (String str : requiredFileTypes) {
+            if (!todoDirectoryConfig.getSupportedGetFile().contains(str)) {
+                res = "One or more unsupported fileType : " + fileTypes;
+                return Response.ok(res).build();
+            }
+        }
+        ArrayList<String> allFiles = new ArrayList<String>();
+        ArrayList<String> allFilesV2 = new ArrayList<String>();
+        for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+            allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
+        }
+        for (String str : requiredFileTypes) {
+            allFilesV2.addAll(directoryService.filterFiles(allFiles, str));
+        }
+        allFiles = directoryService.createLink(allFilesV2, true);
+        for (String fileName : allFiles) {
+            res += fileName + "<br>";
+        }
+        logger.info("getFilteredFiles : Out");
+        return Response.ok(res).build();
+    }
+    @Path("/v1/yaml")
+    @GET
+    public YamlObject getYamlObject() throws TodoException {
+        logger.info("getYamlObject : In");
+        YamlObject yamlObject = directoryService.getYamlObject();
+        logger.info("getYamlFileName : Out");
+        return yamlObject;
     }
 }
