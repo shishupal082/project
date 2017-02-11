@@ -1,7 +1,6 @@
 package com.todo;
 
 import com.todo.config.TestConfig;
-import com.todo.config.TodoDirectoryConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;
 import io.dropwizard.Configuration;
@@ -13,8 +12,9 @@ import io.dropwizard.Configuration;
 public class TodoConfiguration extends Configuration {
     private TestConfig testConfig;
     private TodoFileConfig todoFileConfig;
-    private TodoDirectoryConfig todoDirectoryConfig;
     private TodoViewConfig todoViewConfig;
+    private String todoDirectoryConfigPath;
+    private String yamlObjectPath;
 
     public TodoFileConfig getTodoFileConfig() {
         return todoFileConfig;
@@ -32,19 +32,27 @@ public class TodoConfiguration extends Configuration {
         this.testConfig = testConfig;
     }
 
-    public TodoDirectoryConfig getTodoDirectoryConfig() {
-        return todoDirectoryConfig;
-    }
-
-    public void setTodoDirectoryConfig(TodoDirectoryConfig todoDirectoryConfig) {
-        this.todoDirectoryConfig = todoDirectoryConfig;
-    }
-
     public TodoViewConfig getTodoViewConfig() {
         return todoViewConfig;
     }
 
     public void setTodoViewConfig(TodoViewConfig todoViewConfig) {
         this.todoViewConfig = todoViewConfig;
+    }
+
+    public String getTodoDirectoryConfigPath() {
+        return todoDirectoryConfigPath;
+    }
+
+    public void setTodoDirectoryConfigPath(String todoDirectoryConfigPath) {
+        this.todoDirectoryConfigPath = todoDirectoryConfigPath;
+    }
+
+    public String getYamlObjectPath() {
+        return yamlObjectPath;
+    }
+
+    public void setYamlObjectPath(String yamlObjectPath) {
+        this.yamlObjectPath = yamlObjectPath;
     }
 }

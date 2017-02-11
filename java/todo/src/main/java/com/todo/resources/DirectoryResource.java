@@ -1,7 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.TodoDirectoryConfig;
+import com.todo.config.DirectoryConfig;
 import com.todo.model.YamlObject;
 import com.todo.services.DirectoryService;
 import com.todo.utils.StringUtils;
@@ -24,20 +24,20 @@ import java.util.ArrayList;
 @Consumes(MediaType.APPLICATION_JSON)
 public class DirectoryResource {
     private static Logger logger = LoggerFactory.getLogger(DirectoryResource.class);
-    private TodoDirectoryConfig todoDirectoryConfig;
     private DirectoryService directoryService;
-    public DirectoryResource(TodoConfiguration todoConfiguration, TodoDirectoryConfig todoDirectoryConfig) {
-        this.todoDirectoryConfig = todoDirectoryConfig;
-        this.directoryService = new DirectoryService(todoDirectoryConfig);
+    public DirectoryResource(TodoConfiguration todoConfiguration) {
+        this.directoryService = new DirectoryService(todoConfiguration.getTodoDirectoryConfigPath(),
+            todoConfiguration.getYamlObjectPath());
     }
     @Path("/v1/getAll")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getAll() {
+        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
         logger.info("getAll : In");
         String res = "";
         ArrayList<String> allFiles = new ArrayList<String>();
-        for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+        for (String folderPath : directoryConfig.getRelativePath()) {
             logger.info("Searching files in : {}", folderPath);
             allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
         }
@@ -67,6 +67,7 @@ public class DirectoryResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFile(@QueryParam("name") String fileName) {
         logger.info("getFile : In : fileName : {}", fileName);
+        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
         String fileData = null;
         String line;
         BufferedReader bufferedReader = null;
@@ -74,11 +75,11 @@ public class DirectoryResource {
             String[] fileArray = fileName.split("\\.");
             if (fileArray.length > 1) {
                 String fileExt = fileArray[fileArray.length - 1];
-                if (todoDirectoryConfig.getSupportedGetFile().contains(fileExt)) {
-                    bufferedReader = directoryService.getFile(todoDirectoryConfig.getRelativePath(), fileName);
+                if (directoryConfig.getSupportedGetFile().contains(fileExt)) {
+                    bufferedReader = directoryService.getFile(directoryConfig.getRelativePath(), fileName);
                     fileData = "";
                     while ((line=bufferedReader.readLine()) != null) {
-                        if (todoDirectoryConfig.getSkipLineBreakFile().contains(fileExt)) {
+                        if (directoryConfig.getSkipLineBreakFile().contains(fileExt)) {
                             fileData += line;
                         } else {
                             fileData += line + "<br>";
@@ -90,12 +91,12 @@ public class DirectoryResource {
             } else {
                 fileData = "Unsupported file format";
             }
-        } catch (IOException ioe) {
-            fileData = "File not found";
-            logger.info("Error parsing file : {} : {} : IOE", fileName, fileData);
+        } catch (TodoException todoe) {
+            fileData = todoe.getMessage();
+            logger.info("Error parsing file : {} : {}", fileName, fileData);
         } catch (Exception e) {
             fileData = "Invalid arguments";
-            logger.info("Error parsing file : {} : {}", fileName, fileData);
+            logger.info("Error parsing file : {} : {} : {}", fileName, fileData, e);
         }
         logger.info("getFile : Out : {}", fileName);
         return Response.ok(fileData).build();
@@ -105,17 +106,18 @@ public class DirectoryResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFilteredFiles(@QueryParam("type") String fileTypes) {
         logger.info("getFilteredFiles : In : fileType : {}", fileTypes);
+        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
         String res = "";
         ArrayList<String> requiredFileTypes = StringUtils.tokanizeString(fileTypes, ",");
         for (String str : requiredFileTypes) {
-            if (!todoDirectoryConfig.getSupportedGetFile().contains(str)) {
+            if (!directoryConfig.getSupportedGetFile().contains(str)) {
                 res = "One or more unsupported fileType : " + fileTypes;
                 return Response.ok(res).build();
             }
         }
         ArrayList<String> allFiles = new ArrayList<String>();
         ArrayList<String> allFilesV2 = new ArrayList<String>();
-        for (String folderPath : todoDirectoryConfig.getRelativePath()) {
+        for (String folderPath : directoryConfig.getRelativePath()) {
             logger.info("Finding files in : {}", folderPath);
             allFiles.addAll(directoryService.getAllFiles(folderPath, folderPath, true));
         }

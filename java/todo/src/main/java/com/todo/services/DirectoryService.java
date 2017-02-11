@@ -2,7 +2,7 @@ package com.todo.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.todo.config.TodoDirectoryConfig;
+import com.todo.config.DirectoryConfig;
 import com.todo.model.YamlObject;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
@@ -17,9 +17,11 @@ import java.util.ArrayList;
  */
 public class DirectoryService {
     private static Logger logger = LoggerFactory.getLogger(DirectoryService.class);
-    private TodoDirectoryConfig todoDirectoryConfig;
-    public DirectoryService(TodoDirectoryConfig todoDirectoryConfig) {
-        this.todoDirectoryConfig = todoDirectoryConfig;
+    private String directoryConfigPath;
+    private String yamlObjectPath;
+    public DirectoryService(String directoryConfigPath, String yamlObjectPath) {
+        this.directoryConfigPath = directoryConfigPath;
+        this.yamlObjectPath = yamlObjectPath;
     }
     public ArrayList<String> filterFiles(ArrayList<String> allFiles, String fileType) {
         ArrayList<String> filteredFiles = new ArrayList<String>();
@@ -33,13 +35,23 @@ public class DirectoryService {
         }
         return filteredFiles;
     }
+    public DirectoryConfig getDirectoryConfig() {
+        DirectoryConfig directoryConfig = null;
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        try {
+            directoryConfig = mapper.readValue(new File(directoryConfigPath), DirectoryConfig.class);
+        } catch (IOException ioe) {
+            logger.info("IOE : for file : {}", directoryConfigPath);
+        }
+        return directoryConfig;
+    }
     public YamlObject getYamlObject() throws TodoException {
         YamlObject yamlObject = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
-            yamlObject = mapper.readValue(new File(todoDirectoryConfig.getYamlObject()), YamlObject.class);
+            yamlObject = mapper.readValue(new File(yamlObjectPath), YamlObject.class);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", todoDirectoryConfig.getYamlObject());
+            logger.info("IOE : for file : {}", yamlObjectPath);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return yamlObject;
@@ -108,8 +120,7 @@ public class DirectoryService {
                 logger.info("No files found in folder : {}, listOfFiles=null", folderPath);
             }
         } catch (Exception e) {
-            logger.info("Error fetching folder from : {}", folderPath);
-            logger.info("{}", e);
+            logger.info("Error fetching folder from : {}, {}", folderPath, e);
         }
         return allFileList;
     }

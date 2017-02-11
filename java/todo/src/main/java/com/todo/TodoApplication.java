@@ -27,8 +27,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
-        environment.jersey().register(new DirectoryResource(todoConfiguration,
-            todoConfiguration.getTodoDirectoryConfig()));
+        environment.jersey().register(new DirectoryResource(todoConfiguration));
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
     }
