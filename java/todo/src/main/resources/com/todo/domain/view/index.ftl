@@ -16,16 +16,24 @@
                     <td>/</td>
                 </tr>
                 <tr>
-                    <td><a href="/index">Index page (Route to /)</a></td>
-                    <td>/index</td>
-                </tr>
-                <tr>
-                    <td><a href="/dashboard">Dashboard</a></td>
+                    <td><a href="/dashboard">View dashboard</a></td>
                     <td>/dashboard</td>
                 </tr>
                 <tr>
-                    <td><a href="/api/todo/v1/get?id=1">Get todo by Id</a></td>
-                    <td>/api/todo/v1/get?id=1</td>
+                    <td><a href="/todo/all">View all todo</a></td>
+                    <td>/todo/all</td>
+                </tr>
+                <tr>
+                    <td><a href="/todo/id/1">View todo</a></td>
+                    <td>/todo/id/1</td>
+                </tr>
+                <tr>
+                    <td><a href="/api/todo/v1/all">Get all todo</a></td>
+                    <td>/api/todo/v1/id/all</td>
+                </tr>
+                <tr>
+                    <td><a href="/api/todo/v1/id/1">Get todo by Id</a></td>
+                    <td>/api/todo/v1/id/1</td>
                 </tr>
                 <tr>
                     <td><a href="/files/v1/getAll">List all files</a></td>

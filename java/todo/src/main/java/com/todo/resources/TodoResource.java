@@ -2,6 +2,7 @@ package com.todo.resources;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.TodoFileConfig;
+import com.todo.model.Todo;
 import com.todo.model.TodoDatabase;
 import com.todo.parser.FileParser;
 import com.todo.parser.TodoDbParser;
@@ -10,8 +11,12 @@ import com.todo.services.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by shishupalkumar on 12/01/17.
@@ -34,9 +39,21 @@ public class TodoResource {
         logger.info("TodoUpdate : {}", todoDatabase.getTodoUpdateMap());
     }
 
-    @Path("/get")
+    @Path("/all")
     @GET
-    public TodoResponse getTodoResponseById(@QueryParam("id") String todoId) {
+    public ArrayList<Todo> getAllTodo(@Context HttpServletRequest httpServletRequest) {
+        logger.info("getAllTodo : In");
+        TodoDbParser todoDbParser = new FileParser();
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
+        TodoService todoService = new TodoService(todoDatabase);
+        ArrayList<Todo> todos = todoService.getAllTodo();
+        logger.info("getAllTodo : Out : {}", todos);
+        return todos;
+    }
+    @Path("/id/{id}")
+    @GET
+    public TodoResponse getTodoResponseById(@Context HttpServletRequest httpServletRequest,
+                                            @PathParam("id") String todoId) {
         logger.info("getTodoResponseById : In");
         Integer todoIndex = 0;
         try {

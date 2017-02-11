@@ -26,11 +26,11 @@ public class TodoApplication extends Application<TodoConfiguration> {
     @Override
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
         environment.jersey().register(new LogFilter());
-        environment.jersey().register(new ViewResource(todoConfiguration,
-            todoConfiguration.getTodoViewConfig()));
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
         environment.jersey().register(new DirectoryResource(todoConfiguration,
             todoConfiguration.getTodoDirectoryConfig()));
+        environment.jersey().register(new ViewResource(todoConfiguration,
+            todoConfiguration.getTodoViewConfig()));
     }
     public static void main(String[] args) throws Exception {
         new TodoApplication().run(args[0], args[1]);

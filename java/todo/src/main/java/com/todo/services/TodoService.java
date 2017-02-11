@@ -19,6 +19,16 @@ public class TodoService {
     public TodoService(TodoDatabase todoDatabase) {
         this.todoDatabase = todoDatabase;
     }
+    public ArrayList<Todo> getAllTodo() {
+        TodoResponse todoResponse = new TodoResponse();
+        Map<Integer, Todo> todoMap = todoDatabase.getTodoMap();
+        ArrayList<Todo> todos = new ArrayList<Todo>();
+        for (Map.Entry<Integer, Todo> todoMap1 : todoMap.entrySet()) {
+            logger.info("{}, {}", todoMap1.getKey(), todoMap1.getValue());
+            todos.add(todoMap1.getValue());
+        }
+        return todos;
+    }
     public TodoResponse getTodoById(final String todoId) {
         TodoResponse todoResponse = new TodoResponse();
         Map<Integer, Todo> todoMap = todoDatabase.getTodoMap();
