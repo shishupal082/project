@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -26,11 +27,13 @@ import java.net.URISyntaxException;
 public class ViewResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     private TodoViewConfig todoViewConfig;
+    @Context
+    private HttpServletRequest httpServletRequest;
     public ViewResource(TodoConfiguration todoConfiguration, TodoViewConfig todoViewConfig) {
         this.todoViewConfig = todoViewConfig;
     }
     @GET
-    public CommonView indexPage(@Context final HttpServletRequest httpServletRequest) {
+    public CommonView indexPage() {
         logger.info("Loading indexPage");
         return new CommonView(httpServletRequest, "index.ftl");
     }
@@ -42,8 +45,9 @@ public class ViewResource {
     }
     @GET
     @Path("dashboard")
-    public DashboardView getDashboard(@Context final HttpServletRequest httpServletRequest) {
+    public DashboardView getDashboard() {
         logger.info("getDashboard : In");
+//        HttpSession httpSession = httpServletRequest.getSession();
         DashboardView dashboardView = new DashboardView(httpServletRequest);
         logger.info("getDashboard : Out");
         return dashboardView;
@@ -56,7 +60,7 @@ public class ViewResource {
     }
     @GET
     @Path("todo/all")
-    public TodoView loadAllTodoView(@Context final HttpServletRequest httpServletRequest) {
+    public TodoView loadAllTodoView() {
         logger.info("loadAllTodoView : In");
         TodoView todoView = new TodoView(httpServletRequest);
         logger.info("loadAllTodoView : Out");
@@ -70,16 +74,15 @@ public class ViewResource {
     }
     @GET
     @Path("todo/id/{id}")
-    public TodoView loadTodoView(@Context final HttpServletRequest httpServletRequest,
-                                 @PathParam("id") String todoId) {
+    public TodoView loadTodoView(@PathParam("id") String todoId) {
         logger.info("loadTodoView : In");
         TodoView todoView = new TodoView(httpServletRequest);
         logger.info("loadTodoView : Out");
         return todoView;
     }
-    @Path("/{default: .*}")
+    @Path("{default: .*}")
     @GET
-    public CommonView defaultMethod(@Context final HttpServletRequest httpServletRequest) throws URISyntaxException {
+    public CommonView defaultMethod() throws URISyntaxException {
         return new CommonView(httpServletRequest, "page_not_found_404.ftl");
     }
 }

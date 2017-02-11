@@ -28,6 +28,8 @@ import java.util.Map;
 public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     private TodoFileConfig todoFileConfig;
+    @Context
+    private HttpServletRequest httpServletRequest;
     public TodoResource (TodoConfiguration todoConfiguration, TodoFileConfig todoFileConfig) {
         this.todoFileConfig = todoFileConfig;
         TodoDbParser todoDbParser = new FileParser();
@@ -41,7 +43,7 @@ public class TodoResource {
 
     @Path("/all")
     @GET
-    public ArrayList<Todo> getAllTodo(@Context HttpServletRequest httpServletRequest) {
+    public ArrayList<Todo> getAllTodo() {
         logger.info("getAllTodo : In");
         TodoDbParser todoDbParser = new FileParser();
         TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
@@ -52,8 +54,7 @@ public class TodoResource {
     }
     @Path("/id/{id}")
     @GET
-    public TodoResponse getTodoResponseById(@Context HttpServletRequest httpServletRequest,
-                                            @PathParam("id") String todoId) {
+    public TodoResponse getTodoResponseById(@PathParam("id") String todoId) {
         logger.info("getTodoResponseById : In");
         Integer todoIndex = 0;
         try {
