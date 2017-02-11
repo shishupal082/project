@@ -108,12 +108,21 @@ public class DirectoryResource {
         logger.info("getFilteredFiles : In : fileType : {}", fileTypes);
         DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
         String res = "";
+        if (fileTypes == null) {
+            res = "Invalid fileType : null";
+            return Response.ok(res).build();
+        }
         ArrayList<String> requiredFileTypes = StringUtils.tokanizeString(fileTypes, ",");
-        for (String str : requiredFileTypes) {
-            if (!directoryConfig.getSupportedGetFile().contains(str)) {
-                res = "One or more unsupported fileType : " + fileTypes;
-                return Response.ok(res).build();
+        if (requiredFileTypes.size() > 0) {
+            for (String str : requiredFileTypes) {
+                if (!directoryConfig.getSupportedGetFile().contains(str)) {
+                    res = "One or more unsupported fileType : " + fileTypes;
+                    return Response.ok(res).build();
+                }
             }
+        } else {
+            res = "Invalid fileType";
+            return Response.ok(res).build();
         }
         ArrayList<String> allFiles = new ArrayList<String>();
         ArrayList<String> allFilesV2 = new ArrayList<String>();
