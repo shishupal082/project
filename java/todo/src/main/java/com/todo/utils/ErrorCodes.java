@@ -9,6 +9,7 @@ public enum ErrorCodes {
     UNABLE_TO_PARSE_JSON("Unable to parse Json", "Unable to parse Json", 400),
     BAD_REQUEST_ERROR("Bad request error", "Bad request error", 401),
     FILE_NOT_FOUND("File not found", "File not found", 402),
+    INVALID_QUERY_PARAMS("Invalid query params", "Invalid query params", 403),
     SERVER_ERROR("Server error", "Server error", 500);
 
     private String errorCode;

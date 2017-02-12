@@ -36,6 +36,10 @@
                     <td>/api/todo/v1/id/1</td>
                 </tr>
                 <tr>
+                    <td><a href="/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END">Call socket</a></td>
+                    <td>/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END</td>
+                </tr>
+                <tr>
                     <td><a href="/files/v1/getAll">List all files</a></td>
                     <td>/files/v1/getAll</td>
                 </tr>

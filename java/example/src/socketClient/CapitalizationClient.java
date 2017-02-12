@@ -71,7 +71,7 @@ public class CapitalizationClient {
         }
     }
     private void startCommunication() throws IOException{
-        System.out.println(getResponse());
+//        System.out.println(getResponse());
         System.out.print("Enter string 1 : ");
         String userInput = systemIn.readLine();
         sendRequest(userInput);
@@ -92,7 +92,7 @@ public class CapitalizationClient {
     }
     private void connectToServer(String[] args) throws IOException {
         String ip = "127.0.0.1";
-        Integer port = 8080;
+        Integer port = 8000;
         if (args.length >= 2) {
             ip = args[0];
             port = Integer.parseInt(args[1]);

@@ -7,7 +7,10 @@ import com.todo.model.TodoDatabase;
 import com.todo.parser.FileParser;
 import com.todo.parser.TodoDbParser;
 import com.todo.response.TodoResponse;
+import com.todo.services.SocketService;
 import com.todo.services.TodoService;
+import com.todo.utils.ErrorCodes;
+import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +31,7 @@ import java.util.Map;
 public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     private TodoFileConfig todoFileConfig;
+    private SocketService socketService;
     @Context
     private HttpServletRequest httpServletRequest;
     public TodoResource (TodoConfiguration todoConfiguration, TodoFileConfig todoFileConfig) {
@@ -39,6 +43,7 @@ public class TodoResource {
         logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
         logger.info("TodoComment : {}", todoDatabase.getTodoCommentMap());
         logger.info("TodoUpdate : {}", todoDatabase.getTodoUpdateMap());
+        socketService = new SocketService(todoConfiguration.getSocketRequestDelimiter());
     }
 
     @Path("/all")
@@ -69,5 +74,18 @@ public class TodoResource {
         TodoResponse todoResponse = todoService.getTodoById(todoIndex.toString());
         logger.info("getTodoResponseById : Out : {}", todoResponse);
         return todoResponse;
+    }
+
+    @Path("/socket")
+    @GET
+    public String getSocketResponse(@QueryParam("query") String query) throws TodoException{
+        logger.info("getSocketResponse : In : query : {}", query);
+        if (query == null) {
+            logger.info("getSocketResponse : throw : TodoException : {}", ErrorCodes.BAD_REQUEST_ERROR);
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String response = socketService.getSocketResponse(query);
+        logger.info("getSocketResponse : Out : response : {}", response);
+        return response;
     }
 }

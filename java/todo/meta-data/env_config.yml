@@ -38,3 +38,4 @@ todoFileConfig:
 
 todoDirectoryConfigPath: meta-data/directory_config.yaml
 yamlObjectPath: meta-data/files/yaml_object.yaml
+socketRequestDelimiter: "!!!"

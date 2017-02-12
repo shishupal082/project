@@ -29,7 +29,7 @@ public class CapitalizationServer {
         String protocol = "byte";
         System.out.println("The capitalization server is running with protocol : " + protocol);
         int clientNumber = 0;
-        Integer port = 8080;
+        Integer port = 8000;
         if (args.length >= 1) {
             port = Integer.parseInt(args[0]);
         }
@@ -112,7 +112,7 @@ public class CapitalizationServer {
          */
         public void run() {
             try {
-                this.sendResponse("Hello, you are client #" + clientNumber + ".");
+//                this.sendResponse("Hello, you are client #" + clientNumber + ".");
                 while (true) {
                     String input = this.getRequest();
                     if (input == null || input.equals(".")) {
