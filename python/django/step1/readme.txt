@@ -22,7 +22,7 @@ virtualenv venv
 source venv/bin/activate
 
 Step-4]
-Use vertual environment
+Install dependencies
 
 pip install -r requirement.txt
 
