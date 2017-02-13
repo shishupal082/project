@@ -27,7 +27,7 @@ public class TodoExceptionMapper implements ExceptionMapper<Exception> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"Something went " +
                     "wrong\"}").type(MediaType.APPLICATION_JSON).build();
         }
-        return null;
+        return Response.status(500).entity("{\"error\":" + exception.getMessage() + "}").build();
     }
 }
 
