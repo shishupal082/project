@@ -8,3 +8,18 @@ print("hello world")
 now install pip set path
 then try 
 pip install django
+
+sudo easy_install pip
+
+
+
+which python
+python --version
+sudo pip install --upgrade pip
+
+
+https://packaging.python.org/installing/#creating-and-using-virtual-environments
+
+virtualenv venv //(venv => Folder name for vertual env)
+
+ pip install -r requirement.txt 
