@@ -60,7 +60,8 @@ public class SocketClient {
 	            OutputStream outToServer = client.getOutputStream();
 	            DataOutputStream out = new DataOutputStream(outToServer);
 				logger.info("Send request : {}::length={}", request, request.length());
-	            out.writeBytes(request);
+//	            out.writeBytes(request);
+				out.write(request.getBytes("UTF-8"));
 	            response = this.getResponse();
 				logger.info("Response : {}::length=", response, response.length());
 			}

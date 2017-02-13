@@ -64,7 +64,8 @@ public class CapitalizationClient {
             OutputStream outToServer = socket.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outToServer);
             request += "|END";
-            dataOutputStream.writeBytes(request);
+//            dataOutputStream.writeBytes(request);
+            dataOutputStream.write(request.getBytes("UTF-8"));
         } else {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(request);

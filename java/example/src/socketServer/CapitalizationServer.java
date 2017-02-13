@@ -99,7 +99,8 @@ public class CapitalizationServer {
                 response += "|END";
                 OutputStream outToServer = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outToServer);
-                dataOutputStream.writeBytes(response);
+//                dataOutputStream.writeBytes(response);
+                dataOutputStream.write(response.getBytes("UTF-8"));
             } else {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 out.println(response);
