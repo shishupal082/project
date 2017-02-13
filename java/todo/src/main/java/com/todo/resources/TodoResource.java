@@ -78,7 +78,7 @@ public class TodoResource {
 
     @Path("/socket")
     @GET
-    public String getSocketResponse(@QueryParam("query") String query) throws TodoException{
+    public String getSocketResponse(@QueryParam("query") String query) throws TodoException {
         logger.info("getSocketResponse : In : query : {}", query);
         if (query == null) {
             logger.info("getSocketResponse : throw : TodoException : {}", ErrorCodes.BAD_REQUEST_ERROR);

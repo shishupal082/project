@@ -6,6 +6,7 @@ import com.todo.filters.ResponseFilter;
 import com.todo.resources.DirectoryResource;
 import com.todo.resources.TodoResource;
 import com.todo.resources.ViewResource;
+import com.todo.utils.TodoExceptionMapper;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -28,6 +29,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
+        environment.jersey().register(new TodoExceptionMapper());
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
         environment.jersey().register(new DirectoryResource(todoConfiguration));
         environment.jersey().register(new ViewResource(todoConfiguration,

@@ -1,5 +1,5 @@
-javac -d "out/" src/HelloWorld.java
-java -cp "out/" HelloWorld
+javac -d "out/" src/app.HelloWorld.java
+java -cp "out/" app.HelloWorld
 
 
 To run socketClient.DateClient

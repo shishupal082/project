@@ -6,6 +6,8 @@ var App = require('./components/App');
 
 page({hashbang: false});
 
+
+
 function renderAll() {
 	React.render(<App />, document.getElementById("dashboard_app"));	
 }
