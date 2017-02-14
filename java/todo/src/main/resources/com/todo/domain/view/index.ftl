@@ -55,6 +55,14 @@
                     <td><a href="/files/v1/yaml">Get yaml file</a></td>
                     <td>/files/v1/yaml</td>
                 </tr>
+                <tr>
+                    <td><a href="/api/config/v1/get/directory_config">Get directory config</a></td>
+                    <td>/api/config/v1/get/directory_config</td>
+                </tr>
+                <tr>
+                    <td><a href="/api/config/v1/update/directory_config">Update directory config</a></td>
+                    <td>/api/config/v1/update/directory_config</td>
+                </tr>
             </table>
         </div>
     </div>

@@ -35,16 +35,6 @@ public class DirectoryService {
         }
         return filteredFiles;
     }
-    public DirectoryConfig getDirectoryConfig() {
-        DirectoryConfig directoryConfig = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            directoryConfig = mapper.readValue(new File(directoryConfigPath), DirectoryConfig.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", directoryConfigPath);
-        }
-        return directoryConfig;
-    }
     public YamlObject getYamlObject() throws TodoException {
         YamlObject yamlObject = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());

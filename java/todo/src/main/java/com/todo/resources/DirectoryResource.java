@@ -25,15 +25,17 @@ import java.util.ArrayList;
 public class DirectoryResource {
     private static Logger logger = LoggerFactory.getLogger(DirectoryResource.class);
     private DirectoryService directoryService;
+    private TodoConfiguration todoConfiguration;
     public DirectoryResource(TodoConfiguration todoConfiguration) {
         this.directoryService = new DirectoryService(todoConfiguration.getTodoDirectoryConfigPath(),
             todoConfiguration.getYamlObjectPath());
+        this.todoConfiguration = todoConfiguration;
     }
     @Path("/v1/getAll")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getAll() {
-        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
+        DirectoryConfig directoryConfig = todoConfiguration.getDirectoryConfig();
         logger.info("getAll : In");
         String res = "";
         ArrayList<String> allFiles = new ArrayList<String>();
@@ -67,7 +69,7 @@ public class DirectoryResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFile(@QueryParam("name") String fileName) {
         logger.info("getFile : In : fileName : {}", fileName);
-        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
+        DirectoryConfig directoryConfig = todoConfiguration.getDirectoryConfig();
         String fileData = null;
         String line;
         BufferedReader bufferedReader = null;
@@ -106,7 +108,7 @@ public class DirectoryResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFilteredFiles(@QueryParam("type") String fileTypes) {
         logger.info("getFilteredFiles : In : fileType : {}", fileTypes);
-        DirectoryConfig directoryConfig = directoryService.getDirectoryConfig();
+        DirectoryConfig directoryConfig = todoConfiguration.getDirectoryConfig();
         String res = "";
         if (fileTypes == null) {
             res = "Invalid fileType : null";

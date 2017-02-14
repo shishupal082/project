@@ -3,9 +3,11 @@ package com.todo;
 import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
+import com.todo.resources.ConfigResource;
 import com.todo.resources.DirectoryResource;
 import com.todo.resources.TodoResource;
 import com.todo.resources.ViewResource;
+import com.todo.services.ConfigService;
 import com.todo.utils.TodoExceptionMapper;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -26,6 +28,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
     }
     @Override
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
+        ConfigService.updateStaticDirectoryConfig(todoConfiguration);
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
@@ -34,6 +37,8 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new DirectoryResource(todoConfiguration));
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
+        environment.jersey().register(new ConfigResource(todoConfiguration));
+
     }
     public static void main(String[] args) throws Exception {
         new TodoApplication().run(args[0], args[1]);
