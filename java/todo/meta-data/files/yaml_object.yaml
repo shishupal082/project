@@ -6,10 +6,11 @@ address:
   line2: Address line 2
   city: Washington D.C.
   zip: 20000
-roles:
+roles1:
   - User
   - Editor
-mobile: [9876543210, 9876543210]
-mobile1:
-  - 9876543210
-  - 9876543210
+roles2: [User, Editor]
+roles3:
+  - User
+  - Editor
+roles4: [User, Editor]

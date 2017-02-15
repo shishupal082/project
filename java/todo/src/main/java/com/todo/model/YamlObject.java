@@ -1,5 +1,7 @@
 package com.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -10,9 +12,10 @@ public class YamlObject {
     private String name;
     private int age;
     private Map<String, String> address;
-    private String[] roles;
-    private String[] mobile;
-    private ArrayList<String> mobile1;
+    private String[] roles1;
+    private String[] roles2;
+    private ArrayList<String> roles3;
+    private ArrayList<String> roles4;
     public String getName() {
         return name;
     }
@@ -31,27 +34,35 @@ public class YamlObject {
     public void setAddress(Map<String, String> address) {
         this.address = address;
     }
-    public String[] getRoles() {
-        return roles;
+    public String[] getRoles1() {
+        return roles1;
     }
-    public void setRoles(String[] roles) {
-        this.roles = roles;
-    }
-
-    public String[] getMobile() {
-        return mobile;
+    public void setRoles1(String[] roles1) {
+        this.roles1 = roles1;
     }
 
-    public void setMobile(String[] mobile) {
-        this.mobile = mobile;
+    public String[] getRoles2() {
+        return roles2;
     }
 
-    public ArrayList<String> getMobile1() {
-        return mobile1;
+    public void setRoles2(String[] roles2) {
+        this.roles2 = roles2;
     }
 
-    public void setMobile1(ArrayList<String> mobile1) {
-        this.mobile1 = mobile1;
+    public ArrayList<String> getRoles3() {
+        return roles3;
+    }
+
+    public void setRoles3(ArrayList<String> roles3) {
+        this.roles3 = roles3;
+    }
+
+    public ArrayList<String> getRoles4() {
+        return roles4;
+    }
+
+    public void setRoles4(ArrayList<String> roles4) {
+        this.roles4 = roles4;
     }
 }
 
