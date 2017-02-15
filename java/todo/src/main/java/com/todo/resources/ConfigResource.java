@@ -2,13 +2,7 @@ package com.todo.resources;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.DirectoryConfig;
-import com.todo.model.Todo;
-import com.todo.model.TodoDatabase;
-import com.todo.parser.FileParser;
-import com.todo.parser.TodoDbParser;
 import com.todo.services.ConfigService;
-import com.todo.services.TodoService;
-import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 
 /**
  * Created by shishupalkumar on 14/02/17.

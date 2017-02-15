@@ -9,3 +9,7 @@ address:
 roles:
   - User
   - Editor
+mobile: [9876543210, 9876543210]
+mobile1:
+  - 9876543210
+  - 9876543210
