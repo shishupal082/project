@@ -1,27 +1,24 @@
 package com.todo.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.todo.config.DirectoryConfig;
-import com.todo.model.YamlObject;
-import com.todo.utils.ErrorCodes;
+import com.todo.TodoConfiguration;
+import com.todo.config.FilesConfig;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shishupalkumar on 01/02/17.
  */
-public class DirectoryService {
-    private static Logger logger = LoggerFactory.getLogger(DirectoryService.class);
-    private String directoryConfigPath;
-    private String yamlObjectPath;
-    public DirectoryService(String directoryConfigPath, String yamlObjectPath) {
-        this.directoryConfigPath = directoryConfigPath;
-        this.yamlObjectPath = yamlObjectPath;
+public class FilesService {
+    private static Logger logger = LoggerFactory.getLogger(FilesService.class);
+    private TodoConfiguration todoConfiguration;
+    public FilesService(TodoConfiguration todoConfiguration) {
+        this.todoConfiguration = todoConfiguration;
     }
     public ArrayList<String> filterFiles(ArrayList<String> allFiles, String fileType) {
         ArrayList<String> filteredFiles = new ArrayList<String>();
@@ -35,48 +32,46 @@ public class DirectoryService {
         }
         return filteredFiles;
     }
-    public YamlObject getYamlObject() throws TodoException {
-        YamlObject yamlObject = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            yamlObject = mapper.readValue(new File(yamlObjectPath), YamlObject.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", yamlObjectPath);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+    public ArrayList<String> createDownloadLink(ArrayList<String> allFiles) {
+        ArrayList<String> allDownloadLink = new ArrayList<String>();
+        for (String fileName : allFiles) {
+            if ((Boolean)getFileStatus(
+                todoConfiguration.getFilesConfig().getRelativePath(), fileName).get("status")) {
+                allDownloadLink.add("<a href=/files/v1/download?name=" + fileName + ">" + fileName + "</a>");
+            } else {
+                logger.info("FileName : {}, is not a file", fileName);
+            }
         }
-        return yamlObject;
+        return allDownloadLink;
     }
     public ArrayList<String> createLink(ArrayList<String> allFiles, boolean isRelative) {
         ArrayList<String> allFileLink = new ArrayList<String>();
-        String href = "";
         for (String fileName : allFiles) {
-            if (isRelative) {
-                href = "/files/v1/get?name=" + fileName;
-            } else {
-                href = fileName;
-            }
-            allFileLink.add("<a href=" + href + ">" + fileName + "</a>");
+            allFileLink.add("<a href=/files/v1/get?name=" + fileName + ">" + fileName + "</a>");
         }
         return allFileLink;
     }
-    public BufferedReader getFile(ArrayList<String> folderPath, String fileName) throws TodoException {
-        BufferedReader bufferedReader = null;
+    public Map<String, Object> getFileStatus(ArrayList<String> folderPath, String fileName) throws TodoException {
+        HashMap<String, Object> fileStatus = new HashMap<String, Object>();
+        fileStatus.put("status", false);
         for (String folder : folderPath) {
-            try {
-                bufferedReader = new BufferedReader(
-                    new FileReader(folder + fileName));
+            if (new File(folder + fileName).isFile()) {
+                fileStatus.put("status", true);
+                fileStatus.put("path", folder + fileName);
                 logger.info("File : {}, found in : {}",fileName, folder);
                 break;
-            } catch (IOException ioe) {
-                logger.info("File : {}, not found in : {}",fileName, folder);
             }
         }
-        if (bufferedReader == null) {
-            logger.info("File : {}, not found in folderPath : {} : throws : {}",
-                fileName, folderPath, ErrorCodes.FILE_NOT_FOUND.getErrorString());
-            throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
+        return fileStatus;
+    }
+    public ArrayList<String> getAllFilesV2() {
+        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
+        ArrayList<String> allFiles = new ArrayList<String>();
+        for (String folderPath : filesConfig.getRelativePath()) {
+            logger.info("Searching files in : {}", folderPath);
+            allFiles.addAll(getAllFiles(folderPath, folderPath, true));
         }
-        return bufferedReader;
+        return allFiles;
     }
     public ArrayList<String> getAllFiles(String folderPath, String staticFolderPath, boolean removeFolderPath) {
         ArrayList<String> allFileList = new ArrayList<String>();

@@ -4,7 +4,7 @@ import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
 import com.todo.resources.ConfigResource;
-import com.todo.resources.DirectoryResource;
+import com.todo.resources.FilesResource;
 import com.todo.resources.TodoResource;
 import com.todo.resources.ViewResource;
 import com.todo.services.ConfigService;
@@ -34,7 +34,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new TodoExceptionMapper());
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
-        environment.jersey().register(new DirectoryResource(todoConfiguration));
+        environment.jersey().register(new FilesResource(todoConfiguration));
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
         environment.jersey().register(new ConfigResource(todoConfiguration));

@@ -44,16 +44,24 @@
                     <td>/files/v1/getAll</td>
                 </tr>
                 <tr>
-                    <td><a href="/files/v1/filter?type=txt,csv">Filter available files</a></td>
-                    <td>/files/v1/filter?type=txt,csv</td>
-                </tr>
-                <tr>
                     <td><a href="/files/v1/get?name=test.txt">Get text file</a></td>
                     <td>/files/v1/get?name=test.txt</td>
                 </tr>
                 <tr>
-                    <td><a href="/files/v1/yaml">Get yaml file</a></td>
-                    <td>/files/v1/yaml</td>
+                    <td><a href="/files/v1/download?name=test.txt">Download file</a></td>
+                    <td>/files/v1/download?name=test.txt</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/v1/filter?type=txt,csv">Filter files</a></td>
+                    <td>/files/v1/filter?type=txt,csv</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/v1/filter/download?type=txt,csv">Download filtered files</a></td>
+                    <td>/files/v1/filter?type=txt,csv</td>
+                </tr>
+                <tr>
+                    <td><a href="/api/config/v1/yaml">Get yaml file</a></td>
+                    <td>/api/config/v1/yaml</td>
                 </tr>
                 <tr>
                     <td><a href="/api/config/v1/get/directory_config">Get directory config</a></td>

@@ -1,4 +1,5 @@
 ---
-supportedGetFile: [txt, yml, yaml, js, css, less, data, csv, dat, html, htm]
-skipLineBreakFile: [html, htm]
-relativePath: [meta-data/files/, ../../templates/common/]
+relativePath: [meta-data/, meta-data/files/, ../../templates/common/]
+imageType: [png, jpg, jpeg, gif]
+textType: [css, csv, html, xml, plain]
+applicationType: [pdf, json]

@@ -1,7 +1,8 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.DirectoryConfig;
+import com.todo.config.FilesConfig;
+import com.todo.model.YamlObject;
 import com.todo.services.ConfigService;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
@@ -31,23 +32,31 @@ public class ConfigResource {
         configService = new ConfigService(todoConfiguration);
         this.todoConfiguration = todoConfiguration;
     }
+    @Path("/yaml")
+    @GET
+    public YamlObject getYamlObject() throws TodoException {
+        logger.info("getYamlObject : In");
+        YamlObject yamlObject = configService.getYamlObject();
+        logger.info("getYamlFileName : Out");
+        return yamlObject;
+    }
     @Path("/get/directory_config")
     @GET
-    public DirectoryConfig getDirectoryConfig() throws TodoException {
-        logger.info("getDirectoryConfig : In");
-        DirectoryConfig directoryConfig = todoConfiguration.getDirectoryConfig();
-        if (directoryConfig == null) {
-            directoryConfig = new DirectoryConfig();
+    public FilesConfig getDirectoryConfig() throws TodoException {
+        logger.info("getFilesConfig : In");
+        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
+        if (filesConfig == null) {
+            filesConfig = new FilesConfig();
         }
-        logger.info("getDirectoryConfig : Out : {}", directoryConfig);
-        return directoryConfig;
+        logger.info("getFilesConfig : Out : {}", filesConfig);
+        return filesConfig;
     }
     @Path("/update/directory_config")
     @GET
-    public DirectoryConfig updateDirectoryConfig() {
+    public FilesConfig updateDirectoryConfig() {
         logger.info("updateDirectoryConfig : In");
-        DirectoryConfig directoryConfig = configService.updateDirectoryConfig();
-        logger.info("updateDirectoryConfig : Out : {}", directoryConfig);
-        return directoryConfig;
+        FilesConfig filesConfig = configService.updateDirectoryConfig();
+        logger.info("updateDirectoryConfig : Out : {}", filesConfig);
+        return filesConfig;
     }
 }

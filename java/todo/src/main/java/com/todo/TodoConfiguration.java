@@ -1,6 +1,6 @@
 package com.todo;
 
-import com.todo.config.DirectoryConfig;
+import com.todo.config.FilesConfig;
 import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;
@@ -17,7 +17,7 @@ public class TodoConfiguration extends Configuration {
     private String todoDirectoryConfigPath;
     private String yamlObjectPath;
     private String socketRequestDelimiter;
-    private DirectoryConfig directoryConfig;
+    private FilesConfig filesConfig;
 
     public TodoFileConfig getTodoFileConfig() {
         return todoFileConfig;
@@ -67,11 +67,11 @@ public class TodoConfiguration extends Configuration {
         this.socketRequestDelimiter = socketRequestDelimiter;
     }
 
-    public DirectoryConfig getDirectoryConfig() {
-        return directoryConfig;
+    public FilesConfig getFilesConfig() {
+        return filesConfig;
     }
 
-    public void setDirectoryConfig(DirectoryConfig directoryConfig) {
-        this.directoryConfig = directoryConfig;
+    public void setFilesConfig(FilesConfig filesConfig) {
+        this.filesConfig = filesConfig;
     }
 }
