@@ -14,13 +14,10 @@ def detail(request, question_id):
     try:
         question = Question.objects.get(pk=question_id)
         data["question"] = question.question_text
-        data["choice"] = {}
-        i = 0;
+        data["choice"] = []
+
         for choice in question.choice_set.all():
-            data["choice"][i] = {}
-            data["choice"][i]["id"] = choice.id
-            data["choice"][i]["text"] = choice.choice_text
-            i = i+1
+            data["choice"].append({"id" : choice.id, "text":choice.choice_text})
 
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
