@@ -1,6 +1,9 @@
 package com.todo.utils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -10,6 +13,7 @@ import java.util.concurrent.TimeoutException;
 
 @Provider
 public class TodoExceptionMapper implements ExceptionMapper<Exception> {
+    private static Logger logger = LoggerFactory.getLogger(TodoExceptionMapper.class);
     public Response toResponse(Exception exception) {
         if (exception instanceof TodoException) {
             Integer statusCode = ((TodoException) exception).getErrorCode().getStatusCode();
@@ -27,7 +31,9 @@ public class TodoExceptionMapper implements ExceptionMapper<Exception> {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("{\"error\":\"Something went " +
                     "wrong\"}").type(MediaType.APPLICATION_JSON).build();
         }
-        return Response.status(500).entity("{\"error\":" + exception.getMessage() + "}").build();
+        logger.info("Unknown exception found : {}", exception);
+        return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"" + exception.getMessage() +
+            "\"}").type(MediaType.APPLICATION_JSON).build();
     }
 }
 

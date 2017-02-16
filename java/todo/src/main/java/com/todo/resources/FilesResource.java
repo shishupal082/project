@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -60,11 +61,12 @@ public class FilesResource {
 //        return Response.ok(res).build();
 //    }
 
-    @Path("/get")
+    @Path("/get/{actualFileName}")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response viewFile(@QueryParam("name") String fileName) throws TodoException {
-        logger.info("getFile : In : fileName : {}", fileName);
+    public Response viewFile(@PathParam("actualFileName") String actualFileName,
+                             @QueryParam("name") String fileName) throws TodoException {
+        logger.info("getFile : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
         String fileData = null;
         try {
             Map<String, Object> fileStatus =  filesService.getFileStatus(
@@ -81,6 +83,7 @@ public class FilesResource {
                 ArrayList<String> imageType = filesConfig.getImageType();
                 ArrayList<String> applicationType = filesConfig.getApplicationType();
                 ArrayList<String> textType = filesConfig.getTextType();
+                ArrayList<String> unsupportedFileType = filesConfig.getUnsupportedType();
                 Response.ResponseBuilder r;
                 if (imageType.contains(fileExt)) {
                     r = Response.ok(f, "image/" + fileExt);
@@ -88,6 +91,11 @@ public class FilesResource {
                     r = Response.ok(f, "application/" + fileExt);
                 } else if (textType.contains(fileExt)){
                     r = Response.ok(f, "text/" + fileExt);
+                } else if(unsupportedFileType.contains(fileExt)) {
+                    String downloadPath = "/files/v1/download?name="+fileName;
+                    logger.info("Unsupported fileType : {}, found in : {} : redirect to download : path={}",
+                        fileExt, unsupportedFileType, downloadPath);
+                    r = Response.seeOther(new URI(downloadPath));
                 } else {
                     r = Response.ok(f);
                 }
@@ -137,6 +145,7 @@ public class FilesResource {
         String res = "";
         ArrayList<String> requiredFileTypes = null;
         if (fileTypes == null) {
+            logger.info("Unsupported: fileType : null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         } else {
             requiredFileTypes = StringUtils.tokanizeString(fileTypes, ",");

@@ -46,8 +46,12 @@ public class FilesService {
     }
     public ArrayList<String> createLink(ArrayList<String> allFiles, boolean isRelative) {
         ArrayList<String> allFileLink = new ArrayList<String>();
+        String file = "";
+        String[] fileArr = null;
         for (String fileName : allFiles) {
-            allFileLink.add("<a href=/files/v1/get?name=" + fileName + ">" + fileName + "</a>");
+            fileArr = fileName.split("/");
+            file = fileArr[fileArr.length - 1];
+            allFileLink.add("<a href=/files/v1/get/" + file + "?name=" + fileName + ">" + fileName + "</a>");
         }
         return allFileLink;
     }

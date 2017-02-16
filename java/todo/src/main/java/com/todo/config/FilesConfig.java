@@ -10,6 +10,7 @@ public class FilesConfig {
     private ArrayList<String> imageType;
     private ArrayList<String> textType;
     private ArrayList<String> applicationType;
+    private ArrayList<String> unsupportedType;
     public ArrayList<String> getRelativePath() {
         return relativePath;
     }
@@ -40,5 +41,13 @@ public class FilesConfig {
 
     public void setTextType(ArrayList<String> textType) {
         this.textType = textType;
+    }
+
+    public ArrayList<String> getUnsupportedType() {
+        return unsupportedType;
+    }
+
+    public void setUnsupportedType(ArrayList<String> unsupportedType) {
+        this.unsupportedType = unsupportedType;
     }
 }
