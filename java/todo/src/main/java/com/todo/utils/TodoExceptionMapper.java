@@ -23,6 +23,7 @@ public class TodoExceptionMapper implements ExceptionMapper<Exception> {
             } else {
                 errorMessage = new TodoError(exception.getMessage()).toString();
             }
+            logger.info("TodoException : {}", exception);
             return Response.status(statusCode).entity(errorMessage).type(MediaType.APPLICATION_JSON).build();
         } else if (exception instanceof TimeoutException) {
             return Response.status(Response.Status.GATEWAY_TIMEOUT).entity("{\"error\":\"Downstream service " +

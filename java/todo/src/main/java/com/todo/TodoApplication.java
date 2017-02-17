@@ -8,6 +8,7 @@ import com.todo.resources.FilesResource;
 import com.todo.resources.TodoResource;
 import com.todo.resources.ViewResource;
 import com.todo.services.ConfigService;
+import com.todo.task.resources.TaskResource;
 import com.todo.utils.TodoExceptionMapper;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -38,6 +39,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
         environment.jersey().register(new ConfigResource(todoConfiguration));
+        environment.jersey().register(new TaskResource(todoConfiguration.getTaskConfigPath()));
 
     }
     public static void main(String[] args) throws Exception {

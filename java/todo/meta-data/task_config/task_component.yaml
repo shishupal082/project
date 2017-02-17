@@ -1,0 +1,20 @@
+---
+taskComponents:
+  _1:
+    taskItem: _1
+    name: Task-1-component-1
+  _2:
+    taskItem: _1
+    name: Task-1-component-2
+  _3:
+    taskItem: _1
+    name: Task-1-component-3
+  _111:
+    taskItem: _11
+    name: Task-1-component-1
+  _112:
+    taskItem: _11
+    name: Task-1-component-1
+  _114:
+    taskItem: _12
+    name: Task-1-component-1

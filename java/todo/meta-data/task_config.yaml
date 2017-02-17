@@ -1,0 +1,4 @@
+---
+taskItemsPath: [meta-data/task_config/task_items.yaml, meta-data/task_config/task_items_2.yaml]
+taskComponentPath: [meta-data/task_config/task_component.yaml]
+taskApplicationPath: [meta-data/task_config/task_application.yaml]
