@@ -85,7 +85,10 @@ public class TaskResource {
     @GET
     public Response getTaskComponentsByIdV2(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
-        Object response = taskService.getTaskDetails(taskId);
+        ArrayList<String> requiredParams = new ArrayList<String>();
+        requiredParams.add("id");
+        requiredParams.add("name");
+        Object response = taskService.getTaskDetails(taskId, requiredParams);
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
@@ -137,7 +140,7 @@ public class TaskResource {
         response.put("id", componentId);
         response.put("name", taskComponent.getName());
         response.put("taskItem", taskComponent.getTaskItem());
-        response.put("taskDetails", taskService.getTaskDetails(taskComponent.getTaskItem()));
+        response.put("taskDetails", taskService.getTaskDetails(taskComponent.getTaskItem(), null));
         logger.info("getTaskComponentDetails : Out");
         return Response.ok(response).build();
     }

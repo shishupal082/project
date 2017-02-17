@@ -64,9 +64,35 @@ public class TaskService {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         String[] taskComponentsPath = taskConfig.getTaskComponentPath();
         try {
+            Map<String, TaskItem> taskItems = taskConfig.getTaskItems();
+            TaskItem tempTaskItem = null;
+            Map<String, String> tempHashMap = new HashMap<String, String>();
+            for(Map.Entry<String, TaskItem> entry : taskItems.entrySet()) {
+                tempTaskItem = entry.getValue();
+                if (tempTaskItem.getComponent() == null) {
+                    logger.info("Component not found : {}", tempTaskItem);
+                    throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+                }
+                for (String componentId : tempTaskItem.getComponent()) {
+                    if (tempHashMap.containsKey(componentId)) {
+                        logger.info("Duplicate entry found for componentId : {}", componentId);
+                        throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
+                    }
+                    tempHashMap.put(componentId, entry.getKey());
+                }
+            }
+            logger.info("ComponentId vs taskId : {}", tempHashMap);
             for (String taskComponentPath: taskComponentsPath) {
                 taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
                 result.putAll(taskComponents.getTaskComponents());
+            }
+            for (Map.Entry<String, TaskComponent> entry : result.entrySet()) {
+                String taskItem = tempHashMap.get(entry.getKey());
+                if (taskItem == null) {
+                    logger.info("taskItem not found for component : {}", entry.getKey());
+                    throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+                }
+                entry.getValue().setTaskItem(taskItem);
             }
             finalTaskComponents.setTaskComponents(result);
         } catch (IOException ioe) {
@@ -119,7 +145,7 @@ public class TaskService {
         }
         return response;
     }
-    public Object getTaskDetails(String taskId) throws TodoException {
+    public Object getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
         Map<String, TaskItem> taskItemMap = taskConfiguration.getTaskItems();
         if (taskItemMap == null) {
             logger.info("taskItemMap is null");
@@ -134,11 +160,7 @@ public class TaskService {
         HashMap<String, Object> response = new HashMap<String, Object>();
         response.put("name", taskItemById.getName());
         response.put("place", taskItemById.getPlace());
-        ArrayList<String> requiredParams = new ArrayList<String>();
-        requiredParams.add("id");
-        requiredParams.add("name");
         response.put("components", taskItemById.getComponent());
-        requiredParams.add("taskItem");
         response.put("componentDetails", getComponents(taskItemById.getComponent(), requiredParams));
         return response;
     }

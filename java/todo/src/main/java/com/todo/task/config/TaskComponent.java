@@ -1,11 +1,14 @@
 package com.todo.task.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by shishupalkumar on 17/02/17.
  */
 public class TaskComponent {
-    private String taskItem;
     private String name;
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private String taskItem;
 
     public String getTaskItem() {
         return taskItem;
