@@ -39,9 +39,34 @@
                     <td><a href="/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END">Call socket</a></td>
                     <td>/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END</td>
                 </tr>
+
                 <tr>
-                    <td><a href="/files/v1/getAll">List all files</a></td>
-                    <td>/files/v1/getAll</td>
+                    <td><a href="/files/api/v1/config/get">Get files config</a></td>
+                    <td>/files/v1/config/get</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/api/v1/config/update">Update files config</a></td>
+                    <td>/files/v1/config/update</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/api/v2/data">Update files config</a></td>
+                    <td>/files/v1/config/update</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/api/v2/data/0">Update files config</a></td>
+                    <td>/files/v1/config/update</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/api/v3/data">Update files config</a></td>
+                    <td>/files/v1/config/update</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/api/v3/data/0">Update files config</a></td>
+                    <td>/files/v1/config/update</td>
+                </tr>
+                <tr>
+                    <td><a href="/files/v1/get/test.txt?name=test.txt">Get text file</a></td>
+                    <td>/files/v1/get/test.txt?name=test.txt</td>
                 </tr>
                 <tr>
                     <td><a href="/files/v1/get/test.txt?name=test.txt">Get text file</a></td>
@@ -62,14 +87,6 @@
                 <tr>
                     <td><a href="/api/config/v1/yaml">Get yaml file</a></td>
                     <td>/api/config/v1/yaml</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/config/v1/get/directory_config">Get directory config</a></td>
-                    <td>/api/config/v1/get/directory_config</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/config/v1/update/directory_config">Update directory config</a></td>
-                    <td>/api/config/v1/update/directory_config</td>
                 </tr>
             </table>
         </div>

@@ -34,7 +34,7 @@ public class FilesResource {
         this.todoConfiguration = todoConfiguration;
         FilesService.updateFileConfig(todoConfiguration);
     }
-    @Path("/v1/config/get")
+    @Path("/api/v1/config/get")
     @GET
     public FilesConfig v1ConfigGet() throws TodoException {
         logger.info("v1ConfigGet : In");
@@ -45,7 +45,7 @@ public class FilesResource {
         logger.info("v1ConfigGet : Out : {}", filesConfig);
         return filesConfig;
     }
-    @Path("/v1/config/update")
+    @Path("/api/v1/config/update")
     @GET
     public FilesConfig v1ConfigUpdate() throws TodoException {
         logger.info("v1ConfigUpdate : In");
@@ -53,21 +53,7 @@ public class FilesResource {
         logger.info("v1ConfigUpdate : Out : {}", filesConfig);
         return filesConfig;
     }
-    @Path("/v1/getAll")
-    @GET
-    @Produces(MediaType.TEXT_HTML)
-    public Response getAll() throws TodoException {
-        logger.info("getAll : In");
-        ArrayList<String> allFiles = filesService.getAllFilesV2();
-        allFiles = filesService.createLink(allFiles, true);
-        String res = "";
-        for (String fileName : allFiles) {
-            res += fileName + "<br>";
-        }
-        logger.info("getAll : Out");
-        return Response.ok(res).build();
-    }
-    @Path("/v2/getAll/data")
+    @Path("/api/v2/data")
     @GET
     public ArrayList<ScanResult> getAllV2Data() throws TodoException {
         logger.info("getAll : In");
@@ -80,7 +66,7 @@ public class FilesResource {
         logger.info("getAll : Out");
         return response;
     }
-    @Path("/v2/getAll/data/{index}")
+    @Path("/api/v2/data/{index}")
     @GET
     public ScanResult getAllV2Index(@PathParam("index") String index) throws TodoException {
         logger.info("getAll : In");
@@ -98,7 +84,53 @@ public class FilesResource {
         logger.info("getAll : Out");
         return response;
     }
-    @Path("/v2/getAll/dir")
+    @Path("/api/v3/data")
+    @GET
+    public ArrayList<ScanResult> v3getAllData() throws TodoException {
+        logger.info("v3getAllData : In");
+        ArrayList<ScanResult> response = new ArrayList<ScanResult>();
+        ScanResult scanResult;
+        for (String scanDir : todoConfiguration.getFilesConfig().getRelativePath()) {
+            scanResult = filesService.getAllFilesV3(scanDir, scanDir, false);
+            response.add(scanResult);
+        }
+        logger.info("v3getAllData : Out");
+        return response;
+    }
+    @Path("/api/v3/data/{index}")
+    @GET
+    public ScanResult v3getAllDataIndex(@PathParam("index") String index) throws TodoException {
+        logger.info("v3getAllDataIndex : In");
+        Integer directoryIndex;
+        String scanDir = null;
+        try {
+            directoryIndex = Integer.parseInt(index);
+            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
+            scanDir = allRelativePath.get(directoryIndex);
+        } catch (Exception e) {
+            logger.info("Invalid directory index : {}", e);
+            throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
+        }
+        ScanResult scanResult = filesService.getAllFilesV3(scanDir, scanDir, false);
+        logger.info("v3getAllDataIndex : Out");
+        return scanResult;
+    }
+    @Path("/v1/getAll")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response getAll() throws TodoException {
+        logger.info("getAll : In");
+        ArrayList<String> allFiles = filesService.getAllFilesV2();
+        allFiles = filesService.createLink(allFiles, true);
+        String res = "";
+        for (String fileName : allFiles) {
+            res += fileName + "<br>";
+        }
+        logger.info("getAll : Out");
+        return Response.ok(res).build();
+    }
+
+    @Path("/v2/getAll")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getAllV2Dir() throws TodoException {
@@ -117,7 +149,7 @@ public class FilesResource {
         return Response.ok(res).build();
     }
 
-    @Path("/v2/getAll/dir/{index}")
+    @Path("/v2/getAll/{index}")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response getAllV2IndexDir(@PathParam("index") String index) throws TodoException {
@@ -141,38 +173,7 @@ public class FilesResource {
         logger.info("getAllV2IndexDir : Out");
         return Response.ok(res).build();
     }
-    @Path("/v3/getAll/data")
-    @GET
-    public ArrayList<ScanResult> v3getAllData() throws TodoException {
-        logger.info("v3getAllData : In");
-        ArrayList<ScanResult> response = new ArrayList<ScanResult>();
-        ScanResult scanResult;
-        for (String scanDir : todoConfiguration.getFilesConfig().getRelativePath()) {
-            scanResult = filesService.getAllFilesV3(scanDir, scanDir, false);
-            response.add(scanResult);
-        }
-        logger.info("v3getAllData : Out");
-        return response;
-    }
-    @Path("/v3/getAll/data/{index}")
-    @GET
-    public ScanResult v3getAllDataIndex(@PathParam("index") String index) throws TodoException {
-        logger.info("v3getAllDataIndex : In");
-        Integer directoryIndex;
-        String scanDir = null;
-        try {
-            directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
-            scanDir = allRelativePath.get(directoryIndex);
-        } catch (Exception e) {
-            logger.info("Invalid directory index : {}", e);
-            throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
-        }
-        ScanResult scanResult = filesService.getAllFilesV3(scanDir, scanDir, false);
-        logger.info("v3getAllDataIndex : Out");
-        return scanResult;
-    }
-    @Path("/v3/getAll/dir")
+    @Path("/v3/getAll")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response v3getAllDir() throws TodoException {
@@ -191,7 +192,7 @@ public class FilesResource {
         return Response.ok(res).build();
     }
 
-    @Path("/v3/getAll/dir/{index}")
+    @Path("/v3/getAll/{index}")
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response v3getAllDirIndex(@PathParam("index") String index) throws TodoException {

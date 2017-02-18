@@ -19,6 +19,7 @@ public class TodoConfiguration extends Configuration {
     private String socketRequestDelimiter;
     private FilesConfig filesConfig;
     private String taskConfigPath;
+    private String availableResourcePath;
 
     public TodoFileConfig getTodoFileConfig() {
         return todoFileConfig;
@@ -82,5 +83,13 @@ public class TodoConfiguration extends Configuration {
 
     public void setTaskConfigPath(String taskConfigPath) {
         this.taskConfigPath = taskConfigPath;
+    }
+
+    public String getAvailableResourcePath() {
+        return availableResourcePath;
+    }
+
+    public void setAvailableResourcePath(String availableResourcePath) {
+        this.availableResourcePath = availableResourcePath;
     }
 }

@@ -3,6 +3,7 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.config.ResourceDetails;
 import com.todo.model.YamlObject;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
@@ -32,5 +33,17 @@ public class ConfigService {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return yamlObject;
+    }
+    public ResourceDetails getResourceDetails() throws TodoException {
+        ResourceDetails resourceDetails = null;
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        String resourcePath = todoConfiguration.getAvailableResourcePath();
+        try {
+            resourceDetails = mapper.readValue(new File(resourcePath), ResourceDetails.class);
+        } catch (IOException ioe) {
+            logger.info("IOE : for file : {}", resourcePath);
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        return resourceDetails;
     }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Created by shishupalkumar on 17/02/17.
  */
-@Path("/api/task")
+@Path("/task")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TaskResource {
@@ -38,7 +38,7 @@ public class TaskResource {
         this.taskConfig = TaskService.updateTaskConfig(taskConfigPath);
         taskService = new TaskService(taskConfig);
     }
-    @Path("/v1/update")
+    @Path("/api/v1/update")
     @GET
     public TaskConfig updateTasks() throws TodoException {
         logger.info("updateTasks : In");
@@ -47,14 +47,14 @@ public class TaskResource {
         taskService = new TaskService(taskConfig);
         return taskConfig;
     }
-    @Path("/v1/get")
+    @Path("/api/v1/get")
     @GET
     public TaskConfig getTaskConfig() throws TodoException {
         logger.info("updateTasks : In");
         logger.info("updateTasks : Out");
         return taskConfig;
     }
-    @Path("/v1/tasks")
+    @Path("/api/v1/tasks")
     @GET
     public Map<String, TaskItem> getTaskItems() throws TodoException {
         logger.info("getTaskItems : In");
@@ -66,7 +66,7 @@ public class TaskResource {
         logger.info("getTaskItems : Out");
         return taskItemMap;
     }
-    @Path("/v1/tasks/{taskId}")
+    @Path("/api/v1/tasks/{taskId}")
     @GET
     public TaskItem getTaskComponentsById(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
@@ -84,7 +84,7 @@ public class TaskResource {
         logger.info("getTaskItems : Out");
         return result;
     }
-    @Path("/v2/tasks/{taskId}")
+    @Path("/api/v2/tasks/{taskId}")
     @GET
     public Response getTaskComponentsByIdV2(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
@@ -96,7 +96,7 @@ public class TaskResource {
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
-    @Path("/v1/components")
+    @Path("/api/v1/components")
     @GET
     public Map<String, TaskComponent> getTaskComponents() throws TodoException {
         logger.info("getTaskComponents : In");
@@ -108,7 +108,7 @@ public class TaskResource {
         logger.info("getTaskComponents : Out");
         return result;
     }
-    @Path("/v1/components/{id}")
+    @Path("/api/v1/components/{id}")
     @GET
     public TaskComponent getTaskComponent(@PathParam("id") String componentId)
         throws TodoException {
@@ -126,7 +126,7 @@ public class TaskResource {
         logger.info("getTaskComponent : Out");
         return taskComponent;
     }
-    @Path("/v2/components/{id}")
+    @Path("/api/v2/components/{id}")
     @GET
     public Response getTaskComponentDetails(@PathParam("id") String componentId) throws TodoException {
         logger.info("getTaskComponentDetails : In");
@@ -148,7 +148,7 @@ public class TaskResource {
         logger.info("getTaskComponentDetails : Out");
         return Response.ok(response).build();
     }
-    @Path("/v3/components/{id}")
+    @Path("/api/v3/components/{id}")
     @GET
     public Response getTaskComponentDetailsV3(@PathParam("id") String componentId) throws TodoException {
         logger.info("getTaskComponentDetailsV3 : In");
@@ -168,7 +168,7 @@ public class TaskResource {
         logger.info("getTaskComponentDetailsV3 : Out");
         return Response.ok(response).build();
     }
-    @Path("/v1/app")
+    @Path("/api/v1/app")
     @GET
     public TaskApplications getTaskApplications() throws TodoException {
         logger.info("getTaskApplications : In");
@@ -180,7 +180,7 @@ public class TaskResource {
         logger.info("getTaskApplications : Out");
         return result;
     }
-    @Path("/v2/app")
+    @Path("/api/v2/app")
     @GET
     public Map<String, Object> getTaskApplicationsV2() throws TodoException {
         logger.info("getTaskApplications : In");
@@ -205,7 +205,7 @@ public class TaskResource {
         logger.info("getTaskApplications : Out");
         return response;
     }
-    @Path("/v1/app/{appId}")
+    @Path("/api/v1/app/{appId}")
     @GET
     public Map<String, String[][]> getTaskApplicationsByAppId(@PathParam("appId") String appId)
             throws TodoException {
@@ -223,7 +223,7 @@ public class TaskResource {
         logger.info("getTaskApplicationsByAppId : Out");
         return response;
     }
-    @Path("/v2/app/{appId}")
+    @Path("/api/v2/app/{appId}")
     @GET
     public Object getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
             throws TodoException {

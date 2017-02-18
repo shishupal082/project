@@ -1,0 +1,74 @@
+---
+resources:
+  - name: Index page
+    url: /
+    help: /
+  - name: View Dashboard
+    url: /dashboard
+    help: /dashboard
+  - url: /todo/all
+    name: View all todo
+    help: /todo/all
+  - url: /todo/id/1
+    name: View todo by Id
+    help: /todo/id/{id}
+  - url: /api/todo/v1/all
+    name: Get all todo
+    help: /api/todo/v1/all
+  - url: /api/todo/v1/id/1
+    name: Get todo by Id
+    help: /api/todo/v1/id/1
+  - url: /api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END
+    name: Call socket
+    help: /api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END
+  - url: /api/config/v1/yaml
+    name: Get yaml object
+    help: /api/config/v1/yaml
+  - url: /files/api/v1/config/get
+    name: Get file config
+    help: /files/api/v1/config/get
+  - url: /files/api/v1/config/update
+    name: update file config
+    help: /files/api/v1/config/update
+  - url: /files/v1/filter?type=txt,csv
+    name: Filter file by type
+    help: /files/v1/filter?type=txt,csv
+  - url: /files/v1/filter/download?type=txt,csv
+    name: Download filtered file by type
+    help: /files/v1/filter/download?type=txt,csv
+  - url: /files/v1/download?name=test.txt
+    name: Download file
+    help: /files/v1/download?name=test.txt
+  - url: /files/v1/get/test.txt?name=test.txt
+    name: Get file
+    help: /files/v1/get/test.txt?name=test.txt
+  - url: /files/api/v2/data
+    name: Get scaned directory data (Recursive)
+    help: /files/api/v2/data
+  - url: /files/api/v2/data/0
+    name: Get scaned directory data for 1st index (Recursive)
+    help: /files/api/v2/data/{index}
+  - url: /files/api/v3/data
+    name: Get scaned directory data (Non Recursive)
+    help: /files/api/v3/data
+  - url: /files/api/v3/data/0
+    name: Get scaned directory data for 1st index (Non Recursive)
+    help: /files/api/v3/data/{index}
+  - url: /files/api/v3/data/0
+    name: Get scaned directory data for 1st index (Non Recursive)
+    help: /files/api/v3/data/{index}
+  - url: /files/v1/getAll
+    name: List all files
+    help: /files/v1/getAll
+  - url: /files/v2/getAll
+    name: List all files (V2)
+    help: /files/v2/getAll
+  - url: /files/v2/getAll/0
+    name: List all files for first index
+    help: /files/v2/getAll/{index}
+  - url: /files/v3/getAll
+    name: List all files (Non recursive)
+    help: /files/v3/getAll
+  - url: /files/v3/getAll/0
+    name: List all files (Non recursive)
+    help: /files/v3/getAll/{index}

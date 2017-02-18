@@ -37,6 +37,7 @@ todoFileConfig:
   todoCommentFileName: meta-data/csv/comment.csv
 
 yamlObjectPath: meta-data/config/yaml_object.yaml
+availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
 taskConfigPath: meta-data/config/task_config.yaml
 #taskConfigPath: ../../config-2017-02-18/task_config.yaml

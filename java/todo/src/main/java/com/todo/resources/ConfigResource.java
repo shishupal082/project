@@ -1,6 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.config.ResourceDetails;
 import com.todo.model.YamlObject;
 import com.todo.services.ConfigService;
 import com.todo.utils.TodoException;
@@ -26,10 +27,8 @@ public class ConfigResource {
     @Context
     private HttpServletRequest httpServletRequest;
     private ConfigService configService;
-    private TodoConfiguration todoConfiguration;
     public ConfigResource(TodoConfiguration todoConfiguration) {
         configService = new ConfigService(todoConfiguration);
-        this.todoConfiguration = todoConfiguration;
     }
     @Path("/yaml")
     @GET
@@ -38,5 +37,13 @@ public class ConfigResource {
         YamlObject yamlObject = configService.getYamlObject();
         logger.info("getYamlFileName : Out");
         return yamlObject;
+    }
+    @Path("/resource")
+    @GET
+    public ResourceDetails getResourceDetials() throws TodoException {
+        logger.info("getResourceDetials : In");
+        ResourceDetails resourceDetails = configService.getResourceDetails();
+        logger.info("getResourceDetials : Out");
+        return resourceDetails;
     }
 }
