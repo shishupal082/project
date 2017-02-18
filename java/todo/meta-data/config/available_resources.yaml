@@ -54,14 +54,11 @@ resources:
   - url: /files/api/v3/data/0
     name: Get scaned directory data for 1st index (Non Recursive)
     help: /files/api/v3/data/{index}
-  - url: /files/api/v3/data/0
-    name: Get scaned directory data for 1st index (Non Recursive)
-    help: /files/api/v3/data/{index}
   - url: /files/v1/getAll
-    name: List all files
+    name: List all files - v1
     help: /files/v1/getAll
   - url: /files/v2/getAll
-    name: List all files (V2)
+    name: List all files - v2
     help: /files/v2/getAll
   - url: /files/v2/getAll/0
     name: List all files for first index
@@ -72,3 +69,39 @@ resources:
   - url: /files/v3/getAll/0
     name: List all files (Non recursive)
     help: /files/v3/getAll/{index}
+  - url: /task/api/v1/get
+    name: Get all task config
+    help: /task/api/v1/get
+  - url: /task/api/v1/update
+    name: Update task config
+    help: /task/api/v1/update
+  - url: /task/api/v1/tasks
+    name: Get all task - v1
+    help: /task/api/v1/tasks
+  - url: /task/api/v1/tasks/_1
+    name: Get individual task - v1
+    help: /task/api/v1/tasks/{taskId}
+  - url: /task/api/v2/tasks/_1
+    name: Get individual task - v2
+    help: /task/api/v2/tasks/{taskId}
+  - url: /task/api/v1/components
+    name: Get all available components
+    help: /task/api/v1/components
+  - url: /task/api/v1/components/_1
+    name: Get component by id - v1
+    help: /task/api/v1/components/{id}
+  - url: /task/api/v2/components/_1
+    name: Get component by id - v2
+    help: /task/api/v2/components/{id}
+  - url: /task/api/v3/components/_1
+    name: Get component by id - v3
+    help: /task/api/v3/components/{id}
+  - url: /task/api/v1/app
+    name: Get all app - v1
+    help: /task/api/v1/app
+  - url: /task/api/v1/app/app-1
+    name: Get app by id - v1
+    help: /task/api/v1/app/{appId}
+  - url: /task/api/v2/app/app-1
+    name: Get app by id - v2
+    help: /task/api/v2/app/{appId}

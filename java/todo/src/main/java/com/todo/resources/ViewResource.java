@@ -4,7 +4,9 @@ import com.todo.TodoConfiguration;
 import com.todo.config.TodoViewConfig;
 import com.todo.domain.view.CommonView;
 import com.todo.domain.view.DashboardView;
+import com.todo.domain.view.IndexView;
 import com.todo.domain.view.TodoView;
+import com.todo.services.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,13 +31,16 @@ public class ViewResource {
     private TodoViewConfig todoViewConfig;
     @Context
     private HttpServletRequest httpServletRequest;
+    private TodoConfiguration todoConfiguration;
     public ViewResource(TodoConfiguration todoConfiguration, TodoViewConfig todoViewConfig) {
+        this.todoConfiguration = todoConfiguration;
         this.todoViewConfig = todoViewConfig;
     }
     @GET
-    public CommonView indexPage() {
+    public IndexView indexPage() {
         logger.info("Loading indexPage");
-        return new CommonView(httpServletRequest, "index.ftl");
+        ConfigService configService = new ConfigService(todoConfiguration);
+        return new IndexView(httpServletRequest, configService.getResourceDetails());
     }
     @GET
     @Path("index")
@@ -47,7 +52,6 @@ public class ViewResource {
     @Path("dashboard")
     public DashboardView getDashboard() {
         logger.info("getDashboard : In");
-//        HttpSession httpSession = httpServletRequest.getSession();
         DashboardView dashboardView = new DashboardView(httpServletRequest);
         logger.info("getDashboard : Out");
         return dashboardView;

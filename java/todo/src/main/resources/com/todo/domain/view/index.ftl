@@ -11,83 +11,12 @@
         <div class="text-center">Todo Index</div>
         <div>
             <table>
-                <tr>
-                    <td width="160px"><a href="/">Index page</a></td>
-                    <td>/</td>
-                </tr>
-                <tr>
-                    <td><a href="/dashboard">View dashboard</a></td>
-                    <td>/dashboard</td>
-                </tr>
-                <tr>
-                    <td><a href="/todo/all">View all todo</a></td>
-                    <td>/todo/all</td>
-                </tr>
-                <tr>
-                    <td><a href="/todo/id/1">View todo</a></td>
-                    <td>/todo/id/1</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/todo/v1/all">Get all todo</a></td>
-                    <td>/api/todo/v1/id/all</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/todo/v1/id/1">Get todo by Id</a></td>
-                    <td>/api/todo/v1/id/1</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END">Call socket</a></td>
-                    <td>/api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END</td>
-                </tr>
-
-                <tr>
-                    <td><a href="/files/api/v1/config/get">Get files config</a></td>
-                    <td>/files/v1/config/get</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/api/v1/config/update">Update files config</a></td>
-                    <td>/files/v1/config/update</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/api/v2/data">Update files config</a></td>
-                    <td>/files/v1/config/update</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/api/v2/data/0">Update files config</a></td>
-                    <td>/files/v1/config/update</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/api/v3/data">Update files config</a></td>
-                    <td>/files/v1/config/update</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/api/v3/data/0">Update files config</a></td>
-                    <td>/files/v1/config/update</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/v1/get/test.txt?name=test.txt">Get text file</a></td>
-                    <td>/files/v1/get/test.txt?name=test.txt</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/v1/get/test.txt?name=test.txt">Get text file</a></td>
-                    <td>/files/v1/get/test.txt?name=test.txt</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/v1/download?name=test.txt">Download file</a></td>
-                    <td>/files/v1/download?name=test.txt</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/v1/filter?type=txt,csv">Filter files</a></td>
-                    <td>/files/v1/filter?type=txt,csv</td>
-                </tr>
-                <tr>
-                    <td><a href="/files/v1/filter/download?type=txt,csv">Download filtered files</a></td>
-                    <td>/files/v1/filter/download?type=txt,csv</td>
-                </tr>
-                <tr>
-                    <td><a href="/api/config/v1/yaml">Get yaml file</a></td>
-                    <td>/api/config/v1/yaml</td>
-                </tr>
+                <#list resourceDetails as r>
+                    <tr>
+                        <td><a href="${r.url}">${r.name}</a></td>
+                        <td>${r.help}</td>
+                    </tr>
+                </#list>
             </table>
         </div>
     </div>
