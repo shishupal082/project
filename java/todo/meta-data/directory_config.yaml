@@ -1,6 +1,0 @@
----
-relativePath: [meta-data/files/, ../../templates/common/]
-imageType: [png, jpg, jpeg, gif]
-textType: [css, csv, html, xml, plain]
-applicationType: [pdf, json]
-unsupportedType: [jar]

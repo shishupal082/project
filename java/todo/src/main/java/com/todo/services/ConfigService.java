@@ -3,7 +3,7 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
-import com.todo.config.FilesConfig;
+import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
@@ -33,24 +33,5 @@ public class ConfigService {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return yamlObject;
-    }
-    public FilesConfig updateDirectoryConfig() {
-        FilesConfig filesConfig = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        String directoryConfigPath = todoConfiguration.getTodoDirectoryConfigPath();
-        try {
-            filesConfig = mapper.readValue(new File(directoryConfigPath),
-                FilesConfig.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", directoryConfigPath);
-        }
-        todoConfiguration.setFilesConfig(filesConfig);
-        logger.info("TodoConfiguration : FilesConfig : updated");
-        return filesConfig;
-    }
-    public static FilesConfig updateStaticDirectoryConfig(TodoConfiguration todoConfiguration) {
-        ConfigService configService = new ConfigService(todoConfiguration);
-        configService.updateDirectoryConfig();
-        return todoConfiguration.getFilesConfig();
     }
 }

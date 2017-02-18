@@ -30,15 +30,15 @@ testConfig:
 
 todoFileConfig:
   delimator: ","
-  todoFileName: meta-data/todo.csv
-  todoUserFileName: meta-data/user.csv
-  todoEventFileName: meta-data/event.csv
-  todoUpdateFileName: meta-data/update_details.csv
-  todoCommentFileName: meta-data/comment.csv
+  todoFileName: meta-data/csv/todo.csv
+  todoUserFileName: meta-data/csv/user.csv
+  todoEventFileName: meta-data/csv/event.csv
+  todoUpdateFileName: meta-data/csv/update_details.csv
+  todoCommentFileName: meta-data/csv/comment.csv
 
-yamlObjectPath: meta-data/files/yaml_object.yaml
+yamlObjectPath: meta-data/config/yaml_object.yaml
 socketRequestDelimiter: "!!!"
-#taskConfigPath: meta-data/task_config.yaml
-taskConfigPath: ../../config-2017-02-18/task_config.yaml
-#todoDirectoryConfigPath: meta-data/directory_config.yaml
-todoDirectoryConfigPath: ../../config-2017-02-18/directory_config.yaml
+taskConfigPath: meta-data/config/task_config.yaml
+#taskConfigPath: ../../config-2017-02-18/task_config.yaml
+todoDirectoryConfigPath: meta-data/config/directory_config.yaml
+#todoDirectoryConfigPath: ../../config-2017-02-18/directory_config.yaml

@@ -1,6 +1,6 @@
 package com.todo;
 
-import com.todo.config.FilesConfig;
+import com.todo.file.config.FilesConfig;
 import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;

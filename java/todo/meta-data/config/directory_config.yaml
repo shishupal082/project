@@ -1,0 +1,7 @@
+---
+relativePath: [meta-data/files/, meta-data/csv/, ../../templates/common/]
+imageType: [png, jpg, jpeg, gif]
+#textType: [css, csv, html, xml, plain]
+textType: [css, html, xml, plain]
+applicationType: [pdf, json]
+unsupportedType: [jar]

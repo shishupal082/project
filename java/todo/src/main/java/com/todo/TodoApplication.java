@@ -4,10 +4,9 @@ import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
 import com.todo.resources.ConfigResource;
-import com.todo.resources.FilesResource;
+import com.todo.file.resources.FilesResource;
 import com.todo.resources.TodoResource;
 import com.todo.resources.ViewResource;
-import com.todo.services.ConfigService;
 import com.todo.task.resources.TaskResource;
 import com.todo.utils.TodoExceptionMapper;
 import io.dropwizard.Application;
@@ -29,7 +28,6 @@ public class TodoApplication extends Application<TodoConfiguration> {
     }
     @Override
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
-        ConfigService.updateStaticDirectoryConfig(todoConfiguration);
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
