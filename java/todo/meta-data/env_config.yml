@@ -36,7 +36,9 @@ todoFileConfig:
   todoUpdateFileName: meta-data/update_details.csv
   todoCommentFileName: meta-data/comment.csv
 
-todoDirectoryConfigPath: meta-data/directory_config.yaml
 yamlObjectPath: meta-data/files/yaml_object.yaml
-taskConfigPath: meta-data/task_config.yaml
 socketRequestDelimiter: "!!!"
+#taskConfigPath: meta-data/task_config.yaml
+taskConfigPath: ../../config-2017-02-18/task_config.yaml
+#todoDirectoryConfigPath: meta-data/directory_config.yaml
+todoDirectoryConfigPath: ../../config-2017-02-18/directory_config.yaml

@@ -12,7 +12,7 @@ import java.util.Map;
 public class TaskConfig {
     private Map<String, TaskItem> taskItems;
     private Map<String, TaskComponent> taskComponents;
-    private TaskApplication taskApplication;
+    private TaskApplications taskApplications;
     private String[] taskItemsPath;
     private String[] taskComponentPath;
     private String[] taskApplicationPath;
@@ -33,12 +33,12 @@ public class TaskConfig {
         this.taskComponents = taskComponents;
     }
 
-    public TaskApplication getTaskApplication() {
-        return taskApplication;
+    public TaskApplications getTaskApplications() {
+        return taskApplications;
     }
 
-    public void setTaskApplication(TaskApplication taskApplication) {
-        this.taskApplication = taskApplication;
+    public void setTaskApplications(TaskApplications taskApplications) {
+        this.taskApplications = taskApplications;
     }
 
     public String[] getTaskItemsPath() {
@@ -70,7 +70,7 @@ public class TaskConfig {
         return "TaskConfig{" +
             "taskItems=" + taskItems +
             ", taskComponents=" + taskComponents +
-            ", taskApplication=" + taskApplication +
+            ", taskApplications=" + taskApplications +
             ", taskItemsPath=" + Arrays.toString(taskItemsPath) +
             ", taskComponentPath=" + Arrays.toString(taskComponentPath) +
             ", taskApplicationPath=" + Arrays.toString(taskApplicationPath) +

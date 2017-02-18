@@ -1,5 +1,7 @@
 package com.todo.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -14,5 +16,14 @@ public class StringUtils {
             result.add(st.nextToken());
         }
         return result;
+    }
+    public static String urlEncode(String str) {
+        if (str == null) {
+            return str;
+        }
+        try {
+            return URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException uee) {}
+        return str;
     }
 }

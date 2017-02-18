@@ -35,6 +35,7 @@ public class TaskService {
         logger.info("TaskConfig loaded with data : {}", taskConfig);
         updateTaskItems(taskConfig);
         updateTaskComponents(taskConfig);
+        updateTaskApplication(taskConfig);
         logger.info("FinalTaskConfig with data : {}", taskConfig);
         return taskConfig;
     }
@@ -102,6 +103,25 @@ public class TaskService {
         taskConfig.setTaskComponents(finalTaskComponents.getTaskComponents());
         logger.info("TaskComponents loaded with data : {}", finalTaskComponents);
     }
+    public static void updateTaskApplication(TaskConfig taskConfig) throws TodoException {
+        TaskApplications taskApplications = null;
+        TaskApplications finalTaskApplications = new TaskApplications();
+        Map<String, Map<String, String[][]>> result = new HashMap<String, Map<String, String[][]>>();
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        String[] taskApplicationsPath = taskConfig.getTaskApplicationPath();
+        try {
+            for (String taskApplicationPath: taskApplicationsPath) {
+                taskApplications = mapper.readValue(new File(taskApplicationPath), TaskApplications.class);
+                result.putAll(taskApplications.getTaskApplications());
+            }
+            finalTaskApplications.setTaskApplications(result);
+        } catch (IOException ioe) {
+            logger.info("IOE : for file : taskComponentsPath");
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        taskConfig.setTaskApplications(finalTaskApplications);
+        logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
+    }
     public Object getComponentdetails(String componentId, ArrayList<String> requiredParams) {
         if (componentId == null) {
             return null;
@@ -112,23 +132,60 @@ public class TaskService {
             logger.info("Component not found for componentId : {}", componentId);
             return null;
         }
-        logger.info("TaskSomponent for id : {}, {}", componentId, tempTaskComponent);
+        logger.info("TaskComponent for id : {}, {}", componentId, tempTaskComponent);
         if (requiredParams == null) {
             return tempTaskComponent.getName();
         }
-        Map<String, String> componentDetails = new HashMap<String, String>();
+        Map<String, Object> componentDetails = new HashMap<String, Object>();
         for(String requiredParam : requiredParams) {
             if (requiredParam.equals("id")) {
-                componentDetails.put("id", componentId);
+                componentDetails.put(requiredParam, componentId);
             }
             if (requiredParam.equals("name")) {
-                componentDetails.put("name", tempTaskComponent.getName());
+                componentDetails.put(requiredParam, tempTaskComponent.getName());
             }
             if (requiredParam.equals("taskItem")) {
-                componentDetails.put("taskItem", tempTaskComponent.getTaskItem());
+                componentDetails.put(requiredParam, tempTaskComponent.getTaskItem());
+            }
+            if (requiredParam.equals("application")) {
+                componentDetails.put(requiredParam, getTaskComponentApplication(componentId));
             }
         }
         return componentDetails;
+    }
+    public Object getAppDetailsByAppId(String appId, ArrayList<String> componentReqParams) {
+        Map<String, ArrayList<ArrayList<Object>>> response = new HashMap<String, ArrayList<ArrayList<Object>>>();
+        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        if (taskApplications == null) {
+            logger.info("taskApplications is null");
+            return null;
+        }
+        Map<String, String[][]> applicationDetails = taskApplications.getTaskApplications().get(appId);
+        if (applicationDetails == null) {
+            logger.info("taskApplicationById is null");
+            return null;
+        }
+        ArrayList<ArrayList<Object>> componentDetails;
+        ArrayList<Object> componentDetailsV2;
+        Object componentDetail;
+        for (Map.Entry<String, String[][]> entry : applicationDetails.entrySet()) {
+            componentDetails = new ArrayList<ArrayList<Object>>();
+            for (String[] strings : entry.getValue()) {
+                componentDetailsV2 = new ArrayList<Object>();
+                for (String componentId: strings) {
+                    componentDetail = getComponentdetails(componentId, componentReqParams);
+                    if (componentDetail == null) {
+                        componentDetailsV2.add(componentId);
+                    } else {
+                        componentDetailsV2.add(componentDetail);
+                    }
+                }
+                componentDetails.add(componentDetailsV2);
+            }
+            response.put(entry.getKey(), componentDetails);
+        }
+        logger.info("App details for app id : {}, {}", appId, response);
+        return response;
     }
     public ArrayList<Object> getComponents(String[] componentIds, ArrayList<String> requiredParams) {
         ArrayList<Object> response = new ArrayList<Object>();
@@ -161,7 +218,52 @@ public class TaskService {
         response.put("name", taskItemById.getName());
         response.put("place", taskItemById.getPlace());
         response.put("components", taskItemById.getComponent());
-        response.put("componentDetails", getComponents(taskItemById.getComponent(), requiredParams));
+        if (requiredParams != null) {
+            response.put("componentDetails", getComponents(taskItemById.getComponent(), requiredParams));
+        }
         return response;
+    }
+    public ArrayList<ArrayList<String>> getTaskComponentApplication(String componentId) {
+        ArrayList<ArrayList<String>> response = new ArrayList<ArrayList<String>>();
+        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        if (taskApplications == null || componentId == null) {
+            logger.info("taskApplications or componentId is null");
+            return null;
+        }
+        Map<String, Map<String, String[][]>> allApplications = taskApplications.getTaskApplications();
+        if (allApplications == null) {
+            logger.info("allApplications is null");
+            return null;
+        }
+        ArrayList<String> componentUses;
+        String appName, appVariable;
+        for (Map.Entry<String, Map<String, String[][]>> entry : allApplications.entrySet()) {
+            appName = entry.getKey();
+            if (entry.getValue() == null) {
+                continue;
+            }
+            for (Map.Entry<String, String[][]> entry1 : entry.getValue().entrySet()) {
+                componentUses = new ArrayList<String>();
+                appVariable = entry1.getKey();
+                for (String[] strings : entry1.getValue()) {
+                    if (strings == null) {
+                        continue;
+                    }
+                    for (String str: strings) {
+                        if (componentId.equals(str)) {
+                            componentUses.add(appName);
+                            componentUses.add(appVariable);
+                        }
+                    }
+                }
+                if (componentUses.size() > 0) {
+                    response.add(componentUses);
+                }
+            }
+        }
+        if (response.size() > 0) {
+            return response;
+        }
+        return null;
     }
 }

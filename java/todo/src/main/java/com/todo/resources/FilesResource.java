@@ -92,7 +92,7 @@ public class FilesResource {
                 } else if (textType.contains(fileExt)){
                     r = Response.ok(f, "text/" + fileExt);
                 } else if(unsupportedFileType.contains(fileExt)) {
-                    String downloadPath = "/files/v1/download?name="+fileName;
+                    String downloadPath = "/files/v1/download?name=" + StringUtils.urlEncode(fileName);
                     logger.info("Unsupported fileType : {}, found in : {} : redirect to download : path={}",
                         fileExt, unsupportedFileType, downloadPath);
                     r = Response.seeOther(new URI(downloadPath));

@@ -2,6 +2,7 @@ package com.todo.services;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.FilesConfig;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,8 @@ public class FilesService {
         for (String fileName : allFiles) {
             if ((Boolean)getFileStatus(
                 todoConfiguration.getFilesConfig().getRelativePath(), fileName).get("status")) {
-                allDownloadLink.add("<a href=/files/v1/download?name=" + fileName + ">" + fileName + "</a>");
+                allDownloadLink.add("<a href=/files/v1/download?name=" + StringUtils.urlEncode(fileName)
+                    + ">" + fileName + "</a>");
             } else {
                 logger.info("FileName : {}, is not a file", fileName);
             }
@@ -51,7 +53,8 @@ public class FilesService {
         for (String fileName : allFiles) {
             fileArr = fileName.split("/");
             file = fileArr[fileArr.length - 1];
-            allFileLink.add("<a href=/files/v1/get/" + file + "?name=" + fileName + ">" + fileName + "</a>");
+            allFileLink.add("<a href=/files/v1/get/" + StringUtils.urlEncode(file) + "?name=" +
+                StringUtils.urlEncode(fileName) + ">" + fileName + "</a>");
         }
         return allFileLink;
     }

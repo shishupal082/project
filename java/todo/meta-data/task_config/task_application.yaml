@@ -1,5 +1,5 @@
 ---
-taskApplication:
+taskApplications:
   app-1:
-    - path_1: [[_1], [_2, _3], [_114]]
-    - path_2: [[_1], [_2, "Any thing can be done"], ["To do anything"]]
+    path-1: [[_1],[_2], [_3, _111]]
+    path-2: [[_112],[_2], ["can be done anything"]]
