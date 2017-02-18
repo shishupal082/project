@@ -45,6 +45,12 @@ gulp.task("react-todo-app",function(){
         .pipe(concat('todo_app.js'))
         .pipe(gulp.dest('../../app/react_workshop/'));
 });
+gulp.task("rateCard-app",function(){
+    gulp.src('src/js/rateCard.js')
+        .pipe(browserify({transform:'reactify'}))
+        .pipe(concat('rateCard.js'))
+        .pipe(gulp.dest('../../app/react_workshop/'));
+});
 gulp.task("test_js",function(){
     gulp.src(['./src/js/test.js', './src/js/test2.js'])
         .pipe(concat('test.js'))
@@ -58,8 +64,9 @@ gulp.task("test_css",function(){
         .pipe(gulp.dest('dist/css/'));
 });
 // gulp.task('default',['test_js', 'test_css', 'page_js', 'react-todo-app']);
-gulp.task('default',['test_js', 'test_css', 'react-todo-app']);
+gulp.task('default',['test_js', 'test_css', 'react-todo-app', 'rateCard-app']);
 gulp.task("watch",['default'],function(){
 	// gulp.watch('../../app/page_js/*.js',['page_js']);
-	gulp.watch('../../app/react_workshop/src/**/*.js',['react-todo-app']);
+	// gulp.watch('../../app/react_workshop/src/**/*.js',['react-todo-app']);
+    gulp.watch('../../app/react_workshop/src/**/*.js',['rateCard-app']);
 });

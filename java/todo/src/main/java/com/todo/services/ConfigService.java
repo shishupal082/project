@@ -3,7 +3,6 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
-import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;

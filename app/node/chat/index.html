@@ -2,17 +2,32 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css">
 </head>
 <body>
     <center><h1>Console Based chat server!</h1></center>
-    <div>
-        <ul>
-            <li>socket.emit("chat_message", "Hello World");</li>
-        </ul>
+    <div class="container">
+        <div class="row">
+            <ul>
+                <li>socket.emit("chat_message", "Hello World");</li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div>Success IP address</div>
+                <ul id="ip_success"></ul>
+            </div>
+            <div class="col-md-4">
+                <div>Failure IP address</div>
+                <ul id="ip_failure"></ul>
+            </div>
+        </div>
     </div>
-    <div><b id="socket_id"></b></div>
+    <div class="container"><b id="socket_id"></b></div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        var ip_loaded = {"":{"success" : 0, "failure":0}};
         var socket = io();
         socket.on('connect', function(){
             document.getElementById("socket_id").innerText = this.id;
@@ -22,6 +37,31 @@
         });
         socket.on('chat_message', function(msg){
             console.log(msg);
+        });
+        socket.on('ip_check', function(data){
+            $("#ip_success").empty();
+            $("#ip_failure").empty();
+            for(var i=0; i<data.length; i++) {
+                var ip = data[i].ip;
+                var status = data[i].status;
+                if (ip_loaded[ip]) {
+                    ip_loaded[ip][status] = ip_loaded[ip][status] + 1;
+                } else {
+                    if (status == "success") {
+                        ip_loaded[ip] = {"success": 1, "failure" : 0};
+                    } else {
+                        ip_loaded[ip] = {"success": 0, "failure" : 1};
+                    }
+                }
+            }
+            for (var ip in ip_loaded) {
+                if (ip_loaded[ip].success) {
+                    $("#ip_success").append("<li>" + ip + "(" + ip_loaded[ip].success + ")</li>");
+                }
+                if (ip_loaded[ip].failure) {
+                    $("#ip_failure").append("<li>" + ip + "(" + ip_loaded[ip].failure + ")</li>");
+                }
+            }
         });
     </script>
 </body>
