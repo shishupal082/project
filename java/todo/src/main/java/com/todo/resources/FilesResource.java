@@ -1,6 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.domain.view.CommonView;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
@@ -12,7 +13,9 @@ import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -30,10 +33,44 @@ public class FilesResource {
     private static Logger logger = LoggerFactory.getLogger(FilesResource.class);
     private FilesService filesService;
     private TodoConfiguration todoConfiguration;
+    @Context
+    private HttpServletRequest httpServletRequest;
     public FilesResource(TodoConfiguration todoConfiguration) {
         this.filesService = new FilesService(todoConfiguration);
         this.todoConfiguration = todoConfiguration;
         FilesService.updateFileConfig(todoConfiguration);
+    }
+//    @Path("/v1/upload")
+//    @POST
+//    @Produces(MediaType.MULTIPART_FORM_DATA)
+//    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+//                               @FormDataParam("file") FormDataContentDisposition fileDetail) throws TodoException {
+//        logger.info("uploadFile : In");
+//        String uploadedFileLocation = "meta-data/files/uploaded/" + fileDetail.getFileName();
+//
+//        try {
+//            OutputStream out;
+//            int read = 0;
+//            byte[] bytes = new byte[1024];
+//            out = new FileOutputStream(new File(uploadedFileLocation));
+//            while ((read = uploadedInputStream.read(bytes)) != -1) {
+//                out.write(bytes, 0, read);
+//            }
+//            out.flush();
+//            out.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        String output = "File uploaded to : " + fileDetail.toString();
+//        logger.info("uploadFile : Out");
+//        return Response.status(200).entity(output).build();
+//    }
+    @Path("/v1/upload/view")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public CommonView uploadFileView() throws TodoException {
+        logger.info("uploadFileView : In : Out");
+        return new CommonView(httpServletRequest, "file_upload.ftl");
     }
     @Path("/api/v1/config/get")
     @GET

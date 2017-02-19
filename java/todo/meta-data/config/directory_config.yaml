@@ -1,7 +1,8 @@
 ---
-#relativePath: [meta-data/, meta-data/files/, meta-data/csv/, ../../templates/common/]
-relativePath: [../../pendrive/docs-2017-02-18/]
+relativePath: [meta-data/, meta-data/files/, meta-data/csv/, ../../templates/common/]
+#relativePath: [../../pendrive/docs-2017-02-18/]
 unsupportedFileType: [jar, docx]
+fileuploadPath: meta-data/files/uploaded/
 mimeType:
   png: image/png
   jpg: image/jpg
