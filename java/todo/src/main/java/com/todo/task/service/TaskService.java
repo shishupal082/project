@@ -23,7 +23,7 @@ public class TaskService {
     public TaskService(TaskConfig taskConfig) {
         this.taskConfiguration = taskConfig;
     }
-    public static TaskConfig updateTaskConfig(String taskConfigPath) throws TodoException {
+    public static TaskConfig getTaskConfig(String taskConfigPath) {
         TaskConfig taskConfig = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
@@ -32,6 +32,10 @@ public class TaskService {
             logger.info("IOE : for file : {}", taskConfigPath);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
+        return taskConfig;
+    }
+    public static TaskConfig updateTaskConfig(String taskConfigPath) throws TodoException {
+        TaskConfig taskConfig = getTaskConfig(taskConfigPath);
         logger.info("TaskConfig loaded with data : {}", taskConfig);
         updateTaskItems(taskConfig);
         updateTaskComponents(taskConfig);

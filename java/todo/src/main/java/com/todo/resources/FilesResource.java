@@ -95,6 +95,15 @@ public class FilesResource {
         logger.info("getFile : Out : {}", fileName);
         return Response.ok(fileData).build();
     }
+    @Path("/v1/get/view")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response v1GetViewDirect(@QueryParam("name") String fileName) throws TodoException {
+        logger.info("v1GetViewDirect : In : , fileName : {}", fileName);
+        Response response = v1GetView(null, fileName);
+        logger.info("v1GetViewDirect : Out : {}", fileName);
+        return response;
+    }
     @Path("/v1/get/download")
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)

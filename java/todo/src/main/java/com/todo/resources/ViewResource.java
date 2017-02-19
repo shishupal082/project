@@ -2,10 +2,7 @@ package com.todo.resources;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.TodoViewConfig;
-import com.todo.domain.view.CommonView;
-import com.todo.domain.view.DashboardView;
-import com.todo.domain.view.IndexView;
-import com.todo.domain.view.TodoView;
+import com.todo.domain.view.*;
 import com.todo.services.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +46,7 @@ public class ViewResource {
         return Response.seeOther(new URI("/")).build();
     }
     @GET
-    @Path("dashboard")
+    @Path("view/dashboard")
     public DashboardView getDashboard() {
         logger.info("getDashboard : In");
         DashboardView dashboardView = new DashboardView(httpServletRequest);
@@ -57,13 +54,21 @@ public class ViewResource {
         return dashboardView;
     }
     @GET
-    @Path("todo/")
+    @Path("view/config")
+    public ConfigView getConfigView() {
+        logger.info("getConfigView : In");
+        ConfigView configView = new ConfigView(httpServletRequest, todoConfiguration, "config.ftl");
+        logger.info("getConfigView : Out");
+        return configView;
+    }
+    @GET
+    @Path("view/todo/")
     public Response gotoAllTodo() throws URISyntaxException {
         logger.info("getIndex : routing from /todo to /todo/all");
         return Response.seeOther(new URI("/todo/all")).build();
     }
     @GET
-    @Path("todo/all")
+    @Path("view/todo/all")
     public TodoView loadAllTodoView() {
         logger.info("loadAllTodoView : In");
         TodoView todoView = new TodoView(httpServletRequest);
@@ -71,13 +76,13 @@ public class ViewResource {
         return todoView;
     }
     @GET
-    @Path("todo/id")
+    @Path("view/todo/id")
     public Response gotoAllTodoFromUnknownId() throws URISyntaxException {
         logger.info("getIndex : routing from /todo/id to /todo/all");
         return Response.seeOther(new URI("/todo/all")).build();
     }
     @GET
-    @Path("todo/id/{id}")
+    @Path("view/todo/id/{id}")
     public TodoView loadTodoView(@PathParam("id") String todoId) {
         logger.info("loadTodoView : In");
         TodoView todoView = new TodoView(httpServletRequest);

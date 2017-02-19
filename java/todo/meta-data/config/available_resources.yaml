@@ -4,26 +4,29 @@ resources:
     url: /
     help: /
   - name: View Dashboard
-    url: /dashboard
-    help: /dashboard
-  - url: /todo/all
+    url: /view/dashboard
+    help: /view/dashboard
+  - name: View Config
+    url: /view/config
+    help: /view/config
+  - url: /view/todo/all
     name: View all todo
-    help: /todo/all
-  - url: /todo/id/1
+    help: /view/todo/all
+  - url: /view/todo/id/1
     name: View todo by Id
-    help: /todo/id/{id}
-  - url: /api/todo/v1/all
+    help: /view/todo/id/{id}
+  - url: /todo/api/v1/all
     name: Get all todo
-    help: /api/todo/v1/all
-  - url: /api/todo/v1/id/1
+    help: /todo/api/v1/all
+  - url: /todo/api/v1/id/1
     name: Get todo by Id
-    help: /api/todo/v1/id/1
-  - url: /api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END
+    help: /todo/api/v1/id/1
+  - url: /todo/api/v1/socket?query=127.0.0.1!!!8000!!!test|END
     name: Call socket
-    help: /api/todo/v1/socket?query=127.0.0.1!!!8000!!!test|END
-  - url: /api/config/v1/yaml
+    help: /todo/api/v1/socket?query=127.0.0.1!!!8000!!!test|END
+  - url: /config/api/v1/yaml
     name: Get yaml object
-    help: /api/config/v1/yaml
+    help: /config/api/v1/yaml
   - url: /files/api/v1/config/get
     name: File config
     help: /files/api/v1/config/get

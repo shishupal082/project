@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Created by shishupalkumar on 12/01/17.
  */
-@Path("/api/todo/v1")
+@Path("/todo/api/v1")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 

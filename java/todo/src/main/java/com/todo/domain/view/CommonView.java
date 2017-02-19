@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by shishupalkumar on 11/02/17.
  */
 public class CommonView extends View {
-    private static Logger logger = LoggerFactory.getLogger(IndexView.class);
+    private static Logger logger = LoggerFactory.getLogger(CommonView.class);
     public CommonView(HttpServletRequest httpServletRequest, String pageName) {
         super(pageName);
         logger.info("Loading CommonView with page : {}", pageName);

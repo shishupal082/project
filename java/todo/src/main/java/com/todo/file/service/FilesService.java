@@ -3,6 +3,7 @@ package com.todo.file.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.domain.ConfigDetails;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
@@ -109,31 +110,48 @@ public class FilesService {
         }
         return allFileLink;
     }
-    public FileDetails getFileDetails(String fileName) throws TodoException {
+    private FileDetails getFileDetailsFromPath(String fileName, String path) {
         FileDetails fileDetails = new FileDetails();
         FilesConfig filesConfig = todoConfiguration.getFilesConfig();
-        ArrayList<String> folderPath = filesConfig.getRelativePath();
-        for (String folder : folderPath) {
-            File file = new File(folder + fileName);
-            if (file.isFile()) {
-                fileDetails.setFile(file);
-                fileDetails.setFileName(fileName);
-                fileDetails.setFilePath(folder + fileName);
-                String[] fileArray = fileName.split("\\.");
-                if (fileArray.length > 1) {
-                    String fileExt = fileArray[fileArray.length - 1];
-                    fileDetails.setFileExtention(fileExt);
-                }
-                if (filesConfig.getMimeType().get(fileDetails.getFileExtention()) == null) {
-                    fileDetails.setFileMemType(MediaType.TEXT_HTML);
-                } else {
-                    fileDetails.setFileMemType(filesConfig.getMimeType().get(fileDetails.getFileExtention()));
-                }
-                logger.info("File : {}, found in : {}", fileName, folder);
-                break;
+        File file = new File(path);
+        if (file.isFile()) {
+            fileDetails.setFile(file);
+            fileDetails.setFileName(fileName);
+            fileDetails.setFilePath(path);
+            String[] fileArray = fileName.split("\\.");
+            if (fileArray.length > 1) {
+                String fileExt = fileArray[fileArray.length - 1];
+                fileDetails.setFileExtention(fileExt);
+            }
+            if (filesConfig.getMimeType().get(fileDetails.getFileExtention()) == null) {
+                fileDetails.setFileMemType(MediaType.TEXT_HTML);
+            } else {
+                fileDetails.setFileMemType(filesConfig.getMimeType().get(fileDetails.getFileExtention()));
             }
         }
-        if (fileDetails.getFileName() == null) {
+        return fileDetails;
+    }
+    public FileDetails getFileDetails(String fileName) throws TodoException {
+        FileDetails fileDetails = new FileDetails();
+        if (fileName.split("todoConfiguration").length > 1) {
+            String filePath = ConfigDetails.getFilePath(todoConfiguration, fileName);
+            if (filePath == null) {
+                logger.info("File : {}, not found", fileName);
+                throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
+            }
+            logger.info("File : {}, is configuration file, path : {}", fileName, filePath);
+            fileDetails = getFileDetailsFromPath(filePath, filePath);
+        } else {
+            ArrayList<String> folderPath = todoConfiguration.getFilesConfig().getRelativePath();
+            for (String folder : folderPath) {
+                fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
+                if (fileDetails.getFile() != null) {
+                    logger.info("File : {}, found in : {}", fileName, folder);
+                    break;
+                }
+            }
+        }
+        if (fileDetails.getFile() == null) {
             logger.info("File : {}, not found", fileName);
             throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
         }
