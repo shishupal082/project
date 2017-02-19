@@ -1,16 +1,12 @@
 ---
-relativePath: [meta-data/, meta-data/files/, meta-data/csv/, ../../templates/common/]
-#relativePath: [../../pendrive/docs-2017-02-18/]
+relativePath: [meta-data/files/, ../../templates/common/]
 unsupportedFileType: [jar, docx]
-fileuploadPath: meta-data/files/uploaded/
 mimeType:
   png: image/png
   jpg: image/jpg
   jpeg: image/jpeg
   gif: image/gif
-  txt: text/plain
   css: text/css
-  csv: text/plain
   html: text/html
   htm: text/html
   htmls: text/html
@@ -18,3 +14,6 @@ mimeType:
   json: application/json
   yaml: text/plain
   yml: text/plain
+  csv: text/plain
+  txt: text/plain
+  sh: text/sh

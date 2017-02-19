@@ -5,6 +5,7 @@ import com.todo.domain.view.CommonView;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
+import com.todo.file.domain.PathType;
 import com.todo.file.domain.ScanResult;
 import com.todo.file.service.FilesService;
 import com.todo.utils.ErrorCodes;
@@ -187,7 +188,6 @@ public class FilesResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFilteredFilesView(@QueryParam("type") String fileTypes) throws TodoException {
         logger.info("getFilteredFiles : In : fileType : {}", fileTypes);
-        String res = FilesConstant.noFileFound;
         ArrayList<String> requiredFileTypes = null;
         if (fileTypes == null) {
             logger.info("Unsupported: fileType : null");
@@ -205,9 +205,7 @@ public class FilesResource {
             filteredFiles = filesService.filterFilesByExtention(totalFiles, requiredFileTypes);
         }
         ArrayList<String> allFiles = filesService.createLinkV3(filteredFiles);
-        if (allFiles.size() > 0) {
-            res = "";
-        }
+        String res = allFiles.size() > 0 ? "" : FilesConstant.noFileFound;
         for (String fileName : allFiles) {
             res += fileName + "<br>";
         }
@@ -229,10 +227,7 @@ public class FilesResource {
         logger.info("getAllV2View : In");
         ArrayList<ScanResult> scanResultAllDirecotry = filesService.scanAllDirectory(true);
         ArrayList<String> allFiles = filesService.createLinkV3(scanResultAllDirecotry);
-        String res = FilesConstant.noFileFound;
-        if (allFiles.size() > 0) {
-            res = "";
-        }
+        String res = allFiles.size() > 0 ? "" : FilesConstant.noFileFound;
         for (String fileName : allFiles) {
             res += fileName + "<br>";
         }
@@ -292,14 +287,14 @@ public class FilesResource {
     @Path("/v3/getAll/view")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response getAllV3View() throws TodoException {
+    public Response getAllV3View(@QueryParam("path") String path) throws TodoException {
         logger.info("getAllV3View : In");
         ArrayList<ScanResult> scanResultAllDirecotry = filesService.scanAllDirectory(false);
-        ArrayList<String> allFiles = filesService.createLinkV3(scanResultAllDirecotry);
-        String res = FilesConstant.noFileFound;
-        if (allFiles.size() > 0) {
-            res = "";
+        ArrayList<String> allFiles = new ArrayList<String>();
+        for (int i=0; i<scanResultAllDirecotry.size(); i++) {
+            allFiles.addAll(filesService.createLinkV4(scanResultAllDirecotry.get(i).getScanResults(), i));
         }
+        String res = allFiles.size() > 0 ? "" : FilesConstant.noFileFound;
         for (String fileName : allFiles) {
             res += fileName + "<br>";
         }
@@ -327,20 +322,26 @@ public class FilesResource {
     @Path("/v3/getAll/index/{index}/view")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response getAllV3IndexView(@PathParam("index") String index) throws TodoException {
+    public Response getAllV3IndexView(@PathParam("index") String index,
+                                      @QueryParam("path") String path) throws TodoException {
         logger.info("getAllV3IndexView : In");
         Integer directoryIndex;
-        String scanDir = null;
+        String scanDir = null, folderPath;
         try {
             directoryIndex = Integer.parseInt(index);
             ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
+            folderPath = scanDir;
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
-        ScanResult scanResultDirecotry = filesService.scanDirectory(scanDir, scanDir, false);
-        ArrayList<String> allFiles = filesService.createLinkV2(scanResultDirecotry);
+        if (path != null) {
+            folderPath = scanDir + path;
+        }
+        ScanResult scanResultDirecotry = filesService.scanDirectory(folderPath, scanDir, false);
+        ArrayList<String> allFiles;
+        allFiles = filesService.createLinkV4(scanResultDirecotry.getScanResults(), directoryIndex);
         String res = allFiles.size() > 0 ? "" : FilesConstant.noFileFound;
         for (String fileName : allFiles) {
             res += fileName + "<br>";

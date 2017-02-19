@@ -30,7 +30,7 @@ public class FilesService {
     public FilesService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
     }
-    public FilesConfig updateFileConfig() {
+    public FilesConfig updateFileConfig() throws TodoException {
         FilesConfig filesConfig = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         String directoryConfigPath = todoConfiguration.getTodoDirectoryConfigPath();
@@ -39,12 +39,13 @@ public class FilesService {
                 FilesConfig.class);
         } catch (IOException ioe) {
             logger.info("IOE : for file : {}", directoryConfigPath);
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         todoConfiguration.setFilesConfig(filesConfig);
         logger.info("TodoConfiguration : FilesConfig : updated");
         return filesConfig;
     }
-    public static FilesConfig updateFileConfig(TodoConfiguration todoConfiguration) {
+    public static FilesConfig updateFileConfig(TodoConfiguration todoConfiguration) throws TodoException {
         FilesService filesService = new FilesService(todoConfiguration);
         filesService.updateFileConfig();
         return todoConfiguration.getFilesConfig();
@@ -87,6 +88,7 @@ public class FilesService {
             pathName = pathArr[pathArr.length-1];
             fileArr = scanResult.getPathName().split("/");
             fileName = fileArr[fileArr.length - 1];
+            pathName = pathName.length() < 1 ? scanResult.getPathName() : pathName;
             allFileLink.add("<a href=" + FilesConstant.fileViewUrl + StringUtils.urlEncode(fileName) + "?name=" +
                 StringUtils.urlEncode(pathName) + ">" + pathName + "</a>");
         } else {
@@ -95,6 +97,27 @@ public class FilesService {
                 for (ScanResult scanResult1 : scanResults) {
                     allFileLink.addAll(createLinkV2(scanResult1));
                 }
+            }
+        }
+        return allFileLink;
+    }
+    public ArrayList<String> createLinkV4(ArrayList<ScanResult> scanResults, Integer dirIndex) {
+        ArrayList<String> allFileLink = new ArrayList<String>();
+        if (scanResults == null) {
+            logger.info("Invalid scanResults : null");
+            return allFileLink;
+        }
+        String pathName;
+        String[] pathArr;
+        for (ScanResult scanResult : scanResults) {
+            if (scanResult.getPathType() == PathType.FILE) {
+                allFileLink.addAll(createLinkV2(scanResult));
+            } else {
+                pathArr = scanResult.getPathName().split(scanResult.getStaticFolderPath(), 2);
+                pathName = pathArr[pathArr.length-1];
+                pathName = pathName.length() < 1 ? scanResult.getPathName() : pathName;
+                allFileLink.add("<a href=/files/v3/getAll/index/"+dirIndex+"/view?path=" +
+                    StringUtils.urlEncode(pathName) + ">" + pathName + "</a>");
             }
         }
         return allFileLink;

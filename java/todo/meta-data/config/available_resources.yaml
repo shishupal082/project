@@ -65,13 +65,13 @@ resources:
     help: /files/v2/getAll/index/{id}/view
   - url: /files/v3/getAll/data
     name: Get all - v3 - data
-    help: /files/v3/getAll/data?path={path-to-folder-or-file-or-null}
+    help: /files/v3/getAll/data
   - url: /files/v3/getAll/view
     name: Get all - v3 - view
     help: /files/v3/getAll/view?path={path-to-folder-or-file-or-null}
   - url: /files/v3/getAll/index/0/data
     name: Get all - index - 0 - v3 - data
-    help: /files/v3/getAll/index/{id}/data?path={path-to-folder-or-file-or-null}
+    help: /files/v3/getAll/index/{id}/data
   - url: /files/v3/getAll/index/0/view
     name: Get all - index - 0 - v3 - view
     help: /files/v3/getAll/index/{id}/view?path={path-to-folder-or-file-or-null}
