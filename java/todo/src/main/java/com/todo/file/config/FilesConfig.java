@@ -1,16 +1,15 @@
 package com.todo.file.config;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by shishupalkumar on 01/02/17.
  */
 public class FilesConfig {
     private ArrayList<String> relativePath;
-    private ArrayList<String> imageType;
-    private ArrayList<String> textType;
-    private ArrayList<String> applicationType;
-    private ArrayList<String> unsupportedType;
+    private ArrayList<String> unsupportedFileType;
+    private Map<String, String> mimeType;
     public ArrayList<String> getRelativePath() {
         return relativePath;
     }
@@ -19,35 +18,19 @@ public class FilesConfig {
         this.relativePath = relativePath;
     }
 
-    public ArrayList<String> getApplicationType() {
-        return applicationType;
+    public ArrayList<String> getUnsupportedFileType() {
+        return unsupportedFileType;
     }
 
-    public void setApplicationType(ArrayList<String> applicationType) {
-        this.applicationType = applicationType;
+    public void setUnsupportedFileType(ArrayList<String> unsupportedFileType) {
+        this.unsupportedFileType = unsupportedFileType;
     }
 
-    public ArrayList<String> getImageType() {
-        return imageType;
+    public Map<String, String> getMimeType() {
+        return mimeType;
     }
 
-    public void setImageType(ArrayList<String> imageType) {
-        this.imageType = imageType;
-    }
-
-    public ArrayList<String> getTextType() {
-        return textType;
-    }
-
-    public void setTextType(ArrayList<String> textType) {
-        this.textType = textType;
-    }
-
-    public ArrayList<String> getUnsupportedType() {
-        return unsupportedType;
-    }
-
-    public void setUnsupportedType(ArrayList<String> unsupportedType) {
-        this.unsupportedType = unsupportedType;
+    public void setMimeType(Map<String, String> mimeType) {
+        this.mimeType = mimeType;
     }
 }

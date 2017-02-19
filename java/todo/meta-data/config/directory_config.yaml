@@ -1,7 +1,18 @@
 ---
-relativePath: [meta-data/files/, meta-data/csv/, ../../templates/common/]
-imageType: [png, jpg, jpeg, gif]
-#textType: [css, csv, html, xml, plain]
-textType: [css, html, xml, plain]
-applicationType: [pdf, json]
-unsupportedType: [jar]
+relativePath: [meta-data/, meta-data/files/, meta-data/csv/, ../../templates/common/]
+unsupportedFileType: [jar]
+mimeType:
+  png: image/png
+  jpg: image/jpg
+  jpeg: image/jpeg
+  gif: image/gif
+  txt: text/plain
+  css: text/css
+  csv: text/plain
+  html: text/html
+  htm: text/html
+  htmls: text/html
+  pdf: application/pdf
+  json: application/json
+  yaml: text/plain
+  yml: text/plain

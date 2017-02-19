@@ -13,7 +13,7 @@
             <table>
                 <#list resourceDetails as r>
                     <tr>
-                        <td><a href="${r.url}">${r.name}</a></td>
+                        <td width="200px"><a href="${r.url}">${r.name}</a></td>
                         <td>${r.help}</td>
                     </tr>
                 </#list>

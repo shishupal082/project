@@ -25,67 +25,67 @@ resources:
     name: Get yaml object
     help: /api/config/v1/yaml
   - url: /files/api/v1/config/get
-    name: Get file config
+    name: File config
     help: /files/api/v1/config/get
   - url: /files/api/v1/config/update
-    name: update file config
+    name: Update file config
     help: /files/api/v1/config/update
-  - url: /files/v1/filter?type=txt,csv
-    name: Filter file by type
-    help: /files/v1/filter?type=txt,csv
-  - url: /files/v1/filter/download?type=txt,csv
-    name: Download filtered file by type
-    help: /files/v1/filter/download?type=txt,csv
-  - url: /files/v1/download?name=test.txt
-    name: Download file
-    help: /files/v1/download?name=test.txt
-  - url: /files/v1/get/test.txt?name=test.txt
-    name: Get file
-    help: /files/v1/get/test.txt?name=test.txt
-  - url: /files/api/v2/data
-    name: Get scaned directory data (Recursive)
-    help: /files/api/v2/data
-  - url: /files/api/v2/data/0
-    name: Get scaned directory data for 1st index (Recursive)
-    help: /files/api/v2/data/{index}
-  - url: /files/api/v3/data
-    name: Get scaned directory data (Non Recursive)
-    help: /files/api/v3/data
-  - url: /files/api/v3/data/0
-    name: Get scaned directory data for 1st index (Non Recursive)
-    help: /files/api/v3/data/{index}
-  - url: /files/v1/getAll
-    name: List all files - v1
-    help: /files/v1/getAll
-  - url: /files/v2/getAll
-    name: List all files - v2
-    help: /files/v2/getAll
-  - url: /files/v2/getAll/0
-    name: List all files for first index
-    help: /files/v2/getAll/{index}
-  - url: /files/v3/getAll
-    name: List all files (Non recursive)
-    help: /files/v3/getAll
-  - url: /files/v3/getAll/0
-    name: List all files (Non recursive)
-    help: /files/v3/getAll/{index}
-  - url: /task/api/v1/get
-    name: Get all task config
-    help: /task/api/v1/get
-  - url: /task/api/v1/update
+  - url: /files/v1/get/data/test.txt?name=test.txt
+    name: File - data
+    help: /files/v1/get/data/test.txt?name={file-name}
+  - url: /files/v1/get/view/test.txt?name=test.txt
+    name: File - view
+    help: /files/v1/get/view/test.txt?name={file-name}
+  - url: /files/v1/get/download?name=test.txt
+    name: File - download
+    help: /files/v1/get/download?name={file-name}
+  - url: /files/v1/filter/data?type=txt,csv
+    name: Filter - data
+    help: /files/v1/filter/data?type=txt,csv
+  - url: /files/v1/filter/view?type=txt,csv
+    name: Filter - view
+    help: /files/v1/filter/view?type=txt,csv
+  - url: /files/v2/getAll/data
+    name: Get all - v2 - data
+    help: /files/v2/getAll/data
+  - url: /files/v2/getAll/view
+    name: Get all - v2 - view
+    help: /files/v2/getAll/view
+  - url: /files/v2/getAll/index/0/data
+    name: Get all - index - 0 - v2 - data
+    help: /files/v2/getAll/index/{id}/data
+  - url: /files/v2/getAll/index/0/view
+    name: Get all - index - 0 - v2 - view
+    help: /files/v2/getAll/index/{id}/view
+  - url: /files/v3/getAll/data
+    name: Get all - v3 - data
+    help: /files/v3/getAll/data?path={path-to-folder-or-file-or-null}
+  - url: /files/v3/getAll/view
+    name: Get all - v3 - view
+    help: /files/v3/getAll/view?path={path-to-folder-or-file-or-null}
+  - url: /files/v3/getAll/index/0/data
+    name: Get all - index - 0 - v3 - data
+    help: /files/v3/getAll/index/{id}/data?path={path-to-folder-or-file-or-null}
+  - url: /files/v3/getAll/index/0/view
+    name: Get all - index - 0 - v3 - view
+    help: /files/v3/getAll/index/{id}/view?path={path-to-folder-or-file-or-null}
+  - url: /task/api/config/v1/get
+    name: Task config
+    help: /task/api/config/v1/get
+  - url: /task/api/config/v1/update
     name: Update task config
-    help: /task/api/v1/update
+    help: /task/api/config/v1/update
   - url: /task/api/v1/tasks
-    name: Get all task - v1
+    name: Get all task
     help: /task/api/v1/tasks
   - url: /task/api/v1/tasks/_1
-    name: Get individual task - v1
-    help: /task/api/v1/tasks/{taskId}
+    name: Get task by id - v1
+    help: /task/api/v1/tasks/{id}
   - url: /task/api/v2/tasks/_1
-    name: Get individual task - v2
-    help: /task/api/v2/tasks/{taskId}
+    name: Get task by id - v2
+    help: /task/api/v2/tasks/{id}
   - url: /task/api/v1/components
-    name: Get all available components
+    name: Get all component
     help: /task/api/v1/components
   - url: /task/api/v1/components/_1
     name: Get component by id - v1
@@ -97,11 +97,11 @@ resources:
     name: Get component by id - v3
     help: /task/api/v3/components/{id}
   - url: /task/api/v1/app
-    name: Get all app - v1
+    name: Get all app
     help: /task/api/v1/app
   - url: /task/api/v1/app/app-1
     name: Get app by id - v1
-    help: /task/api/v1/app/{appId}
+    help: /task/api/v1/app/{id}
   - url: /task/api/v2/app/app-1
     name: Get app by id - v2
-    help: /task/api/v2/app/{appId}
+    help: /task/api/v2/app/{id}

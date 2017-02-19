@@ -1,4 +1,4 @@
-package com.todo.task.resources;
+package com.todo.resources;
 
 import com.todo.task.config.TaskApplications;
 import com.todo.task.config.TaskComponent;
@@ -15,7 +15,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class TaskResource {
         this.taskConfig = TaskService.updateTaskConfig(taskConfigPath);
         taskService = new TaskService(taskConfig);
     }
-    @Path("/api/v1/update")
+    @Path("/api/config/v1/update")
     @GET
     public TaskConfig updateTasks() throws TodoException {
         logger.info("updateTasks : In");
@@ -47,7 +46,7 @@ public class TaskResource {
         taskService = new TaskService(taskConfig);
         return taskConfig;
     }
-    @Path("/api/v1/get")
+    @Path("/api/config/v1/get")
     @GET
     public TaskConfig getTaskConfig() throws TodoException {
         logger.info("updateTasks : In");
