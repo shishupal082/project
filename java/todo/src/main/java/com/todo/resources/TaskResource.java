@@ -1,6 +1,5 @@
 package com.todo.resources;
 
-import com.todo.TodoConfiguration;
 import com.todo.task.config.TaskApplications;
 import com.todo.task.config.TaskComponent;
 import com.todo.task.config.TaskConfig;
@@ -33,9 +32,10 @@ public class TaskResource {
     private TaskConfig taskConfig;
     private String taskConfigPath;
     private TaskService taskService;
-    public TaskResource(TodoConfiguration todoConfiguration, String taskConfigPath) {
+    public TaskResource(String taskConfigPath) {
+        this.taskConfigPath = taskConfigPath;
         this.taskConfig = TaskService.updateTaskConfig(taskConfigPath);
-        taskService = new TaskService(taskConfig);
+        this.taskService = new TaskService(taskConfig);
     }
     @Path("/api/config/v1/update")
     @GET

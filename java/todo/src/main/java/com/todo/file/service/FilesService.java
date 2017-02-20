@@ -2,8 +2,6 @@ package com.todo.file.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.todo.TodoConfiguration;
-import com.todo.domain.ConfigDetails;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
@@ -18,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,14 +23,13 @@ import java.util.Map;
  */
 public class FilesService {
     private static Logger logger = LoggerFactory.getLogger(FilesService.class);
-    private TodoConfiguration todoConfiguration;
-    public FilesService(TodoConfiguration todoConfiguration) {
-        this.todoConfiguration = todoConfiguration;
+    private FilesConfig filesConfig;
+    public FilesService(FilesConfig filesConfig) {
+        this.filesConfig = filesConfig;
     }
-    public FilesConfig updateFileConfig() throws TodoException {
+    public static FilesConfig getFileConfig(String directoryConfigPath) throws TodoException {
         FilesConfig filesConfig = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        String directoryConfigPath = todoConfiguration.getTodoDirectoryConfigPath();
         try {
             filesConfig = mapper.readValue(new File(directoryConfigPath),
                 FilesConfig.class);
@@ -41,14 +37,8 @@ public class FilesService {
             logger.info("IOE : for file : {}", directoryConfigPath);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        todoConfiguration.setFilesConfig(filesConfig);
-        logger.info("TodoConfiguration : FilesConfig : updated");
+        logger.info("Files config loaded with data : {}", filesConfig);
         return filesConfig;
-    }
-    public static FilesConfig updateFileConfig(TodoConfiguration todoConfiguration) throws TodoException {
-        FilesService filesService = new FilesService(todoConfiguration);
-        filesService.updateFileConfig();
-        return todoConfiguration.getFilesConfig();
     }
     public ArrayList<ScanResult> filterFilesByExtention(ArrayList<ScanResult> scanResults,
                                                         ArrayList<String> requiredFileTypes) {
@@ -135,7 +125,6 @@ public class FilesService {
     }
     private FileDetails getFileDetailsFromPath(String fileName, String path) {
         FileDetails fileDetails = new FileDetails();
-        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
         File file = new File(path);
         if (file.isFile()) {
             fileDetails.setFile(file);
@@ -151,21 +140,19 @@ public class FilesService {
             } else {
                 fileDetails.setFileMemType(filesConfig.getMimeType().get(fileDetails.getFileExtention()));
             }
+        } else {
+            logger.info("fileName : {} is not a valid file and path : {}", fileName, path);
         }
         return fileDetails;
     }
-    public FileDetails getFileDetails(String fileName) throws TodoException {
+    public FileDetails getFileDetails(String fileName, Map<String, String> configFileMapper) throws TodoException {
         FileDetails fileDetails = new FileDetails();
-        if (fileName.split("todoConfiguration").length > 1) {
-            String filePath = ConfigDetails.getFilePath(todoConfiguration, fileName);
-            if (filePath == null) {
-                logger.info("File : {}, not found", fileName);
-                throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
-            }
+        if (configFileMapper != null && configFileMapper.get(fileName) != null) {
+            String filePath = configFileMapper.get(fileName);
             logger.info("File : {}, is configuration file, path : {}", fileName, filePath);
             fileDetails = getFileDetailsFromPath(filePath, filePath);
         } else {
-            ArrayList<String> folderPath = todoConfiguration.getFilesConfig().getRelativePath();
+            ArrayList<String> folderPath = filesConfig.getRelativePath();
             for (String folder : folderPath) {
                 fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
                 if (fileDetails.getFile() != null) {
@@ -183,7 +170,7 @@ public class FilesService {
     public ArrayList<ScanResult> scanAllDirectory(boolean isRecursive) {
         ScanResult scanResult;
         ArrayList<ScanResult> scanResults = new ArrayList<ScanResult>();
-        for (String scanDir : todoConfiguration.getFilesConfig().getRelativePath()) {
+        for (String scanDir : filesConfig.getRelativePath()) {
             scanResult = scanDirectory(scanDir, scanDir, isRecursive);
             scanResults.add(scanResult);
         }

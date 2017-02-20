@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by shishupalkumar on 19/02/17.
  */
-public class ConfigView extends View{
+public class ConfigView extends View {
     private ConfigViewParams configViewParams;
     private static Logger logger = LoggerFactory.getLogger(ConfigView.class);
     public ConfigView(HttpServletRequest httpServletRequest, TodoConfiguration todoConfiguration, String pageName) {
@@ -23,7 +23,8 @@ public class ConfigView extends View{
         configViewParams = new ConfigViewParams();
         configViewParams.setHeading("Config View");
         configViewParams.setTitle("Config Dashboard");
-        configViewParams.setFiles(ConfigDetails.getConfigFiles(todoConfiguration));
+        ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
+        configViewParams.setFiles(configDetails.getConfigFiles());
     }
     public ConfigViewParams getConfigViewParams() {
         return configViewParams;

@@ -15,7 +15,10 @@ import java.util.jar.Pack200;
 public class ConfigDetails {
     private static Logger logger = LoggerFactory.getLogger(ConfigDetails.class);
     private TodoConfiguration todoConfiguration;
-    private Map<String, String> getConfigFileMapper() {
+    public ConfigDetails(TodoConfiguration todoConfiguration) {
+        this.todoConfiguration = todoConfiguration;
+    }
+    public Map<String, String> getConfigFileMapper() {
         String yamlObjectPathName = "todoConfiguration.yamlObjectPath";
         String availableResourcePathName = "todoConfiguration.availableResourcePath";
         String todoDirectoryConfigPathName = "todoConfiguration.todoDirectoryConfigPath";
@@ -25,6 +28,10 @@ public class ConfigDetails {
         String taskApplicationPathName = "todoConfiguration.taskConfigPath.taskApplicationPath";
 
         Map<String, String> configFilesMapper = new HashMap<String, String>();
+        if (todoConfiguration == null) {
+            logger.info("todoConfiguration is null : returning empty map.");
+            return configFilesMapper;
+        }
         configFilesMapper.put(yamlObjectPathName, todoConfiguration.getYamlObjectPath());
         configFilesMapper.put(availableResourcePathName, todoConfiguration.getAvailableResourcePath());
         configFilesMapper.put(todoDirectoryConfigPathName, todoConfiguration.getTodoDirectoryConfigPath());
@@ -41,10 +48,7 @@ public class ConfigDetails {
         }
         return configFilesMapper;
     }
-    private ConfigDetails(TodoConfiguration todoConfiguration) {
-        this.todoConfiguration = todoConfiguration;
-    }
-    public static ArrayList<String> getConfigFiles(TodoConfiguration todoConfiguration) {
+    public ArrayList<String> getConfigFiles() {
         ArrayList<String> configFiles = new ArrayList<String>();
         ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
         for (Map.Entry<String, String> entry : configDetails.getConfigFileMapper().entrySet()) {
@@ -52,14 +56,5 @@ public class ConfigDetails {
         }
         Collections.sort(configFiles);
         return configFiles;
-    }
-    public static String getFilePath(TodoConfiguration todoConfiguration, String configFileName) {
-        ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
-        Map<String, String> mapper = configDetails.getConfigFileMapper();
-        String configFilePath = mapper.get(configFileName);
-        if (configFilePath == null) {
-            logger.info("configFileName : {}, not found in : {}", configFileName, mapper);
-        }
-        return configFilePath;
     }
 }

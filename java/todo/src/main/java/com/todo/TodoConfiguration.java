@@ -17,7 +17,6 @@ public class TodoConfiguration extends Configuration {
     private String todoDirectoryConfigPath;
     private String yamlObjectPath;
     private String socketRequestDelimiter;
-    private FilesConfig filesConfig;
     private String taskConfigPath;
     private String availableResourcePath;
 
@@ -67,14 +66,6 @@ public class TodoConfiguration extends Configuration {
 
     public void setSocketRequestDelimiter(String socketRequestDelimiter) {
         this.socketRequestDelimiter = socketRequestDelimiter;
-    }
-
-    public FilesConfig getFilesConfig() {
-        return filesConfig;
-    }
-
-    public void setFilesConfig(FilesConfig filesConfig) {
-        this.filesConfig = filesConfig;
     }
 
     public String getTaskConfigPath() {

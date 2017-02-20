@@ -1,6 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.domain.ConfigDetails;
 import com.todo.domain.view.CommonView;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
@@ -33,13 +34,16 @@ import java.util.Map;
 public class FilesResource {
     private static Logger logger = LoggerFactory.getLogger(FilesResource.class);
     private FilesService filesService;
+    private FilesConfig filesConfig;
+    private String directoryConfigPath;
     private TodoConfiguration todoConfiguration;
     @Context
     private HttpServletRequest httpServletRequest;
-    public FilesResource(TodoConfiguration todoConfiguration) {
-        this.filesService = new FilesService(todoConfiguration);
+    public FilesResource(TodoConfiguration todoConfiguration, String directoryConfigPath) {
         this.todoConfiguration = todoConfiguration;
-        FilesService.updateFileConfig(todoConfiguration);
+        this.directoryConfigPath = directoryConfigPath;
+        this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
+        this.filesService = new FilesService(filesConfig);
     }
 //    @Path("/v1/upload")
 //    @POST
@@ -77,9 +81,8 @@ public class FilesResource {
     @GET
     public FilesConfig v1ConfigGet() throws TodoException {
         logger.info("v1ConfigGet : In");
-        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
         if (filesConfig == null) {
-            filesConfig = new FilesConfig();
+            throw new TodoException(ErrorCodes.SERVER_ERROR);
         }
         logger.info("v1ConfigGet : Out : {}", filesConfig);
         return filesConfig;
@@ -88,7 +91,7 @@ public class FilesResource {
     @GET
     public FilesConfig v1ConfigUpdate() throws TodoException {
         logger.info("v1ConfigUpdate : In");
-        FilesConfig filesConfig = filesService.updateFileConfig();
+        this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
         logger.info("v1ConfigUpdate : Out : {}", filesConfig);
         return filesConfig;
     }
@@ -97,7 +100,12 @@ public class FilesResource {
     public FileDetails v1GetData(@PathParam("actualFileName") String actualFileName,
                              @QueryParam("name") String fileName) throws TodoException {
         logger.info("v1GetData : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
-        FileDetails fileDetails = filesService.getFileDetails(fileName);
+        ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
+        Map<String, String> configFileMapper = null;
+        if (fileName != null && fileName.split("todoConfiguration.").length > 1) {
+            configFileMapper = configDetails.getConfigFileMapper();
+        }
+        FileDetails fileDetails = filesService.getFileDetails(fileName, configFileMapper);
         fileDetails.setFile(null);
         logger.info("v1GetData : Out : {}", fileName);
         return fileDetails;
@@ -109,8 +117,12 @@ public class FilesResource {
                                  @QueryParam("name") String fileName) throws TodoException {
         logger.info("v1GetData : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
         String fileData = null;
-        FileDetails fileDetails = filesService.getFileDetails(fileName);
-        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
+        ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
+        Map<String, String> configFileMapper = null;
+        if (fileName != null && fileName.split("todoConfiguration.").length > 1) {
+            configFileMapper = configDetails.getConfigFileMapper();
+        }
+        FileDetails fileDetails = filesService.getFileDetails(fileName, configFileMapper);
         Response.ResponseBuilder r;
         try {
             if (filesConfig.getUnsupportedFileType().contains(fileDetails.getFileExtention())) {
@@ -147,7 +159,13 @@ public class FilesResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response downloadFile(@QueryParam("name") String fileName) throws TodoException {
         logger.info("downloadFile : in : fileName : {}", fileName);
-        FileDetails fileDetails = filesService.getFileDetails(fileName);
+        ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
+        Map<String, String> configFileMapper = null;
+        if (fileName != null && fileName.split("todoConfiguration.").length > 1) {
+            configFileMapper = configDetails.getConfigFileMapper();
+            logger.info("File : {}, is a configuration file", fileName);
+        }
+        FileDetails fileDetails = filesService.getFileDetails(fileName, configFileMapper);
         try {
             InputStream inputStream = new FileInputStream(fileDetails.getFilePath());
             return Response.ok(inputStream)
@@ -242,7 +260,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
+            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -261,7 +279,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
+            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -309,7 +327,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
+            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -325,7 +343,6 @@ public class FilesResource {
     public Response getAllV3IndexView(@PathParam("index") String index,
                                       @QueryParam("path") String path) throws TodoException {
         logger.info("getAllV3IndexView : In");
-        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
         Integer directoryIndex;
         String scanDir = null, folderPath;
         try {
