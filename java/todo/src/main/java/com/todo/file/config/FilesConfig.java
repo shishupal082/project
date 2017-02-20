@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class FilesConfig {
     private ArrayList<String> relativePath;
+    private Map<String, String> pathReplaceString;
     private ArrayList<String> unsupportedFileType;
     private Map<String, String> mimeType;
     public ArrayList<String> getRelativePath() {
@@ -24,6 +25,14 @@ public class FilesConfig {
 
     public void setUnsupportedFileType(ArrayList<String> unsupportedFileType) {
         this.unsupportedFileType = unsupportedFileType;
+    }
+
+    public Map<String, String> getPathReplaceString() {
+        return pathReplaceString;
+    }
+
+    public void setPathReplaceString(Map<String, String> pathReplaceString) {
+        this.pathReplaceString = pathReplaceString;
     }
 
     public Map<String, String> getMimeType() {

@@ -1,5 +1,7 @@
 ---
 relativePath: [meta-data/files/, ../../templates/common/]
+pathReplaceString:
+  ../:
 unsupportedFileType: [jar, docx]
 mimeType:
   png: image/png

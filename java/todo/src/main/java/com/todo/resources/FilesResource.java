@@ -5,7 +5,6 @@ import com.todo.domain.view.CommonView;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
-import com.todo.file.domain.PathType;
 import com.todo.file.domain.ScanResult;
 import com.todo.file.service.FilesService;
 import com.todo.utils.ErrorCodes;
@@ -23,6 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by shishupalkumar on 01/02/17.
@@ -287,7 +287,7 @@ public class FilesResource {
     @Path("/v3/getAll/view")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response getAllV3View(@QueryParam("path") String path) throws TodoException {
+    public Response getAllV3View() throws TodoException {
         logger.info("getAllV3View : In");
         ArrayList<ScanResult> scanResultAllDirecotry = filesService.scanAllDirectory(false);
         ArrayList<String> allFiles = new ArrayList<String>();
@@ -325,11 +325,12 @@ public class FilesResource {
     public Response getAllV3IndexView(@PathParam("index") String index,
                                       @QueryParam("path") String path) throws TodoException {
         logger.info("getAllV3IndexView : In");
+        FilesConfig filesConfig = todoConfiguration.getFilesConfig();
         Integer directoryIndex;
         String scanDir = null, folderPath;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getFilesConfig().getRelativePath();
+            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
             folderPath = scanDir;
         } catch (Exception e) {
@@ -337,6 +338,14 @@ public class FilesResource {
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
         if (path != null) {
+            if (filesConfig.getPathReplaceString() != null) {
+                logger.info("Path before replace : {}", path);
+                for(Map.Entry<String, String> entry : filesConfig.getPathReplaceString().entrySet()) {
+                    logger.info("Replacing string : {}, to : {}", entry.getKey(), entry.getValue());
+                    path = path.replace(entry.getKey(), entry.getValue());
+                }
+                logger.info("Path after replace : {}", path);
+            }
             folderPath = scanDir + path;
         }
         ScanResult scanResultDirecotry = filesService.scanDirectory(folderPath, scanDir, false);
