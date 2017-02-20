@@ -34,7 +34,7 @@ public class FilesService {
             filesConfig = mapper.readValue(new File(directoryConfigPath),
                 FilesConfig.class);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", directoryConfigPath);
+            logger.info("IOE : for file : {}, {}", directoryConfigPath, ioe);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         logger.info("Files config loaded with data : {}", filesConfig);

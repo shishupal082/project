@@ -19,17 +19,17 @@ import java.util.Map;
  */
 public class TaskService {
     private static Logger logger = LoggerFactory.getLogger(TaskService.class);
+    private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private TaskConfig taskConfiguration;
     public TaskService(TaskConfig taskConfig) {
         this.taskConfiguration = taskConfig;
     }
     public static TaskConfig getTaskConfig(String taskConfigPath) {
         TaskConfig taskConfig = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             taskConfig = mapper.readValue(new File(taskConfigPath), TaskConfig.class);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", taskConfigPath);
+            logger.info("IOE : for file : {}, {}", taskConfigPath, ioe);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return taskConfig;
@@ -47,7 +47,6 @@ public class TaskService {
         TaskItems taskItems = null;
         TaskItems finalTaskItems = new TaskItems();
         Map<String, TaskItem> result = new HashMap<String, TaskItem>();
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         String[] taskItemsPath = taskConfig.getTaskItemsPath();
         try {
             for (String taskItemPath: taskItemsPath) {
@@ -56,7 +55,7 @@ public class TaskService {
             }
             finalTaskItems.setTaskItems(result);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : taskItemsPath");
+            logger.info("IOE : for file : taskItemsPath : {}", ioe);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskItems(finalTaskItems.getTaskItems());
@@ -66,7 +65,6 @@ public class TaskService {
         TaskComponents taskComponents = null;
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         String[] taskComponentsPath = taskConfig.getTaskComponentPath();
         try {
             Map<String, TaskItem> taskItems = taskConfig.getTaskItems();
@@ -101,17 +99,16 @@ public class TaskService {
             }
             finalTaskComponents.setTaskComponents(result);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : taskComponentsPath");
+            logger.info("IOE : for file : taskComponentsPath : {}", ioe);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskComponents(finalTaskComponents.getTaskComponents());
         logger.info("TaskComponents loaded with data : {}", finalTaskComponents);
     }
-    public static void updateTaskApplication(TaskConfig taskConfig) throws TodoException {
+    private static void updateTaskApplication(TaskConfig taskConfig) throws TodoException {
         TaskApplications taskApplications = null;
         TaskApplications finalTaskApplications = new TaskApplications();
         Map<String, Map<String, String[][]>> result = new HashMap<String, Map<String, String[][]>>();
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         String[] taskApplicationsPath = taskConfig.getTaskApplicationPath();
         try {
             for (String taskApplicationPath: taskApplicationsPath) {
@@ -120,13 +117,13 @@ public class TaskService {
             }
             finalTaskApplications.setTaskApplications(result);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : taskComponentsPath");
+            logger.info("IOE : for file : taskComponentsPath : {}", ioe);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskApplications(finalTaskApplications);
         logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
     }
-    public Object getComponentdetails(String componentId, ArrayList<String> requiredParams) {
+    private Object getComponentdetails(String componentId, ArrayList<String> requiredParams) {
         if (componentId == null) {
             return null;
         }
