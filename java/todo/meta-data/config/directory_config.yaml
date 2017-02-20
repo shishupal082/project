@@ -4,6 +4,7 @@ pathReplaceString:
   ../:
 unsupportedFileType: [jar, docx]
 messageSavePath: ../../pvt/uploaded_files/java/
+#messageSavePath: ../../pendrive/uploaded_files/
 mimeType:
   png: image/png
   jpg: image/jpg

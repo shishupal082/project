@@ -264,27 +264,29 @@ public class FilesService {
         if (fileName == null) {
             fileName =  timeInMs.toString();
         }
+        String filePath = filesConfig.getMessageSavePath() + fileName + ".txt";
         try {
-            File file = new File(filesConfig.getMessageSavePath() + fileName + ".txt");
+            File file = new File(filePath);
             boolean fileCreated = file.createNewFile();
             countTry++;
             if (fileCreated) {
                 FileWriter writer = new FileWriter(file);
                 writer.write(message);
                 writer.close();
+                logger.info("Message : {}, saved in : {}", message, filePath);
                 response = "Message saved";
             } else {
                 if (countTry < 2) {
                     logger.info("File create failed in first attempt : countTry : {}", countTry);
                     response = saveMessage(message, fileName + "-" + timeInMs.toString(), countTry);
                 } else {
-                    logger.info("Unable to save message : {}, {}, {}", message, fileName, countTry);
+                    logger.info("Unable to save message : {}, {}, {}, {}", message, fileName, countTry, filePath);
                     throw new TodoException(ErrorCodes.SERVER_ERROR);
                 }
             }
         } catch (Exception e) {
             response = "Error while saving message.";
-            logger.info("Error saving message : {}", e);
+            logger.info("Error saving message : {}, {}", filePath, e);
         }
         return response;
     }
