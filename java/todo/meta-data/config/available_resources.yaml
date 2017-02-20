@@ -30,6 +30,12 @@ resources:
   - url: /files/v1/upload/view
     name: File upload view
     help: /files/v1/upload/view
+  - url: /files/v1/query/view
+    name: File query view
+    help: /files/v1/query/view
+  - url: /files/v1/query/submit
+    name: File query submit
+    help: /files/v1/query/submit
   - url: /files/api/v1/config/get
     name: File config
     help: /files/api/v1/config/get

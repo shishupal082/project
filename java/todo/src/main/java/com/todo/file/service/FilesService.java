@@ -253,4 +253,39 @@ public class FilesService {
         logger.info("Scan folder result for folder : {}, {}", folderPath, finalFileScanResult);
         return finalFileScanResult;
     }
+    public String saveMessage(String message, String fileName, Integer countTry) throws TodoException {
+        logger.info("Save message : {} : {} : {}", message, fileName, countTry);
+        if (message == null) {
+            logger.info("Message is null, san not be saved.");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String response;
+        Long timeInMs = System.currentTimeMillis();
+        if (fileName == null) {
+            fileName =  timeInMs.toString();
+        }
+        try {
+            File file = new File(filesConfig.getMessageSavePath() + fileName + ".txt");
+            boolean fileCreated = file.createNewFile();
+            countTry++;
+            if (fileCreated) {
+                FileWriter writer = new FileWriter(file);
+                writer.write(message);
+                writer.close();
+                response = "Message saved";
+            } else {
+                if (countTry < 2) {
+                    logger.info("File create failed in first attempt : countTry : {}", countTry);
+                    response = saveMessage(message, fileName + "-" + timeInMs.toString(), countTry);
+                } else {
+                    logger.info("Unable to save message : {}, {}, {}", message, fileName, countTry);
+                    throw new TodoException(ErrorCodes.SERVER_ERROR);
+                }
+            }
+        } catch (Exception e) {
+            response = "Error while saving message.";
+            logger.info("Error saving message : {}", e);
+        }
+        return response;
+    }
 }

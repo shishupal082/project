@@ -11,6 +11,7 @@ public class FilesConfig {
     private Map<String, String> pathReplaceString;
     private ArrayList<String> unsupportedFileType;
     private Map<String, String> mimeType;
+    private String messageSavePath;
     public ArrayList<String> getRelativePath() {
         return relativePath;
     }
@@ -41,5 +42,13 @@ public class FilesConfig {
 
     public void setMimeType(Map<String, String> mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public String getMessageSavePath() {
+        return messageSavePath;
+    }
+
+    public void setMessageSavePath(String messageSavePath) {
+        this.messageSavePath = messageSavePath;
     }
 }

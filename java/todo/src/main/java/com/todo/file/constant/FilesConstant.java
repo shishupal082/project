@@ -6,5 +6,6 @@ package com.todo.file.constant;
 public class FilesConstant {
     public static String fileDownloadUrl = "/files/v1/get/download";
     public static String fileViewUrl = "/files/v1/get/view/";
+    public static String queryViewUrl = "/files/v1/query/view/";
     public static String noFileFound = "No file found";
 }

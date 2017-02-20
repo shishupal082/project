@@ -77,6 +77,27 @@ public class FilesResource {
         logger.info("uploadFileView : In : Out");
         return new CommonView(httpServletRequest, "file_upload.ftl");
     }
+    @Path("/v1/query/view")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public CommonView fileQueryView() throws TodoException {
+        logger.info("uploadFileView : In : Out");
+        return new CommonView(httpServletRequest, "query_view.ftl");
+    }
+    @Path("/v1/query/submit")
+    @POST
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Produces(MediaType.TEXT_HTML)
+    public Response fileQuerySubmit(@FormParam("message") String message,
+                                    @FormParam("filename") String fileName) throws TodoException {
+        logger.info("fileQuerySubmit : In : message : {}", message);
+        String response = filesService.saveMessage(message, fileName, 0);
+        logger.info("fileQuerySubmit : Out : response : {}", response);
+        response = "<center><span>" + response
+            + "</span><span>&nbsp;&nbsp;&nbsp;</span><a href=" +
+            FilesConstant.queryViewUrl+">Try again</a></center>";
+        return Response.ok(response).build();
+    }
     @Path("/api/v1/config/get")
     @GET
     public FilesConfig v1ConfigGet() throws TodoException {

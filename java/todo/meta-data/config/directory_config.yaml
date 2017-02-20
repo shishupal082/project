@@ -1,8 +1,9 @@
 ---
-relativePath: [meta-data/files/, ../../templates/common/]
+relativePath: [meta-data/files/, ../../templates/common/, ../../pvt/uploaded_files/java/]
 pathReplaceString:
   ../:
 unsupportedFileType: [jar, docx]
+messageSavePath: ../../pvt/uploaded_files/java/
 mimeType:
   png: image/png
   jpg: image/jpg
