@@ -113,6 +113,7 @@ public class FilesResource {
     public FilesConfig v1ConfigUpdate() throws TodoException {
         logger.info("v1ConfigUpdate : In");
         this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
+        this.filesService = new FilesService(filesConfig);
         logger.info("v1ConfigUpdate : Out : {}", filesConfig);
         return filesConfig;
     }
