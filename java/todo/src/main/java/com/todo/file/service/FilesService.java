@@ -253,10 +253,11 @@ public class FilesService {
         logger.info("Scan folder result for folder : {}, {}", folderPath, finalFileScanResult);
         return finalFileScanResult;
     }
-    public String saveMessage(String message, String fileName, Integer countTry) throws TodoException {
-        logger.info("Save message : {} : {} : {}", message, fileName, countTry);
+    public String saveMessage(String message, String fileName, String ext,
+                              boolean overWrite, Integer countTry) throws TodoException {
+        logger.info("Save message : fileName = {} : countTry = {}", fileName, countTry);
         if (message == null) {
-            logger.info("Message is null, san not be saved.");
+            logger.info("Message is null, can not be saved.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         String response;
@@ -264,7 +265,10 @@ public class FilesService {
         if (fileName == null) {
             fileName =  timeInMs.toString();
         }
-        String filePath = filesConfig.getMessageSavePath() + fileName + ".txt";
+        if (ext == null) {
+            ext = ".txt";
+        }
+        String filePath = filesConfig.getMessageSavePath() + fileName + ext;
         try {
             File file = new File(filePath);
             boolean fileCreated = file.createNewFile();
@@ -273,12 +277,19 @@ public class FilesService {
                 FileWriter writer = new FileWriter(file);
                 writer.write(message);
                 writer.close();
-                logger.info("Message : {}, saved in : {}", message, filePath);
+                logger.info("Message saved in : {}", file);
                 response = "Message saved";
             } else {
                 if (countTry < 2) {
-                    logger.info("File create failed in first attempt : countTry : {}", countTry);
-                    response = saveMessage(message, fileName + "-" + timeInMs.toString(), countTry);
+                    if (overWrite) {
+                        logger.info("File already exist and overwrite is true, delete old file : {}", filePath);
+                        boolean fileDeleteStatus = file.delete();
+                        logger.info("File deleted : {}", fileDeleteStatus);
+                        response = saveMessage(message, fileName, ext, true, countTry);
+                    } else {
+                        logger.info("File create failed in first attempt, retry... : countTry : {}", countTry);
+                        response = saveMessage(message, fileName + "-" + timeInMs.toString(), ext, false, countTry);
+                    }
                 } else {
                     logger.info("Unable to save message : {}, {}, {}, {}", message, fileName, countTry, filePath);
                     throw new TodoException(ErrorCodes.SERVER_ERROR);
@@ -289,5 +300,23 @@ public class FilesService {
             logger.info("Error saving message : {}, {}", filePath, e);
         }
         return response;
+    }
+    public void verifyConfigPath() throws TodoException {
+        String saveMsgPath = filesConfig.getMessageSavePath();
+        try {
+            File folder = new File(saveMsgPath);
+            if (folder.isFile()) {
+                logger.info("Save message path is a file not directory : {}", saveMsgPath);
+                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+            }
+            if (folder.listFiles() == null) {
+                logger.info("Save message path is invalid : {}", saveMsgPath);
+                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+            }
+            logger.info("Save message path is verified : {}", saveMsgPath);
+        } catch (Exception e) {
+            logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH.getErrorString());
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+        }
     }
 }

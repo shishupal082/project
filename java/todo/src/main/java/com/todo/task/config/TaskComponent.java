@@ -8,14 +8,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class TaskComponent {
     private String name;
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private String taskItem;
+    private String taskId;
 
-    public String getTaskItem() {
-        return taskItem;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setTaskItem(String taskItem) {
-        this.taskItem = taskItem;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public String getName() {
@@ -29,7 +29,7 @@ public class TaskComponent {
     @Override
     public String toString() {
         return "TaskComponent{" +
-            "taskItem='" + taskItem + '\'' +
+            "taskId='" + taskId + '\'' +
             ", name='" + name + '\'' +
             '}';
     }

@@ -2,6 +2,7 @@ package com.todo.task.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
@@ -48,14 +49,16 @@ public class TaskService {
         TaskItems finalTaskItems = new TaskItems();
         Map<String, TaskItem> result = new HashMap<String, TaskItem>();
         String[] taskItemsPath = taskConfig.getTaskItemsPath();
+        String parsingPath = null;
         try {
             for (String taskItemPath: taskItemsPath) {
+                parsingPath = taskItemPath;
                 taskItems = mapper.readValue(new File(taskItemPath), TaskItems.class);
                 result.putAll(taskItems.getTaskItems());
             }
             finalTaskItems.setTaskItems(result);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : taskItemsPath : {}", ioe);
+        } catch (IOException e) {
+            logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskItems(finalTaskItems.getTaskItems());
@@ -66,6 +69,7 @@ public class TaskService {
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
         String[] taskComponentsPath = taskConfig.getTaskComponentPath();
+        String parsingPath = null;
         try {
             Map<String, TaskItem> taskItems = taskConfig.getTaskItems();
             TaskItem tempTaskItem = null;
@@ -86,6 +90,7 @@ public class TaskService {
             }
             logger.info("ComponentId vs taskId : {}", tempHashMap);
             for (String taskComponentPath: taskComponentsPath) {
+                parsingPath = taskComponentPath;
                 taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
                 result.putAll(taskComponents.getTaskComponents());
             }
@@ -95,11 +100,11 @@ public class TaskService {
                     logger.info("taskItem not found for component : {}", entry.getKey());
                     throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
                 }
-                entry.getValue().setTaskItem(taskItem);
+                entry.getValue().setTaskId(taskItem);
             }
             finalTaskComponents.setTaskComponents(result);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : taskComponentsPath : {}", ioe);
+        } catch (IOException e) {
+            logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskComponents(finalTaskComponents.getTaskComponents());
@@ -110,20 +115,22 @@ public class TaskService {
         TaskApplications finalTaskApplications = new TaskApplications();
         Map<String, Map<String, String[][]>> result = new HashMap<String, Map<String, String[][]>>();
         String[] taskApplicationsPath = taskConfig.getTaskApplicationPath();
+        String parsingPath = null;
         try {
             for (String taskApplicationPath: taskApplicationsPath) {
+                parsingPath = taskApplicationPath;
                 taskApplications = mapper.readValue(new File(taskApplicationPath), TaskApplications.class);
                 result.putAll(taskApplications.getTaskApplications());
             }
             finalTaskApplications.setTaskApplications(result);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : taskComponentsPath : {}", ioe);
+        } catch (IOException e) {
+            logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskApplications(finalTaskApplications);
         logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
     }
-    private Object getComponentdetails(String componentId, ArrayList<String> requiredParams) {
+    private Object getComponentdetails(String componentId, ArrayList<String> componentParams) {
         if (componentId == null) {
             return null;
         }
@@ -134,21 +141,30 @@ public class TaskService {
             return null;
         }
         logger.info("TaskComponent for id : {}, {}", componentId, tempTaskComponent);
-        if (requiredParams == null) {
+        if (componentParams == null) {
             return tempTaskComponent.getName();
         }
         Map<String, Object> componentDetails = new HashMap<String, Object>();
-        for(String requiredParam : requiredParams) {
-            if (requiredParam.equals("id")) {
+        for(String requiredParam : componentParams) {
+            if (TaskComponentParams.ID.getName().equals(requiredParam)) {
                 componentDetails.put(requiredParam, componentId);
+                continue;
             }
-            if (requiredParam.equals("name")) {
+            if (TaskComponentParams.NAME.getName().equals(requiredParam)) {
                 componentDetails.put(requiredParam, tempTaskComponent.getName());
+                continue;
             }
-            if (requiredParam.equals("taskItem")) {
-                componentDetails.put(requiredParam, tempTaskComponent.getTaskItem());
+            if (TaskComponentParams.TASK_ID.getName().equals(requiredParam)) {
+                componentDetails.put(requiredParam, tempTaskComponent.getTaskId());
+                continue;
             }
-            if (requiredParam.equals("application")) {
+            if (TaskComponentParams.TASK_DETAILS.getName().equals(requiredParam)) {
+                componentDetails.put(requiredParam,
+                    getTaskDetails(tempTaskComponent.getTaskId(), null).get(
+                        TaskComponentParams.TASK_DETAILS.getName()));
+                continue;
+            }
+            if (TaskComponentParams.APPLICATION.getName().equals(requiredParam)) {
                 componentDetails.put(requiredParam, getTaskComponentApplication(componentId));
             }
         }
@@ -188,7 +204,7 @@ public class TaskService {
         logger.info("App details for app id : {}, {}", appId, response);
         return response;
     }
-    public ArrayList<Object> getComponents(String[] componentIds, ArrayList<String> requiredParams) {
+    private ArrayList<Object> getComponents(String[] componentIds, ArrayList<String> requiredParams) {
         ArrayList<Object> response = new ArrayList<Object>();
         if (componentIds == null) {
             return response;
@@ -203,7 +219,7 @@ public class TaskService {
         }
         return response;
     }
-    public Object getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
+    public HashMap<String, Object> getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
         Map<String, TaskItem> taskItemMap = taskConfiguration.getTaskItems();
         if (taskItemMap == null) {
             logger.info("taskItemMap is null");
@@ -216,9 +232,7 @@ public class TaskService {
         }
         logger.info("taskItemById found : {}", taskItemById);
         HashMap<String, Object> response = new HashMap<String, Object>();
-        response.put("name", taskItemById.getName());
-        response.put("place", taskItemById.getPlace());
-        response.put("components", taskItemById.getComponent());
+        response.put(TaskComponentParams.TASK_DETAILS.getName(), taskItemById);
         if (requiredParams != null) {
             response.put("componentDetails", getComponents(taskItemById.getComponent(), requiredParams));
         }

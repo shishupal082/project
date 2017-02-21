@@ -108,12 +108,15 @@ resources:
   - url: /task/api/v3/components/_1
     name: Get component by id - v3
     help: /task/api/v3/components/{id}
-  - url: /task/api/v1/app
-    name: Get all app
-    help: /task/api/v1/app
-  - url: /task/api/v1/app/app-1
+  - url: /task/api/v1/app/all
+    name: Get all app - v1
+    help: /task/api/v1/app/all
+  - url: /task/api/v2/app/all
+    name: Get all app - v2
+    help: /task/api/v2/app/all
+  - url: /task/api/v1/app/id/app-1
     name: Get app by id - v1
-    help: /task/api/v1/app/{id}
-  - url: /task/api/v2/app/app-1
+    help: /task/api/v1/app/id/{id}
+  - url: /task/api/v2/app/id/app-1
     name: Get app by id - v2
-    help: /task/api/v2/app/{id}
+    help: /task/api/v2/app/id/{id}

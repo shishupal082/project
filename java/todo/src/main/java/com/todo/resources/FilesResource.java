@@ -44,8 +44,9 @@ public class FilesResource {
         this.directoryConfigPath = directoryConfigPath;
         this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
         this.filesService = new FilesService(filesConfig);
+        filesService.verifyConfigPath();
     }
-//    @Path("/v1/upload")
+    //    @Path("/v1/upload")
 //    @POST
 //    @Produces(MediaType.MULTIPART_FORM_DATA)
 //    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
@@ -81,7 +82,7 @@ public class FilesResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public CommonView fileQueryView() throws TodoException {
-        logger.info("uploadFileView : In : Out");
+        logger.info("fileQueryView : In : Out");
         return new CommonView(httpServletRequest, "query_view.ftl");
     }
     @Path("/v1/query/submit")
@@ -89,9 +90,12 @@ public class FilesResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.TEXT_HTML)
     public Response fileQuerySubmit(@FormParam("message") String message,
-                                    @FormParam("filename") String fileName) throws TodoException {
-        logger.info("fileQuerySubmit : In : message : {}", message);
-        String response = filesService.saveMessage(message, fileName, 0);
+                                    @FormParam("filename") String fileName,
+                                    @FormParam("ext") String ext,
+                                    @FormParam("overwrite") String overwrite) throws TodoException {
+        boolean overWrite = "yes".equals(overwrite);
+        logger.info("fileQuerySubmit : In : {}, {}, {}, {}", message, fileName, ext, overWrite);
+        String response = filesService.saveMessage(message, fileName, ext, overWrite, 0);
         logger.info("fileQuerySubmit : Out : response : {}", response);
         response = "<center><span>" + response
             + "</span><span>&nbsp;&nbsp;&nbsp;</span><a href=" +
@@ -120,7 +124,7 @@ public class FilesResource {
     @Path("/v1/get/data/{actualFileName}")
     @GET
     public FileDetails v1GetData(@PathParam("actualFileName") String actualFileName,
-                             @QueryParam("name") String fileName) throws TodoException {
+                                 @QueryParam("name") String fileName) throws TodoException {
         logger.info("v1GetData : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
         ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
         Map<String, String> configFileMapper = null;
@@ -136,7 +140,7 @@ public class FilesResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response v1GetView(@PathParam("actualFileName") String actualFileName,
-                                 @QueryParam("name") String fileName) throws TodoException {
+                              @QueryParam("name") String fileName) throws TodoException {
         logger.info("v1GetData : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
         String fileData = null;
         ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
