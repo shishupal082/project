@@ -283,6 +283,15 @@ public class FilesService {
                 if (countTry < 2) {
                     if (overWrite) {
                         logger.info("File already exist and overwrite is true, delete old file : {}", filePath);
+                        BufferedReader in = new BufferedReader(
+                            new InputStreamReader(
+                                new FileInputStream(file), "UTF-8"));
+                        logger.info("Deleted file data : ");
+                        String str;
+                        while ((str = in.readLine()) != null) {
+                            logger.info(str);
+                        }
+                        in.close();
                         boolean fileDeleteStatus = file.delete();
                         logger.info("File deleted : {}", fileDeleteStatus);
                         response = saveMessage(message, fileName, ext, true, countTry);
