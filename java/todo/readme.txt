@@ -1,14 +1,18 @@
 To run this application
 
-java -jar target/todo-*-SNAPSHOT.jar server meta-data/env_config.yml
+Go to todo folder then =>
+
+run the command => sh run.sh
 
 or,
 
-Copy target/todo-1.0-SNAPSHOT.jar in meta-data folder
-then run => sh meta-data/run.sh
+java -jar meta-data/todo-*-SNAPSHOT.jar server meta-data/config/env_config.yml
 
-To start working on ui part :
+==================================================================================
+Start working on ui part :
+==================================================================================
 go to ui folder :
 npm install
-gulp webserver
-gulp watch
+if gulp is not installed => sudo npm install --global gulp
+In one terminal => gulp webserver
+In other terminal => gulp watch
