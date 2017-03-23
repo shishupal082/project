@@ -1,5 +1,6 @@
 ---
 relativePath: [meta-data/files/, ../../templates/common/, ../../pvt/uploaded_files/java/]
+uiPath: []
 pathReplaceString:
   ../:
 unsupportedFileType: [jar, docx]
@@ -10,6 +11,7 @@ mimeType:
   jpeg: image/jpeg
   gif: image/gif
   css: text/css
+  js: text/javascript
   html: text/html
   htm: text/html
   htmls: text/html

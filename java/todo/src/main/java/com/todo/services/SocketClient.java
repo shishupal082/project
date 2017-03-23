@@ -48,7 +48,7 @@ public class SocketClient {
 			if (isResponseEnd) {
 				break;
 			}
-			dataIn = dataInputStream.read();
+			dataIn = dataInputStream.readByte();
 		}
 		return parsedResponse;
 	}
@@ -63,7 +63,9 @@ public class SocketClient {
 //	            out.writeBytes(request);
 				out.write(request.getBytes("UTF-8"));
 	            response = this.getResponse();
-				logger.info("Response : {}::length=", response, response.length());
+				logger.info("Response : {}::length={}", response, response.length());
+			} else {
+				logger.info("Socket connection failed.");
 			}
 		} catch (SocketTimeoutException s) {
 			logger.info("Socket timed out!");

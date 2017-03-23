@@ -71,6 +71,31 @@ public class FilesResource {
 //        logger.info("uploadFile : Out");
 //        return Response.status(200).entity(output).build();
 //    }
+    @Path("/v1/static")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response v1GetStaticFile(@QueryParam("name") String fileName) throws TodoException {
+        logger.info("v1GetStaticFile : In : fileName : {}", fileName);
+        if (fileName == null || fileName.split("\\.\\.", 0).length > 1) {
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String fileData = null;
+        FileDetails fileDetails = filesService.getStaticFileDetails(fileName);
+        Response.ResponseBuilder r;
+        try {
+            r = Response.ok(fileDetails.getFile(), fileDetails.getFileMemType());
+            logger.info("v1GetStaticFile : Out : {}", fileName);
+            return r.build();
+        } catch (TodoException todoe) {
+            fileData = todoe.getMessage();
+            logger.info("Error parsing file : {} : {}", fileName, fileData);
+        } catch (Exception e) {
+            fileData = "Invalid arguments";
+            logger.info("Error parsing file : {} : {} : {}", fileName, fileData, e);
+        }
+        logger.info("v1GetStaticFile : Out : {}", fileName);
+        return Response.ok(fileData).build();
+    }
     @Path("/v1/upload/view")
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -136,39 +161,39 @@ public class FilesResource {
         logger.info("v1GetData : Out : {}", fileName);
         return fileDetails;
     }
-    @Path("/v1/get/view/{actualFileName}")
+    @Path("/v1/get/view/{fileName}")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public Response v1GetView(@PathParam("actualFileName") String actualFileName,
-                              @QueryParam("name") String fileName) throws TodoException {
-        logger.info("v1GetData : In : actualFileName : {}, fileName : {}", actualFileName, fileName);
+    public Response v1GetView(@PathParam("fileName") String fileName,
+                              @QueryParam("name") String actualFileName) throws TodoException {
+        logger.info("v1GetData : In : fileName : {}, actualFileName : {}", fileName, actualFileName);
         String fileData = null;
         ConfigDetails configDetails = new ConfigDetails(todoConfiguration);
         Map<String, String> configFileMapper = null;
-        if (fileName != null && fileName.split("todoConfiguration.").length > 1) {
+        if (actualFileName != null && actualFileName.split("todoConfiguration.").length > 1) {
             configFileMapper = configDetails.getConfigFileMapper();
         }
-        FileDetails fileDetails = filesService.getFileDetails(fileName, configFileMapper);
+        FileDetails fileDetails = filesService.getFileDetails(actualFileName, configFileMapper);
         Response.ResponseBuilder r;
         try {
             if (filesConfig.getUnsupportedFileType().contains(fileDetails.getFileExtention())) {
-                String downloadPath = FilesConstant.fileDownloadUrl+"?name=" + StringUtils.urlEncode(fileName);
+                String downloadPath = FilesConstant.fileDownloadUrl+"?name=" + StringUtils.urlEncode(actualFileName);
                 logger.info("Unsupported fileType : {}, found in : {} : redirect to download : path={}",
                     fileDetails.getFileExtention(), filesConfig.getUnsupportedFileType(), downloadPath);
                 r = Response.seeOther(new URI(downloadPath));
             } else {
                 r = Response.ok(fileDetails.getFile(), fileDetails.getFileMemType());
             }
-            logger.info("getFile : Out : {}", fileName);
+            logger.info("getFile : Out : {}", actualFileName);
             return r.build();
         } catch (TodoException todoe) {
             fileData = todoe.getMessage();
-            logger.info("Error parsing file : {} : {}", fileName, fileData);
+            logger.info("Error parsing file : {} : {}", actualFileName, fileData);
         } catch (Exception e) {
             fileData = "Invalid arguments";
-            logger.info("Error parsing file : {} : {} : {}", fileName, fileData, e);
+            logger.info("Error parsing file : {} : {} : {}", actualFileName, fileData, e);
         }
-        logger.info("getFile : Out : {}", fileName);
+        logger.info("getFile : Out : {}", actualFileName);
         return Response.ok(fileData).build();
     }
     @Path("/v1/get/view")

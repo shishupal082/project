@@ -145,6 +145,22 @@ public class FilesService {
         }
         return fileDetails;
     }
+    public FileDetails getStaticFileDetails(String fileName) throws TodoException {
+        FileDetails fileDetails = new FileDetails();
+        ArrayList<String> folderPath = filesConfig.getUiPath();
+        for (String folder : folderPath) {
+            fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
+            if (fileDetails.getFile() != null) {
+                logger.info("File : {}, found in : {}", fileName, folder);
+                break;
+            }
+        }
+        if (fileDetails.getFile() == null) {
+            logger.info("File : {}, not found", fileName);
+            throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
+        }
+        return fileDetails;
+    }
     public FileDetails getFileDetails(String fileName, Map<String, String> configFileMapper) throws TodoException {
         FileDetails fileDetails = new FileDetails();
         if (configFileMapper != null && configFileMapper.get(fileName) != null) {

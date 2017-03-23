@@ -7,7 +7,11 @@ class DirectoryLibs extends Libs{
 	}
 	public function dirToArray($dir, $recursive = TRUE) { 
 		$result = array();
-		if(!file_exists($dir)){
+		// if(!file_exists($dir)){
+		// 	return $result;
+		// }
+		if (!is_dir($dir)) {
+			log_message_prod("Given path is not directory : ".$dir);
 			return $result;
 		}
 		$cdir = scandir($dir);

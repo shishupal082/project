@@ -8,10 +8,20 @@ import java.util.Map;
  */
 public class FilesConfig {
     private ArrayList<String> relativePath;
+    private ArrayList<String> uiPath;
     private Map<String, String> pathReplaceString;
     private ArrayList<String> unsupportedFileType;
     private Map<String, String> mimeType;
     private String messageSavePath;
+
+    public ArrayList<String> getUiPath() {
+        return uiPath;
+    }
+
+    public void setUiPath(ArrayList<String> uiPath) {
+        this.uiPath = uiPath;
+    }
+
     public ArrayList<String> getRelativePath() {
         return relativePath;
     }
