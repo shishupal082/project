@@ -42,6 +42,9 @@ resources:
   - url: /files/api/v1/config/update
     name: Update file config
     help: /files/api/v1/config/update
+  - url: /files/v1/static?name=static-file-name
+    name: Load static file
+    help: /files/v1/static?name={file-name}
   - url: /files/v1/get/data/test.txt?name=test.txt
     name: File - data
     help: /files/v1/get/data/test.txt?name={file-name}
