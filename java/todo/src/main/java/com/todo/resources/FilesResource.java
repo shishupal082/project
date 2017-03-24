@@ -76,9 +76,10 @@ public class FilesResource {
     @Produces(MediaType.TEXT_HTML)
     public Response v1GetStaticFile(@QueryParam("name") String fileName) throws TodoException {
         logger.info("v1GetStaticFile : In : fileName : {}", fileName);
-        if (fileName == null || fileName.split("\\.\\.", 0).length > 1) {
+        if (fileName == null) {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        fileName = filesService.parseFilePath(fileName);
         String fileData = null;
         FileDetails fileDetails = filesService.getStaticFileDetails(fileName);
         Response.ResponseBuilder r;
@@ -406,14 +407,7 @@ public class FilesResource {
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
         if (path != null) {
-            if (filesConfig.getPathReplaceString() != null) {
-                logger.info("Path before replace : {}", path);
-                for(Map.Entry<String, String> entry : filesConfig.getPathReplaceString().entrySet()) {
-                    logger.info("Replacing string : {}, to : {}", entry.getKey(), entry.getValue());
-                    path = path.replace(entry.getKey(), entry.getValue());
-                }
-                logger.info("Path after replace : {}", path);
-            }
+            path = filesService.parseFilePath(path);
             folderPath = scanDir + path;
         }
         ScanResult scanResultDirecotry = filesService.scanDirectory(folderPath, scanDir, false);

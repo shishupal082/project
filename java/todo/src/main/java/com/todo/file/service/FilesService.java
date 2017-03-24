@@ -344,4 +344,17 @@ public class FilesService {
             throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
         }
     }
+    public String parseFilePath(String filePath) {
+        if (filePath != null) {
+            if (filesConfig.getPathReplaceString() != null) {
+                logger.info("Path before replace : {}", filePath);
+                for(Map.Entry<String, String> entry : filesConfig.getPathReplaceString().entrySet()) {
+                    logger.info("Replacing string : {}, to : {}", entry.getKey(), entry.getValue());
+                    filePath = filePath.replace(entry.getKey(), entry.getValue());
+                }
+                logger.info("Path after replace : {}", filePath);
+            }
+        }
+        return filePath;
+    }
 }
