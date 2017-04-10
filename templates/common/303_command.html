@@ -22,9 +22,14 @@ li code{
 		</ul>
 		<h2>Remote login</h2>
 		<ul>
-			<li><code>ssh ip_address (Later it will ask for username and password)</code></li>
+			<li>To enable in mac => System Preferences >> Sharing >> Enable Remote Login</li>
+			<li><code>ssh ip_address (Later it will ask for username and password, port 22)</code></li>
 			<li><code>ssh user@ip</code></li>
-			<li><code>scp source_file_name user@ip:password destination</code></li>
+			<li>From local to remote</li>
+			<li><code>scp foobar.txt user@remotehost:/some/remote/directory</code></li>
+			<li>From remote to local</li>
+			<li><code>scp user@remotehost:foobar.txt /some/local/directory</code></li>
+
 		</ul>
 		<h2>Unix</h2>
 		<ul>
@@ -46,8 +51,15 @@ li code{
 			<li><code tabindex="1">du -h filename (get filesize)</code></li></li>
 			<li><code tabindex="1">ps -ef | grep 'rails'</code></li>
 			<li><code tabindex="1">ps -eaf | grep jetty</code></li>
+			<li>501 10749     1   0 24Mar17 ?? 20:21.03 /Applications/IntelliJ IDEA CE.app/Contents/MacOS/idea (PID=10749)</li>
+			<li>501 10795 10749   0 24Mar17 ?? 0:26.79 /Applications/IntelliJ IDEA CE.app/Contents/bin/fsnotifier</li>
 			<li><code tabindex="1">sudo kill -9 4770</code></li>
 			<li><code tabindex="1">ps -eaf | grep jetty</code></li>
+			<li><code tabindex="1">ps aux</code></li>
+			<li>USER  PID  %CPU  %MEM  VSZ  RSS  TT  STAT  STARTED  TIME  COMMAND</li>
+			<li><code tabindex="1">ps aux | grep IntelliJ</code></li>
+			<li><code tabindex="1">ps aux | head -5</code></li>
+			<li><code tabindex="1">ps aux | head -5 |  awk '{print $2 "\t" $3 "\t" $4 "\t" $11$12$13$14$15}'</code></li>
 			<li><code tabindex="1">hostname</code></li>
 			<li><code tabindex="1">ipconfig</code></li>
 			<li><code tabindex="1">ifconfig</code></li>
@@ -75,7 +87,7 @@ li code{
 			<li><code tabindex="1">chown :staff file(to change group to a file)</code></li>
 			<li><code tabindex="1">-rwxrw-r-- (10 char, 1:file type, read, write, execute)</code></li>
 			<li><code tabindex="1">cp *-2016-12-01-* destination_folder</code></li>
-			<li><code tabindex="1">cp *-2016-12-01-* destination_folder</code></li>
+			<li><code tabindex="1">mv *-2016-12-01-* destination_folder</code></li>
 			<li><code tabindex="1">find . -name "*-2017-*" | wc -l (Count)</code></li>
 		</ul>
 		<h2>Logs</h2>
