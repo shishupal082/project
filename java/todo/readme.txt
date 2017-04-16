@@ -27,3 +27,11 @@ Edit configuration
 Name : TodoApplication
 Main class : com.todo.TodoApplication
 Program arguments : server env_config_path
+
+1.1
+=========
+2017-04-16
+Added favicon icon
+
+2017-03-30
+Added support for loading static files and template from outside of the project

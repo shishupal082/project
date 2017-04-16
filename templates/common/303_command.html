@@ -59,7 +59,7 @@ li code{
 			<li>USER  PID  %CPU  %MEM  VSZ  RSS  TT  STAT  STARTED  TIME  COMMAND</li>
 			<li><code tabindex="1">ps aux | grep IntelliJ</code></li>
 			<li><code tabindex="1">ps aux | head -5</code></li>
-			<li><code tabindex="1">ps aux | head -5 |  awk '{print $2 "\t" $3 "\t" $4 "\t" $11$12$13$14$15}'</code></li>
+			<li><code tabindex="1">ps aux | head -5 |  awk '{print "pid="$2 "\t" $3 "\t" $4 "\t" $11$12$13$14$15}'</code></li>
 			<li><code tabindex="1">hostname</code></li>
 			<li><code tabindex="1">ipconfig</code></li>
 			<li><code tabindex="1">ifconfig</code></li>
@@ -89,6 +89,7 @@ li code{
 			<li><code tabindex="1">cp *-2016-12-01-* destination_folder</code></li>
 			<li><code tabindex="1">mv *-2016-12-01-* destination_folder</code></li>
 			<li><code tabindex="1">find . -name "*-2017-*" | wc -l (Count)</code></li>
+			<li><code tabindex="1">grep -rnw directory/path/ -e "pattern"</code></li>
 		</ul>
 		<h2>Logs</h2>
 		<ul>

@@ -23,8 +23,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
     }
     @Override
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
-        environment.jersey().register(new FaviconResource(todoConfiguration,
-            todoConfiguration.getTodoDirectoryConfigPath()));
+        environment.jersey().register(new FaviconResource());
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
