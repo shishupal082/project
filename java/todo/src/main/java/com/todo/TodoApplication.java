@@ -3,11 +3,7 @@ package com.todo;
 import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
-import com.todo.resources.ConfigResource;
-import com.todo.resources.FilesResource;
-import com.todo.resources.TodoResource;
-import com.todo.resources.ViewResource;
-import com.todo.resources.TaskResource;
+import com.todo.resources.*;
 import com.todo.common.TodoExceptionMapper;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -23,11 +19,12 @@ public class TodoApplication extends Application<TodoConfiguration> {
     public void initialize(Bootstrap<TodoConfiguration> bootstrap) {
         super.initialize(bootstrap);
         bootstrap.addBundle(new ViewBundle<TodoConfiguration>());
-        bootstrap.addBundle(new AssetsBundle("/assets/favicon.ico", "/favicon.ico"));
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets"));
     }
     @Override
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
+        environment.jersey().register(new FaviconResource(todoConfiguration,
+            todoConfiguration.getTodoDirectoryConfigPath()));
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());

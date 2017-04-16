@@ -16,3 +16,14 @@ npm install
 if gulp is not installed => sudo npm install --global gulp
 In one terminal => gulp webserver
 In other terminal => gulp watch
+
+
+Steps to setup
+==================================================================================
+Import project in "IntelliJ IDEA"
+Add pom.xml in project by right click
+Edit configuration
+
+Name : TodoApplication
+Main class : com.todo.TodoApplication
+Program arguments : server env_config_path
