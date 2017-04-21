@@ -54,6 +54,9 @@ public class TaskService {
             for (String taskItemPath: taskItemsPath) {
                 parsingPath = taskItemPath;
                 taskItems = mapper.readValue(new File(taskItemPath), TaskItems.class);
+                for (Map.Entry<String, TaskItem> entry : taskItems.getTaskItems().entrySet()) {
+                    entry.getValue().setId(entry.getKey());
+                }
                 result.putAll(taskItems.getTaskItems());
             }
             finalTaskItems.setTaskItems(result);
@@ -89,21 +92,22 @@ public class TaskService {
                 }
             }
             logger.info("ComponentId vs taskId : {}", tempHashMap);
-            for (String taskComponentPath: taskComponentsPath) {
-                parsingPath = taskComponentPath;
-                taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
-                result.putAll(taskComponents.getTaskComponents());
-            }
-            for (Map.Entry<String, TaskComponent> entry : result.entrySet()) {
-                String taskItem = tempHashMap.get(entry.getKey());
-                if (taskItem == null) {
-                    logger.info("taskItem not found for component : {}", entry.getKey());
-                    throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
-                }
-                entry.getValue().setTaskId(taskItem);
+//            for (String taskComponentPath: taskComponentsPath) {
+//                parsingPath = taskComponentPath;
+//                taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
+//                result.putAll(taskComponents.getTaskComponents());
+//            }
+            for (Map.Entry<String, String> entry : tempHashMap.entrySet()) {
+                String taskComponentId = entry.getKey();
+                String taskId = entry.getValue();
+                TaskComponent taskComponent = new TaskComponent();
+                taskComponent.setId(taskComponentId);
+                taskComponent.setTaskId(taskId);
+                taskComponent.setName(taskComponentId);
+                result.put(taskComponentId, taskComponent);
             }
             finalTaskComponents.setTaskComponents(result);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }

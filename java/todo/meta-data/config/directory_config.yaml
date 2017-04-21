@@ -1,6 +1,6 @@
 ---
 relativePath: [meta-data/files/, ../../templates/common/, ../../pvt/uploaded_files/java/]
-uiPath: [../../static/, src/main/resources/]
+uiPath: [../../static/]
 pathReplaceString:
   ../:
 unsupportedFileType: [jar, docx]
