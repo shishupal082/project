@@ -1,18 +1,18 @@
 ---
 taskItems:
-  _11:
+  - id: _1
     name: Task-1
     place: Task-2 Place
-    component: [_111, _112, _113]
-  _12:
+    component: [_1, _2, _3]
+  - id: _2
     name: Task-2
     place: Task-2 Place
-    component: [_114, _115]
-  _13:
+    component: [_4, _5]
+  - id: _3
     name: Task-3
     place: Task-3 Place
-    component: [_116, _117, _118]
-  _14:
+    component: [_6, _7, _8]
+  - id: _4
     name: Task-4
     place: Task-4 Place
     component: []

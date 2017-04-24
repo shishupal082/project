@@ -1,18 +1,19 @@
 package com.todo.task.config;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by shishupalkumar on 17/02/17.
  */
 public class TaskItems {
-    private Map<String, TaskItem> taskItems;
+    private ArrayList<TaskItem> taskItems;
 
-    public Map<String, TaskItem> getTaskItems() {
+    public ArrayList<TaskItem> getTaskItems() {
         return taskItems;
     }
 
-    public void setTaskItems(Map<String, TaskItem> taskItems) {
+    public void setTaskItems(ArrayList<TaskItem> taskItems) {
         this.taskItems = taskItems;
     }
 

@@ -28,10 +28,20 @@ Name : TodoApplication
 Main class : com.todo.TodoApplication
 Program arguments : server env_config_path
 
+1.0
+=========
+Always verify there should not be duplicate entry for taskComponent.
+
 1.1
 =========
+2017-03-30
+Added support for loading static files and template from outside of the project
+
 2017-04-16
 Added favicon icon
 
-2017-03-30
-Added support for loading static files and template from outside of the project
+2017-04-22
+Added id for taskItem and taskComponent
+
+2017-04-24
+Change data pattern for taskItems from hash map to arrayList

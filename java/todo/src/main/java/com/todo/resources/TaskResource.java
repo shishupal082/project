@@ -56,27 +56,32 @@ public class TaskResource {
     }
     @Path("/api/v1/tasks")
     @GET
-    public Map<String, TaskItem> getTaskItems() throws TodoException {
+    public ArrayList<TaskItem> getTaskItems() throws TodoException {
         logger.info("getTaskItems : In");
-        Map<String, TaskItem> taskItemMap = taskConfig.getTaskItems();
-        if (taskItemMap == null) {
+        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         logger.info("getTaskItems : Out");
-        return taskItemMap;
+        return taskItems;
     }
     @Path("/api/v1/tasks/{taskId}")
     @GET
     public TaskItem getTaskComponentsById(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
         TaskItem result = null;
-        Map<String, TaskItem> taskItemMap = taskConfig.getTaskItems();
-        if (taskItemMap == null) {
+        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        result = taskItemMap.get(taskId);
+        for (int i=0; i< taskItems.size(); i++) {
+            if (taskId.equals(taskItems.get(i).getId())) {
+                result = taskItems.get(i);
+                break;
+            }
+        }
         if (result == null) {
             logger.info("result is null for taskId : {}", taskId);
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
@@ -207,7 +212,7 @@ public class TaskResource {
     @Path("/api/v1/app/id/{appId}")
     @GET
     public Map<String, String[][]> getTaskApplicationsByAppId(@PathParam("appId") String appId)
-            throws TodoException {
+        throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
         TaskApplications taskApplications = taskConfig.getTaskApplications();
         if (taskApplications == null) {
@@ -225,7 +230,7 @@ public class TaskResource {
     @Path("/api/v2/app/id/{appId}")
     @GET
     public Object getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
-            throws TodoException {
+        throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
         ArrayList<String> componentRequiredParams = new ArrayList<String>();
         componentRequiredParams.add(TaskComponentParams.ID.getName());

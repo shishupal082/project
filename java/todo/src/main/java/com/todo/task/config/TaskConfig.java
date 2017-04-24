@@ -2,6 +2,7 @@ package com.todo.task.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -10,18 +11,18 @@ import java.util.Map;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskConfig {
-    private Map<String, TaskItem> taskItems;
+    private ArrayList<TaskItem> taskItems;
     private Map<String, TaskComponent> taskComponents;
     private TaskApplications taskApplications;
     private String[] taskItemsPath;
     private String[] taskComponentPath;
     private String[] taskApplicationPath;
 
-    public Map<String, TaskItem> getTaskItems() {
+    public ArrayList<TaskItem> getTaskItems() {
         return taskItems;
     }
 
-    public void setTaskItems(Map<String, TaskItem> taskItems) {
+    public void setTaskItems(ArrayList<TaskItem> taskItems) {
         this.taskItems = taskItems;
     }
 

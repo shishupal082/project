@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,17 +48,14 @@ public class TaskService {
     private static void updateTaskItems(TaskConfig taskConfig) throws TodoException {
         TaskItems taskItems = null;
         TaskItems finalTaskItems = new TaskItems();
-        Map<String, TaskItem> result = new HashMap<String, TaskItem>();
+        ArrayList<TaskItem> result = new ArrayList<TaskItem>();
         String[] taskItemsPath = taskConfig.getTaskItemsPath();
         String parsingPath = null;
         try {
             for (String taskItemPath: taskItemsPath) {
                 parsingPath = taskItemPath;
                 taskItems = mapper.readValue(new File(taskItemPath), TaskItems.class);
-                for (Map.Entry<String, TaskItem> entry : taskItems.getTaskItems().entrySet()) {
-                    entry.getValue().setId(entry.getKey());
-                }
-                result.putAll(taskItems.getTaskItems());
+                result.addAll(taskItems.getTaskItems());
             }
             finalTaskItems.setTaskItems(result);
         } catch (IOException e) {
@@ -74,30 +72,28 @@ public class TaskService {
         String[] taskComponentsPath = taskConfig.getTaskComponentPath();
         String parsingPath = null;
         try {
-            Map<String, TaskItem> taskItems = taskConfig.getTaskItems();
-            TaskItem tempTaskItem = null;
-            Map<String, String> tempHashMap = new HashMap<String, String>();
-            for(Map.Entry<String, TaskItem> entry : taskItems.entrySet()) {
-                tempTaskItem = entry.getValue();
-                if (tempTaskItem.getComponent() == null) {
-                    logger.info("Component not found : {}", tempTaskItem);
-                    throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+            ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+            Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
+            for(TaskItem taskItem : taskItems) {
+                if (taskItem.getComponent() == null) {
+                    logger.info("Component not found : {}", taskItem);
+                    continue;
                 }
-                for (String componentId : tempTaskItem.getComponent()) {
-                    if (tempHashMap.containsKey(componentId)) {
-                        logger.info("Duplicate entry found for componentId : {}", componentId);
+                for (String componentId : taskItem.getComponent()) {
+                    if (componentIdVsTaskId.containsKey(componentId)) {
+                        logger.info("Duplicate entry found for componentId : {}, {}", componentId, taskItem);
                         throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
                     }
-                    tempHashMap.put(componentId, entry.getKey());
+                    componentIdVsTaskId.put(componentId, taskItem.getId());
                 }
             }
-            logger.info("ComponentId vs taskId : {}", tempHashMap);
+            logger.info("ComponentId vs taskId : {}", componentIdVsTaskId);
 //            for (String taskComponentPath: taskComponentsPath) {
 //                parsingPath = taskComponentPath;
 //                taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
 //                result.putAll(taskComponents.getTaskComponents());
 //            }
-            for (Map.Entry<String, String> entry : tempHashMap.entrySet()) {
+            for (Map.Entry<String, String> entry : componentIdVsTaskId.entrySet()) {
                 String taskComponentId = entry.getKey();
                 String taskId = entry.getValue();
                 TaskComponent taskComponent = new TaskComponent();
@@ -224,16 +220,24 @@ public class TaskService {
         return response;
     }
     public HashMap<String, Object> getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
-        Map<String, TaskItem> taskItemMap = taskConfiguration.getTaskItems();
-        if (taskItemMap == null) {
+        ArrayList<TaskItem> taskItems = taskConfiguration.getTaskItems();
+        if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        TaskItem taskItemById = taskItemMap.get(taskId);
-        if (taskItemById == null) {
+        Integer index = null;
+        for (int i=0; i<taskItems.size(); i++) {
+            if (taskId.equals(taskItems.get(i).getId())) {
+                index = i;
+                break;
+            }
+        }
+        if (index == null) {
             logger.info("Task not found for taskid : {}", taskId);
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        TaskItem taskItemById = taskItems.get(index);
+
         logger.info("taskItemById found : {}", taskItemById);
         HashMap<String, Object> response = new HashMap<String, Object>();
         response.put(TaskComponentParams.TASK_DETAILS.getName(), taskItemById);
