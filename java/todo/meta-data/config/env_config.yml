@@ -40,6 +40,6 @@ yamlObjectPath: meta-data/config/yaml_object.yaml
 availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
 taskConfigPath: meta-data/config/task_config.yaml
-#taskConfigPath: ../config/task_config.yaml
+#taskConfigPath: ../../config/config/task_config.yaml
 todoDirectoryConfigPath: meta-data/config/directory_config.yaml
-#todoDirectoryConfigPath: ../config/directory_config.yaml
+#todoDirectoryConfigPath: ../../config/config/directory_config.yaml
