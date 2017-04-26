@@ -45,3 +45,8 @@ Added id for taskItem and taskComponent
 
 2017-04-24
 Change data pattern for taskItems from hash map to arrayList
+
+2017-04-26
+Change data pattern for taskItems :
+added options (Map<String, String>)
+removed name, place
