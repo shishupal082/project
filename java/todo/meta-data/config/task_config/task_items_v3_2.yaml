@@ -1,0 +1,22 @@
+---
+taskItems:
+  - id: _11
+    component: [_111, _112, _113]
+    options:
+      name: Task-1
+      location: Task-2 Place
+  - id: _12
+    component: [_114, _115]
+    options:
+      name: Task-2
+      location: Task-2 Place
+  - id: _13
+    component: [_116, _117, _118]
+    options:
+      name: Task-3
+      place: Task-3 Place
+  - id: _14
+    component: []
+    options:
+      name: Task-4
+      place: Task-4 Place
