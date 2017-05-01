@@ -1,10 +1,7 @@
 package com.todo.resources;
 
 import com.todo.task.TaskComponentParams;
-import com.todo.task.config.TaskApplications;
-import com.todo.task.config.TaskComponent;
-import com.todo.task.config.TaskConfig;
-import com.todo.task.config.TaskItem;
+import com.todo.task.config.*;
 import com.todo.task.service.TaskService;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
@@ -186,16 +183,16 @@ public class TaskResource {
     }
     @Path("/api/v2/app/all")
     @GET
-    public Map<String, Object> getTaskApplicationsV2() throws TodoException {
+    public ArrayList<Map<String, Object>> getTaskApplicationsV2() throws TodoException {
         logger.info("getTaskApplications : In");
-        Map<String, Object> response = new HashMap<String, Object>();
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
         TaskApplications taskApplications = taskConfig.getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        Map<String, Map<String, String[][]>> app = taskApplications.getTaskApplications();
-        if (app == null) {
+        ArrayList<TaskApplication> apps = taskApplications.getTaskApplications();
+        if (apps == null) {
             logger.info("app is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
@@ -203,15 +200,21 @@ public class TaskResource {
         componentRequiredParams.add(TaskComponentParams.ID.getName());
         componentRequiredParams.add(TaskComponentParams.NAME.getName());
         componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
-        for (Map.Entry<String, Map<String, String[][]>> entry : app.entrySet()) {
-            response.put(entry.getKey(), taskService.getAppDetailsByAppId(entry.getKey(), componentRequiredParams));
+        Map<String, Object> temp = null;
+        for (TaskApplication taskApplication : apps) {
+            temp = new HashMap<String, Object>();
+            temp.put("id", taskApplication.getId());
+            temp.put("options", taskApplication.getOptions());
+            temp.put("path", taskApplication.getPath());
+            temp.put("pathComponent", taskService.getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+            response.add(temp);
         }
         logger.info("getTaskApplications : Out");
         return response;
     }
     @Path("/api/v1/app/id/{appId}")
     @GET
-    public Map<String, String[][]> getTaskApplicationsByAppId(@PathParam("appId") String appId)
+    public TaskApplication getTaskApplicationsByAppId(@PathParam("appId") String appId)
         throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
         TaskApplications taskApplications = taskConfig.getTaskApplications();
@@ -219,13 +222,13 @@ public class TaskResource {
             logger.info("taskApplications is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        Map<String, String[][]> response = taskApplications.getTaskApplications().get(appId);
-        if (response == null) {
+        TaskApplication taskApplication = taskApplications.getTaskApplicationByAppId(appId);
+        if (taskApplication == null) {
             logger.info("taskApplicationById is null");
             throw new TodoException(ErrorCodes.TASK_APPLICATION_NOT_FOUND);
         }
         logger.info("getTaskApplicationsByAppId : Out");
-        return response;
+        return taskApplication;
     }
     @Path("/api/v2/app/id/{appId}")
     @GET

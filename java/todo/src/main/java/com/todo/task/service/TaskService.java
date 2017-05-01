@@ -113,14 +113,14 @@ public class TaskService {
     private static void updateTaskApplication(TaskConfig taskConfig) throws TodoException {
         TaskApplications taskApplications = null;
         TaskApplications finalTaskApplications = new TaskApplications();
-        Map<String, Map<String, String[][]>> result = new HashMap<String, Map<String, String[][]>>();
+        ArrayList<TaskApplication> result = new ArrayList<TaskApplication>();
         String[] taskApplicationsPath = taskConfig.getTaskApplicationPath();
         String parsingPath = null;
         try {
             for (String taskApplicationPath: taskApplicationsPath) {
                 parsingPath = taskApplicationPath;
                 taskApplications = mapper.readValue(new File(taskApplicationPath), TaskApplications.class);
-                result.putAll(taskApplications.getTaskApplications());
+                result.addAll(taskApplications.getTaskApplications());
             }
             finalTaskApplications.setTaskApplications(result);
         } catch (IOException e) {
@@ -177,15 +177,15 @@ public class TaskService {
             logger.info("taskApplications is null");
             return null;
         }
-        Map<String, String[][]> applicationDetails = taskApplications.getTaskApplications().get(appId);
-        if (applicationDetails == null) {
-            logger.info("taskApplicationById is null");
+        TaskApplication taskApplication = taskApplications.getTaskApplicationByAppId(appId);
+        if (taskApplication == null) {
+            logger.info("Invalid taskApplicationById : {}", appId);
             return null;
         }
         ArrayList<ArrayList<Object>> componentDetails;
         ArrayList<Object> componentDetailsV2;
         Object componentDetail;
-        for (Map.Entry<String, String[][]> entry : applicationDetails.entrySet()) {
+        for (Map.Entry<String, String[][]> entry : taskApplication.getPath().entrySet()) {
             componentDetails = new ArrayList<ArrayList<Object>>();
             for (String[] strings : entry.getValue()) {
                 componentDetailsV2 = new ArrayList<Object>();
@@ -253,19 +253,15 @@ public class TaskService {
             logger.info("taskApplications or componentId is null");
             return null;
         }
-        Map<String, Map<String, String[][]>> allApplications = taskApplications.getTaskApplications();
+        ArrayList<TaskApplication> allApplications = taskApplications.getTaskApplications();
         if (allApplications == null) {
             logger.info("allApplications is null");
             return null;
         }
         ArrayList<String> componentUses;
-        String appName, appVariable;
-        for (Map.Entry<String, Map<String, String[][]>> entry : allApplications.entrySet()) {
-            appName = entry.getKey();
-            if (entry.getValue() == null) {
-                continue;
-            }
-            for (Map.Entry<String, String[][]> entry1 : entry.getValue().entrySet()) {
+        String appId, appVariable;
+        for (TaskApplication taskApplication : allApplications) {
+            for (Map.Entry<String, String[][]> entry1 : taskApplication.getPath().entrySet()) {
                 componentUses = new ArrayList<String>();
                 appVariable = entry1.getKey();
                 for (String[] strings : entry1.getValue()) {
@@ -274,7 +270,7 @@ public class TaskService {
                     }
                     for (String str: strings) {
                         if (componentId.equals(str)) {
-                            componentUses.add(appName);
+                            componentUses.add(taskApplication.getId());
                             componentUses.add(appVariable);
                         }
                     }
