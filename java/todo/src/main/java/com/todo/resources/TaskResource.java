@@ -232,19 +232,32 @@ public class TaskResource {
     }
     @Path("/api/v2/app/id/{appId}")
     @GET
-    public Object getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
+    public Map<String, Object> getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
         throws TodoException {
-        logger.info("getTaskApplicationsByAppId : In");
+        logger.info("getTaskApplicationsByAppIdV2 : In");
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        TaskApplications taskApplications = taskConfig.getTaskApplications();
+        if (taskApplications == null) {
+            logger.info("taskApplications is null");
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        TaskApplication taskApplication = taskApplications.getTaskApplicationByAppId(appId);
+        if (taskApplication == null) {
+            logger.info("Invalid appId : {}", appId);
+            throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
+        }
         ArrayList<String> componentRequiredParams = new ArrayList<String>();
         componentRequiredParams.add(TaskComponentParams.ID.getName());
         componentRequiredParams.add(TaskComponentParams.NAME.getName());
         componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
         componentRequiredParams.add(TaskComponentParams.TASK_DETAILS.getName());
-        Object response = taskService.getAppDetailsByAppId(appId, componentRequiredParams);
-        if (response == null) {
-            throw new TodoException(ErrorCodes.TASK_APPLICATION_NOT_FOUND);
-        }
-        logger.info("getTaskApplicationsByAppId : Out");
+        response.put("id", taskApplication.getId());
+        response.put("options", taskApplication.getOptions());
+        response.put("path", taskApplication.getPath());
+        response.put("pathComponent", taskService.getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+        logger.info("getTaskApplicationsByAppIdV2 : Out");
         return response;
     }
 }
