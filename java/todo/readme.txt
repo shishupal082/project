@@ -53,3 +53,30 @@ removed name, place
 
 2017-05-01
 Change data formate for taskApplication
+
+2017-05-05
+
+Data/view api
+Return if file exist
+
+/files/v1/get/data/test.txt?name={file-name}
+
+Data/view api
+Return list of files if this type exist
+/files/v1/filter/data?type=txt,csv
+
+Data/view api
+Return list of files by searching recursive
+/files/v2/getAll/view
+
+Data/view api
+Return list of files by searching recursive based on index
+/files/v2/getAll/index/{id}/data
+
+Data/view api
+Return list of files by searching ir-recursive
+/files/v3/getAll/view
+
+Data/view api
+Return list of files by searching ir-recursive based on index
+/files/v3/getAll/index/{id}/data
