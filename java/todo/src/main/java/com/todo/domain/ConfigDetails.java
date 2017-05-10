@@ -26,6 +26,7 @@ public class ConfigDetails {
         String taskItemsPathName = "todoConfiguration.taskConfigPath.taskItemsPath";
         String taskComponentPathName = "todoConfiguration.taskConfigPath.taskComponentPath";
         String taskApplicationPathName = "todoConfiguration.taskConfigPath.taskApplicationPath";
+        String taskHistoryPaths = "todoConfiguration.taskConfigPath.taskHistoryPath";
 
         Map<String, String> configFilesMapper = new HashMap<String, String>();
         if (todoConfiguration == null) {
@@ -45,6 +46,9 @@ public class ConfigDetails {
         }
         for (int i=0; i<taskConfig.getTaskApplicationPath().length; i++) {
             configFilesMapper.put(taskApplicationPathName + "." + i, taskConfig.getTaskApplicationPath()[i]);
+        }
+        for (int i=0; i<taskConfig.getTaskHistoryPath().length; i++) {
+            configFilesMapper.put(taskHistoryPaths + "." + i, taskConfig.getTaskHistoryPath()[i]);
         }
         return configFilesMapper;
     }

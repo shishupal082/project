@@ -80,3 +80,14 @@ Return list of files by searching ir-recursive
 Data/view api
 Return list of files by searching ir-recursive based on index
 /files/v3/getAll/index/{id}/data
+
+
+1.2
+=========
+2017-05-08
+==============
+Added history config file
+
+2017-05-10
+==============
+Added standard value for component id under task items

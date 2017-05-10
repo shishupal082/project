@@ -17,6 +17,7 @@ public class TaskConfig {
     private String[] taskItemsPath;
     private String[] taskComponentPath;
     private String[] taskApplicationPath;
+    private String[] taskHistoryPath;
 
     public ArrayList<TaskItem> getTaskItems() {
         return taskItems;
@@ -66,6 +67,14 @@ public class TaskConfig {
         this.taskApplicationPath = taskApplicationPath;
     }
 
+    public String[] getTaskHistoryPath() {
+        return taskHistoryPath;
+    }
+
+    public void setTaskHistoryPath(String[] taskHistoryPath) {
+        this.taskHistoryPath = taskHistoryPath;
+    }
+
     @Override
     public String toString() {
         return "TaskConfig{" +
@@ -75,6 +84,7 @@ public class TaskConfig {
             ", taskItemsPath=" + Arrays.toString(taskItemsPath) +
             ", taskComponentPath=" + Arrays.toString(taskComponentPath) +
             ", taskApplicationPath=" + Arrays.toString(taskApplicationPath) +
+            ", taskHistoryPath=" + Arrays.toString(taskHistoryPath) +
             '}';
     }
 }

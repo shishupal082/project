@@ -2,6 +2,7 @@ package com.todo.task.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.todo.parser.string_parser.StringParser;
 import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
 import com.todo.utils.ErrorCodes;
@@ -65,6 +66,11 @@ public class TaskService {
         taskConfig.setTaskItems(finalTaskItems.getTaskItems());
         logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
+    private static String parseComponentId(String str) {
+        StringParser stringParser = new StringParser(str);
+//        String[] strs = (String[]) stringParser.getValue("name");
+        return (String) stringParser.getValue("id");
+    }
     private static void updateTaskComponents(TaskConfig taskConfig) throws TodoException {
         TaskComponents taskComponents = null;
         TaskComponents finalTaskComponents = new TaskComponents();
@@ -80,11 +86,12 @@ public class TaskService {
                     continue;
                 }
                 for (String componentId : taskItem.getComponent()) {
-                    if (componentIdVsTaskId.containsKey(componentId)) {
-                        logger.info("Duplicate entry found for componentId : {}, {}", componentId, taskItem);
+                    String compId = parseComponentId(componentId);
+                    if (componentIdVsTaskId.containsKey(compId)) {
+                        logger.info("Duplicate entry found for componentId : {}, {}", compId, taskItem);
                         throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
                     }
-                    componentIdVsTaskId.put(componentId, taskItem.getId());
+                    componentIdVsTaskId.put(compId, taskItem.getId());
                 }
             }
             logger.info("ComponentId vs taskId : {}", componentIdVsTaskId);
@@ -211,7 +218,7 @@ public class TaskService {
         }
         Object componentDetails = null;
         for (String componentId: componentIds) {
-            componentDetails = this.getComponentdetails(componentId, requiredParams);
+            componentDetails = this.getComponentdetails(parseComponentId(componentId), requiredParams);
             if (componentDetails == null) {
                 continue;
             }

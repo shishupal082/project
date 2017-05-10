@@ -2,3 +2,4 @@
 taskItemsPath: [meta-data/config/task_config/task_items_v3_1.yaml, meta-data/config/task_config/task_items_v3_2.yaml]
 taskComponentPath: [meta-data/config/task_config/task_component.yaml]
 taskApplicationPath: [meta-data/config/task_config/task_application_v2.yaml]
+taskHistoryPath: [meta-data/config/task_config/history.yaml]
