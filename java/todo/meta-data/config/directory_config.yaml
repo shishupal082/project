@@ -1,25 +1,4 @@
 ---
 relativePath: [meta-data/files/, ../../templates/common/, ../../pvt/uploaded_files/java/]
 uiPath: [../../static/]
-pathReplaceString:
-  ../:
-unsupportedFileType: [jar, docx]
 messageSavePath: ../../pvt/uploaded_files/java/
-mimeType:
-  png: image/png
-  jpg: image/jpg
-  jpeg: image/jpeg
-  gif: image/gif
-  ico: image/x-icon
-  css: text/css
-  js: text/javascript
-  html: text/html
-  htm: text/html
-  htmls: text/html
-  pdf: application/pdf
-  json: application/json
-  yaml: text/plain
-  yml: text/plain
-  csv: text/plain
-  txt: text/plain
-  sh: text/sh

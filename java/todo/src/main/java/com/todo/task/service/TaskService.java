@@ -59,6 +59,15 @@ public class TaskService {
                 result.addAll(taskItems.getTaskItems());
             }
             finalTaskItems.setTaskItems(result);
+            ArrayList<String> tempTaskIds = new ArrayList<String>();
+            for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
+                if (tempTaskIds.contains(tempTaskItem.getId())) {
+                    logger.info("Duplicate entry found for taskId : {}, {}, {}", tempTaskItem.getId(), tempTaskItem, tempTaskIds);
+                    throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
+                } else {
+                    tempTaskIds.add(tempTaskItem.getId());
+                }
+            }
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -78,9 +87,9 @@ public class TaskService {
         String[] taskComponentsPath = taskConfig.getTaskComponentPath();
         String parsingPath = null;
         try {
-            ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+            ArrayList<TaskItem> tempTaskItems = taskConfig.getTaskItems();
             Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
-            for(TaskItem taskItem : taskItems) {
+            for(TaskItem taskItem : tempTaskItems) {
                 if (taskItem.getComponent() == null) {
                     logger.info("Component not found : {}", taskItem);
                     continue;

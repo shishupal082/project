@@ -2,6 +2,7 @@ package com.todo.file.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.todo.TodoConfiguration;
 import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
@@ -24,7 +25,9 @@ import java.util.Map;
 public class FilesService {
     private static Logger logger = LoggerFactory.getLogger(FilesService.class);
     private FilesConfig filesConfig;
-    public FilesService(FilesConfig filesConfig) {
+    private TodoConfiguration todoConfiguration;
+    public FilesService(TodoConfiguration todoConfiguration, FilesConfig filesConfig) {
+        this.todoConfiguration = todoConfiguration;
         this.filesConfig = filesConfig;
     }
     public static FilesConfig getFileConfig(String directoryConfigPath) throws TodoException {
@@ -135,10 +138,11 @@ public class FilesService {
                 String fileExt = fileArray[fileArray.length - 1];
                 fileDetails.setFileExtention(fileExt);
             }
-            if (filesConfig.getMimeType().get(fileDetails.getFileExtention()) == null) {
+            if (todoConfiguration.getDirectoryConfig().getMimeType().get(fileDetails.getFileExtention()) == null) {
                 fileDetails.setFileMemType(MediaType.TEXT_HTML);
             } else {
-                fileDetails.setFileMemType(filesConfig.getMimeType().get(fileDetails.getFileExtention()));
+                fileDetails.setFileMemType(todoConfiguration.getDirectoryConfig().getMimeType().get(
+                    fileDetails.getFileExtention()));
             }
         } else {
             logger.info("fileName : {} is not a valid file and path : {}", fileName, path);
@@ -346,9 +350,10 @@ public class FilesService {
     }
     public String parseFilePath(String filePath) {
         if (filePath != null) {
-            if (filesConfig.getPathReplaceString() != null) {
+            if (todoConfiguration.getDirectoryConfig().getPathReplaceString() != null) {
                 logger.info("Path before replace : {}", filePath);
-                for(Map.Entry<String, String> entry : filesConfig.getPathReplaceString().entrySet()) {
+                for(Map.Entry<String, String> entry :
+                    todoConfiguration.getDirectoryConfig().getPathReplaceString().entrySet()) {
                     logger.info("Replacing string : {}, to : {}", entry.getKey(), entry.getValue());
                     filePath = filePath.replace(entry.getKey(), entry.getValue());
                 }

@@ -9,9 +9,6 @@ import java.util.Map;
 public class FilesConfig {
     private ArrayList<String> relativePath;
     private ArrayList<String> uiPath;
-    private Map<String, String> pathReplaceString;
-    private ArrayList<String> unsupportedFileType;
-    private Map<String, String> mimeType;
     private String messageSavePath;
 
     public ArrayList<String> getUiPath() {
@@ -28,30 +25,6 @@ public class FilesConfig {
 
     public void setRelativePath(ArrayList<String> relativePath) {
         this.relativePath = relativePath;
-    }
-
-    public ArrayList<String> getUnsupportedFileType() {
-        return unsupportedFileType;
-    }
-
-    public void setUnsupportedFileType(ArrayList<String> unsupportedFileType) {
-        this.unsupportedFileType = unsupportedFileType;
-    }
-
-    public Map<String, String> getPathReplaceString() {
-        return pathReplaceString;
-    }
-
-    public void setPathReplaceString(Map<String, String> pathReplaceString) {
-        this.pathReplaceString = pathReplaceString;
-    }
-
-    public Map<String, String> getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(Map<String, String> mimeType) {
-        this.mimeType = mimeType;
     }
 
     public String getMessageSavePath() {

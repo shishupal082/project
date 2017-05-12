@@ -36,10 +36,35 @@ todoFileConfig:
   todoUpdateFileName: meta-data/csv/update_details.csv
   todoCommentFileName: meta-data/csv/comment.csv
 
+directoryConfig:
+  pathReplaceString:
+    ../:
+  unsupportedFileType: [jar, docx, doc, xls, xlsx]
+  mimeType:
+    png: image/png
+    jpg: image/jpg
+    jpeg: image/jpeg
+    gif: image/gif
+    ico: image/x-icon
+    css: text/css
+    js: text/javascript
+    html: text/html
+    htm: text/html
+    htmls: text/html
+    pdf: application/pdf
+    json: application/json
+    yaml: text/plain
+    yml: text/plain
+    csv: text/plain
+    txt: text/plain
+    sh: text/sh
+
 yamlObjectPath: meta-data/config/yaml_object.yaml
 availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
-taskConfigPath: meta-data/config/task_config.yaml
-#taskConfigPath: ../../config/config/task_config.yaml
-todoDirectoryConfigPath: meta-data/config/directory_config.yaml
-#todoDirectoryConfigPath: ../../config/config/directory_config.yaml
+#taskConfigPath: meta-data/config/task_config.yaml
+#taskConfigPath: ../../config/config/std_task_config.yaml
+taskConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_task_config.yaml
+#todoDirectoryConfigPath: meta-data/config/directory_config.yaml
+#todoDirectoryConfigPath: ../../config/config/std_directory_config.yaml
+todoDirectoryConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_directory_config.yaml

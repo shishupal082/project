@@ -91,3 +91,8 @@ Added history config file
 2017-05-10
 ==============
 Added standard value for component id under task items
+
+2017-05-12
+==============
+Unique check added for taskId
+pathReplaceString, unsupportedFileType, mimeType config moved from directory config to enc config
