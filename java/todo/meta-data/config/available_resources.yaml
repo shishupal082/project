@@ -91,8 +91,11 @@ resources:
     name: Update task config
     help: /task/api/config/v1/update
   - url: /task/api/v1/tasks
-    name: Get all task
+    name: Get all task - v1
     help: /task/api/v1/tasks
+  - url: /task/api/v2/tasks
+    name: Get all task - v2
+    help: /task/api/v2/tasks
   - url: /task/api/v1/tasks/_1
     name: Get task by id - v1
     help: /task/api/v1/tasks/{id}

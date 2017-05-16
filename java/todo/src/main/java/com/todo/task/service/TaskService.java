@@ -253,7 +253,6 @@ public class TaskService {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         TaskItem taskItemById = taskItems.get(index);
-
         logger.info("taskItemById found : {}", taskItemById);
         HashMap<String, Object> response = new HashMap<String, Object>();
         response.put(TaskComponentParams.TASK_DETAILS.getName(), taskItemById);
@@ -300,5 +299,37 @@ public class TaskService {
             return response;
         }
         return null;
+    }
+    public HashMap<String, Object> getTaskDetailsByIdV2(String taskId) {
+        ArrayList<String> requiredComponentParams = new ArrayList<String>();
+        requiredComponentParams.add(TaskComponentParams.NAME.getName());
+        requiredComponentParams.add(TaskComponentParams.APPLICATION.getName());
+        return getTaskDetails(taskId, requiredComponentParams);
+    }
+    public TaskApplication getTaskApplicationByIdV1(String appId) {
+        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        if (taskApplications == null) {
+            logger.info("taskApplications is null");
+            return null;
+        }
+        return taskApplications.getTaskApplicationByAppId(appId);
+    }
+    public Map<String, Object> getTaskApplicationByIdV2(String appId) {
+        TaskApplication taskApplication = getTaskApplicationByIdV1(appId);
+        if (taskApplication == null) {
+            logger.info("taskApplications is null");
+            return null;
+        }
+        Map<String, Object> response = new HashMap<String, Object>();
+        ArrayList<String> componentRequiredParams = new ArrayList<String>();
+        componentRequiredParams.add(TaskComponentParams.ID.getName());
+        componentRequiredParams.add(TaskComponentParams.NAME.getName());
+        componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
+//        componentRequiredParams.add(TaskComponentParams.TASK_DETAILS.getName());
+        response.put("id", taskApplication.getId());
+        response.put("options", taskApplication.getOptions());
+        response.put("path", taskApplication.getPath());
+        response.put("pathComponent", getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+        return response;
     }
 }

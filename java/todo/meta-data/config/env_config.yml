@@ -62,9 +62,9 @@ directoryConfig:
 yamlObjectPath: meta-data/config/yaml_object.yaml
 availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
-#taskConfigPath: meta-data/config/task_config.yaml
+# taskConfigPath: meta-data/config/task_config.yaml
 #taskConfigPath: ../../config/config/std_task_config.yaml
 taskConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_task_config.yaml
-#todoDirectoryConfigPath: meta-data/config/directory_config.yaml
+# todoDirectoryConfigPath: meta-data/config/directory_config.yaml
 #todoDirectoryConfigPath: ../../config/config/std_directory_config.yaml
 todoDirectoryConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_directory_config.yaml
