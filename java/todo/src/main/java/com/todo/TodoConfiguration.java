@@ -5,6 +5,7 @@ import com.todo.file.config.FilesConfig;
 import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;
+import com.todo.services.ConfigService;
 import io.dropwizard.Configuration;
 
 /**
@@ -16,11 +17,19 @@ public class TodoConfiguration extends Configuration {
     private TodoFileConfig todoFileConfig;
     private TodoViewConfig todoViewConfig;
     private DirectoryConfig directoryConfig;
-    private String todoDirectoryConfigPath;
     private String yamlObjectPath;
     private String socketRequestDelimiter;
-    private String taskConfigPath;
+    private String appConfigPath;
     private String availableResourcePath;
+    private ConfigService configService;
+
+    public String getAppConfigPath() {
+        return appConfigPath;
+    }
+
+    public void setAppConfigPath(String appConfigPath) {
+        this.appConfigPath = appConfigPath;
+    }
 
     public DirectoryConfig getDirectoryConfig() {
         return directoryConfig;
@@ -54,14 +63,6 @@ public class TodoConfiguration extends Configuration {
         this.todoViewConfig = todoViewConfig;
     }
 
-    public String getTodoDirectoryConfigPath() {
-        return todoDirectoryConfigPath;
-    }
-
-    public void setTodoDirectoryConfigPath(String todoDirectoryConfigPath) {
-        this.todoDirectoryConfigPath = todoDirectoryConfigPath;
-    }
-
     public String getYamlObjectPath() {
         return yamlObjectPath;
     }
@@ -77,20 +78,19 @@ public class TodoConfiguration extends Configuration {
     public void setSocketRequestDelimiter(String socketRequestDelimiter) {
         this.socketRequestDelimiter = socketRequestDelimiter;
     }
-
-    public String getTaskConfigPath() {
-        return taskConfigPath;
-    }
-
-    public void setTaskConfigPath(String taskConfigPath) {
-        this.taskConfigPath = taskConfigPath;
-    }
-
     public String getAvailableResourcePath() {
         return availableResourcePath;
     }
 
     public void setAvailableResourcePath(String availableResourcePath) {
         this.availableResourcePath = availableResourcePath;
+    }
+
+    public ConfigService getConfigService() {
+        return configService;
+    }
+
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
     }
 }

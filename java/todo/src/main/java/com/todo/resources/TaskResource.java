@@ -1,5 +1,6 @@
 package com.todo.resources;
 
+import com.todo.TodoConfiguration;
 import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
 import com.todo.task.service.TaskService;
@@ -27,29 +28,11 @@ public class TaskResource {
     private static Logger logger = LoggerFactory.getLogger(TaskResource.class);
     @Context
     private HttpServletRequest httpServletRequest;
-    private TaskConfig taskConfig;
-    private String taskConfigPath;
     private TaskService taskService;
-    public TaskResource(String taskConfigPath) {
-        this.taskConfigPath = taskConfigPath;
-        this.taskConfig = TaskService.updateTaskConfig(taskConfigPath);
+    private TaskConfig taskConfig;
+    public TaskResource(TodoConfiguration todoConfiguration) {
+        this.taskConfig = todoConfiguration.getConfigService().getTaskConfig();
         this.taskService = new TaskService(taskConfig);
-    }
-    @Path("/api/config/v1/update")
-    @GET
-    public TaskConfig updateTasks() throws TodoException {
-        logger.info("updateTasks : In");
-        taskConfig = TaskService.updateTaskConfig(taskConfigPath);
-        logger.info("updateTasks : Out");
-        taskService = new TaskService(taskConfig);
-        return taskConfig;
-    }
-    @Path("/api/config/v1/get")
-    @GET
-    public TaskConfig getTaskConfig() throws TodoException {
-        logger.info("updateTasks : In");
-        logger.info("updateTasks : Out");
-        return taskConfig;
     }
     @Path("/api/v1/tasks")
     @GET
@@ -178,7 +161,8 @@ public class TaskResource {
             throw new TodoException(ErrorCodes.TASK_COMPONENT_NOT_FOUND);
         }
         response.put("component", taskComponent);
-        response.put(TaskComponentParams.APPLICATION.getName(), taskService.getTaskComponentApplication(componentId));
+        response.put(TaskComponentParams.APPLICATION.getName(),
+            taskService.getTaskComponentApplication(componentId));
         logger.info("getTaskComponentDetailsV3 : Out");
         return Response.ok(response).build();
     }

@@ -1,18 +1,13 @@
 package com.todo.task.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.parser.string_parser.StringParser;
 import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
 import com.todo.utils.ErrorCodes;
-import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,135 +17,22 @@ import java.util.Map;
  */
 public class TaskService {
     private static Logger logger = LoggerFactory.getLogger(TaskService.class);
-    private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-    private TaskConfig taskConfiguration;
+    private TaskConfig taskConfig;
     public TaskService(TaskConfig taskConfig) {
-        this.taskConfiguration = taskConfig;
+        this.taskConfig = taskConfig;
     }
-    public static TaskConfig getTaskConfig(String taskConfigPath) {
-        TaskConfig taskConfig = null;
-        try {
-            taskConfig = mapper.readValue(new File(taskConfigPath), TaskConfig.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}, {}", taskConfigPath, ioe);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        return taskConfig;
-    }
-    public static TaskConfig updateTaskConfig(String taskConfigPath) throws TodoException {
-        TaskConfig taskConfig = getTaskConfig(taskConfigPath);
-        logger.info("TaskConfig loaded with data : {}", taskConfig);
-        updateTaskItems(taskConfig);
-        updateTaskComponents(taskConfig);
-        updateTaskApplication(taskConfig);
-        logger.info("FinalTaskConfig with data : {}", taskConfig);
-        return taskConfig;
-    }
-    private static void updateTaskItems(TaskConfig taskConfig) throws TodoException {
-        TaskItems taskItems = null;
-        TaskItems finalTaskItems = new TaskItems();
-        ArrayList<TaskItem> result = new ArrayList<TaskItem>();
-        String[] taskItemsPath = taskConfig.getTaskItemsPath();
-        String parsingPath = null;
-        try {
-            for (String taskItemPath: taskItemsPath) {
-                parsingPath = taskItemPath;
-                taskItems = mapper.readValue(new File(taskItemPath), TaskItems.class);
-                result.addAll(taskItems.getTaskItems());
-            }
-            finalTaskItems.setTaskItems(result);
-            ArrayList<String> tempTaskIds = new ArrayList<String>();
-            for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
-                if (tempTaskIds.contains(tempTaskItem.getId())) {
-                    logger.info("Duplicate entry found for taskId : {}, {}, {}", tempTaskItem.getId(), tempTaskItem, tempTaskIds);
-                    throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
-                } else {
-                    tempTaskIds.add(tempTaskItem.getId());
-                }
-            }
-        } catch (IOException e) {
-            logger.info("Exception for file : {}, {}", parsingPath, e);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        taskConfig.setTaskItems(finalTaskItems.getTaskItems());
-        logger.info("TaskItems loaded with data : {}", finalTaskItems);
-    }
+
     private static String parseComponentId(String str) {
         StringParser stringParser = new StringParser(str);
 //        String[] strs = (String[]) stringParser.getValue("name");
         return (String) stringParser.getValue("id");
     }
-    private static void updateTaskComponents(TaskConfig taskConfig) throws TodoException {
-        TaskComponents taskComponents = null;
-        TaskComponents finalTaskComponents = new TaskComponents();
-        Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
-        String[] taskComponentsPath = taskConfig.getTaskComponentPath();
-        String parsingPath = null;
-        try {
-            ArrayList<TaskItem> tempTaskItems = taskConfig.getTaskItems();
-            Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
-            for(TaskItem taskItem : tempTaskItems) {
-                if (taskItem.getComponent() == null) {
-                    logger.info("Component not found : {}", taskItem);
-                    continue;
-                }
-                for (String componentId : taskItem.getComponent()) {
-                    String compId = parseComponentId(componentId);
-                    if (componentIdVsTaskId.containsKey(compId)) {
-                        logger.info("Duplicate entry found for componentId : {}, {}", compId, taskItem);
-                        throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
-                    }
-                    componentIdVsTaskId.put(compId, taskItem.getId());
-                }
-            }
-            logger.info("ComponentId vs taskId : {}", componentIdVsTaskId);
-//            for (String taskComponentPath: taskComponentsPath) {
-//                parsingPath = taskComponentPath;
-//                taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
-//                result.putAll(taskComponents.getTaskComponents());
-//            }
-            for (Map.Entry<String, String> entry : componentIdVsTaskId.entrySet()) {
-                String taskComponentId = entry.getKey();
-                String taskId = entry.getValue();
-                TaskComponent taskComponent = new TaskComponent();
-                taskComponent.setId(taskComponentId);
-                taskComponent.setTaskId(taskId);
-                taskComponent.setName(taskComponentId);
-                result.put(taskComponentId, taskComponent);
-            }
-            finalTaskComponents.setTaskComponents(result);
-        } catch (Exception e) {
-            logger.info("Exception for file : {}, {}", parsingPath, e);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        taskConfig.setTaskComponents(finalTaskComponents.getTaskComponents());
-        logger.info("TaskComponents loaded with data : {}", finalTaskComponents);
-    }
-    private static void updateTaskApplication(TaskConfig taskConfig) throws TodoException {
-        TaskApplications taskApplications = null;
-        TaskApplications finalTaskApplications = new TaskApplications();
-        ArrayList<TaskApplication> result = new ArrayList<TaskApplication>();
-        String[] taskApplicationsPath = taskConfig.getTaskApplicationPath();
-        String parsingPath = null;
-        try {
-            for (String taskApplicationPath: taskApplicationsPath) {
-                parsingPath = taskApplicationPath;
-                taskApplications = mapper.readValue(new File(taskApplicationPath), TaskApplications.class);
-                result.addAll(taskApplications.getTaskApplications());
-            }
-            finalTaskApplications.setTaskApplications(result);
-        } catch (IOException e) {
-            logger.info("Exception for file : {}, {}", parsingPath, e);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        taskConfig.setTaskApplications(finalTaskApplications);
-        logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
-    }
+
     private Object getComponentdetails(String componentId, ArrayList<String> componentParams) {
         if (componentId == null) {
             return null;
         }
-        Map<String, TaskComponent> taskComponentMap = taskConfiguration.getTaskComponents();
+        Map<String, TaskComponent> taskComponentMap = taskConfig.getTaskComponents();
         TaskComponent tempTaskComponent = taskComponentMap.get(componentId);
         if (tempTaskComponent == null) {
             logger.info("Component not found for componentId : {}", componentId);
@@ -186,9 +68,9 @@ public class TaskService {
         }
         return componentDetails;
     }
-    public Object getAppDetailsByAppId(String appId, ArrayList<String> componentReqParams) {
+    private Object getAppDetailsByAppId(String appId, ArrayList<String> componentReqParams) {
         Map<String, ArrayList<ArrayList<Object>>> response = new HashMap<String, ArrayList<ArrayList<Object>>>();
-        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        TaskApplications taskApplications = taskConfig.getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             return null;
@@ -236,7 +118,7 @@ public class TaskService {
         return response;
     }
     public HashMap<String, Object> getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
-        ArrayList<TaskItem> taskItems = taskConfiguration.getTaskItems();
+        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -263,7 +145,7 @@ public class TaskService {
     }
     public ArrayList<ArrayList<String>> getTaskComponentApplication(String componentId) {
         ArrayList<ArrayList<String>> response = new ArrayList<ArrayList<String>>();
-        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        TaskApplications taskApplications = taskConfig.getTaskApplications();
         if (taskApplications == null || componentId == null) {
             logger.info("taskApplications or componentId is null");
             return null;
@@ -307,7 +189,7 @@ public class TaskService {
         return getTaskDetails(taskId, requiredComponentParams);
     }
     public TaskApplication getTaskApplicationByIdV1(String appId) {
-        TaskApplications taskApplications = taskConfiguration.getTaskApplications();
+        TaskApplications taskApplications = taskConfig.getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             return null;

@@ -25,8 +25,23 @@ resources:
     name: Call socket
     help: /todo/api/v1/socket?query=127.0.0.1!!!8000!!!test|END
   - url: /config/api/v1/yaml
-    name: Get yaml object
+    name: "[data] Get yaml object"
     help: /config/api/v1/yaml
+  - url: /config/api/v1/resource
+    name: "[data] Available resource"
+    help: /config/api/v1/resource
+  - url: /config/api/v1/get/task
+    name: "[data] Get task config"
+    help: /config/api/v1/get/task
+  - url: /config/api/v1/update/task
+    name: "[data] Update task config"
+    help: /config/api/v1/update/task
+  - url: /config/api/v1/get/files
+    name: "[data] Get file config"
+    help: /config/api/v1/get/files
+  - url: /config/api/v1/update/files
+    name: "[data] Update file config"
+    help: /config/api/v1/update/files
   - url: /files/v1/upload/view
     name: File upload view
     help: /files/v1/upload/view
@@ -36,12 +51,6 @@ resources:
   - url: /files/v1/query/submit
     name: File query submit
     help: /files/v1/query/submit
-  - url: /files/api/v1/config/get
-    name: File config
-    help: /files/api/v1/config/get
-  - url: /files/api/v1/config/update
-    name: Update file config
-    help: /files/api/v1/config/update
   - url: /files/v1/static?name=static-file-name
     name: Load static file
     help: /files/v1/static?name={file-name}
@@ -84,12 +93,6 @@ resources:
   - url: /files/v3/getAll/index/0/view
     name: Get all - index - 0 - v3 - view
     help: /files/v3/getAll/index/{id}/view?path={path-to-folder-or-file-or-null}
-  - url: /task/api/config/v1/get
-    name: Task config
-    help: /task/api/config/v1/get
-  - url: /task/api/config/v1/update
-    name: Update task config
-    help: /task/api/config/v1/update
   - url: /task/api/v1/tasks
     name: Get all task - v1
     help: /task/api/v1/tasks

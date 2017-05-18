@@ -28,14 +28,12 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new RequestFilter());
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new TodoExceptionMapper());
+        environment.jersey().register(new ConfigResource(todoConfiguration));
         environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
-        environment.jersey().register(new FilesResource(todoConfiguration,
-            todoConfiguration.getTodoDirectoryConfigPath()));
+        environment.jersey().register(new FilesResource(todoConfiguration));
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
-        environment.jersey().register(new ConfigResource(todoConfiguration));
-        environment.jersey().register(new TaskResource(todoConfiguration.getTaskConfigPath()));
-
+        environment.jersey().register(new TaskResource(todoConfiguration));
     }
     public static void main(String[] args) throws Exception {
         new TodoApplication().run(args[0], args[1]);

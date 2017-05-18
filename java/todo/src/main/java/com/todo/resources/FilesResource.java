@@ -35,15 +35,13 @@ public class FilesResource {
     private static Logger logger = LoggerFactory.getLogger(FilesResource.class);
     private FilesService filesService;
     private FilesConfig filesConfig;
-    private String directoryConfigPath;
     private TodoConfiguration todoConfiguration;
     @Context
     private HttpServletRequest httpServletRequest;
-    public FilesResource(TodoConfiguration todoConfiguration, String directoryConfigPath) {
+    public FilesResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
-        this.directoryConfigPath = directoryConfigPath;
-        this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
-        this.filesService = new FilesService(todoConfiguration, filesConfig);
+        this.filesService = new FilesService(todoConfiguration);
+        this.filesConfig = todoConfiguration.getConfigService().getFileConfig();
         filesService.verifyConfigPath();
     }
     //    @Path("/v1/upload")
@@ -127,25 +125,6 @@ public class FilesResource {
             + "</span><span>&nbsp;&nbsp;&nbsp;</span><a href=" +
             FilesConstant.queryViewUrl+">Try again</a></center>";
         return Response.ok(response).build();
-    }
-    @Path("/api/v1/config/get")
-    @GET
-    public FilesConfig v1ConfigGet() throws TodoException {
-        logger.info("v1ConfigGet : In");
-        if (filesConfig == null) {
-            throw new TodoException(ErrorCodes.SERVER_ERROR);
-        }
-        logger.info("v1ConfigGet : Out : {}", filesConfig);
-        return filesConfig;
-    }
-    @Path("/api/v1/config/update")
-    @GET
-    public FilesConfig v1ConfigUpdate() throws TodoException {
-        logger.info("v1ConfigUpdate : In");
-        this.filesConfig = FilesService.getFileConfig(directoryConfigPath);
-        this.filesService = new FilesService(todoConfiguration, filesConfig);
-        logger.info("v1ConfigUpdate : Out : {}", filesConfig);
-        return filesConfig;
     }
     @Path("/v1/get/data/{actualFileName}")
     @GET

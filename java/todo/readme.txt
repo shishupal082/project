@@ -96,3 +96,14 @@ Added standard value for component id under task items
 ==============
 Unique check added for taskId
 pathReplaceString, unsupportedFileType, mimeType config moved from directory config to enc config
+
+
+2017-05-16
+==============
+Added /task/api/v2/tasks api
+made similar api for all task or app v1 or w.r.t. by id v1 or v2
+
+2017-05-18
+==============
+Combine external directory file and config task config file and made as app_config
+Move get and update file config to config resources for tasks and files

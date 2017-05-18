@@ -3,7 +3,6 @@ package com.todo.task.config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -14,10 +13,6 @@ public class TaskConfig {
     private ArrayList<TaskItem> taskItems;
     private Map<String, TaskComponent> taskComponents;
     private TaskApplications taskApplications;
-    private String[] taskItemsPath;
-    private String[] taskComponentPath;
-    private String[] taskApplicationPath;
-    private String[] taskHistoryPath;
 
     public ArrayList<TaskItem> getTaskItems() {
         return taskItems;
@@ -43,48 +38,12 @@ public class TaskConfig {
         this.taskApplications = taskApplications;
     }
 
-    public String[] getTaskItemsPath() {
-        return taskItemsPath;
-    }
-
-    public void setTaskItemsPath(String[] taskItemsPath) {
-        this.taskItemsPath = taskItemsPath;
-    }
-
-    public String[] getTaskComponentPath() {
-        return taskComponentPath;
-    }
-
-    public void setTaskComponentPath(String[] taskComponentPath) {
-        this.taskComponentPath = taskComponentPath;
-    }
-
-    public String[] getTaskApplicationPath() {
-        return taskApplicationPath;
-    }
-
-    public void setTaskApplicationPath(String[] taskApplicationPath) {
-        this.taskApplicationPath = taskApplicationPath;
-    }
-
-    public String[] getTaskHistoryPath() {
-        return taskHistoryPath;
-    }
-
-    public void setTaskHistoryPath(String[] taskHistoryPath) {
-        this.taskHistoryPath = taskHistoryPath;
-    }
-
     @Override
     public String toString() {
         return "TaskConfig{" +
             "taskItems=" + taskItems +
             ", taskComponents=" + taskComponents +
             ", taskApplications=" + taskApplications +
-            ", taskItemsPath=" + Arrays.toString(taskItemsPath) +
-            ", taskComponentPath=" + Arrays.toString(taskComponentPath) +
-            ", taskApplicationPath=" + Arrays.toString(taskApplicationPath) +
-            ", taskHistoryPath=" + Arrays.toString(taskHistoryPath) +
             '}';
     }
 }

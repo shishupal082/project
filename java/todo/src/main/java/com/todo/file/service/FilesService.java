@@ -26,22 +26,9 @@ public class FilesService {
     private static Logger logger = LoggerFactory.getLogger(FilesService.class);
     private FilesConfig filesConfig;
     private TodoConfiguration todoConfiguration;
-    public FilesService(TodoConfiguration todoConfiguration, FilesConfig filesConfig) {
+    public FilesService(TodoConfiguration todoConfiguration) {
+        this.filesConfig = todoConfiguration.getConfigService().getFileConfig();
         this.todoConfiguration = todoConfiguration;
-        this.filesConfig = filesConfig;
-    }
-    public static FilesConfig getFileConfig(String directoryConfigPath) throws TodoException {
-        FilesConfig filesConfig = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            filesConfig = mapper.readValue(new File(directoryConfigPath),
-                FilesConfig.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}, {}", directoryConfigPath, ioe);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        logger.info("Files config loaded with data : {}", filesConfig);
-        return filesConfig;
     }
     public ArrayList<ScanResult> filterFilesByExtention(ArrayList<ScanResult> scanResults,
                                                         ArrayList<String> requiredFileTypes) {
