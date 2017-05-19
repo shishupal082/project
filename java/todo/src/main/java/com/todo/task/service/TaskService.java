@@ -1,5 +1,6 @@
 package com.todo.task.service;
 
+import com.todo.TodoConfiguration;
 import com.todo.parser.string_parser.StringParser;
 import com.todo.task.TaskComponentParams;
 import com.todo.task.config.*;
@@ -17,11 +18,10 @@ import java.util.Map;
  */
 public class TaskService {
     private static Logger logger = LoggerFactory.getLogger(TaskService.class);
-    private TaskConfig taskConfig;
-    public TaskService(TaskConfig taskConfig) {
-        this.taskConfig = taskConfig;
+    private TodoConfiguration todoConfiguration;
+    public TaskService(TodoConfiguration todoConfiguration) {
+        this.todoConfiguration = todoConfiguration;
     }
-
     private static String parseComponentId(String str) {
         StringParser stringParser = new StringParser(str);
 //        String[] strs = (String[]) stringParser.getValue("name");
@@ -32,7 +32,8 @@ public class TaskService {
         if (componentId == null) {
             return null;
         }
-        Map<String, TaskComponent> taskComponentMap = taskConfig.getTaskComponents();
+        Map<String, TaskComponent> taskComponentMap =
+            todoConfiguration.getConfigService().getTaskConfig().getTaskComponents();
         TaskComponent tempTaskComponent = taskComponentMap.get(componentId);
         if (tempTaskComponent == null) {
             logger.info("Component not found for componentId : {}", componentId);
@@ -70,7 +71,7 @@ public class TaskService {
     }
     private Object getAppDetailsByAppId(String appId, ArrayList<String> componentReqParams) {
         Map<String, ArrayList<ArrayList<Object>>> response = new HashMap<String, ArrayList<ArrayList<Object>>>();
-        TaskApplications taskApplications = taskConfig.getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             return null;
@@ -118,7 +119,7 @@ public class TaskService {
         return response;
     }
     public HashMap<String, Object> getTaskDetails(String taskId, ArrayList<String> requiredParams) throws TodoException {
-        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -145,7 +146,7 @@ public class TaskService {
     }
     public ArrayList<ArrayList<String>> getTaskComponentApplication(String componentId) {
         ArrayList<ArrayList<String>> response = new ArrayList<ArrayList<String>>();
-        TaskApplications taskApplications = taskConfig.getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
         if (taskApplications == null || componentId == null) {
             logger.info("taskApplications or componentId is null");
             return null;
@@ -189,7 +190,7 @@ public class TaskService {
         return getTaskDetails(taskId, requiredComponentParams);
     }
     public TaskApplication getTaskApplicationByIdV1(String appId) {
-        TaskApplications taskApplications = taskConfig.getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             return null;

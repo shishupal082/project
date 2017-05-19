@@ -34,14 +34,12 @@ import java.util.Map;
 public class FilesResource {
     private static Logger logger = LoggerFactory.getLogger(FilesResource.class);
     private FilesService filesService;
-    private FilesConfig filesConfig;
     private TodoConfiguration todoConfiguration;
     @Context
     private HttpServletRequest httpServletRequest;
     public FilesResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
         this.filesService = new FilesService(todoConfiguration);
-        this.filesConfig = todoConfiguration.getConfigService().getFileConfig();
         filesService.verifyConfigPath();
     }
     //    @Path("/v1/upload")
@@ -293,7 +291,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -312,7 +310,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -360,7 +358,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -380,7 +378,7 @@ public class FilesResource {
         String scanDir = null, folderPath;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = filesConfig.getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
             folderPath = scanDir;
         } catch (Exception e) {

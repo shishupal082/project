@@ -24,10 +24,8 @@ import java.util.Map;
  */
 public class FilesService {
     private static Logger logger = LoggerFactory.getLogger(FilesService.class);
-    private FilesConfig filesConfig;
     private TodoConfiguration todoConfiguration;
     public FilesService(TodoConfiguration todoConfiguration) {
-        this.filesConfig = todoConfiguration.getConfigService().getFileConfig();
         this.todoConfiguration = todoConfiguration;
     }
     public ArrayList<ScanResult> filterFilesByExtention(ArrayList<ScanResult> scanResults,
@@ -138,7 +136,7 @@ public class FilesService {
     }
     public FileDetails getStaticFileDetails(String fileName) throws TodoException {
         FileDetails fileDetails = new FileDetails();
-        ArrayList<String> folderPath = filesConfig.getUiPath();
+        ArrayList<String> folderPath = todoConfiguration.getConfigService().getFileConfig().getUiPath();
         for (String folder : folderPath) {
             fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
             if (fileDetails.getFile() != null) {
@@ -159,7 +157,7 @@ public class FilesService {
             logger.info("File : {}, is configuration file, path : {}", fileName, filePath);
             fileDetails = getFileDetailsFromPath(filePath, filePath);
         } else {
-            ArrayList<String> folderPath = filesConfig.getRelativePath();
+            ArrayList<String> folderPath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
             for (String folder : folderPath) {
                 fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
                 if (fileDetails.getFile() != null) {
@@ -177,7 +175,7 @@ public class FilesService {
     public ArrayList<ScanResult> scanAllDirectory(boolean isRecursive) {
         ScanResult scanResult;
         ArrayList<ScanResult> scanResults = new ArrayList<ScanResult>();
-        for (String scanDir : filesConfig.getRelativePath()) {
+        for (String scanDir : todoConfiguration.getConfigService().getFileConfig().getRelativePath()) {
             scanResult = scanDirectory(scanDir, scanDir, isRecursive);
             scanResults.add(scanResult);
         }
@@ -275,7 +273,7 @@ public class FilesService {
         if (ext == null) {
             ext = ".txt";
         }
-        String filePath = filesConfig.getMessageSavePath() + fileName + ext;
+        String filePath = todoConfiguration.getConfigService().getFileConfig().getMessageSavePath() + fileName + ext;
         try {
             File file = new File(filePath);
             boolean fileCreated = file.createNewFile();
@@ -318,7 +316,7 @@ public class FilesService {
         return response;
     }
     public void verifyConfigPath() throws TodoException {
-        String saveMsgPath = filesConfig.getMessageSavePath();
+        String saveMsgPath = todoConfiguration.getConfigService().getFileConfig().getMessageSavePath();
         try {
             File folder = new File(saveMsgPath);
             if (folder.isFile()) {

@@ -107,3 +107,7 @@ made similar api for all task or app v1 or w.r.t. by id v1 or v2
 ==============
 Combine external directory file and config task config file and made as app_config
 Move get and update file config to config resources for tasks and files
+
+2017-05-19
+==============
+Bug fix for get task api by id, not reflecting updated data

@@ -29,16 +29,16 @@ public class TaskResource {
     @Context
     private HttpServletRequest httpServletRequest;
     private TaskService taskService;
-    private TaskConfig taskConfig;
+    private TodoConfiguration todoConfiguration;
     public TaskResource(TodoConfiguration todoConfiguration) {
-        this.taskConfig = todoConfiguration.getConfigService().getTaskConfig();
-        this.taskService = new TaskService(taskConfig);
+        this.todoConfiguration = todoConfiguration;
+        this.taskService = new TaskService(todoConfiguration);
     }
     @Path("/api/v1/tasks")
     @GET
     public ArrayList<TaskItem> getTaskItems() throws TodoException {
         logger.info("getTaskItems : In");
-        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -51,7 +51,7 @@ public class TaskResource {
     public Response getTaskItemsV2() throws TodoException {
         logger.info("getTaskItems : In");
         ArrayList<HashMap<String, Object>> response = new ArrayList<HashMap<String, Object>>();
-        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -67,7 +67,7 @@ public class TaskResource {
     public TaskItem getTaskComponentsById(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
         TaskItem result = null;
-        ArrayList<TaskItem> taskItems = taskConfig.getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -97,7 +97,7 @@ public class TaskResource {
     @GET
     public Map<String, TaskComponent> getTaskComponents() throws TodoException {
         logger.info("getTaskComponents : In");
-        Map<String, TaskComponent> result = taskConfig.getTaskComponents();
+        Map<String, TaskComponent> result = todoConfiguration.getConfigService().getTaskConfig().getTaskComponents();
         if (result == null) {
             logger.info("result is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -110,7 +110,8 @@ public class TaskResource {
     public TaskComponent getTaskComponent(@PathParam("id") String componentId)
         throws TodoException {
         logger.info("getTaskComponent : In");
-        Map<String, TaskComponent> taskComponentMap = taskConfig.getTaskComponents();
+        Map<String, TaskComponent> taskComponentMap =
+            todoConfiguration.getConfigService().getTaskConfig().getTaskComponents();
         if (taskComponentMap == null) {
             logger.info("taskComponentMap is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -128,7 +129,8 @@ public class TaskResource {
     public Response getTaskComponentDetails(@PathParam("id") String componentId) throws TodoException {
         logger.info("getTaskComponentDetails : In");
         HashMap<String, Object> response = new HashMap<String, Object>();
-        Map<String, TaskComponent> taskComponentMap = taskConfig.getTaskComponents();
+        Map<String, TaskComponent> taskComponentMap =
+            todoConfiguration.getConfigService().getTaskConfig().getTaskComponents();
         if (taskComponentMap == null) {
             logger.info("taskComponentMap is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -150,7 +152,8 @@ public class TaskResource {
     public Response getTaskComponentDetailsV3(@PathParam("id") String componentId) throws TodoException {
         logger.info("getTaskComponentDetailsV3 : In");
         Map<String, Object> response = new HashMap<String, Object>();
-        Map<String, TaskComponent> taskComponentMap = taskConfig.getTaskComponents();
+        Map<String, TaskComponent> taskComponentMap =
+            todoConfiguration.getConfigService().getTaskConfig().getTaskComponents();
         if (taskComponentMap == null) {
             logger.info("taskComponentMap is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -170,7 +173,7 @@ public class TaskResource {
     @GET
     public TaskApplications getTaskApplications() throws TodoException {
         logger.info("getTaskApplications : In");
-        TaskApplications result = taskConfig.getTaskApplications();
+        TaskApplications result = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
         if (result == null) {
             logger.info("result is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -183,7 +186,7 @@ public class TaskResource {
     public ArrayList<Map<String, Object>> getTaskApplicationsV2() throws TodoException {
         logger.info("getTaskApplications : In");
         ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
-        TaskApplications taskApplications = taskConfig.getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
         if (taskApplications == null) {
             logger.info("taskApplications is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
