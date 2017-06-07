@@ -99,12 +99,18 @@ resources:
   - url: /task/api/v2/tasks
     name: Get all task - v2
     help: /task/api/v2/tasks
+  - url: /task/api/v3/tasks
+    name: Get all task - v3
+    help: /task/api/v3/tasks
   - url: /task/api/v1/tasks/_1
     name: Get task by id - v1
     help: /task/api/v1/tasks/{id}
   - url: /task/api/v2/tasks/_1
     name: Get task by id - v2
     help: /task/api/v2/tasks/{id}
+  - url: /task/api/v3/tasks/_1
+    name: Get task by id - v3
+    help: /task/api/v3/tasks/{id}
   - url: /task/api/v1/components
     name: Get all component
     help: /task/api/v1/components
@@ -123,9 +129,15 @@ resources:
   - url: /task/api/v2/app/all
     name: Get all app - v2
     help: /task/api/v2/app/all
+  - url: /task/api/v3/app/all
+    name: Get all app - v3
+    help: /task/api/v3/app/all
   - url: /task/api/v1/app/id/app-1
     name: Get app by id - v1
     help: /task/api/v1/app/id/{id}
   - url: /task/api/v2/app/id/app-1
     name: Get app by id - v2
     help: /task/api/v2/app/id/{id}
+  - url: /task/api/v3/app/id/app-1
+    name: Get app by id - v3
+    help: /task/api/v3/app/id/{id}

@@ -183,36 +183,129 @@ public class TaskService {
         }
         return null;
     }
-    public HashMap<String, Object> getTaskDetailsByIdV2(String taskId) {
-        ArrayList<String> requiredComponentParams = new ArrayList<String>();
-        requiredComponentParams.add(TaskComponentParams.NAME.getName());
-        requiredComponentParams.add(TaskComponentParams.APPLICATION.getName());
-        return getTaskDetails(taskId, requiredComponentParams);
+    private TaskItem getTaskItemById(String taskId) {
+        if (taskId == null) {
+            logger.info("taskId is null");
+            return null;
+        }
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
+        if (taskItems == null) {
+            logger.info("taskItemMap is null");
+            return null;
+        }
+        for (TaskItem taskItem: taskItems) {
+            if (taskId.equals(taskItem.getId())) {
+                return taskItem;
+            }
+        }
+        logger.info("taskItem not found for taskId : {}", taskId);
+        return null;
     }
-    public TaskApplication getTaskApplicationByIdV1(String appId) {
+    private Map<String, Object> getTaskItemByTaskItemResponse(TaskItem taskItem, String version) {
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
+        if (taskItems == null) {
+            logger.info("taskItemMap is null");
+            return null;
+        }
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("id", taskItem.getId());
+        response.put("component", taskItem.getComponent());
+        response.put("options", taskItem.getOptions());
+        if ("v2".equals(version)) {
+            ArrayList<String> requiredComponentParams = new ArrayList<String>();
+            requiredComponentParams.add(TaskComponentParams.NAME.getName());
+            requiredComponentParams.add(TaskComponentParams.APPLICATION.getName());
+            response.put("componentDetails", getComponents(taskItem.getComponent(), requiredComponentParams));
+        } else if ("v3".equals(version)) {
+            ArrayList<String> requiredComponentParams = new ArrayList<String>();
+            requiredComponentParams.add(TaskComponentParams.NAME.getName());
+            requiredComponentParams.add(TaskComponentParams.APPLICATION.getName());
+            response.put("componentDetails", getComponents(taskItem.getComponent(), requiredComponentParams));
+            response.put("history", taskItem.getHistory());
+        }
+        return response;
+    }
+    public Map<String, Object> getTaskDetailsById(String taskId, String version) {
+        TaskItem taskItem = this.getTaskItemById(taskId);
+        if (taskItem == null) {
+            return null;
+        }
+        return getTaskItemByTaskItemResponse(taskItem, version);
+    }
+    public ArrayList<Map<String, Object>> getAllTaskItems(String version) {
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
+        if (taskItems == null) {
+            logger.info("taskItemMap is null");
+            return null;
+        }
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        for (TaskItem taskItem : taskItems) {
+            response.add(getTaskItemByTaskItemResponse(taskItem, version));
+        }
+        return response;
+    }
+    private TaskApplication getAppById(String appId) {
+        if (appId == null) {
+            logger.info("appId is null");
+            return null;
+        }
         TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
-        if (taskApplications == null) {
+        if (taskApplications == null || taskApplications.getTaskApplications() == null) {
             logger.info("taskApplications is null");
             return null;
         }
-        return taskApplications.getTaskApplicationByAppId(appId);
+        for (TaskApplication taskApplication: taskApplications.getTaskApplications()) {
+            if (appId.equals(taskApplication.getId())) {
+                return taskApplication;
+            }
+        }
+        logger.info("taskApplication not found for appId : {}", appId);
+        return null;
     }
-    public Map<String, Object> getTaskApplicationByIdV2(String appId) {
-        TaskApplication taskApplication = getTaskApplicationByIdV1(appId);
-        if (taskApplication == null) {
+    private Map<String, Object> getTaskAppLicationByResponse(TaskApplication taskApplication, String version) {
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
+        if (taskApplications == null || taskApplications.getTaskApplications() == null) {
             logger.info("taskApplications is null");
             return null;
         }
         Map<String, Object> response = new HashMap<String, Object>();
-        ArrayList<String> componentRequiredParams = new ArrayList<String>();
-        componentRequiredParams.add(TaskComponentParams.ID.getName());
-        componentRequiredParams.add(TaskComponentParams.NAME.getName());
-        componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
-//        componentRequiredParams.add(TaskComponentParams.TASK_DETAILS.getName());
         response.put("id", taskApplication.getId());
-        response.put("options", taskApplication.getOptions());
         response.put("path", taskApplication.getPath());
-        response.put("pathComponent", getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+        response.put("options", taskApplication.getOptions());
+        if ("v2".equals(version)) {
+            ArrayList<String> componentRequiredParams = new ArrayList<String>();
+            componentRequiredParams.add(TaskComponentParams.ID.getName());
+            componentRequiredParams.add(TaskComponentParams.NAME.getName());
+            componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
+            response.put("pathComponent", getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+        } else if ("v3".equals(version)) {
+            ArrayList<String> componentRequiredParams = new ArrayList<String>();
+            componentRequiredParams.add(TaskComponentParams.ID.getName());
+            componentRequiredParams.add(TaskComponentParams.NAME.getName());
+            componentRequiredParams.add(TaskComponentParams.TASK_ID.getName());
+//            componentRequiredParams.add(TaskComponentParams.TASK_DETAILS.getName());
+            response.put("pathComponent", getAppDetailsByAppId(taskApplication.getId(), componentRequiredParams));
+            response.put("history", taskApplication.getHistory());
+        }
+        return response;
+    }
+    public Map<String, Object> getApplicationById(String appId, String version) {
+        TaskApplication taskApplication = this.getAppById(appId);
+        if (taskApplication == null) {
+            return null;
+        }
+        return getTaskAppLicationByResponse(taskApplication, version);
+    }
+    public ArrayList<Map<String, Object>> getAllApplication(String version) {
+        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
+        if (taskApplications == null || taskApplications.getTaskApplications() == null) {
+            logger.info("taskItemMap is null");
+            return null;
+        }
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        for (TaskApplication taskApplication : taskApplications.getTaskApplications()) {
+            response.add(getTaskAppLicationByResponse(taskApplication, version));
+        }
         return response;
     }
 }

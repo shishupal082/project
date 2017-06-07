@@ -111,3 +111,53 @@ Move get and update file config to config resources for tasks and files
 2017-05-19
 ==============
 Bug fix for get task api by id, not reflecting updated data
+
+1.3
+=========
+2017-06-05
+==============
+Response changed for
+/api/v2/tasks
+/api/v2/tasks/{taskId}
+
+old :
+{
+  componentDetails[]: {name: string, aplication[][]: string},
+  taskDetails : {
+    id: string
+	component: string[]
+	options: {string: string}
+  }
+}
+
+new :
+{
+  componentDetails[]: {name: string, aplication[][]: string},
+  id: string
+  component: string[]
+  options: {string: string}
+}
+
+Create new api which give task by id + history of that id
+Hystory is added parallel to id, options, .. in data file
+history:
+  - date: YYYY-MM-DD-HH:MM
+    field_1: string
+  - date: YYYY-MM-DD-HH:MM
+    field_1: string
+    str_1: str_2
+
+New Api Added
+1] /api/v3/tasks (Add history data in v3)
+2] /api/v3/tasks/{taskId} (Add history data in v2)
+3] /api/v3/app/all (Add history data in v2)
+4] /api/v3/app/id/{appId} (Add history data in v2)
+
+Pending
+history will be saved independently of task or apps
+history can be stored in seprate files or it can saved parallel along with options
+1] All => /task/api/v1/history/all
+2] By Id => /task/api/v1/history/id/{id} // This id can be appId, taskId, componentId
+Similar for component
+
+apps path component should have support of adding extra data as like in task component

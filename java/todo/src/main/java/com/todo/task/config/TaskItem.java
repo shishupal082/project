@@ -1,5 +1,6 @@
 package com.todo.task.config;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class TaskItem {
     private String id;
     private String[] component;
     private Map<String, String> options;
+    private ArrayList<Map<String, String>> history;
 
     public String getId() {
         return id;
@@ -35,12 +37,21 @@ public class TaskItem {
         this.options = options;
     }
 
+    public ArrayList<Map<String, String>> getHistory() {
+        return history;
+    }
+
+    public void setHistory(ArrayList<Map<String, String>> history) {
+        this.history = history;
+    }
+
     @Override
     public String toString() {
         return "TaskItem{" +
             "id='" + id + '\'' +
             ", component=" + Arrays.toString(component) +
             ", options=" + options +
+            ", history=" + history +
             '}';
     }
 }

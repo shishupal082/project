@@ -36,60 +36,73 @@ public class TaskResource {
     }
     @Path("/api/v1/tasks")
     @GET
-    public ArrayList<TaskItem> getTaskItems() throws TodoException {
+    public Response getTaskItems() throws TodoException {
         logger.info("getTaskItems : In");
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
-        if (taskItems == null) {
+        ArrayList<Map<String, Object>> response = taskService.getAllTaskItems("v1");
+        if (response == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         logger.info("getTaskItems : Out");
-        return taskItems;
+        return Response.ok(response).build();
     }
     @Path("/api/v2/tasks")
     @GET
     public Response getTaskItemsV2() throws TodoException {
         logger.info("getTaskItems : In");
-        ArrayList<HashMap<String, Object>> response = new ArrayList<HashMap<String, Object>>();
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
-        if (taskItems == null) {
+        ArrayList<Map<String, Object>> response = taskService.getAllTaskItems("v2");
+        if (response == null) {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        for (TaskItem taskItem : taskItems) {
-            response.add(taskService.getTaskDetailsByIdV2(taskItem.getId()));
+        logger.info("getTaskItems : Out");
+        return Response.ok(response).build();
+    }
+    @Path("/api/v3/tasks")
+    @GET
+    public Response getTaskItemsV3() throws TodoException {
+        logger.info("getTaskItems : In");
+        ArrayList<Map<String, Object>> response = taskService.getAllTaskItems("v3");
+        if (response == null) {
+            logger.info("taskItemMap is null");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
     @Path("/api/v1/tasks/{taskId}")
     @GET
-    public TaskItem getTaskComponentsById(@PathParam("taskId") String taskId) throws TodoException {
+    public Response getTaskByIdV1(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
-        TaskItem result = null;
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfig().getTaskItems();
-        if (taskItems == null) {
-            logger.info("taskItemMap is null");
+        Map<String, Object> response = taskService.getTaskDetailsById(taskId, "v1");
+        if (response == null) {
+            logger.info("response is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        for (int i=0; i< taskItems.size(); i++) {
-            if (taskId.equals(taskItems.get(i).getId())) {
-                result = taskItems.get(i);
-                break;
-            }
-        }
-        if (result == null) {
-            logger.info("result is null for taskId : {}", taskId);
-            throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
-        }
         logger.info("getTaskItems : Out");
-        return result;
+        return Response.ok(response).build();
     }
     @Path("/api/v2/tasks/{taskId}")
     @GET
-    public Response getTaskComponentsByIdV2(@PathParam("taskId") String taskId) throws TodoException {
+    public Response getTaskByIdV2(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
-        HashMap<String, Object> response = taskService.getTaskDetailsByIdV2(taskId);
+        Map<String, Object> response = taskService.getTaskDetailsById(taskId, "v2");
+        if (response == null) {
+            logger.info("response is null");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        logger.info("getTaskItems : Out");
+        return Response.ok(response).build();
+    }
+    @Path("/api/v3/tasks/{taskId}")
+    @GET
+    public Response getTaskByIdV3(@PathParam("taskId") String taskId) throws TodoException {
+        logger.info("getTaskItems : In");
+        Map<String, Object> response = taskService.getTaskDetailsById(taskId, "v3");
+        if (response == null) {
+            logger.info("response is null");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
@@ -171,61 +184,77 @@ public class TaskResource {
     }
     @Path("/api/v1/app/all")
     @GET
-    public TaskApplications getTaskApplications() throws TodoException {
+    public ArrayList<Map<String, Object>> getTaskApplications() throws TodoException {
         logger.info("getTaskApplications : In");
-        TaskApplications result = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
-        if (result == null) {
-            logger.info("result is null");
+        ArrayList<Map<String, Object>> response = taskService.getAllApplication("v1");
+        if (response == null) {
+            logger.info("response is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         logger.info("getTaskApplications : Out");
-        return result;
+        return response;
     }
     @Path("/api/v2/app/all")
     @GET
     public ArrayList<Map<String, Object>> getTaskApplicationsV2() throws TodoException {
         logger.info("getTaskApplications : In");
-        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
-        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfig().getTaskApplications();
-        if (taskApplications == null) {
-            logger.info("taskApplications is null");
+        ArrayList<Map<String, Object>> response = taskService.getAllApplication("v2");
+        if (response == null) {
+            logger.info("response is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        ArrayList<TaskApplication> apps = taskApplications.getTaskApplications();
-        if (apps == null) {
-            logger.info("app is null");
+        logger.info("getTaskApplications : Out");
+        return response;
+    }
+    @Path("/api/v3/app/all")
+    @GET
+    public ArrayList<Map<String, Object>> getTaskApplicationsV3() throws TodoException {
+        logger.info("getTaskApplications : In");
+        ArrayList<Map<String, Object>> response = taskService.getAllApplication("v3");
+        if (response == null) {
+            logger.info("response is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        for (TaskApplication taskApplication : apps) {
-            response.add(taskService.getTaskApplicationByIdV2(taskApplication.getId()));
         }
         logger.info("getTaskApplications : Out");
         return response;
     }
     @Path("/api/v1/app/id/{appId}")
     @GET
-    public TaskApplication getTaskApplicationsByAppId(@PathParam("appId") String appId)
+    public Map<String, Object> getTaskApplicationsByAppId(@PathParam("appId") String appId)
         throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
-        TaskApplication taskApplication = taskService.getTaskApplicationByIdV1(appId);
-        if (taskApplication == null) {
+        Map<String, Object> response = taskService.getApplicationById(appId, "v1");
+        if (response == null) {
             logger.info("taskApplicationById is null");
             throw new TodoException(ErrorCodes.TASK_APPLICATION_NOT_FOUND);
         }
         logger.info("getTaskApplicationsByAppId : Out");
-        return taskApplication;
+        return response;
     }
     @Path("/api/v2/app/id/{appId}")
     @GET
     public Map<String, Object> getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
         throws TodoException {
-        logger.info("getTaskApplicationsByAppIdV2 : In");
-        Map<String, Object> response = taskService.getTaskApplicationByIdV2(appId);
+        logger.info("getTaskApplicationsByAppId : In");
+        Map<String, Object> response = taskService.getApplicationById(appId, "v2");
         if (response == null) {
             logger.info("Invalid appId : {}", appId);
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
-        logger.info("getTaskApplicationsByAppIdV2 : Out");
+        logger.info("getTaskApplicationsByAppId : Out");
+        return response;
+    }
+    @Path("/api/v3/app/id/{appId}")
+    @GET
+    public Map<String, Object> getTaskApplicationsByAppIdV3(@PathParam("appId") String appId)
+        throws TodoException {
+        logger.info("getTaskApplicationsByAppId : In");
+        Map<String, Object> response = taskService.getApplicationById(appId, "v3");
+        if (response == null) {
+            logger.info("Invalid appId : {}", appId);
+            throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
+        }
+        logger.info("getTaskApplicationsByAppId : Out");
         return response;
     }
 }

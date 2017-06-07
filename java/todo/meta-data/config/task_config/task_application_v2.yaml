@@ -6,6 +6,9 @@ taskApplications:
       path-2: [[_112],[_2], [_118], ["can be done anything"]]
     options:
       x: y
+    history:
+      - z: x
+        a: b
   - id: app-2
     path:
       path-1: [[_1],[_2], [_3, _111]]
