@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class AppConfig {
     private TaskConfig taskConfig;
-    public FilesConfig filesConfig;
+    private FilesConfig filesConfig;
 
     private String[] taskItemsPath;
     private String[] taskComponentPath;

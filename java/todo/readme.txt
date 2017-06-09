@@ -197,3 +197,7 @@ pathComponentResponseImprovedTo :
     component: completeString
     path: string
 }
+
+Bug fix for path is null
+Remove unwanted logger
+Added support for adding more data in pathComponent same as taskComponent
