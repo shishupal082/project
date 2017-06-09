@@ -1,6 +1,7 @@
 package com.todo.task.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.todo.task.config.component.TaskComponent;
 
 import java.util.ArrayList;
 import java.util.Map;

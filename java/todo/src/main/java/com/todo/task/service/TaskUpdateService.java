@@ -3,8 +3,10 @@ package com.todo.task.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.parser.string_parser.StringParser;
-import com.todo.services.ConfigService;
 import com.todo.task.config.*;
+import com.todo.task.config.component.TaskComponent;
+import com.todo.task.config.response.TaskComponentDetails;
+import com.todo.task.config.response.PathComponentDetails;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
@@ -49,7 +51,8 @@ public class TaskUpdateService {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskItems(finalTaskItems.getTaskItems());
-        logger.info("TaskItems loaded with data : {}", finalTaskItems);
+        logger.info("TaskItems load success.");
+//        logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
     public static void updateTaskComponents(TaskConfig taskConfig, String[] taskComponentsPath) throws TodoException {
         TaskComponents taskComponents = null;
@@ -61,43 +64,74 @@ public class TaskUpdateService {
             Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
             for(TaskItem taskItem : tempTaskItems) {
                 if (taskItem.getComponent() == null) {
-                    logger.info("Component not found : {}", taskItem);
+                    //logger.info("Component not found : {}", taskItem);
                     continue;
                 }
-                for (String componentId : taskItem.getComponent()) {
-                    String compId = (String) new StringParser(componentId).getValue("id");
+                for (String component : taskItem.getComponent()) {
+                    String compId = (String) new StringParser(component).getValue("id");
+                    if (compId == null) {
+                        logger.info("componentId is null for component : {}, in taskItem : {}", component, taskItem);
+                        throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+                    }
                     if (componentIdVsTaskId.containsKey(compId)) {
                         logger.info("Duplicate entry found for componentId : {}, {}", compId, taskItem);
                         throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
                     }
+                    TaskComponent taskComponent = new TaskComponent();
+                    taskComponent.setId(compId);
+                    TaskComponentDetails taskComponentDetails = new TaskComponentDetails();
+                    taskComponentDetails.setTaskId(taskItem.getId());
+                    taskComponentDetails.setComponent(component);
+                    taskComponentDetails.setComponentId(compId);
+                    taskComponent.getTaskDetails().add(taskComponentDetails);
+                    result.put(compId, taskComponent);
                     componentIdVsTaskId.put(compId, taskItem.getId());
                 }
             }
-            logger.info("ComponentId vs taskId : {}", componentIdVsTaskId);
-//            for (String taskComponentPath: taskComponentsPath) {
-//                parsingPath = taskComponentPath;
-//                taskComponents = mapper.readValue(new File(taskComponentPath), TaskComponents.class);
-//                result.putAll(taskComponents.getTaskComponents());
-//            }
-            for (Map.Entry<String, String> entry : componentIdVsTaskId.entrySet()) {
-                String taskComponentId = entry.getKey();
-                String taskId = entry.getValue();
-                TaskComponent taskComponent = new TaskComponent();
-                taskComponent.setId(taskComponentId);
-                taskComponent.setTaskId(taskId);
-                taskComponent.setName(taskComponentId);
-                result.put(taskComponentId, taskComponent);
+            TaskApplications taskApplications = taskConfig.getTaskApplications();
+            if (taskApplications.getTaskApplications() != null) {
+                for(TaskApplication taskApplication : taskApplications.getTaskApplications()) {
+                    if (taskApplication.getPath() == null) {
+                        continue;
+                    }
+                    for (Map.Entry<String, String[][]> entry : taskApplication.getPath().entrySet()) {
+                        String[][] pathComponenets = entry.getValue();
+                        if (pathComponenets != null) {
+                            for (String[] components : pathComponenets) {
+                                if (components != null) {
+                                    for (String component : components) {
+                                        String compId = (String) new StringParser(component).getValue("id");
+                                        if (compId == null) {
+                                            continue;
+                                        }
+                                        TaskComponent tempTaskComponent = result.get(compId);
+                                        if (tempTaskComponent == null) {
+                                            continue;
+                                        }
+                                        PathComponentDetails pathComponentDetails = new PathComponentDetails();
+                                        pathComponentDetails.setAppId(taskApplication.getId());
+                                        pathComponentDetails.setComponent(component);
+                                        pathComponentDetails.setPath(entry.getKey());
+                                        pathComponentDetails.setComponentId(compId);
+                                        tempTaskComponent.getAppDetails().add(pathComponentDetails);
+                                        result.put(compId, tempTaskComponent);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            finalTaskComponents.setTaskComponents(result);
+            finalTaskComponents.setTaskComponent(result);
         } catch (Exception e) {
-            logger.info("Exception for file : {}, {}", parsingPath, e);
+            logger.info("Exception in generating taskComponent : {}, {}", e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        taskConfig.setTaskComponents(finalTaskComponents.getTaskComponents());
-        logger.info("TaskComponents loaded with data : {}", finalTaskComponents);
+        taskConfig.setTaskComponents(finalTaskComponents.getTaskComponent());
+        logger.info("TaskComponents generate success.");
     }
     public static void updateTaskApplication(TaskConfig taskConfig,
-                                              String[] taskApplicationsPath) throws TodoException {
+                                             String[] taskApplicationsPath) throws TodoException {
         TaskApplications taskApplications = null;
         TaskApplications finalTaskApplications = new TaskApplications();
         ArrayList<TaskApplication> result = new ArrayList<TaskApplication>();
@@ -114,6 +148,7 @@ public class TaskUpdateService {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskApplications(finalTaskApplications);
-        logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
+        logger.info("TaskApplications load success.");
+//        logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
     }
 }

@@ -4,6 +4,7 @@ import com.todo.file.config.FilesConfig;
 import com.todo.task.config.TaskConfig;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by shishupalkumar on 18/05/17.
@@ -90,5 +91,20 @@ public class AppConfig {
 
     public void setMessageSavePath(String messageSavePath) {
         this.messageSavePath = messageSavePath;
+    }
+
+    @Override
+    public String toString() {
+        return "AppConfig{" +
+            "taskConfig=" + taskConfig +
+            ", filesConfig=" + filesConfig +
+            ", taskItemsPath=" + Arrays.toString(taskItemsPath) +
+            ", taskComponentPath=" + Arrays.toString(taskComponentPath) +
+            ", taskApplicationPath=" + Arrays.toString(taskApplicationPath) +
+            ", taskHistoryPath=" + Arrays.toString(taskHistoryPath) +
+            ", relativePath=" + relativePath +
+            ", uiPath=" + uiPath +
+            ", messageSavePath='" + messageSavePath + '\'' +
+            '}';
     }
 }

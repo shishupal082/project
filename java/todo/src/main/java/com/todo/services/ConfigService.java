@@ -45,11 +45,13 @@ public class ConfigService {
     }
     public void updateTaskConfig(AppConfig appConfig, String appConfigPath) throws TodoException {
         AppConfig tempAppConfig = getAppConfig(appConfigPath);
-        logger.info("TampAppConfig loaded with data : {}", tempAppConfig);
+        logger.info("TempAppConfig loaded with data : {}", tempAppConfig);
         TaskConfig taskConfig = new TaskConfig();
         TaskUpdateService.updateTaskItems(taskConfig, tempAppConfig.getTaskItemsPath());
-        TaskUpdateService.updateTaskComponents(taskConfig, tempAppConfig.getTaskComponentPath());
         TaskUpdateService.updateTaskApplication(taskConfig, tempAppConfig.getTaskApplicationPath());
+        TaskUpdateService.updateTaskComponents(taskConfig, tempAppConfig.getTaskComponentPath());
+        logger.info("Final taskItem data : {}", taskConfig.getTaskItems());
+        logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
         appConfig.setTaskConfig(taskConfig);
     }
     public void updateFilesConfig(AppConfig appConfig, String appConfigPath) throws TodoException {

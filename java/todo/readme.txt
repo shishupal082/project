@@ -161,3 +161,39 @@ history can be stored in seprate files or it can saved parallel along with optio
 Similar for component
 
 apps path component should have support of adding extra data as like in task component
+
+2017-06-09
+==============
+Api renamed :
+/api/v1/components => /api/v1/component/all
+/api/v1/components/{id} => /api/v1/component/id/{id}
+
+Api deleted :
+/api/v2/components/{id}
+/api/v3/components/{id}
+
+API improved
+
+/api/v1/component/id/{id}
+componentByIdV1
+{
+	id: string,
+	taskDetails:
+		- taskId: string
+		  componentId: id
+		  component: completeString
+	appDetails:
+		- appId: string
+		  componentId: id
+		  component: completeString
+		  path: string
+}
+
+/api/v2/app/id/{id}
+pathComponentResponseImprovedTo :
+{
+  - appId: string
+    componentId: id
+    component: completeString
+    path: string
+}
