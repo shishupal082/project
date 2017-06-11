@@ -201,3 +201,12 @@ pathComponentResponseImprovedTo :
 Bug fix for path is null
 Remove unwanted logger
 Added support for adding more data in pathComponent same as taskComponent
+
+2017-06-11
+==============
+Bug fix for
+/task/api/v2/tasks/{id}
+/task/api/v2/app/id/{id}
+
+Multiple component was visible for the single entry if same component is used at multiple place in same app and
+Same is reflected in the task componentDetails
