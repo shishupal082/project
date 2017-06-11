@@ -63,6 +63,6 @@ yamlObjectPath: meta-data/config/yaml_object.yaml
 availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
 appConfigPath: meta-data/config/app_config.yaml
-#appConfigPath: ../../config/config/std_app_config.yaml
-#appConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_app_config.yaml
-#appConfigPath: "G:/workspace/config/config/mac_app_config.yaml"
+# appConfigPath: ../../config/config/std_app_config.yaml
+# appConfigPath: /Volumes/PENDRIVE/workspace/config/config/mac_app_config.yaml
+# appConfigPath: "G:/workspace/config/config/mac_app_config.yaml"
