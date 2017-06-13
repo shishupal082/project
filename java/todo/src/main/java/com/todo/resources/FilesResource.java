@@ -180,7 +180,7 @@ public class FilesResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public Response v1GetViewDirect(@QueryParam("name") String fileName) throws TodoException {
-        logger.info("v1GetViewDirect : In : , fileName : {}", fileName);
+        logger.info("v1GetViewDirect : In : fileName : {}", fileName);
         Response response = v1GetView(null, fileName);
         logger.info("v1GetViewDirect : Out : {}", fileName);
         return response;
@@ -207,6 +207,24 @@ public class FilesResource {
             logger.info("fileName : {}, not found", fileName);
             throw new TodoException(ErrorCodes.FILE_NOT_FOUND);
         }
+    }
+    @Path("/v1/get/download/{fileName}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response downloadFileV2(@QueryParam("name") String fileName) throws TodoException {
+        logger.info("downloadFileV2 : In : fileName : {}", fileName);
+        Response response = downloadFile(fileName);
+        logger.info("downloadFileV2 : Out : {}", fileName);
+        return response;
+    }
+    @Path("/v1/download/view/{fileName}")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response downloadFileV3(@QueryParam("name") String fileName) throws TodoException {
+        logger.info("downloadFileV3 : In : fileName : {}", fileName);
+        Response response = downloadFile(fileName);
+        logger.info("downloadFileV3 : Out : {}", fileName);
+        return response;
     }
     @Path("/v1/filter/data")
     @GET

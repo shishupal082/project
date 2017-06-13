@@ -60,9 +60,15 @@ resources:
   - url: /files/v1/get/view/test.txt?name=test.txt
     name: File - view
     help: /files/v1/get/view/test.txt?name={file-name}
+  - url: /files/v1/download/view/file-name?name=test.txt
+    name: File - download
+    help: /files/v1/download/view/file-name?name={file-name}
   - url: /files/v1/get/download?name=test.txt
     name: File - download
     help: /files/v1/get/download?name={file-name}
+  - url: /files/v1/get/download/file-name?name=test.txt
+    name: File - download
+    help: /files/v1/get/download/file-name?name={file-name}
   - url: /files/v1/filter/data?type=txt,csv
     name: Filter - data
     help: /files/v1/filter/data?type=txt,csv

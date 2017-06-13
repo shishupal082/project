@@ -210,3 +210,12 @@ Bug fix for
 
 Multiple component was visible for the single entry if same component is used at multiple place in same app and
 Same is reflected in the task componentDetails
+
+
+2017-06-13
+==============
+Added two new api
+/files/v1/download/view/file-name?name={file-name}
+/files/v1/get/download/file-name?name={file-name}
+
+Similar to => /files/v1/get/download?name={file-name}
