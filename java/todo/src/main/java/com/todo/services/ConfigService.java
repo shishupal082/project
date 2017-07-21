@@ -60,6 +60,7 @@ public class ConfigService {
         filesConfig.setMessageSavePath(tempAppConfig.getMessageSavePath());
         filesConfig.setRelativePath(tempAppConfig.getRelativePath());
         filesConfig.setUiPath(tempAppConfig.getUiPath());
+        filesConfig.setAddTextPath(tempAppConfig.getAddTextPath());
         appConfig.setFilesConfig(filesConfig);
     }
     public YamlObject getYamlObject() throws TodoException {
@@ -74,10 +75,9 @@ public class ConfigService {
         }
         return yamlObject;
     }
-    public ResourceDetails getResourceDetails() throws TodoException {
+    public ResourceDetails getResourceDetails(String resourcePath) throws TodoException {
         ResourceDetails resourceDetails = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        String resourcePath = todoConfiguration.getAvailableResourcePath();
         try {
             resourceDetails = mapper.readValue(new File(resourcePath), ResourceDetails.class);
         } catch (IOException ioe) {

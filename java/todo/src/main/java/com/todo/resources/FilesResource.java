@@ -417,4 +417,14 @@ public class FilesResource {
         logger.info("getAllV3IndexView : Out");
         return Response.ok(res).build();
     }
+    @Path("/v1/add_text")
+    @GET
+    @Produces(MediaType.TEXT_HTML)
+    public Response addTextToFile(@QueryParam("fileName") String fileName,
+                                      @QueryParam("text") String text) throws TodoException {
+        logger.info("addTextToFile {}, {}", fileName, text);
+        String res = filesService.addNewLine(text, fileName);
+        logger.info("addTextToFile out.");
+        return Response.ok(res).build();
+    }
 }

@@ -315,6 +315,45 @@ public class FilesService {
         }
         return response;
     }
+    public String addNewLine(String text, String fileName) throws TodoException {
+        logger.info("Add new line text : {}, in: fileName = {} : countTry = {}", text, fileName);
+        if (text == null) {
+            logger.info("Text is null, Need to add new line.");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        if (fileName == null) {
+            logger.info("Invalid fileName.");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String response = "Error";
+        try {
+            File file = new File(todoConfiguration.getConfigService().getFileConfig().getAddTextPath() + fileName);
+            if (file.isFile()) {
+                Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(file, true), "UTF-8"));
+                writer.append("\n");
+                writer.append(text);
+                writer.close();
+                logger.info("Text {} added in : {}", text, fileName);
+                response = "Success";
+            } else {
+                logger.info("File does not exist creating new file.");
+                boolean fileCreated = file.createNewFile();
+                if (fileCreated) {
+                    logger.info("New file {} created.", fileName);
+                    FileWriter writer = new FileWriter(file);
+                    writer.write(text);
+                    writer.close();
+                    response = "Success";
+                } else {
+                    logger.info("Unable to create New file {}", fileName);
+                }
+            }
+        } catch (Exception e) {
+            logger.info("Error saving text : {}, in file : {}, {}", text, fileName, e);
+        }
+        return response;
+    }
     public void verifyConfigPath() throws TodoException {
         String saveMsgPath = todoConfiguration.getConfigService().getFileConfig().getMessageSavePath();
         try {

@@ -20,6 +20,9 @@ public class AppConfig {
     private ArrayList<String> relativePath;
     private ArrayList<String> uiPath;
     private String messageSavePath;
+    private String resourcePath;
+    private String addTextPath;
+
 
     public TaskConfig getTaskConfig() {
         return taskConfig;
@@ -93,6 +96,22 @@ public class AppConfig {
         this.messageSavePath = messageSavePath;
     }
 
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    public String getAddTextPath() {
+        return addTextPath;
+    }
+
+    public void setAddTextPath(String addTextPath) {
+        this.addTextPath = addTextPath;
+    }
+
     @Override
     public String toString() {
         return "AppConfig{" +
@@ -105,6 +124,8 @@ public class AppConfig {
             ", relativePath=" + relativePath +
             ", uiPath=" + uiPath +
             ", messageSavePath='" + messageSavePath + '\'' +
+            ", resourcePath='" + resourcePath + '\'' +
+            ", addTextPath='" + addTextPath + '\'' +
             '}';
     }
 }

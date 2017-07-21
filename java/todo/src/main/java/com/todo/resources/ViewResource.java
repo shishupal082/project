@@ -37,13 +37,30 @@ public class ViewResource {
     public IndexView indexPage() {
         logger.info("Loading indexPage");
         ConfigService configService = new ConfigService(todoConfiguration);
-        return new IndexView(httpServletRequest, configService.getResourceDetails());
+        return new IndexView(httpServletRequest,
+            configService.getResourceDetails(
+                ConfigService.getAppConfig(todoConfiguration.getAppConfigPath()).getResourcePath()));
     }
     @GET
     @Path("index")
     public Response getIndex() throws URISyntaxException {
         logger.info("getIndex : routing from /index to /");
         return Response.seeOther(new URI("/")).build();
+    }
+//    @GET
+//    @Path("view/build")
+//    public CommonView buildDetails() {
+//        logger.info("Loading buildDetails");
+//        ConfigService configService = new ConfigService(todoConfiguration);
+//        return new CommonView(httpServletRequest, "build.ftl");
+//    }
+    @GET
+    @Path("view/resource")
+    public IndexView getViewResource() {
+        logger.info("Loading indexPage");
+        ConfigService configService = new ConfigService(todoConfiguration);
+        return new IndexView(httpServletRequest,
+            configService.getResourceDetails(todoConfiguration.getAvailableResourcePath()));
     }
     @GET
     @Path("view/dashboard")

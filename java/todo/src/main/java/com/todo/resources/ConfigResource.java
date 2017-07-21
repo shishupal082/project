@@ -45,7 +45,8 @@ public class ConfigResource {
     @GET
     public ResourceDetails getResourceDetials() throws TodoException {
         logger.info("getResourceDetails : In");
-        ResourceDetails resourceDetails = configService.getResourceDetails();
+        ResourceDetails resourceDetails = configService.getResourceDetails(
+            todoConfiguration.getAvailableResourcePath());
         logger.info("getResourceDetails : Out");
         return resourceDetails;
     }

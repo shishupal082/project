@@ -9,6 +9,12 @@ resources:
   - name: View Config
     url: /view/config
     help: /view/config
+#  - name: View Build
+#    url: /view/build
+#    help: /view/build
+  - name: View Resource
+    url: /view/resource
+    help: /view/resource
   - url: /view/todo/all
     name: View all todo
     help: /view/todo/all
@@ -48,6 +54,9 @@ resources:
   - url: /files/v1/query/view
     name: File query view
     help: /files/v1/query/view
+  - url: /files/v1/add_text?text=hello&fileName=test.txt
+    name: "[Get]Add new line to file"
+    help: /files/v1/add_text?text=hello&fileName=test.txt
   - url: /files/v1/query/submit
     name: File query submit
     help: /files/v1/query/submit

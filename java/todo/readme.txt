@@ -219,3 +219,20 @@ Added two new api
 /files/v1/get/download/file-name?name={file-name}
 
 Similar to => /files/v1/get/download?name={file-name}
+
+
+2017-07-17
+==============
+New api added
+1] Get api
+/files/v1/add_text?fileName=xyz.txt&data=xyz
+2] Post api
+/files/v1/add_text?fileName=xyz.txt
+  data = string
+3] /view/build (But it is commented as of now)
+4] /view/resource
+
+Added extra field in appConfig
+    - Home screen loading app resource
+resourcePath: meta-data/config/available_resources.yaml
+addTextPath: meta-data/files/temp/

@@ -10,6 +10,7 @@ public class FilesConfig {
     private ArrayList<String> relativePath;
     private ArrayList<String> uiPath;
     private String messageSavePath;
+    private String addTextPath;
 
     public ArrayList<String> getUiPath() {
         return uiPath;
@@ -33,5 +34,13 @@ public class FilesConfig {
 
     public void setMessageSavePath(String messageSavePath) {
         this.messageSavePath = messageSavePath;
+    }
+
+    public String getAddTextPath() {
+        return addTextPath;
+    }
+
+    public void setAddTextPath(String addTextPath) {
+        this.addTextPath = addTextPath;
     }
 }
