@@ -5,7 +5,7 @@ relativePath:
   - ../../pvt/uploaded_files/java/
 uiPath: [../../static/]
 messageSavePath: ../../pvt/uploaded_files/java/
-addTextPath: meta-data/files/temp/
+addTextPath: ../../pvt/uploaded_files/java/
 taskItemsPath: [meta-data/config/task_config/task_items_v3_1.yaml, meta-data/config/task_config/task_items_v3_2.yaml]
 taskComponentPath: [meta-data/config/task_config/task_component.yaml]
 taskApplicationPath: [meta-data/config/task_config/task_application_v2.yaml]
