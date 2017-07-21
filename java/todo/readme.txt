@@ -236,3 +236,8 @@ Added extra field in appConfig
     - Home screen loading app resource
 resourcePath: meta-data/config/available_resources.yaml
 addTextPath: meta-data/files/temp/
+
+Build created 1.3
+
+1.4
+=======
