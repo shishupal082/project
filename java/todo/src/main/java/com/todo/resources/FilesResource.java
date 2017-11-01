@@ -9,6 +9,7 @@ import com.todo.file.domain.FileDetails;
 import com.todo.file.domain.ScanResult;
 import com.todo.file.service.FilesService;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.IpAddress;
 import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
@@ -37,6 +38,7 @@ public class FilesResource {
     private TodoConfiguration todoConfiguration;
     @Context
     private HttpServletRequest httpServletRequest;
+
     public FilesResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
         this.filesService = new FilesService(todoConfiguration);
@@ -104,7 +106,7 @@ public class FilesResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public CommonView fileQueryView() throws TodoException {
-        logger.info("fileQueryView : In : Out");
+        logger.info("fileQueryView : In : Out : {}", IpAddress.getClientIpAddr(httpServletRequest));
         return new CommonView(httpServletRequest, "query_view.ftl");
     }
     @Path("/v1/query/submit")

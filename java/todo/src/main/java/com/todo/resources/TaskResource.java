@@ -4,6 +4,7 @@ import com.todo.TodoConfiguration;
 import com.todo.task.config.component.TaskComponent;
 import com.todo.task.service.TaskService;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,19 @@ public class TaskResource {
             logger.info("taskItemMap is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        logger.info("getTaskItems : Out");
+        return Response.ok(response).build();
+    }
+    @Path("/api/v1/tasks/byid")
+    @GET
+    public Response getTaskItemsById() throws TodoException {
+        logger.info("getTaskItems : In");
+        ArrayList<Map<String, Object>> response = taskService.getAllTaskItems("v1");
+        if (response == null) {
+            logger.info("taskItemMap is null");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        response = StringUtils.sortObjectArray(response, "id");
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }

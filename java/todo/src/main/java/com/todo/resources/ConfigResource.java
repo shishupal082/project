@@ -1,6 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.config.ClientDetails;
 import com.todo.config.ResourceDetails;
 import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
@@ -83,5 +84,13 @@ public class ConfigResource {
         FilesConfig filesConfig = configService.getFileConfig();
         logger.info("getFileConfig : out");
         return filesConfig;
+    }
+    @Path("/v1/get/client-details")
+    @GET
+    public ClientDetails getClientDetails() throws TodoException {
+        logger.info("getClientDetails : in");
+        ClientDetails clientDetails = new ClientDetails(httpServletRequest);
+        logger.info("getClientDetails : out : {}", clientDetails);
+        return clientDetails;
     }
 }

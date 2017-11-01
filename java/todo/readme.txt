@@ -225,12 +225,9 @@ Similar to => /files/v1/get/download?name={file-name}
 ==============
 New api added
 1] Get api
-/files/v1/add_text?fileName=xyz.txt&data=xyz
-2] Post api
-/files/v1/add_text?fileName=xyz.txt
-  data = string
-3] /view/build (But it is commented as of now)
-4] /view/resource
+/files/v1/add_text?fileName=xyz.txt&text=xyz
+2] /view/build (But it is commented as of now)
+3] /view/resource
 
 Added extra field in appConfig
     - Home screen loading app resource
@@ -241,3 +238,14 @@ Build created 1.3
 
 1.4
 =======
+New api added
+1] /config/api/v1/get/client-details
+Response : CliientDetails
+
+IpAddress class added
+Width and height of text area for submit message increased to 310px and 150px
+
+New api added
+2] /task/api/v1/tasks/byid
+
+Short by object array added in StringUtils class

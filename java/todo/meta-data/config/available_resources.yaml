@@ -48,6 +48,9 @@ resources:
   - url: /config/api/v1/update/files
     name: "[data] Update file config"
     help: /config/api/v1/update/files
+  - url: /config/api/v1/get/client-details
+    name: "[data] Get client details"
+    help: /config/api/v1/get/client-details
   - url: /files/v1/upload/view
     name: File upload view
     help: /files/v1/upload/view
@@ -111,6 +114,9 @@ resources:
   - url: /task/api/v1/tasks
     name: Get all task - v1
     help: /task/api/v1/tasks
+  - url: /task/api/v1/tasks/byid
+    name: Get all task - v1 byid
+    help: /task/api/v1/tasks/byid
   - url: /task/api/v2/tasks
     name: Get all task - v2
     help: /task/api/v2/tasks

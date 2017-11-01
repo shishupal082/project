@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <td>Message</td>
-                    <td><textarea name="message"></textarea></td>
+                    <td><textarea name="message" style="width: 310px; height: 150px;"></textarea></td>
                 </tr>
                 <tr>
                     <td><span>Overwrite</span><input type="checkbox" name="overwrite" value="yes"/></td>
