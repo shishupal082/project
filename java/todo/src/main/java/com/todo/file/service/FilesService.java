@@ -369,6 +369,7 @@ public class FilesService {
             logger.info("Save message path is verified : {}", saveMsgPath);
         } catch (Exception e) {
             logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH.getErrorString());
+            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
             throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
         }
     }

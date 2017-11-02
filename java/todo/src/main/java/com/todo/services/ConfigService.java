@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by shishupalkumar on 14/02/17.
@@ -28,22 +29,35 @@ public class ConfigService {
     public ConfigService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
     }
-    public static AppConfig getAppConfig(String appConfigPath) {
-        AppConfig appConfig = null;
-        try {
-            appConfig = mapper.readValue(new File(appConfigPath), AppConfig.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}, {}", appConfigPath, ioe);
+    public static AppConfig getAppConfig(ArrayList<String> appConfigPath) {
+        if (appConfigPath == null || appConfigPath.isEmpty()) {
+            logger.info("Invalid app config");
+            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        AppConfig appConfig = null, tempAppConfig = null;
+        for (String fileName : appConfigPath) {
+            try {
+                tempAppConfig = mapper.readValue(new File(fileName), AppConfig.class);
+                if (appConfig == null) {
+                    appConfig = new AppConfig();
+                }
+                appConfig.merge(tempAppConfig);
+            } catch (IOException ioe) {
+                logger.info("IOE : for file : {}, {}", fileName, ioe);
+                logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+            }
+        }
+        if (appConfig == null) {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return appConfig;
     }
-    public void updateAppConfig(String appConfigPath) throws TodoException {
+    public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
         this.appConfig = new AppConfig();
         updateFilesConfig(appConfig, appConfigPath);
         updateTaskConfig(appConfig, appConfigPath);
     }
-    public void updateTaskConfig(AppConfig appConfig, String appConfigPath) throws TodoException {
+    public void updateTaskConfig(AppConfig appConfig, ArrayList<String> appConfigPath) throws TodoException {
         AppConfig tempAppConfig = getAppConfig(appConfigPath);
         logger.info("TempAppConfig loaded with data : {}", tempAppConfig);
         TaskConfig taskConfig = new TaskConfig();
@@ -54,7 +68,7 @@ public class ConfigService {
         logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
         appConfig.setTaskConfig(taskConfig);
     }
-    public void updateFilesConfig(AppConfig appConfig, String appConfigPath) throws TodoException {
+    public void updateFilesConfig(AppConfig appConfig, ArrayList<String> appConfigPath) throws TodoException {
         FilesConfig filesConfig = new FilesConfig();
         AppConfig tempAppConfig = getAppConfig(appConfigPath);
         filesConfig.setMessageSavePath(tempAppConfig.getMessageSavePath());

@@ -4,7 +4,6 @@ import com.todo.file.config.FilesConfig;
 import com.todo.task.config.TaskConfig;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by shishupalkumar on 18/05/17.
@@ -13,10 +12,10 @@ public class AppConfig {
     private TaskConfig taskConfig;
     private FilesConfig filesConfig;
 
-    private String[] taskItemsPath;
-    private String[] taskComponentPath;
-    private String[] taskApplicationPath;
-    private String[] taskHistoryPath;
+    private ArrayList<String> taskItemsPath;
+    private ArrayList<String> taskComponentPath;
+    private ArrayList<String> taskApplicationPath;
+    private ArrayList<String> taskHistoryPath;
     private ArrayList<String> relativePath;
     private ArrayList<String> uiPath;
     private String messageSavePath;
@@ -40,35 +39,35 @@ public class AppConfig {
         this.filesConfig = filesConfig;
     }
 
-    public String[] getTaskItemsPath() {
+    public ArrayList<String> getTaskItemsPath() {
         return taskItemsPath;
     }
 
-    public void setTaskItemsPath(String[] taskItemsPath) {
+    public void setTaskItemsPath(ArrayList<String> taskItemsPath) {
         this.taskItemsPath = taskItemsPath;
     }
 
-    public String[] getTaskComponentPath() {
+    public ArrayList<String> getTaskComponentPath() {
         return taskComponentPath;
     }
 
-    public void setTaskComponentPath(String[] taskComponentPath) {
+    public void setTaskComponentPath(ArrayList<String> taskComponentPath) {
         this.taskComponentPath = taskComponentPath;
     }
 
-    public String[] getTaskApplicationPath() {
+    public ArrayList<String> getTaskApplicationPath() {
         return taskApplicationPath;
     }
 
-    public void setTaskApplicationPath(String[] taskApplicationPath) {
+    public void setTaskApplicationPath(ArrayList<String> taskApplicationPath) {
         this.taskApplicationPath = taskApplicationPath;
     }
 
-    public String[] getTaskHistoryPath() {
+    public ArrayList<String> getTaskHistoryPath() {
         return taskHistoryPath;
     }
 
-    public void setTaskHistoryPath(String[] taskHistoryPath) {
+    public void setTaskHistoryPath(ArrayList<String> taskHistoryPath) {
         this.taskHistoryPath = taskHistoryPath;
     }
 
@@ -111,16 +110,68 @@ public class AppConfig {
     public void setAddTextPath(String addTextPath) {
         this.addTextPath = addTextPath;
     }
-
+    public void merge(AppConfig tempAppConfig) {
+        if (tempAppConfig.getTaskItemsPath() != null) {
+            if (this.getTaskItemsPath() != null) {
+                this.getTaskItemsPath().addAll(tempAppConfig.getTaskItemsPath());
+            } else {
+                this.setTaskItemsPath(tempAppConfig.getTaskItemsPath());
+            }
+        }
+        if (tempAppConfig.getTaskApplicationPath() != null) {
+            if (this.getTaskApplicationPath() != null) {
+                this.getTaskApplicationPath().addAll(tempAppConfig.getTaskApplicationPath());
+            } else {
+                this.setTaskApplicationPath(tempAppConfig.getTaskApplicationPath());
+            }
+        }
+        if (tempAppConfig.getTaskComponentPath() != null) {
+            if (this.getTaskComponentPath() != null) {
+                this.getTaskComponentPath().addAll(tempAppConfig.getTaskComponentPath());
+            } else {
+                this.setTaskComponentPath(tempAppConfig.getTaskComponentPath());
+            }
+        }
+        if (tempAppConfig.getUiPath() != null) {
+            if (this.getUiPath() != null) {
+                this.getUiPath().addAll(tempAppConfig.getUiPath());
+            } else {
+                this.setUiPath(tempAppConfig.getUiPath());
+            }
+        }
+        if (tempAppConfig.getRelativePath() != null) {
+            if (this.getRelativePath() != null) {
+                this.getRelativePath().addAll(tempAppConfig.getRelativePath());
+            } else {
+                this.setRelativePath(tempAppConfig.getRelativePath());
+            }
+        }
+        if (tempAppConfig.getTaskHistoryPath() != null) {
+            if (this.getTaskHistoryPath() != null) {
+                this.getTaskHistoryPath().addAll(tempAppConfig.getTaskHistoryPath());
+            } else {
+                this.setTaskHistoryPath(tempAppConfig.getTaskHistoryPath());
+            }
+        }
+        if (tempAppConfig.getResourcePath() != null) {
+            this.setResourcePath(tempAppConfig.getResourcePath());
+        }
+        if (tempAppConfig.getMessageSavePath() != null) {
+            this.setMessageSavePath(tempAppConfig.getMessageSavePath());
+        }
+        if (tempAppConfig.getAddTextPath() != null) {
+            this.setAddTextPath(tempAppConfig.getAddTextPath());
+        }
+    }
     @Override
     public String toString() {
         return "AppConfig{" +
             "taskConfig=" + taskConfig +
             ", filesConfig=" + filesConfig +
-            ", taskItemsPath=" + Arrays.toString(taskItemsPath) +
-            ", taskComponentPath=" + Arrays.toString(taskComponentPath) +
-            ", taskApplicationPath=" + Arrays.toString(taskApplicationPath) +
-            ", taskHistoryPath=" + Arrays.toString(taskHistoryPath) +
+            ", taskItemsPath=" + taskItemsPath +
+            ", taskComponentPath=" + taskComponentPath +
+            ", taskApplicationPath=" + taskApplicationPath +
+            ", taskHistoryPath=" + taskHistoryPath +
             ", relativePath=" + relativePath +
             ", uiPath=" + uiPath +
             ", messageSavePath='" + messageSavePath + '\'' +

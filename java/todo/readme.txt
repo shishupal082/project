@@ -238,6 +238,7 @@ Build created 1.3
 
 1.4
 =======
+--------------------------------------------------
 New api added
 1] /config/api/v1/get/client-details
 Response : CliientDetails
@@ -245,7 +246,15 @@ Response : CliientDetails
 IpAddress class added
 Width and height of text area for submit message increased to 310px and 150px
 
+--------------------------------------------------
 New api added
 2] /task/api/v1/tasks/byid
 
 Short by object array added in StringUtils class
+
+--------------------------------------------------
+Added facility to add multiple appConfiguration file
+
+Converted
+env_config => appConfigPath from String to ArrayList<String>
+It can also empty array and can be loaded from run time using args

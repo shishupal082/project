@@ -24,7 +24,7 @@ import java.util.Map;
 public class TaskUpdateService {
     private static Logger logger = LoggerFactory.getLogger(TaskUpdateService.class);
     private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-    public static void updateTaskItems(TaskConfig taskConfig, String[] taskItemsPath) throws TodoException {
+    public static void updateTaskItems(TaskConfig taskConfig, ArrayList<String> taskItemsPath) throws TodoException {
         TaskItems taskItems = null;
         TaskItems finalTaskItems = new TaskItems();
         ArrayList<TaskItem> result = new ArrayList<TaskItem>();
@@ -54,7 +54,7 @@ public class TaskUpdateService {
         logger.info("TaskItems load success.");
 //        logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
-    public static void updateTaskComponents(TaskConfig taskConfig, String[] taskComponentsPath) throws TodoException {
+    public static void updateTaskComponents(TaskConfig taskConfig, ArrayList<String> taskComponentsPath) throws TodoException {
         TaskComponents taskComponents = null;
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
@@ -131,7 +131,7 @@ public class TaskUpdateService {
         logger.info("TaskComponents generate success.");
     }
     public static void updateTaskApplication(TaskConfig taskConfig,
-                                             String[] taskApplicationsPath) throws TodoException {
+                                             ArrayList<String> taskApplicationsPath) throws TodoException {
         TaskApplications taskApplications = null;
         TaskApplications finalTaskApplications = new TaskApplications();
         ArrayList<TaskApplication> result = new ArrayList<TaskApplication>();

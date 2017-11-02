@@ -8,6 +8,8 @@ import com.todo.config.TodoViewConfig;
 import com.todo.services.ConfigService;
 import io.dropwizard.Configuration;
 
+import java.util.ArrayList;
+
 /**
  * Created by shishupalkumar on 11/01/17.
  */
@@ -19,15 +21,15 @@ public class TodoConfiguration extends Configuration {
     private DirectoryConfig directoryConfig;
     private String yamlObjectPath;
     private String socketRequestDelimiter;
-    private String appConfigPath;
+    private ArrayList<String> appConfigPath;
     private String availableResourcePath;
     private ConfigService configService;
 
-    public String getAppConfigPath() {
+    public ArrayList<String> getAppConfigPath() {
         return appConfigPath;
     }
 
-    public void setAppConfigPath(String appConfigPath) {
+    public void setAppConfigPath(ArrayList<String> appConfigPath) {
         this.appConfigPath = appConfigPath;
     }
 
