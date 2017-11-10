@@ -1,12 +1,13 @@
 ---
 relativePath:
   - meta-data/files/
+  - meta-data/uploaded_files/
   - meta-data/ui/
 taskItemsPath: [meta-data/config/task_config/task_items_v3_1.yaml, meta-data/config/task_config/task_items_v3_2.yaml]
 taskComponentPath: [meta-data/config/task_config/task_component.yaml]
 taskApplicationPath: [meta-data/config/task_config/task_application_v2.yaml]
 taskHistoryPath: [meta-data/config/task_config/history.yaml]
 resourcePath: meta-data/config/available_resources.yaml
-messageSavePath: meta-data/uploaded_files/
+messageSavePath: meta-data/uploaded_files/uploaded_files/
 uiPath: [meta-data/ui/]
-addTextPath: meta-data/log/
+addTextPath: meta-data/log/log/

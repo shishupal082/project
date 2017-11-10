@@ -258,3 +258,7 @@ Added facility to add multiple appConfiguration file
 Converted
 env_config => appConfigPath from String to ArrayList<String>
 It can also empty array and can be loaded from run time using args
+
+--------------------------------------------------
+2017-11-10
+app config created to work as standlone application
