@@ -2,3 +2,6 @@
 relativePath:
   - ../../templates/common/
   - ../../pvt/uploaded_files/java/
+messageSavePath: ../../pvt/uploaded_files/java/
+uiPath: [../../static/]
+addTextPath: ../../pvt/uploaded_files/java/
