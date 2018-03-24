@@ -1,0 +1,5 @@
+#!/bin/bash
+configFilePath=/custom/cmd-config.txt
+buildCommandFolder=$(sed -n "3p" $configFilePath)
+cd $buildCommandFolder
+sh build.sh

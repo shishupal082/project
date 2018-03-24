@@ -1,0 +1,6 @@
+#!/bin/bash
+configFilePath=/custom/cmd-config.txt
+runCommandFolder=$(sed -n "3p" $configFilePath)
+echo ****************Starting application****************
+cd $runCommandFolder
+sh run.sh

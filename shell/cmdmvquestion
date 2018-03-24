@@ -1,0 +1,25 @@
+#!/bin/bash
+configFilePath=/custom/cmd-config.txt
+from=$(sed -n "1p" $configFilePath)
+to=$(sed -n "2p" $configFilePath)
+ZERO=0
+
+current_date_time="`date "+%Y-%m-%d %H:%M:%S"`";
+
+cd $from
+regex="*-201[0-9]-*"
+totalFile=$(find . -name "$regex" | wc -l)
+
+if [ "$1" == "count" ]
+then
+	echo $current_date_time " : Total file count : $totalFile"
+	exit
+fi
+
+if [ $totalFile == $ZERO ]
+then
+   echo $current_date_time " : No file to move"
+else
+   echo $current_date_time " : Moving $totalFile files"
+   # mv $from$regex $to
+fi
