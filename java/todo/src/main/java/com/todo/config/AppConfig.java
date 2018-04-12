@@ -13,9 +13,7 @@ public class AppConfig {
     private FilesConfig filesConfig;
 
     private ArrayList<String> taskItemsPath;
-    private ArrayList<String> taskComponentPath;
     private ArrayList<String> taskApplicationPath;
-    private ArrayList<String> taskHistoryPath;
     private ArrayList<String> relativePath;
     private ArrayList<String> uiPath;
     private String messageSavePath;
@@ -47,28 +45,12 @@ public class AppConfig {
         this.taskItemsPath = taskItemsPath;
     }
 
-    public ArrayList<String> getTaskComponentPath() {
-        return taskComponentPath;
-    }
-
-    public void setTaskComponentPath(ArrayList<String> taskComponentPath) {
-        this.taskComponentPath = taskComponentPath;
-    }
-
     public ArrayList<String> getTaskApplicationPath() {
         return taskApplicationPath;
     }
 
     public void setTaskApplicationPath(ArrayList<String> taskApplicationPath) {
         this.taskApplicationPath = taskApplicationPath;
-    }
-
-    public ArrayList<String> getTaskHistoryPath() {
-        return taskHistoryPath;
-    }
-
-    public void setTaskHistoryPath(ArrayList<String> taskHistoryPath) {
-        this.taskHistoryPath = taskHistoryPath;
     }
 
     public ArrayList<String> getRelativePath() {
@@ -125,13 +107,6 @@ public class AppConfig {
                 this.setTaskApplicationPath(tempAppConfig.getTaskApplicationPath());
             }
         }
-        if (tempAppConfig.getTaskComponentPath() != null) {
-            if (this.getTaskComponentPath() != null) {
-                this.getTaskComponentPath().addAll(tempAppConfig.getTaskComponentPath());
-            } else {
-                this.setTaskComponentPath(tempAppConfig.getTaskComponentPath());
-            }
-        }
         if (tempAppConfig.getUiPath() != null) {
             if (this.getUiPath() != null) {
                 this.getUiPath().addAll(tempAppConfig.getUiPath());
@@ -144,13 +119,6 @@ public class AppConfig {
                 this.getRelativePath().addAll(tempAppConfig.getRelativePath());
             } else {
                 this.setRelativePath(tempAppConfig.getRelativePath());
-            }
-        }
-        if (tempAppConfig.getTaskHistoryPath() != null) {
-            if (this.getTaskHistoryPath() != null) {
-                this.getTaskHistoryPath().addAll(tempAppConfig.getTaskHistoryPath());
-            } else {
-                this.setTaskHistoryPath(tempAppConfig.getTaskHistoryPath());
             }
         }
         if (tempAppConfig.getResourcePath() != null) {
@@ -169,9 +137,7 @@ public class AppConfig {
             "taskConfig=" + taskConfig +
             ", filesConfig=" + filesConfig +
             ", taskItemsPath=" + taskItemsPath +
-            ", taskComponentPath=" + taskComponentPath +
             ", taskApplicationPath=" + taskApplicationPath +
-            ", taskHistoryPath=" + taskHistoryPath +
             ", relativePath=" + relativePath +
             ", uiPath=" + uiPath +
             ", messageSavePath='" + messageSavePath + '\'' +

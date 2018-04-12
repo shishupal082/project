@@ -12,3 +12,14 @@
 */*/*/.DS_Store
 
 pvt/
+
+java/todo/.idea/*
+java/todo/src/main/main.iml
+java/todo/src/test/test.iml
+java/todo/todo.iml
+java/todo/target/
+java/todo/meta-data/todo-*.jar
+
+java/example/.idea/
+java/example/example.iml
+

@@ -262,3 +262,18 @@ It can also empty array and can be loaded from run time using args
 --------------------------------------------------
 2017-11-10
 app config created to work as standlone application
+
+1.4.1
+=======
+--------------------------------------------------
+2018-03-01
+Added input to each component from reading output dynamically is used for special purpose for parsing component
+so it should not be used for component info
+
+1.4.2
+=======
+--------------------------------------------------
+2018-04-12
+Remove two app config variable
+taskComponentPath and taskHistoryPath as it was not required
+

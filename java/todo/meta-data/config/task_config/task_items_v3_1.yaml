@@ -1,6 +1,6 @@
 ---
 taskItems:
-  - id: _1
+  - id: 104
     component: ["id:string=_1|name:string[]=_hello,world", "id:string=_2|name:string=world", _3]
     options:
       name: Task-1
@@ -14,17 +14,17 @@ taskItems:
       - str_1: 2017-06-04
         str_2: Observed some thing repeated
         str_3: Something old
-  - id: _2
+  - id: 102
     component: [_4, _5]
     options:
       name: Task-2
       location: Task-2 Place
-  - id: _3
+  - id: 103
     component: [_6, _7, _8]
     options:
       name: Task-3
       location: Task-3 Place
-  - id: _4
+  - id: 101
     component: []
     options:
       name: Task-4

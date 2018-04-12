@@ -22,9 +22,7 @@ public class ConfigDetails {
         String availableResourcePathName = "todoConfiguration.availableResourcePath";
         String appConfigPathName = "todoConfiguration.appConfigPath";
         String taskItemsPathName = "todoConfiguration.appConfigPath.taskItemsPath";
-        String taskComponentPathName = "todoConfiguration.appConfigPath.taskComponentPath";
         String taskApplicationPathName = "todoConfiguration.appConfigPath.taskApplicationPath";
-        String taskHistoryPaths = "todoConfiguration.appConfigPath.taskHistoryPath";
 
         Map<String, String> configFilesMapper = new HashMap<String, String>();
         if (todoConfiguration == null) {
@@ -40,14 +38,8 @@ public class ConfigDetails {
         for (int i = 0; i< appConfig.getTaskItemsPath().size(); i++) {
             configFilesMapper.put(taskItemsPathName + "." + i, appConfig.getTaskItemsPath().get(i));
         }
-        for (int i = 0; i< appConfig.getTaskComponentPath().size(); i++) {
-            configFilesMapper.put(taskComponentPathName + "." + i, appConfig.getTaskComponentPath().get(i));
-        }
         for (int i = 0; i< appConfig.getTaskApplicationPath().size(); i++) {
             configFilesMapper.put(taskApplicationPathName + "." + i, appConfig.getTaskApplicationPath().get(i));
-        }
-        for (int i = 0; i< appConfig.getTaskHistoryPath().size(); i++) {
-            configFilesMapper.put(taskHistoryPaths + "." + i, appConfig.getTaskHistoryPath().get(i));
         }
         return configFilesMapper;
     }

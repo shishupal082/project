@@ -63,7 +63,6 @@ public class ConfigService {
         TaskConfig taskConfig = new TaskConfig();
         TaskUpdateService.updateTaskItems(taskConfig, tempAppConfig.getTaskItemsPath());
         TaskUpdateService.updateTaskApplication(taskConfig, tempAppConfig.getTaskApplicationPath());
-        TaskUpdateService.updateTaskComponents(taskConfig, tempAppConfig.getTaskComponentPath());
         logger.info("Final taskItem data : {}", taskConfig.getTaskItems());
         logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
         appConfig.setTaskConfig(taskConfig);
