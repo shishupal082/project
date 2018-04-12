@@ -54,7 +54,7 @@ public class TaskUpdateService {
         logger.info("TaskItems load success.");
 //        logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
-    public static void updateTaskComponents(TaskConfig taskConfig, ArrayList<String> taskComponentsPath) throws TodoException {
+    public static void updateTaskComponents(TaskConfig taskConfig) throws TodoException {
         TaskComponents taskComponents = null;
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();

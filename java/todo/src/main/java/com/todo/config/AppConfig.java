@@ -20,7 +20,6 @@ public class AppConfig {
     private String resourcePath;
     private String addTextPath;
 
-
     public TaskConfig getTaskConfig() {
         return taskConfig;
     }

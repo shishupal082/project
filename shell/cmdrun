@@ -6,5 +6,5 @@ runCommandFolder=$(sed -n "3p" "$venvFolder"cmd-config.txt)
 
 echo ****************Starting application****************
 cd $runCommandFolder
-sh run.sh
+sh run.bat
 echo ****************Application stoped****************
