@@ -12,7 +12,7 @@
 */*/*/.DS_Store
 
 pvt/
-todo/
+todo-app/
 
 java/todo/.idea/*
 java/todo/src/main/main.iml
