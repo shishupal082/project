@@ -279,3 +279,8 @@ java -jar meta-data/todo-1.4.2-bita-SNAPSHOT.jar server meta-data/config/env_con
 Remove two app config variable
 taskComponentPath and taskHistoryPath as it was not required
 
+1.4.1
+=======
+2018-03-01 (Actually added on 2018-04-16)
+Added input to each component from reading output dynamically
+~~~~~ is used for special purpose for parsing component so it should not be used for component info

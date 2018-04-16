@@ -1,7 +1,7 @@
 ---
 taskItems:
   - id: 104
-    component: ["id:string=_1|name:string[]=_hello,world", "id:string=_2|name:string=world", _3]
+    component: ["id:string=_1|name:string[]=_hello,world|out:string[]=_2", "id:string=_2|name:string=world", _3]
     options:
       name: Task-1
       location: Task-1 Place

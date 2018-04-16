@@ -36,6 +36,9 @@ public class TaskUpdateService {
                 result.addAll(taskItems.getTaskItems());
             }
             finalTaskItems.setTaskItems(result);
+            /*
+            * Check for duplicate taskId
+            * */
             ArrayList<String> tempTaskIds = new ArrayList<String>();
             for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
                 if (tempTaskIds.contains(tempTaskItem.getId())) {
@@ -49,6 +52,64 @@ public class TaskUpdateService {
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+        }
+        /*
+        * Add input component for the next element
+        * */
+        Map<String, ArrayList<String>> tempCompOutIdVsCompId = new HashMap<String, ArrayList<String>>();
+        if (finalTaskItems.getTaskItems() != null) {
+            for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
+                String[] taskComponents = tempTaskItem.getComponent();
+                if (taskComponents != null) {
+                    for (String component: taskComponents) {
+                        String componentId = (String) new StringParser(component).getValue("id");
+                        String[] componentOuts = (String []) new StringParser(component).getValue("out");
+                        if (componentOuts != null) {
+                            for (String componentOut: componentOuts) {
+                                if (tempCompOutIdVsCompId.get(componentOut) != null) {
+                                    tempCompOutIdVsCompId.get(componentOut).add(componentId);
+                                } else {
+                                    ArrayList<String> componentIds = new ArrayList<String>();
+                                    componentIds.add(componentId);
+                                    tempCompOutIdVsCompId.put(componentOut, componentIds);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
+                String[] taskComponents = tempTaskItem.getComponent();
+                String updatedComponentStr = null;
+                if (taskComponents != null) {
+                    for (String component: taskComponents) {
+                        if (updatedComponentStr != null) {
+                            updatedComponentStr += "~~~~~" + component;
+                        } else {
+                            updatedComponentStr = component;
+                        }
+                        String componentId = (String) new StringParser(component).getValue("id");
+                        if (tempCompOutIdVsCompId.get(componentId) != null) {
+                            String inputComponentId = null;
+                            for (String compId: tempCompOutIdVsCompId.get(componentId)) {
+                                if (inputComponentId != null) {
+                                    inputComponentId += "," + compId;
+                                } else {
+                                    inputComponentId = compId;
+                                }
+                            }
+                            if (inputComponentId != null) {
+                                if (updatedComponentStr != null) {
+                                    updatedComponentStr +="|in:string[]=" + inputComponentId;
+                                }
+                            }
+                        }
+                    }
+                    if (updatedComponentStr != null) {
+                        tempTaskItem.setComponent(updatedComponentStr.split("~~~~~"));
+                    }
+                }
+            }
         }
         taskConfig.setTaskItems(finalTaskItems.getTaskItems());
         logger.info("TaskItems load success.");
