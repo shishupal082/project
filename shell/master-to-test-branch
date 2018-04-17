@@ -1,0 +1,19 @@
+#!/bin/bash
+git checkout step2
+git rm -r app
+git rm -r c
+git rm -r data
+git rm -r java/example
+git rm -r java/step1
+git rm -r java/todo
+git rm -r java/step3
+git rm -r java/step4
+git rm -r php
+git rm -r python
+git rm -r static
+git rm -r templates
+git rm .htaccess
+git rm index.php
+git rm links.html
+git rm manage.py
+git rm sanitra_app.rb

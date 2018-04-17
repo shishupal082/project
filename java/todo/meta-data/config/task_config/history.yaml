@@ -1,9 +1,0 @@
----
-history:
-  - id: _114
-    history:
-      - date: 2017-05-09
-        change: "options : from_old_value to new_value"
-      - str_1: 2017-06-05
-        str_2: hs_2
-        str_3: hs_3
