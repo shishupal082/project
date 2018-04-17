@@ -1,8 +1,0 @@
-To craete custom command
-
-Add in .bash_profile
-
-SHELL=shell script folder
-PATH=$PATH:$SHELL
-Create shells script file in shell folder
-chmod +x file // Change file permission
