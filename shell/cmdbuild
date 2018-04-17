@@ -1,0 +1,8 @@
+#!/bin/bash
+configFilePath=/custom/cmd-config.txt
+venvFolder=$(sed -n "1p" $configFilePath)
+
+buildCommandFolder=$(sed -n "3p" "$venvFolder"cmd-config.txt)
+
+cd $buildCommandFolder
+sh build.sh
