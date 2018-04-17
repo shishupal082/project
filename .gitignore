@@ -13,6 +13,7 @@
 
 pvt/
 todo-app/
+todo-app*
 
 java/todo/.idea/*
 java/todo/src/main/main.iml
