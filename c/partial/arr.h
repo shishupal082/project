@@ -1,6 +1,7 @@
 void print(int a[], int start_index, int last_endex){
     int i;
     for (i=start_index; i<=last_endex; i++) {
+    	/*This is used to avoid space at the end of display*/
         if(i<last_endex){
             printf("%d ", a[i]);
         } else {
