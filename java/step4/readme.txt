@@ -19,8 +19,26 @@ java -jar Step4.jar
 
 HelloWorld
 -----------
+Method-1]
+**************
+
 javac -d "out" -sourcepath src "src/HelloWorld.java"
+
+Note: If out directory is not there then it will not compile
+	  If success It will create a file HelloWorld.class
+	  Which can be run after going to out folder and type the command "java HelloWorld"
+
+
+Method-2]
+**************
+
+If you want to run that class from step4 directory then type below command
+Command "java out/HelloWorld" will not work
+
 java -classpath ".:out/" HelloWorld
+
+Method-3]
+**************
 
 First go to out folder then run below command
 
