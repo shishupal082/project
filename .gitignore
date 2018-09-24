@@ -26,9 +26,9 @@ java/example/.idea/
 java/example/example.iml
 
 
-java/.class
-java/*/.class
-java/*/*/.class
-java/*/*/*/.class
-java/*/*/*/*/.class
-java/*/*/*/*/*/.class
+java/*.class
+java/*/*.class
+java/*/*/*.class
+java/*/*/*/*.class
+java/*/*/*/*/*.class
+java/*/*/*/*/*/*.class
