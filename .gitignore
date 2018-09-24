@@ -25,3 +25,10 @@ java/todo/meta-data/todo-*.jar
 java/example/.idea/
 java/example/example.iml
 
+
+java/.class
+java/*/.class
+java/*/*/.class
+java/*/*/*/.class
+java/*/*/*/*/.class
+java/*/*/*/*/*/.class
