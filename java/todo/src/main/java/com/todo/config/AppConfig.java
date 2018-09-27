@@ -4,10 +4,13 @@ import com.todo.file.config.FilesConfig;
 import com.todo.task.config.TaskConfig;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * Created by shishupalkumar on 18/05/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AppConfig {
     private TaskConfig taskConfig;
     private FilesConfig filesConfig;
@@ -19,6 +22,7 @@ public class AppConfig {
     private String messageSavePath;
     private String resourcePath;
     private String addTextPath;
+    private Map<String, String> tcpIpConfig;
 
     public TaskConfig getTaskConfig() {
         return taskConfig;
@@ -129,6 +133,21 @@ public class AppConfig {
         if (tempAppConfig.getAddTextPath() != null) {
             this.setAddTextPath(tempAppConfig.getAddTextPath());
         }
+        if (tempAppConfig.getTcpIpConfig() != null) {
+            if (tcpIpConfig != null) {
+                tcpIpConfig.putAll(tempAppConfig.getTcpIpConfig());
+            } else {
+                tcpIpConfig = tempAppConfig.getTcpIpConfig();
+            }
+        }
+    }
+
+    public Map<String, String> getTcpIpConfig() {
+        return tcpIpConfig;
+    }
+
+    public void setTcpIpConfig(Map<String, String> tcpIpConfig) {
+        this.tcpIpConfig = tcpIpConfig;
     }
     @Override
     public String toString() {
@@ -142,6 +161,7 @@ public class AppConfig {
             ", messageSavePath='" + messageSavePath + '\'' +
             ", resourcePath='" + resourcePath + '\'' +
             ", addTextPath='" + addTextPath + '\'' +
+            ", tcpIpConfig='" + tcpIpConfig + '\'' +
             '}';
     }
 }

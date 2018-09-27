@@ -53,28 +53,26 @@ public class ConfigService {
         return appConfig;
     }
     public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
-        this.appConfig = new AppConfig();
-        updateFilesConfig(appConfig, appConfigPath);
-        updateTaskConfig(appConfig, appConfigPath);
+        this.appConfig = getAppConfig(appConfigPath);
+        logger.info("AppConfig loaded with data : {}", appConfig);
+        updateFilesConfig(appConfigPath);
+        updateTaskConfig(appConfigPath);
     }
-    public void updateTaskConfig(AppConfig appConfig, ArrayList<String> appConfigPath) throws TodoException {
-        AppConfig tempAppConfig = getAppConfig(appConfigPath);
-        logger.info("TempAppConfig loaded with data : {}", tempAppConfig);
+    public void updateTaskConfig(ArrayList<String> appConfigPath) throws TodoException {
         TaskConfig taskConfig = new TaskConfig();
-        TaskUpdateService.updateTaskItems(taskConfig, tempAppConfig.getTaskItemsPath());
-        TaskUpdateService.updateTaskApplication(taskConfig, tempAppConfig.getTaskApplicationPath());
+        TaskUpdateService.updateTaskItems(taskConfig, appConfig.getTaskItemsPath());
+        TaskUpdateService.updateTaskApplication(taskConfig, appConfig.getTaskApplicationPath());
         TaskUpdateService.updateTaskComponents(taskConfig);
         logger.info("Final taskItem data : {}", taskConfig.getTaskItems());
         logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
         appConfig.setTaskConfig(taskConfig);
     }
-    public void updateFilesConfig(AppConfig appConfig, ArrayList<String> appConfigPath) throws TodoException {
+    public void updateFilesConfig(ArrayList<String> appConfigPath) throws TodoException {
         FilesConfig filesConfig = new FilesConfig();
-        AppConfig tempAppConfig = getAppConfig(appConfigPath);
-        filesConfig.setMessageSavePath(tempAppConfig.getMessageSavePath());
-        filesConfig.setRelativePath(tempAppConfig.getRelativePath());
-        filesConfig.setUiPath(tempAppConfig.getUiPath());
-        filesConfig.setAddTextPath(tempAppConfig.getAddTextPath());
+        filesConfig.setMessageSavePath(appConfig.getMessageSavePath());
+        filesConfig.setRelativePath(appConfig.getRelativePath());
+        filesConfig.setUiPath(appConfig.getUiPath());
+        filesConfig.setAddTextPath(appConfig.getAddTextPath());
         appConfig.setFilesConfig(filesConfig);
     }
     public YamlObject getYamlObject() throws TodoException {

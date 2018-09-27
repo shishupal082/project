@@ -55,7 +55,7 @@ public class ConfigResource {
     @GET
     public TaskConfig updateTasks() throws TodoException {
         logger.info("updateTasks : in");
-        configService.updateTaskConfig(configService.getAppConfig(), todoConfiguration.getAppConfigPath());
+        configService.updateTaskConfig(todoConfiguration.getAppConfigPath());
         TaskConfig taskConfig = configService.getTaskConfig();
         logger.info("updateTasks : out");
         return taskConfig;
@@ -72,7 +72,7 @@ public class ConfigResource {
     @GET
     public FilesConfig updateFilesConfig() throws TodoException {
         logger.info("updateFilesConfig : in");
-        configService.updateFilesConfig(configService.getAppConfig(), todoConfiguration.getAppConfigPath());
+        configService.updateFilesConfig(todoConfiguration.getAppConfigPath());
         FilesConfig filesConfig = configService.getFileConfig();
         logger.info("updateFilesConfig : out");
         return filesConfig;

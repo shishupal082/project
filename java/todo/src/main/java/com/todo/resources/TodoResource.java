@@ -19,6 +19,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,12 +33,14 @@ public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     private TodoFileConfig todoFileConfig;
     private SocketService socketService;
+    private Map<String, String> tcpIpConfig;
     @Context
     private HttpServletRequest httpServletRequest;
     public TodoResource (TodoConfiguration todoConfiguration, TodoFileConfig todoFileConfig) {
         this.todoFileConfig = todoFileConfig;
         TodoDbParser todoDbParser = new FileParser();
         TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
+        tcpIpConfig = todoConfiguration.getConfigService().getAppConfig().getTcpIpConfig();
         logger.info("Todos : {}", todoDatabase.getTodoMap());
         logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
         logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
@@ -85,6 +88,18 @@ public class TodoResource {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         String response = socketService.getSocketResponse(query);
+        logger.info("getSocketResponse : Out : response : {}", response);
+        return response;
+    }
+    @Path("/socket/v2")
+    @GET
+    public String getSocketResponse(@QueryParam("query") String query, @QueryParam("service") String serviceName) throws TodoException {
+        logger.info("getSocketResponse : In : service : {} : query : {}", serviceName, query);
+        if (query == null) {
+            logger.info("getSocketResponse : throw : TodoException : {}", ErrorCodes.BAD_REQUEST_ERROR);
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String response = socketService.getSocketResponseV2(tcpIpConfig, serviceName, query);
         logger.info("getSocketResponse : Out : response : {}", response);
         return response;
     }

@@ -30,6 +30,9 @@ resources:
   - url: /todo/api/v1/socket?query=127.0.0.1!!!8000!!!test|END
     name: Call socket
     help: /todo/api/v1/socket?query=127.0.0.1!!!8000!!!test|END
+  - url: /todo/api/v1/socket/v2?query=test|END&service=self
+    name: Call socket v2
+    help: /todo/api/v1/socket/v2?query=test|END&service=self
   - url: /config/api/v1/yaml
     name: "[data] Get yaml object"
     help: /config/api/v1/yaml

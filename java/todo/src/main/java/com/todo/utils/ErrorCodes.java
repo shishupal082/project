@@ -10,6 +10,8 @@ public enum ErrorCodes {
     BAD_REQUEST_ERROR("Bad request error", "Bad request error", 401),
     FILE_NOT_FOUND("File not found", "File not found", 402),
     INVALID_QUERY_PARAMS("Invalid query params", "Invalid query params", 403),
+    INVALID_SERVICE_NAME_EMPTY("Invalid service name Empty", "Invalid service name Empty", 403),
+    INVALID_SERVICE_NAME("Invalid service name", "Invalid service name", 403),
     TASK_COMPONENT_NOT_FOUND("Component not found", "Component not found", 403),
     TASK_APPLICATION_NOT_FOUND("Application not found", "Application not found", 403),
     CONFIG_ERROR_INVALID_SAVE_MSG_PATH("Invalid save message path", "Invalid save message path", 403),
