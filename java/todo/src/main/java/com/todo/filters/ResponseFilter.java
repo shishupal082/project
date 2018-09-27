@@ -29,12 +29,12 @@ public class ResponseFilter implements ContainerResponseFilter {
     private HttpServletResponse httpServletResponse;
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
-        HttpSession httpSession = null;
-        Cookie sessionCookie = new Cookie(AppConstant.COOKIE_NAME, String.valueOf(UUID.randomUUID()));
+        HttpSession httpSession = httpServletRequest.getSession();
+        String  responseCookieData = (String) httpSession.getAttribute(AppConstant.SESSION_COOKIE_DATA);
+        Cookie sessionCookie = new Cookie(AppConstant.COOKIE_NAME, responseCookieData);
         sessionCookie.setPath("/");
         httpServletResponse.addCookie(sessionCookie);
-//        httpSession = httpServletRequest.getSession();
-        logger.info("ResponseFilter executed sessionCookie : {}, httpSession : {}",
-            sessionCookie.getValue(), httpSession);
+        logger.info("ResponseFilter executed sessionCookie : {}",
+            sessionCookie.getValue());
     }
 }

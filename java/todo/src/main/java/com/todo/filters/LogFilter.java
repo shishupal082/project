@@ -23,15 +23,19 @@ import javax.ws.rs.ext.Provider;
 @Priority(500) // Highest priority filter
 @Provider
 public class LogFilter implements ContainerRequestFilter {
-    private static Logger logger = LoggerFactory.getLogger(LogFilter.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(LogFilter.class);
     @Context
     private HttpServletRequest httpServletReq;
 
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String requestId = String.valueOf(UUID.randomUUID());
-        logger.info("Logger requestId generated : {}", requestId);
-        MDC.remove(AppConstant.X_REQUEST_Id);
-        MDC.put(AppConstant.X_REQUEST_Id, requestId);
+        LOGGER.info("Logger requestId generated : {}", requestId);
+        MDC.remove(AppConstant.X_REQUEST_ID);
+        MDC.put(AppConstant.X_REQUEST_ID, requestId);
+    }
+    public static void addSessionIdInLog(String sessionId) throws IOException {
+        MDC.remove(AppConstant.X_SESSION_ID);
+        MDC.put(AppConstant.X_SESSION_ID, sessionId);
     }
 }
 

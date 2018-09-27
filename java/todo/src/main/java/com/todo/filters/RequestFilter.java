@@ -39,14 +39,15 @@ public class RequestFilter implements ContainerRequestFilter {
     }
     public void filter(final ContainerRequestContext requestContext) throws IOException {
         String cookieData = getCookieData(AppConstant.COOKIE_NAME);
-        HttpSession httpSession = null;
-        try {
-//            httpSession = httpServletRequest.getSession();
-//            httpSession.setAttribute("requestFilterIdentifier", UUID.randomUUID());
-//            logger.info("httpSession : {}", httpSession);
-        } catch (Exception e) {
-            logger.info("Error in accessing httpSession : {}", e);
+        String newCookieData = null;
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (cookieData == null || cookieData.equals("")) {
+            newCookieData = UUID.randomUUID().toString();
+            logger.info("Invalid session cookieData : {}, Created new : {}", cookieData, newCookieData);
+            cookieData = newCookieData;
         }
-        logger.info("RequestFilter executed, cookieData : {}, httpSession : {}", cookieData, httpSession);
+        LogFilter.addSessionIdInLog(cookieData);
+        httpSession.setAttribute(AppConstant.SESSION_COOKIE_DATA, cookieData);
+        logger.info("RequestFilter executed, cookieData : {}", cookieData);
     }
 }
