@@ -284,3 +284,10 @@ taskComponentPath and taskHistoryPath as it was not required
 2018-03-01 (Actually added on 2018-04-16)
 Added input to each component from reading output dynamically
 ~~~~~ is used for special purpose for parsing component so it should not be used for component info
+
+
+1.4.3
+=======
+2018-09-27
+Added session handler in project
+Added socket v2 api so that tcpi/ip configuration can be saved in app config file
