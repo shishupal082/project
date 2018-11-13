@@ -15,7 +15,7 @@
 		"jquery_ui_js" : "/static/libs/jquery_ui/jquery-ui.js",
 		"jquery_ui_1.8.16" : "/static/libs/jquery-ui-1.8.16.min.js",
 		"pvt_validate_plugins" : "/static/libs/pvt_validate_plugins.js",
-		"bootstrap" : "/static/libs/bootstrap/bootstrap-v2.2.2/js/bootstrap.js",
+		"bootstrap" : "/static/libs/bootstrap/bootstrap-v3.1.1/js/bootstrap.js",
 		"bootstrap_datepicker" : "/static/libs/bootstrap/bootstarp-datepicker/bootstrap-datepicker.js",
 		"cc" : "/static/bootstrap/bootstarp_datepicker/cc.js",
 		"jquery_timepicker_p" : "/static/libs/jquery_timepicker_p/jquery.timepicker.js",
@@ -52,7 +52,7 @@
 	},
 	"css":{
 		"bootstrap-v3.1.1" : "/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css",
-		"bootstrap" : "/static/libs/bootstrap/bootstrap-v2.2.2/css/bootstrap.css",
+		"bootstrap" : "/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css",
 		"chosen_css" : "/static/libs/chosen/chosen.css",
 		"jquery_ui_css_1.8.16" : "/static/libs/jquery_ui/jquery-ui-1.8.16.css",
 		"style" : "/static/css/style.css",

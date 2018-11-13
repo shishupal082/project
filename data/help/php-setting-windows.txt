@@ -1,0 +1,10 @@
+Download apache
+Put it into C drive
+Run httpd.exe using command line or from services
+After configuration it should server
+--------------------------------------------------
+Php setup
+Download php (preferably 5)
+Keep it into C drive
+Configure php 5 properly with apache
+Then it should work properly
