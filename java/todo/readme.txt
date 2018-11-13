@@ -291,3 +291,47 @@ Added input to each component from reading output dynamically
 2018-09-27
 Added session handler in project
 Added socket v2 api so that tcpi/ip configuration can be saved in app config file
+
+1.4.4
+=======
+2018-10-16
+
+Added different fonts and symbols in assets folder
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url(../fonts/glyphicons-halflings-regular.eot);
+  src: url(../fonts/glyphicons-halflings-regular.eot?#iefix)
+    format('embedded-opentype'),
+    url(../fonts/glyphicons-halflings-regular.woff2) format('woff2'),
+    url(../fonts/glyphicons-halflings-regular.woff) format('woff'),
+    url(../fonts/glyphicons-halflings-regular.ttf) format('truetype'),
+    url(../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular)
+    format('svg')
+}
+
+@font-face {
+  font-family: 'RobotoItalic';
+  font-style: 'italic';
+  font-weight: 400;
+  src: local('Roboto Italic'), 
+       local('Roboto-Italic'), 
+       url(Roboto-Italic.ttf) 
+       format('woff');
+}
+
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale
+}
+
+.glyphicon-asterisk:before {
+  content: "\002a"
+}
