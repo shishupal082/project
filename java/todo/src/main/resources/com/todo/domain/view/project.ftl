@@ -13,7 +13,7 @@
         value='<#list projectViewParams.pathParams as path>${path}/</#list>'
     />
     <input type="text" name="version" value='${projectViewParams.version}' />
-    <input type="text" name="version" value='${projectViewParams.config}' />
+    <input type="text" name="config" value='${projectViewParams.config}' />
 </div>
 ${projectViewParams.html}
 <#if projectViewParams.projectNotFound>

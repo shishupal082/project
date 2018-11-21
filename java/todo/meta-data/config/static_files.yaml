@@ -5,6 +5,7 @@ projectData:
   - version: projectDashboard
     title: Project Dashboard
     html: "<center>Project Dashboard</center>"
+    config: test:string=123
     cssFiles:
       - bootstrap-3.3.7-css
   - title: Project Test v7
