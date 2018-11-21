@@ -1,0 +1,115 @@
+fileMapping:
+  bootstrap-3.3.7-css: /assets/static/bootstrap-3.3.7-dist/css/bootstrap.css
+  jquery-1.8.3-js: /assets/static/jquery-1.8.3.js
+projectData:
+  - version: projectDashboard
+    title: Project Dashboard
+    html: "<center>Project Dashboard</center>"
+    cssFiles:
+      - bootstrap-3.3.7-css
+  - title: Project Test v7
+    html: "<center>Project Test v7</center>"
+    pattern:
+      - p0
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      - p7
+    patternParams:
+      - p0
+      - p1
+      - p2
+      - p3
+      - p4
+      - p5
+      - p6
+      - p7
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js
+  - title: Project Test v6
+    html: "<center>Project Test v6</center>"
+    pattern:
+      - p3
+      - p4
+      - p6
+    patternParams:
+      - p3
+      - p4
+      - p6
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js
+  - title: Project Test v5
+    html: "<center>Project Test v5</center>"
+    pattern:
+      - p0
+      - p5
+    patternParams:
+      - p0
+      - p5
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js
+  - title: Project Test v4
+    html: "<center>Project Test v4</center>"
+    pattern:
+      - p0
+      - p1
+      - p2
+      - p4
+    patternParams:
+      - p0
+      - p1
+      - p2
+      - p4
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js
+  - title: Project Test v3
+    html: "<center>Project Test v3</center>"
+    pattern:
+      - p0
+      - p1
+      - p2
+      - p3
+    patternParams:
+      - p0
+      - p1
+      - p2
+      - p3
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js
+  - title: Project Test v2
+    html: "<center>Project Test v2</center>"
+    pattern:
+      - p0
+      - p1
+      - p2
+    patternParams:
+      - p0
+      - p1
+      - p2
+    cssFiles:
+      - bootstrap-3.3.7-css
+  - title: Project Test v1
+    html: "<center>Project Test v1</center>"
+    pattern:
+      - p0
+      - p1
+    patternParams:
+      - p0
+      - p1
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - jquery-1.8.3-js

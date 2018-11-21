@@ -1,0 +1,19 @@
+fileMapping:
+  bootstarp-3.3.7-css: /assets/static/bootstrap-3.3.7-dist/css/bootstrap.css
+projectData:
+  - title:
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - start.js
+  - title: Project Test
+    pattern:
+      - p1
+      - p2
+    patternParams:
+      - ui
+      - index.html
+    cssFiles:
+      - bootstrap-3.3.7-css
+    jsFiles:
+      - start.js

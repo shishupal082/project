@@ -39,6 +39,12 @@ resources:
   - url: /config/api/v1/resource
     name: "[data] Available resource"
     help: /config/api/v1/resource
+  - url: /config/api/v1/get/app-config
+    name: "[data] Get App Config"
+    help: /config/api/v1/get/app-config
+  - url: /config/api/v1/update/app-config
+    name: "[data] Update App Config"
+    help: /config/api/v1/update/app-config
   - url: /config/api/v1/get/task
     name: "[data] Get task config"
     help: /config/api/v1/get/task
@@ -48,9 +54,15 @@ resources:
   - url: /config/api/v1/get/files
     name: "[data] Get file config"
     help: /config/api/v1/get/files
-  - url: /config/api/v1/update/files
-    name: "[data] Update file config"
-    help: /config/api/v1/update/files
+  - url: /config/api/v1/get/project-static-data
+    name: "[data] Get project-static-data"
+    help: /config/api/v1/get/project-static-data
+  - url: /config/api/v1/update/project-static-data
+    name: "[data] Update project-static-data"
+    help: /config/api/v1/update/project-static-data
+#  - url: /config/api/v1/update/files
+#    name: "[data] Update file config"
+#    help: /config/api/v1/update/files
   - url: /config/api/v1/get/client-details
     name: "[data] Get client details"
     help: /config/api/v1/get/client-details
@@ -159,3 +171,33 @@ resources:
   - url: /task/api/v3/app/id/app-1
     name: Get app by id - v3
     help: /task/api/v3/app/id/{id}
+  - url: /project
+    name: Project Dashboard
+    help: /project
+  - url: /project/p0
+    name: Project v0
+    help: /project/p0
+  - url: /project/p0/p1
+    name: Project v1
+    help: /project/p0/p1
+  - url: /project/p0/p1/p2
+    name: Project v2
+    help: /project/p0/p1/p2
+  - url: /project/p0/p1/p2/p3
+    name: Project v3
+    help: /project/p0/p1/p2/p3
+  - url: /project/p0/p1/p2/p3/p4
+    name: Project v4
+    help: /project/p0/p1/p2/p3/p4
+  - url: /project/p0/p1/p2/p3/p4/p5
+    name: Project v5
+    help: /project/p0/p1/p2/p3/p4/p5
+  - url: /project/p0/p1/p2/p3/p4/p5/p6
+    name: Project v6
+    help: /project/p0/p1/p2/p3/p4/p5/p6
+  - url: /project/p0/p1/p2/p3/p4/p5/p6/p7
+    name: Project v7
+    help: /project/p0/p1/p2/p3/p4/p5/p6/p7
+  - url: /project/p0/p1/p2/p3/p4/p5/p6/p7/*
+    name: Project (404)
+    help: /project/p0/p1/p2/p3/p4/p5/p6/p7/* => 404

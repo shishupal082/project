@@ -1,8 +1,10 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.config.AppConfig;
 import com.todo.config.ClientDetails;
 import com.todo.config.ResourceDetails;
+import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.services.ConfigService;
@@ -33,6 +35,10 @@ public class ConfigResource {
         configService = new ConfigService(todoConfiguration);
         this.todoConfiguration.setConfigService(configService);
         configService.updateAppConfig(todoConfiguration.getAppConfigPath());
+        configService.updateFilesConfig();
+        configService.updateTaskConfig();
+        configService.updateProjectStaticData(
+                configService.getAppConfig().getProjectStaticDataConfigPath());
     }
     @Path("/v1/yaml")
     @GET
@@ -51,14 +57,20 @@ public class ConfigResource {
         logger.info("getResourceDetails : Out");
         return resourceDetails;
     }
-    @Path("/v1/update/task")
+    @Path("/v1/get/app-config")
     @GET
-    public TaskConfig updateTasks() throws TodoException {
-        logger.info("updateTasks : in");
-        configService.updateTaskConfig(todoConfiguration.getAppConfigPath());
-        TaskConfig taskConfig = configService.getTaskConfig();
-        logger.info("updateTasks : out");
-        return taskConfig;
+    public AppConfig getAppConfig() throws TodoException {
+        logger.info("getAppConfig : in");
+        logger.info("getAppConfig : out");
+        return configService.getAppConfig();
+    }
+    @Path("/v1/update/app-config")
+    @GET
+    public AppConfig updateAppConfig() throws TodoException {
+        logger.info("updateAppConfig : in");
+        configService.updateAppConfig(todoConfiguration.getAppConfigPath());
+        logger.info("updateAppConfig : out : {}");
+        return configService.getAppConfig();
     }
     @Path("/v1/get/task")
     @GET
@@ -68,14 +80,32 @@ public class ConfigResource {
         logger.info("getTaskConfig : out");
         return taskConfig;
     }
-    @Path("/v1/update/files")
+    @Path("/v1/update/task")
     @GET
-    public FilesConfig updateFilesConfig() throws TodoException {
-        logger.info("updateFilesConfig : in");
-        configService.updateFilesConfig(todoConfiguration.getAppConfigPath());
-        FilesConfig filesConfig = configService.getFileConfig();
-        logger.info("updateFilesConfig : out");
-        return filesConfig;
+    public TaskConfig updateTasks() throws TodoException {
+        logger.info("updateTasks : in");
+        configService.updateTaskConfig();
+        TaskConfig taskConfig = configService.getTaskConfig();
+        logger.info("updateTasks : out");
+        return taskConfig;
+    }
+    @Path("/v1/get/project-static-data")
+    @GET
+    public ProjectStaticData getProjectStaticData() throws TodoException {
+        logger.info("getProjectStaticData : in");
+        ProjectStaticData projectStaticData = configService.getAppConfig().getProjectStaticData();
+        logger.info("getProjectStaticData : out : {}", projectStaticData);
+        return projectStaticData;
+    }
+    @Path("/v1/update/project-static-data")
+    @GET
+    public ProjectStaticData updateProjectStaticData() throws TodoException {
+        logger.info("updateProjectStaticData : in");
+        configService.updateProjectStaticData(
+                configService.getAppConfig().getProjectStaticDataConfigPath());
+        ProjectStaticData projectStaticData = configService.getAppConfig().getProjectStaticData();
+        logger.info("updateProjectStaticData : out : {}", projectStaticData);
+        return projectStaticData;
     }
     @Path("/v1/get/files")
     @GET

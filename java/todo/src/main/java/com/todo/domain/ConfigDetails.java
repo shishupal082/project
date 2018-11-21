@@ -31,7 +31,7 @@ public class ConfigDetails {
         }
         configFilesMapper.put(yamlObjectPathName, todoConfiguration.getYamlObjectPath());
         configFilesMapper.put(availableResourcePathName, todoConfiguration.getAvailableResourcePath());
-        AppConfig appConfig = ConfigService.getAppConfig(todoConfiguration.getAppConfigPath());
+        AppConfig appConfig = todoConfiguration.getConfigService().getAppConfig();
         for (int i=0; i<todoConfiguration.getAppConfigPath().size(); i++) {
             configFilesMapper.put(appConfigPathName + "." + i, todoConfiguration.getAppConfigPath().get(i));
         }

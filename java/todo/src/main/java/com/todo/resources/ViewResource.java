@@ -36,10 +36,13 @@ public class ViewResource {
     @GET
     public IndexView indexPage() {
         logger.info("Loading indexPage");
-        ConfigService configService = new ConfigService(todoConfiguration);
+        ConfigService configService = todoConfiguration.getConfigService();
+        /*
+        * It will load resource path from app Config
+        * */
         return new IndexView(httpServletRequest,
-            configService.getResourceDetails(
-                ConfigService.getAppConfig(todoConfiguration.getAppConfigPath()).getResourcePath()));
+            configService.getResourceDetails(configService.getAppConfig().getResourcePath()),
+                configService.getAppConfig().getIndexPageReRoute());
     }
     @GET
     @Path("index")
@@ -47,20 +50,16 @@ public class ViewResource {
         logger.info("getIndex : routing from /index to /");
         return Response.seeOther(new URI("/")).build();
     }
-//    @GET
-//    @Path("view/build")
-//    public CommonView buildDetails() {
-//        logger.info("Loading buildDetails");
-//        ConfigService configService = new ConfigService(todoConfiguration);
-//        return new CommonView(httpServletRequest, "build.ftl");
-//    }
     @GET
     @Path("view/resource")
     public IndexView getViewResource() {
         logger.info("Loading indexPage");
-        ConfigService configService = new ConfigService(todoConfiguration);
+        ConfigService configService = todoConfiguration.getConfigService();
+        /*
+         * It will load resource path from env_config
+         * */
         return new IndexView(httpServletRequest,
-            configService.getResourceDetails(todoConfiguration.getAvailableResourcePath()));
+            configService.getResourceDetails(todoConfiguration.getAvailableResourcePath()), null);
     }
     @GET
     @Path("view/dashboard")

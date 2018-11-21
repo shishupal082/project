@@ -14,3 +14,7 @@ addTextPath: meta-data/log/log/
 tcpIpConfig:
   self: "127.0.0.1:8001"
 temp: meta-data/log/log/
+indexPageReRoute:
+projectStaticDataConfigPath:
+  - meta-data/config/static_files.yaml
+  - meta-data/config/static_files_b.yaml

@@ -335,3 +335,35 @@ Added different fonts and symbols in assets folder
 .glyphicon-asterisk:before {
   content: "\002a"
 }
+
+2018-11-19
+===============
+Created new project resource
+/project => projectDashboard
+/project/p0
+/project/p0/p1
+/project/p0/p1/p2
+/project/p0/p1/p2/p3
+/project/p0/p1/p2/p3/p4
+/project/p0/p1/p2/p3/p4/p5
+/project/p0/p1/p2/p3/p4/p5/p6
+/project/p0/p1/p2/p3/p4/p5/p6/p7
+/project/p0/p1/p2/p3/p4/p5/p6/p7/* => 404
+
+If pattern matches at two places then first will get priority
+
+
+Removed resource as it was not implemented properly
+
+- /config/api/v1/get/files
+
+Added get and update project-static-data api
+
+- /config/api/v1/get/project-static-data
+- /config/api/v1/update/project-static-data
+
+Added appConfigParamaters
+  indexPageReRoute: /config/api/v1/get/project-static-data
+  projectStaticDataConfigPath:
+    - meta-data/config/static_files.yaml
+    - meta-data/config/static_files_b.yaml

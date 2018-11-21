@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
 import com.todo.config.AppConfig;
 import com.todo.config.ResourceDetails;
+import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.task.config.TaskConfig;
@@ -53,12 +54,18 @@ public class ConfigService {
         return appConfig;
     }
     public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
-        this.appConfig = getAppConfig(appConfigPath);
-        logger.info("AppConfig loaded with data : {}", appConfig);
-        updateFilesConfig(appConfigPath);
-        updateTaskConfig(appConfigPath);
+        AppConfig tempAppConfig = getAppConfig(appConfigPath);
+        logger.info("AppConfig loaded with data : {}", tempAppConfig);
+        if (appConfig == null) {
+            appConfig =tempAppConfig;
+        } else {
+            tempAppConfig.setTaskConfig(appConfig.getTaskConfig());
+            tempAppConfig.setFilesConfig(appConfig.getFilesConfig());
+            tempAppConfig.setProjectStaticData(appConfig.getProjectStaticData());
+            appConfig = tempAppConfig;
+        }
     }
-    public void updateTaskConfig(ArrayList<String> appConfigPath) throws TodoException {
+    public void updateTaskConfig() throws TodoException {
         TaskConfig taskConfig = new TaskConfig();
         TaskUpdateService.updateTaskItems(taskConfig, appConfig.getTaskItemsPath());
         TaskUpdateService.updateTaskApplication(taskConfig, appConfig.getTaskApplicationPath());
@@ -67,13 +74,37 @@ public class ConfigService {
         logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
         appConfig.setTaskConfig(taskConfig);
     }
-    public void updateFilesConfig(ArrayList<String> appConfigPath) throws TodoException {
+    public void updateFilesConfig() throws TodoException {
         FilesConfig filesConfig = new FilesConfig();
         filesConfig.setMessageSavePath(appConfig.getMessageSavePath());
         filesConfig.setRelativePath(appConfig.getRelativePath());
         filesConfig.setUiPath(appConfig.getUiPath());
         filesConfig.setAddTextPath(appConfig.getAddTextPath());
         appConfig.setFilesConfig(filesConfig);
+    }
+    public void updateProjectStaticData(ArrayList<String> projectStaticDataConfigPath)
+            throws TodoException {
+        ProjectStaticData projectStaticData = new ProjectStaticData();
+        if (projectStaticDataConfigPath == null) {
+            logger.info("projectStaticDataConfigPath is NULL");
+        } else {
+            ProjectStaticData tempProjectStaticData;
+            for (String fileName : projectStaticDataConfigPath) {
+                logger.info("Processing projectStaticData from : {}", fileName);
+                try {
+                    tempProjectStaticData = mapper.readValue(new File(fileName),
+                            ProjectStaticData.class);
+                    if (tempProjectStaticData != null) {
+                        projectStaticData.merge(tempProjectStaticData);
+                    }
+                } catch (IOException ioe) {
+                    logger.info("IOE : for file : {}, {}", fileName, ioe);
+                    logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+                }
+            }
+        }
+        logger.info("Final projectStaticData : {}", projectStaticData);
+        appConfig.setProjectStaticData(projectStaticData);
     }
     public YamlObject getYamlObject() throws TodoException {
         YamlObject yamlObject = null;

@@ -39,6 +39,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new ViewResource(todoConfiguration,
             todoConfiguration.getTodoViewConfig()));
         environment.jersey().register(new TaskResource(todoConfiguration));
+        environment.jersey().register(new ProjectResource(todoConfiguration));
     }
     public static void main(String[] args) throws Exception {
         appConfigPath = new ArrayList<String>();

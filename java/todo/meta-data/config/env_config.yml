@@ -11,9 +11,9 @@ logging:
       threshold: ALL
       timeZone: UTC
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      currentLogFilename: /log/todo/application.log
+      currentLogFilename: /var/log/project/java_log/application.log
 #      currentLogFilename: meta-data/log/todo/application.log
-      archivedLogFilenamePattern: /log/todo/application-%d{yyyy-MM-dd}-%i.log.gz
+      archivedLogFilenamePattern: /var/log/java_log/application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 5
 
 server:

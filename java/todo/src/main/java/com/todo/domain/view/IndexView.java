@@ -16,11 +16,22 @@ import java.util.ArrayList;
 public class IndexView extends View {
     private static Logger logger = LoggerFactory.getLogger(IndexView.class);
     private ResourceDetails resourceDetails;
-    public IndexView(HttpServletRequest httpServletRequest, ResourceDetails resourceDetails) {
+    private String indexPageReRoute;
+    public IndexView(HttpServletRequest httpServletRequest, ResourceDetails resourceDetails,
+                     String indexPageReRoute) {
         super("index.ftl");
         this.resourceDetails = resourceDetails;
+        if (indexPageReRoute == null) {
+            indexPageReRoute = "";
+        }
+        this.indexPageReRoute = indexPageReRoute;
         logger.info("Loading IndexView.");
     }
+
+    public String getIndexPageReRoute() {
+        return indexPageReRoute;
+    }
+
     public ArrayList<Resource> getResourceDetails() {
         return resourceDetails.getResources();
     }

@@ -1,10 +1,10 @@
 package com.todo.config;
 
+import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.file.config.FilesConfig;
 import com.todo.task.config.TaskConfig;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class AppConfig {
     private TaskConfig taskConfig;
     private FilesConfig filesConfig;
+    private ProjectStaticData projectStaticData;
 
     private ArrayList<String> taskItemsPath;
     private ArrayList<String> taskApplicationPath;
@@ -23,6 +24,8 @@ public class AppConfig {
     private String resourcePath;
     private String addTextPath;
     private Map<String, String> tcpIpConfig;
+    private String indexPageReRoute;
+    private ArrayList<String> projectStaticDataConfigPath;
 
     public TaskConfig getTaskConfig() {
         return taskConfig;
@@ -38,6 +41,14 @@ public class AppConfig {
 
     public void setFilesConfig(FilesConfig filesConfig) {
         this.filesConfig = filesConfig;
+    }
+
+    public ProjectStaticData getProjectStaticData() {
+        return projectStaticData;
+    }
+
+    public void setProjectStaticData(ProjectStaticData projectStaticData) {
+        this.projectStaticData = projectStaticData;
     }
 
     public ArrayList<String> getTaskItemsPath() {
@@ -140,6 +151,18 @@ public class AppConfig {
                 tcpIpConfig = tempAppConfig.getTcpIpConfig();
             }
         }
+        if (tempAppConfig.getIndexPageReRoute() != null) {
+            this.setIndexPageReRoute(tempAppConfig.getIndexPageReRoute());
+        } else {
+            indexPageReRoute = tempAppConfig.getIndexPageReRoute();
+        }
+        if (tempAppConfig.getProjectStaticDataConfigPath() != null) {
+            if (projectStaticDataConfigPath != null) {
+                projectStaticDataConfigPath.addAll(tempAppConfig.getProjectStaticDataConfigPath());
+            } else {
+                projectStaticDataConfigPath = tempAppConfig.getProjectStaticDataConfigPath();
+            }
+        }
     }
 
     public Map<String, String> getTcpIpConfig() {
@@ -149,19 +172,36 @@ public class AppConfig {
     public void setTcpIpConfig(Map<String, String> tcpIpConfig) {
         this.tcpIpConfig = tcpIpConfig;
     }
+
+    public String getIndexPageReRoute() {
+        return indexPageReRoute;
+    }
+
+    public void setIndexPageReRoute(String indexPageReRoute) {
+        this.indexPageReRoute = indexPageReRoute;
+    }
+
+    public ArrayList<String> getProjectStaticDataConfigPath() {
+        return projectStaticDataConfigPath;
+    }
+
+    public void setProjectStaticDataConfigPath(ArrayList<String> projectStaticDataConfigPath) {
+        this.projectStaticDataConfigPath = projectStaticDataConfigPath;
+    }
+
     @Override
     public String toString() {
         return "AppConfig{" +
-            "taskConfig=" + taskConfig +
-            ", filesConfig=" + filesConfig +
-            ", taskItemsPath=" + taskItemsPath +
-            ", taskApplicationPath=" + taskApplicationPath +
-            ", relativePath=" + relativePath +
-            ", uiPath=" + uiPath +
-            ", messageSavePath='" + messageSavePath + '\'' +
-            ", resourcePath='" + resourcePath + '\'' +
-            ", addTextPath='" + addTextPath + '\'' +
-            ", tcpIpConfig='" + tcpIpConfig + '\'' +
-            '}';
+                "taskItemsPath=" + taskItemsPath +
+                ", taskApplicationPath=" + taskApplicationPath +
+                ", relativePath=" + relativePath +
+                ", uiPath=" + uiPath +
+                ", messageSavePath='" + messageSavePath + '\'' +
+                ", resourcePath='" + resourcePath + '\'' +
+                ", addTextPath='" + addTextPath + '\'' +
+                ", tcpIpConfig=" + tcpIpConfig +
+                ", indexPageReRoute='" + indexPageReRoute + '\'' +
+                ", projectStaticDataConfigPath=" + projectStaticDataConfigPath +
+                '}';
     }
 }
