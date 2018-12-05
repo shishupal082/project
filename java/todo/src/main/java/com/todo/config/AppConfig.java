@@ -153,8 +153,6 @@ public class AppConfig {
         }
         if (tempAppConfig.getIndexPageReRoute() != null) {
             this.setIndexPageReRoute(tempAppConfig.getIndexPageReRoute());
-        } else {
-            indexPageReRoute = tempAppConfig.getIndexPageReRoute();
         }
         if (tempAppConfig.getProjectStaticDataConfigPath() != null) {
             if (projectStaticDataConfigPath != null) {

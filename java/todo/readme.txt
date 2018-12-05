@@ -367,3 +367,52 @@ Added appConfigParamaters
   projectStaticDataConfigPath:
     - meta-data/config/static_files.yaml
     - meta-data/config/static_files_b.yaml
+
+1.4.5
+===============
+2018-12-05
+===============
+For appConfigParamaters
+  indexPageReRoute: /config/api/v1/get/project-static-data
+
+If app config is having multiple files then
+    indexPageReRoute will be updated by the next files only when next file indexPageReRoute is not null
+
+static_files data format
+fileMapping:
+  bootstrap-3.3.7-css: /assets/static/bootstrap-3.3.7-dist/css/bootstrap.css
+  jquery-1.8.3-js: /assets/static/jquery-1.8.3.js
+projectData:
+  - version: projectDashboard
+    title: Project Dashboard
+    html: "<center>Project Dashboard</center>"
+    config: test:string=123
+    cssFiles:
+      - bootstrap-3.3.7-css
+
+1) version => string
+  can be projectDashboard, v0, v1, ..., v7 (Total 8)
+  projectViewVersion is passed from Project Resource
+2) title => string
+3) config => string
+4) html => string
+5) cssFiles => array of string
+6) jsFiles => array of string
+7) pattern => array of string
+  pattern:
+        - p0
+        - p1
+        - p2
+        - p3
+        - p4
+        - p5
+        - p6
+        - p7
+8) patternParams => array of string
+  patternParams:
+    - url-param-0
+    - url-param-1
+    .
+    .
+    .
+
