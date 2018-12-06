@@ -461,3 +461,4 @@ Pom file version updated from 1.4.5 to 1.4.6
 Added log if appConfig parameters is replaced with new value for resourcePath, addTextPath and indexPageReRoute
 
 Added trim before reroute from index page
+Added version for loading index.js file for resource page index.ftl
