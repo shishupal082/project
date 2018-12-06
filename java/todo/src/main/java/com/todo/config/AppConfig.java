@@ -7,11 +7,15 @@ import com.todo.task.config.TaskConfig;
 import java.util.ArrayList;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by shishupalkumar on 18/05/17.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AppConfig {
+    private static Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
     private TaskConfig taskConfig;
     private FilesConfig filesConfig;
     private ProjectStaticData projectStaticData;
@@ -136,12 +140,20 @@ public class AppConfig {
             }
         }
         if (tempAppConfig.getResourcePath() != null) {
+            if (resourcePath != null) {
+                LOGGER.info("Replacing old resourcePath : {} with : {}",
+                        resourcePath, tempAppConfig.getResourcePath());
+            }
             this.setResourcePath(tempAppConfig.getResourcePath());
         }
         if (tempAppConfig.getMessageSavePath() != null) {
             this.setMessageSavePath(tempAppConfig.getMessageSavePath());
         }
         if (tempAppConfig.getAddTextPath() != null) {
+            if (addTextPath != null) {
+                LOGGER.info("Replacing old addTextPath : {} with : {}",
+                        addTextPath, tempAppConfig.getAddTextPath());
+            }
             this.setAddTextPath(tempAppConfig.getAddTextPath());
         }
         if (tempAppConfig.getTcpIpConfig() != null) {
@@ -152,6 +164,10 @@ public class AppConfig {
             }
         }
         if (tempAppConfig.getIndexPageReRoute() != null) {
+            if (indexPageReRoute != null) {
+                LOGGER.info("Replacing old indexPageReRoute : {} with : {}",
+                        indexPageReRoute, tempAppConfig.getIndexPageReRoute());
+            }
             this.setIndexPageReRoute(tempAppConfig.getIndexPageReRoute());
         }
         if (tempAppConfig.getProjectStaticDataConfigPath() != null) {

@@ -23,6 +23,6 @@
     </div>
 </div>
 <script type="text/javascript" src="/assets/static/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="/assets/static/js/index.js"></script>
+<script type="text/javascript" src="/assets/static/js/index.js?v=${appVersion}"></script>
 </body>
 </html>

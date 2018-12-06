@@ -2,7 +2,7 @@ package com.todo.domain.view;
 
 import com.todo.config.Resource;
 import com.todo.config.ResourceDetails;
-import com.todo.resources.TodoResource;
+import com.todo.constants.AppConstant;
 import io.dropwizard.views.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +17,21 @@ public class IndexView extends View {
     private static Logger logger = LoggerFactory.getLogger(IndexView.class);
     private ResourceDetails resourceDetails;
     private String indexPageReRoute;
+    private String appVersion;
     public IndexView(HttpServletRequest httpServletRequest, ResourceDetails resourceDetails,
-                     String indexPageReRoute) {
+                     String indexPageReRoute2) {
         super("index.ftl");
         this.resourceDetails = resourceDetails;
-        if (indexPageReRoute == null) {
-            indexPageReRoute = "";
+        if (indexPageReRoute2 == null) {
+            indexPageReRoute2 = "";
         }
-        this.indexPageReRoute = indexPageReRoute;
+        this.indexPageReRoute = indexPageReRoute2;
+        this.appVersion = AppConstant.AppVersion;
         logger.info("Loading IndexView.");
     }
-
+    public String getAppVersion() {
+        return appVersion;
+    }
     public String getIndexPageReRoute() {
         return indexPageReRoute;
     }

@@ -8,11 +8,12 @@
     <title>${projectViewParams.title}</title>
 </head>
 <body>
-<div style="display:none;">
-    <input type="text" name="pathParams" value='<#list projectViewParams.pathParams as path>${path}/</#list>' />
-    <input type="text" name="version" value='${projectViewParams.version}' />
-    <input type="text" name="config" value='${projectViewParams.config}' />
-</div>
+    <div id="ui-view" class="ui-view"></div>
+    <div style="display:none;">
+        <input type="text" name="pathParams" value='<#list projectViewParams.pathParams as path>${path}/</#list>' />
+        <input type="text" name="version" value='${projectViewParams.version}' />
+        <input type="text" name="config" value='${projectViewParams.config}' />
+    </div>
 ${projectViewParams.html}
 <#if projectViewParams.projectNotFound>
     <center>Page not found : 404</center>

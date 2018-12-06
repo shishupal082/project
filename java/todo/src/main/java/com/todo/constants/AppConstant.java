@@ -14,4 +14,5 @@ public class AppConstant {
     public static final String IP = "IP";
     public static final String PORT = "PORT";
     public static final String ProjectDashboard = "projectDashboard";
+    public static final String AppVersion = "1.4.6";
 }

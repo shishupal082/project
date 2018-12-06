@@ -416,3 +416,48 @@ projectData:
     .
     .
 
+
+1.4.6
+=================
+2018-12-06
+=================
+Added ui-view div in project.ftl
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<#list projectViewParams.cssFiles as css>
+    <link rel="stylesheet" type="text/css" href="${css}">
+</#list>
+    <title>${projectViewParams.title}</title>
+</head>
+<body>
+    <div id="ui-view" class="ui-view"></div>
+    <div style="display:none;">
+        <input type="text" name="pathParams" value='<#list projectViewParams.pathParams as path>${path}/</#list>' />
+        <input type="text" name="version" value='${projectViewParams.version}' />
+        <input type="text" name="config" value='${projectViewParams.config}' />
+    </div>
+${projectViewParams.html}
+<#if projectViewParams.projectNotFound>
+    <center>Page not found : 404</center>
+    <center><a href="/project">Goto Project Dashboard</a></center>
+</#if>
+<#list projectViewParams.jsFiles as js>
+<script type="text/javascript" src="${js}"></script>
+</#list>
+</body>
+</html>
+
+Jquery 1.6.2.min changes => a.jQuery=a.$=a.$162=f;
+Jquery 1.8.3 changes => window.jQuery = window.$ = window.$183 = jQuery;
+Jquery 1.9.0 changes => window.jQuery = window.$ = window.$190 = jQuery;
+Jquery 2.1.3 changes => window.jQuery = window.$ = window.$213 = jQuery;
+
+Added AppConstant.appVersion = 1.4.6
+This constant is also added in client-details api
+Pom file version updated from 1.4.5 to 1.4.6
+Added log if appConfig parameters is replaced with new value for resourcePath, addTextPath and indexPageReRoute
+
+Added trim before reroute from index page
