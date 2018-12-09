@@ -9,6 +9,7 @@ import com.todo.task.config.response.TaskComponentDetails;
 import com.todo.task.config.response.PathComponentDetails;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.TodoException;
+import com.todo.yaml.todo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,10 +117,8 @@ public class TaskUpdateService {
 //        logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
     public static void updateTaskComponents(TaskConfig taskConfig) throws TodoException {
-        TaskComponents taskComponents = null;
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
-        String parsingPath = null;
         try {
             ArrayList<TaskItem> tempTaskItems = taskConfig.getTaskItems();
             Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
@@ -181,6 +180,40 @@ public class TaskUpdateService {
                             }
                         }
                     }
+                    if (taskApplication.getPaths() == null) {
+                        continue;
+                    }
+                    for (Path path: taskApplication.getPaths()) {
+                        if (path == null) {
+                            continue;
+                        }
+                        ArrayList<ArrayList<String>> pathDetails = path.getDetails();
+                        if(pathDetails != null) {
+                            for (ArrayList<String> pathComponents : pathDetails) {
+                                if (pathComponents != null) {
+                                    for (String pathComponent : pathComponents) {
+                                        String pathCompId = (String) new StringParser(pathComponent).getValue("id");
+                                        if (pathCompId == null) {
+//                                            logger.info("pathCompId is null for pathComponent : {}", pathComponent);
+                                            continue;
+                                        }
+                                        TaskComponent tempTaskComponent = result.get(pathCompId);
+                                        if (tempTaskComponent == null) {
+//                                            logger.info("tempTaskComponent is null for pathCompId : {}", pathCompId);
+                                            continue;
+                                        }
+                                        PathComponentDetails pathComponentDetails = new PathComponentDetails();
+                                        pathComponentDetails.setAppId(taskApplication.getId());
+                                        pathComponentDetails.setComponent(pathComponent);
+                                        pathComponentDetails.setPath(path.getName());
+                                        pathComponentDetails.setComponentId(pathCompId);
+                                        tempTaskComponent.getAppDetails().add(pathComponentDetails);
+                                        result.put(pathCompId, tempTaskComponent);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             finalTaskComponents.setTaskComponent(result);
@@ -201,7 +234,11 @@ public class TaskUpdateService {
             for (String taskApplicationPath: taskApplicationsPath) {
                 parsingPath = taskApplicationPath;
                 taskApplications = mapper.readValue(new File(taskApplicationPath), TaskApplications.class);
-                result.addAll(taskApplications.getTaskApplications());
+                if (taskApplications != null) {
+                    result.addAll(taskApplications.getTaskApplications());
+                } else {
+                    logger.info("TaskApplications are null for : {}", parsingPath);
+                }
             }
             finalTaskApplications.setTaskApplications(result);
         } catch (IOException e) {

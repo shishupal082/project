@@ -1,15 +1,19 @@
-package com.todo.task.config;
+package com.todo.yaml.todo;
 
 import java.util.ArrayList;
 import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.todo.yaml.todo.Path;
 
 /**
  * Created by shishupalkumar on 17/02/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskApplication {
     private String id;
     private Map<String, String> options;
     private ArrayList<Map<String, String>> history;
+    private ArrayList<Path> paths;
     private Map<String, String[][]> path;
 
     public String getId() {
@@ -26,6 +30,14 @@ public class TaskApplication {
 
     public void setOptions(Map<String, String> options) {
         this.options = options;
+    }
+
+    public ArrayList<Path> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(ArrayList<Path> paths) {
+        this.paths = paths;
     }
 
     public Map<String, String[][]> getPath() {
@@ -47,10 +59,11 @@ public class TaskApplication {
     @Override
     public String toString() {
         return "TaskApplication{" +
-            "id='" + id + '\'' +
-            ", options=" + options +
-            ", history=" + history +
-            ", path=" + path +
-            '}';
+                "id='" + id + '\'' +
+                ", options=" + options +
+                ", history=" + history +
+                ", paths=" + paths +
+                ", path=" + path +
+                '}';
     }
 }

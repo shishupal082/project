@@ -28,6 +28,9 @@ Name : TodoApplication
 Main class : com.todo.TodoApplication
 Program arguments : server env_config_path
 
+Example of EditConfigurations --> Program arguments
+   - server meta-data/config/env_config.yml meta-data/config/app_config.yaml meta-data/config/app_config_2.yaml
+
 1.0
 =========
 Always verify there should not be duplicate entry for taskComponent.
@@ -210,7 +213,6 @@ Bug fix for
 
 Multiple component was visible for the single entry if same component is used at multiple place in same app and
 Same is reflected in the task componentDetails
-
 
 2017-06-13
 ==============
@@ -455,10 +457,37 @@ Jquery 1.8.3 changes => window.jQuery = window.$ = window.$183 = jQuery;
 Jquery 1.9.0 changes => window.jQuery = window.$ = window.$190 = jQuery;
 Jquery 2.1.3 changes => window.jQuery = window.$ = window.$213 = jQuery;
 
-Added AppConstant.appVersion = 1.4.6
+Added AppConstant.AppVersion = 1.4.6
 This constant is also added in client-details api
 Pom file version updated from 1.4.5 to 1.4.6
 Added log if appConfig parameters is replaced with new value for resourcePath, addTextPath and indexPageReRoute
 
 Added trim before reroute from index page
 Added version for loading index.js file for resource page index.ftl
+
+1.5.0
+==================
+2018-12-09
+==================
+one more attribute paths added in taskApplication
+paths:
+  - name: string
+    details: ArrayList<ArrayList<String>>
+
+It help in rendering application path the way it is added in yaml file
+
+Now taskApplications can have:
+---
+taskApplications
+  - id: String
+    paths:
+      - name: String
+        details: ArrayList<ArrayList<String>>
+    path:
+       String: String[][]
+    options:
+       String: String
+    history:
+       - String: String
+         String: String
+Try to avoid uring path instead use paths

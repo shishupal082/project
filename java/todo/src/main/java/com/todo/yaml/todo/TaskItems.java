@@ -1,11 +1,12 @@
-package com.todo.task.config;
+package com.todo.yaml.todo;
 
 import java.util.ArrayList;
-import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * Created by shishupalkumar on 17/02/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskItems {
     private ArrayList<TaskItem> taskItems;
 

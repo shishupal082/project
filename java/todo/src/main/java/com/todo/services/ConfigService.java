@@ -57,7 +57,7 @@ public class ConfigService {
         AppConfig tempAppConfig = getAppConfig(appConfigPath);
         logger.info("AppConfig loaded with data : {}", tempAppConfig);
         if (appConfig == null) {
-            appConfig =tempAppConfig;
+            appConfig = tempAppConfig;
         } else {
             tempAppConfig.setTaskConfig(appConfig.getTaskConfig());
             tempAppConfig.setFilesConfig(appConfig.getFilesConfig());
