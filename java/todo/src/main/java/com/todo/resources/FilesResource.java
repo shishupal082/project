@@ -3,7 +3,6 @@ package com.todo.resources;
 import com.todo.TodoConfiguration;
 import com.todo.domain.ConfigDetails;
 import com.todo.domain.view.CommonView;
-import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
 import com.todo.file.domain.ScanResult;
@@ -42,7 +41,6 @@ public class FilesResource {
     public FilesResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
         this.filesService = new FilesService(todoConfiguration);
-        filesService.verifyConfigPath();
     }
     //    @Path("/v1/upload")
 //    @POST
@@ -119,6 +117,7 @@ public class FilesResource {
                                     @FormParam("overwrite") String overwrite) throws TodoException {
         boolean overWrite = "yes".equals(overwrite);
         logger.info("fileQuerySubmit : In : {}, {}, {}, {}", message, fileName, ext, overWrite);
+        filesService.isValidDir(todoConfiguration.getConfigService().getFileConfig().getMessageSavePath(), "Save message");
         String response = filesService.saveMessage(message, fileName, ext, overWrite, 0);
         logger.info("fileQuerySubmit : Out : response : {}", response);
         response = "<center><span>" + response
@@ -425,7 +424,13 @@ public class FilesResource {
     public Response addTextToFile(@QueryParam("fileName") String fileName,
                                       @QueryParam("text") String text) throws TodoException {
         logger.info("addTextToFile {}, {}", fileName, text);
-        String res = filesService.addNewLine(text, fileName);
+        String res = "Error";
+        try {
+            filesService.isValidDir(todoConfiguration.getConfigService().getFileConfig().getAddTextPath(), "Add Text");
+            res = filesService.addNewLine(text, fileName);
+        } catch (Exception e) {
+            logger.info("Error in saving text : {}, in file : {}", text, fileName);
+        }
         logger.info("addTextToFile out.");
         return Response.ok(res).build();
     }

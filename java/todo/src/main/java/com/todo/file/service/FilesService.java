@@ -3,7 +3,6 @@ package com.todo.file.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
-import com.todo.file.config.FilesConfig;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
 import com.todo.file.domain.ScanResult;
@@ -318,16 +317,21 @@ public class FilesService {
     public String addNewLine(String text, String fileName) throws TodoException {
         logger.info("Add new line text : {}, in: fileName = {} : countTry = {}", text, fileName);
         if (text == null) {
-            logger.info("Text is null, Need to add new line.");
+            logger.info("Text is null, Not rquired to add new line.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         if (fileName == null) {
             logger.info("Invalid fileName.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        String pathName = todoConfiguration.getConfigService().getFileConfig().getAddTextPath();
+        if (pathName == null) {
+            logger.info("appConfig addTextPath is null.");
+            throw new TodoException(ErrorCodes.CONFIG_ERROR);
+        }
         String response = "Error";
         try {
-            File file = new File(todoConfiguration.getConfigService().getFileConfig().getAddTextPath() + fileName);
+            File file = new File(pathName + fileName);
             if (file.isFile()) {
                 Writer writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(file, true), "UTF-8"));
@@ -354,23 +358,22 @@ public class FilesService {
         }
         return response;
     }
-    public void verifyConfigPath() throws TodoException {
-        String saveMsgPath = todoConfiguration.getConfigService().getFileConfig().getMessageSavePath();
+    public void isValidDir(String pathName, String logStr) throws TodoException {
         try {
-            File folder = new File(saveMsgPath);
+            File folder = new File(pathName);
             if (folder.isFile()) {
-                logger.info("Save message path is a file not directory : {}", saveMsgPath);
-                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+                logger.info("{} is a file not directory : {}", logStr, pathName);
+                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
             }
             if (folder.listFiles() == null) {
-                logger.info("Save message path is invalid : {}", saveMsgPath);
-                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+                logger.info("{} path is invalid : {}", logStr, pathName);
+                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
             }
-            logger.info("Save message path is verified : {}", saveMsgPath);
+//            logger.info("{} path is verified : {}", logStr, pathName);
         } catch (Exception e) {
-            logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH.getErrorString());
+//            logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_PATH.getErrorString());
             logger.info("Current working directory is : {}", System.getProperty("user.dir"));
-            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_SAVE_MSG_PATH);
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
         }
     }
     public String parseFilePath(String filePath) {

@@ -15,8 +15,10 @@ public enum ErrorCodes {
     TASK_COMPONENT_NOT_FOUND("Component not found", "Component not found", 403),
     TASK_APPLICATION_NOT_FOUND("Application not found", "Application not found", 403),
     CONFIG_ERROR_INVALID_SAVE_MSG_PATH("Invalid save message path", "Invalid save message path", 403),
+    CONFIG_ERROR_INVALID_PATH("Invalid path", "Invalid path", 403),
     DUPLICATE_ENTRY("Duplicate entry", "Duplicate entry", 405),
-    SERVER_ERROR("Server error", "Server error", 500);
+    SERVER_ERROR("Server error", "Server error", 500),
+    CONFIG_ERROR("Configuration error", "Configuration error", 500);
 
     private String errorCode;
     private String errorString;
