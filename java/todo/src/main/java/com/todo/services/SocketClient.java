@@ -14,6 +14,7 @@ public class SocketClient {
 		try {
 			client = new Socket();
 	        client.connect(new InetSocketAddress(serverName, port), 10000);
+			logger.info("Socket connection success on {}:{}", serverName, port);
 		} catch (Exception e) {
 			logger.info("Socket connection error : {}", e);
 		}
