@@ -189,6 +189,7 @@ public class TaskService {
         Map<String, Object> response = new HashMap<String, Object>();
         response.put("id", taskApplication.getId());
         response.put("path", taskApplication.getPath());
+        response.put("paths", taskApplication.getPaths());
         response.put("options", taskApplication.getOptions());
         if ("v2".equals(version)) {
             response.put("pathComponent", getPathComponentByPath(taskApplication));
