@@ -29,39 +29,39 @@ public class TaskService {
         return (String) stringParser.getValue("id");
     }
 
-    private Object getPathComponentByPath(TaskApplication taskApplication) {
-        Map<String, ArrayList<ArrayList<PathComponentDetails>>> response =
-            new HashMap<String, ArrayList<ArrayList<PathComponentDetails>>>();
-        Map<String, String[][]> applicationPath = taskApplication.getPath();
-        if (applicationPath == null) {
-            logger.info("applicationPath is null");
-            return null;
-        }
-        for (Map.Entry<String, String[][]> entry : applicationPath.entrySet()) {
-            ArrayList<ArrayList<PathComponentDetails>> pathComponentDetails =
-                new ArrayList<ArrayList<PathComponentDetails>>();
-            for (String[] strings : entry.getValue()) {
-                ArrayList<PathComponentDetails> componentDetails = new ArrayList<PathComponentDetails>();
-                for (String component: strings) {
-                    String compId = parseComponentId(component);
-                    if (compId == null) {
-                        logger.info("PathComponentId is null for component : {}, taskApplication : {}",
-                            component, taskApplication);
-                        continue;
-                    }
-                    PathComponentDetails pathComponentDetails3 = new PathComponentDetails();
-                    pathComponentDetails3.setAppId(taskApplication.getId());
-                    pathComponentDetails3.setComponent(component);
-                    pathComponentDetails3.setPath(entry.getKey());
-                    pathComponentDetails3.setComponentId(compId);
-                    componentDetails.add(pathComponentDetails3);
-                }
-                pathComponentDetails.add(componentDetails);
-            }
-            response.put(entry.getKey(), pathComponentDetails);
-        }
-        return response;
-    }
+//    private Object getPathComponentByPath(TaskApplication taskApplication) {
+//        Map<String, ArrayList<ArrayList<PathComponentDetails>>> response =
+//            new HashMap<String, ArrayList<ArrayList<PathComponentDetails>>>();
+//        Map<String, String[][]> applicationPath = taskApplication.getPath();
+//        if (applicationPath == null) {
+//            logger.info("applicationPath is null");
+//            return null;
+//        }
+//        for (Map.Entry<String, String[][]> entry : applicationPath.entrySet()) {
+//            ArrayList<ArrayList<PathComponentDetails>> pathComponentDetails =
+//                new ArrayList<ArrayList<PathComponentDetails>>();
+//            for (String[] strings : entry.getValue()) {
+//                ArrayList<PathComponentDetails> componentDetails = new ArrayList<PathComponentDetails>();
+//                for (String component: strings) {
+//                    String compId = parseComponentId(component);
+//                    if (compId == null) {
+//                        logger.info("PathComponentId is null for component : {}, taskApplication : {}",
+//                            component, taskApplication);
+//                        continue;
+//                    }
+//                    PathComponentDetails pathComponentDetails3 = new PathComponentDetails();
+//                    pathComponentDetails3.setAppId(taskApplication.getId());
+//                    pathComponentDetails3.setComponent(component);
+//                    pathComponentDetails3.setPath(entry.getKey());
+//                    pathComponentDetails3.setComponentId(compId);
+//                    componentDetails.add(pathComponentDetails3);
+//                }
+//                pathComponentDetails.add(componentDetails);
+//            }
+//            response.put(entry.getKey(), pathComponentDetails);
+//        }
+//        return response;
+//    }
     private ArrayList<Object> getTaskComponents(String[] componentIds) {
         ArrayList<Object> response = new ArrayList<Object>();
         if (componentIds == null) {
@@ -192,9 +192,9 @@ public class TaskService {
         response.put("paths", taskApplication.getPaths());
         response.put("options", taskApplication.getOptions());
         if ("v2".equals(version)) {
-            response.put("pathComponent", getPathComponentByPath(taskApplication));
+//            response.put("pathComponent", getPathComponentByPath(taskApplication));
         } else if ("v3".equals(version)) {
-            response.put("pathComponent", getPathComponentByPath(taskApplication));
+//            response.put("pathComponent", getPathComponentByPath(taskApplication));
             response.put("history", taskApplication.getHistory());
         }
         return response;

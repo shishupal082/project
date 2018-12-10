@@ -491,3 +491,16 @@ taskApplications
        - String: String
          String: String
 Try to avoid uring path instead use paths
+2018-12-10
+====================
+Removed pathComponent from v2 and v3 api
+Therefore v1 and v2 api will be same and v3 will contains history
+
+
+/api/v1/app/all
+/api/v2/app/all
+/api/v3/app/all
+/api/v1/app/id/{appId}
+/api/v2/app/id/{appId}
+/api/v3/app/id/{appId}
+
