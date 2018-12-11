@@ -504,3 +504,31 @@ Therefore v1 and v2 api will be same and v3 will contains history
 /api/v2/app/id/{appId}
 /api/v3/app/id/{appId}
 
+2018-12-11
+===================
+Added json dependencies in pom file
+<dependency>
+    <groupId>com.googlecode.json-simple</groupId>
+    <artifactId>json-simple</artifactId>
+    <version>1.1.1</version>
+</dependency>
+
+FileConfig class file deleted as it was redundent same thing was already in appConfig class
+
+Remove taskConfig, filesConfig and projectStaticData from appConfig
+
+Added private HashMap<String, String> jsonFileMapping in appConfig
+
+  - appConfig file added one jsonFileMapping variable
+
+jsonFileMapping:
+  sample_json_file2: meta-data/config/sample_json_file.json
+
+
+Removed api /config/api/v1/get/files as it was not required
+Added api /files/v1/read_json for reading direct json file from api
+
+Added two variable taskConfig and projectStaticData in config service similar to appConfig
+
+
+

@@ -17,6 +17,7 @@ public class ProjectStaticData {
         this.fileMapping = fileMapping;
     }
 
+
     public ArrayList<ProjectData> getProjectData() {
         return projectData;
     }
@@ -26,17 +27,22 @@ public class ProjectStaticData {
     }
 
     public void merge(ProjectStaticData tempProjectStaticData) {
-        if (fileMapping != null && tempProjectStaticData.getFileMapping() != null) {
-            fileMapping.putAll(tempProjectStaticData.getFileMapping());
-        } else {
-            fileMapping = tempProjectStaticData.getFileMapping();
+        if (tempProjectStaticData.getFileMapping() != null) {
+            if (this.getFileMapping() != null) {
+                this.getFileMapping().putAll(tempProjectStaticData.getFileMapping());
+            } else {
+                this.setFileMapping(tempProjectStaticData.getFileMapping());
+            }
         }
-        if (projectData != null && tempProjectStaticData.getProjectData() != null) {
-            projectData.addAll(tempProjectStaticData.getProjectData());
-        } else {
-            projectData = tempProjectStaticData.getProjectData();
+        if (tempProjectStaticData.getProjectData() != null) {
+            if (this.getProjectData() != null) {
+                this.getProjectData().addAll(tempProjectStaticData.getProjectData());
+            } else {
+                this.setProjectData(tempProjectStaticData.getProjectData());
+            }
         }
     }
+
     @Override
     public String toString() {
         return "ProjectStaticData{" +

@@ -180,6 +180,8 @@ public class TaskUpdateService {
                             }
                         }
                     }
+                }
+                for(TaskApplication taskApplication : taskApplications.getTaskApplications()) {
                     if (taskApplication.getPaths() == null) {
                         continue;
                     }

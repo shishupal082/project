@@ -5,7 +5,6 @@ import com.todo.config.AppConfig;
 import com.todo.config.ClientDetails;
 import com.todo.config.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.services.ConfigService;
 import com.todo.task.config.TaskConfig;
@@ -35,7 +34,6 @@ public class ConfigResource {
         configService = new ConfigService(todoConfiguration);
         this.todoConfiguration.setConfigService(configService);
         configService.updateAppConfig(todoConfiguration.getAppConfigPath());
-        configService.updateFilesConfig();
         configService.updateTaskConfig();
         configService.updateProjectStaticData(
                 configService.getAppConfig().getProjectStaticDataConfigPath());
@@ -93,7 +91,7 @@ public class ConfigResource {
     @GET
     public ProjectStaticData getProjectStaticData() throws TodoException {
         logger.info("getProjectStaticData : in");
-        ProjectStaticData projectStaticData = configService.getAppConfig().getProjectStaticData();
+        ProjectStaticData projectStaticData = configService.getProjectStaticData();
         logger.info("getProjectStaticData : out : {}", projectStaticData);
         return projectStaticData;
     }
@@ -103,17 +101,9 @@ public class ConfigResource {
         logger.info("updateProjectStaticData : in");
         configService.updateProjectStaticData(
                 configService.getAppConfig().getProjectStaticDataConfigPath());
-        ProjectStaticData projectStaticData = configService.getAppConfig().getProjectStaticData();
+        ProjectStaticData projectStaticData = configService.getProjectStaticData();
         logger.info("updateProjectStaticData : out : {}", projectStaticData);
         return projectStaticData;
-    }
-    @Path("/v1/get/files")
-    @GET
-    public FilesConfig getFileConfig() throws TodoException {
-        logger.info("getFileConfig : in");
-        FilesConfig filesConfig = configService.getFileConfig();
-        logger.info("getFileConfig : out");
-        return filesConfig;
     }
     @Path("/v1/get/client-details")
     @GET

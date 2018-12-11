@@ -23,7 +23,13 @@ import javax.ws.rs.core.Response;
 import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Created by shishupalkumar on 01/02/17.
@@ -117,7 +123,7 @@ public class FilesResource {
                                     @FormParam("overwrite") String overwrite) throws TodoException {
         boolean overWrite = "yes".equals(overwrite);
         logger.info("fileQuerySubmit : In : {}, {}, {}, {}", message, fileName, ext, overWrite);
-        filesService.isValidDir(todoConfiguration.getConfigService().getFileConfig().getMessageSavePath(), "Save message");
+        filesService.isValidDir(todoConfiguration.getConfigService().getAppConfig().getMessageSavePath(), "Save message");
         String response = filesService.saveMessage(message, fileName, ext, overWrite, 0);
         logger.info("fileQuerySubmit : Out : response : {}", response);
         response = "<center><span>" + response
@@ -310,7 +316,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -329,7 +335,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -377,7 +383,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -397,7 +403,7 @@ public class FilesResource {
         String scanDir = null, folderPath;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
             folderPath = scanDir;
         } catch (Exception e) {
@@ -426,12 +432,20 @@ public class FilesResource {
         logger.info("addTextToFile {}, {}", fileName, text);
         String res = "Error";
         try {
-            filesService.isValidDir(todoConfiguration.getConfigService().getFileConfig().getAddTextPath(), "Add Text");
+            filesService.isValidDir(todoConfiguration.getConfigService().getAppConfig().getAddTextPath(), "Add Text");
             res = filesService.addNewLine(text, fileName);
         } catch (Exception e) {
             logger.info("Error in saving text : {}, in file : {}", text, fileName);
         }
         logger.info("addTextToFile out.");
         return Response.ok(res).build();
+    }
+    @Path("/v1/read_json")
+    @GET
+    public Object readJsonFile(@QueryParam("fileRef") String fileRef) throws TodoException {
+        logger.info("readJsonFile : {}", fileRef);
+        Object obj = filesService.getJsonFileResponse(fileRef);
+        logger.info("readJsonFile out.");
+        return obj;
     }
 }

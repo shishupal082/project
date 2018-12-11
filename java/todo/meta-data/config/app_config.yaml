@@ -18,3 +18,6 @@ indexPageReRoute:
 projectStaticDataConfigPath:
   - meta-data/config/static_files.yaml
   - meta-data/config/static_files_b.yaml
+
+jsonFileMapping:
+  sample_json_file2: meta-data/config/sample_json_file.json

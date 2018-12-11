@@ -3,6 +3,7 @@ package com.todo.file.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.constants.AppConstant;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
 import com.todo.file.domain.ScanResult;
@@ -16,7 +17,13 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Created by shishupalkumar on 01/02/17.
@@ -135,7 +142,7 @@ public class FilesService {
     }
     public FileDetails getStaticFileDetails(String fileName) throws TodoException {
         FileDetails fileDetails = new FileDetails();
-        ArrayList<String> folderPath = todoConfiguration.getConfigService().getFileConfig().getUiPath();
+        ArrayList<String> folderPath = todoConfiguration.getConfigService().getAppConfig().getUiPath();
         for (String folder : folderPath) {
             fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
             if (fileDetails.getFile() != null) {
@@ -156,7 +163,7 @@ public class FilesService {
             logger.info("File : {}, is configuration file, path : {}", fileName, filePath);
             fileDetails = getFileDetailsFromPath(filePath, filePath);
         } else {
-            ArrayList<String> folderPath = todoConfiguration.getConfigService().getFileConfig().getRelativePath();
+            ArrayList<String> folderPath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
             for (String folder : folderPath) {
                 fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
                 if (fileDetails.getFile() != null) {
@@ -174,7 +181,7 @@ public class FilesService {
     public ArrayList<ScanResult> scanAllDirectory(boolean isRecursive) {
         ScanResult scanResult;
         ArrayList<ScanResult> scanResults = new ArrayList<ScanResult>();
-        for (String scanDir : todoConfiguration.getConfigService().getFileConfig().getRelativePath()) {
+        for (String scanDir : todoConfiguration.getConfigService().getAppConfig().getRelativePath()) {
             scanResult = scanDirectory(scanDir, scanDir, isRecursive);
             scanResults.add(scanResult);
         }
@@ -272,7 +279,7 @@ public class FilesService {
         if (ext == null) {
             ext = ".txt";
         }
-        String filePath = todoConfiguration.getConfigService().getFileConfig().getMessageSavePath() + fileName + ext;
+        String filePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath() + fileName + ext;
         try {
             File file = new File(filePath);
             boolean fileCreated = file.createNewFile();
@@ -324,7 +331,7 @@ public class FilesService {
             logger.info("Invalid fileName.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        String pathName = todoConfiguration.getConfigService().getFileConfig().getAddTextPath();
+        String pathName = todoConfiguration.getConfigService().getAppConfig().getAddTextPath();
         if (pathName == null) {
             logger.info("appConfig addTextPath is null.");
             throw new TodoException(ErrorCodes.CONFIG_ERROR);
@@ -389,5 +396,46 @@ public class FilesService {
             }
         }
         return filePath;
+    }
+    public Object getJsonFileResponse (final String jsonFileRef) throws TodoException {
+        Object obj = null;
+        String fileName = null;
+        JSONParser jsonParser = new JSONParser();
+        if (jsonFileRef == null) {
+            logger.info("Invalid request jsonFileRef : null");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        try {
+            HashMap<String, String> jsonFileMapping = todoConfiguration.getConfigService()
+                    .getAppConfig().getJsonFileMapping();
+            if (jsonFileMapping == null) {
+                logger.info("Invalid config jsonFileMapping : null");
+            } else {
+                fileName = jsonFileMapping.get(jsonFileRef);
+                if (fileName == null) {
+                    logger.info("Invalid request jsonFileRef: {}, in jsonFileMapping: {}",
+                            jsonFileRef, jsonFileMapping);
+                } else {
+                    FileReader reader = new FileReader(fileName);
+                    obj = jsonParser.parse(reader);
+                    logger.info("Read json file {} for jsonFileRef {} is success",
+                            fileName, jsonFileRef);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            logger.info("File not found : {}, {}, {}", jsonFileRef, fileName, e);
+        } catch (IOException e) {
+            logger.info("IOExcpection for file : {}, {}, {}", jsonFileRef, fileName, e);
+        } catch (ParseException e) {
+            logger.info("ParseException for file : {}, {}, {}", jsonFileRef, fileName, e);
+        } catch (Exception e) {
+            logger.info("Unknown exception for jsonFileRef : {}, {}, {}", jsonFileRef, jsonFileRef, e);
+        }
+        if (obj == null) {
+            HashMap<String, String> objV2 = new HashMap<String, String>();
+            objV2.put(AppConstant.STATUS, AppConstant.FAILURE);
+            obj = objV2;
+        }
+        return obj;
     }
 }

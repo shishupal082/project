@@ -1,10 +1,10 @@
 package com.todo.config;
 
 import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.file.config.FilesConfig;
 import com.todo.task.config.TaskConfig;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Logger;
@@ -16,10 +16,8 @@ import org.slf4j.LoggerFactory;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AppConfig {
     private static Logger LOGGER = LoggerFactory.getLogger(AppConfig.class);
-    private TaskConfig taskConfig;
-    private FilesConfig filesConfig;
-    private ProjectStaticData projectStaticData;
 
+    private HashMap<String, String> jsonFileMapping;
     private ArrayList<String> taskItemsPath;
     private ArrayList<String> taskApplicationPath;
     private ArrayList<String> relativePath;
@@ -31,28 +29,12 @@ public class AppConfig {
     private String indexPageReRoute;
     private ArrayList<String> projectStaticDataConfigPath;
 
-    public TaskConfig getTaskConfig() {
-        return taskConfig;
+    public HashMap<String, String> getJsonFileMapping() {
+        return jsonFileMapping;
     }
 
-    public void setTaskConfig(TaskConfig taskConfig) {
-        this.taskConfig = taskConfig;
-    }
-
-    public FilesConfig getFilesConfig() {
-        return filesConfig;
-    }
-
-    public void setFilesConfig(FilesConfig filesConfig) {
-        this.filesConfig = filesConfig;
-    }
-
-    public ProjectStaticData getProjectStaticData() {
-        return projectStaticData;
-    }
-
-    public void setProjectStaticData(ProjectStaticData projectStaticData) {
-        this.projectStaticData = projectStaticData;
+    public void setJsonFileMapping(HashMap<String, String> jsonFileMapping) {
+        this.jsonFileMapping = jsonFileMapping;
     }
 
     public ArrayList<String> getTaskItemsPath() {
@@ -111,6 +93,15 @@ public class AppConfig {
         this.addTextPath = addTextPath;
     }
     public void merge(AppConfig tempAppConfig) {
+
+        if (tempAppConfig.getJsonFileMapping() != null) {
+            if (this.getJsonFileMapping() != null) {
+                this.getJsonFileMapping().putAll(tempAppConfig.getJsonFileMapping());
+            } else {
+                this.setJsonFileMapping(tempAppConfig.getJsonFileMapping());
+            }
+        }
+
         if (tempAppConfig.getTaskItemsPath() != null) {
             if (this.getTaskItemsPath() != null) {
                 this.getTaskItemsPath().addAll(tempAppConfig.getTaskItemsPath());
@@ -206,7 +197,8 @@ public class AppConfig {
     @Override
     public String toString() {
         return "AppConfig{" +
-                "taskItemsPath=" + taskItemsPath +
+                "jsonFileMapping=" + jsonFileMapping +
+                ", taskItemsPath=" + taskItemsPath +
                 ", taskApplicationPath=" + taskApplicationPath +
                 ", relativePath=" + relativePath +
                 ", uiPath=" + uiPath +

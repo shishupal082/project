@@ -6,7 +6,6 @@ import com.todo.TodoConfiguration;
 import com.todo.config.AppConfig;
 import com.todo.config.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.file.config.FilesConfig;
 import com.todo.model.YamlObject;
 import com.todo.task.config.TaskConfig;
 import com.todo.task.service.TaskUpdateService;
@@ -27,6 +26,8 @@ public class ConfigService {
     private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private TodoConfiguration todoConfiguration;
     private AppConfig appConfig;
+    private TaskConfig taskConfig;
+    private ProjectStaticData projectStaticData;
     public ConfigService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
     }
@@ -56,46 +57,31 @@ public class ConfigService {
     public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
         AppConfig tempAppConfig = getAppConfig(appConfigPath);
         logger.info("AppConfig loaded with data : {}", tempAppConfig);
-        if (appConfig == null) {
-            appConfig = tempAppConfig;
-        } else {
-            tempAppConfig.setTaskConfig(appConfig.getTaskConfig());
-            tempAppConfig.setFilesConfig(appConfig.getFilesConfig());
-            tempAppConfig.setProjectStaticData(appConfig.getProjectStaticData());
-            appConfig = tempAppConfig;
-        }
+        appConfig = tempAppConfig;
     }
     public void updateTaskConfig() throws TodoException {
-        TaskConfig taskConfig = new TaskConfig();
-        TaskUpdateService.updateTaskItems(taskConfig, appConfig.getTaskItemsPath());
-        TaskUpdateService.updateTaskApplication(taskConfig, appConfig.getTaskApplicationPath());
-        TaskUpdateService.updateTaskComponents(taskConfig);
-        logger.info("Final taskItem data : {}", taskConfig.getTaskItems());
-        logger.info("Final taskApplication data : {}", taskConfig.getTaskApplications());
-        appConfig.setTaskConfig(taskConfig);
-    }
-    public void updateFilesConfig() throws TodoException {
-        FilesConfig filesConfig = new FilesConfig();
-        filesConfig.setMessageSavePath(appConfig.getMessageSavePath());
-        filesConfig.setRelativePath(appConfig.getRelativePath());
-        filesConfig.setUiPath(appConfig.getUiPath());
-        filesConfig.setAddTextPath(appConfig.getAddTextPath());
-        appConfig.setFilesConfig(filesConfig);
+        TaskConfig tempTaskConfig = new TaskConfig();
+        TaskUpdateService.updateTaskItems(tempTaskConfig, appConfig.getTaskItemsPath());
+        TaskUpdateService.updateTaskApplication(tempTaskConfig, appConfig.getTaskApplicationPath());
+        TaskUpdateService.updateTaskComponents(tempTaskConfig);
+        logger.info("Final taskItem data : {}", tempTaskConfig.getTaskItems());
+        logger.info("Final taskApplication data : {}", tempTaskConfig.getTaskApplications());
+        taskConfig = tempTaskConfig;
     }
     public void updateProjectStaticData(ArrayList<String> projectStaticDataConfigPath)
             throws TodoException {
-        ProjectStaticData projectStaticData = new ProjectStaticData();
+        ProjectStaticData projectStaticDataV1 = new ProjectStaticData();
         if (projectStaticDataConfigPath == null) {
             logger.info("projectStaticDataConfigPath is NULL");
         } else {
-            ProjectStaticData tempProjectStaticData;
+            ProjectStaticData projectStaticDataV2;
             for (String fileName : projectStaticDataConfigPath) {
                 logger.info("Processing projectStaticData from : {}", fileName);
                 try {
-                    tempProjectStaticData = mapper.readValue(new File(fileName),
+                    projectStaticDataV2 = mapper.readValue(new File(fileName),
                             ProjectStaticData.class);
-                    if (tempProjectStaticData != null) {
-                        projectStaticData.merge(tempProjectStaticData);
+                    if (projectStaticDataV2 != null) {
+                        projectStaticDataV1.merge(projectStaticDataV2);
                     }
                 } catch (IOException ioe) {
                     logger.info("IOE : for file : {}, {}", fileName, ioe);
@@ -103,8 +89,8 @@ public class ConfigService {
                 }
             }
         }
-        logger.info("Final projectStaticData : {}", projectStaticData);
-        appConfig.setProjectStaticData(projectStaticData);
+        logger.info("Final projectStaticData : {}", projectStaticDataV1);
+        projectStaticData = projectStaticDataV1;
     }
     public YamlObject getYamlObject() throws TodoException {
         YamlObject yamlObject = null;
@@ -133,10 +119,9 @@ public class ConfigService {
         return appConfig;
     }
     public TaskConfig getTaskConfig() throws TodoException {
-        return appConfig.getTaskConfig();
+        return taskConfig;
     }
-    public FilesConfig getFileConfig() {
-        return appConfig.getFilesConfig();
+    public ProjectStaticData getProjectStaticData() throws TodoException {
+        return projectStaticData;
     }
-
 }
