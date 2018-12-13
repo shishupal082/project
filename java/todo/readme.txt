@@ -531,4 +531,17 @@ Added api /files/v1/read_json for reading direct json file from api
 Added two variable taskConfig and projectStaticData in config service similar to appConfig
 
 
+2018-12-12
+====================
+Removed /config/api/v1/get/files from application_resource.yaml
 
+2018-12-14
+====================
+Remove duplicate api
+
+/task/api/v3/tasks
+/api/v3/tasks/{taskId}
+/api/v3/app/all
+/api/v3/app/id/{appId}
+
+Same is updated in meta-data/config/application_resource.yaml
