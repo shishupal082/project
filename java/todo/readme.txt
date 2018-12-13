@@ -540,8 +540,8 @@ Removed /config/api/v1/get/files from application_resource.yaml
 Remove duplicate api
 
 /task/api/v3/tasks
-/api/v3/tasks/{taskId}
-/api/v3/app/all
-/api/v3/app/id/{appId}
+/task/api/v3/tasks/{taskId}
+/task/api/v3/app/all
+/task/api/v3/app/id/{appId}
 
 Same is updated in meta-data/config/application_resource.yaml
