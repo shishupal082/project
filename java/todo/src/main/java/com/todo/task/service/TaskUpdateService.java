@@ -52,6 +52,7 @@ public class TaskUpdateService {
             }
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
+            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         /*
@@ -245,6 +246,7 @@ public class TaskUpdateService {
             finalTaskApplications.setTaskApplications(result);
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
+            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfig.setTaskApplications(finalTaskApplications);

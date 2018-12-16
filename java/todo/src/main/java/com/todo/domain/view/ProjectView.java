@@ -73,7 +73,11 @@ public class ProjectView extends View {
                 }
             }
             if (projectData.getPatternParams() != null) {
-                String urlParams = String.join("", projectData.getPatternParams());
+                //Fix for java-1.7.1
+                String urlParams = "";//String.join("", projectData.getPatternParams());
+                for (String pathParam : projectData.getPatternParams()) {
+                    urlParams += pathParam;
+                }
                 if (urlParams.equals(currentUrl)) {
                     currentProjectData = projectData;
                     break;

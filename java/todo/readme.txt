@@ -545,3 +545,10 @@ Remove duplicate api
 /task/api/v3/app/id/{appId}
 
 Same is updated in meta-data/config/application_resource.yaml
+
+2018-12-15
+====================
+1.5.0 projects urls are not working with java-1.7.1
+Error in String.join replacing this with for-loop
+Improved log if taskComponent or apps files are not found
+
