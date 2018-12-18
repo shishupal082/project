@@ -1,8 +1,8 @@
 package com.todo.yaml.todo;
 
-import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 /**
  * Created by shishupalkumar on 17/02/17.
  */

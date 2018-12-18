@@ -1,7 +1,6 @@
 package com.todo.domain;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by shishupalkumar on 19/02/17.

@@ -19,7 +19,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,15 +30,15 @@ import java.util.Map;
 
 public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
-    private TodoFileConfig todoFileConfig;
+    private TodoConfiguration todoConfiguration;
     private SocketService socketService;
     private Map<String, String> tcpIpConfig;
     @Context
     private HttpServletRequest httpServletRequest;
-    public TodoResource (TodoConfiguration todoConfiguration, TodoFileConfig todoFileConfig) {
-        this.todoFileConfig = todoFileConfig;
+    public TodoResource (TodoConfiguration todoConfiguration) {
+        this.todoConfiguration = todoConfiguration;
         TodoDbParser todoDbParser = new FileParser();
-        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoConfiguration.getTodoFileConfig());
         tcpIpConfig = todoConfiguration.getConfigService().getAppConfig().getTcpIpConfig();
         logger.info("Todos : {}", todoDatabase.getTodoMap());
         logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
@@ -54,7 +53,7 @@ public class TodoResource {
     public ArrayList<Todo> getAllTodo() {
         logger.info("getAllTodo : In");
         TodoDbParser todoDbParser = new FileParser();
-        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoConfiguration.getTodoFileConfig());
         TodoService todoService = new TodoService(todoDatabase);
         ArrayList<Todo> todos = todoService.getAllTodo();
         logger.info("getAllTodo : Out : {}", todos);
@@ -72,7 +71,7 @@ public class TodoResource {
             throw new NumberFormatException("Invalid Todo Id : " + todoId);
         }
         TodoDbParser todoDbParser = new FileParser();
-        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoFileConfig);
+        TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoConfiguration.getTodoFileConfig());
         TodoService todoService = new TodoService(todoDatabase);
         TodoResponse todoResponse = todoService.getTodoById(todoIndex.toString());
         logger.info("getTodoResponseById : Out : {}", todoResponse);

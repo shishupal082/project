@@ -1,14 +1,12 @@
 package com.todo.config;
 
-import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.task.config.TaskConfig;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by shishupalkumar on 18/05/17.

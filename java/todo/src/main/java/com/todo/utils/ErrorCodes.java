@@ -18,7 +18,8 @@ public enum ErrorCodes {
     CONFIG_ERROR_INVALID_PATH("Invalid path", "Invalid path", 403),
     DUPLICATE_ENTRY("Duplicate entry", "Duplicate entry", 405),
     SERVER_ERROR("Server error", "Server error", 500),
-    CONFIG_ERROR("Configuration error", "Configuration error", 500);
+    CONFIG_ERROR("Configuration error", "Configuration error", 500),
+    RUNTIME_ERROR("Run time error", "Run time error", 599);
 
     private String errorCode;
     private String errorString;

@@ -1,11 +1,10 @@
 package com.todo.yaml.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * Created by shishupalkumar on 17/02/17.
  */

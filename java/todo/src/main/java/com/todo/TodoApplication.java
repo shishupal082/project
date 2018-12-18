@@ -1,16 +1,17 @@
 package com.todo;
 
+import com.todo.common.TodoExceptionMapper;
 import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
 import com.todo.resources.*;
-import com.todo.common.TodoExceptionMapper;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.eclipse.jetty.server.session.SessionHandler;
+
 import java.util.ArrayList;
 
 /**
@@ -34,12 +35,12 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new TodoExceptionMapper());
         environment.jersey().register(new ConfigResource(todoConfiguration));
-        environment.jersey().register(new TodoResource(todoConfiguration, todoConfiguration.getTodoFileConfig()));
+        environment.jersey().register(new TodoResource(todoConfiguration));
         environment.jersey().register(new FilesResource(todoConfiguration));
-        environment.jersey().register(new ViewResource(todoConfiguration,
-            todoConfiguration.getTodoViewConfig()));
+        environment.jersey().register(new ViewResource(todoConfiguration));
         environment.jersey().register(new TaskResource(todoConfiguration));
         environment.jersey().register(new ProjectResource(todoConfiguration));
+
     }
     public static void main(String[] args) throws Exception {
         appConfigPath = new ArrayList<String>();

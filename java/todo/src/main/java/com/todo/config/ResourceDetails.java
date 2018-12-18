@@ -2,11 +2,13 @@ package com.todo.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+
 import java.util.ArrayList;
 
 /**
  * Created by shishupalkumar on 18/02/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourceDetails {
     private ArrayList<Resource> resources;
 

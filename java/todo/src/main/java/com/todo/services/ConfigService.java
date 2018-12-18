@@ -6,10 +6,14 @@ import com.todo.TodoConfiguration;
 import com.todo.config.AppConfig;
 import com.todo.config.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.model.YamlObject;
+import com.todo.interfaces.YamlObjectImplements;
+import com.todo.model.YamlObjectDB;
+import com.todo.parser.YamlObjectFileParser;
+import com.todo.yaml.todo.YamlObject;
 import com.todo.task.config.TaskConfig;
 import com.todo.task.service.TaskUpdateService;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +31,7 @@ public class ConfigService {
     private TodoConfiguration todoConfiguration;
     private AppConfig appConfig;
     private TaskConfig taskConfig;
+    private YamlObjectDB yamlObjectDB;
     private ProjectStaticData projectStaticData;
     public ConfigService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
@@ -92,17 +97,23 @@ public class ConfigService {
         logger.info("Final projectStaticData : {}", projectStaticDataV1);
         projectStaticData = projectStaticDataV1;
     }
+    public void updateYamlObjectDBFromFile() throws TodoException {
+        YamlObjectFileParser yamlObjectFileParser = new YamlObjectFileParser();
+        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
+        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFile(todoConfiguration.getYamlObjectPath());
+        yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
+        logger.info("yamlObjectDB updated from File");
+    }
+//    public void updateYamlObjectDBFromData(Integer age, String name) throws TodoException {
+//        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
+//        YamlObject yamlObject = new YamlObject();
+//        yamlObject.setAge(age);
+//        yamlObject.setName(name);
+//        yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
+//        logger.info("yamlObjectDB updated from data");
+//    }
     public YamlObject getYamlObject() throws TodoException {
-        YamlObject yamlObject = null;
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        String yamlObjectPath = todoConfiguration.getYamlObjectPath();
-        try {
-            yamlObject = mapper.readValue(new File(yamlObjectPath), YamlObject.class);
-        } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", yamlObjectPath);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
-        }
-        return yamlObject;
+        return yamlObjectDB.getYamlObject();
     }
     public ResourceDetails getResourceDetails(String resourcePath) throws TodoException {
         ResourceDetails resourceDetails = null;
@@ -110,8 +121,8 @@ public class ConfigService {
         try {
             resourceDetails = mapper.readValue(new File(resourcePath), ResourceDetails.class);
         } catch (IOException ioe) {
-            logger.info("IOE : for file : {}", resourcePath);
-            throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
+            logger.info("IOE : for file : {}", resourcePath, ioe);
+            throw new TodoException(ErrorCodes.RUNTIME_ERROR);
         }
         return resourceDetails;
     }

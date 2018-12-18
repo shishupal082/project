@@ -20,18 +20,15 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 /**
+ *
  * Created by shishupalkumar on 01/02/17.
  */
 @Path("/files")
@@ -94,7 +91,8 @@ public class FilesResource {
             logger.info("Error parsing file : {} : {}", fileName, fileData);
         } catch (Exception e) {
             fileData = "Invalid arguments";
-            logger.info("Error parsing file : {} : {} : {}", fileName, fileData, e);
+            logger.info("Error parsing file : {} : {}", StringUtils.getLoggerObject(fileName, fileData, e));
+            e.getStackTrace();
         }
         logger.info("v1GetStaticFile : Out : {}", fileName);
         return Response.ok(fileData).build();
@@ -122,7 +120,8 @@ public class FilesResource {
                                     @FormParam("ext") String ext,
                                     @FormParam("overwrite") String overwrite) throws TodoException {
         boolean overWrite = "yes".equals(overwrite);
-        logger.info("fileQuerySubmit : In : {}, {}, {}, {}", message, fileName, ext, overWrite);
+        logger.info("fileQuerySubmit : In : {}, {}, {}, {}",
+                StringUtils.getLoggerObject(message, fileName, ext, overWrite));
         filesService.isValidDir(todoConfiguration.getConfigService().getAppConfig().getMessageSavePath(), "Save message");
         String response = filesService.saveMessage(message, fileName, ext, overWrite, 0);
         logger.info("fileQuerySubmit : Out : response : {}", response);
@@ -165,8 +164,8 @@ public class FilesResource {
                 fileDetails.getFileExtention())) {
                 String downloadPath = FilesConstant.fileDownloadUrl+"?name=" + StringUtils.urlEncode(actualFileName);
                 logger.info("Unsupported fileType : {}, found in : {} : redirect to download : path={}",
-                    fileDetails.getFileExtention(), todoConfiguration.getDirectoryConfig().getUnsupportedFileType(),
-                    downloadPath);
+                    StringUtils.getLoggerObject(fileDetails.getFileExtention(), todoConfiguration.getDirectoryConfig().getUnsupportedFileType(),
+                            downloadPath));
                 r = Response.seeOther(new URI(downloadPath));
             } else {
                 r = Response.ok(fileDetails.getFile(), fileDetails.getFileMemType());
@@ -178,7 +177,8 @@ public class FilesResource {
             logger.info("Error parsing file : {} : {}", actualFileName, fileData);
         } catch (Exception e) {
             fileData = "Invalid arguments";
-            logger.info("Error parsing file : {} : {} : {}", actualFileName, fileData, e);
+            logger.info("Error parsing file : {} : {} : {}",
+                    StringUtils.getLoggerObject(actualFileName, fileData, e));
         }
         logger.info("getFile : Out : {}", actualFileName);
         return Response.ok(fileData).build();

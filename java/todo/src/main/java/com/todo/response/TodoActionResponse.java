@@ -5,7 +5,6 @@ import com.todo.model.TodoEvent;
 import com.todo.model.TodoUser;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by shishupalkumar on 26/12/16.

@@ -552,3 +552,7 @@ Same is updated in meta-data/config/application_resource.yaml
 Error in String.join replacing this with for-loop
 Improved log if taskComponent or apps files are not found
 
+2018-12-18
+====================
+Removed todo project from inteliji and reimported as maven project to fix importing erros
+Created interface, implements and DB for YamlObject and TaskConfig

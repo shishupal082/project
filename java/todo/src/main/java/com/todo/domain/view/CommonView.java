@@ -1,6 +1,5 @@
 package com.todo.domain.view;
 
-import com.todo.resources.TodoResource;
 import io.dropwizard.views.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -25,13 +24,11 @@ import java.net.URISyntaxException;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ViewResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
-    private TodoViewConfig todoViewConfig;
     @Context
     private HttpServletRequest httpServletRequest;
     private TodoConfiguration todoConfiguration;
-    public ViewResource(TodoConfiguration todoConfiguration, TodoViewConfig todoViewConfig) {
+    public ViewResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
-        this.todoViewConfig = todoViewConfig;
     }
     @GET
     public IndexView indexPage() {

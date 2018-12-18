@@ -1,16 +1,16 @@
 package com.todo.file.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
 import com.todo.constants.AppConstant;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
-import com.todo.file.domain.ScanResult;
 import com.todo.file.domain.PathType;
+import com.todo.file.domain.ScanResult;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +19,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * Created by shishupalkumar on 01/02/17.
@@ -311,7 +306,8 @@ public class FilesService {
                         response = saveMessage(message, fileName + "-" + timeInMs.toString(), ext, false, countTry);
                     }
                 } else {
-                    logger.info("Unable to save message : {}, {}, {}, {}", message, fileName, countTry, filePath);
+                    logger.info("Unable to save message : {}, {}, {}, {}",
+                            StringUtils.getLoggerObject(message, fileName, countTry, filePath));
                     throw new TodoException(ErrorCodes.SERVER_ERROR);
                 }
             }
@@ -361,7 +357,7 @@ public class FilesService {
                 }
             }
         } catch (Exception e) {
-            logger.info("Error saving text : {}, in file : {}, {}", text, fileName, e);
+            logger.info("Error saving text : {}, in file : {}, {}", StringUtils.getLoggerObject(text, fileName, e));
         }
         return response;
     }
@@ -423,13 +419,13 @@ public class FilesService {
                 }
             }
         } catch (FileNotFoundException e) {
-            logger.info("File not found : {}, {}, {}", jsonFileRef, fileName, e);
+            logger.info("File not found : {}, {}, {}", StringUtils.getLoggerObject(jsonFileRef, fileName, e));
         } catch (IOException e) {
-            logger.info("IOExcpection for file : {}, {}, {}", jsonFileRef, fileName, e);
+            logger.info("IOExcpection for file : {}, {}, {}", StringUtils.getLoggerObject(jsonFileRef, fileName, e));
         } catch (ParseException e) {
-            logger.info("ParseException for file : {}, {}, {}", jsonFileRef, fileName, e);
+            logger.info("ParseException for file : {}, {}, {}", StringUtils.getLoggerObject(jsonFileRef, fileName, e));
         } catch (Exception e) {
-            logger.info("Unknown exception for jsonFileRef : {}, {}, {}", jsonFileRef, jsonFileRef, e);
+            logger.info("Unknown exception for jsonFileRef : {}, {}", jsonFileRef, e);
         }
         if (obj == null) {
             HashMap<String, String> objV2 = new HashMap<String, String>();

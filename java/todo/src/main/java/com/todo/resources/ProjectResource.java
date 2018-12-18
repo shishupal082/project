@@ -1,21 +1,15 @@
 package com.todo.resources;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.todo.TodoConfiguration;
 import com.todo.constants.AppConstant;
 import com.todo.domain.project_static_data.ProjectStaticData;
-import com.todo.domain.view.CommonView;
 import com.todo.domain.view.ProjectView;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URISyntaxException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import javax.ws.rs.*;
 
 @Path("/project")
 public class ProjectResource {

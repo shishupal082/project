@@ -3,11 +3,13 @@ package com.todo.task.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.parser.string_parser.StringParser;
-import com.todo.task.config.*;
+import com.todo.task.config.TaskComponents;
+import com.todo.task.config.TaskConfig;
 import com.todo.task.config.component.TaskComponent;
-import com.todo.task.config.response.TaskComponentDetails;
 import com.todo.task.config.response.PathComponentDetails;
+import com.todo.task.config.response.TaskComponentDetails;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import com.todo.yaml.todo.*;
 import org.slf4j.Logger;
@@ -44,7 +46,7 @@ public class TaskUpdateService {
             for (TaskItem tempTaskItem: finalTaskItems.getTaskItems()) {
                 if (tempTaskIds.contains(tempTaskItem.getId())) {
                     logger.info("Duplicate entry found for taskId : {}, {}, {}",
-                        tempTaskItem.getId(), tempTaskItem, tempTaskIds);
+                            StringUtils.getLoggerObject(tempTaskItem.getId(), tempTaskItem, tempTaskIds));
                     throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
                 } else {
                     tempTaskIds.add(tempTaskItem.getId());

@@ -2,6 +2,7 @@ package com.todo.services;
 
 import com.todo.constants.AppConstant;
 import com.todo.utils.ErrorCodes;
+import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,8 @@ public class SocketService {
 					response.put(AppConstant.IP, tcpConfigParam[0]);
 					response.put(AppConstant.PORT, tcpConfigParam[1]);
 					response.put(AppConstant.STATUS, AppConstant.SUCCESS);
-					LOGGER.info("TcpIpConfig for name : {} --> {}:{}", name, tcpConfigParam[0], tcpConfigParam[1]);
+					LOGGER.info("TcpIpConfig for name : {} --> {}:{}",
+							StringUtils.getLoggerObject(name, tcpConfigParam[0], tcpConfigParam[1]));
 				} else {
 					LOGGER.info(ErrorCodes.INVALID_QUERY_PARAMS.getErrorString());
 					throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);

@@ -6,13 +6,13 @@ import com.todo.domain.project_static_data.ProjectData;
 import com.todo.domain.project_static_data.ProjectPath;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import io.dropwizard.views.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ProjectView extends View {
     private static Logger logger = LoggerFactory.getLogger(ProjectView.class);

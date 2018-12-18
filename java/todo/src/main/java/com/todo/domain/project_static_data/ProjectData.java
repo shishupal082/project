@@ -1,7 +1,8 @@
 package com.todo.domain.project_static_data;
 
-import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProjectData {

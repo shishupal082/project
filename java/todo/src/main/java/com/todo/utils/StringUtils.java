@@ -32,6 +32,27 @@ public class StringUtils {
         } catch (UnsupportedEncodingException uee) {}
         return str;
     }
+    public static Object[] getLoggerObject (Object o1, Object o2) {
+        Object[] response = new Object[2];
+        response[0] = o1;
+        response[1] = o2;
+        return response;
+    }
+    public static Object[] getLoggerObject (Object o1, Object o2, Object o3) {
+        Object[] response = new Object[3];
+        response[0] = o1;
+        response[1] = o2;
+        response[2] = o3;
+        return response;
+    }
+    public static Object[] getLoggerObject (Object o1, Object o2, Object o3, Object o4) {
+        Object[] response = new Object[4];
+        response[0] = o1;
+        response[1] = o2;
+        response[2] = o3;
+        response[3] = o4;
+        return response;
+    }
     public static ArrayList<Map<String, Object>> sortObjectArray(ArrayList<Map<String, Object>> obj, String param) {
         Map<String, Object> temp;
         if (obj == null) {

@@ -14,7 +14,6 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by shishupalkumar on 11/02/17.

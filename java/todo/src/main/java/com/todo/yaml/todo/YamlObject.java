@@ -1,6 +1,6 @@
-package com.todo.model;
+package com.todo.yaml.todo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * Created by shishupalkumar on 10/02/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class YamlObject {
     private String name;
     private int age;

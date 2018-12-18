@@ -2,11 +2,13 @@ package com.todo.domain;
 
 import com.todo.TodoConfiguration;
 import com.todo.config.AppConfig;
-import com.todo.services.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by shishupalkumar on 19/02/17.

@@ -19,12 +19,20 @@ public class TodoExceptionMapper implements ExceptionMapper<Exception> {
         if (exception instanceof TodoException) {
             Integer statusCode = ((TodoException) exception).getErrorCode().getStatusCode();
             String errorMessage;
+            Object exceptionLogger = null;
             if (statusCode >= 200 && statusCode < 300) {
                 errorMessage = new TodoError(exception.getMessage(), statusCode).toString();
+                exceptionLogger = exception;
+            } else if (statusCode == 599) {
+                //Run time error, it includes IOE, Exception, ...
+                //Need not to log exception again as it is already logged
+                errorMessage = new TodoError(exception.getMessage(), statusCode).toString();
+                exceptionLogger = errorMessage;
             } else {
                 errorMessage = new TodoError(exception.getMessage()).toString();
+                exceptionLogger = exception;
             }
-            logger.info("TodoException : {}", exception);
+            logger.info("TodoException : {}", exceptionLogger);
             return Response.status(statusCode).entity(errorMessage).type(MediaType.APPLICATION_JSON).build();
         } else if (exception instanceof TimeoutException) {
             return Response.status(Response.Status.GATEWAY_TIMEOUT).entity("{\"error\":\"Downstream service " +

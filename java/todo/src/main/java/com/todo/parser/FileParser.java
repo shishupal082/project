@@ -14,7 +14,7 @@ import java.util.*;
  * Created by shishupalkumar on 30/12/16.
  */
 public class FileParser implements TodoDbParser {
-    private static Logger logger = LoggerFactory.getLogger(TodoDbParser.class);
+    private static Logger logger = LoggerFactory.getLogger(FileParser.class);
     private TodoFileConfig todoFileConfig;
     private String todoDataFileName;
     private String todoUserFileName;
