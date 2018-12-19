@@ -515,7 +515,7 @@ Added json dependencies in pom file
 
 FileConfig class file deleted as it was redundent same thing was already in appConfig class
 
-Remove taskConfig, filesConfig and projectStaticData from appConfig
+Remove taskConfigDB, filesConfig and projectStaticData from appConfig
 
 Added private HashMap<String, String> jsonFileMapping in appConfig
 
@@ -528,7 +528,7 @@ jsonFileMapping:
 Removed api /config/api/v1/get/files as it was not required
 Added api /files/v1/read_json for reading direct json file from api
 
-Added two variable taskConfig and projectStaticData in config service similar to appConfig
+Added two variable taskConfigDB and projectStaticData in config service similar to appConfig
 
 
 2018-12-12
@@ -556,3 +556,13 @@ Improved log if taskComponent or apps files are not found
 ====================
 Removed todo project from inteliji and reimported as maven project to fix importing erros
 Created interface, implements and DB for YamlObject and TaskConfig
+
+1.5.1
+======
+2018-12-18
+====================
+Added componentDetails in both tasks as well as in apps
+For v2 both componentDetails and history will be available
+
+If pathComponent is not found in taskComponents then it will add in pathsComponentDetails
+component added extra for both taskComponentDetails and pathsComponentDetails

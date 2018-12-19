@@ -1,13 +1,13 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.AppConfig;
+import com.todo.yaml.todo.AppConfig;
 import com.todo.config.ClientDetails;
-import com.todo.config.ResourceDetails;
+import com.todo.model.TaskConfigDB;
+import com.todo.yaml.todo.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.yaml.todo.YamlObject;
 import com.todo.services.ConfigService;
-import com.todo.task.config.TaskConfig;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,20 +78,20 @@ public class ConfigResource {
     }
     @Path("/v1/get/task")
     @GET
-    public TaskConfig getTaskConfig() throws TodoException {
-        logger.info("getTaskConfig : in");
-        TaskConfig taskConfig = configService.getTaskConfig();
-        logger.info("getTaskConfig : out");
-        return taskConfig;
+    public TaskConfigDB getTaskConfig() throws TodoException {
+        logger.info("getTaskConfigDB : in");
+        TaskConfigDB taskConfigDB = configService.getTaskConfigDB();
+        logger.info("getTaskConfigDB : out");
+        return taskConfigDB;
     }
     @Path("/v1/update/task")
     @GET
-    public TaskConfig updateTasks() throws TodoException {
+    public TaskConfigDB updateTasks() throws TodoException {
         logger.info("updateTasks : in");
         configService.updateTaskConfig();
-        TaskConfig taskConfig = configService.getTaskConfig();
+        TaskConfigDB taskConfigDB = configService.getTaskConfigDB();
         logger.info("updateTasks : out");
-        return taskConfig;
+        return taskConfigDB;
     }
     @Path("/v1/get/project-static-data")
     @GET

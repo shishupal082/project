@@ -1,4 +1,4 @@
-package com.todo.config;
+package com.todo.yaml.todo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.slf4j.Logger;

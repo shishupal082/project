@@ -3,17 +3,16 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
-import com.todo.config.AppConfig;
-import com.todo.config.ResourceDetails;
+import com.todo.yaml.todo.AppConfig;
+import com.todo.model.TaskConfigDB;
+import com.todo.yaml.todo.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.interfaces.YamlObjectImplements;
 import com.todo.model.YamlObjectDB;
 import com.todo.parser.YamlObjectFileParser;
 import com.todo.yaml.todo.YamlObject;
-import com.todo.task.config.TaskConfig;
 import com.todo.task.service.TaskUpdateService;
 import com.todo.utils.ErrorCodes;
-import com.todo.utils.StringUtils;
 import com.todo.utils.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +29,7 @@ public class ConfigService {
     private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private TodoConfiguration todoConfiguration;
     private AppConfig appConfig;
-    private TaskConfig taskConfig;
+    private TaskConfigDB taskConfigDB;
     private YamlObjectDB yamlObjectDB;
     private ProjectStaticData projectStaticData;
     public ConfigService(TodoConfiguration todoConfiguration) {
@@ -65,13 +64,13 @@ public class ConfigService {
         appConfig = tempAppConfig;
     }
     public void updateTaskConfig() throws TodoException {
-        TaskConfig tempTaskConfig = new TaskConfig();
-        TaskUpdateService.updateTaskItems(tempTaskConfig, appConfig.getTaskItemsPath());
-        TaskUpdateService.updateTaskApplication(tempTaskConfig, appConfig.getTaskApplicationPath());
-        TaskUpdateService.updateTaskComponents(tempTaskConfig);
-        logger.info("Final taskItem data : {}", tempTaskConfig.getTaskItems());
-        logger.info("Final taskApplication data : {}", tempTaskConfig.getTaskApplications());
-        taskConfig = tempTaskConfig;
+        TaskConfigDB tempTaskConfigDB = new TaskConfigDB();
+        TaskUpdateService.updateTaskItems(tempTaskConfigDB, appConfig.getTaskItemsPath());
+        TaskUpdateService.updateTaskApplication(tempTaskConfigDB, appConfig.getTaskApplicationPath());
+        TaskUpdateService.updateTaskComponents(tempTaskConfigDB);
+        logger.info("Final taskItem data : {}", tempTaskConfigDB.getTaskItems());
+        logger.info("Final taskApplication data : {}", tempTaskConfigDB.getTaskApplications());
+        taskConfigDB = tempTaskConfigDB;
     }
     public void updateProjectStaticData(ArrayList<String> projectStaticDataConfigPath)
             throws TodoException {
@@ -100,7 +99,7 @@ public class ConfigService {
     public void updateYamlObjectDBFromFile() throws TodoException {
         YamlObjectFileParser yamlObjectFileParser = new YamlObjectFileParser();
         YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
-        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFile(todoConfiguration.getYamlObjectPath());
+        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFilePath(todoConfiguration.getYamlObjectPath());
         yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
         logger.info("yamlObjectDB updated from File");
     }
@@ -129,8 +128,8 @@ public class ConfigService {
     public AppConfig getAppConfig() throws TodoException {
         return appConfig;
     }
-    public TaskConfig getTaskConfig() throws TodoException {
-        return taskConfig;
+    public TaskConfigDB getTaskConfigDB() throws TodoException {
+        return taskConfigDB;
     }
     public ProjectStaticData getProjectStaticData() throws TodoException {
         return projectStaticData;

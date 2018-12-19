@@ -15,7 +15,7 @@ import java.io.IOException;
 public class YamlObjectFileParser {
     private static Logger logger = LoggerFactory.getLogger(YamlObjectFileParser.class);
     public YamlObjectFileParser() {}
-    public YamlObject getYamlObjectFromFile(String yamlObjectPath) {
+    public YamlObject getYamlObjectFromFilePath(String yamlObjectPath) {
         YamlObject yamlObject = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {

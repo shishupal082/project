@@ -1,8 +1,11 @@
-package com.todo.config;
+package com.todo.yaml.todo;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by shishupalkumar on 18/02/17.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Resource {
     private String url;
     private String name;

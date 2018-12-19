@@ -1,7 +1,7 @@
 package com.todo.domain;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.AppConfig;
+import com.todo.yaml.todo.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

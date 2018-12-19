@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo $(pwd)
+
+cd 2018-12-14
+
+requiredDir[0]="application_resource"
+requiredDir[1]="application_resource/log"
+requiredDir[2]="application_resource/log/log"
+requiredDir[3]="application_resource/todo_log"
+requiredDir[4]="application_resource/uploaded_files"
+requiredDir[5]="application_resource/uploaded_files/uploaded_files"
+
+for i in {0..5}
+do
+	d=${requiredDir[$i]}
+  if [ -d "$d" ]; then
+  	echo "Directory already exist : ${d}"
+  else
+    # mkdir $d
+    echo "Directory created : ${d}"
+  fi
+done

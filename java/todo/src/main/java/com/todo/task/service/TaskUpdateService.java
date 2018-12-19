@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.parser.string_parser.StringParser;
 import com.todo.task.config.TaskComponents;
-import com.todo.task.config.TaskConfig;
+import com.todo.model.TaskConfigDB;
 import com.todo.task.config.component.TaskComponent;
 import com.todo.task.config.response.PathComponentDetails;
 import com.todo.task.config.response.TaskComponentDetails;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class TaskUpdateService {
     private static Logger logger = LoggerFactory.getLogger(TaskUpdateService.class);
     private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-    public static void updateTaskItems(TaskConfig taskConfig, ArrayList<String> taskItemsPath) throws TodoException {
+    public static void updateTaskItems(TaskConfigDB taskConfigDB, ArrayList<String> taskItemsPath) throws TodoException {
         TaskItems taskItems = null;
         TaskItems finalTaskItems = new TaskItems();
         ArrayList<TaskItem> result = new ArrayList<TaskItem>();
@@ -115,15 +115,15 @@ public class TaskUpdateService {
                 }
             }
         }
-        taskConfig.setTaskItems(finalTaskItems.getTaskItems());
+        taskConfigDB.setTaskItems(finalTaskItems.getTaskItems());
         logger.info("TaskItems load success.");
 //        logger.info("TaskItems loaded with data : {}", finalTaskItems);
     }
-    public static void updateTaskComponents(TaskConfig taskConfig) throws TodoException {
+    public static void updateTaskComponents(TaskConfigDB taskConfigDB) throws TodoException {
         TaskComponents finalTaskComponents = new TaskComponents();
         Map<String, TaskComponent> result = new HashMap<String, TaskComponent>();
         try {
-            ArrayList<TaskItem> tempTaskItems = taskConfig.getTaskItems();
+            ArrayList<TaskItem> tempTaskItems = taskConfigDB.getTaskItems();
             Map<String, String> componentIdVsTaskId = new HashMap<String, String>();
             for(TaskItem taskItem : tempTaskItems) {
                 if (taskItem.getComponent() == null) {
@@ -151,7 +151,7 @@ public class TaskUpdateService {
                     componentIdVsTaskId.put(compId, taskItem.getId());
                 }
             }
-            TaskApplications taskApplications = taskConfig.getTaskApplications();
+            TaskApplications taskApplications = taskConfigDB.getTaskApplications();
             if (taskApplications.getTaskApplications() != null) {
                 for(TaskApplication taskApplication : taskApplications.getTaskApplications()) {
                     if (taskApplication.getPath() == null) {
@@ -226,10 +226,10 @@ public class TaskUpdateService {
             logger.info("Exception in generating taskComponent : {}, {}", e);
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        taskConfig.setTaskComponents(finalTaskComponents.getTaskComponent());
+        taskConfigDB.setTaskComponents(finalTaskComponents.getTaskComponent());
         logger.info("TaskComponents generate success.");
     }
-    public static void updateTaskApplication(TaskConfig taskConfig,
+    public static void updateTaskApplication(TaskConfigDB taskConfigDB,
                                              ArrayList<String> taskApplicationsPath) throws TodoException {
         TaskApplications taskApplications = null;
         TaskApplications finalTaskApplications = new TaskApplications();
@@ -251,7 +251,7 @@ public class TaskUpdateService {
             logger.info("Current working directory is : {}", System.getProperty("user.dir"));
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
-        taskConfig.setTaskApplications(finalTaskApplications);
+        taskConfigDB.setTaskApplications(finalTaskApplications);
         logger.info("TaskApplications load success.");
 //        logger.info("TaskApplications loaded with data : {}", finalTaskApplications);
     }
