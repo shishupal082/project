@@ -566,3 +566,13 @@ For v2 both componentDetails and history will be available
 
 If pathComponent is not found in taskComponents then it will add in pathsComponentDetails
 component added extra for both taskComponentDetails and pathsComponentDetails
+
+1.5.2
+======
+2018-12-21
+====================
+For saving message in file, files/v1/query/submit
+If oldFileName already exist then rename existing fileName and save newFile as requested
+
+File upload api added /files/v1/upload
+for fileUpload is file already exist, rename existing file and save new file as requested

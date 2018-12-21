@@ -1,4 +1,6 @@
-package com.todo.utils;
+package com.todo.common;
+
+import com.todo.utils.ErrorCodes;
 
 /**
  * Created by shishupalkumar on 10/02/17.

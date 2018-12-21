@@ -84,4 +84,24 @@ public class StringUtils {
         }
         return obj;
     }
+    public static String getFileExtention(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+        String[] fileNameArr = fileName.split("\\.");
+        return "." + fileNameArr[fileNameArr.length-1];
+    }
+    public static String getAbsoluteFileName(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+        String[] fileNameArr = fileName.split("\\.");
+        String absFileName = "";
+        for (int i=0; i<fileNameArr.length; i++) {
+            if (i < fileNameArr.length-1) {
+                absFileName += fileNameArr[i];
+            }
+        }
+        return absFileName;
+    }
 }

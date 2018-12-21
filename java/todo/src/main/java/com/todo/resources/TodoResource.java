@@ -1,7 +1,6 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.TodoFileConfig;
 import com.todo.model.Todo;
 import com.todo.model.TodoDatabase;
 import com.todo.parser.FileParser;
@@ -10,7 +9,7 @@ import com.todo.response.TodoResponse;
 import com.todo.services.SocketService;
 import com.todo.services.TodoService;
 import com.todo.utils.ErrorCodes;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

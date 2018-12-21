@@ -63,15 +63,18 @@ resources:
   - url: /files/v1/upload/view
     name: File upload view
     help: /files/v1/upload/view
+  - url:
+    name: File upload [POST]
+    help: /files/v1/upload
   - url: /files/v1/query/view
     name: File query view
     help: /files/v1/query/view
+  - url:
+    name: File query submit [POST]
+    help: /files/v1/query/submit
   - url: /files/v1/add_text?text=hello&fileName=test.txt
     name: "[Get]Add new line to file"
     help: /files/v1/add_text?text=hello&fileName=test.txt
-  - url: /files/v1/query/submit
-    name: File query submit
-    help: /files/v1/query/submit
   - url: /files/v1/static?name=static-file-name
     name: Load static file
     help: /files/v1/static?name={file-name}

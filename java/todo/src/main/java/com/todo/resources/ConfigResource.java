@@ -8,7 +8,7 @@ import com.todo.yaml.todo.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.yaml.todo.YamlObject;
 import com.todo.services.ConfigService;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

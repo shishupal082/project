@@ -10,7 +10,10 @@ import com.todo.file.service.FilesService;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.IpAddress;
 import com.todo.utils.StringUtils;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
+import com.todo.utils.SystemUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +23,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
@@ -45,31 +46,45 @@ public class FilesResource {
         this.todoConfiguration = todoConfiguration;
         this.filesService = new FilesService(todoConfiguration);
     }
-    //    @Path("/v1/upload")
-//    @POST
-//    @Produces(MediaType.MULTIPART_FORM_DATA)
-//    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
-//                               @FormDataParam("file") FormDataContentDisposition fileDetail) throws TodoException {
-//        logger.info("uploadFile : In");
-//        String uploadedFileLocation = "meta-data/files/uploaded/" + fileDetail.getFileName();
-//
-//        try {
-//            OutputStream out;
-//            int read = 0;
-//            byte[] bytes = new byte[1024];
-//            out = new FileOutputStream(new File(uploadedFileLocation));
-//            while ((read = uploadedInputStream.read(bytes)) != -1) {
-//                out.write(bytes, 0, read);
-//            }
-//            out.flush();
-//            out.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        String output = "File uploaded to : " + fileDetail.toString();
-//        logger.info("uploadFile : Out");
-//        return Response.status(200).entity(output).build();
-//    }
+    @Path("/v1/upload")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+                               @FormDataParam("file") FormDataContentDisposition fileDetail) throws TodoException {
+        logger.info("uploadFile : In");
+        String fileName = StringUtils.getAbsoluteFileName(fileDetail.getFileName());
+        String ext = StringUtils.getFileExtention(fileDetail.getFileName());
+        String saveMessagePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        if (SystemUtils.isValidDirectoryV2(saveMessagePath)) {
+            if (SystemUtils.isFileExistV2(saveMessagePath + fileName + ext)) {
+                if (!filesService.renameExistingFile(saveMessagePath, fileName, ext)) {
+                    logger.info("Error in renaming existing file with same fileName : {}",
+                            saveMessagePath + fileName);
+                    throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+                }
+            }
+        } else {
+            logger.info("Save message path is invalid : {}", saveMessagePath);
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+        }
+        try {
+            logger.info("File uploading: {} ...", fileName + ext);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            OutputStream out = new FileOutputStream(new File(saveMessagePath + fileName + ext));
+            while ((read = uploadedInputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+            logger.info("File upload: {} success", fileName + ext);
+        } catch (IOException e) {
+            logger.info("Error in file upload : {}", e);
+        }
+        String output = "File uploaded to : " + fileDetail.toString();
+        logger.info("uploadFile : Out");
+        return Response.status(200).entity(output).build();
+    }
     @Path("/v1/static")
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -122,7 +137,11 @@ public class FilesResource {
         boolean overWrite = "yes".equals(overwrite);
         logger.info("fileQuerySubmit : In : {}, {}, {}, {}",
                 StringUtils.getLoggerObject(message, fileName, ext, overWrite));
-        filesService.isValidDir(todoConfiguration.getConfigService().getAppConfig().getMessageSavePath(), "Save message");
+        String saveMessagePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        if (!SystemUtils.isValidDirectoryV2(saveMessagePath)) {
+            logger.info("Save message path is invalid : {}", saveMessagePath);
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+        }
         String response = filesService.saveMessage(message, fileName, ext, overWrite, 0);
         logger.info("fileQuerySubmit : Out : response : {}", response);
         response = "<center><span>" + response
@@ -431,11 +450,15 @@ public class FilesResource {
                                       @QueryParam("text") String text) throws TodoException {
         logger.info("addTextToFile {}, {}", fileName, text);
         String res = "Error";
-        try {
-            filesService.isValidDir(todoConfiguration.getConfigService().getAppConfig().getAddTextPath(), "Add Text");
-            res = filesService.addNewLine(text, fileName);
-        } catch (Exception e) {
-            logger.info("Error in saving text : {}, in file : {}", text, fileName);
+        String addTextPath = todoConfiguration.getConfigService().getAppConfig().getAddTextPath();
+        if (SystemUtils.isValidDirectoryV2(addTextPath)) {
+            try {
+                res = filesService.addNewLine(text, fileName);
+            } catch (Exception e) {
+                logger.info("Error in saving text : {}, in file : {}", text, fileName);
+            }
+        } else {
+            logger.info("Add Text path is invalid : {}", addTextPath);
         }
         logger.info("addTextToFile out.");
         return Response.ok(res).build();

@@ -3,6 +3,7 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.utils.SystemUtils;
 import com.todo.yaml.todo.AppConfig;
 import com.todo.model.TaskConfigDB;
 import com.todo.yaml.todo.ResourceDetails;
@@ -13,7 +14,7 @@ import com.todo.parser.YamlObjectFileParser;
 import com.todo.yaml.todo.YamlObject;
 import com.todo.task.service.TaskUpdateService;
 import com.todo.utils.ErrorCodes;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public class ConfigService {
                 appConfig.merge(tempAppConfig);
             } catch (IOException ioe) {
                 logger.info("IOE : for file : {}, {}", fileName, ioe);
-                logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+                logger.info("Current working directory is : {}", SystemUtils.getProjectWorkingDirV2());
             }
         }
         if (appConfig == null) {
@@ -89,7 +90,7 @@ public class ConfigService {
                     }
                 } catch (IOException ioe) {
                     logger.info("IOE : for file : {}, {}", fileName, ioe);
-                    logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+                    logger.info("Current working directory is : {}", SystemUtils.getProjectWorkingDirV2());
                 }
             }
         }

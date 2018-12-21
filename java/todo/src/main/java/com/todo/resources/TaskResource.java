@@ -6,7 +6,7 @@ import com.todo.task.config.component.TaskComponent;
 import com.todo.task.service.TaskService;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.StringUtils;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

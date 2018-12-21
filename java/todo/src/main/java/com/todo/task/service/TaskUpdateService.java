@@ -10,7 +10,8 @@ import com.todo.task.config.response.PathComponentDetails;
 import com.todo.task.config.response.TaskComponentDetails;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.StringUtils;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
+import com.todo.utils.SystemUtils;
 import com.todo.yaml.todo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public class TaskUpdateService {
             }
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
-            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+            logger.info("Current working directory is : {}", SystemUtils.getProjectWorkingDirV2());
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         /*
@@ -248,7 +249,7 @@ public class TaskUpdateService {
             finalTaskApplications.setTaskApplications(result);
         } catch (IOException e) {
             logger.info("Exception for file : {}, {}", parsingPath, e);
-            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+            logger.info("Current working directory is : {}", SystemUtils.getProjectWorkingDirV2());
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         taskConfigDB.setTaskApplications(finalTaskApplications);

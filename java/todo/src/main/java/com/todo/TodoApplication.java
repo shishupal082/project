@@ -11,6 +11,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import org.eclipse.jetty.server.session.SessionHandler;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
     public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
         todoConfiguration.getAppConfigPath().addAll(appConfigPath);
         environment.servlets().setSessionHandler(new SessionHandler());
+        environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new FaviconResource());
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());

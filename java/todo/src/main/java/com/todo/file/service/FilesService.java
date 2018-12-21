@@ -8,7 +8,8 @@ import com.todo.file.domain.PathType;
 import com.todo.file.domain.ScanResult;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.StringUtils;
-import com.todo.utils.TodoException;
+import com.todo.common.TodoException;
+import com.todo.utils.SystemUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
@@ -26,7 +27,9 @@ import java.util.Map;
 public class FilesService {
     private static Logger logger = LoggerFactory.getLogger(FilesService.class);
     private TodoConfiguration todoConfiguration;
+    private SystemUtils systemUtils;
     public FilesService(TodoConfiguration todoConfiguration) {
+        systemUtils = new SystemUtils();
         this.todoConfiguration = todoConfiguration;
     }
     public ArrayList<ScanResult> filterFilesByExtention(ArrayList<ScanResult> scanResults,
@@ -267,18 +270,50 @@ public class FilesService {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         String response;
-        Long timeInMs = System.currentTimeMillis();
-        if (fileName == null) {
-            fileName =  timeInMs.toString();
+        String timeInMs = systemUtils.getDateTime("YYYYMMdd'T'HHmmssS");
+        if (timeInMs == null) {
+            timeInMs = systemUtils.getTimeInMs();
         }
+        if (fileName == null) {
+            fileName =  timeInMs;
+        }
+        fileName = fileName.trim();
         if (ext == null) {
             ext = ".txt";
         }
-        String filePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath() + fileName + ext;
+        String saveMessageDir = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        String filePath = saveMessageDir + fileName + ext;
+        if (countTry > 1) {
+            response = "Error while saving message.";
+            logger.info("Error saving message : {}, {}", fileName);
+            return response;
+        }
         try {
             File file = new File(filePath);
-            boolean fileCreated = file.createNewFile();
             countTry++;
+            if (SystemUtils.isFileExistV2(filePath)) {
+                if (overWrite) {
+                    logger.info("File already exist and overwrite is true, delete old file : {}", filePath);
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(
+                                    new FileInputStream(file), "UTF-8"));
+                    logger.info("Deleted file data : ");
+                    String str;
+                    while ((str = in.readLine()) != null) {
+                        logger.info(str);
+                    }
+                    in.close();
+                    boolean fileDeleteStatus = file.delete();
+                    logger.info("File deleted : {}", fileDeleteStatus);
+                } else {
+                    renameExistingFile(saveMessageDir, fileName, ext);
+                }
+                if (countTry > 0) {
+                    logger.info("File create failed in first attempt, retry... : countTry : {}", countTry);
+                }
+                return saveMessage(message, fileName, ext, overWrite, countTry);
+            }
+            boolean fileCreated = file.createNewFile();
             if (fileCreated) {
                 FileWriter writer = new FileWriter(file);
                 writer.write(message);
@@ -286,30 +321,9 @@ public class FilesService {
                 logger.info("Message saved in : {}", file);
                 response = "Message saved";
             } else {
-                if (countTry < 2) {
-                    if (overWrite) {
-                        logger.info("File already exist and overwrite is true, delete old file : {}", filePath);
-                        BufferedReader in = new BufferedReader(
-                            new InputStreamReader(
-                                new FileInputStream(file), "UTF-8"));
-                        logger.info("Deleted file data : ");
-                        String str;
-                        while ((str = in.readLine()) != null) {
-                            logger.info(str);
-                        }
-                        in.close();
-                        boolean fileDeleteStatus = file.delete();
-                        logger.info("File deleted : {}", fileDeleteStatus);
-                        response = saveMessage(message, fileName, ext, true, countTry);
-                    } else {
-                        logger.info("File create failed in first attempt, retry... : countTry : {}", countTry);
-                        response = saveMessage(message, fileName + "-" + timeInMs.toString(), ext, false, countTry);
-                    }
-                } else {
-                    logger.info("Unable to save message : {}, {}, {}, {}",
-                            StringUtils.getLoggerObject(message, fileName, countTry, filePath));
-                    throw new TodoException(ErrorCodes.SERVER_ERROR);
-                }
+                logger.info("Unable to save message : {}, {}, {}, {}",
+                        StringUtils.getLoggerObject(message, fileName, countTry, filePath));
+                throw new TodoException(ErrorCodes.SERVER_ERROR);
             }
         } catch (Exception e) {
             response = "Error while saving message.";
@@ -361,6 +375,32 @@ public class FilesService {
         }
         return response;
     }
+    public Boolean renameExistingFile(String dir, String fileName, String ext) {
+        Boolean renameExistingFileStatus = false;
+        if (dir == null) {
+            return false;
+        }
+        if (ext == null) {
+            ext = ".txt";
+        }
+        String timeInMs = systemUtils.getDateTime("YYYYMMdd'T'HHmmssS");
+        if (timeInMs == null) {
+            timeInMs = systemUtils.getTimeInMs();
+        }
+        String renameFilePath = dir + fileName + "-" + timeInMs + ext;
+        try {
+            File file = new File(dir + fileName + ext);
+            File newFile = new File(renameFilePath);
+            if (file.renameTo(newFile)) {
+                String logStr = "fileName '{}' is already exist, renaming existing file with '{}'";
+                logger.info(logStr, fileName + ext, fileName + "-" + timeInMs + ext);
+            }
+            renameExistingFileStatus = true;
+        } catch (Exception e) {
+            logger.info("Error in renaming file '{}', {}", fileName + ext, e);
+        }
+        return renameExistingFileStatus;
+    }
     public void isValidDir(String pathName, String logStr) throws TodoException {
         try {
             File folder = new File(pathName);
@@ -375,7 +415,7 @@ public class FilesService {
 //            logger.info("{} path is verified : {}", logStr, pathName);
         } catch (Exception e) {
 //            logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_PATH.getErrorString());
-            logger.info("Current working directory is : {}", System.getProperty("user.dir"));
+            logger.info("Current working directory is : {}", systemUtils.getProjectWorkingDir());
             throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
         }
     }
