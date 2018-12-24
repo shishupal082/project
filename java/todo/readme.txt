@@ -576,3 +576,13 @@ If oldFileName already exist then rename existing fileName and save newFile as r
 
 File upload api added /files/v1/upload
 for fileUpload is file already exist, rename existing file and save new file as requested
+
+1.5.3
+======
+2018-12-24
+====================
+Added "custom_logging.yaml" file for renaming old log file and creating new log file for each run
+
+directory: /var/log/project/java_log/
+fileName: application
+fileExt: .log

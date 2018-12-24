@@ -270,7 +270,7 @@ public class FilesService {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         String response;
-        String timeInMs = systemUtils.getDateTime("YYYYMMdd'T'HHmmssS");
+        String timeInMs = systemUtils.getDateTime(AppConstant.DateTimeFormat);
         if (timeInMs == null) {
             timeInMs = systemUtils.getTimeInMs();
         }
@@ -375,6 +375,7 @@ public class FilesService {
         }
         return response;
     }
+
     public Boolean renameExistingFile(String dir, String fileName, String ext) {
         Boolean renameExistingFileStatus = false;
         if (dir == null) {
@@ -383,7 +384,7 @@ public class FilesService {
         if (ext == null) {
             ext = ".txt";
         }
-        String timeInMs = systemUtils.getDateTime("YYYYMMdd'T'HHmmssS");
+        String timeInMs = systemUtils.getDateTime(AppConstant.DateTimeFormat);
         if (timeInMs == null) {
             timeInMs = systemUtils.getTimeInMs();
         }
@@ -400,24 +401,6 @@ public class FilesService {
             logger.info("Error in renaming file '{}', {}", fileName + ext, e);
         }
         return renameExistingFileStatus;
-    }
-    public void isValidDir(String pathName, String logStr) throws TodoException {
-        try {
-            File folder = new File(pathName);
-            if (folder.isFile()) {
-                logger.info("{} is a file not directory : {}", logStr, pathName);
-                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
-            }
-            if (folder.listFiles() == null) {
-                logger.info("{} path is invalid : {}", logStr, pathName);
-                throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
-            }
-//            logger.info("{} path is verified : {}", logStr, pathName);
-        } catch (Exception e) {
-//            logger.info("{}", ErrorCodes.CONFIG_ERROR_INVALID_PATH.getErrorString());
-            logger.info("Current working directory is : {}", systemUtils.getProjectWorkingDir());
-            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
-        }
     }
     public String parseFilePath(String filePath) {
         if (filePath != null) {

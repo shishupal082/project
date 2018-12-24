@@ -1,0 +1,3 @@
+directory: /var/log/project/java_log/
+fileName: application
+fileExt: .log

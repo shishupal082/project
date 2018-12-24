@@ -1,10 +1,12 @@
 package com.todo;
 
+import com.todo.common.LoggingHelper;
 import com.todo.common.TodoExceptionMapper;
 import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
 import com.todo.resources.*;
+import com.todo.utils.SystemUtils;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -45,8 +47,17 @@ public class TodoApplication extends Application<TodoConfiguration> {
 
     }
     public static void main(String[] args) throws Exception {
+        if (args.length <3) {
+            String logStr = "Min 3 parameters required:server, " +
+                    "env_config_yml_filepath, env_config_custom_logging_yaml_filepath";
+            SystemUtils.printLog(logStr);
+            throw new Exception();
+        }
+        String customLoggingPath = args[2];
+        LoggingHelper loggingHelper = new LoggingHelper();
+        loggingHelper.doLoggingSetup(customLoggingPath);
         appConfigPath = new ArrayList<String>();
-        for (int i=2; i<args.length; i++) {
+        for (int i=3; i<args.length; i++) {
             appConfigPath.add(args[i]);
         }
         new TodoApplication().run(args[0], args[1]);

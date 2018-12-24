@@ -17,4 +17,5 @@ public class AppConstant {
     public static final String AppVersion = "1.5.0";
     public static final String V1 = "V1";
     public static final String V2 = "V2";
+    public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
 }

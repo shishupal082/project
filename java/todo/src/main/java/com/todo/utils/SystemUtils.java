@@ -3,7 +3,7 @@ package com.todo.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,6 +53,39 @@ public class SystemUtils {
         }
         return isValidDirectory;
     }
+    public Boolean copyFile(String oldFilePath, String newFilePath) {
+        Boolean fileCopyStatus = false;
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            File file = new File(oldFilePath);
+            File newFile = new File(newFilePath);
+            is = new FileInputStream(file);
+            os = new FileOutputStream(newFile);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            is.close();
+            os.close();
+            fileCopyStatus = true;
+        } catch (Exception e) {
+            LOGGER.info("Error in copy file '{}', {}", oldFilePath, e);
+        }
+        return fileCopyStatus;
+    }
+    public Boolean deleteFileContent(String filePath) {
+        Boolean deleteFileContentStatus = false;
+        try {
+            PrintWriter pw = new PrintWriter(filePath);
+            pw.close();
+            deleteFileContentStatus = true;
+        } catch (Exception e) {
+            LOGGER.info("Error in deleting file content: filePath= '{}', {}", filePath, e);
+        }
+        return deleteFileContentStatus;
+    }
     public static String getProjectWorkingDirV2() {
         SystemUtils systemUtils = new SystemUtils();
         return systemUtils.getProjectWorkingDir();
@@ -64,5 +97,8 @@ public class SystemUtils {
     public static Boolean isFileExistV2(String filePath) {
         SystemUtils systemUtils = new SystemUtils();
         return systemUtils.isFileExist(filePath);
+    }
+    public static void printLog(String logStr) {
+        System.out.println(logStr);
     }
 }
