@@ -1,5 +1,6 @@
 package com.todo.utils;
 
+import com.todo.constants.AppConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,13 @@ public class SystemUtils {
         Long currentTimeInMs = System.currentTimeMillis();
         return currentTimeInMs.toString();
     }
+    public String getFormatedTimeInMs() {
+        String dateTime = getDateTime(AppConstant.DateTimeFormat);
+        if (dateTime == null) {
+            dateTime = getTimeInMs();
+        }
+        return dateTime;
+    }
     public String getProjectWorkingDir() {
         return System.getProperty("user.dir");
     }
@@ -50,6 +58,9 @@ public class SystemUtils {
             }
         } catch (Exception e) {
             LOGGER.info("Current working directory is : {}, {}", getProjectWorkingDir(), e);
+        }
+        if (!isValidDirectory) {
+            LOGGER.info("Current working directory is : {}", getProjectWorkingDir());
         }
         return isValidDirectory;
     }
@@ -98,7 +109,11 @@ public class SystemUtils {
         SystemUtils systemUtils = new SystemUtils();
         return systemUtils.isFileExist(filePath);
     }
-    public static void printLog(String logStr) {
+    public static String getFormatedTimeInMsV2() {
+        SystemUtils systemUtils = new SystemUtils();
+        return systemUtils.getFormatedTimeInMs();
+    }
+    public static void printLog(Object logStr) {
         System.out.println(logStr);
     }
 }

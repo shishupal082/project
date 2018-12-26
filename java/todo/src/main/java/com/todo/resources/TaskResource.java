@@ -16,6 +16,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -87,11 +88,13 @@ public class TaskResource {
     @GET
     public Response getTaskByIdV1(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
-        Map<String, Object> response = taskService.getTaskDetailsById(taskId, AppConstant.V1);
-        if (response == null) {
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        Map<String, Object> taskDetailsById = taskService.getTaskDetailsById(taskId, AppConstant.V1);
+        if (taskDetailsById == null) {
             logger.info("response is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        response.add(taskDetailsById);
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
@@ -99,11 +102,13 @@ public class TaskResource {
     @GET
     public Response getTaskByIdV2(@PathParam("taskId") String taskId) throws TodoException {
         logger.info("getTaskItems : In");
-        Map<String, Object> response = taskService.getTaskDetailsById(taskId, AppConstant.V2);
-        if (response == null) {
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        Map<String, Object> taskDetailsById = taskService.getTaskDetailsById(taskId, AppConstant.V2);
+        if (taskDetailsById == null) {
             logger.info("response is null");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+        response.add(taskDetailsById);
         logger.info("getTaskItems : Out");
         return Response.ok(response).build();
     }
@@ -133,7 +138,7 @@ public class TaskResource {
     }
     @Path("/api/v1/component/id/{id}")
     @GET
-    public TaskComponent getTaskComponent(@PathParam("id") String componentId)
+    public Map<String, TaskComponent> getTaskComponent(@PathParam("id") String componentId)
         throws TodoException {
         logger.info("getComponent : In");
         Map<String, TaskComponent> taskComponentMap =
@@ -147,8 +152,10 @@ public class TaskResource {
             logger.info("taskComponent is null for id : {}", componentId);
             throw new TodoException(ErrorCodes.TASK_COMPONENT_NOT_FOUND);
         }
+        HashMap<String, TaskComponent> response = new HashMap<String, TaskComponent>();
+        response.put(taskComponent.getId(), taskComponent);
         logger.info("getComponent : Out");
-        return taskComponent;
+        return response;
     }
     @Path("/api/v1/app/all")
     @GET
@@ -188,27 +195,31 @@ public class TaskResource {
 //    }
     @Path("/api/v1/app/id/{appId}")
     @GET
-    public Map<String, Object> getTaskApplicationsByAppId(@PathParam("appId") String appId)
+    public ArrayList<Map<String, Object>> getTaskApplicationsByAppId(@PathParam("appId") String appId)
         throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
-        Map<String, Object> response = taskService.getApplicationById(appId, AppConstant.V1);
-        if (response == null) {
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        Map<String, Object> appById = taskService.getApplicationById(appId, AppConstant.V1);
+        if (appById == null) {
             logger.info("taskApplicationById is null");
             throw new TodoException(ErrorCodes.TASK_APPLICATION_NOT_FOUND);
         }
+        response.add(appById);
         logger.info("getTaskApplicationsByAppId : Out");
         return response;
     }
     @Path("/api/v2/app/id/{appId}")
     @GET
-    public Map<String, Object> getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
+    public ArrayList<Map<String, Object>> getTaskApplicationsByAppIdV2(@PathParam("appId") String appId)
         throws TodoException {
         logger.info("getTaskApplicationsByAppId : In");
-        Map<String, Object> response = taskService.getApplicationById(appId, AppConstant.V2);
-        if (response == null) {
+        ArrayList<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+        Map<String, Object> appById = taskService.getApplicationById(appId, AppConstant.V2);
+        if (appById == null) {
             logger.info("Invalid appId : {}", appId);
             throw new TodoException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
+        response.add(appById);
         logger.info("getTaskApplicationsByAppId : Out");
         return response;
     }

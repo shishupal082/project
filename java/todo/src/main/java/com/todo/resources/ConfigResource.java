@@ -43,6 +43,11 @@ public class ConfigResource {
         configService.updateProjectStaticData(
                 configService.getAppConfig().getProjectStaticDataConfigPath());
         configService.updateYamlObjectDBFromFile();
+        try {
+            configService.updateCommandsDBFromFilePath();
+        } catch (TodoException todoe) {
+            logger.info("Error in updating commands: {}", todoe);
+        }
     }
     @Path("/v1/yaml")
     @GET

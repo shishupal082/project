@@ -14,6 +14,8 @@ public enum ErrorCodes {
     INVALID_SERVICE_NAME("Invalid service name", "Invalid service name", 403),
     TASK_COMPONENT_NOT_FOUND("Component not found", "Component not found", 403),
     TASK_APPLICATION_NOT_FOUND("Application not found", "Application not found", 403),
+    COMMAND_ID_NULL("Invalid commandId", "Invalid commandId", 403),
+    COMMAND_NOT_FOUND("Command not found", "Command not found", 403),
     CONFIG_ERROR_INVALID_SAVE_MSG_PATH("Invalid save message path", "Invalid save message path", 403),
     CONFIG_ERROR_INVALID_PATH("Invalid path", "Invalid path", 403),
     DUPLICATE_ENTRY("Duplicate entry", "Duplicate entry", 405),

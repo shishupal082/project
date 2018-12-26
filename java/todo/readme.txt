@@ -581,8 +581,43 @@ for fileUpload is file already exist, rename existing file and save new file as 
 ======
 2018-12-24
 ====================
-Added "custom_logging.yaml" file for renaming old log file and creating new log file for each run
+Added "env_config_custom_logging.yaml" file for renaming old log file and creating new log file for each run
 
-directory: /var/log/project/java_log/
+directory: save log directory (same as env config file)
 fileName: application
-fileExt: .log
+extention: .log
+
+logFilePath and customLogFilePath should be same, otherwise application should not start
+
+new resource CommandResource created
+Four new api added:
+
+- /commands/api/get/all
+- /commands/api/get/id/{commandId}
+- /commands/api/update
+- /commands/api/execute/id/{commandId}
+
+Commands file data:
+
+---
+commandList:
+  - id: capitalize_hello
+    ip: 127.0.0.1
+    port: 9080
+    command: hello|END
+    config:
+
+appConfig change:
+
+commandConfig:
+  commandFilePaths:
+    - meta-data/config/commands.yaml
+  commandLogRequestFile:
+    directory: command save directory
+    fileName: command_log
+    extention: .txt
+  commandLogResponseFile:
+    directory: command save directory
+    fileName: command_log
+    extention: .txt
+

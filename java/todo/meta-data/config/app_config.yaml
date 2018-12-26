@@ -21,3 +21,15 @@ projectStaticDataConfigPath:
 
 jsonFileMapping:
   sample_json_file2: meta-data/config/sample_json_file.json
+
+commandConfig:
+  commandFilePaths:
+    - meta-data/config/commands.yaml
+  commandLogRequestFile:
+    directory: meta-data/uploaded_files/uploaded_files/
+    fileName: command_log
+    extention: .txt
+  commandLogResponseFile:
+    directory: meta-data/uploaded_files/uploaded_files/
+    fileName: command_log
+    extention: .txt

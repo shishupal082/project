@@ -331,8 +331,55 @@ public class FilesService {
         }
         return response;
     }
+    public Boolean addNewLineInDirFilename(String text, String pathName, String fileName) throws TodoException {
+        logger.info("Add new line text : {}, in: fileName = {}", text, fileName);
+        if (text == null) {
+            logger.info("Text is null, Not rquired to add new line.");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        if (fileName == null) {
+            logger.info("Invalid fileName.");
+            throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        if (pathName == null) {
+            logger.info("pathName is null.");
+            throw new TodoException(ErrorCodes.CONFIG_ERROR);
+        }
+        if (!systemUtils.isValidDirectory(pathName)) {
+            logger.info("pathName: {}, is not a directory", pathName);
+            throw new TodoException(ErrorCodes.CONFIG_ERROR);
+        }
+        Boolean response = false;
+        try {
+            File file = new File(pathName + fileName);
+            if (file.isFile()) {
+                Writer writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(file, true), "UTF-8"));
+                writer.append("\n");
+                writer.append(text);
+                writer.close();
+                logger.info("Text {} added in : {}", text, fileName);
+                response = true;
+            } else {
+                logger.info("File does not exist creating new file.");
+                boolean fileCreated = file.createNewFile();
+                if (fileCreated) {
+                    logger.info("New file {} created.", fileName);
+                    FileWriter writer = new FileWriter(file);
+                    writer.write(text);
+                    writer.close();
+                    response = true;
+                } else {
+                    logger.info("Unable to create New file {}", fileName);
+                }
+            }
+        } catch (Exception e) {
+            logger.info("Error saving text : {}, in file : {}, {}", StringUtils.getLoggerObject(text, fileName, e));
+        }
+        return response;
+    }
     public String addNewLine(String text, String fileName) throws TodoException {
-        logger.info("Add new line text : {}, in: fileName = {} : countTry = {}", text, fileName);
+        logger.info("Add new line text : {}, in: fileName = {}", text, fileName);
         if (text == null) {
             logger.info("Text is null, Not rquired to add new line.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
@@ -342,36 +389,10 @@ public class FilesService {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         String pathName = todoConfiguration.getConfigService().getAppConfig().getAddTextPath();
-        if (pathName == null) {
-            logger.info("appConfig addTextPath is null.");
-            throw new TodoException(ErrorCodes.CONFIG_ERROR);
-        }
+        Boolean r = addNewLineInDirFilename(text, pathName, fileName);
         String response = "Error";
-        try {
-            File file = new File(pathName + fileName);
-            if (file.isFile()) {
-                Writer writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(file, true), "UTF-8"));
-                writer.append("\n");
-                writer.append(text);
-                writer.close();
-                logger.info("Text {} added in : {}", text, fileName);
-                response = "Success";
-            } else {
-                logger.info("File does not exist creating new file.");
-                boolean fileCreated = file.createNewFile();
-                if (fileCreated) {
-                    logger.info("New file {} created.", fileName);
-                    FileWriter writer = new FileWriter(file);
-                    writer.write(text);
-                    writer.close();
-                    response = "Success";
-                } else {
-                    logger.info("Unable to create New file {}", fileName);
-                }
-            }
-        } catch (Exception e) {
-            logger.info("Error saving text : {}, in file : {}, {}", StringUtils.getLoggerObject(text, fileName, e));
+        if (r) {
+            response = "Success";
         }
         return response;
     }

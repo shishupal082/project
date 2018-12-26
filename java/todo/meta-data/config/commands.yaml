@@ -1,0 +1,18 @@
+---
+commandList:
+  - id: capitalize_hello
+    ip: 127.0.0.1
+    port: 9080
+    command: hello|END
+    config:
+    config2:
+  - id: capitalize_hello2
+    ip: 127.0.0.1
+    port: 9080
+    command: hello|END
+    config:
+    config2:
+  - id: capitalize_hello_again
+    ip: 127.0.0.1
+    port: 9080
+    command: hello Again|END

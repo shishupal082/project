@@ -3,9 +3,13 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.interfaces.CommandsFileData;
+import com.todo.model.CommandsDB;
+import com.todo.utils.StringUtils;
 import com.todo.utils.SystemUtils;
 import com.todo.yaml.todo.AppConfig;
 import com.todo.model.TaskConfigDB;
+import com.todo.yaml.todo.Command;
 import com.todo.yaml.todo.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.interfaces.YamlObjectImplements;
@@ -33,6 +37,7 @@ public class ConfigService {
     private TaskConfigDB taskConfigDB;
     private YamlObjectDB yamlObjectDB;
     private ProjectStaticData projectStaticData;
+    private CommandsDB commandsDB;
     public ConfigService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
     }
@@ -104,6 +109,35 @@ public class ConfigService {
         yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
         logger.info("yamlObjectDB updated from File");
     }
+    public void updateCommandsDBFromFilePath() throws TodoException {
+        if (appConfig == null || appConfig.getCommandConfig() == null) {
+            logger.info("appConfig or commandConfig is null");
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+        }
+        ArrayList<String> commandsFilePath = getAppConfig().getCommandConfig().getCommandFilePaths();
+        CommandsFileData commandsFileData = new CommandsFileData(commandsFilePath);
+        CommandsDB commandsDBTemp = commandsFileData.getCommandsDB();
+        if (commandsDBTemp != null && commandsDBTemp.getCommandList() != null) {
+            ArrayList<Command> commandList = commandsDBTemp.getCommandList();
+            ArrayList<String> tempCommandIds = new ArrayList<String>();
+            for(Command command: commandList) {
+                if (tempCommandIds.contains(command.getId())) {
+                    logger.info("Duplicate entry found for commandId : {}, {}, {}",
+                            StringUtils.getLoggerObject(command.getId(), command, tempCommandIds));
+                    throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
+                }
+                tempCommandIds.add(command.getId());
+            }
+        }
+        commandsDB = commandsDBTemp;
+        logger.info("CommandsDB updated, Final commandsDB: {}", commandsDB);
+    }
+//    public void getCommandsDBFromFilePath() {
+//        ArrayList<String> commandsFilePath = getAppConfig().getCommandConfig().getCommandFilePaths();
+//        CommandsFileData commandsFileData = new CommandsFileData(commandsFilePath);
+//        CommandsDB commandsDBTemp = commandsFileData.getCommandsDB();
+//        logger.info("Final commandsDBTemp: {}", commandsDBTemp);
+//    }
 //    public void updateYamlObjectDBFromData(Integer age, String name) throws TodoException {
 //        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
 //        YamlObject yamlObject = new YamlObject();
@@ -134,5 +168,8 @@ public class ConfigService {
     }
     public ProjectStaticData getProjectStaticData() throws TodoException {
         return projectStaticData;
+    }
+    public CommandsDB getCommandsDB() {
+        return commandsDB;
     }
 }

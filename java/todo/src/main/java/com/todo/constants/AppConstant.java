@@ -11,10 +11,12 @@ public class AppConstant {
     public static final String STATUS = "STATUS";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
+    public static final String REASON = "REASON";
+    public static final String RESPONSE = "RESPONSE";
     public static final String IP = "IP";
     public static final String PORT = "PORT";
     public static final String ProjectDashboard = "projectDashboard";
-    public static final String AppVersion = "1.5.0";
+    public static final String AppVersion = "1.5.3";
     public static final String V1 = "V1";
     public static final String V2 = "V2";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";

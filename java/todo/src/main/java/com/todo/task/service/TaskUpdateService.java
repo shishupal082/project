@@ -2,7 +2,7 @@ package com.todo.task.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.todo.parser.string_parser.StringParser;
+import com.todo.utils.StringParser;
 import com.todo.task.config.TaskComponents;
 import com.todo.model.TaskConfigDB;
 import com.todo.task.config.component.TaskComponent;

@@ -26,6 +26,7 @@ public class AppConfig {
     private Map<String, String> tcpIpConfig;
     private String indexPageReRoute;
     private ArrayList<String> projectStaticDataConfigPath;
+    private CommandConfig commandConfig;
 
     public HashMap<String, String> getJsonFileMapping() {
         return jsonFileMapping;
@@ -91,7 +92,6 @@ public class AppConfig {
         this.addTextPath = addTextPath;
     }
     public void merge(AppConfig tempAppConfig) {
-
         if (tempAppConfig.getJsonFileMapping() != null) {
             if (this.getJsonFileMapping() != null) {
                 this.getJsonFileMapping().putAll(tempAppConfig.getJsonFileMapping());
@@ -166,6 +166,29 @@ public class AppConfig {
                 projectStaticDataConfigPath = tempAppConfig.getProjectStaticDataConfigPath();
             }
         }
+        if (tempAppConfig.getCommandConfig() != null) {
+            if (commandConfig != null) {
+                if (tempAppConfig.getCommandConfig().getCommandFilePaths() != null) {
+                    if (commandConfig.getCommandFilePaths() != null) {
+                        commandConfig.getCommandFilePaths().addAll(tempAppConfig.getCommandConfig().getCommandFilePaths());
+                    } else {
+                        commandConfig.setCommandFilePaths(tempAppConfig.getCommandConfig().getCommandFilePaths());
+                    }
+                }
+                commandConfig.setCommandLogRequestFile(tempAppConfig.getCommandConfig().getCommandLogRequestFile());
+                commandConfig.setCommandLogResponseFile(tempAppConfig.getCommandConfig().getCommandLogResponseFile());
+            } else {
+                commandConfig = tempAppConfig.getCommandConfig();
+            }
+        }
+    }
+
+    public CommandConfig getCommandConfig() {
+        return commandConfig;
+    }
+
+    public void setCommandConfig(CommandConfig commandConfig) {
+        this.commandConfig = commandConfig;
     }
 
     public Map<String, String> getTcpIpConfig() {
@@ -206,6 +229,7 @@ public class AppConfig {
                 ", tcpIpConfig=" + tcpIpConfig +
                 ", indexPageReRoute='" + indexPageReRoute + '\'' +
                 ", projectStaticDataConfigPath=" + projectStaticDataConfigPath +
+                ", commandConfig='" + commandConfig + '\'' +
                 '}';
     }
 }

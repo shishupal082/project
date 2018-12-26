@@ -1,4 +1,4 @@
-package com.todo.parser.string_parser;
+package com.todo.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

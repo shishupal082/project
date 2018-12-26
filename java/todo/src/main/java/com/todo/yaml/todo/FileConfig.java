@@ -3,10 +3,10 @@ package com.todo.yaml.todo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomLogging {
+public class FileConfig {
     private String directory;
     private String fileName;
-    private String fileExt;
+    private String extention;
 
     public String getDirectory() {
         return directory;
@@ -20,12 +20,12 @@ public class CustomLogging {
         return fileName;
     }
 
-    public String getFileExt() {
-        return fileExt;
+    public String getExtention() {
+        return extention;
     }
 
-    public void setFileExt(String fileExt) {
-        this.fileExt = fileExt;
+    public void setExtention(String extention) {
+        this.extention = extention;
     }
 
     public void setFileName(String fileName) {
@@ -34,10 +34,10 @@ public class CustomLogging {
 
     @Override
     public String toString() {
-        return "CustomLogging{" +
+        return "FileConfig{" +
                 "directory='" + directory + '\'' +
                 ", fileName='" + fileName + '\'' +
-                ", fileExt='" + fileExt + '\'' +
+                ", extention='" + extention + '\'' +
                 '}';
     }
 }

@@ -156,6 +156,18 @@ resources:
   - url: /task/api/v2/app/id/app-1
     name: Get app by id - v2
     help: /task/api/v2/app/id/{id}
+  - url: /commands/api/get/all
+    name: Commands Get all
+    help: /commands/api/get/all
+  - url: /commands/api/get/id/command-id
+    name: Commands Get by id
+    help: /commands/api/get/id/{id}
+  - url: /commands/api/update
+    name: Commands update
+    help: /commands/api/update
+  - url: /commands/api/execute/id/command-id
+    name: Commands Execute
+    help: /commands/api/execute/id/{id}
   - url: /project
     name: Project Dashboard
     help: /project

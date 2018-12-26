@@ -2,7 +2,7 @@ package com.todo.task.service;
 
 import com.todo.TodoConfiguration;
 import com.todo.constants.AppConstant;
-import com.todo.parser.string_parser.StringParser;
+import com.todo.utils.StringParser;
 import com.todo.task.config.component.TaskComponent;
 import com.todo.task.config.response.PathComponentDetails;
 import com.todo.yaml.todo.Path;
