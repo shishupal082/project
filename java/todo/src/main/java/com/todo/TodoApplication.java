@@ -7,6 +7,7 @@ import com.todo.filters.LogFilter;
 import com.todo.filters.RequestFilter;
 import com.todo.filters.ResponseFilter;
 import com.todo.resources.*;
+import com.todo.services.ConfigService;
 import com.todo.utils.SystemUtils;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -37,7 +38,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         bootstrap.addBundle(new AssetsBundle("/assets/", "/assets"));
     }
     @Override
-    public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception{
+    public void run(TodoConfiguration todoConfiguration, Environment environment) throws Exception {
         String currentLogFilename = null;
         LoggingHelper loggingHelper = new LoggingHelper();
         try {
@@ -52,6 +53,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
             SystemUtils.printLog(exitApplicationText);
             throw new Exception();
         }
+        ConfigService.verifyAppConstantVersion("pom.xml");
         todoConfiguration.getAppConfigPath().addAll(appConfigPath);
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
@@ -67,7 +69,6 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new ViewResource(todoConfiguration));
         environment.jersey().register(new TaskResource(todoConfiguration));
         environment.jersey().register(new ProjectResource(todoConfiguration));
-
     }
     public static void main(String[] args) throws Exception {
         exitApplicationText = "********* Exiting Application *********";

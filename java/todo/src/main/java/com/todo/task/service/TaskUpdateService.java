@@ -33,6 +33,10 @@ public class TaskUpdateService {
         TaskItems finalTaskItems = new TaskItems();
         ArrayList<TaskItem> result = new ArrayList<TaskItem>();
         String parsingPath = null;
+        if (taskItemsPath == null) {
+            logger.info("taskItemsPath is null but not array");
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+        }
         try {
             for (String taskItemPath: taskItemsPath) {
                 parsingPath = taskItemPath;
@@ -236,6 +240,10 @@ public class TaskUpdateService {
         TaskApplications finalTaskApplications = new TaskApplications();
         ArrayList<TaskApplication> result = new ArrayList<TaskApplication>();
         String parsingPath = null;
+        if (taskApplicationsPath == null) {
+            logger.info("taskItemsPath is null but not array");
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+        }
         try {
             for (String taskApplicationPath: taskApplicationsPath) {
                 parsingPath = taskApplicationPath;

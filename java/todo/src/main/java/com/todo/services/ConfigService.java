@@ -3,6 +3,7 @@ package com.todo.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
+import com.todo.constants.AppConstant;
 import com.todo.interfaces.CommandsFileData;
 import com.todo.model.CommandsDB;
 import com.todo.utils.StringUtils;
@@ -21,7 +22,12 @@ import com.todo.utils.ErrorCodes;
 import com.todo.common.TodoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +69,34 @@ public class ConfigService {
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
         }
         return appConfig;
+    }
+    public static void verifyAppConstantVersion(String filename) throws TodoException {
+        try {
+            File inputFile = new File(filename);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputFile);
+            doc.getDocumentElement().normalize();
+            NodeList nList = doc.getElementsByTagName("version");
+            String projectVersion = ((Element) nList.item(0)).getTextContent();
+            String[] projectVersionAttr = projectVersion.split("-");
+            if (projectVersionAttr.length < 1) {
+                logger.info("version in {} is empty", filename);
+                throw new TodoException(ErrorCodes.CONFIG_ERROR);
+            } else if (!AppConstant.AppVersion.equals(projectVersionAttr[0])) {
+                logger.info("version in {} is: {}, not matching with AppVersion: {}",
+                        StringUtils.getLoggerObject(filename, projectVersionAttr[0], AppConstant.AppVersion));
+                throw new TodoException(ErrorCodes.CONFIG_ERROR);
+            } else {
+                logger.info("AppVersion: {} is verified from {} version: {}",
+                        StringUtils.getLoggerObject(AppConstant.AppVersion, filename, projectVersion));
+            }
+        } catch (IOException ioe) {
+            logger.info("Loading AppVersion: {}", AppConstant.AppVersion);
+        } catch (Exception e) {
+            logger.info("Error in parsing appVesrion from: {}", filename);
+            throw new TodoException(ErrorCodes.RUNTIME_ERROR);
+        }
     }
     public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
         AppConfig tempAppConfig = getAppConfig(appConfigPath);

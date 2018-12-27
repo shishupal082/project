@@ -621,3 +621,23 @@ commandConfig:
     fileName: command_log
     extention: .txt
 
+2018-12-27
+=================
+Verify AppConstant.AppVersion in real time:
+ - If pom.xml not found
+   - Loading AppVersion: 1.5.3
+ - If pom.xml found
+   - If version in pom.xml is not found
+     - It will give error in pom.xml file but program will run
+     - Build will not work: 'version' is missing. @ line 4, column 109
+     - version in pom.xml is: ${dropwizard.version}, not matching with AppConstant.AppVersion: 1.5.3
+   - if version tag is there with empty content
+     - version in pom.xml is: , not matching with AppConstant.AppVersion: 1.5.3
+   - If version in pom.xml is not equal to AppConstant.version
+     - version in pom.xml is: 1.5.3bitaSNAPSHOT, not matching with AppConstant.AppVersion: 1.5.3
+     - AppConstant.AppVersion: 1.5.3 is verified from: pom.xml
+   - If version in pom.xml is equal to AppConstant.version
+     - AppVersion: 1.5.3 is verified from pom.xml version: 1.5.3-bita-SNAPSHOT
+
+Added xml parser support dependency in pom.xml
+
