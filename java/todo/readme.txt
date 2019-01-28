@@ -641,3 +641,8 @@ Verify AppConstant.AppVersion in real time:
 
 Added xml parser support dependency in pom.xml
 
+2019-01-28
+=================
+/commands/api/execute/id/{commandId}
+
+Added two query optional parameter ip and port

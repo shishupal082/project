@@ -83,7 +83,7 @@ public class CommandsService {
             LOGGER.info("Error in saving {} as commandConfig is null", type);
         }
     }
-    public Object executeCommandFromCommandId(String commandId) {
+    public Object executeCommandFromCommandId(String commandId, String ip, String port) {
         HashMap<String, String> response = new HashMap<String, String>();
         response.put("commandId", commandId);
         response.put(AppConstant.STATUS, AppConstant.SUCCESS);
@@ -96,14 +96,19 @@ public class CommandsService {
             response.put(AppConstant.REASON, "command not found");
             LOGGER.info("command not found for commandId: {}", commandId);
         }
-        if (response.get(AppConstant.STATUS).equals(AppConstant.SUCCESS)) {
-            if (command.getIp() != null &&
-                    command.getPort() != null && command.getCommand() != null) {
+        if (command != null && response.get(AppConstant.STATUS).equals(AppConstant.SUCCESS)) {
+            if (ip == null) {
+                ip = command.getIp();
+            }
+            if (port == null) {
+                port = command.getPort();
+            }
+            if (ip != null && port != null && command.getCommand() != null) {
                 String requsetDelimiter = todoConfiguration.getSocketRequestDelimiter();
                 String dateTimeStr = SystemUtils.getFormatedTimeInMsV2();
                 String commandStr = "";
-                commandStr += command.getIp();
-                commandStr += requsetDelimiter + command.getPort();
+                commandStr += ip;
+                commandStr += requsetDelimiter + port;
                 commandStr += requsetDelimiter + command.getCommand();
                 LOGGER.info("command generated:{}, for commandId: {}", commandStr, commandId);
                 generateLog("request", dateTimeStr, commandStr);

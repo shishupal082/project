@@ -4,6 +4,7 @@ import com.todo.TodoConfiguration;
 import com.todo.common.TodoException;
 import com.todo.model.CommandsDB;
 import com.todo.services.CommandsService;
+import com.todo.utils.StringUtils;
 import com.todo.yaml.todo.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,9 +65,11 @@ public class CommandsResource {
     }
     @Path("/execute/id/{commandId}")
     @GET
-    public Object executeCommandFromCommandId(@PathParam("commandId") String commandId) throws TodoException {
-        logger.info("executeCommandFromCommandId : In, id: {}", commandId);
-        Object executeResponse = commandsService.executeCommandFromCommandId(commandId);
+    public Object executeCommandFromCommandId(@PathParam("commandId") String commandId,
+                                              @QueryParam("ip") String ip,
+                                              @QueryParam("port") String port) throws TodoException {
+        logger.info("executeCommandFromCommandId : In, commandId: {}, ip: {}, port: {}", StringUtils.getLoggerObject(commandId, ip, port));
+        Object executeResponse = commandsService.executeCommandFromCommandId(commandId, ip, port);
         logger.info("executeCommandFromCommandId : Out, response: {}", executeResponse);
         return executeResponse;
     }
