@@ -18,6 +18,7 @@ public enum ErrorCodes {
     COMMAND_NOT_FOUND("Command not found", "Command not found", 403),
     CONFIG_ERROR_INVALID_SAVE_MSG_PATH("Invalid save message path", "Invalid save message path", 403),
     CONFIG_ERROR_INVALID_PATH("Invalid path", "Invalid path", 403),
+    CONFIG_ERROR_INVALID_STORAGE_TYPE("Invalid storage type", "Invalid storage type", 403),
     DUPLICATE_ENTRY("Duplicate entry", "Duplicate entry", 405),
     SERVER_ERROR("Server error", "Server error", 500),
     CONFIG_ERROR("Configuration error", "Configuration error", 500),

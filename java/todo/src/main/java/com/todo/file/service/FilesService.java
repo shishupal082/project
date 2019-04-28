@@ -140,7 +140,7 @@ public class FilesService {
     }
     public FileDetails getStaticFileDetails(String fileName) throws TodoException {
         FileDetails fileDetails = new FileDetails();
-        ArrayList<String> folderPath = todoConfiguration.getConfigService().getAppConfig().getUiPath();
+        ArrayList<String> folderPath = todoConfiguration.getConfigInterface().getAppConfig().getUiPath();
         for (String folder : folderPath) {
             fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
             if (fileDetails.getFile() != null) {
@@ -161,7 +161,7 @@ public class FilesService {
             logger.info("File : {}, is configuration file, path : {}", fileName, filePath);
             fileDetails = getFileDetailsFromPath(filePath, filePath);
         } else {
-            ArrayList<String> folderPath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
+            ArrayList<String> folderPath = todoConfiguration.getConfigInterface().getAppConfig().getRelativePath();
             for (String folder : folderPath) {
                 fileDetails = getFileDetailsFromPath(fileName, folder + fileName);
                 if (fileDetails.getFile() != null) {
@@ -179,7 +179,7 @@ public class FilesService {
     public ArrayList<ScanResult> scanAllDirectory(boolean isRecursive) {
         ScanResult scanResult;
         ArrayList<ScanResult> scanResults = new ArrayList<ScanResult>();
-        for (String scanDir : todoConfiguration.getConfigService().getAppConfig().getRelativePath()) {
+        for (String scanDir : todoConfiguration.getConfigInterface().getAppConfig().getRelativePath()) {
             scanResult = scanDirectory(scanDir, scanDir, isRecursive);
             scanResults.add(scanResult);
         }
@@ -281,7 +281,7 @@ public class FilesService {
         if (ext == null) {
             ext = ".txt";
         }
-        String saveMessageDir = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        String saveMessageDir = todoConfiguration.getConfigInterface().getAppConfig().getMessageSavePath();
         String filePath = saveMessageDir + fileName + ext;
         if (countTry > 1) {
             response = "Error while saving message.";
@@ -388,7 +388,7 @@ public class FilesService {
             logger.info("Invalid fileName.");
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
-        String pathName = todoConfiguration.getConfigService().getAppConfig().getAddTextPath();
+        String pathName = todoConfiguration.getConfigInterface().getAppConfig().getAddTextPath();
         Boolean r = addNewLineInDirFilename(text, pathName, fileName);
         String response = "Error";
         if (r) {
@@ -446,7 +446,7 @@ public class FilesService {
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         try {
-            HashMap<String, String> jsonFileMapping = todoConfiguration.getConfigService()
+            HashMap<String, String> jsonFileMapping = todoConfiguration.getConfigInterface()
                     .getAppConfig().getJsonFileMapping();
             if (jsonFileMapping == null) {
                 logger.info("Invalid config jsonFileMapping : null");

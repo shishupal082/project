@@ -3,6 +3,7 @@ package com.todo.resources;
 import com.todo.TodoConfiguration;
 import com.todo.config.TodoViewConfig;
 import com.todo.domain.view.*;
+import com.todo.interfaces.ConfigInterface;
 import com.todo.services.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,13 +34,13 @@ public class ViewResource {
     @GET
     public IndexView indexPage() {
         logger.info("Loading indexPage");
-        ConfigService configService = todoConfiguration.getConfigService();
+        ConfigInterface configInterface = todoConfiguration.getConfigInterface();
         /*
         * It will load resource path from app Config
         * */
         return new IndexView(httpServletRequest,
-            configService.getResourceDetails(configService.getAppConfig().getResourcePath()),
-                configService.getAppConfig().getIndexPageReRoute());
+            ConfigService.getResourceDetails(configInterface.getAppConfig().getResourcePath()),
+                configInterface.getAppConfig().getIndexPageReRoute());
     }
     @GET
     @Path("index")
@@ -51,12 +52,11 @@ public class ViewResource {
     @Path("view/resource")
     public IndexView getViewResource() {
         logger.info("Loading indexPage");
-        ConfigService configService = todoConfiguration.getConfigService();
         /*
          * It will load resource path from env_config
          * */
         return new IndexView(httpServletRequest,
-            configService.getResourceDetails(todoConfiguration.getAvailableResourcePath()), null);
+            ConfigService.getResourceDetails(todoConfiguration.getAvailableResourcePath()), null);
     }
     @GET
     @Path("view/dashboard")

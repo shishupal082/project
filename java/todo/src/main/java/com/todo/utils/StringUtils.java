@@ -72,7 +72,7 @@ public class StringUtils {
                 String str1 = (String) obj.get(i).get(param);
                 String str2 = (String) obj.get(j).get(param);
                 if (StringUtil.isBlank(str1) || StringUtil.isBlank(str2)) {
-                    logger.info("Comparing values str1 or str2 is null : {}, {}", str1, str2);
+//                    logger.info("Comparing values str1 or str2 is null : {}, {}", str1, str2);
                     continue;
                 }
                 if (str1.compareTo(str2)>0) {

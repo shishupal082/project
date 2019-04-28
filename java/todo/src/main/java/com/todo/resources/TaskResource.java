@@ -128,7 +128,8 @@ public class TaskResource {
     @GET
     public Map<String, TaskComponent> getTaskComponents() throws TodoException {
         logger.info("getComponent : In");
-        Map<String, TaskComponent> result = todoConfiguration.getConfigService().getTaskConfigDB().getTaskComponents();
+        Map<String, TaskComponent> result = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskComponents();
         if (result == null) {
             logger.info("result is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);
@@ -142,7 +143,8 @@ public class TaskResource {
         throws TodoException {
         logger.info("getComponent : In");
         Map<String, TaskComponent> taskComponentMap =
-            todoConfiguration.getConfigService().getTaskConfigDB().getTaskComponents();
+            todoConfiguration.getConfigInterface().getTaskConfigDB(
+                    todoConfiguration.getConfigInterface().getAppConfig()).getTaskComponents();
         if (taskComponentMap == null) {
             logger.info("taskComponentMap is null");
             throw new TodoException(ErrorCodes.UNABLE_TO_PARSE_JSON);

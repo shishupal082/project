@@ -23,7 +23,8 @@ public class ProjectResource {
     public ProjectView loadProjectView() {
         logger.info("loadProjectView : In");
         ArrayList<String> pathParam = new ArrayList<String>();
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 AppConstant.ProjectDashboard, pathParam, projectStaticData);
         logger.info("loadProjectView : Out");
@@ -37,7 +38,8 @@ public class ProjectResource {
         ArrayList<String> pathParam = new ArrayList<String>();
         pathParam.add(p0);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v0", pathParam, projectStaticData);
         logger.info("loadProjectViewV0 : Out");
@@ -51,7 +53,8 @@ public class ProjectResource {
         pathParam.add(p0);
         pathParam.add(p1);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v1", pathParam, projectStaticData);
         logger.info("loadProjectViewV1 : Out");
@@ -67,7 +70,8 @@ public class ProjectResource {
         pathParam.add(p1);
         pathParam.add(p2);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v2", pathParam, projectStaticData);
         logger.info("loadProjectViewV2 : Out");
@@ -84,7 +88,8 @@ public class ProjectResource {
         pathParam.add(p2);
         pathParam.add(p3);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v3", pathParam, projectStaticData);
         logger.info("loadProjectViewV3 : Out");
@@ -103,7 +108,8 @@ public class ProjectResource {
         pathParam.add(p3);
         pathParam.add(p4);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v4", pathParam, projectStaticData);
         logger.info("loadProjectViewV4 : Out");
@@ -123,7 +129,8 @@ public class ProjectResource {
         pathParam.add(p4);
         pathParam.add(p5);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v5", pathParam, projectStaticData);
         logger.info("loadProjectViewV5 : Out");
@@ -145,7 +152,8 @@ public class ProjectResource {
         pathParam.add(p5);
         pathParam.add(p6);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v6", pathParam, projectStaticData);
         logger.info("loadProjectViewV6 : Out");
@@ -168,7 +176,8 @@ public class ProjectResource {
         pathParam.add(p6);
         pathParam.add(p7);
         logger.info("Pathparameters : {}", pathParam);
-        ProjectStaticData projectStaticData = todoConfiguration.getConfigService().getProjectStaticData();
+        ProjectStaticData projectStaticData = todoConfiguration.getConfigInterface().getProjectStaticData(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ProjectView projectView = new ProjectView(httpServletRequest,
                 "v7", pathParam, projectStaticData);
         logger.info("loadProjectViewV7 : Out");

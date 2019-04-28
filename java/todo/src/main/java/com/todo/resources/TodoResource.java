@@ -31,14 +31,12 @@ public class TodoResource {
     private static Logger logger = LoggerFactory.getLogger(TodoResource.class);
     private TodoConfiguration todoConfiguration;
     private SocketService socketService;
-    private Map<String, String> tcpIpConfig;
     @Context
     private HttpServletRequest httpServletRequest;
     public TodoResource (TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
         TodoDbParser todoDbParser = new FileParser();
         TodoDatabase todoDatabase = todoDbParser.getTodoDatabase(todoConfiguration.getTodoFileConfig());
-        tcpIpConfig = todoConfiguration.getConfigService().getAppConfig().getTcpIpConfig();
         logger.info("Todos : {}", todoDatabase.getTodoMap());
         logger.info("TodoUser : {}", todoDatabase.getTodoUserMap());
         logger.info("TodoEvent : {}", todoDatabase.getTodoEventMap());
@@ -91,12 +89,15 @@ public class TodoResource {
     }
     @Path("/socket/v2")
     @GET
-    public String getSocketResponse(@QueryParam("query") String query, @QueryParam("service") String serviceName) throws TodoException {
+    public String getSocketResponse(@QueryParam("query") String query, @QueryParam("service") String serviceName)
+            throws TodoException {
         logger.info("getSocketResponse : In : service : {} : query : {}", serviceName, query);
         if (query == null) {
             logger.info("getSocketResponse : throw : TodoException : {}", ErrorCodes.BAD_REQUEST_ERROR);
             throw new TodoException(ErrorCodes.BAD_REQUEST_ERROR);
         }
+
+        Map<String, String> tcpIpConfig = todoConfiguration.getConfigInterface().getAppConfig().getTcpIpConfig();
         String response = socketService.getSocketResponseV2(tcpIpConfig, serviceName, query);
         logger.info("getSocketResponse : Out : response : {}", response);
         return response;

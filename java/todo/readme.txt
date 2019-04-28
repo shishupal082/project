@@ -641,8 +641,27 @@ Verify AppConstant.AppVersion in real time:
 
 Added xml parser support dependency in pom.xml
 
+1.5.4
+=================
 2019-01-28
 =================
 /commands/api/execute/id/{commandId}
 
 Added two query optional parameter ip and port
+
+
+1.5.5
+=================
+2019-04-28
+=================
+server file env_config.yml env_config_custom_logging.yaml app_config.yaml app_config_2.yaml
+dataStorage file, ram, db [As of now only "ram" and "file" is working]
+- If dataStorage is file then
+  - It will not support update feature, as file can not be updated
+Now minimum argument length is 4
+1 => server
+2 => dataStorage
+3 => env_config
+4 => env_config_custom_logging
+....
+

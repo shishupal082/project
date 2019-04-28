@@ -28,7 +28,8 @@ public class CommandsService {
         socketService = new SocketService(todoConfiguration.getSocketRequestDelimiter());
     }
     public Command getCommandById(String commandId) throws TodoException {
-        CommandsDB commandsDB = todoConfiguration.getConfigService().getCommandsDB();
+        CommandsDB commandsDB = todoConfiguration.getConfigInterface().getCommandsDB(
+                todoConfiguration.getConfigInterface().getAppConfig());
         if (commandId == null) {
             LOGGER.info("commandId is null");
             throw new TodoException(ErrorCodes.COMMAND_ID_NULL);
@@ -61,7 +62,7 @@ public class CommandsService {
         LOGGER.info("Saving log for type: {}, dateTimeStr: {}, commandStr:{}",
                 StringUtils.getLoggerObject(type, dateTimeStr, commandStr));
         CommandConfig commandConfig =
-                todoConfiguration.getConfigService().getAppConfig().getCommandConfig();
+                todoConfiguration.getConfigInterface().getAppConfig().getCommandConfig();
         String requsetDelimiter = todoConfiguration.getSocketRequestDelimiter();
         if (commandConfig != null) {
             try {

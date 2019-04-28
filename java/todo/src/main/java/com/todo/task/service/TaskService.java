@@ -38,7 +38,8 @@ public class TaskService {
         ArrayList<Path> paths = taskApplication.getPaths();
         ArrayList<HashMap<String, Object>> r = new ArrayList<HashMap<String, Object>>();
         Map<String, TaskComponent> taskComponentMap =
-                todoConfiguration.getConfigService().getTaskConfigDB().getTaskComponents();
+                todoConfiguration.getConfigInterface().getTaskConfigDB(
+                        todoConfiguration.getConfigInterface().getAppConfig()).getTaskComponents();
         if (paths == null) {
             logger.info("applicationPaths is null");
             return null;
@@ -119,7 +120,8 @@ public class TaskService {
             return response;
         }
         Map<String, TaskComponent> taskComponentMap =
-            todoConfiguration.getConfigService().getTaskConfigDB().getTaskComponents();
+            todoConfiguration.getConfigInterface().getTaskConfigDB(
+                    todoConfiguration.getConfigInterface().getAppConfig()).getTaskComponents();
         for (String component: components) {
             TaskComponent componentDetails = taskComponentMap.get(parseComponentId(component));
             HashMap<String, Object> componentDetailsObj = new HashMap<String, Object>();
@@ -166,7 +168,8 @@ public class TaskService {
             logger.info("taskId is null");
             return null;
         }
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfigDB().getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             return null;
@@ -180,7 +183,8 @@ public class TaskService {
         return null;
     }
     private Map<String, Object> getTaskItemByTaskItemResponse(TaskItem taskItem, String version) {
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfigDB().getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             return null;
@@ -207,7 +211,8 @@ public class TaskService {
         return getTaskItemByTaskItemResponse(taskItem, version);
     }
     public ArrayList<Map<String, Object>> getAllTaskItems(String version) {
-        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigService().getTaskConfigDB().getTaskItems();
+        ArrayList<TaskItem> taskItems = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskItems();
         if (taskItems == null) {
             logger.info("taskItemMap is null");
             return null;
@@ -223,7 +228,8 @@ public class TaskService {
             logger.info("appId is null");
             return null;
         }
-        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfigDB().getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskApplications();
         if (taskApplications == null || taskApplications.getTaskApplications() == null) {
             logger.info("taskApplications is null");
             return null;
@@ -237,7 +243,8 @@ public class TaskService {
         return null;
     }
     private Map<String, Object> getTaskAppLicationByResponse(TaskApplication taskApplication, String version) {
-        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfigDB().getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskApplications();
         if (taskApplications == null || taskApplications.getTaskApplications() == null) {
             logger.info("taskApplications is null");
             return null;
@@ -264,7 +271,8 @@ public class TaskService {
         return getTaskAppLicationByResponse(taskApplication, version);
     }
     public ArrayList<Map<String, Object>> getAllApplication(String version) {
-        TaskApplications taskApplications = todoConfiguration.getConfigService().getTaskConfigDB().getTaskApplications();
+        TaskApplications taskApplications = todoConfiguration.getConfigInterface().getTaskConfigDB(
+                todoConfiguration.getConfigInterface().getAppConfig()).getTaskApplications();
         if (taskApplications == null || taskApplications.getTaskApplications() == null) {
             logger.info("taskItemMap is null");
             return null;

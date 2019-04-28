@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.todo.TodoConfiguration;
 import com.todo.constants.AppConstant;
-import com.todo.interfaces.CommandsFileData;
-import com.todo.model.CommandsDB;
 import com.todo.utils.StringUtils;
 import com.todo.utils.SystemUtils;
 import com.todo.yaml.todo.AppConfig;
 import com.todo.model.TaskConfigDB;
-import com.todo.yaml.todo.Command;
 import com.todo.yaml.todo.ResourceDetails;
 import com.todo.domain.project_static_data.ProjectStaticData;
 import com.todo.interfaces.YamlObjectImplements;
@@ -39,11 +36,11 @@ public class ConfigService {
     private static Logger logger = LoggerFactory.getLogger(ConfigService.class);
     private static ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private TodoConfiguration todoConfiguration;
-    private AppConfig appConfig;
-    private TaskConfigDB taskConfigDB;
-    private YamlObjectDB yamlObjectDB;
-    private ProjectStaticData projectStaticData;
-    private CommandsDB commandsDB;
+//    private AppConfig appConfig;
+//    private TaskConfigDB taskConfigDB;
+//    private YamlObjectDB yamlObjectDB;
+//    private ProjectStaticData projectStaticData;
+//    private CommandsDB commandsDB;
     public ConfigService(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
     }
@@ -60,6 +57,7 @@ public class ConfigService {
                     appConfig = new AppConfig();
                 }
                 appConfig.merge(tempAppConfig);
+                logger.info("AppConfigLoaded from file : {}", fileName);
             } catch (IOException ioe) {
                 logger.info("IOE : for file : {}, {}", fileName, ioe);
                 logger.info("Current working directory is : {}", SystemUtils.getProjectWorkingDirV2());
@@ -98,21 +96,21 @@ public class ConfigService {
             throw new TodoException(ErrorCodes.RUNTIME_ERROR);
         }
     }
-    public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
-        AppConfig tempAppConfig = getAppConfig(appConfigPath);
-        logger.info("AppConfig loaded with data : {}", tempAppConfig);
-        appConfig = tempAppConfig;
-    }
-    public void updateTaskConfig() throws TodoException {
-        TaskConfigDB tempTaskConfigDB = new TaskConfigDB();
-        TaskUpdateService.updateTaskItems(tempTaskConfigDB, appConfig.getTaskItemsPath());
-        TaskUpdateService.updateTaskApplication(tempTaskConfigDB, appConfig.getTaskApplicationPath());
-        TaskUpdateService.updateTaskComponents(tempTaskConfigDB);
-        logger.info("Final taskItem data : {}", tempTaskConfigDB.getTaskItems());
-        logger.info("Final taskApplication data : {}", tempTaskConfigDB.getTaskApplications());
-        taskConfigDB = tempTaskConfigDB;
-    }
-    public void updateProjectStaticData(ArrayList<String> projectStaticDataConfigPath)
+//    public void updateAppConfig(ArrayList<String> appConfigPath) throws TodoException {
+//        AppConfig tempAppConfig = getAppConfig(appConfigPath);
+//        logger.info("AppConfig loaded with data : {}", tempAppConfig);
+//        appConfig = tempAppConfig;
+//    }
+//    public static TaskConfigDB getTaskConfigDB() throws TodoException {
+//        TaskConfigDB taskConfigDB = new TaskConfigDB();
+//        TaskUpdateService.updateTaskItems(taskConfigDB, appConfig.getTaskItemsPath());
+//        TaskUpdateService.updateTaskApplication(taskConfigDB, appConfig.getTaskApplicationPath());
+//        TaskUpdateService.updateTaskComponents(taskConfigDB);
+//        logger.info("Final taskItem data : {}", taskConfigDB.getTaskItems());
+//        logger.info("Final taskApplication data : {}", taskConfigDB.getTaskApplications());
+//        return taskConfigDB;
+//    }
+    public static ProjectStaticData getProjectStaticData(ArrayList<String> projectStaticDataConfigPath)
             throws TodoException {
         ProjectStaticData projectStaticDataV1 = new ProjectStaticData();
         if (projectStaticDataConfigPath == null) {
@@ -133,39 +131,38 @@ public class ConfigService {
                 }
             }
         }
-        logger.info("Final projectStaticData : {}", projectStaticDataV1);
-        projectStaticData = projectStaticDataV1;
+        return projectStaticDataV1;
     }
-    public void updateYamlObjectDBFromFile() throws TodoException {
-        YamlObjectFileParser yamlObjectFileParser = new YamlObjectFileParser();
-        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
-        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFilePath(todoConfiguration.getYamlObjectPath());
-        yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
-        logger.info("yamlObjectDB updated from File");
-    }
-    public void updateCommandsDBFromFilePath() throws TodoException {
-        if (appConfig == null || appConfig.getCommandConfig() == null) {
-            logger.info("appConfig or commandConfig is null");
-            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
-        }
-        ArrayList<String> commandsFilePath = getAppConfig().getCommandConfig().getCommandFilePaths();
-        CommandsFileData commandsFileData = new CommandsFileData(commandsFilePath);
-        CommandsDB commandsDBTemp = commandsFileData.getCommandsDB();
-        if (commandsDBTemp != null && commandsDBTemp.getCommandList() != null) {
-            ArrayList<Command> commandList = commandsDBTemp.getCommandList();
-            ArrayList<String> tempCommandIds = new ArrayList<String>();
-            for(Command command: commandList) {
-                if (tempCommandIds.contains(command.getId())) {
-                    logger.info("Duplicate entry found for commandId : {}, {}, {}",
-                            StringUtils.getLoggerObject(command.getId(), command, tempCommandIds));
-                    throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
-                }
-                tempCommandIds.add(command.getId());
-            }
-        }
-        commandsDB = commandsDBTemp;
-        logger.info("CommandsDB updated, Final commandsDB: {}", commandsDB);
-    }
+//    public void updateYamlObjectDBFromFile() throws TodoException {
+//        YamlObjectFileParser yamlObjectFileParser = new YamlObjectFileParser();
+//        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
+//        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFilePath(todoConfiguration.getYamlObjectPath());
+//        yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
+//        logger.info("yamlObjectDB updated from File");
+//    }
+//    public void updateCommandsDBFromFilePath() throws TodoException {
+//        if (appConfig == null || appConfig.getCommandConfig() == null) {
+//            logger.info("appConfig or commandConfig is null");
+//            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
+//        }
+//        ArrayList<String> commandsFilePath = getAppConfig().getCommandConfig().getCommandFilePaths();
+//        CommandsFileData commandsFileData = new CommandsFileData(commandsFilePath);
+//        CommandsDB commandsDBTemp = commandsFileData.getCommandsDB();
+//        if (commandsDBTemp != null && commandsDBTemp.getCommandList() != null) {
+//            ArrayList<Command> commandList = commandsDBTemp.getCommandList();
+//            ArrayList<String> tempCommandIds = new ArrayList<String>();
+//            for(Command command: commandList) {
+//                if (tempCommandIds.contains(command.getId())) {
+//                    logger.info("Duplicate entry found for commandId : {}, {}, {}",
+//                            StringUtils.getLoggerObject(command.getId(), command, tempCommandIds));
+//                    throw new TodoException(ErrorCodes.DUPLICATE_ENTRY);
+//                }
+//                tempCommandIds.add(command.getId());
+//            }
+//        }
+//        commandsDB = commandsDBTemp;
+//        logger.info("CommandsDB updated, Final commandsDB: {}", commandsDB);
+//    }
 //    public void getCommandsDBFromFilePath() {
 //        ArrayList<String> commandsFilePath = getAppConfig().getCommandConfig().getCommandFilePaths();
 //        CommandsFileData commandsFileData = new CommandsFileData(commandsFilePath);
@@ -180,10 +177,15 @@ public class ConfigService {
 //        yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
 //        logger.info("yamlObjectDB updated from data");
 //    }
-    public YamlObject getYamlObject() throws TodoException {
+    public static YamlObject getYamlObject(String yamlObjectPath) throws TodoException {
+        YamlObjectFileParser yamlObjectFileParser = new YamlObjectFileParser();
+        YamlObjectImplements yamlObjectImplements = new YamlObjectImplements();
+        YamlObject yamlObject = yamlObjectFileParser.getYamlObjectFromFilePath(yamlObjectPath);
+        YamlObjectDB yamlObjectDB = yamlObjectImplements.getYamlObjectDB(yamlObject);
+        logger.info("yamlObjectDB loaded from File");
         return yamlObjectDB.getYamlObject();
     }
-    public ResourceDetails getResourceDetails(String resourcePath) throws TodoException {
+    public static ResourceDetails getResourceDetails(String resourcePath) throws TodoException {
         ResourceDetails resourceDetails = null;
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
@@ -194,16 +196,16 @@ public class ConfigService {
         }
         return resourceDetails;
     }
-    public AppConfig getAppConfig() throws TodoException {
-        return appConfig;
-    }
-    public TaskConfigDB getTaskConfigDB() throws TodoException {
-        return taskConfigDB;
-    }
-    public ProjectStaticData getProjectStaticData() throws TodoException {
-        return projectStaticData;
-    }
-    public CommandsDB getCommandsDB() {
-        return commandsDB;
-    }
+//    public AppConfig getAppConfig() throws TodoException {
+//        return appConfig;
+//    }
+//    public TaskConfigDB getTaskConfigDB() throws TodoException {
+//        return taskConfigDB;
+//    }
+//    public ProjectStaticData getProjectStaticData() throws TodoException {
+//        return projectStaticData;
+//    }
+//    public CommandsDB getCommandsDB() {
+//        return commandsDB;
+//    }
 }

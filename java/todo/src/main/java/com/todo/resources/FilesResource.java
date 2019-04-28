@@ -54,7 +54,7 @@ public class FilesResource {
         logger.info("uploadFile : In");
         String fileName = StringUtils.getAbsoluteFileName(fileDetail.getFileName());
         String ext = StringUtils.getFileExtention(fileDetail.getFileName());
-        String saveMessagePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        String saveMessagePath = todoConfiguration.getConfigInterface().getAppConfig().getMessageSavePath();
         if (SystemUtils.isValidDirectoryV2(saveMessagePath)) {
             if (SystemUtils.isFileExistV2(saveMessagePath + fileName + ext)) {
                 if (!filesService.renameExistingFile(saveMessagePath, fileName, ext)) {
@@ -137,7 +137,7 @@ public class FilesResource {
         boolean overWrite = "yes".equals(overwrite);
         logger.info("fileQuerySubmit : In : {}, {}, {}, {}",
                 StringUtils.getLoggerObject(message, fileName, ext, overWrite));
-        String saveMessagePath = todoConfiguration.getConfigService().getAppConfig().getMessageSavePath();
+        String saveMessagePath = todoConfiguration.getConfigInterface().getAppConfig().getMessageSavePath();
         if (!SystemUtils.isValidDirectoryV2(saveMessagePath)) {
             logger.info("Save message path is invalid : {}", saveMessagePath);
             throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_PATH);
@@ -335,7 +335,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigInterface().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -354,7 +354,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigInterface().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -402,7 +402,7 @@ public class FilesResource {
         String scanDir = null;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigInterface().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
         } catch (Exception e) {
             logger.info("Invalid directory index : {}", e);
@@ -422,7 +422,7 @@ public class FilesResource {
         String scanDir = null, folderPath;
         try {
             directoryIndex = Integer.parseInt(index);
-            ArrayList<String> allRelativePath = todoConfiguration.getConfigService().getAppConfig().getRelativePath();
+            ArrayList<String> allRelativePath = todoConfiguration.getConfigInterface().getAppConfig().getRelativePath();
             scanDir = allRelativePath.get(directoryIndex);
             folderPath = scanDir;
         } catch (Exception e) {
@@ -450,7 +450,7 @@ public class FilesResource {
                                       @QueryParam("text") String text) throws TodoException {
         logger.info("addTextToFile {}, {}", fileName, text);
         String res = "Error";
-        String addTextPath = todoConfiguration.getConfigService().getAppConfig().getAddTextPath();
+        String addTextPath = todoConfiguration.getConfigInterface().getAppConfig().getAddTextPath();
         if (SystemUtils.isValidDirectoryV2(addTextPath)) {
             try {
                 res = filesService.addNewLine(text, fileName);

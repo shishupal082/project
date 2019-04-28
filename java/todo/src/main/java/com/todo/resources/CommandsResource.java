@@ -33,7 +33,9 @@ public class CommandsResource {
     public ArrayList<Command> getCommandsDB() throws TodoException {
         logger.info("getCommandsDB : In");
         ArrayList<Command> commandArrayList = new ArrayList<Command>();
-        CommandsDB commandsDB = todoConfiguration.getConfigService().getCommandsDB();
+        CommandsDB commandsDB = todoConfiguration.getConfigInterface().getCommandsDB(
+                todoConfiguration.getConfigInterface().getAppConfig()
+        );
         if (commandsDB != null && commandsDB.getCommandList() != null) {
             commandArrayList = commandsDB.getCommandList();
         }
@@ -54,9 +56,9 @@ public class CommandsResource {
     @GET
     public ArrayList<Command> updateCommandsDB() throws TodoException {
         logger.info("updateCommandsDB : In");
-        todoConfiguration.getConfigService().updateCommandsDBFromFilePath();
+        CommandsDB commandsDB = todoConfiguration.getConfigInterface().updateCommandsDB(
+                todoConfiguration.getConfigInterface().getAppConfig());
         ArrayList<Command> commandArrayList = new ArrayList<Command>();
-        CommandsDB commandsDB = todoConfiguration.getConfigService().getCommandsDB();
         if (commandsDB != null && commandsDB.getCommandList() != null) {
             commandArrayList = commandsDB.getCommandList();
         }

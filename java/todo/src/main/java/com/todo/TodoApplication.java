@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 public class TodoApplication extends Application<TodoConfiguration> {
     private static Logger LOGGER = LoggerFactory.getLogger(TodoApplication.class);
+    private static String dataStorage;
     private static ArrayList<String> appConfigPath;
     private static String customLoggingPath;
     private static String exitApplicationText;
@@ -55,6 +56,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         }
         ConfigService.verifyAppConstantVersion("pom.xml");
         todoConfiguration.getAppConfigPath().addAll(appConfigPath);
+        todoConfiguration.setDataStorage(dataStorage);
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new FaviconResource());
@@ -72,14 +74,15 @@ public class TodoApplication extends Application<TodoConfiguration> {
     }
     public static void main(String[] args) throws Exception {
         exitApplicationText = "********* Exiting Application *********";
-        if (args.length <3) {
-            String logStr = "Min 3 parameters required:server, " +
+        if (args.length <4) {
+            String logStr = "Min 4 parameters required:server, storage, " +
                     "env_config_yml_filepath, env_config_custom_logging_yaml_filepath";
             SystemUtils.printLog(logStr);
             SystemUtils.printLog(exitApplicationText);
             throw new Exception();
         }
-        customLoggingPath = args[2];
+        dataStorage = args[1];//ram, file, db, ...
+        customLoggingPath = args[3];
         LoggingHelper loggingHelper = new LoggingHelper();
         if (!loggingHelper.doLoggingSetup(customLoggingPath)) {
             SystemUtils.printLog("Error in Log setup.");
@@ -87,9 +90,9 @@ public class TodoApplication extends Application<TodoConfiguration> {
             throw new Exception();
         }
         appConfigPath = new ArrayList<String>();
-        for (int i=3; i<args.length; i++) {
+        for (int i=4; i<args.length; i++) {
             appConfigPath.add(args[i]);
         }
-        new TodoApplication().run(args[0], args[1]);
+        new TodoApplication().run(args[0], args[2]);
     }
 }

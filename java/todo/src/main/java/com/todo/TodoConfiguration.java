@@ -4,6 +4,7 @@ import com.todo.config.DirectoryConfig;
 import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;
+import com.todo.interfaces.ConfigInterface;
 import com.todo.services.ConfigService;
 import io.dropwizard.Configuration;
 
@@ -22,7 +23,8 @@ public class TodoConfiguration extends Configuration {
     private String socketRequestDelimiter;
     private ArrayList<String> appConfigPath;
     private String availableResourcePath;
-    private ConfigService configService;
+    private ConfigInterface configInterface;
+    private String dataStorage;
 
     public ArrayList<String> getAppConfigPath() {
         return appConfigPath;
@@ -86,12 +88,19 @@ public class TodoConfiguration extends Configuration {
     public void setAvailableResourcePath(String availableResourcePath) {
         this.availableResourcePath = availableResourcePath;
     }
-
-    public ConfigService getConfigService() {
-        return configService;
+    public ConfigInterface getConfigInterface() {
+        return configInterface;
     }
 
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
+    public void setConfigInterface(ConfigInterface configInterface) {
+        this.configInterface = configInterface;
+    }
+
+    public String getDataStorage() {
+        return dataStorage;
+    }
+
+    public void setDataStorage(String dataStorage) {
+        this.dataStorage = dataStorage;
     }
 }

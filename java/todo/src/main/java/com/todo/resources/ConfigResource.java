@@ -1,6 +1,9 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.interfaces.ConfigImplementsFile;
+import com.todo.interfaces.ConfigImplementsRAM;
+import com.todo.interfaces.ConfigInterface;
 import com.todo.yaml.todo.AppConfig;
 import com.todo.config.ClientDetails;
 import com.todo.model.TaskConfigDB;
@@ -33,27 +36,35 @@ public class ConfigResource {
     @Context
     private HttpServletRequest httpServletRequest;
     private TodoConfiguration todoConfiguration;
-    private ConfigService configService;
+//    private ConfigService configService;
+    private ConfigInterface configInterface;
     public ConfigResource(TodoConfiguration todoConfiguration) {
         this.todoConfiguration = todoConfiguration;
-        configService = new ConfigService(todoConfiguration);
-        this.todoConfiguration.setConfigService(configService);
-        configService.updateAppConfig(todoConfiguration.getAppConfigPath());
-        configService.updateTaskConfig();
-        configService.updateProjectStaticData(
-                configService.getAppConfig().getProjectStaticDataConfigPath());
-        configService.updateYamlObjectDBFromFile();
-        try {
-            configService.updateCommandsDBFromFilePath();
-        } catch (TodoException todoe) {
-            logger.info("Error in updating commands: {}", todoe);
+//        configService = new ConfigService(todoConfiguration);
+//        this.todoConfiguration.setConfigService(configService);
+//        configService.updateAppConfig(todoConfiguration.getAppConfigPath());
+//        configService.updateTaskConfig();
+//        configService.updateProjectStaticData(
+//                configService.getAppConfig().getProjectStaticDataConfigPath());
+//        configService.updateYamlObjectDBFromFile();
+//        try {
+//            configService.updateCommandsDBFromFilePath();
+//        } catch (TodoException todoe) {
+//            logger.info("Error in updating commands: {}", todoe);
+//        }
+        //ConfigInterfacing
+        if (todoConfiguration.getDataStorage().equals("ram")) {
+            configInterface = new ConfigImplementsRAM(todoConfiguration);
+        } else {
+            configInterface = new ConfigImplementsFile(todoConfiguration);
         }
+        this.todoConfiguration.setConfigInterface(configInterface);
     }
     @Path("/v1/yaml")
     @GET
     public YamlObject getYamlObject() throws TodoException {
         logger.info("getYamlObject : In");
-        YamlObject yamlObject = configService.getYamlObject();
+        YamlObject yamlObject = ConfigService.getYamlObject(todoConfiguration.getYamlObjectPath());
         logger.info("getYamlFileName : Out");
         return yamlObject;
     }
@@ -61,7 +72,7 @@ public class ConfigResource {
     @GET
     public ResourceDetails getResourceDetials() throws TodoException {
         logger.info("getResourceDetails : In");
-        ResourceDetails resourceDetails = configService.getResourceDetails(
+        ResourceDetails resourceDetails = ConfigService.getResourceDetails(
             todoConfiguration.getAvailableResourcePath());
         logger.info("getResourceDetails : Out");
         return resourceDetails;
@@ -71,21 +82,21 @@ public class ConfigResource {
     public AppConfig getAppConfig() throws TodoException {
         logger.info("getAppConfig : in");
         logger.info("getAppConfig : out");
-        return configService.getAppConfig();
+        return configInterface.getAppConfig();
     }
     @Path("/v1/update/app-config")
     @GET
     public AppConfig updateAppConfig() throws TodoException {
         logger.info("updateAppConfig : in");
-        configService.updateAppConfig(todoConfiguration.getAppConfigPath());
-        logger.info("updateAppConfig : out : {}");
-        return configService.getAppConfig();
+        AppConfig appConfig = configInterface.updateAppConfig();
+        logger.info("updateAppConfig : out");
+        return appConfig;
     }
     @Path("/v1/get/task")
     @GET
     public TaskConfigDB getTaskConfig() throws TodoException {
         logger.info("getTaskConfigDB : in");
-        TaskConfigDB taskConfigDB = configService.getTaskConfigDB();
+        TaskConfigDB taskConfigDB = configInterface.getTaskConfigDB(configInterface.getAppConfig());
         logger.info("getTaskConfigDB : out");
         return taskConfigDB;
     }
@@ -93,8 +104,7 @@ public class ConfigResource {
     @GET
     public TaskConfigDB updateTasks() throws TodoException {
         logger.info("updateTasks : in");
-        configService.updateTaskConfig();
-        TaskConfigDB taskConfigDB = configService.getTaskConfigDB();
+        TaskConfigDB taskConfigDB = configInterface.updateTaskConfigDB(configInterface.getAppConfig());
         logger.info("updateTasks : out");
         return taskConfigDB;
     }
@@ -102,7 +112,7 @@ public class ConfigResource {
     @GET
     public ProjectStaticData getProjectStaticData() throws TodoException {
         logger.info("getProjectStaticData : in");
-        ProjectStaticData projectStaticData = configService.getProjectStaticData();
+        ProjectStaticData projectStaticData = configInterface.getProjectStaticData(configInterface.getAppConfig());
         logger.info("getProjectStaticData : out : {}", projectStaticData);
         return projectStaticData;
     }
@@ -110,9 +120,7 @@ public class ConfigResource {
     @GET
     public ProjectStaticData updateProjectStaticData() throws TodoException {
         logger.info("updateProjectStaticData : in");
-        configService.updateProjectStaticData(
-                configService.getAppConfig().getProjectStaticDataConfigPath());
-        ProjectStaticData projectStaticData = configService.getProjectStaticData();
+        ProjectStaticData projectStaticData = configInterface.updateProjectStaticData(configInterface.getAppConfig());
         logger.info("updateProjectStaticData : out : {}", projectStaticData);
         return projectStaticData;
     }
