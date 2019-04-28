@@ -4,6 +4,7 @@ import com.todo.TodoConfiguration;
 import com.todo.interfaces.ConfigImplementsFile;
 import com.todo.interfaces.ConfigImplementsRAM;
 import com.todo.interfaces.ConfigInterface;
+import com.todo.utils.ErrorCodes;
 import com.todo.yaml.todo.AppConfig;
 import com.todo.config.ClientDetails;
 import com.todo.model.TaskConfigDB;
@@ -38,7 +39,7 @@ public class ConfigResource {
     private TodoConfiguration todoConfiguration;
 //    private ConfigService configService;
     private ConfigInterface configInterface;
-    public ConfigResource(TodoConfiguration todoConfiguration) {
+    public ConfigResource(TodoConfiguration todoConfiguration) throws TodoException {
         this.todoConfiguration = todoConfiguration;
 //        configService = new ConfigService(todoConfiguration);
 //        this.todoConfiguration.setConfigService(configService);
@@ -55,8 +56,10 @@ public class ConfigResource {
         //ConfigInterfacing
         if (todoConfiguration.getDataStorage().equals("ram")) {
             configInterface = new ConfigImplementsRAM(todoConfiguration);
-        } else {
+        } else if(todoConfiguration.getDataStorage().equals("file")) {
             configInterface = new ConfigImplementsFile(todoConfiguration);
+        } else {
+            throw new TodoException(ErrorCodes.CONFIG_ERROR_INVALID_STORAGE_TYPE);
         }
         this.todoConfiguration.setConfigInterface(configInterface);
     }
