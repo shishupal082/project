@@ -12,8 +12,8 @@
 */*/*/.DS_Store
 
 pvt/
-todo-app/
-todo-app*
+todo/
+todo*
 
 java/step1/.idea/*
 
