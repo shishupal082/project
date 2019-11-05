@@ -1,4 +1,4 @@
-<script>
+
   (function(i,s,o,g,r,a,m){
   	i['GoogleAnalyticsObject']=r;
   	i[r]=i[r]||function(){
@@ -13,4 +13,3 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','_gaq');
   _gaq('create', 'UA-75647007-1', 'auto');
   _gaq('send', 'pageview');
-</script>
