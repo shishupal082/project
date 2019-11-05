@@ -8,3 +8,21 @@ Download php (preferably 5)
 Keep it into C drive
 Configure php 5 properly with apache
 Then it should work properly
+
+
+-------------------------------------------------
+Restart apache
+-------------------------------------------------
+Go to
+c/Apache/bin
+httpd -k restart
+
+
+DocumentRoot "${SRVROOT}/htdocs"
+<Directory "${SRVROOT}/htdocs">
+
+Change to 
+
+DocumentRoot "d:/project"
+<Directory "d:/project">
+
