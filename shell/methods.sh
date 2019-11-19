@@ -1,5 +1,5 @@
 #!/bin/sh
-src=methods.sh
+src="$(pwd)/methods.sh"
 marker=**********
 
 logFile=../../logs/log.txt
