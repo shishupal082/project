@@ -18,7 +18,7 @@ if [ -f "$logFile" ]; then
   isLogFileFound=true
   addLog "Source file '${src}'"
 else
-  echo "${now} logFile '${logFile}' does not exist."
+  echo "$(date +"%Y-%m-%d %T") logFile '${logFile}' does not exist."
 fi
 
 addLog "${marker} START ${marker}"
