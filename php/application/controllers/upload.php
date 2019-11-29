@@ -11,7 +11,7 @@ class Upload extends CI_Controller {
     public function do_upload() {
         $relativePath = "pvt/uploaded_files/";
         $config['upload_path']   = DOCUMENT_ROOT."/".$relativePath;
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|iso|zip|rar';
         $config['max_size']      = 10000;
         $config['max_width']     = 10240;
         $config['max_height']    = 7680;
