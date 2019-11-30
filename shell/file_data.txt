@@ -1,0 +1,3 @@
+logs/log.txt
+DestinationFolderPath/	sourceFile		sourceDir/
+DestinationFolderPath/	sourceFolder/	sourceDir/
