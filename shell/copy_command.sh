@@ -100,6 +100,11 @@ updateSource () {
   input="file_data.txt"
   lineNumber=0
 
+  if [[ !(-f $input) ]]; then
+    addLog "Input source file '$input' does not exist."
+    return
+  fi
+
   while read line; do
     if [[ $lineNumber < 1 ]]; then
       for word in $(echo $line | tr " " "\n"); do
