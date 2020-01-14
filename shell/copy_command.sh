@@ -50,9 +50,9 @@ verifyOldData() {
   destination=${destinationDir}${fileFolderName}
   source=${sourceDir}${fileFolderName}
   if [[ -d "${destination}" ]]; then
-    rm -rf ${destination}
+    # rm -rf ${destination}
   elif [[ -f "${destination}" ]]; then
-    rm ${destination}
+    # rm ${destination}
   else
     if [[ -f ${source} ]]; then
       addLog "Old File '${destination}' does not exist"

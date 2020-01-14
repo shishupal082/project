@@ -1,0 +1,2 @@
+copy/log.txt
+copy/file_data_v2.0.txt

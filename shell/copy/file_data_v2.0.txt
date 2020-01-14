@@ -1,0 +1,12 @@
+DestinationFolderPath/
+sourceFileName
+sourceDir/
+DestinationFolderPath/
+sourceFolderName
+sourceDir/
+DestinationFolderPath/
+sourceFileName
+
+DestinationFolderPath/
+sourceFileName
+sourceDir/
