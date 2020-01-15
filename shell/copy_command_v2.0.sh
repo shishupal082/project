@@ -54,6 +54,28 @@ verifyLogFile () {
 
 verifyLogFile $logFile
 
+readConfig() {
+  input=${CONFIG_SRC}
+  lineNumber=0
+
+  if [[ !(-f $input) ]]; then
+    addLog "Config source file '$input' does not exist."
+    return
+  fi
+
+  while read line; do
+    lineNumber=$((lineNumber+1))
+    parseFileLineV2 ${line}
+    line2=${ParsedFileLine}
+    if [[ $lineNumber -eq 1 ]]; then
+      verifyLogFile ${line2}
+    elif [[ $lineNumber -eq 2 ]]; then
+      INPUT_FILE=${line2}
+    fi
+  done < "$input"
+}
+
+readConfig
 
 addLog "${marker} Copy start ${marker}"
 addLog "Current directory: $(pwd)"
@@ -84,29 +106,6 @@ setFILEFOLDERSIZE () {
     i="`expr $i + 1`"
   done
 }
-
-readConfig() {
-	input=${CONFIG_SRC}
-  lineNumber=0
-
-  if [[ !(-f $input) ]]; then
-    addLog "Config source file '$input' does not exist."
-    return
-  fi
-
-  while read line; do
-    lineNumber=$((lineNumber+1))
-    parseFileLineV2 ${line}
-    line2=${ParsedFileLine}
-    if [[ $lineNumber -eq 1 ]]; then
-    	verifyLogFile ${line2}
-    elif [[ $lineNumber -eq 2 ]]; then
-    	INPUT_FILE=${line2}
-    fi
-  done < "$input"
-}
-
-readConfig
 
 sourceDir=()
 name=()
