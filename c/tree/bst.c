@@ -24,13 +24,27 @@ void push(struct node ** root, int data) {
         push(&(*root)->right, data);
     }
 }
-void printInorder(struct node* root) {
+void printInOrder(struct node* root) {
      if (root == NULL)
           return;
-     printInorder(root->left);
+     printInOrder(root->left);
      printf("%d ", root->data);  
-     printInorder(root->right);
-}  
+     printInOrder(root->right);
+}
+void printPreOrder(struct node* root) {
+     if (root == NULL)
+          return;
+     printf("%d ", root->data);
+     printPreOrder(root->left);
+     printPreOrder(root->right);
+}
+void printPostOrder(struct node* root) {
+     if (root == NULL)
+          return;
+     printPostOrder(root->left);
+     printPostOrder(root->right);
+     printf("%d ", root->data);
+}
 int main() {
     struct node *root  = NULL;
     push(&root, 2);
@@ -38,8 +52,14 @@ int main() {
     push(&root, 4);
     push(&root, 5);
     push(&root, 1);
-    printf("Inorder traversal of binary tree is \n");
-    printInorder(root);
+    printf("InOrder traversal of binary tree is \n");
+    printInOrder(root);
+    printf("\n");
+    printf("PreOrder traversal of binary tree is \n");
+    printPreOrder(root);
+    printf("\n");
+    printf("PostOrder traversal of binary tree is \n");
+    printPostOrder(root);
     printf("\n");
     return 0;
 }
