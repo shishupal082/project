@@ -45,7 +45,7 @@
     "gulp": "^3.8.11",
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.5.2",
-    "jquery": "^2.1.4",
+    "jquery": "^3.4.1",
     "lscache": "^1.0.5",
     "page": "^1.6.3",
     "q": "^1.4.1",
