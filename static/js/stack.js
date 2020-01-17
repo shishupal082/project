@@ -1,9 +1,7 @@
 (function() {
 var MAXSTACK = 100, TOP=-1;
 var STACK = [];
-for (var i = 0; i < MAXSTACK; i++) {
-    STACK.push(0);
-}
+
 var BT = (function(){
     function BT(val) {
         this.data = val;
@@ -121,6 +119,9 @@ Stack.extend = Stack.fn.extend = function(options) {
 Stack.extend({
     reset: function() {
         STACK = []; TOP = -1;
+        for (var i = 0; i < MAXSTACK; i++) {
+            STACK.push(0);
+        }
     },
     push: function(item) {
         if (TOP >= MAXSTACK - 1) {
@@ -231,14 +232,40 @@ Stack.extend({
         result = Stack.pop();
         return result;
     },
-    createPosixTree: function(expression) {
-        return AST.createPosixTree(expression);
+    createPosixTree: function(tokenizedExp) {
+        return AST.createPosixTree(tokenizedExp);
     },
-    evaluate: function(expression) {
-        var posix = Stack.createPosixTree(expression);
+    evaluateNumerical: function(expression) {
+        var tokens = Stack.tokenize(expression, ["(",")","+","-","*","/"]);
+        var posix = Stack.createPosixTree(tokens);
         return Stack.calNumerical(posix);
-    }
+    },
+    evaluateBinary: function(expression) {
+        var tokens = Stack.tokenize(expression, ["(",")","&&","||"]);
+        var posix = Stack.createPosixTree(tokens);
+        return Stack.calBinary(posix);
+    },
+    tokenize: function(expression, tokenItems) {
+        var tokens = [];
+        if (tokenItems && tokenItems.length) {
+            for (var i = 0; i < tokenItems.length; i++) {
+                expression = expression.split(tokenItems[i]).join(","+tokenItems[i]+",");
+            }
+        }
+        var temp = expression.split(","), tempToken;
+        //Remove empty values and trim all token
+        for (var i = 0; i < temp.length; i++) {
+            tempToken = temp[i].trim();
+            if (tempToken == "") {
+                continue;
+            } else {
+                tokens.push(tempToken);
+            }
+        }
+        return tokens;
+    },
 });
+Stack.reset();
 /*End of direct access of methods*/
 window.Stack = window.$S = Stack;
 })();
