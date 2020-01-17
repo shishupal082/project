@@ -1,0 +1,304 @@
+(function(window, $S) {
+function generateExpression(items) {
+    var st = $S.getStack();
+    var pre = "", post = "", op = "";
+    var op, values;
+    if (isObject(items)) {
+        op = items["op"];
+        values = items["val"];
+        for (var i = 0; i < values.length; i++) {
+            st.push(values[i]);
+        }
+        while(st.TOP > 0) {
+            pre = st.pop();
+            if (pre.val) {
+                generateExpression(pre);
+            }
+            post = st.pop();
+            if (post.val) {
+                generateExpression(post);
+            }
+            pre = pre.exp ? pre.exp : pre;
+            post = post.exp ? post.exp : post;
+            st.push("("+post+op+pre+")");
+        }
+        items["exp"] = st.pop();
+    }
+    return items;
+}
+
+var loopCount = 0, setValueCount = 0, setValue;
+var possibleValues = [];
+var currentValues = {};
+var exps = {};
+var debug = [];
+
+var Model = function(selector, context) {
+    return new Model.fn.init(selector, context);
+};
+setValue = (function() {
+    function set(key, value) {
+        this._isValueChanged = false;
+        if (Model.isValidKey(key) && Model.isValidValue(value)) {
+            var oldValue = Model(key).get();
+            currentValues[key] = value*1;
+            var newValue = Model(key).get();
+            if (oldValue != newValue) {
+                setValueCount++;
+                $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+                this._isValueChanged = true;
+            }
+        }
+        return 0;
+    }
+    set.prototype.isValueChanged = function() {
+        return this._isValueChanged;
+    };
+    return set;
+})();
+function isFunction(value) {
+    return typeof value == "function" ? true : false;
+}
+function isObject(value) {
+    return (typeof value == "object" && isNaN(value.length)) ? true : false;
+}
+function isValidValue(value) {
+    if (isNaN(value) || [0,1].indexOf(value*1) < 0) {
+        return false;
+    }
+    return true;
+}
+function isValidKey(key) {
+    return possibleValues.indexOf(key) >=0 ? true : false;
+}
+function isArray(value) {
+    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
+}
+
+/*
+Direct access by id: $M("id").get()
+*/
+Model.fn = Model.prototype = {
+    constructor: Model,
+    init: function(selector, context) {
+        if (typeof selector === "string") {
+            this.key = selector;
+        }
+        return this;
+    },
+    get: function() {
+        if (isValidKey(this.key)) {
+            return currentValues[this.key] ? currentValues[this.key] : 0;
+        }
+        return 0;
+    },
+    isUp: function(value) {
+        return this.get() == 1;
+    },
+    isDown: function(value) {
+        return this.get() == 0;
+    },
+    addExp: function(exp) {
+        if (isValidKey(this.key)) {
+            if (exps[this.key] && exps[this.key].length) {
+                exps[this.key].push(exp);
+            } else {
+                exps[this.key] = [exp];
+            }
+        }
+        return 0;
+    },
+    initializeCurrentValues: function(extCurrentValues) {
+        currentValues = extCurrentValues;
+        return currentValues;
+    },
+    setPossibleValues: function(extPossibleValues) {
+        possibleValues = extPossibleValues;
+        return possibleValues;
+    },
+    addDebug: function() {
+        if (isValidKey(this.key)) {
+            debug.push(this.key);
+        }
+        return 0;
+    }
+};
+Model.fn.init.prototype = Model.fn;
+/*
+End of direct access of ID
+*/
+/*Direct access of methods: $M.methodName*/
+Model.extend = Model.fn.extend = function(options) {
+    if (isObject(options)) {
+        for (var key in options) {
+            if (isFunction(options[key])) {
+                /*If method already exist then it will be overwritten*/
+                if (isFunction(this[key])) {
+                    $S.log("Method " + key + " is overwritten.");
+                }
+                this[key] = options[key];
+            }
+        }
+    }
+    return this;
+};
+Model.extend({
+    isValidValue: function(value) {
+        return isValidValue(value);
+    },
+    isValidKey: function(key) {
+        return isValidKey(key);
+    },
+    isArray: function(value) {
+        return isArray(value);
+    },
+    isFunction: function(value) {
+        return isFunction(value);
+    },
+    isMethodDefined: function(name) {
+        return this.isFunction(this[name]);
+    },
+    isExpDefined: function(name) {
+        if (exps[name] && exps[name].length) {
+            return true;
+        }
+        return false;
+    },
+    getExps: function() {
+        return exps;
+    },
+    getPossibleValues : function() {
+        return possibleValues;
+    },
+    getCurrentValues : function() {
+        return currentValues;
+    }
+});
+Model.extend({
+    is: function(key, type) {
+        if (type == "up") {
+            return Model(key).isUp();
+        } else if (type == "dn") {
+            return Model(key).isDown();
+        }
+        return false;
+    },
+    isUp: function(key) {
+        return Model(key).isUp();
+    },
+    isAllUp: function(keys) {
+        if (isArray(keys) && keys.length > 0) {
+            for (var i = 0; i < keys.length; i++) {
+                if (Model(keys[i]).isDown()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    },
+    getValue: function(key) {
+        return Model(key).get();
+    },
+    setValue: function(key, value) {
+        if (setValueCount > 400) {
+            setValueCount++;
+            $S.log(setValueCount + ": Limit exceed.");
+            return 0;
+        }
+        var set = new setValue(key, value);
+        if (set.isValueChanged()) {
+            Model.reCheckAllValues();
+        }
+        return 0;
+    },
+    isDown: function(key) {
+        return Model(key).isDown();
+    },
+    isAllDown: function(keys) {
+        if (isArray(keys) && keys.length > 0) {
+            for (var i = 0; i < keys.length; i++) {
+                if (Model(keys[i]).isUp()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+});
+Model.extend({
+    reCheckAllValues: function() {
+        var valueToBeChecked = [];
+        valueToBeChecked = possibleValues;
+        for (var i = 0; i < valueToBeChecked.length; i++) {
+            var name = valueToBeChecked[i];
+            var modelNode = Model(name);
+            var oldValue = modelNode.get();
+            var newValue = 0;
+            if (Model.isMethodDefined(name)) {
+                Model[name]();
+            } else if (Model.isExpDefined(name)) {
+                Model.setValueWithExpression(name);
+            }
+            newValue = modelNode.get();
+            //To avoid further processing if value changed
+            //Because it will already handle by setValue method
+            if (oldValue != newValue) {
+                return 0;
+            }
+        }
+    },
+    generateExpression: function(items) {
+        return generateExpression(items);
+    },
+    setValueWithExpression: function(name) {
+        var exp = exps[name];
+        var oldValue = Model(name).get();
+        var newValue = 0;
+        if (debug.indexOf(name) >=0) {
+            $S.log("DEBUG: " + name);
+        }
+        if (exp && exp.length) {
+            for (var i = 0; i < exp.length; i++) {
+                if (Model.isExpressionTrue(name, exp[i])) {
+                    newValue = 1;
+                    continue;
+                } else {
+                    newValue = 0;
+                    break;
+                }
+            }
+        }
+        if (debug.indexOf(name) >=0) {
+            $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
+        }
+        Model.setValue(name, newValue);
+        return newValue;
+    },
+    isExpressionTrue: function(name, exp) {
+        var tokenizedExp = $S.tokenize(exp, ["(",")","&&","||"]);
+        var posix = $S.createPosixTree(tokenizedExp);
+        var posixVal = [];
+        if (posix.length) {
+            for (var i = 0; i < posix.length; i++) {
+                var itemArr = posix[i].split(":");
+                posixVal.push(posix[i]);
+                if (itemArr.length == 2) {
+                    posixVal[i] = Model.is(itemArr[0], itemArr[1]);
+                }
+            }
+        }
+        if (debug.indexOf(name) >=0) {
+            console.log(exp);
+            console.log(posix);
+            console.log(posixVal);
+        }
+        var result = $S.calBinary(posixVal);
+        return result;
+    }
+});
+
+/*End of direct access of methods*/
+window.Model = window.$M = Model;
+})(window, $S);
