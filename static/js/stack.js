@@ -268,6 +268,33 @@ Stack.extend({
         var ast = new AST();//Abstract syntax tree
         return ast.createPosixTree(tokenizedExp);
     },
+    generateExpression: function (items) {
+        var st = new St();
+        var pre = "", post = "", op = "";
+        var op, values;
+        if (isObject(items)) {
+            op = items["op"];
+            values = items["val"];
+            for (var i = 0; i < values.length; i++) {
+                st.push(values[i]);
+            }
+            while(st.TOP > 0) {
+                pre = st.pop();
+                if (pre.val) {
+                    Stack.generateExpression(pre);
+                }
+                post = st.pop();
+                if (post.val) {
+                    Stack.generateExpression(post);
+                }
+                pre = pre.exp ? pre.exp : pre;
+                post = post.exp ? post.exp : post;
+                st.push("("+post+op+pre+")");
+            }
+            items["exp"] = st.pop();
+        }
+        return items ? items["exp"] : "";
+    },
     evaluateNumerical: function(expression) {
         var tokens = Stack.tokenize(expression, ["(",")","+","-","*","/"]);
         var posix = Stack.createPosixTree(tokens);

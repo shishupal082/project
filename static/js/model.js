@@ -1,31 +1,4 @@
 (function(window, $S) {
-function generateExpression(items) {
-    var st = $S.getStack();
-    var pre = "", post = "", op = "";
-    var op, values;
-    if (isObject(items)) {
-        op = items["op"];
-        values = items["val"];
-        for (var i = 0; i < values.length; i++) {
-            st.push(values[i]);
-        }
-        while(st.TOP > 0) {
-            pre = st.pop();
-            if (pre.val) {
-                generateExpression(pre);
-            }
-            post = st.pop();
-            if (post.val) {
-                generateExpression(post);
-            }
-            pre = pre.exp ? pre.exp : pre;
-            post = post.exp ? post.exp : post;
-            st.push("("+post+op+pre+")");
-        }
-        items["exp"] = st.pop();
-    }
-    return items;
-}
 
 var loopCount = 0, setValueCount = 0, setValue;
 var possibleValues = [];
@@ -250,7 +223,7 @@ Model.extend({
         }
     },
     generateExpression: function(items) {
-        return generateExpression(items);
+        return $S.generateExpression(items);
     },
     setValueWithExpression: function(name) {
         var exp = exps[name];
