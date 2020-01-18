@@ -1,6 +1,6 @@
 (function(window, $S) {
 
-var loopCount = 0, setValueCount = 0, setValue;
+var loopCount = 0, setValueCount = 0;
 var possibleValues = [];
 var currentValues = {};
 var exps = {};
@@ -9,9 +9,10 @@ var debug = [];
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
-setValue = (function() {
+var setValue = (function() {
+    var isValueChanged = false;
     function set(key, value) {
-        this._isValueChanged = false;
+        isValueChanged = false;
         if (Model.isValidKey(key) && Model.isValidValue(value)) {
             var oldValue = Model(key).get();
             currentValues[key] = value*1;
@@ -19,13 +20,13 @@ setValue = (function() {
             if (oldValue != newValue) {
                 setValueCount++;
                 $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
-                this._isValueChanged = true;
+                isValueChanged = true;
             }
         }
-        return 0;
+        return isValueChanged;
     }
     set.prototype.isValueChanged = function() {
-        return this._isValueChanged;
+        return isValueChanged;
     };
     return set;
 })();
@@ -138,7 +139,11 @@ Model.extend({
         return false;
     },
     getExps: function() {
-        return exps;
+        var response = {exps: exps, count: 0};
+        for (var key in exps) {
+            response.count++;
+        }
+        return response;
     },
     getPossibleValues : function() {
         return possibleValues;
