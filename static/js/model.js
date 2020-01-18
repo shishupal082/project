@@ -79,6 +79,8 @@ Model.fn = Model.prototype = {
             } else {
                 exps[this.key] = [exp];
             }
+        } else {
+            $S.log("Invalid expression key:" + this.key);
         }
         return 0;
     },
@@ -125,6 +127,9 @@ Model.extend({
     },
     isArray: function(value) {
         return isArray(value);
+    },
+    isObject: function(value) {
+        return isObject(value);
     },
     isFunction: function(value) {
         return isFunction(value);
