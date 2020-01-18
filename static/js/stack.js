@@ -56,38 +56,41 @@ var BT = (function(){
 var St = (function(){
     var MAXSTACK = 100;
     function St() {
-        this.STACK = [];
-        this.TOP = -1;
+        this._STACK = [];
+        this._TOP = -1;
     }
     St.prototype.reset = function() {
-        this.STACK = []; this.TOP = -1;
+        this._STACK = []; this._TOP = -1;
         for (var i = 0; i < MAXSTACK; i++) {
-            this.STACK.push(0);
+            this._STACK.push(0);
         }
     };
     St.prototype.push = function(item) {
-        if (this.TOP >= MAXSTACK - 1) {
+        if (this._TOP >= MAXSTACK - 1) {
             Logger.log("stack over flow");
             return 0;
         } else {
-            this.TOP = this.TOP + 1;
-            this.STACK[this.TOP] = item;
+            this._TOP = this._TOP + 1;
+            this._STACK[this._TOP] = item;
         }
         return 1;
     };
     St.prototype.pop = function() {
         var item = 0;
-        if (this.TOP < 0) {
+        if (this._TOP < 0) {
             Logger.log("stack under flow");
         } else {
-            item = this.STACK[this.TOP];
-            this.TOP = this.TOP - 1;
+            item = this._STACK[this._TOP];
+            this._TOP = this._TOP - 1;
         }
         return item;
     };
+    St.prototype.getTop = function() {
+        return this._TOP;
+    };
     St.prototype.print = function() {
-        for (var i = 0; i < this.TOP+1; i++) {
-            Logger.log(i + "-" + this.STACK[i]);
+        for (var i = 0; i < this._TOP+1; i++) {
+            Logger.log(i + "-" + this._STACK[i]);
         }
         return 0;
     }
@@ -279,7 +282,7 @@ Stack.extend({
             for (var i = 0; i < values.length; i++) {
                 st.push(values[i]);
             }
-            while(st.TOP > 0) {
+            while(st.getTop() > 0) {
                 pre = st.pop();
                 if (pre.val) {
                     Stack.generateExpression(pre);
