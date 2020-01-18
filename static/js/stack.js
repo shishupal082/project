@@ -145,6 +145,36 @@ function isFunction(value) {
 function isObject(value) {
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
 }
+function calculateValue(op1, operator, op2) {
+    var val = null;
+    switch (operator) {
+        case '*':
+            val = op1 * op2;
+        break;
+        case '/':
+            if (op2 != 0) {
+                val = op1 / op2;
+            } else {
+                val = 0;
+            }
+        break;
+        case '+':
+            val = op1 + op2;
+        break;
+        case '-':
+            val = op1 - op2;
+        break;
+        case "&&":
+            val = op1 && op2;
+        break;
+        case "||":
+            val = op1 || op2;
+        break;
+        default:
+        break;
+    }
+    return val;
+};
 Stack.fn = Stack.prototype = {
     constructor: Stack,
     init: function(selector, context) {
@@ -200,35 +230,17 @@ Stack.extend({
     //3*((4+5)*7+2*2)*2 = [3,4,5,"+",7,"*",2,2,"*","+","*",2,"*"] = 397*22*+2* = 402
     calNumerical: function(postfix) {
         var st = new St();
-        var ch, i;
+        var A, op, B;
         var val, result;
-        var A, B;
-        for (i = 0; i<postfix.length; i++) {
-            ch = postfix[i];
-            if (!isNaN(ch)) {
-                st.push(ch);
+        for (var i = 0; i<postfix.length; i++) {
+            op = postfix[i]; //operator
+            if (!isNaN(postfix[i])) {
+                st.push(postfix[i]*1);
             }
-            else if (["+","-","*","/"].indexOf(ch) >= 0) {
+            else if (["+","-","*","/"].indexOf(op) >= 0) {
                 A = st.pop()*1;
                 B = st.pop()*1;
-                switch (ch) {
-                    case '*':
-                        val = B * A;
-                    break;
-                    case '/':
-                        if (A != 0) {
-                            val = B / A;
-                        } else {
-                            val = 0;
-                        }
-                    break;
-                    case '+':
-                        val = B + A;
-                    break;
-                    case '-':
-                        val = B - A;
-                    break;
-                }
+                val = calculateValue(B, op, A);
                 st.push(val);
             }
         }
@@ -237,27 +249,16 @@ Stack.extend({
     },
     calBinary: function(postfix) {
         var st = new St();
-        var ch, i;
-        var val, result;
-        var A, B;
-        for (i = 0; i<postfix.length; i++) {
-            ch = postfix[i];
-            if (!isNaN(ch)) {
-                st.push(ch);
-            }
-            else if (["&&","||"].indexOf(ch) >= 0) {
+        var A, op, B;
+        var  val, result;
+        for (var i = 0; i<postfix.length; i++) {
+            op = postfix[i]; //operator
+            if (typeof postfix[i] == "boolean") {
+                st.push(postfix[i]);
+            } else if (["&&","||"].indexOf(op) >= 0) {
                 A = st.pop();
                 B = st.pop();
-                switch (ch) {
-                    case "&&":
-                        val = B && A;
-                    break;
-                    case "||":
-                        val = B || A;
-                    break;
-                    default:
-                    break;
-                }
+                val = calculateValue(B, op, A);
                 st.push(val);
             }
         }
@@ -270,10 +271,10 @@ Stack.extend({
     },
     generateExpression: function (items) {
         var st = new St();
-        var pre = "", post = "", op = "";
+        var pre, post;
         var op, values;
         if (isObject(items)) {
-            op = items["op"];
+            op = items["op"]; //operator
             values = items["val"];
             for (var i = 0; i < values.length; i++) {
                 st.push(values[i]);
@@ -282,13 +283,13 @@ Stack.extend({
                 pre = st.pop();
                 if (pre.val) {
                     Stack.generateExpression(pre);
+                    pre = pre.exp;
                 }
                 post = st.pop();
                 if (post.val) {
                     Stack.generateExpression(post);
+                    post = post.exp;
                 }
-                pre = pre.exp ? pre.exp : pre;
-                post = post.exp ? post.exp : post;
                 st.push("("+post+op+pre+")");
             }
             items["exp"] = st.pop();
