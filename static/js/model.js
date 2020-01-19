@@ -184,9 +184,9 @@ Model.extend({
         return Model(key).get();
     },
     setValue: function(key, value) {
-        if (setValueCount > 400) {
+        if (setValueCount > 500) {
             setValueCount++;
-            $S.log(setValueCount + ": Limit exceed.");
+            $S.log(setValueCount + ": Limit exceed, key:" + key + ", value:" + value);
             return 0;
         }
         var set = new setValue(key, value);
@@ -233,7 +233,8 @@ Model.extend({
         }
     },
     generateExpression: function(items) {
-        return $S.generateExpression(items);
+        var itemsWithExp = $S.generateExpression(items);
+        return itemsWithExp ? itemsWithExp["exp"] : "";
     },
     setValueWithExpression: function(name) {
         var exp = exps[name];

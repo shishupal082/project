@@ -54,9 +54,13 @@ var BT = (function(){
     return BT;
 })();
 var St = (function(){
-    var MAXSTACK = 100;
-    function St() {
-        this._STACK = [];
+    var MAXSTACK = 500, STACK = [];
+    function St(shareStorage) {
+        if (typeof shareStorage == "boolean" && shareStorage) {
+            this._STACK = STACK;
+        } else {
+            this._STACK = [];
+        }
         this._TOP = -1;
     }
     St.prototype.reset = function() {
@@ -111,7 +115,6 @@ var AST = (function() {
     AST.prototype.createPosixTree = function(items) {
         result = [];
         var st = new St();
-        // Stack.reset();
         var currentTree, parent;
         var eTree = new BT("");
         st.push(eTree);
@@ -205,8 +208,8 @@ Stack.extend = Stack.fn.extend = function(options) {
     return this;
 };
 Stack.extend({
-    getStack: function() {
-        return new St();
+    getStack: function(shareStorage) {
+        return new St(shareStorage);
     },
     log: function(log) {
         Logger.log(log);
@@ -297,7 +300,7 @@ Stack.extend({
             }
             items["exp"] = st.pop();
         }
-        return items ? items["exp"] : "";
+        return items;
     },
     evaluateNumerical: function(expression) {
         var tokens = Stack.tokenize(expression, ["(",")","+","-","*","/"]);
