@@ -9,7 +9,7 @@ class Upload extends CI_Controller {
         echo '<a href="/test/id/325">Click here for submit.</a>';
     }
     public function do_upload() {
-        $relativePath = "pvt/uploaded_files/";
+        $relativePath = "uploaded_files/";
         $config['upload_path']   = DOCUMENT_ROOT."/".$relativePath;
         $config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|iso|zip|rar';
         $config['max_size']      = 0; //In kb, 0 for no limit

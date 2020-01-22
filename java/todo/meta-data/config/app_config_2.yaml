@@ -1,7 +1,7 @@
 ---
 relativePath:
   - ../../templates/common/
-  - ../../pvt/uploaded_files/java/
-messageSavePath: ../../pvt/uploaded_files/java/
+  - ../../uploaded_files/java/
+messageSavePath: ../../uploaded_files/java/
 uiPath: [../../static/]
-addTextPath: ../../pvt/uploaded_files/java/
+addTextPath: ../../uploaded_files/java/
