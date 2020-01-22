@@ -1,0 +1,2 @@
+javac CapitalizationClientV2.java
+java CapitalizationClientV2

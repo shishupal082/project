@@ -1,0 +1,2 @@
+javac CapitalizationServer.java
+java CapitalizationServer
