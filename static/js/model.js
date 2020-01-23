@@ -282,7 +282,7 @@ Model.extend({
         return result;
     }
 });
-
+Model.$S = $S;
 /*End of direct access of methods*/
 window.Model = window.$M = Model;
 })(window, $S);
