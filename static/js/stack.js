@@ -17,6 +17,24 @@ var Log = (function(){
     return Logger;
 })();
 var Logger = new Log();
+function isFunction(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return typeof value == "function" ? true : false;
+}
+function isArray(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
+}
+function isObject(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return (typeof value == "object" && isNaN(value.length)) ? true : false;
+}
 var BT = (function(){
     function BT(val) {
         this.data = val;
@@ -142,15 +160,73 @@ var AST = (function() {
     };
     return AST;
 })();
+var Table = (function() {
+var rows=0, cols=0, content = [];
+function Table(tableItems) {
+    content = [];
+    rows = 0; cols = 0;
+    if (tableItems && tableItems.length) {
+        rows = tableItems.length;
+        for (var i = 0; i < tableItems.length; i++) {
+            content.push([]);
+            if (tableItems[i] && tableItems[i].length > cols) {
+                cols = tableItems[i].length;
+            }
+        }
+        for (var i = 0; i < tableItems.length; i++) {
+            for (var j = 0; j < cols; j++) {
+                if (j >= tableItems[i].length) {
+                    content[i].push("");
+                } else {
+                    content[i].push(tableItems[i][j]);
+                }
+            }
+        }
+    }
+}
+Table.prototype.generateTdHtml = function(tdContent) {
+    var tdHtml = "";
+    if (typeof tdContent == "string") {
+        return tdContent;
+    } else if(isObject(tdContent)) {
+        var attr = tdContent.attr ? tdContent.attr : "";
+        var preTag = tdContent.tag ? '<'+tdContent.tag+' '+attr+'>' : "";
+        var postTag = tdContent.tag ? '</'+tdContent.tag+'>' : "";
+        tdHtml += preTag;
+        tdHtml += this.generateTdHtml(tdContent.text);
+        tdHtml += postTag;
+    } else if (isArray(tdContent)) {
+        for (var i = 0; i < tdContent.length; i++) {
+            tdHtml += this.generateTdHtml(tdContent[i]);
+        }
+    }
+    return tdHtml;
+};
+Table.prototype.getHtml = function(attr) {
+    var tableAttr = attr ? attr : "";
+    var html = '<table '+tableAttr+'>',
+        displayContent = "",
+        attr = "";
+    for (var i = 0; i < rows; i++) {
+        html += '<tr>';
+        for (var j = 0; j < cols; j++) {
+            attr = (content[i][j] && content[i][j].parentAttr) ? content[i][j].parentAttr : "";
+            displayContent = this.generateTdHtml(content[i][j]);
+            html += '<td '+attr+'>' + displayContent + '</td>';
+        }
+        html += '</tr>';
+    }
+    html += '</table>';
+    return html;
+};
+Table.prototype.getContent = function() {
+    return content;
+};
+return Table;
+})();
 var Stack = function(selector, context) {
     return new Stack.fn.init(selector, context);
 };
-function isFunction(value) {
-    return typeof value == "function" ? true : false;
-}
-function isObject(value) {
-    return (typeof value == "object" && isNaN(value.length)) ? true : false;
-}
 function calculateValue(op1, operator, op2) {
     var val = null;
     switch (operator) {
@@ -211,11 +287,26 @@ Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
     },
+    getTable: function(tableContent) {
+        return new Table(tableContent);
+    },
     log: function(log) {
         Logger.log(log);
     },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
+    },
+    isArray: function(value) {
+        return isArray(value);
+    },
+    isObject: function(value) {
+        return isObject(value);
+    },
+    isFunction: function(value) {
+        return isFunction(value);
+    },
+    isMethodDefined: function(name) {
+        return this.isFunction(this[name]);
     }
 });
 Stack.extend({

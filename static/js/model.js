@@ -31,10 +31,22 @@ var setValue = (function() {
     return set;
 })();
 function isFunction(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
     return typeof value == "function" ? true : false;
 }
 function isObject(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
+}
+function isArray(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
 }
 function isValidValue(value) {
     if (isNaN(value) || [0,1].indexOf(value*1) < 0) {
@@ -44,9 +56,6 @@ function isValidValue(value) {
 }
 function isValidKey(key) {
     return possibleValues.indexOf(key) >=0 ? true : false;
-}
-function isArray(value) {
-    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
 }
 
 /*
@@ -118,6 +127,14 @@ Model.extend = Model.fn.extend = function(options) {
     }
     return this;
 };
+Model.extend({
+    getStack: function(shareStorage) {
+        return $S.getStack(shareStorage);
+    },
+    getTable: function(tableContent) {
+        return $S.getTable(tableContent);
+    }
+});
 Model.extend({
     isValidValue: function(value) {
         return isValidValue(value);
