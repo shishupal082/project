@@ -28,7 +28,7 @@ var DT = (function() {
                 case "DD":
                     result.push(dd < 10 ? "0"+dd : dd+"");
                 break;
-                case "HH":
+                case "hh":
                     result.push(hour < 10 ? "0"+hour : hour +"");
                 break;
                 case "mm":
