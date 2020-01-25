@@ -2,17 +2,83 @@
 //5 digit random number from 10000 to 99999
 var max = 99999, min = 10000;
 var key = Math.floor(Math.random() * (max - min + 1)) + min;
+//DateTimeObject
+var DT = (function() {
+    var yyyy, mm, dd, hour, min, sec, ms, meridian;
+    function DateTime() {}
+    DateTime.prototype.getDateTime = function(format, splitter, joiner) {
+        var dt = new Date(), result = [];
+        yyyy = dt.getFullYear();
+        mm = dt.getMonth() + 1;
+        dd = dt.getDate();
+        hour = dt.getHours();
+        min = dt.getMinutes();
+        sec = dt.getSeconds();
+        ms = dt.getMilliseconds();
+        meridian = hour > 11 ? "PM" : "AM";
+        var formats = format ? format.split(splitter) : [];
+        for (var i = 0; i < formats.length; i++) {
+            switch(formats[i]) {
+                case "YYYY":
+                    result.push(yyyy);
+                break;
+                case "MM":
+                    result.push(mm <10 ? "0"+mm : mm+"");
+                break;
+                case "DD":
+                    result.push(dd < 10 ? "0"+dd : dd+"");
+                break;
+                case "HH":
+                    result.push(hour < 10 ? "0"+hour : hour +"");
+                break;
+                case "mm":
+                    result.push(min < 10 ? "0"+min : min+"");
+                break;
+                case "ss":
+                    result.push(sec < 10 ? "0"+sec : sec+"");
+                break;
+                case "ms":
+                    result.push(ms < 10 ? "0"+ms : ms+"");
+                break;
+                case "mr":
+                    result.push(meridian);
+                break;
+                default:
+                    result.push(formats[i]);
+                break;
+            }
+        }
+        return result.join(joiner);
+    }
+    return DateTime;
+})();
+
 var Log = (function(){
+    var dateTimeEnable = false,format,splitter,joiner;
     function Logger(){}
     Logger.prototype.updateLoggerKey = function(loggerKey) {
         key = loggerKey;
+    };
+    Logger.prototype.setDateTimeState = function(state,v1,v2,v3) {
+        format=v1;
+        splitter=v2;
+        joiner=v3;
+        if (state == true) {
+            dateTimeEnable = true;
+        } else {
+            dateTimeEnable = false;
+        }
     };
     Logger.prototype.logInApi = function(log) {
         console.log(key + ":" + log);
     };
     Logger.prototype.log = function(log) {
-        // console.log(log);
-        console.log(key + ":" + log);
+        var preLog = key + ":" ;
+        if (dateTimeEnable) {
+            var dt = new DT();
+            preLog += dt.getDateTime(format,splitter,joiner)+":";
+        }
+        console.log(preLog+ log);
     };
     return Logger;
 })();
@@ -287,6 +353,9 @@ Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
     },
+    getDT: function() {
+        return new DT();
+    },
     getTable: function(tableContent) {
         return new Table(tableContent);
     },
@@ -295,6 +364,9 @@ Stack.extend({
     },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
+    },
+    setLoggerDateTimeState: function(state,formats,splitter,joiner) {
+        Logger.setDateTimeState(state,formats,splitter,joiner);
     },
     isArray: function(value) {
         return isArray(value);

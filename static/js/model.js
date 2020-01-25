@@ -133,6 +133,12 @@ Model.extend({
     },
     getTable: function(tableContent) {
         return $S.getTable(tableContent);
+    },
+    getDT: function() {
+        return $S.getDT();
+    },
+    setLoggerDateTimeState: function(state,formats,splitter,joiner) {
+        return $S.setLoggerDateTimeState(state,formats,splitter,joiner);
     }
 });
 Model.extend({
