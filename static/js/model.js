@@ -248,6 +248,8 @@ Model.extend({
                 Model[name]();
             } else if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
+            } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
+                Model["setValueDefaultMethod"](name);
             }
             newValue = modelNode.get();
             //To avoid further processing if value changed
