@@ -84,7 +84,11 @@ Model.fn = Model.prototype = {
     addExp: function(exp) {
         if (isValidKey(this.key)) {
             if (exps[this.key] && exps[this.key].length) {
-                exps[this.key].push(exp);
+                if (exps[this.key].indexOf(exp) < 0) {
+                    exps[this.key].push(exp);
+                } else {
+                    $S.log("Trying to add duplicate expression for key:" + this.key + ", expression:"+exp);
+                }
             } else {
                 exps[this.key] = [exp];
             }
@@ -139,8 +143,8 @@ Model.extend({
     getDT: function() {
         return $S.getDT();
     },
-    setLoggerDateTimeState: function(state,formats,splitter,joiner) {
-        return $S.setLoggerDateTimeState(state,formats,splitter,joiner);
+    setLoggerDateTimeState: function(state,formats,splitter) {
+        return $S.setLoggerDateTimeState(state,formats,splitter);
     }
 });
 Model.extend({
@@ -180,6 +184,18 @@ Model.extend({
     },
     getCurrentValues : function() {
         return currentValues;
+    },
+    changeSetValueCountLimit: function(newLimit) {
+        if(isNaN(newLimit)) {
+            $S.log("Invalid newLimit:" + newLimit);
+        } else {
+            setValueCount = newLimit*1;
+        }
+        return 1;
+    },
+    resetSetValueCount: function(newLimit) {
+        setValueCount = 0;
+        return 1;
     }
 });
 Model.extend({
@@ -211,7 +227,9 @@ Model.extend({
     setValue: function(key, value) {
         if (setValueCount > 500) {
             setValueCount++;
-            $S.log(setValueCount + ": Limit exceed, key:" + key + ", value:" + value);
+            var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + value;
+            $S.log(logText);
+            throw logText;
             return 0;
         }
         var set = new setValue(key, value);

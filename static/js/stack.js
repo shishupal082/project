@@ -6,50 +6,68 @@ var key = Math.floor(Math.random() * (max - min + 1)) + min;
 var DT = (function() {
     var yyyy, mm, dd, hour, min, sec, ms, meridian;
     function DateTime() {}
-    DateTime.prototype.getDateTime = function(format, splitter, joiner) {
-        var dt = new Date(), result = [];
-        yyyy = dt.getFullYear();
-        mm = dt.getMonth() + 1;
-        dd = dt.getDate();
-        hour = dt.getHours();
-        min = dt.getMinutes();
-        sec = dt.getSeconds();
-        ms = dt.getMilliseconds();
-        meridian = hour > 11 ? "PM" : "AM";
-        var formats = format ? format.split(splitter) : [];
-        for (var i = 0; i < formats.length; i++) {
-            switch(formats[i]) {
-                case "YYYY":
-                    result.push(yyyy);
-                break;
-                case "MM":
-                    result.push(mm <10 ? "0"+mm : mm+"");
-                break;
-                case "DD":
-                    result.push(dd < 10 ? "0"+dd : dd+"");
-                break;
-                case "hh":
-                    result.push(hour < 10 ? "0"+hour : hour +"");
-                break;
-                case "mm":
-                    result.push(min < 10 ? "0"+min : min+"");
-                break;
-                case "ss":
-                    result.push(sec < 10 ? "0"+sec : sec+"");
-                break;
-                case "ms":
-                    result.push(ms < 10 ? "0"+ms : ms+"");
-                break;
-                case "mr":
-                    result.push(meridian);
-                break;
-                default:
-                    result.push(formats[i]);
-                break;
+    function getFormatedDateTime(formatedValue, format, seprator) {
+        var response = "";
+        var formatKeys = format.split(seprator);
+        if (formatedValue) {
+            for (var i=0; i<formatKeys.length; i++) {
+                if (formatedValue[formatKeys[i]]) {
+                    response+=formatedValue[formatKeys[i]];
+                } else {
+                    response+=formatKeys[i];
+                }
             }
         }
-        return result.join(joiner);
-    }
+        return response;
+    };
+    DateTime.prototype.getDateTime = function(format, seprator) {
+        // "D/YYYY/-/MM/-/DD/T/hh/:/mm/:/ss/:/ms","/" --> "D2020-01-26T22:34:24:071"
+        var currentDateTime = new Date();
+        var fullYear = currentDateTime.getFullYear();
+        var month = currentDateTime.getMonth()+1;
+        var date = currentDateTime.getDate();
+        var horus = currentDateTime.getHours();
+        var minutes = currentDateTime.getMinutes();
+        var seconds = currentDateTime.getSeconds();
+        var miliSeconds = currentDateTime.getMilliseconds();
+        var formatedValue = {};
+        formatedValue["YYYY"] = fullYear;
+        formatedValue["MM"] = month <= 9 ? "0"+month : month;
+        formatedValue["DD"] = date <= 9 ? "0"+date : date;
+        formatedValue["hh"] = horus <= 9 ? "0"+horus : horus;
+        formatedValue["mm"] = minutes <= 9 ? "0"+minutes : minutes;
+        formatedValue["ss"] = seconds <= 9 ? "0" + seconds : seconds;
+        if (miliSeconds <= 9) {
+            miliSeconds = "00" + miliSeconds;
+        } else if (miliSeconds <= 99) {
+            miliSeconds = "0" + miliSeconds;
+        }
+        formatedValue["ms"] = miliSeconds;
+        return getFormatedDateTime(formatedValue, format, seprator);
+    };
+    DateTime.prototype.getDayNumberTimeFromSeconds = function(seconds, format, seprator) {
+        var response = "";
+        var formatKeys = format.split(seprator);
+        var formatedValue = {};
+        var dayNum = "000" + Math.ceil(seconds/(24*60*60));//058, day number
+        var hours = "00" + Math.floor((seconds/(60*60))%24);
+        var minutes = "00" + Math.floor((seconds/60)%60);
+        var second = "00" + Math.floor(seconds%60);
+        formatedValue["ddd"] = dayNum.substring(dayNum.length - 3); 
+        formatedValue["hh"] = hours.substring(hours.length - 2);
+        formatedValue["mm"] = minutes.substring(minutes.length - 2);
+        formatedValue["ss"] = second.substring(second.length - 2);
+        if (formatedValue) {
+            for (var i=0; i<formatKeys.length; i++) {
+                if (formatedValue[formatKeys[i]]) {
+                    response+=formatedValue[formatKeys[i]];
+                } else {
+                    response+=formatKeys[i];
+                }
+            }
+        }
+        return response;
+    };
     return DateTime;
 })();
 
@@ -59,10 +77,9 @@ var Log = (function(){
     Logger.prototype.updateLoggerKey = function(loggerKey) {
         key = loggerKey;
     };
-    Logger.prototype.setDateTimeState = function(state,v1,v2,v3) {
+    Logger.prototype.setDateTimeState = function(state,v1,v2) {
         format=v1;
         splitter=v2;
-        joiner=v3;
         if (state == true) {
             dateTimeEnable = true;
         } else {
@@ -76,7 +93,7 @@ var Log = (function(){
         var preLog = key + ":" ;
         if (dateTimeEnable) {
             var dt = new DT();
-            preLog += dt.getDateTime(format,splitter,joiner)+":";
+            preLog += dt.getDateTime(format,splitter)+":";
         }
         console.log(preLog+ log);
     };
@@ -365,8 +382,8 @@ Stack.extend({
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
     },
-    setLoggerDateTimeState: function(state,formats,splitter,joiner) {
-        Logger.setDateTimeState(state,formats,splitter,joiner);
+    setLoggerDateTimeState: function(state,formats,splitter) {
+        Logger.setDateTimeState(state,formats,splitter);
     },
     isArray: function(value) {
         return isArray(value);

@@ -3,6 +3,7 @@ configFilePath=/custom/cmd-config.txt
 dir=$(sed -n "3p" $configFilePath)
 fileName="pointPossibleValues.json"
 expressionFileName="pointExpression.json"
+partialExpressionFileName="partialPointExpression.json"
 tab="    "
 
 u1InPorts=(12)
@@ -20,11 +21,15 @@ if [[ -d "${dir}" ]]; then
     if [[ -f "${dir}${expressionFileName}" ]]; then
         rm "${dir}${expressionFileName}"
     fi
+    if [[ -f "${dir}${partialExpressionFileName}" ]]; then
+        rm "${dir}${partialExpressionFileName}"
+    fi
 fi
 
 echo "[" >> "${dir}${fileName}"
 echo "{" >> "${dir}${expressionFileName}"
-# swModelCount=${#swModel[*]}
+echo "{" >> "${dir}${partialExpressionFileName}"
+
 addExpressionInFile() {
     id=$1
     in=$2
@@ -40,6 +45,9 @@ addExpressionInFile() {
     ocrExp="(((${pName}-WNR:up&&RWWNR:up)||(${pName}-ASWR:up||${pName}-OCR:up))&&((${pName}-CWLR:dn&&${pName}-CCR:dn)&&(${pName}-OWLR:up||${pName}-OCR:up)))"
     cwlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&NWWNR:up)||${pName}-CWLR:up))||(${pName}-WNR:dn&&${pName}-CLR:up))&&(${pName}-CWKR:dn&&${pName}-OWLR:dn)))"
     owlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&RWWNR:up)||${pName}-OWLR:up))||(${pName}-WNR:dn&&${pName}-OLR:up))&&(${pName}-OWKR:dn&&${pName}-CWLR:dn)))"
+    partialCLRExp="(${pName}-CWKR:dn&&${pName}-OLR:dn)"
+    partialOLRExp="(${pName}-OWKR:dn&&${pName}-CLR:dn)"
+    wfrExp=${pName}-WNR:dn #Temprory
     echo "${tab}"'"'${pName}'-CWKR":["'$cwkrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-OWKR":["'$owkrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-CCR":["'$ccrExp'"],' >> "${dir}${expressionFileName}"
@@ -48,10 +56,15 @@ addExpressionInFile() {
     echo "${tab}"'"'${pName}'-OWLR":["'$owlrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-ASWR":["'$aswrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-WCKR":["'$wckrExp'"],' >> "${dir}${expressionFileName}"
+    echo "${tab}"'"'${pName}'-WFR":["'$wfrExp'"],' >> "${dir}${expressionFileName}"
+
+    echo "${tab}"'"'${pName}'-CLR":["'$partialCLRExp'"],' >> "${dir}${partialExpressionFileName}"
     if [[ $isLast == true ]]; then
         echo "${tab}"'"'${pName}'-WOKR":["'$wokrExp'"]' >> "${dir}${expressionFileName}"
+        echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"]' >> "${dir}${partialExpressionFileName}"
     else
         echo "${tab}"'"'${pName}'-WOKR":["'$wokrExp'"],' >> "${dir}${expressionFileName}"
+        echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"],' >> "${dir}${partialExpressionFileName}"
     fi
 }
 addPossibleValueInFile() {
@@ -59,7 +72,7 @@ addPossibleValueInFile() {
     in=$2
     out=$3
     re='^[0-9]+$'
-    # Partial possible values for point (U1-I-12)
+    # Partial possible values for point is => U1-I-12
     if ! [[ $in =~ $re ]] ; then
        echo "${tab}"'"'${id}-${in}-${out}'",' >> "${dir}${fileName}"
     else
@@ -126,5 +139,6 @@ done
 # U2 ends ************
 # ----------------------------------------------------------------------
 echo "}" >> "${dir}${expressionFileName}"
+echo "}" >> "${dir}${partialExpressionFileName}"
 echo "]" >> "${dir}${fileName}"
 echo "End Time:${tab}"$(date +"%Y-%m-%d %T")
