@@ -3,30 +3,13 @@ configFilePath=/custom/cmd-config.txt
 dir=$(sed -n "3p" $configFilePath)
 fileName="pointPossibleValues.json"
 tab="    "
-swModel=()
-swModel+=("U1")
-swModel+=("U2")
 
-PORTS=()
+u1InPorts=(12)
+u1OutPorts=(25 26)
 
-getInOutOptions () {
-    U1=(1 2 3 4 5 6 7 8 9 10)
-    U1+=(11 12 13 14 15 16 17 18 19 20)
-    U1+=(21 22 23 24 25 26 27 28 29 30)
-    U1=(12 25 26)
-    U2=(1 2 3 4 5 6 7 8 9 10)
-    U2+=(11 12 13 14 15 16 17 18 19 20)
-    U2+=(21 22 23 24 25 26 27 28 29 30)
-    U2=(13 14 19 25 26)
-    U3=()
-    if [[ $1 == "U1" ]]; then
-        PORTS=${U1}
-    elif [[ $1 == "U2" ]]; then
-        PORTS=${U2}
-    else
-        PORTS=()
-    fi
-}
+u2InPorts=(19 25 26)
+u2OutPorts=(13 14 25 26)
+
 
 echo "Start Time:  "$(date +"%Y-%m-%d %T")
 if [[ -d "${dir}" ]]; then
@@ -36,48 +19,71 @@ if [[ -d "${dir}" ]]; then
 fi
 
 echo "[" >> "${dir}${fileName}"
-swModelCount=${#swModel[*]}
+# swModelCount=${#swModel[*]}
 
-# 
-# echo "${tab}[" >> "${dir}${fileName}"
-for (( i = 0; i <${swModelCount} ; i++ )); do
-    id=${swModel[$i]}
-    getInOutOptions ${id}
-    ports=$PORTS
-    for (( j = 0; j < ${#ports[*]}; j++ )); do
-        in=${ports[$j]}
-        for (( k = 0; k < ${#ports[*]}; k++ )); do
-            out=${ports[$k]}
-            echo "${tab}"'"'${id}-${in}-${out}'-CWKR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-OWKR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-WCKR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-WOKR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-CWLR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-OWLR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-CLR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-OLR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-CCR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-OCR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-ASWR",' >> "${dir}${fileName}"
-            echo "${tab}"'"'${id}-${in}-${out}'-WNR",' >> "${dir}${fileName}"
-        done
+addInFile() {
+    id=$1
+    in=$2
+    out=$3
+    re='^[0-9]+$'
+    if ! [[ $in =~ $re ]] ; then
+       echo "${tab}"'"'${id}-${in}-${out}'",' >> "${dir}${fileName}"
+    else
+        echo "${tab}"'"'${id}-${in}-${out}'-CWKR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-OWKR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-WCKR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-WOKR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-CWLR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-OWLR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-WFR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-CLR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-OLR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-CCR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-OCR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-ASWR",' >> "${dir}${fileName}"
+        echo "${tab}"'"'${id}-${in}-${out}'-WNR",' >> "${dir}${fileName}"
+    fi
+}
+
+# U1 starts ************
+# U1 I/O ports
+id=U1
+for (( j = 0; j < ${#u1InPorts[*]}; j++ )); do
+    for (( k = 0; k < ${#u1OutPorts[*]}; k++ )); do
+        addInFile $id ${u1InPorts[$j]} ${u1OutPorts[$k]}
     done
 done
-# echo "${tab}]," >> "${dir}${fileName}"
-# 
-# echo "${tab}[" >> "${dir}${fileName}"
-for (( i = 0; i < ${swModelCount}; i++ )); do
-    id=${swModel[$i]}
-    for (( j = 1; j <= 32; j++ )); do
-        echo "${tab}"'"'${id}-"I"-${j}'",' >> "${dir}${fileName}"
-        if [[ ${id} == "U2" && ${j} -eq 32 ]]; then
-            echo "${tab}"'"'${id}-"O"-${j}'"' >> "${dir}${fileName}"
-        else
-            echo "${tab}"'"'${id}-"O"-${j}'",' >> "${dir}${fileName}"
-        fi
+# U1 I ports
+for (( j = 0; j < ${#u1InPorts[*]}; j++ )); do
+    addInFile $id I ${u1InPorts[$j]}
+done
+# U1 O ports
+for (( j = 0; j < ${#u1OutPorts[*]}; j++ )); do
+    addInFile $id O ${u1OutPorts[$j]}
+done
+# U1 ends ************
+# ----------------------------------------------------------------------
+# U2 starts ************
+# U2 I/O ports
+id=U2
+for (( j = 0; j < ${#u2InPorts[*]}; j++ )); do
+    for (( k = 0; k < ${#u2OutPorts[*]}; k++ )); do
+        addInFile $id ${u2InPorts[$j]} ${u2OutPorts[$k]}
     done
 done
-# echo "${tab}]" >> "${dir}${fileName}"
-# 
+# U2 I ports
+for (( j = 0; j < ${#u2InPorts[*]}; j++ )); do
+    addInFile $id I ${u2InPorts[$j]}
+done
+# U2 O ports
+for (( j = 0; j < ${#u2OutPorts[*]}; j++ )); do
+    if [[ $j -eq ${#u2OutPorts[*]}-1 ]]; then
+        echo "${tab}"'"'${id}-"O"-${u2OutPorts[$j]}'"' >> "${dir}${fileName}"
+    else
+        addInFile $id O ${u2OutPorts[$j]}
+    fi
+done
+# U2 ends ************
+# ----------------------------------------------------------------------
 echo "]" >> "${dir}${fileName}"
 echo "End Time:${tab}"$(date +"%Y-%m-%d %T")

@@ -104,6 +104,8 @@ Model.fn = Model.prototype = {
     addDebug: function() {
         if (isValidKey(this.key)) {
             debug.push(this.key);
+        } else {
+            $S.log("Invalid key for debug:" + this.key);
         }
         return 0;
     }
