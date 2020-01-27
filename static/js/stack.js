@@ -70,7 +70,77 @@ var DT = (function() {
     };
     return DateTime;
 })();
-
+var LocalStorage = (function(){
+    function LocalStorage () {
+        var _localStorage = localStorage;
+        var validKeys = [];
+        var bypassKeys = ["local_storage_support_test","length","key","getItem","setItem","removeItem","clear"];
+        function isValidKey (key) {
+            if (bypassKeys.indexOf(key) >= 0) {
+                return false;
+            }
+            return true;
+        };
+        function get(key) {
+            var response = {"status": false, "value": null};
+            if (_localStorage && key && isValidKey(key)) {
+                var value = _localStorage.getItem(key);
+                if (value) {
+                    response["status"] = true;
+                    response["value"] = value;
+                }
+            }
+            return response;
+        };
+        function getAll() {
+            var response = {"status": true, count:0, "value": {}};
+            for (var key in _localStorage) {
+                if (isValidKey(key)) {
+                    var temp = get(key);
+                    if (temp.status) {
+                        response.value[key] = temp.value;
+                        response.count++;
+                    }
+                }
+            }
+            return response;
+        };
+        function set(key, value) {
+            var response = {"status": false};
+            if (_localStorage && key && isValidKey(key)) {
+                _localStorage.setItem(key, value);
+                response["status"] = true;
+            }
+            return response;
+        };
+        function remove(key) {
+            var response = {"status": false};
+            if (_localStorage && key && isValidKey(key)) {
+                _localStorage.removeItem(key);
+                response["status"] = true;
+            }
+            return response;
+        };
+        function clear() {
+            var response = {"status": false};
+            if (_localStorage) {
+                for (var i=0; i< validKeys.length; i++) {
+                    _localStorage.removeItem(validKeys[i]);
+                }
+                response["status"] = true;
+            }
+            return response;
+        };
+        return {
+            getAll: getAll,
+            get: get,
+            set: set,
+            remove: remove,
+            clear: clear
+        };
+    }
+    return LocalStorage;
+})();
 var Log = (function(){
     var dateTimeEnable = false,format,splitter,joiner;
     function Logger(){}
@@ -372,6 +442,9 @@ Stack.extend({
     },
     getDT: function() {
         return new DT();
+    },
+    getLocalStorage: function() {
+        return new LocalStorage();
     },
     getTable: function(tableContent) {
         return new Table(tableContent);
