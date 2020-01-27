@@ -2,6 +2,7 @@
 
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
+var ignoreRecheckPossibleValues = [];
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -105,6 +106,10 @@ Model.fn = Model.prototype = {
         possibleValues = extPossibleValues;
         return possibleValues;
     },
+    setIgnoreRecheckPossibleValues: function(expIgnoreRecheckPossibleValues) {
+        ignoreRecheckPossibleValues = expIgnoreRecheckPossibleValues;
+        return ignoreRecheckPossibleValues;
+    },
     addDebug: function() {
         if (isValidKey(this.key)) {
             debug.push(this.key);
@@ -185,6 +190,9 @@ Model.extend({
     getPossibleValues : function() {
         return possibleValues;
     },
+    getIgnorePossibleValues : function() {
+        return ignoreRecheckPossibleValues;
+    },
     getCurrentValues : function() {
         return currentValues;
     },
@@ -228,7 +236,7 @@ Model.extend({
         return Model(key).get();
     },
     setValue: function(key, value) {
-        if (setValueCount > setValueCountLimit) {
+        if (setValueCount >= setValueCountLimit) {
             setValueCount++;
             var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + value;
             $S.log(logText);
@@ -262,6 +270,9 @@ Model.extend({
         valueToBeChecked = possibleValues;
         for (var i = 0; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
+            if (ignoreRecheckPossibleValues.indexOf(name) >=0) {
+                continue;
+            }
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;
