@@ -266,7 +266,7 @@ Model.extend({
             var oldValue = modelNode.get();
             var newValue = 0;
             if (Model.isMethodDefined(name)) {
-                Model[name]();
+                Model[name](name);
             } else if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
             } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
