@@ -276,6 +276,9 @@ Model.extend({
             //To avoid further processing if value changed
             //Because it will already handle by setValue method
             if (oldValue != newValue) {
+                if (Model.isFunction(Model["setValueChangedCallback"])) {
+                    Model["setValueChangedCallback"](name, oldValue, newValue);
+                }
                 return 0;
             }
         }
