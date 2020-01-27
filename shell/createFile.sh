@@ -72,7 +72,7 @@ addExpressionInFile() {
     echo "${tab}"'"'${pName}'-OWLR":["'$owlrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-ASWR":["'$aswrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-WCKR":["'$wckrExp'"],' >> "${dir}${expressionFileName}"
-    echo "${tab}"'"'${pName}'-WFR":["'$wfrExp'"],' >> "${dir}${expressionFileName}"
+    # echo "${tab}"'"'${pName}'-WFR":["'$wfrExp'"],' >> "${dir}${expressionFileName}"
 
     echo "${tab}"'"'${pName}'-CLR":["'$partialCLRExp'"],' >> "${dir}${partialExpressionFileName}"
     echo "${tab}"'"'${pName}'-WFR":1,' >> "${dir}${currentValuesFileName}"
