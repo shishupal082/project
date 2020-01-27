@@ -1,6 +1,6 @@
 (function(window, $S) {
 
-var loopCount = 0, setValueCount = 0;
+var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
 var currentValues = {};
 var exps = {};
@@ -137,6 +137,9 @@ Model.extend({
     getStack: function(shareStorage) {
         return $S.getStack(shareStorage);
     },
+    getLocalStorage: function() {
+        return $S.getLocalStorage();
+    },
     getTable: function(tableContent) {
         return $S.getTable(tableContent);
     },
@@ -189,7 +192,7 @@ Model.extend({
         if(isNaN(newLimit)) {
             $S.log("Invalid newLimit:" + newLimit);
         } else {
-            setValueCount = newLimit*1;
+            setValueCountLimit = newLimit*1;
         }
         return 1;
     },
@@ -225,7 +228,7 @@ Model.extend({
         return Model(key).get();
     },
     setValue: function(key, value) {
-        if (setValueCount > 500) {
+        if (setValueCount > setValueCountLimit) {
             setValueCount++;
             var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + value;
             $S.log(logText);
