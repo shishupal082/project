@@ -3,6 +3,7 @@
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
 var ignoreRecheckPossibleValues = [];
+var reCheckingStatus = true;
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -106,6 +107,14 @@ Model.fn = Model.prototype = {
         possibleValues = extPossibleValues;
         return possibleValues;
     },
+    setReCheckingStatus: function(status) {
+        if (status) {
+            reCheckingStatus = true;
+        } else {
+            reCheckingStatus = false;
+        }
+        return reCheckingStatus;
+    },
     setIgnoreRecheckPossibleValues: function(expIgnoreRecheckPossibleValues) {
         ignoreRecheckPossibleValues = expIgnoreRecheckPossibleValues;
         return ignoreRecheckPossibleValues;
@@ -193,6 +202,9 @@ Model.extend({
     getIgnorePossibleValues : function() {
         return ignoreRecheckPossibleValues;
     },
+    getReCheckingStatus: function() {
+        return reCheckingStatus;
+    },
     getCurrentValues : function() {
         return currentValues;
     },
@@ -266,6 +278,9 @@ Model.extend({
 });
 Model.extend({
     reCheckAllValues: function() {
+        if (reCheckingStatus == false) {
+            return 0;
+        }
         var valueToBeChecked = [];
         valueToBeChecked = possibleValues;
         for (var i = 0; i < valueToBeChecked.length; i++) {
@@ -293,6 +308,7 @@ Model.extend({
                 return 0;
             }
         }
+        return 1;
     },
     generateExpression: function(items) {
         var itemsWithExp = $S.generateExpression(items);
