@@ -187,6 +187,10 @@ Model.extend({
         verifyExpression = true;
         return verifyExpression;
     },
+    disableVerifyExpression: function() {
+        verifyExpression = false;
+        return verifyExpression;
+    },
     enableReChecking: function() {
         reCheckingStatus = true;
         return reCheckingStatus;
@@ -248,6 +252,12 @@ Model.extend({
             response.push(possibleValues[i]);
         }
         return response;
+    },
+    getReCheckingStatus: function() {
+        return reCheckingStatus;
+    },
+    getVerifyExpressionStatus: function() {
+        return verifyExpression;
     },
     getIgnorePossibleValues : function() {
         var response = [];
