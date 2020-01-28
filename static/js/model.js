@@ -7,10 +7,21 @@ var reCheckingStatus = true;
 var currentValues = {};
 var exps = {};
 var debug = [];
-
+var valueToBeChecked = [];
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
+function setValueTobeChecked() {
+    valueToBeChecked = [];
+    for (var i = 0; i < possibleValues.length; i++) {
+        if (ignoreRecheckPossibleValues.indexOf(possibleValues[i]) >= 0) {
+            continue;
+        } else {
+            valueToBeChecked.push(possibleValues[i]);
+        }
+    }
+    return valueToBeChecked;
+}
 var setValue = (function() {
     var isValueChanged = false;
     function set(key, value) {
@@ -100,11 +111,21 @@ Model.fn = Model.prototype = {
         return 0;
     },
     initializeCurrentValues: function(extCurrentValues) {
-        currentValues = extCurrentValues;
+        if (isObject(extCurrentValues)) {
+            for (var key in extCurrentValues) {
+                currentValues[key] = extCurrentValues[key];
+            }
+        }
         return currentValues;
     },
     setPossibleValues: function(extPossibleValues) {
-        possibleValues = extPossibleValues;
+        if (isArray(extPossibleValues)) {
+            possibleValues = [];
+            for (var i = 0; i < extPossibleValues.length; i++) {
+                possibleValues.push(extPossibleValues[i]);
+            }
+        }
+        setValueTobeChecked();
         return possibleValues;
     },
     setReCheckingStatus: function(status) {
@@ -115,8 +136,14 @@ Model.fn = Model.prototype = {
         }
         return reCheckingStatus;
     },
-    setIgnoreRecheckPossibleValues: function(expIgnoreRecheckPossibleValues) {
-        ignoreRecheckPossibleValues = expIgnoreRecheckPossibleValues;
+    setIgnoreRecheckPossibleValues: function(extIgnoreRecheckPossibleValues) {
+        if (isArray(extIgnoreRecheckPossibleValues)) {
+            ignoreRecheckPossibleValues = [];
+            for (var i = 0; i < extIgnoreRecheckPossibleValues.length; i++) {
+                ignoreRecheckPossibleValues.push(extIgnoreRecheckPossibleValues[i]);
+            }
+        }
+        setValueTobeChecked();
         return ignoreRecheckPossibleValues;
     },
     addDebug: function() {
@@ -211,9 +238,9 @@ Model.extend({
     changeSetValueCountLimit: function(newLimit) {
         if(isNaN(newLimit)) {
             $S.log("Invalid newLimit:" + newLimit);
-        } else {
-            setValueCountLimit = newLimit*1;
+            return 0;
         }
+        setValueCountLimit = newLimit*1;
         return 1;
     },
     resetSetValueCount: function(newLimit) {
@@ -247,16 +274,20 @@ Model.extend({
     getValue: function(key) {
         return Model(key).get();
     },
-    setValue: function(key, value) {
+    setValue: function(key, newValue) {
         if (setValueCount >= setValueCountLimit) {
             setValueCount++;
-            var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + value;
+            var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + newValue;
             $S.log(logText);
             throw logText;
             return 0;
         }
-        var set = new setValue(key, value);
+        var oldValue = Model(key).get();
+        var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
+            if (Model.isFunction(Model["setValueChangedCallback"])) {
+                Model["setValueChangedCallback"](key, oldValue, newValue);
+            }
             Model.reCheckAllValues();
         }
         return 0;
@@ -281,13 +312,8 @@ Model.extend({
         if (reCheckingStatus == false) {
             return 0;
         }
-        var valueToBeChecked = [];
-        valueToBeChecked = possibleValues;
         for (var i = 0; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
-            if (ignoreRecheckPossibleValues.indexOf(name) >=0) {
-                continue;
-            }
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;
@@ -302,9 +328,6 @@ Model.extend({
             //To avoid further processing if value changed
             //Because it will already handle by setValue method
             if (oldValue != newValue) {
-                if (Model.isFunction(Model["setValueChangedCallback"])) {
-                    Model["setValueChangedCallback"](name, oldValue, newValue);
-                }
                 return 0;
             }
         }
