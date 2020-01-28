@@ -4,6 +4,7 @@ var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
 var ignoreRecheckPossibleValues = [];
 var reCheckingStatus = true;
+var verifyExpression = false;
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -128,14 +129,6 @@ Model.fn = Model.prototype = {
         setValueTobeChecked();
         return possibleValues;
     },
-    setReCheckingStatus: function(status) {
-        if (status) {
-            reCheckingStatus = true;
-        } else {
-            reCheckingStatus = false;
-        }
-        return reCheckingStatus;
-    },
     setIgnoreRecheckPossibleValues: function(extIgnoreRecheckPossibleValues) {
         if (isArray(extIgnoreRecheckPossibleValues)) {
             ignoreRecheckPossibleValues = [];
@@ -189,6 +182,26 @@ Model.extend({
     },
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);
+    },
+    enableVerifyExpression: function() {
+        verifyExpression = true;
+        return verifyExpression;
+    },
+    disableReChecking: function() {
+        reCheckingStatus = false;
+        return reCheckingStatus;
+    },
+    resetSetValueCount: function(newLimit) {
+        setValueCount = 0;
+        return 1;
+    },
+    changeSetValueCountLimit: function(newLimit) {
+        if(isNaN(newLimit)) {
+            $S.log("Invalid newLimit:" + newLimit);
+            return 0;
+        }
+        setValueCountLimit = newLimit*1;
+        return 1;
     }
 });
 Model.extend({
@@ -239,9 +252,6 @@ Model.extend({
         }
         return response;
     },
-    getReCheckingStatus: function() {
-        return reCheckingStatus;
-    },
     getCurrentValues : function() {
         var currentValuesResponse = {};
         var count = 0;
@@ -250,18 +260,6 @@ Model.extend({
             count++;
         }
         return {currentValues: currentValuesResponse, count: count};
-    },
-    changeSetValueCountLimit: function(newLimit) {
-        if(isNaN(newLimit)) {
-            $S.log("Invalid newLimit:" + newLimit);
-            return 0;
-        }
-        setValueCountLimit = newLimit*1;
-        return 1;
-    },
-    resetSetValueCount: function(newLimit) {
-        setValueCount = 0;
-        return 1;
     }
 });
 Model.extend({
@@ -390,12 +388,40 @@ Model.extend({
                 }
             }
         }
+        /** Expression validation start **/
+        if (verifyExpression) {
+            var isValidExpression = true;
+            for (var i = 0; i < posixVal.length; i++) {
+                if ([true, false, "&&", "||"].indexOf(posixVal[i]) >= 0) {
+                    continue;
+                } else {
+                    isValidExpression = false;
+                    $S.log(name + ": invalid posixVal: " + posixVal[i]);
+                }
+            }
+            var tokenizedExpLength = 0;
+            for (var i = 0; i < tokenizedExp.length; i++) {
+                if (["(",")"].indexOf(tokenizedExp[i]) >= 0) {
+                    continue;
+                }
+                tokenizedExpLength++;
+            }
+            if (tokenizedExpLength != posixVal.length) {
+                isValidExpression = false;
+                $S.log(name + ": invalid expression: " + exp);
+            }
+            if (isValidExpression == false) {
+                throw "Invalid expression:" + exp + ", for "+ name;
+            }
+        }
+        /** Expression validation End **/
+        var result = $S.calBinary(posixVal);
         if (debug.indexOf(name) >=0) {
             console.log(exp);
             console.log(posix);
             console.log(posixVal);
+            console.log(result);
         }
-        var result = $S.calBinary(posixVal);
         return result;
     }
 });

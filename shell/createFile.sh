@@ -61,7 +61,7 @@ addExpressionInFile() {
     wokrExp="(${pName}-CCR:dn&&${pName}-WCKR:dn)"
     aswrExp="((${pName}-CLR:up&&(${pName}-CWLR:up&&${pName}-CCR:dn))||((${pName}-OLR:up&&${pName}-OWLR:up)&&${pName}-OCR:dn))"
     cwkrExp="((${pName}-WCKR:up&&((${pName}-CWLR:dn&&${pName}-OWLR:dn)||${pName}-CCR:up))&&${pName}-OWKR:dn)"
-    owkrExp="(((${pName}-WOKR:up&&${pName}-CWKR:dn)&&((${pName}-CWLR:dn&&${pName}-OWLR:dn)||${pName}-OCR:up)))"
+    owkrExp="((${pName}-WOKR:up&&${pName}-CWKR:dn)&&((${pName}-CWLR:dn&&${pName}-OWLR:dn)||${pName}-OCR:up))"
     ccrExp="(((${pName}-WNR:up&&CWWNR:up)||(${pName}-ASWR:up||${pName}-CCR:up))&&((${pName}-OWLR:dn&&${pName}-OCR:dn)&&(${pName}-CWLR:up||${pName}-CCR:up)))"
     ocrExp="(((${pName}-WNR:up&&OWWNR:up)||(${pName}-ASWR:up||${pName}-OCR:up))&&((${pName}-CWLR:dn&&${pName}-CCR:dn)&&(${pName}-OWLR:up||${pName}-OCR:up)))"
     cwlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&CWWNR:up)||${pName}-CWLR:up))||(${pName}-WNR:dn&&${pName}-CLR:up))&&(${pName}-CWKR:dn&&${pName}-OWLR:dn)))"
