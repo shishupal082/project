@@ -187,6 +187,10 @@ Model.extend({
         verifyExpression = true;
         return verifyExpression;
     },
+    enableReChecking: function() {
+        reCheckingStatus = true;
+        return reCheckingStatus;
+    },
     disableReChecking: function() {
         reCheckingStatus = false;
         return reCheckingStatus;
