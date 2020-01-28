@@ -388,6 +388,13 @@ Model.extend({
                 }
             }
         }
+        var result = $S.calBinary(posixVal);
+        if (debug.indexOf(name) >=0) {
+            console.log(exp);
+            console.log(posix);
+            console.log(posixVal);
+            console.log(result);
+        }
         /** Expression validation start **/
         if (verifyExpression) {
             var isValidExpression = true;
@@ -411,17 +418,10 @@ Model.extend({
                 $S.log(name + ": invalid expression: " + exp);
             }
             if (isValidExpression == false) {
-                throw "Invalid expression:" + exp + ", for "+ name;
+                throw name + ": invalid expression:" + exp;
             }
         }
         /** Expression validation End **/
-        var result = $S.calBinary(posixVal);
-        if (debug.indexOf(name) >=0) {
-            console.log(exp);
-            console.log(posix);
-            console.log(posixVal);
-            console.log(result);
-        }
         return result;
     }
 });
