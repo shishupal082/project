@@ -217,23 +217,39 @@ Model.extend({
         return false;
     },
     getExps: function() {
-        var response = {exps: exps, count: 0};
+        var expsResponse = {};
+        var count = 0;
         for (var key in exps) {
-            response.count++;
+            expsResponse[key] = exps[key];
+            count++;
+        }
+        return {exps: expsResponse, count: count};
+    },
+    getPossibleValues : function() {
+        var response = [];
+        for (var i = 0; i < possibleValues.length; i++) {
+            response.push(possibleValues[i]);
         }
         return response;
     },
-    getPossibleValues : function() {
-        return possibleValues;
-    },
     getIgnorePossibleValues : function() {
-        return ignoreRecheckPossibleValues;
+        var response = [];
+        for (var i = 0; i < ignoreRecheckPossibleValues.length; i++) {
+            response.push(ignoreRecheckPossibleValues[i]);
+        }
+        return response;
     },
     getReCheckingStatus: function() {
         return reCheckingStatus;
     },
     getCurrentValues : function() {
-        return currentValues;
+        var currentValuesResponse = {};
+        var count = 0;
+        for (var key in currentValues) {
+            currentValuesResponse[key] = currentValues[key];
+            count++;
+        }
+        return {currentValues: currentValuesResponse, count: count};
     },
     changeSetValueCountLimit: function(newLimit) {
         if(isNaN(newLimit)) {
