@@ -570,7 +570,7 @@ Stack.extend({
             }
         }
         result = st.pop();
-        return val;
+        return result;
     },
     calBinary: function(postfix) {
         var st = new St();
