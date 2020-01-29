@@ -236,19 +236,31 @@ var St = (function(){
     return St;
 })();
 var BT = (function(){
-    var skipSpaceInResult = true;
+    var skipValuesInResult = [];
+
+    // Fix for single item expression, like
+    // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
+    // BT => root.data = "", root.left.data = "true"
+    // Therefore postOrderResult should be ["true"] instead of ["true", ""]
+
+    function getValidData(data) {
+        var res = {"status": false, data: ""};
+        if (skipValuesInResult.indexOf(data) < 0) {
+            res["status"] = true;
+            res["data"] = data;
+        }
+        return res;
+    }
     function BT(val) {
         this.data = val;
         this.left = null;
         this.right = null;
     }
-    BT.prototype.enableSkippingSpaceInResult = function() {
-        skipSpaceInResult = true;
-        return skipSpaceInResult;
-    };
-    BT.prototype.disableSkippingSpaceInResult = function() {
-        skipSpaceInResult = true;
-        return skipSpaceInResult;
+    BT.prototype.addSkipValuesInResult = function(value) {
+        if (["string", "number"].indexOf(typeof value) >= 0) {
+            skipValuesInResult.push(value);
+        }
+        return skipValuesInResult;
     };
     BT.prototype.insertLeft = function(node, data) {
         var newNode = new BT(data);
@@ -291,17 +303,7 @@ var BT = (function(){
         }
         this.getPostOrder(root.left, postOrderResult);
         this.getPostOrder(root.right, postOrderResult);
-
-        // Fix for single item expression, like
-        // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
-        // BT => root.data = "", root.left.data = "true"
-        // Therefore postOrderResult should be ["true"] instead of ["true", ""]
-
-        if (skipSpaceInResult) {
-            if (root.data != "") {
-                postOrderResult.push(root.data);
-            }
-        } else {
+        if (getValidData(root.data).status) {
             postOrderResult.push(root.data);
         }
         return postOrderResult;
@@ -311,7 +313,9 @@ var BT = (function(){
             return inOrderResult;
         }
         this.getInOrder(root.left, inOrderResult);
-        inOrderResult.push(root.data);
+        if (getValidData(root.data).status) {
+            inOrderResult.push(root.data);
+        }
         this.getInOrder(root.right, inOrderResult);
         return inOrderResult;
     };
@@ -319,7 +323,9 @@ var BT = (function(){
         if (root == null) {
             return preOrderResult;
         }
-        preOrderResult.push(root.data);
+        if (getValidData(root.data).status) {
+            preOrderResult.push(root.data);
+        }
         this.getPreOrder(root.left, preOrderResult);
         this.getPreOrder(root.right, preOrderResult);
         return preOrderResult;
@@ -604,6 +610,7 @@ Stack.extend({
     },
     createPosixTree: function(tokenizedExp) {
         var bt = new BT(""), posixTreeValue = [];
+        bt.addSkipValuesInResult("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
         posixTreeValue = bt.getPostOrder(btRoot, []);
         return posixTreeValue;
