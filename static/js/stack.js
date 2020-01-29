@@ -202,6 +202,13 @@ var BT = (function(){
             node = newNode;
         }
     };
+    BT.prototype.insertNodeInLeft = function(parent, leftNode) {
+        if (parent) {
+            parent.left = leftNode;
+        } else {
+            parent = leftNode;
+        }
+    };
     BT.prototype.insertRight = function(node, data) {
         var newNode = new BT(data);
         if (node) {
@@ -296,8 +303,17 @@ var AST = (function() {
                 st.push(currentTree);
                 currentTree = currentTree.getLeftChild(currentTree);
             } else if(["+","-","*","/","&&","||"].indexOf(items[i]) >=0) {
-                currentTree.data = items[i];
-                currentTree.insertRight(currentTree, '');
+                var newData = items[i];
+                if (currentTree.data != "") {
+                    var oldLeft = currentTree.left;
+                    var oldRight = currentTree.right;
+                    currentTree.insertRight(currentTree, newData);
+                    currentTree = currentTree.getRightChild(currentTree);
+                    currentTree.insertNodeInLeft(currentTree, oldRight);
+                } else {
+                    currentTree.data = newData;
+                }
+                currentTree.insertRight(currentTree, "");
                 st.push(currentTree);
                 currentTree = currentTree.getRightChild(currentTree);
             } else if(items[i] == ")") {
