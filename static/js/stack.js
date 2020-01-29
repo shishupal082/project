@@ -237,14 +237,19 @@ var St = (function(){
 })();
 var BT = (function(){
     var skipSpaceInResult = true;
-    function BT(val, skipSpaceInResult1) {
+    function BT(val) {
         this.data = val;
         this.left = null;
         this.right = null;
-        if (typeof skipSpaceInResult1 == "boolean") {
-            skipSpaceInResult = skipSpaceInResult1;
-        }
     }
+    BT.prototype.enableSkippingSpaceInResult = function() {
+        skipSpaceInResult = true;
+        return skipSpaceInResult;
+    };
+    BT.prototype.disableSkippingSpaceInResult = function() {
+        skipSpaceInResult = true;
+        return skipSpaceInResult;
+    };
     BT.prototype.insertLeft = function(node, data) {
         var newNode = new BT(data);
         if (node) {
@@ -488,6 +493,9 @@ Stack.extend({
     getLocalStorage: function() {
         return new LocalStorage();
     },
+    getBT: function() {
+        return new BT();
+    },
     getTable: function(tableContent) {
         return new Table(tableContent);
     },
@@ -595,7 +603,7 @@ Stack.extend({
         return result;
     },
     createPosixTree: function(tokenizedExp) {
-        var bt = new BT("", true), posixTreeValue = [];
+        var bt = new BT(""), posixTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
         posixTreeValue = bt.getPostOrder(btRoot, []);
         return posixTreeValue;
