@@ -541,7 +541,15 @@ Stack.extend({
     // (3*(9*7+4)*2) = (3*99*2) = 594
     // (3*((4+5)*7+8*9)) = (3*(9*7+8*9)) = (3*(9*7+72)) = (3*(9*79)) = (3*711) = 2133
     // (3*((4+5)*7+8*9)*2) = (3*(9*7+8*9)*2) = (3*(9*7+72)*2) = (3*(9*79)*2) = (3*711*2) = 4266
-
+    /*
+        It it not following BODMAS strictly, but it follws partially
+        BODMAS: Bracket, Of, Division, Multiplication, Addition, Subtraction
+        BODMAS is also known as PEDMAS: Parentheses, Exponent, ...
+        Exponent can be intiger or fraction 1/2, 1/3
+        Preferences => 1st it will evaluate Bracket, then it will follow right associativity (i.e. Right to Left)
+        It does not support Exponent
+        It support other things, Bracket, Division, Multiplication, Addition and Subtraction
+    */
     calNumerical: function(postfix) {
         var st = new St();
         var A, op, B;
