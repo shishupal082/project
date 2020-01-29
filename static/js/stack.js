@@ -236,10 +236,14 @@ var St = (function(){
     return St;
 })();
 var BT = (function(){
-    function BT(val) {
+    var skipSpaceInResult = true;
+    function BT(val, skipSpaceInResult1) {
         this.data = val;
         this.left = null;
         this.right = null;
+        if (typeof skipSpaceInResult1 == "boolean") {
+            skipSpaceInResult = skipSpaceInResult1;
+        }
     }
     BT.prototype.insertLeft = function(node, data) {
         var newNode = new BT(data);
@@ -282,7 +286,19 @@ var BT = (function(){
         }
         this.getPostOrder(root.left, postOrderResult);
         this.getPostOrder(root.right, postOrderResult);
-        postOrderResult.push(root.data);
+
+        // Fix for single item expression, like
+        // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
+        // BT => root.data = "", root.left.data = "true"
+        // Therefore postOrderResult should be ["true"] instead of ["true", ""]
+
+        if (skipSpaceInResult) {
+            if (root.data != "") {
+                postOrderResult.push(root.data);
+            }
+        } else {
+            postOrderResult.push(root.data);
+        }
         return postOrderResult;
     };
     BT.prototype.getInOrder = function(root, inOrderResult) {
@@ -314,6 +330,8 @@ var BT = (function(){
                 this.insertLeft(currentTree, "");
                 st.push(currentTree);
                 currentTree = this.getLeftChild(currentTree);
+            } else if(items[i] == ")") {
+                currentTree = st.pop();
             } else if(["+","-","*","/","&&","||"].indexOf(items[i]) >=0) {
                 var newData = items[i];
                 if (currentTree.data != "") {
@@ -327,8 +345,6 @@ var BT = (function(){
                 this.insertRight(currentTree, "");
                 st.push(currentTree);
                 currentTree = this.getRightChild(currentTree);
-            } else if(items[i] == ")") {
-                currentTree = st.pop();
             } else {
                 currentTree.data = items[i];
                 parent = st.pop();
@@ -534,12 +550,15 @@ Stack.extend({
             op = postfix[i]; //operator
             if (!isNaN(postfix[i])) {
                 st.push(postfix[i]*1);
-            }
-            else if (["+","-","*","/"].indexOf(op) >= 0) {
+            } else if (["+","-","*","/"].indexOf(op) >= 0) {
                 A = st.pop()*1;
                 B = st.pop()*1;
                 val = calculateValue(B, op, A);
                 st.push(val);
+            } else {
+                var logText = "Invalid operator or value for numerical calculation: " + op;
+                logText += ", in postfix:" + postfix.toString();
+                Logger.log(logText);
             }
         }
         result = st.pop();
@@ -558,13 +577,17 @@ Stack.extend({
                 B = st.pop();
                 val = calculateValue(B, op, A);
                 st.push(val);
+            } else {
+                var logText = "Invalid operator or value for binary calculation: " + op;
+                logText += ", in postfix: " + postfix.toString();
+                Logger.log(logText);
             }
         }
         result = st.pop();
         return result;
     },
     createPosixTree: function(tokenizedExp) {
-        var bt = new BT(), posixTreeValue = [];
+        var bt = new BT("", true), posixTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
         posixTreeValue = bt.getPostOrder(btRoot, []);
         return posixTreeValue;
@@ -604,6 +627,15 @@ Stack.extend({
     evaluateBinary: function(expression) {
         var tokens = Stack.tokenize(expression, ["(",")","&&","||"]);
         var posix = Stack.createPosixTree(tokens);
+        for (var i = 0; i < posix.length; i++) {
+            if (posix[i] == "true") {
+                posix[i] = true;
+            } else if (posix[i] == "false") {
+                posix[i] = false;
+            } else {
+                continue;
+            }
+        }
         return Stack.calBinary(posix);
     },
     tokenize: function(expression, tokenItems) {
