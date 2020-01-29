@@ -188,49 +188,6 @@ function isObject(value) {
     }
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
 }
-var BT = (function(){
-    function BT(val) {
-        this.data = val;
-        this.left = null;
-        this.right = null;
-    }
-    BT.prototype.insertLeft = function(node, data) {
-        var newNode = new BT(data);
-        if (node) {
-            node.left = newNode;
-        } else {
-            node = newNode;
-        }
-    };
-    BT.prototype.insertNodeInLeft = function(parent, leftNode) {
-        if (parent) {
-            parent.left = leftNode;
-        } else {
-            parent = leftNode;
-        }
-    };
-    BT.prototype.insertRight = function(node, data) {
-        var newNode = new BT(data);
-        if (node) {
-            node.right = newNode;
-        } else {
-            node = newNode;
-        }
-    };
-    BT.prototype.getLeftChild = function(node) {
-        if (node && node.left) {
-            return node.left;
-        }
-        return node;
-    };
-    BT.prototype.getRightChild = function(node) {
-        if (node && node.right) {
-            return node.right;
-        }
-        return node;
-    };
-    return BT;
-})();
 var St = (function(){
     var MAXSTACK = 500, STACK = [];
     function St(shareStorage) {
@@ -278,20 +235,75 @@ var St = (function(){
     }
     return St;
 })();
-//AST = Abstract Syntax Tree
-var AST = (function() {
-    var result = [];
-    function generateResult(bt) {
-        if (bt != null) {
-            generateResult(bt.left);
-            generateResult(bt.right);
-            result.push(bt.data);
-        }
-        return result;
+var BT = (function(){
+    function BT(val) {
+        this.data = val;
+        this.left = null;
+        this.right = null;
     }
-    function AST() {}
-    AST.prototype.createPosixTree = function(items) {
-        result = [];
+    BT.prototype.insertLeft = function(node, data) {
+        var newNode = new BT(data);
+        if (node) {
+            node.left = newNode;
+        } else {
+            node = newNode;
+        }
+    };
+    BT.prototype.insertNodeInLeft = function(parent, leftNode) {
+        if (parent) {
+            parent.left = leftNode;
+        } else {
+            parent = leftNode;
+        }
+    };
+    BT.prototype.insertRight = function(node, data) {
+        var newNode = new BT(data);
+        if (node) {
+            node.right = newNode;
+        } else {
+            node = newNode;
+        }
+    };
+    BT.prototype.getLeftChild = function(node) {
+        if (node && node.left) {
+            return node.left;
+        }
+        return node;
+    };
+    BT.prototype.getRightChild = function(node) {
+        if (node && node.right) {
+            return node.right;
+        }
+        return node;
+    };
+    BT.prototype.getPostOrder = function(root, postOrderResult) {
+        if (root == null) {
+            return postOrderResult;
+        }
+        this.getPostOrder(root.left, postOrderResult);
+        this.getPostOrder(root.right, postOrderResult);
+        postOrderResult.push(root.data);
+        return postOrderResult;
+    };
+    BT.prototype.getInOrder = function(root, inOrderResult) {
+        if (root == null) {
+            return inOrderResult;
+        }
+        this.getInOrder(root.left, inOrderResult);
+        inOrderResult.push(root.data);
+        this.getInOrder(root.right, inOrderResult);
+        return inOrderResult;
+    };
+    BT.prototype.getPreOrder = function(root, preOrderResult) {
+        if (root == null) {
+            return preOrderResult;
+        }
+        preOrderResult.push(root.data);
+        this.getPreOrder(root.left, preOrderResult);
+        this.getPreOrder(root.right, preOrderResult);
+        return preOrderResult;
+    };
+    BT.prototype.createBinaryTree = function(items) {
         var st = new St();
         var currentTree, parent;
         var eTree = new BT("");
@@ -299,23 +311,22 @@ var AST = (function() {
         currentTree = eTree;
         for (var i = 0; i < items.length; i++) {
             if (items[i] == "(") {
-                currentTree.insertLeft(currentTree, "");
+                this.insertLeft(currentTree, "");
                 st.push(currentTree);
-                currentTree = currentTree.getLeftChild(currentTree);
+                currentTree = this.getLeftChild(currentTree);
             } else if(["+","-","*","/","&&","||"].indexOf(items[i]) >=0) {
                 var newData = items[i];
                 if (currentTree.data != "") {
-                    var oldLeft = currentTree.left;
                     var oldRight = currentTree.right;
-                    currentTree.insertRight(currentTree, newData);
-                    currentTree = currentTree.getRightChild(currentTree);
-                    currentTree.insertNodeInLeft(currentTree, oldRight);
+                    this.insertRight(currentTree, newData);
+                    currentTree = this.getRightChild(currentTree);
+                    this.insertNodeInLeft(currentTree, oldRight);
                 } else {
                     currentTree.data = newData;
                 }
-                currentTree.insertRight(currentTree, "");
+                this.insertRight(currentTree, "");
                 st.push(currentTree);
-                currentTree = currentTree.getRightChild(currentTree);
+                currentTree = this.getRightChild(currentTree);
             } else if(items[i] == ")") {
                 currentTree = st.pop();
             } else {
@@ -324,10 +335,9 @@ var AST = (function() {
                 currentTree = parent;
             }
         }
-        generateResult(eTree);
-        return result;
+        return eTree;
     };
-    return AST;
+    return BT;
 })();
 var Table = (function() {
 var rows=0, cols=0, content = [];
@@ -488,21 +498,34 @@ Stack.extend({
     }
 });
 Stack.extend({
-    //3*4*5*6 = ["(","3","*",4,"*",5,"*",6,")"] = [3,4,5,6,"*","*","*"] = 3456*** = 360
-    //(((3*4)*5)*6) = ["(","(","(",3,"*",4,")","*",5,")","*",6,")"] = [3,4,"*",5,"*",6,"*"] = 34*5*6* = 360
-    //(4+(5*6)) = ["(",4,"+","(",5,"*",6,")",")"] = [4,5,6,"*","+"] = 456*+ = 34
-    //(4*5) = ["(", 4, "*", 5, ")"] = [4,5,"*"] = 20
-    //(3+(4*5)) = ["(", 3, "+", "(", 4, "*", 5, ")",")"] = [3,4,5,"*","+"] = 23
-    //(3*(5+5)) = ["(","3","*","(","5","+","5",")",")"] = [3,5,5,"+","*"] = 355+* = 30
-    //(3*(((5+5)*5)+5)) = ["(",3,"*","(","(","(",5,"+",5,")","*",5,")","+",5,")",")"] = [3,5,5,"+",5,"*",5,"+","*"] = 355+5*5+* = 165
+    /** It follows right hand associativity **/
+    //(3*4*5*6) = 360
+    //(((3*4)*5)*6) = 360
+    //(4+(5*6)) = 34
+    //(4*5) = 20
+    //(3+(4*5)) = 23
+    //(3*(5+5)) = 30
+    //(3*(((5+5)*5)+5)) = 165
+    // (2*2*2) = 8
+    // (2+2*2) = (2+4) = 6
+    // (2*2+2) = (2*4) = 8
+    // (2*3+4*7) = (2*3+28) = (2*31) = 62
+    // (2+3*4*7) = (2+3*28) = (2+84) = 86
+    // ((2+3)*(4*7)) = (5*28) = 140
+    // (2*3*4+7) = (2*3*11) = (2*33) = 66
+    // (3+4*(7+2)) = (3+4*9) = (3+36) = 39
+    // (3+4*7+2) = (3*4*9) = (3*36) = 39
+    // (3*4*(7+2)) = (3*4*9) = (3*36) = 108
+    // ((3*4)*7+2) = (12*7+2) = (12*9) = 108
+    // (2*3*(5*5*2*2+2)) = (2*3*(5*5*2*4)) = (2*3*200) = 1200
+    // (2*3+5+5*4+2) = (2*3+5+5*6) = (2*3+5+30) = (2*3+35) = (2*78) = 76
+    // (3*(9*7+4)) = (3*99) = 297
+    // (3*((4+5)*7+2*2)) = (3*9*7+2*2) = (3*9*7+4) = (3*9*11) = (3*99) = 297 
+    // (3*((4+5)*7+2*2)*2) = (3*(9*7+2*2)*2) = (3*99*2) = (3*198) = 594
+    // (3*(9*7+4)*2) = (3*99*2) = 594
+    // (3*((4+5)*7+8*9)) = (3*(9*7+8*9)) = (3*(9*7+72)) = (3*(9*79)) = (3*711) = 2133
+    // (3*((4+5)*7+8*9)*2) = (3*(9*7+8*9)*2) = (3*(9*7+72)*2) = (3*(9*79)*2) = (3*711*2) = 4266
 
-
-    //3*((4+5)*7+8*9) = [3,4,5,"+",7,"*",8,9,"*","+","*"] = 345+7*89*+* = 405
-    //3*((4+5)*7+8*9)*2 = [3,4,5,"+",7,"*",8,9,"*","+","*",2,"*"] = 345+7*89*+*2* = 810
-    //3*((4+5)*7+2*2) = [3,4,5,"+",7,"*",2,2,"*","+","*"] = 345+7*22*+* = 201
-    //3*(9*7+4) = [3,9,7,"*",4,"+","*"] = 397*4+* = 201
-    //3*(9*7+4)*2 = [3,9,7,"*",4,"+","*",2,"*"] = 397*4+*2* = 402
-    //3*((4+5)*7+2*2)*2 = [3,4,5,"+",7,"*",2,2,"*","+","*",2,"*"] = 397*22*+2* = 402
     calNumerical: function(postfix) {
         var st = new St();
         var A, op, B;
@@ -541,8 +564,10 @@ Stack.extend({
         return result;
     },
     createPosixTree: function(tokenizedExp) {
-        var ast = new AST();//Abstract syntax tree
-        return ast.createPosixTree(tokenizedExp);
+        var bt = new BT(), posixTreeValue = [];
+        var btRoot = bt.createBinaryTree(tokenizedExp);
+        posixTreeValue = bt.getPostOrder(btRoot, []);
+        return posixTreeValue;
     },
     generateExpression: function (items) {
         var st = new St();
