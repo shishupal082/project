@@ -311,9 +311,7 @@ var BT = (function(){
         }
         this.getPostOrder(root.left, postOrderResult);
         this.getPostOrder(root.right, postOrderResult);
-        if (root.data != "") {
-            postOrderResult.push(root.data);
-        }
+        postOrderResult.push(root.data);
         return postOrderResult;
     };
     BT.prototype.getPostOrderV2 = function(root, postOrderResult, enableFilter) {
