@@ -189,7 +189,7 @@ function isObject(value) {
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
 }
 var St = (function(){
-    var MAXSTACK = 500, STACK = [];
+    var MAXSTACK = 500000, STACK = [];
     function St(shareStorage) {
         if (typeof shareStorage == "boolean" && shareStorage) {
             this._STACK = STACK;
