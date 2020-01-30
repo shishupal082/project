@@ -9,6 +9,7 @@ var currentValues = {};
 var exps = {};
 var debug = [];
 var valueToBeChecked = [];
+var processingCount = {};
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
@@ -273,6 +274,15 @@ Model.extend({
     getVerifyExpressionStatus: function() {
         return verifyExpression;
     },
+    getProcessingCount: function() {
+        var response = {total: 0, itemsCount: 0, processingCount: {}};
+        for (var key in processingCount) {
+            response.itemsCount++;
+            response.total += processingCount[key];
+            response.processingCount[key] = processingCount[key];
+        }
+        return response;
+    },
     getIgnorePossibleValues : function() {
         var response = [];
         for (var i = 0; i < ignoreRecheckPossibleValues.length; i++) {
@@ -359,6 +369,11 @@ Model.extend({
         }
         while(stack.getTop() >= 0) {
             var name = stack.pop();
+            if (processingCount[name]) {
+                processingCount[name]++;
+            } else {
+                processingCount[name] = 1;
+            }
             if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
             } else if (Model.isMethodDefined(name)) {
@@ -375,6 +390,11 @@ Model.extend({
         }
         for (var i = 0; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
+            if (processingCount[name]) {
+                processingCount[name]++;
+            } else {
+                processingCount[name] = 1;
+            }
             if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
             } else if (Model.isMethodDefined(name)) {
@@ -391,6 +411,11 @@ Model.extend({
         }
         for (var i = 0; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
+            if (processingCount[name]) {
+                processingCount[name]++;
+            } else {
+                processingCount[name] = 1;
+            }
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;
