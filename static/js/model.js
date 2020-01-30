@@ -71,7 +71,12 @@ function isValidValue(value) {
 function isValidKey(key) {
     return possibleValues.indexOf(key) >=0 ? true : false;
 }
-
+function isBooleanTrue(value) {
+    if (typeof value == "boolean") {
+        return value == true;
+    }
+    return false;
+}
 /*
 Direct access by id: $M("id").get()
 */
@@ -101,7 +106,7 @@ Model.fn = Model.prototype = {
                 if (exps[this.key].indexOf(exp) < 0) {
                     exps[this.key].push(exp);
                 } else {
-                    $S.log("Trying to add duplicate expression for key:" + this.key + ", expression:"+exp);
+                    // $S.log("Trying to add duplicate expression for key:" + this.key + ", expression:"+exp);
                 }
             } else {
                 exps[this.key] = [exp];
@@ -138,6 +143,15 @@ Model.fn = Model.prototype = {
         }
         setValueTobeChecked();
         return ignoreRecheckPossibleValues;
+    },
+    setValueTobeChecked: function(valueToBeCheckedExt) {
+        if (isArray(valueToBeCheckedExt)) {
+            valueToBeChecked = [];
+            for (var i = 0; i < valueToBeCheckedExt.length; i++) {
+                valueToBeChecked.push(valueToBeCheckedExt[i]);
+            }
+        }
+        return valueToBeChecked;
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
@@ -299,6 +313,20 @@ Model.extend({
         }
         return false;
     },
+    isDown: function(key) {
+        return Model(key).isDown();
+    },
+    isAllDown: function(keys) {
+        if (isArray(keys) && keys.length > 0) {
+            for (var i = 0; i < keys.length; i++) {
+                if (Model(keys[i]).isUp()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    },
     getValue: function(key) {
         return Model(key).get();
     },
@@ -313,29 +341,50 @@ Model.extend({
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
-            if (Model.isFunction(Model["setValueChangedCallback"])) {
-                Model["setValueChangedCallback"](key, oldValue, newValue);
+            if (Model.isFunction(Model["setValueChangedCallbackV2"])) {
+                Model["setValueChangedCallbackV2"](key, oldValue, newValue);
+            } else if (Model.isFunction(Model["setValueChangedCallbackV3"])) {
+                Model["setValueChangedCallbackV3"](key, oldValue, newValue);
+            } else {
+                Model.reCheckAllValues(true);
             }
-            Model.reCheckAllValues();
         }
         return 0;
-    },
-    isDown: function(key) {
-        return Model(key).isDown();
-    },
-    isAllDown: function(keys) {
-        if (isArray(keys) && keys.length > 0) {
-            for (var i = 0; i < keys.length; i++) {
-                if (Model(keys[i]).isUp()) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 });
 Model.extend({
+    reCheckAllValuesV2: function(stack) {
+        if (reCheckingStatus == false) {
+            return 0;
+        }
+        while(stack.getTop() >= 0) {
+            var name = stack.pop();
+            if (Model.isExpDefined(name)) {
+                Model.setValueWithExpression(name);
+            } else if (Model.isMethodDefined(name)) {
+                Model[name](name);
+            } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
+                Model["setValueDefaultMethod"](name);
+            }
+        }
+        return 1;
+    },
+    reCheckAllValuesV3: function() {
+        if (reCheckingStatus == false) {
+            return 0;
+        }
+        for (var i = 0; i < valueToBeChecked.length; i++) {
+            var name = valueToBeChecked[i];
+            if (Model.isExpDefined(name)) {
+                Model.setValueWithExpression(name);
+            } else if (Model.isMethodDefined(name)) {
+                Model[name](name);
+            } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
+                Model["setValueDefaultMethod"](name);
+            }
+        }
+        return 1;
+    },
     reCheckAllValues: function() {
         if (reCheckingStatus == false) {
             return 0;
@@ -345,10 +394,10 @@ Model.extend({
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;
-            if (Model.isMethodDefined(name)) {
-                Model[name](name);
-            } else if (Model.isExpDefined(name)) {
+            if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
+            } else if (Model.isMethodDefined(name)) {
+                Model[name](name);
             } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
                 Model["setValueDefaultMethod"](name);
             }
@@ -356,7 +405,7 @@ Model.extend({
             //To avoid further processing if value changed
             //Because it will already handle by setValue method
             if (oldValue != newValue) {
-                return 0;
+                break;
             }
         }
         return 1;
@@ -389,8 +438,12 @@ Model.extend({
         Model.setValue(name, newValue);
         return newValue;
     },
-    isExpressionTrue: function(name, exp) {
+    getTokenizedExp: function(exp) {
         var tokenizedExp = $S.tokenize(exp, ["(",")","&&","||"]);
+        return tokenizedExp;
+    },
+    isExpressionTrue: function(name, exp) {
+        var tokenizedExp = this.getTokenizedExp(exp);
         var posix = $S.createPosixTree(tokenizedExp);
         var posixVal = [];
         if (posix.length) {

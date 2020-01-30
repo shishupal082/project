@@ -4,7 +4,7 @@ dir=$(sed -n "3p" $configFilePath)json/
 fileName="pointPossibleValues.json"
 ignoreRecheckPossibleValuesFileName="ignoreRecheckPossibleValues.json"
 expressionFileName="pointExpression.json"
-partialExpressionFileName="partialPointExpression.json"
+# partialExpressionFileName="partialPointExpression.json"
 currentValuesFileName="currentValues.json"
 tab="    "
 
@@ -34,9 +34,9 @@ if [[ -d "${dir}" ]]; then
     if [[ -f "${dir}${expressionFileName}" ]]; then
         rm "${dir}${expressionFileName}"
     fi
-    if [[ -f "${dir}${partialExpressionFileName}" ]]; then
-        rm "${dir}${partialExpressionFileName}"
-    fi
+    # if [[ -f "${dir}${partialExpressionFileName}" ]]; then
+    #     rm "${dir}${partialExpressionFileName}"
+    # fi
     if [[ -f "${dir}${currentValuesFileName}" ]]; then
         rm "${dir}${currentValuesFileName}"
     fi
@@ -48,7 +48,7 @@ fi
 echo "[" >> "${dir}${fileName}"
 echo "[" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
 echo "{" >> "${dir}${expressionFileName}"
-echo "{" >> "${dir}${partialExpressionFileName}"
+# echo "{" >> "${dir}${partialExpressionFileName}"
 echo "{" >> "${dir}${currentValuesFileName}"
 
 addExpressionInFile() {
@@ -66,8 +66,8 @@ addExpressionInFile() {
     ocrExp="(((${pName}-WNR:up&&OWWNR:up)||(${pName}-ASWR:up||${pName}-OCR:up))&&((${pName}-CWLR:dn&&${pName}-CCR:dn)&&(${pName}-OWLR:up||${pName}-OCR:up)))"
     cwlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&CWWNR:up)||${pName}-CWLR:up))||(${pName}-WNR:dn&&${pName}-CLR:up))&&(${pName}-CWKR:dn&&${pName}-OWLR:dn)))"
     owlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&OWWNR:up)||${pName}-OWLR:up))||(${pName}-WNR:dn&&${pName}-OLR:up))&&(${pName}-OWKR:dn&&${pName}-CWLR:dn)))"
-    partialCLRExp="(${pName}-CWKR:dn&&${pName}-OLR:dn)"
-    partialOLRExp="(${pName}-OWKR:dn&&${pName}-CLR:dn)"
+    # partialCLRExp="(${pName}-CWKR:dn&&${pName}-OLR:dn)"
+    # partialOLRExp="(${pName}-OWKR:dn&&${pName}-CLR:dn)"
     # wfrExp=${pName}-CWWNR:dn #Temprory
     echo "${tab}"'"'${pName}'-CWKR":["'$cwkrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-OWKR":["'$owkrExp'"],' >> "${dir}${expressionFileName}"
@@ -79,16 +79,16 @@ addExpressionInFile() {
     echo "${tab}"'"'${pName}'-WCKR":["'$wckrExp'"],' >> "${dir}${expressionFileName}"
     # echo "${tab}"'"'${pName}'-WFR":["'$wfrExp'"],' >> "${dir}${expressionFileName}"
 
-    echo "${tab}"'"'${pName}'-CLR":["'$partialCLRExp'"],' >> "${dir}${partialExpressionFileName}"
+    # echo "${tab}"'"'${pName}'-CLR":["'$partialCLRExp'"],' >> "${dir}${partialExpressionFileName}"
     echo "${tab}"'"'${pName}'-WFR":1,' >> "${dir}${currentValuesFileName}"
     echo "${tab}"'"'${pName}'-OWKR":1,' >> "${dir}${currentValuesFileName}"
     if [[ $isLast == true ]]; then
         echo "${tab}"'"'${pName}'-WOKR":["'$wokrExp'"]' >> "${dir}${expressionFileName}"
-        echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"]' >> "${dir}${partialExpressionFileName}"
+        # echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"]' >> "${dir}${partialExpressionFileName}"
         echo "${tab}"'"'${pName}'-WOKR":1' >> "${dir}${currentValuesFileName}"
     else
         echo "${tab}"'"'${pName}'-WOKR":["'$wokrExp'"],' >> "${dir}${expressionFileName}"
-        echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"],' >> "${dir}${partialExpressionFileName}"
+        # echo "${tab}"'"'${pName}'-OLR":["'$partialOLRExp'"],' >> "${dir}${partialExpressionFileName}"
         echo "${tab}"'"'${pName}'-WOKR":1,' >> "${dir}${currentValuesFileName}"
     fi
 }
@@ -212,7 +212,7 @@ echo "${tab}"'"OWWNR"' >> "${dir}${fileName}"
 # ----------------------------------------------------------------------
 echo "}" >> "${dir}${expressionFileName}"
 echo "}" >> "${dir}${currentValuesFileName}"
-echo "}" >> "${dir}${partialExpressionFileName}"
+# echo "}" >> "${dir}${partialExpressionFileName}"
 echo "]" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
 echo "]" >> "${dir}${fileName}"
 echo "End Time:${tab}"$(date +"%Y-%m-%d %T")

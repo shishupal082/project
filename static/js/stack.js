@@ -227,6 +227,13 @@ var St = (function(){
     St.prototype.getTop = function() {
         return this._TOP;
     };
+    St.prototype.getAll = function() {
+        var res = [];
+        for (var i = 0; i < this._TOP; i++) {
+            res.push(this._STACK[i]);
+        }
+        return res;
+    };
     St.prototype.print = function() {
         for (var i = 0; i < this._TOP+1; i++) {
             Logger.log(i + "-" + this._STACK[i]);
