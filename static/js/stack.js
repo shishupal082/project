@@ -243,9 +243,14 @@ var BT = (function(){
     // BT => root.data = "", root.left.data = "true"
     // Therefore postOrderResult should be ["true"] instead of ["true", ""]
 
-    function getValidData(data) {
+    function getValidData(data, enableFilter) {
         var res = {"status": false, data: ""};
-        if (skipValuesInResult.indexOf(data) < 0) {
+        if (typeof enableFilter == "boolean" && enableFilter) {
+            if (skipValuesInResult.indexOf(data) < 0) {
+                res["status"] = true;
+                res["data"] = data;
+            }
+        } else {
             res["status"] = true;
             res["data"] = data;
         }
@@ -258,7 +263,9 @@ var BT = (function(){
     }
     BT.prototype.addSkipValuesInResult = function(value) {
         if (["string", "number"].indexOf(typeof value) >= 0) {
-            skipValuesInResult.push(value);
+            if (skipValuesInResult.indexOf(value) < 0) {
+                skipValuesInResult.push(value);
+            }
         }
         return skipValuesInResult;
     };
@@ -297,37 +304,49 @@ var BT = (function(){
         }
         return node;
     };
+    // To fasten process, directly check empty value
     BT.prototype.getPostOrder = function(root, postOrderResult) {
         if (root == null) {
             return postOrderResult;
         }
         this.getPostOrder(root.left, postOrderResult);
         this.getPostOrder(root.right, postOrderResult);
-        if (getValidData(root.data).status) {
+        if (root.data != "") {
             postOrderResult.push(root.data);
         }
         return postOrderResult;
     };
-    BT.prototype.getInOrder = function(root, inOrderResult) {
+    BT.prototype.getPostOrderV2 = function(root, postOrderResult, enableFilter) {
+        if (root == null) {
+            return postOrderResult;
+        }
+        this.getPostOrderV2(root.left, postOrderResult, enableFilter);
+        this.getPostOrderV2(root.right, postOrderResult, enableFilter);
+        if (getValidData(root.data, enableFilter).status) {
+            postOrderResult.push(root.data);
+        }
+        return postOrderResult;
+    };
+    BT.prototype.getInOrder = function(root, inOrderResult, enableFilter) {
         if (root == null) {
             return inOrderResult;
         }
         this.getInOrder(root.left, inOrderResult);
-        if (getValidData(root.data).status) {
+        if (getValidData(root.data, enableFilter).status) {
             inOrderResult.push(root.data);
         }
-        this.getInOrder(root.right, inOrderResult);
+        this.getInOrder(root.right, inOrderResult, enableFilter);
         return inOrderResult;
     };
-    BT.prototype.getPreOrder = function(root, preOrderResult) {
+    BT.prototype.getPreOrder = function(root, preOrderResult, enableFilter) {
         if (root == null) {
             return preOrderResult;
         }
-        if (getValidData(root.data).status) {
+        if (getValidData(root.data, enableFilter).status) {
             preOrderResult.push(root.data);
         }
-        this.getPreOrder(root.left, preOrderResult);
-        this.getPreOrder(root.right, preOrderResult);
+        this.getPreOrder(root.left, preOrderResult, enableFilter);
+        this.getPreOrder(root.right, preOrderResult, enableFilter);
         return preOrderResult;
     };
     BT.prototype.createBinaryTree = function(items) {
@@ -608,9 +627,29 @@ Stack.extend({
         result = st.pop();
         return result;
     },
+    createPreOrderTree: function(tokenizedExp, enableFilter) {
+        var bt = new BT(""), preOrderTreeValue = [];
+        bt.addSkipValuesInResult("");
+        var btRoot = bt.createBinaryTree(tokenizedExp);
+        preOrderTreeValue = bt.getPreOrder(btRoot, [], enableFilter);
+        return preOrderTreeValue;
+    },
+    createInOrderTree: function(tokenizedExp, enableFilter) {
+        var bt = new BT(""), inOrderTreeValue = [];
+        bt.addSkipValuesInResult("");
+        var btRoot = bt.createBinaryTree(tokenizedExp);
+        inOrderTreeValue = bt.getInOrder(btRoot, [], enableFilter);
+        return inOrderTreeValue;
+    },
+    createPostOrderTree: function(tokenizedExp, enableFilter) {
+        var bt = new BT(""), postOrderTreeValue = [];
+        bt.addSkipValuesInResult("");
+        var btRoot = bt.createBinaryTree(tokenizedExp);
+        postOrderTreeValue = bt.getPostOrderV2(btRoot, [], enableFilter);
+        return postOrderTreeValue;
+    },
     createPosixTree: function(tokenizedExp) {
         var bt = new BT(""), posixTreeValue = [];
-        bt.addSkipValuesInResult("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
         posixTreeValue = bt.getPostOrder(btRoot, []);
         return posixTreeValue;
