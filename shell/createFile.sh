@@ -2,7 +2,7 @@
 configFilePath=/custom/cmd-config.txt
 dir=$(sed -n "3p" $configFilePath)json/
 fileName="pointPossibleValues.json"
-ignoreRecheckPossibleValuesFileName="ignoreRecheckPossibleValues.json"
+# ignoreRecheckPossibleValuesFileName="ignoreRecheckPossibleValues.json"
 expressionFileName="pointExpression.json"
 # partialExpressionFileName="partialPointExpression.json"
 currentValuesFileName="currentValues.json"
@@ -40,13 +40,13 @@ if [[ -d "${dir}" ]]; then
     if [[ -f "${dir}${currentValuesFileName}" ]]; then
         rm "${dir}${currentValuesFileName}"
     fi
-    if [[ -f "${dir}${ignoreRecheckPossibleValuesFileName}" ]]; then
-        rm "${dir}${ignoreRecheckPossibleValuesFileName}"
-    fi
+    # if [[ -f "${dir}${ignoreRecheckPossibleValuesFileName}" ]]; then
+    #     rm "${dir}${ignoreRecheckPossibleValuesFileName}"
+    # fi
 fi
 
 echo "[" >> "${dir}${fileName}"
-echo "[" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+# echo "[" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
 echo "{" >> "${dir}${expressionFileName}"
 # echo "{" >> "${dir}${partialExpressionFileName}"
 echo "{" >> "${dir}${currentValuesFileName}"
@@ -100,7 +100,7 @@ addPossibleValueInFile() {
     # Partial possible values for point is => U1-I-12
     if ! [[ $in =~ $re ]] ; then
        echo "${tab}"'"'${id}-${in}-${out}'",' >> "${dir}${fileName}"
-       echo "${tab}"'"'${id}-${in}-${out}'",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+       # echo "${tab}"'"'${id}-${in}-${out}'",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
     else
         echo "${tab}"'"'${id}-${in}-${out}'-OWKR",' >> "${dir}${fileName}"
         echo "${tab}"'"'${id}-${in}-${out}'-CWKR",' >> "${dir}${fileName}"
@@ -115,8 +115,8 @@ addPossibleValueInFile() {
         echo "${tab}"'"'${id}-${in}-${out}'-ASWR",' >> "${dir}${fileName}"
         echo "${tab}"'"'${id}-${in}-${out}'-WFR",' >> "${dir}${fileName}"
         echo "${tab}"'"'${id}-${in}-${out}'-WNR",' >> "${dir}${fileName}"
-        echo "${tab}"'"'${id}-${in}-${out}'-WNR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
-        echo "${tab}"'"'${id}-${in}-${out}'-OLR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+        # echo "${tab}"'"'${id}-${in}-${out}'-WNR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+        # echo "${tab}"'"'${id}-${in}-${out}'-OLR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
     fi
 }
 addDisplayExpressionInFile() {
@@ -204,8 +204,8 @@ for (( j = 0; j < ${#u2InPorts[*]}; j++ )); do
         fi
     done
 done
-echo "${tab}"'"CWWNR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
-echo "${tab}"'"OWWNR"' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+# echo "${tab}"'"CWWNR",' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+# echo "${tab}"'"OWWNR"' >> "${dir}${ignoreRecheckPossibleValuesFileName}"
 echo "${tab}"'"CWWNR",' >> "${dir}${fileName}"
 echo "${tab}"'"OWWNR"' >> "${dir}${fileName}"
 # U2 ends ************
@@ -213,6 +213,6 @@ echo "${tab}"'"OWWNR"' >> "${dir}${fileName}"
 echo "}" >> "${dir}${expressionFileName}"
 echo "}" >> "${dir}${currentValuesFileName}"
 # echo "}" >> "${dir}${partialExpressionFileName}"
-echo "]" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
+# echo "]" >> "${dir}${ignoreRecheckPossibleValuesFileName}"
 echo "]" >> "${dir}${fileName}"
 echo "End Time:${tab}"$(date +"%Y-%m-%d %T")
