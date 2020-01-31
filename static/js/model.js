@@ -24,6 +24,14 @@ function setValueTobeChecked() {
     }
     return valueToBeChecked;
 }
+function increaseProcessingCount(name) {
+    if (processingCount[name]) {
+        processingCount[name]++;
+    } else {
+        processingCount[name] = 1;
+    }
+    return name;
+}
 var setValue = (function() {
     var isValueChanged = false;
     function set(key, value) {
@@ -365,11 +373,7 @@ Model.extend({
         }
         while(stack.getTop() >= 0) {
             var name = stack.pop();
-            if (processingCount[name]) {
-                processingCount[name]++;
-            } else {
-                processingCount[name] = 1;
-            }
+            increaseProcessingCount(name);
             if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
             }
@@ -382,11 +386,7 @@ Model.extend({
         }
         for (var i = 0; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
-            if (processingCount[name]) {
-                processingCount[name]++;
-            } else {
-                processingCount[name] = 1;
-            }
+            increaseProcessingCount(name);
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;

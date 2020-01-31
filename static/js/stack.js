@@ -229,13 +229,13 @@ var St = (function(){
     };
     St.prototype.getAll = function() {
         var res = [];
-        for (var i = 0; i < this._TOP; i++) {
+        for (var i = 0; i <= this._TOP; i++) {
             res.push(this._STACK[i]);
         }
         return res;
     };
     St.prototype.print = function() {
-        for (var i = 0; i < this._TOP+1; i++) {
+        for (var i = 0; i <= this._TOP; i++) {
             Logger.log(i + "-" + this._STACK[i]);
         }
         return 0;
