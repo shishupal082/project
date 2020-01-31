@@ -304,7 +304,7 @@ Model.extend({
     },
     getProcessingCount: function() {
         var bst = Model.getBST();
-        var response = {shortedResult: {}, total: 0, itemsCount: 0, processingCount: {}};
+        var response = {sortedResult: {}, total: 0, itemsCount: 0, processingCount: {}};
         for (var key in processingCount) {
             response.itemsCount++;
             response.total += processingCount[key];
@@ -314,17 +314,17 @@ Model.extend({
         }
         var bstArr = bst.getInOrder(bst, []);
         var result = {};
-        for (var i = bstArr.length-1; i >= 0 ; i--) {
+        for (var i = bstArr.length-1; i >= 0; i--) {
             if (bstArr[i].item) {
                 result[bstArr[i].item.name] = bstArr[i].item.count;
             }
         }
-        response.shortedResult = result;
+        response.sortedResult = result;
         return response;
     },
     getVariableDependencies: function(sortedResultRequired) {
         var bst = Model.getBST();
-        var response = {shortedResult: {}, count: 0, dependencies: {}};
+        var response = {sortedResult: {}, count: 0, dependencies: {}};
         for (var key in variableDependencies) {
             response.count++;
             response.dependencies[key] = variableDependencies[key];
@@ -336,12 +336,12 @@ Model.extend({
             }
             var bstArr = bst.getInOrder(bst, []);
             var result = {};
-            for (var i = bstArr.length-1; i >= 0 ; i--) {
+            for (var i = bstArr.length-1; i >= 0; i--) {
                 if (bstArr[i].item) {
                     result[bstArr[i].item.name] = bstArr[i].item.count;
                 }
             }
-            response.shortedResult = result;
+            response.sortedResult = result;
         }
         return response;
     },
