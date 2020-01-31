@@ -10,6 +10,7 @@ var exps = {};
 var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
+var variableDependencies = {};
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
@@ -142,6 +143,21 @@ Model.fn = Model.prototype = {
         }
         setValueTobeChecked();
         return possibleValues;
+    },
+    setVariableDependencies: function(varDependencies) {
+        if (isObject(varDependencies)) {
+            variableDependencies = {};
+            for (var key in varDependencies) {
+                variableDependencies[key] = varDependencies[key];
+            }
+        }
+        return variableDependencies;
+    },
+    updateVariableDependencies: function(name, dependencies) {
+        if (isArray(dependencies)) {
+            variableDependencies[name] = dependencies;
+        }
+        return variableDependencies;
     },
     setIgnoreRecheckPossibleValues: function(extIgnoreRecheckPossibleValues) {
         if (isArray(extIgnoreRecheckPossibleValues)) {
@@ -286,6 +302,21 @@ Model.extend({
             response.itemsCount++;
             response.total += processingCount[key];
             response.processingCount[key] = processingCount[key];
+        }
+        return response;
+    },
+    getVariableDependencies: function(name) {
+        var response = {count: 0, dependencies: {}};
+        if (name) {
+            if (isArray(variableDependencies[name])) {
+                response.count++;
+                response.dependencies[name] = variableDependencies[name];
+            }
+        } else {
+            for (var key in variableDependencies) {
+                response.count++;
+                response.dependencies[key] = variableDependencies[key];
+            }
         }
         return response;
     },
