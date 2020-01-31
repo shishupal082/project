@@ -188,6 +188,42 @@ function isObject(value) {
     }
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
 }
+function isNumber(data) {
+    if (typeof data == "number" && !isNaN(data)) {
+        return true;
+    }
+    return false;
+}
+function calculateValue(op1, operator, op2) {
+    var val = null;
+    switch (operator) {
+        case '*':
+            val = op1 * op2;
+        break;
+        case '/':
+            if (op2 != 0) {
+                val = op1 / op2;
+            } else {
+                val = 0;
+            }
+        break;
+        case '+':
+            val = op1 + op2;
+        break;
+        case '-':
+            val = op1 - op2;
+        break;
+        case "&&":
+            val = op1 && op2;
+        break;
+        case "||":
+            val = op1 || op2;
+        break;
+        default:
+        break;
+    }
+    return val;
+}
 var St = (function(){
     var MAXSTACK = 500000, STACK = [];
     function St(shareStorage) {
@@ -245,22 +281,16 @@ var St = (function(){
 // After insertion data into BST it will return that particular node
 // That node can be modified as per requirement
 var BST = (function() {
-    function isValidData(data) {
-        if (typeof data == "number" && !isNaN(data)) {
-            return true;
-        }
-        return false;
-    }
     function BST(rootData) {
         this.data = rootData;
         this.right = null;
         this.left = null;
     }
     BST.prototype.insertData = function(root, data) { 
-        if (isValidData(data) == false) {
+        if (isNumber(data) == false) {
             return root;
         }
-        if (isValidData(root.data) == false) {
+        if (isNumber(root.data) == false) {
             root.data = data;
             return root;
         }
@@ -522,36 +552,6 @@ return Table;
 var Stack = function(selector, context) {
     return new Stack.fn.init(selector, context);
 };
-function calculateValue(op1, operator, op2) {
-    var val = null;
-    switch (operator) {
-        case '*':
-            val = op1 * op2;
-        break;
-        case '/':
-            if (op2 != 0) {
-                val = op1 / op2;
-            } else {
-                val = 0;
-            }
-        break;
-        case '+':
-            val = op1 + op2;
-        break;
-        case '-':
-            val = op1 - op2;
-        break;
-        case "&&":
-            val = op1 && op2;
-        break;
-        case "||":
-            val = op1 || op2;
-        break;
-        default:
-        break;
-    }
-    return val;
-};
 Stack.fn = Stack.prototype = {
     constructor: Stack,
     init: function(selector, context) {
@@ -617,6 +617,9 @@ Stack.extend({
     },
     isMethodDefined: function(name) {
         return this.isFunction(this[name]);
+    },
+    isNumber: function(value) {
+        return isNumber(value);
     }
 });
 Stack.extend({

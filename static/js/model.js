@@ -81,9 +81,9 @@ function isValidValue(value) {
 function isValidKey(key) {
     return possibleValues.indexOf(key) >=0 ? true : false;
 }
-function isBooleanTrue(value) {
+function isBoolean(value) {
     if (typeof value == "boolean") {
-        return value == true;
+        return true;
     }
     return false;
 }
@@ -329,7 +329,7 @@ Model.extend({
             response.count++;
             response.dependencies[key] = variableDependencies[key];
         }
-        if (isBooleanTrue(sortedResultRequired)) {
+        if (isBoolean(sortedResultRequired) && sortedResultRequired) {
             for (var key in response.dependencies) {
                 var currentNode = bst.insertData(bst, response.dependencies[key].length);
                 currentNode.item = {count: response.dependencies[key].length, name: key};
