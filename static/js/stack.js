@@ -242,6 +242,71 @@ var St = (function(){
     }
     return St;
 })();
+// After insertion data into BST it will return that particular node
+// That node can be modified as per requirement
+var BST = (function() {
+    function isValidData(data) {
+        if (typeof data == "number" && !isNaN(data)) {
+            return true;
+        }
+        return false;
+    }
+    function BST(rootData) {
+        this.data = rootData;
+        this.right = null;
+        this.left = null;
+    }
+    BST.prototype.insertData = function(root, data) { 
+        if (isValidData(data) == false) {
+            return root;
+        }
+        if (isValidData(root.data) == false) {
+            root.data = data;
+            return root;
+        }
+        if(data < root.data) {
+            if(root.left === null) {
+                root.left = new BST(data);
+                return root.left;
+            } else {
+                return this.insertData(root.left, data);  
+            } 
+        } else {
+            if(root.right === null) {
+                root.right = new BST(data);
+                return root.right;
+            } else {
+                return this.insertData(root.right, data); 
+            }
+        }
+        return root;
+    };
+    BST.prototype.getInOrder = function(node, result) {
+        if (node != null) {
+            this.getInOrder(node.left, result);
+            result.push(node);
+            this.getInOrder(node.right, result);
+        }
+        return result;
+    };
+    BST.prototype.getPostOrder = function(node, result) {
+        if (node != null) {
+            this.getInOrder(node.left, result);
+            this.getInOrder(node.right, result);
+            result.push(node);
+        }
+        return result;
+    };
+    BST.prototype.getPreOrder = function(node, result) {
+        if (node != null) {
+            result.push(node);
+            this.getInOrder(node.left, result);
+            this.getInOrder(node.right, result);
+        }
+        return result;
+    }
+    return BST;
+})();
 var BT = (function(){
     var skipValuesInResult = [];
 
@@ -517,14 +582,17 @@ Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
     },
-    getDT: function() {
-        return new DT();
-    },
     getLocalStorage: function() {
         return new LocalStorage();
     },
-    getBT: function() {
-        return new BT();
+    getDT: function() {
+        return new DT();
+    },
+    getBT: function(data) {
+        return new BT(data);
+    },
+    getBST: function(rootData) {
+        return new BST(rootData);
     },
     getTable: function(tableContent) {
         return new Table(tableContent);

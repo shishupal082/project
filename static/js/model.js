@@ -210,6 +210,12 @@ Model.extend({
     getDT: function() {
         return $S.getDT();
     },
+    getBT: function(data) {
+        return $S.getBT(data);
+    },
+    getBST: function(data) {
+        return $S.getBST(data);
+    },
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);
     },
@@ -297,26 +303,45 @@ Model.extend({
         return verifyExpression;
     },
     getProcessingCount: function() {
-        var response = {total: 0, itemsCount: 0, processingCount: {}};
+        var bst = Model.getBST();
+        var response = {shortedResult: {}, total: 0, itemsCount: 0, processingCount: {}};
         for (var key in processingCount) {
             response.itemsCount++;
             response.total += processingCount[key];
             response.processingCount[key] = processingCount[key];
+            var currentNode = bst.insertData(bst, processingCount[key]);
+            currentNode.item = {count: processingCount[key], name: key};
         }
+        var bstArr = bst.getInOrder(bst, []);
+        var result = {};
+        for (var i = bstArr.length-1; i >= 0 ; i--) {
+            if (bstArr[i].item) {
+                result[bstArr[i].item.name] = bstArr[i].item.count;
+            }
+        }
+        response.shortedResult = result;
         return response;
     },
-    getVariableDependencies: function(name) {
-        var response = {count: 0, dependencies: {}};
-        if (name) {
-            if (isArray(variableDependencies[name])) {
-                response.count++;
-                response.dependencies[name] = variableDependencies[name];
+    getVariableDependencies: function(sortedResultRequired) {
+        var bst = Model.getBST();
+        var response = {shortedResult: {}, count: 0, dependencies: {}};
+        for (var key in variableDependencies) {
+            response.count++;
+            response.dependencies[key] = variableDependencies[key];
+        }
+        if (isBooleanTrue(sortedResultRequired)) {
+            for (var key in response.dependencies) {
+                var currentNode = bst.insertData(bst, response.dependencies[key].length);
+                currentNode.item = {count: response.dependencies[key].length, name: key};
             }
-        } else {
-            for (var key in variableDependencies) {
-                response.count++;
-                response.dependencies[key] = variableDependencies[key];
+            var bstArr = bst.getInOrder(bst, []);
+            var result = {};
+            for (var i = bstArr.length-1; i >= 0 ; i--) {
+                if (bstArr[i].item) {
+                    result[bstArr[i].item.name] = bstArr[i].item.count;
+                }
             }
+            response.shortedResult = result;
         }
         return response;
     },
