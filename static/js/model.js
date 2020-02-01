@@ -11,6 +11,7 @@ var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
 var variableDependencies = {};
+var MStack = $S.getStack();
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
@@ -32,6 +33,30 @@ function increaseProcessingCount(name) {
         processingCount[name] = 1;
     }
     return name;
+}
+function getVariableDependencies(name) {
+    var dependentVariable = [];
+    if (variableDependencies[name]) {
+        dependentVariable = variableDependencies[name];
+    }
+    return dependentVariable;
+}
+function setVariableDependencies (name1, name2) {
+    if ($M.isArray(variableDependencies[name1])) {
+        if (variableDependencies[name1].indexOf(name2) < 0) {
+            variableDependencies[name1].push(name2);
+        }
+    } else {
+        variableDependencies[name1] = [name2];
+    }
+    if ($M.isArray(variableDependencies[name2])){
+        if (variableDependencies[name2].indexOf(name1) < 0) {
+            variableDependencies[name2].push(name1);
+        }
+    } else {
+        variableDependencies[name2] = [name1];
+    }
+    return variableDependencies;
 }
 var setValue = (function() {
     var isValueChanged = false;
@@ -144,18 +169,9 @@ Model.fn = Model.prototype = {
         setValueTobeChecked();
         return possibleValues;
     },
-    setVariableDependencies: function(varDependencies) {
-        if (isObject(varDependencies)) {
-            variableDependencies = {};
-            for (var key in varDependencies) {
-                variableDependencies[key] = varDependencies[key];
-            }
-        }
-        return variableDependencies;
-    },
-    updateVariableDependencies: function(name, dependencies) {
-        if (isArray(dependencies)) {
-            variableDependencies[name] = dependencies;
+    updateVariableDependencies: function(dependencies) {
+        if (isValidKey(this.key) && isArray(dependencies)) {
+            variableDependencies[this.key] = dependencies;
         }
         return variableDependencies;
     },
@@ -171,7 +187,9 @@ Model.fn = Model.prototype = {
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
-            debug.push(this.key);
+            if (debug.indexOf(this.key) < 0) {
+                debug.push(this.key);
+            }
         } else {
             $S.log("Invalid key for debug:" + this.key);
         }
@@ -197,6 +215,35 @@ Model.extend = Model.fn.extend = function(options) {
     }
     return this;
 };
+Model.extend({
+    setVariableDependencies: function() {
+        for (var expName in exps) {
+            var expressions = exps[expName];
+            var tokenizedExp = [];
+            for (var i = 0; i < expressions.length; i++) {
+                tokenizedExp = Model.getTokenizedExp(expressions[i]);
+                if (tokenizedExp.length) {
+                    for (var j = 0; j < tokenizedExp.length; j++) {
+                        var itemArr = tokenizedExp[j].split(":");
+                        if (itemArr.length == 2) {
+                            setVariableDependencies(expName, itemArr[0])
+                        }
+                    }
+                }
+            }
+        }
+        return variableDependencies;
+    },
+    addInMStack: function (values) {
+        var allValues = MStack.getAll();
+        for (var  i = values.length-1; i >= 0; i--) {
+            if (allValues.indexOf(values[i]) <0) {
+                MStack.push(values[i]);
+            }
+        }
+        return MStack.getAll();
+    }
+});
 Model.extend({
     getStack: function(shareStorage) {
         return $S.getStack(shareStorage);
@@ -414,7 +461,8 @@ Model.extend({
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
             if (Model.isFunction(Model["setValueChangedCallback"])) {
-                Model["setValueChangedCallback"](key, oldValue, newValue);
+                Model.addInMStack(getVariableDependencies(key));
+                Model["setValueChangedCallback"]();
             } else {
                 Model.reCheckAllValues();
             }
@@ -423,12 +471,31 @@ Model.extend({
     }
 });
 Model.extend({
-    reCheckAllValuesV2: function(stack) {
+/*
+possibleValues = [1,2,3,4,5,6,7,8,9,10];
+variableDependencies = {
+    1: [2,3,4]
+    2: [1,3]
+    3: [1,2,5,6]
+    4: [1]
+    5: [3]
+    6: [3]
+};
+exps : {
+    1: []
+    2: []
+    3: []
+    4: []
+    5: []
+    6: []
+};
+*/
+    reCheckAllValuesV2: function() {
         if (reCheckingStatus == false) {
             return 0;
         }
-        while(stack.getTop() >= 0) {
-            var name = stack.pop();
+        while(MStack.getTop() >= 0) {
+            var name = MStack.pop();
             increaseProcessingCount(name);
             if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name);
