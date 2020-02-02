@@ -2,7 +2,6 @@
 
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
-var ignoreRecheckPossibleValues = [];
 var reCheckingStatus = true;
 var verifyExpression = false;
 var currentValues = {};
@@ -15,13 +14,13 @@ var MStack = $S.getStack();
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
-function setValueTobeChecked() {
+function setValueTobeChecked(values) {
     valueToBeChecked = [];
-    for (var i = 0; i < possibleValues.length; i++) {
-        if (ignoreRecheckPossibleValues.indexOf(possibleValues[i]) >= 0) {
+    for (var i = 0; i < values.length; i++) {
+        if (valueToBeChecked.indexOf(values[i]) >= 0) {
             continue;
         } else {
-            valueToBeChecked.push(possibleValues[i]);
+            valueToBeChecked.push(values[i]);
         }
     }
     return valueToBeChecked;
@@ -166,24 +165,14 @@ Model.fn = Model.prototype = {
                 possibleValues.push(extPossibleValues[i]);
             }
         }
-        setValueTobeChecked();
+        setValueTobeChecked(possibleValues);
         return possibleValues;
     },
-    updateVariableDependencies: function(dependencies) {
-        if (isValidKey(this.key) && isArray(dependencies)) {
-            variableDependencies[this.key] = dependencies;
+    setValueTobeChecked: function(values) {
+        if (isArray(values)) {
+            setValueTobeChecked(values);
         }
-        return variableDependencies;
-    },
-    setIgnoreRecheckPossibleValues: function(extIgnoreRecheckPossibleValues) {
-        if (isArray(extIgnoreRecheckPossibleValues)) {
-            ignoreRecheckPossibleValues = [];
-            for (var i = 0; i < extIgnoreRecheckPossibleValues.length; i++) {
-                ignoreRecheckPossibleValues.push(extIgnoreRecheckPossibleValues[i]);
-            }
-        }
-        setValueTobeChecked();
-        return ignoreRecheckPossibleValues;
+        return valueToBeChecked;
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
@@ -231,6 +220,12 @@ Model.extend({
                     }
                 }
             }
+        }
+        return variableDependencies;
+    },
+    updateVariableDependencies: function(name, dependencies) {
+        if (isValidKey(name) && isArray(dependencies)) {
+            variableDependencies[name] = dependencies;
         }
         return variableDependencies;
     },
@@ -392,13 +387,6 @@ Model.extend({
         }
         return response;
     },
-    getIgnorePossibleValues : function() {
-        var response = [];
-        for (var i = 0; i < ignoreRecheckPossibleValues.length; i++) {
-            response.push(ignoreRecheckPossibleValues[i]);
-        }
-        return response;
-    },
     getCurrentValues : function() {
         var currentValuesResponse = {};
         var count = 0;
@@ -461,10 +449,10 @@ Model.extend({
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
             if (Model.isFunction(Model["setValueChangedCallback"])) {
-                Model.addInMStack(getVariableDependencies(key));
-                Model["setValueChangedCallback"]();
+                Model["setValueChangedCallback"](key, oldValue, newValue);
             } else {
-                Model.reCheckAllValues();
+                Model.addInMStack(getVariableDependencies(key));
+                Model.reCheckAllValuesV2();
             }
         }
         return 0;
