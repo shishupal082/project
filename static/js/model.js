@@ -528,17 +528,7 @@ exps : {
         if (debug.indexOf(name) >=0) {
             $S.log("DEBUG: " + name);
         }
-        if (exp && exp.length) {
-            for (var i = 0; i < exp.length; i++) {
-                if (Model.isExpressionTrue(name, exp[i])) {
-                    newValue = 1;
-                    continue;
-                } else {
-                    newValue = 0;
-                    break;
-                }
-            }
-        }
+        newValue = Model.isAllExpressionsTrue(name, exp) ? 1 : 0;
         if (debug.indexOf(name) >=0) {
             $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
         }
@@ -598,6 +588,29 @@ exps : {
         /** Expression validation End **/
         return result;
     }
+});
+Model.extend({
+    isAllExpressionsTrue: function(name, exps) {
+        var status = false, exp = "";
+        if (isArray(exps)) {
+            for (var i = 0; i < exps.length; i++) {
+                exp = exps[i];
+                if (isObject(exp)) {
+                    exp = Model.generateExpression(exp);
+                }
+                if (Model.isExpressionTrue(name, exp)) {
+                    status = true;
+                    continue;
+                } else {
+                    status = false;
+                    break;
+                }
+            }
+        } else if (isObject(exps)) { 
+            status = Model.isAllExpressionsTrue(name, [exps]);
+        }
+        return status;
+    },
 });
 Model.$S = $S;
 /*End of direct access of methods*/
