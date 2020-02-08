@@ -214,9 +214,12 @@ function calculateValue(op1, operator, op2) {
             val = op1 - op2;
         break;
         case "&&":
+        case "&":
             val = op1 && op2;
         break;
         case "||":
+        case "|":
+        case "#":
             val = op1 || op2;
         break;
         default:
@@ -462,7 +465,7 @@ var BT = (function(){
                 currentTree = this.getLeftChild(currentTree);
             } else if(items[i] == ")") {
                 currentTree = st.pop();
-            } else if(["+","-","*","/","&&","||"].indexOf(items[i]) >=0) {
+            } else if(["+","-","*","/","&&","&","||","|","#"].indexOf(items[i]) >=0) {
                 var newData = items[i];
                 if (currentTree.data != "") {
                     var oldRight = currentTree.right;
@@ -689,7 +692,7 @@ Stack.extend({
             op = postfix[i]; //operator
             if (typeof postfix[i] == "boolean") {
                 st.push(postfix[i]);
-            } else if (["&&","||"].indexOf(op) >= 0) {
+            } else if (["&&","&","||","|","#"].indexOf(op) >= 0) {
                 A = st.pop();
                 B = st.pop();
                 val = calculateValue(B, op, A);
@@ -763,7 +766,7 @@ Stack.extend({
         return Stack.calNumerical(posix);
     },
     evaluateBinary: function(expression) {
-        var tokens = Stack.tokenize(expression, ["(",")","&&","||"]);
+        var tokens = Stack.tokenize(expression, ["(",")","&&","||","#"]);
         var posix = Stack.createPosixTree(tokens);
         for (var i = 0; i < posix.length; i++) {
             if (posix[i] == "true") {

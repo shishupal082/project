@@ -536,20 +536,38 @@ exps : {
         return newValue;
     },
     getTokenizedExp: function(exp) {
-        var tokenizedExp = $S.tokenize(exp, ["(",")","&&","||"]);
+        var tokenizedExp = $S.tokenize(exp, ["(",")","&&","||","#"]);
         return tokenizedExp;
     },
+    getPosixValue: function(posixItem) {
+        /*  posixItem can be following:
+                "&&","&","||","|","#","key:up","key:dn","~key","key"
+        */
+        var status = posixItem;
+        if (["&&","&","||","|","#"].indexOf(posixItem) >= 0) {
+            return status;
+        }
+        var itemArr = posixItem.split(":");
+        if (itemArr.length == 2) {
+            status = Model.is(itemArr[0], itemArr[1]);
+        } else {
+            itemArr = posixItem.split("~");
+            if (itemArr.length == 2) {
+                status = Model.is(itemArr[1], "dn");
+            } else {
+                status = Model.is(itemArr[0], "up");
+            }
+        }
+        return status;
+    },
     isExpressionTrue: function(name, exp) {
-        var tokenizedExp = this.getTokenizedExp(exp);
+        var tokenizedExp = Model.getTokenizedExp(exp);
         var posix = $S.createPosixTree(tokenizedExp);
         var posixVal = [];
         if (posix.length) {
             for (var i = 0; i < posix.length; i++) {
-                var itemArr = posix[i].split(":");
                 posixVal.push(posix[i]);
-                if (itemArr.length == 2) {
-                    posixVal[i] = Model.is(itemArr[0], itemArr[1]);
-                }
+                posixVal[i] = Model.getPosixValue(posix[i]);
             }
         }
         var result = $S.calBinary(posixVal);
@@ -563,7 +581,7 @@ exps : {
         if (verifyExpression) {
             var isValidExpression = true;
             for (var i = 0; i < posixVal.length; i++) {
-                if ([true, false, "&&", "||"].indexOf(posixVal[i]) >= 0) {
+                if ([true,false,"&&","&","||","|","#"].indexOf(posixVal[i]) >= 0) {
                     continue;
                 } else {
                     isValidExpression = false;
