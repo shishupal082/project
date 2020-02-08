@@ -779,6 +779,20 @@ Stack.extend({
         }
         return Stack.calBinary(posix);
     },
+    evaluateBinaryV2: function(expression) {
+        var tokens = Stack.tokenize(expression, ["(",")","&","|","#"]);
+        var posix = Stack.createPosixTree(tokens);
+        for (var i = 0; i < posix.length; i++) {
+            if (posix[i] == "true") {
+                posix[i] = true;
+            } else if (posix[i] == "false") {
+                posix[i] = false;
+            } else {
+                continue;
+            }
+        }
+        return Stack.calBinary(posix);
+    },
     tokenize: function(expression, tokenItems) {
         var tokens = [];
         if (tokenItems && tokenItems.length) {

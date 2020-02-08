@@ -10,6 +10,9 @@ var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
 var variableDependencies = {};
+var binaryOperators = ["&&","||"];
+var binaryOperatorIncludingBracket = ["(",")","&&","||"];
+var binaryOperatorIncludingValue = [true,false,"&&","||"];
 var MStack = $S.getStack();
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
@@ -173,6 +176,20 @@ Model.fn = Model.prototype = {
             setValueTobeChecked(values);
         }
         return valueToBeChecked;
+    },
+    setBinaryOperators: function(opr) {
+        var operators = [];
+        if (isArray(opr)) {
+            for (var i = 0; i < opr.length; i++) {
+                if (["&&","&","||","|","#"].indexOf(opr[i]) >= 0) {
+                    operators.push(opr);
+                }
+            }
+        }
+        binaryOperatorIncludingBracket = operators.concat(["(",")"]);
+        binaryOperatorIncludingValue = operators.concat([true,false]);
+        binaryOperators = operators;
+        return binaryOperators;
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
@@ -536,15 +553,17 @@ exps : {
         return newValue;
     },
     getTokenizedExp: function(exp) {
-        var tokenizedExp = $S.tokenize(exp, ["(",")","&&","||","#"]);
+        var tokenizedExp = $S.tokenize(exp, binaryOperatorIncludingBracket);
         return tokenizedExp;
     },
     getPosixValue: function(posixItem) {
         /*  posixItem can be following:
-                "&&","&","||","|","#","key:up","key:dn","~key","key"
+                "&&","&","||","|","#"
+                "key:up","key:dn"
+                "~key","key"
         */
         var status = posixItem;
-        if (["&&","&","||","|","#"].indexOf(posixItem) >= 0) {
+        if (binaryOperators.indexOf(posixItem) >= 0) {
             return status;
         }
         var itemArr = posixItem.split(":");
@@ -581,7 +600,7 @@ exps : {
         if (verifyExpression) {
             var isValidExpression = true;
             for (var i = 0; i < posixVal.length; i++) {
-                if ([true,false,"&&","&","||","|","#"].indexOf(posixVal[i]) >= 0) {
+                if (binaryOperatorIncludingValue.indexOf(posixVal[i]) >= 0) {
                     continue;
                 } else {
                     isValidExpression = false;
