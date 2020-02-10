@@ -264,8 +264,9 @@ var St = (function(){
     };
     St.prototype.push = function(item) {
         if (this._TOP >= MAXSTACK - 1) {
-            Logger.log("stack over flow");
-            return 0;
+            var logText = "stack over flow";
+            Logger.log(logText);
+            throw logText;
         } else {
             this._TOP = this._TOP + 1;
             this._STACK[this._TOP] = item;
@@ -275,7 +276,9 @@ var St = (function(){
     St.prototype.pop = function() {
         var item = 0;
         if (this._TOP < 0) {
-            Logger.log("stack under flow");
+            var logText = "stack under flow";
+            Logger.log(logText);
+            throw logText;
         } else {
             item = this._STACK[this._TOP];
             this._TOP = this._TOP - 1;
@@ -706,6 +709,7 @@ Stack.extend({
                 var logText = "Invalid operator or value for numerical calculation: " + op;
                 logText += ", in postfix:" + postfix.toString();
                 Logger.log(logText);
+                throw logText;
             }
         }
         result = st.pop();
@@ -732,6 +736,7 @@ Stack.extend({
                 var logText = "Invalid operator or value for binary calculation: " + op;
                 logText += ", in postfix: " + postfix.toString();
                 Logger.log(logText);
+                throw logText;
             }
         }
         result = st.pop();
