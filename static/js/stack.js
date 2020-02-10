@@ -371,14 +371,9 @@ var BT = (function(){
     // BT => root.data = "", root.left.data = "true"
     // Therefore postOrderResult should be ["true"] instead of ["true", ""]
 
-    function getValidData(data, enableFilter) {
-        var res = {"status": false, data: ""};
-        if (typeof enableFilter == "boolean" && enableFilter) {
-            if (skipValuesInResult.indexOf(data) < 0) {
-                res["status"] = true;
-                res["data"] = data;
-            }
-        } else {
+    function getValidData(data) {
+        var res = {"status": false, data: null};
+        if (skipValuesInResult.indexOf(data) < 0) {
             res["status"] = true;
             res["data"] = data;
         }
@@ -442,37 +437,37 @@ var BT = (function(){
         postOrderResult.push(root.data);
         return postOrderResult;
     };
-    BT.prototype.getPostOrderV2 = function(root, postOrderResult, enableFilter) {
+    BT.prototype.getPostOrderV2 = function(root, postOrderResult) {
         if (root == null) {
             return postOrderResult;
         }
-        this.getPostOrderV2(root.left, postOrderResult, enableFilter);
-        this.getPostOrderV2(root.right, postOrderResult, enableFilter);
-        if (getValidData(root.data, enableFilter).status) {
+        this.getPostOrderV2(root.left, postOrderResult);
+        this.getPostOrderV2(root.right, postOrderResult);
+        if (getValidData(root.data).status) {
             postOrderResult.push(root.data);
         }
         return postOrderResult;
     };
-    BT.prototype.getInOrder = function(root, inOrderResult, enableFilter) {
+    BT.prototype.getInOrder = function(root, inOrderResult) {
         if (root == null) {
             return inOrderResult;
         }
         this.getInOrder(root.left, inOrderResult);
-        if (getValidData(root.data, enableFilter).status) {
+        if (getValidData(root.data).status) {
             inOrderResult.push(root.data);
         }
-        this.getInOrder(root.right, inOrderResult, enableFilter);
+        this.getInOrder(root.right, inOrderResult);
         return inOrderResult;
     };
-    BT.prototype.getPreOrder = function(root, preOrderResult, enableFilter) {
+    BT.prototype.getPreOrder = function(root, preOrderResult) {
         if (root == null) {
             return preOrderResult;
         }
-        if (getValidData(root.data, enableFilter).status) {
+        if (getValidData(root.data).status) {
             preOrderResult.push(root.data);
         }
-        this.getPreOrder(root.left, preOrderResult, enableFilter);
-        this.getPreOrder(root.right, preOrderResult, enableFilter);
+        this.getPreOrder(root.left, preOrderResult);
+        this.getPreOrder(root.right, preOrderResult);
         return preOrderResult;
     };
     BT.prototype.createBinaryTree = function(items) {
@@ -743,24 +738,22 @@ Stack.extend({
         result = st.pop();
         return result;
     },
-    createPreOrderTree: function(tokenizedExp, enableFilter) {
+    createPreOrderTree: function(tokenizedExp) {
         var bt = new BT(""), preOrderTreeValue = [];
-        bt.addSkipValuesInResult("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        preOrderTreeValue = bt.getPreOrder(btRoot, [], enableFilter);
+        preOrderTreeValue = bt.getPreOrder(btRoot, []);
         return preOrderTreeValue;
     },
-    createInOrderTree: function(tokenizedExp, enableFilter) {
+    createInOrderTree: function(tokenizedExp) {
         var bt = new BT(""), inOrderTreeValue = [];
-        bt.addSkipValuesInResult("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        inOrderTreeValue = bt.getInOrder(btRoot, [], enableFilter);
+        inOrderTreeValue = bt.getInOrder(btRoot, []);
         return inOrderTreeValue;
     },
-    createPostOrderTree: function(tokenizedExp, enableFilter) {
+    createPostOrderTree: function(tokenizedExp) {
         var bt = new BT(""), postOrderTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        postOrderTreeValue = bt.getPostOrderV2(btRoot, [], enableFilter);
+        postOrderTreeValue = bt.getPostOrderV2(btRoot, []);
         return postOrderTreeValue;
     },
     createPosixTree: function(tokenizedExp) {

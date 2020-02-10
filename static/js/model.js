@@ -14,7 +14,8 @@ var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var MStack = $S.getStack();
-$S.getBT().addSkipValuesInResult("");
+var overwrittenMethodLogExluded = ["createPosixTree"];
+
 
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
@@ -214,8 +215,8 @@ Model.extend = Model.fn.extend = function(options) {
         for (var key in options) {
             if (isFunction(options[key])) {
                 /*If method already exist then it will be overwritten*/
-                if (isFunction(this[key])) {
-                    $S.log("Method " + key + " is overwritten.");
+                if (isFunction(this[key]) && overwrittenMethodLogExluded.indexOf(key) < 0) {
+                    $S.log(" Method " + key + " is overwritten.");
                 }
                 this[key] = options[key];
             }
@@ -559,7 +560,7 @@ exps : {
     },
     isExpressionTrue: function(name, exp) {
         var tokenizedExp = Model.getTokenizedExp(exp);
-        var posix = $S.createPostOrderTree(tokenizedExp, true);
+        var posix = Model["createPosixTree"](tokenizedExp);
         var posixVal = [], posixValue;
         if (posix.length) {
             for (var i = 0; i < posix.length; i++) {
@@ -635,7 +636,16 @@ Model.extend({
         }
         return status;
     },
+    setCreatePosixTreeMethod: function(method) {
+        if (isFunction(method)) {
+            $S.getBT().addSkipValuesInResult("");
+            Model.extend({"createPosixTree": method});
+        } else {
+            Model.extend({"createPosixTree": $S.createPosixTree});
+        }
+    }
 });
+Model.setCreatePosixTreeMethod();
 Model.$S = $S;
 /*End of direct access of methods*/
 window.Model = window.$M = Model;
