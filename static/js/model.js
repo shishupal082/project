@@ -14,7 +14,7 @@ var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var MStack = $S.getStack();
-$S.getBT().addSkipValuesInResult("")
+$S.getBT().addSkipValuesInResult("");
 
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
