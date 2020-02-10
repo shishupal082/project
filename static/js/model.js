@@ -3,7 +3,7 @@
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
 var reCheckingStatus = true;
-var verifyExpression = false;
+var verifyExpression = true;
 var currentValues = {};
 var exps = {};
 var debug = [];
