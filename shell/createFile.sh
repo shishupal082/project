@@ -60,18 +60,18 @@ addExpressionInFile() {
     out=$3
     isLast=$4
     pName=${id}-${in}-${out}
-    wckrExp="(${pName}-OCR:dn&&${pName}-WOKR:dn)"
-    wokrExp="(${pName}-CCR:dn&&${pName}-WCKR:dn)"
-    aswrExp="((${pName}-CLR:up&&(${pName}-CWLR:up&&${pName}-CCR:dn))||((${pName}-OLR:up&&${pName}-OWLR:up)&&${pName}-OCR:dn))"
-    cwkrExp="((${pName}-WCKR:up&&((${pName}-CWLR:dn&&${pName}-OWLR:dn)||${pName}-CCR:up))&&${pName}-OWKR:dn)"
-    owkrExp="((${pName}-WOKR:up&&${pName}-CWKR:dn)&&((${pName}-CWLR:dn&&${pName}-OWLR:dn)||${pName}-OCR:up))"
-    ccrExp="(((${pName}-WNR:up&&CWWNR:up)||(${pName}-ASWR:up||${pName}-CCR:up))&&((${pName}-OWLR:dn&&${pName}-OCR:dn)&&(${pName}-CWLR:up||${pName}-CCR:up)))"
-    ocrExp="(((${pName}-WNR:up&&OWWNR:up)||(${pName}-ASWR:up||${pName}-OCR:up))&&((${pName}-CWLR:dn&&${pName}-CCR:dn)&&(${pName}-OWLR:up||${pName}-OCR:up)))"
-    cwlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&CWWNR:up)||${pName}-CWLR:up))||(${pName}-WNR:dn&&${pName}-CLR:up))&&(${pName}-CWKR:dn&&${pName}-OWLR:dn)))"
-    owlrExp="(${pName}-WFR:up&&((((${pName}-CLR:dn&&${pName}-OLR:dn)&&((${pName}-WNR:up&&OWWNR:up)||${pName}-OWLR:up))||(${pName}-WNR:dn&&${pName}-OLR:up))&&(${pName}-OWKR:dn&&${pName}-CWLR:dn)))"
-    # partialCLRExp="(${pName}-CWKR:dn&&${pName}-OLR:dn)"
-    # partialOLRExp="(${pName}-OWKR:dn&&${pName}-CLR:dn)"
-    # wfrExp=${pName}-CWWNR:dn #Temprory
+    wckrExp="(~${pName}-OCR&&~${pName}-WOKR)"
+    wokrExp="(~${pName}-CCR&&~${pName}-WCKR)"
+    aswrExp="((${pName}-CLR&&(${pName}-CWLR&&~${pName}-CCR))||((${pName}-OLR&&${pName}-OWLR)&&~${pName}-OCR))"
+    cwkrExp="((${pName}-WCKR&&((~${pName}-CWLR&&~${pName}-OWLR)||${pName}-CCR))&&~${pName}-OWKR)"
+    owkrExp="((${pName}-WOKR&&~${pName}-CWKR)&&((~${pName}-CWLR&&~${pName}-OWLR)||${pName}-OCR))"
+    ccrExp="(((${pName}-WNR&&CWWNR)||(${pName}-ASWR||${pName}-CCR))&&((~${pName}-OWLR&&~${pName}-OCR)&&(${pName}-CWLR||${pName}-CCR)))"
+    ocrExp="(((${pName}-WNR&&OWWNR)||(${pName}-ASWR||${pName}-OCR))&&((~${pName}-CWLR&&~${pName}-CCR)&&(${pName}-OWLR||${pName}-OCR)))"
+    cwlrExp="(${pName}-WFR&&((((~${pName}-CLR&&~${pName}-OLR)&&((${pName}-WNR&&CWWNR)||${pName}-CWLR))||(~${pName}-WNR&&${pName}-CLR))&&(~${pName}-CWKR&&~${pName}-OWLR)))"
+    owlrExp="(${pName}-WFR&&((((~${pName}-CLR&&~${pName}-OLR)&&((${pName}-WNR&&OWWNR)||${pName}-OWLR))||(~${pName}-WNR&&${pName}-OLR))&&(~${pName}-OWKR&&~${pName}-CWLR)))"
+    # partialCLRExp="(~${pName}-CWKR&&~${pName}-OLR)"
+    # partialOLRExp="(~${pName}-OWKR&&~${pName}-CLR)"
+    # wfrExp=~${pName}-CWWNR #Temprory
     echo "${tab}"'"'${pName}'-CWKR":["'$cwkrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-OWKR":["'$owkrExp'"],' >> "${dir}${expressionFileName}"
     echo "${tab}"'"'${pName}'-CCR":["'$ccrExp'"],' >> "${dir}${expressionFileName}"
@@ -142,9 +142,9 @@ for (( j = 0; j < ${#u1InPorts[*]}; j++ )); do
     exp=""
     for (( k = 0; k < ${#u1OutPorts[*]}; k++ )); do
         if [[ $exp == "" ]]; then
-            exp="${id}-${u1InPorts[$j]}-${u1OutPorts[$k]}-CWKR:up"
+            exp="${id}-${u1InPorts[$j]}-${u1OutPorts[$k]}-CWKR"
         else
-            exp="(${exp}||${id}-${u1InPorts[$j]}-${u1OutPorts[$k]}-CWKR:up)"
+            exp="(${exp}||${id}-${u1InPorts[$j]}-${u1OutPorts[$k]}-CWKR)"
         fi
     done
     addDisplayExpressionInFile $id-I-${u1InPorts[$j]} ${exp}
@@ -156,9 +156,9 @@ for (( j = 0; j < ${#u1OutPorts[*]}; j++ )); do
     exp=""
     for (( k = 0; k < ${#u1InPorts[*]}; k++ )); do
         if [[ $exp == "" ]]; then
-            exp="${id}-${u1InPorts[$k]}-${u1OutPorts[$j]}-CWKR:up"
+            exp="${id}-${u1InPorts[$k]}-${u1OutPorts[$j]}-CWKR"
         else
-            exp="(${exp}||${id}-${u1InPorts[$k]}-${u1OutPorts[$j]}-CWKR:up)"
+            exp="(${exp}||${id}-${u1InPorts[$k]}-${u1OutPorts[$j]}-CWKR)"
         fi
     done
     addDisplayExpressionInFile $id-O-${u1OutPorts[$j]} ${exp}
@@ -174,9 +174,9 @@ for (( j = 0; j < ${#u2InPorts[*]}; j++ )); do
     exp=""
     for (( k = 0; k < ${#u2OutPorts[*]}; k++ )); do
         if [[ $exp == "" ]]; then
-            exp="${id}-${u2InPorts[$j]}-${u2OutPorts[$k]}-CWKR:up"
+            exp="${id}-${u2InPorts[$j]}-${u2OutPorts[$k]}-CWKR"
         else
-            exp="(${exp}||${id}-${u2InPorts[$j]}-${u2OutPorts[$k]}-CWKR:up)"
+            exp="(${exp}||${id}-${u2InPorts[$j]}-${u2OutPorts[$k]}-CWKR)"
         fi
     done
     addDisplayExpressionInFile $id-I-${u2InPorts[$j]} ${exp}
@@ -188,9 +188,9 @@ for (( j = 0; j < ${#u2OutPorts[*]}; j++ )); do
     exp=""
     for (( k = 0; k < ${#u2InPorts[*]}; k++ )); do
         if [[ $exp == "" ]]; then
-            exp="${id}-${u2InPorts[$k]}-${u2OutPorts[$j]}-CWKR:up"
+            exp="${id}-${u2InPorts[$k]}-${u2OutPorts[$j]}-CWKR"
         else
-            exp="(${exp}||${id}-${u2InPorts[$k]}-${u2OutPorts[$j]}-CWKR:up)"
+            exp="(${exp}||${id}-${u2InPorts[$k]}-${u2OutPorts[$j]}-CWKR)"
         fi
     done
     addDisplayExpressionInFile $id-O-${u2OutPorts[$j]} ${exp}

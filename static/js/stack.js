@@ -194,9 +194,21 @@ function isNumber(data) {
     }
     return false;
 }
-function calculateValue(op1, operator, op2) {
+function isBoolean(value) {
+    if (typeof value == "boolean") {
+        return true;
+    }
+    return false;
+}
+function calculateNumericalValue(op1, operator, op2) {
     var val = null;
     switch (operator) {
+        case '+':
+            val = op1 + op2;
+        break;
+        case '-':
+            val = op1 - op2;
+        break;
         case '*':
             val = op1 * op2;
         break;
@@ -207,12 +219,15 @@ function calculateValue(op1, operator, op2) {
                 val = 0;
             }
         break;
-        case '+':
-            val = op1 + op2;
+        default:
         break;
-        case '-':
-            val = op1 - op2;
-        break;
+    }
+    return val;
+}
+function calculateValue(op1, operator, op2) {
+    var val = null;
+    switch (operator) {
+        case '*':
         case "&&":
         case "&":
             val = op1 && op2;
@@ -220,7 +235,11 @@ function calculateValue(op1, operator, op2) {
         case "||":
         case "|":
         case "#":
+        case '+':
             val = op1 || op2;
+        break;
+        case '~':
+            val = !op1;
         break;
         default:
         break;
@@ -478,6 +497,14 @@ var BT = (function(){
                 this.insertRight(currentTree, "");
                 st.push(currentTree);
                 currentTree = this.getRightChild(currentTree);
+            } else if(["~"].indexOf(items[i]) >=0) {
+                currentTree.data = items[i];
+                if (i < items.length-1) {
+                    i++;
+                    this.insertLeft(currentTree, items[i]);
+                }
+                parent = st.pop();
+                currentTree = parent;
             } else {
                 currentTree.data = items[i];
                 parent = st.pop();
@@ -673,7 +700,7 @@ Stack.extend({
             } else if (["+","-","*","/"].indexOf(op) >= 0) {
                 A = st.pop()*1;
                 B = st.pop()*1;
-                val = calculateValue(B, op, A);
+                val = calculateNumericalValue(B, op, A);
                 st.push(val);
             } else {
                 var logText = "Invalid operator or value for numerical calculation: " + op;
@@ -692,10 +719,14 @@ Stack.extend({
             op = postfix[i]; //operator
             if (typeof postfix[i] == "boolean") {
                 st.push(postfix[i]);
-            } else if (["&&","&","||","|","#"].indexOf(op) >= 0) {
+            } else if (["&&","&","*","||","|","#","+"].indexOf(op) >= 0) {
                 A = st.pop();
                 B = st.pop();
                 val = calculateValue(B, op, A);
+                st.push(val);
+            } else if (["~"].indexOf(op) >= 0) {
+                A = st.pop();
+                val = calculateValue(A, op);
                 st.push(val);
             } else {
                 var logText = "Invalid operator or value for binary calculation: " + op;
@@ -766,7 +797,7 @@ Stack.extend({
         return Stack.calNumerical(posix);
     },
     evaluateBinary: function(expression) {
-        var tokens = Stack.tokenize(expression, ["(",")","&&","||","#"]);
+        var tokens = Stack.tokenize(expression, ["(",")","&&","*","||","#","+","~"]);
         var posix = Stack.createPosixTree(tokens);
         for (var i = 0; i < posix.length; i++) {
             if (posix[i] == "true") {
@@ -780,7 +811,7 @@ Stack.extend({
         return Stack.calBinary(posix);
     },
     evaluateBinaryV2: function(expression) {
-        var tokens = Stack.tokenize(expression, ["(",")","&","|","#"]);
+        var tokens = Stack.tokenize(expression, ["(",")","&","*","|","#","+","~"]);
         var posix = Stack.createPosixTree(tokens);
         for (var i = 0; i < posix.length; i++) {
             if (posix[i] == "true") {

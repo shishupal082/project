@@ -10,9 +10,9 @@ var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
 var variableDependencies = {};
-var binaryOperators = ["&&","||"];
-var binaryOperatorIncludingBracket = ["(",")","&&","||"];
-var binaryOperatorIncludingValue = [true,false,"&&","||"];
+var binaryOperators = ["&&","||","~"];
+var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
+var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var MStack = $S.getStack();
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
@@ -181,14 +181,14 @@ Model.fn = Model.prototype = {
         var operators = [];
         if (isArray(opr)) {
             for (var i = 0; i < opr.length; i++) {
-                if (["&&","&","||","|","#"].indexOf(opr[i]) >= 0) {
-                    operators.push(opr);
+                if (["&&","&","*","||","|","#","+","~"].indexOf(opr[i]) >= 0) {
+                    operators.push(opr[i]);
                 }
             }
         }
-        binaryOperatorIncludingBracket = operators.concat(["(",")"]);
-        binaryOperatorIncludingValue = operators.concat([true,false]);
         binaryOperators = operators;
+        binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
+        binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
         return binaryOperators;
     },
     addDebug: function() {
@@ -230,9 +230,8 @@ Model.extend({
                 tokenizedExp = Model.getTokenizedExp(expressions[i]);
                 if (tokenizedExp.length) {
                     for (var j = 0; j < tokenizedExp.length; j++) {
-                        var itemArr = tokenizedExp[j].split(":");
-                        if (itemArr.length == 2) {
-                            setVariableDependencies(expName, itemArr[0])
+                        if (binaryOperatorIncludingBracket.indexOf(tokenizedExp[j]) < 0) {
+                            setVariableDependencies(expName, tokenizedExp[j]);
                         }
                     }
                 }
@@ -556,37 +555,23 @@ exps : {
         var tokenizedExp = $S.tokenize(exp, binaryOperatorIncludingBracket);
         return tokenizedExp;
     },
-    getPosixValue: function(posixItem) {
-        /*  posixItem can be following:
-                "&&","&","||","|","#"
-                "key:up","key:dn"
-                "~key","key"
-        */
-        var status = posixItem;
-        if (binaryOperators.indexOf(posixItem) >= 0) {
-            return status;
-        }
-        var itemArr = posixItem.split(":");
-        if (itemArr.length == 2) {
-            status = Model.is(itemArr[0], itemArr[1]);
-        } else {
-            itemArr = posixItem.split("~");
-            if (itemArr.length == 2) {
-                status = Model.is(itemArr[1], "dn");
-            } else {
-                status = Model.is(itemArr[0], "up");
-            }
-        }
-        return status;
-    },
     isExpressionTrue: function(name, exp) {
         var tokenizedExp = Model.getTokenizedExp(exp);
         var posix = $S.createPosixTree(tokenizedExp);
-        var posixVal = [];
+        var posixVal = [], posixValue;
         if (posix.length) {
             for (var i = 0; i < posix.length; i++) {
-                posixVal.push(posix[i]);
-                posixVal[i] = Model.getPosixValue(posix[i]);
+                posixValue = posix[i];
+                /*  posixValue can be following:
+                        "key","~",
+                        "&&","&",
+                        "||","|","#",
+                        "*","+"
+                */
+                if (binaryOperators.indexOf(posixValue) < 0) {
+                    posixValue = Model.isUp(posixValue);
+                }
+                posixVal.push(posixValue);
             }
         }
         var result = $S.calBinary(posixVal);
