@@ -367,6 +367,7 @@ var BT = (function(){
 
     // Fix for single item expression, like
     // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
+    // exp = "((true))" or "(((true)))"
     // BT => root.data = "", root.left.data = "true"
     // Therefore postOrderResult should be ["true"] instead of ["true", ""]
 
@@ -758,7 +759,6 @@ Stack.extend({
     },
     createPostOrderTree: function(tokenizedExp, enableFilter) {
         var bt = new BT(""), postOrderTreeValue = [];
-        bt.addSkipValuesInResult("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
         postOrderTreeValue = bt.getPostOrderV2(btRoot, [], enableFilter);
         return postOrderTreeValue;

@@ -14,6 +14,8 @@ var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var MStack = $S.getStack();
+$S.getBT().addSkipValuesInResult("")
+
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
@@ -557,7 +559,7 @@ exps : {
     },
     isExpressionTrue: function(name, exp) {
         var tokenizedExp = Model.getTokenizedExp(exp);
-        var posix = $S.createPosixTree(tokenizedExp);
+        var posix = $S.createPostOrderTree(tokenizedExp, true);
         var posixVal = [], posixValue;
         if (posix.length) {
             for (var i = 0; i < posix.length; i++) {
