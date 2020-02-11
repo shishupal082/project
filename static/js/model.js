@@ -4,6 +4,7 @@ var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
 var reCheckingStatus = true;
 var verifyExpression = true;
+var isProcessingCountEnable = false;
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -32,19 +33,18 @@ function setValueTobeChecked(values) {
     return valueToBeChecked;
 }
 function increaseProcessingCount(name) {
+    if (isProcessingCountEnable == false) {
+        return name;
+    }
     if (processingCount[name]) {
         processingCount[name]++;
     } else {
         processingCount[name] = 1;
     }
-    return name;
-}
-function getVariableDependencies(name) {
-    var dependentVariable = [];
-    if (variableDependencies[name]) {
-        dependentVariable = variableDependencies[name];
+    if (isFunction(Model["processingCallBack"])) {
+        Model["processingCallBack"](name, processingCount[name]);
     }
-    return dependentVariable;
+    return name;
 }
 function setVariableDependencies (name1, name2) {
     if ($M.isArray(variableDependencies[name1])) {
@@ -296,6 +296,14 @@ Model.extend({
         reCheckingStatus = false;
         return reCheckingStatus;
     },
+    enableProcessingCount: function() {
+        isProcessingCountEnable = true;
+        return isProcessingCountEnable;
+    },
+    disableProcessingCount: function() {
+        isProcessingCountEnable = false;
+        return isProcessingCountEnable;
+    },
     resetSetValueCount: function(newLimit) {
         setValueCount = 0;
         return 1;
@@ -360,6 +368,9 @@ Model.extend({
     getReCheckingStatus: function() {
         return reCheckingStatus;
     },
+    getProcessingCountStatus: function() {
+        return isProcessingCountEnable;
+    },
     getVerifyExpressionStatus: function() {
         return verifyExpression;
     },
@@ -407,8 +418,12 @@ Model.extend({
         return response;
     },
 
-    getVariableDependenciesByKey: function(key) {
-        return getVariableDependencies(key);
+    getVariableDependenciesByKey: function(name) {
+        var dependentVariable = [];
+        if (variableDependencies[name]) {
+            dependentVariable = variableDependencies[name];
+        }
+        return dependentVariable;
     },
     getCurrentValues : function() {
         var currentValuesResponse = {};
@@ -474,7 +489,7 @@ Model.extend({
             if (Model.isFunction(Model["setValueChangedCallback"])) {
                 Model["setValueChangedCallback"](key, oldValue, newValue);
             } else {
-                Model.addInMStack(getVariableDependencies(key));
+                Model.addInMStack(Model.getVariableDependenciesByKey(key));
                 Model.reCheckAllValuesV2();
             }
         }
