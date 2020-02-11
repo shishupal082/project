@@ -803,6 +803,7 @@ Stack.extend({
 Stack.extend({
     setSkipValuesFromPosixResult: function(skipValues) {
         if (isArray(skipValues)) {
+            skipValuesInResult = [];
             for (var i = 0; i < skipValues.length; i++) {
                 if (["string", "number"].indexOf(typeof skipValues[i]) >= 0) {
                     skipValuesInResult.push(skipValues[i]);
