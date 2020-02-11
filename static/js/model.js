@@ -406,6 +406,10 @@ Model.extend({
         }
         return response;
     },
+
+    getVariableDependenciesByKey: function(key) {
+        return getVariableDependencies(key);
+    },
     getCurrentValues : function() {
         var currentValuesResponse = {};
         var count = 0;
