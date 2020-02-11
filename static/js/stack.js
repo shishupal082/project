@@ -2,6 +2,7 @@
 //5 digit random number from 10000 to 99999
 var max = 99999, min = 10000;
 var key = Math.floor(Math.random() * (max - min + 1)) + min;
+var skipValuesInResult = [];
 //DateTimeObject
 var DT = (function() {
     var yyyy, mm, dd, hour, min, sec, ms, meridian;
@@ -363,35 +364,11 @@ var BST = (function() {
     return BST;
 })();
 var BT = (function(){
-    var skipValuesInResult = [];
-
-    // Fix for single item expression, like
-    // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
-    // exp = "((true))" or "(((true)))"
-    // BT => root.data = "", root.left.data = "true"
-    // Therefore postOrderResult should be ["true"] instead of ["true", ""]
-
-    function getValidData(data) {
-        var res = {"status": false, data: null};
-        if (skipValuesInResult.indexOf(data) < 0) {
-            res["status"] = true;
-            res["data"] = data;
-        }
-        return res;
-    }
     function BT(val) {
         this.data = val;
         this.left = null;
         this.right = null;
     }
-    BT.prototype.addSkipValuesInResult = function(value) {
-        if (["string", "number"].indexOf(typeof value) >= 0) {
-            if (skipValuesInResult.indexOf(value) < 0) {
-                skipValuesInResult.push(value);
-            }
-        }
-        return skipValuesInResult;
-    };
     BT.prototype.insertLeft = function(node, data) {
         var newNode = new BT(data);
         if (node) {
@@ -427,47 +404,34 @@ var BT = (function(){
         }
         return node;
     };
-    // To fasten process, directly check empty value
-    BT.prototype.getPostOrder = function(root, postOrderResult) {
+    BT.prototype.getPostOrder = function(root) {
+        var postOrderResult = [];
         if (root == null) {
             return postOrderResult;
         }
-        this.getPostOrder(root.left, postOrderResult);
-        this.getPostOrder(root.right, postOrderResult);
+        postOrderResult = postOrderResult.concat(this.getPostOrder(root.left));
+        postOrderResult = postOrderResult.concat(this.getPostOrder(root.right));
         postOrderResult.push(root.data);
         return postOrderResult;
     };
-    BT.prototype.getPostOrderV2 = function(root, postOrderResult) {
-        if (root == null) {
-            return postOrderResult;
-        }
-        this.getPostOrderV2(root.left, postOrderResult);
-        this.getPostOrderV2(root.right, postOrderResult);
-        if (getValidData(root.data).status) {
-            postOrderResult.push(root.data);
-        }
-        return postOrderResult;
-    };
-    BT.prototype.getInOrder = function(root, inOrderResult) {
+    BT.prototype.getInOrder = function(root) {
+        var inOrderResult = [];
         if (root == null) {
             return inOrderResult;
         }
-        this.getInOrder(root.left, inOrderResult);
-        if (getValidData(root.data).status) {
-            inOrderResult.push(root.data);
-        }
-        this.getInOrder(root.right, inOrderResult);
+        inOrderResult = inOrderResult.concat(this.getInOrder(root.left));
+        inOrderResult.push(root.data);
+        inOrderResult = inOrderResult.concat(this.getInOrder(root.right));
         return inOrderResult;
     };
-    BT.prototype.getPreOrder = function(root, preOrderResult) {
+    BT.prototype.getPreOrder = function(root) {
+        var preOrderResult = [];
         if (root == null) {
             return preOrderResult;
         }
-        if (getValidData(root.data).status) {
-            preOrderResult.push(root.data);
-        }
-        this.getPreOrder(root.left, preOrderResult);
-        this.getPreOrder(root.right, preOrderResult);
+        preOrderResult.push(root.data);
+        preOrderResult = preOrderResult.concat(this.getPreOrder(root.left));
+        preOrderResult = preOrderResult.concat(this.getPreOrder(root.right));
         return preOrderResult;
     };
     BT.prototype.createBinaryTree = function(items) {
@@ -688,6 +652,16 @@ Stack.extend({
         It does not support Exponent
         It support other things, Bracket, Division, Multiplication, Addition and Subtraction
     */
+    setSkipValuesFromPosixResult: function(skipValues) {
+        if (isArray(skipValues)) {
+            for (var i = 0; i < skipValues.length; i++) {
+                if (["string", "number"].indexOf(typeof skipValues[i]) >= 0) {
+                    skipValuesInResult.push(skipValues[i]);
+                }
+            }
+        }
+        return skipValuesInResult;
+    },
     calNumerical: function(postfix) {
         var st = new St();
         var A, op, B;
@@ -741,26 +715,37 @@ Stack.extend({
     createPreOrderTree: function(tokenizedExp) {
         var bt = new BT(""), preOrderTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        preOrderTreeValue = bt.getPreOrder(btRoot, []);
+        preOrderTreeValue = bt.getPreOrder(btRoot);
         return preOrderTreeValue;
     },
     createInOrderTree: function(tokenizedExp) {
         var bt = new BT(""), inOrderTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        inOrderTreeValue = bt.getInOrder(btRoot, []);
+        inOrderTreeValue = bt.getInOrder(btRoot);
         return inOrderTreeValue;
     },
     createPostOrderTree: function(tokenizedExp) {
         var bt = new BT(""), postOrderTreeValue = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        postOrderTreeValue = bt.getPostOrderV2(btRoot, []);
+        postOrderTreeValue = bt.getPostOrder(btRoot);
         return postOrderTreeValue;
     },
     createPosixTree: function(tokenizedExp) {
-        var bt = new BT(""), posixTreeValue = [];
+        var bt = new BT(""), posixTreeValue = [], response = [];
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        posixTreeValue = bt.getPostOrder(btRoot, []);
-        return posixTreeValue;
+        posixTreeValue = bt.getPostOrder(btRoot);
+        // Fix for single item expression, like
+        // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
+        // exp = "((true))" or "(((true)))"
+        // BT => root.data = "", root.left.data = "true"
+        // Therefore response should be ["true"] instead of ["true", ""]
+        for (var i = 0; i < posixTreeValue.length; i++) {
+            if (skipValuesInResult.indexOf(posixTreeValue[i]) >= 0) {
+                continue;
+            }
+            response.push(posixTreeValue[i]);
+        }
+        return response;
     },
     generateExpression: function (items) {
         var st = new St();

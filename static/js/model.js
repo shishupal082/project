@@ -636,16 +636,13 @@ Model.extend({
         }
         return status;
     },
+    "createPosixTree": $S.createPostOrderTree,
     setCreatePosixTreeMethod: function(method) {
         if (isFunction(method)) {
-            $S.getBT().addSkipValuesInResult("");
             Model.extend({"createPosixTree": method});
-        } else {
-            Model.extend({"createPosixTree": $S.createPosixTree});
         }
     }
 });
-Model.setCreatePosixTreeMethod();
 Model.$S = $S;
 /*End of direct access of methods*/
 window.Model = window.$M = Model;
