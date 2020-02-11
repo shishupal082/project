@@ -637,10 +637,9 @@ Model.extend({
         return status;
     },
     "createPosixTree": $S.createPostOrderTree,
-    setCreatePosixTreeMethod: function(method) {
-        if (isFunction(method)) {
-            Model.extend({"createPosixTree": method});
-        }
+    setCreatePosixTreeMethodWithFilter: function() {
+        $S.setSkipValuesFromPosixResult([""]);
+        Model.extend({"createPosixTree": $S.createPosixTree});
     }
 });
 Model.$S = $S;

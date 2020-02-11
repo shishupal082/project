@@ -652,16 +652,6 @@ Stack.extend({
         It does not support Exponent
         It support other things, Bracket, Division, Multiplication, Addition and Subtraction
     */
-    setSkipValuesFromPosixResult: function(skipValues) {
-        if (isArray(skipValues)) {
-            for (var i = 0; i < skipValues.length; i++) {
-                if (["string", "number"].indexOf(typeof skipValues[i]) >= 0) {
-                    skipValuesInResult.push(skipValues[i]);
-                }
-            }
-        }
-        return skipValuesInResult;
-    },
     calNumerical: function(postfix) {
         var st = new St();
         var A, op, B;
@@ -713,39 +703,22 @@ Stack.extend({
         return result;
     },
     createPreOrderTree: function(tokenizedExp) {
-        var bt = new BT(""), preOrderTreeValue = [];
+        var bt = new BT("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        preOrderTreeValue = bt.getPreOrder(btRoot);
+        var preOrderTreeValue = bt.getPreOrder(btRoot);
         return preOrderTreeValue;
     },
     createInOrderTree: function(tokenizedExp) {
-        var bt = new BT(""), inOrderTreeValue = [];
+        var bt = new BT("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        inOrderTreeValue = bt.getInOrder(btRoot);
+        var inOrderTreeValue = bt.getInOrder(btRoot);
         return inOrderTreeValue;
     },
     createPostOrderTree: function(tokenizedExp) {
-        var bt = new BT(""), postOrderTreeValue = [];
+        var bt = new BT("");
         var btRoot = bt.createBinaryTree(tokenizedExp);
-        postOrderTreeValue = bt.getPostOrder(btRoot);
+        var postOrderTreeValue = bt.getPostOrder(btRoot);
         return postOrderTreeValue;
-    },
-    createPosixTree: function(tokenizedExp) {
-        var bt = new BT(""), posixTreeValue = [], response = [];
-        var btRoot = bt.createBinaryTree(tokenizedExp);
-        posixTreeValue = bt.getPostOrder(btRoot);
-        // Fix for single item expression, like
-        // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
-        // exp = "((true))" or "(((true)))"
-        // BT => root.data = "", root.left.data = "true"
-        // Therefore response should be ["true"] instead of ["true", ""]
-        for (var i = 0; i < posixTreeValue.length; i++) {
-            if (skipValuesInResult.indexOf(posixTreeValue[i]) >= 0) {
-                continue;
-            }
-            response.push(posixTreeValue[i]);
-        }
-        return response;
     },
     generateExpression: function (items) {
         var st = new St();
@@ -827,7 +800,34 @@ Stack.extend({
         return tokens;
     },
 });
-
+Stack.extend({
+    setSkipValuesFromPosixResult: function(skipValues) {
+        if (isArray(skipValues)) {
+            for (var i = 0; i < skipValues.length; i++) {
+                if (["string", "number"].indexOf(typeof skipValues[i]) >= 0) {
+                    skipValuesInResult.push(skipValues[i]);
+                }
+            }
+        }
+        return skipValuesInResult;
+    },
+    createPosixTree: function(tokenizedExp) {
+        var response = [];
+        var posixTreeValue = Stack.createPostOrderTree(tokenizedExp);
+        // Fix for single item expression, like
+        // exp = "(true)" => tokenizedExp = ["(", "true", ")"]
+        // exp = "((true))" or "(((true)))"
+        // BT => root.data = "", root.left.data = "true"
+        // Therefore response should be ["true"] instead of ["true", ""]
+        for (var i = 0; i < posixTreeValue.length; i++) {
+            if (skipValuesInResult.indexOf(posixTreeValue[i]) >= 0) {
+                continue;
+            }
+            response.push(posixTreeValue[i]);
+        }
+        return response;
+    },
+});
 /*End of direct access of methods*/
 window.Stack = window.$S = Stack;
 })();
