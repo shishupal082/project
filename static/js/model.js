@@ -205,25 +205,11 @@ Model.fn = Model.prototype = {
         return 0;
     }
 };
-Model.fn.init.prototype = Model.fn;
+ExtendObject(Model);
 /*
 End of direct access of ID
 */
 /*Direct access of methods: $M.methodName*/
-Model.extend = Model.fn.extend = function(options) {
-    if (isObject(options)) {
-        for (var key in options) {
-            if (isFunction(options[key])) {
-                /*If method already exist then it will be overwritten*/
-                if (isFunction(this[key]) && overwrittenMethodLogExluded.indexOf(key) < 0) {
-                    $S.log(" Method " + key + " is overwritten.");
-                }
-                this[key] = options[key];
-            }
-        }
-    }
-    return this;
-};
 Model.extend({
     setVariableDependencies: function() {
         for (var expName in exps) {

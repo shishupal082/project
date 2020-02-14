@@ -1,3 +1,20 @@
+function ExtendObject(Object) {
+    Object.fn.init.prototype = Object.fn;
+    Object.extend = Object.fn.extend = function(options) {
+        if (typeof options == "object" && isNaN(options.length)) {
+            for (var key in options) {
+                if (typeof options[key] == "function") {
+                    /*If method already exist then it will be overwritten*/
+                    if (typeof Object[key]  == "function") {
+                        console.log('Method "' + Object.name + "." + key + '" is overwritten.');
+                    }
+                    Object[key] = options[key];
+                }
+            }
+        }
+        return Object;
+    };
+}
 (function() {
 //5 digit random number from 10000 to 99999
 var max = 99999, min = 10000;
