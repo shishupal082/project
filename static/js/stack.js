@@ -279,6 +279,7 @@ var St = (function(){
         for (var i = 0; i < MAXSTACK; i++) {
             this._STACK.push(0);
         }
+        return true;
     };
     St.prototype.push = function(item) {
         if (this._TOP >= MAXSTACK - 1) {
@@ -578,6 +579,7 @@ Table.prototype.getHtml = function() {
             var cId = [tableId,i,j].join("-");
             attr = (content[i][j] && content[i][j].parentAttr) ? content[i][j].parentAttr : "";
             displayContent = this.generateTdHtml(content[i][j]);
+            // If id will be in attr then that will be ignored
             html += '<td id="'+cId+'" '+attr+'>' + displayContent + '</td>';
         }
         html += '</tr>';
@@ -589,11 +591,15 @@ Table.prototype.getContent = function() {
     return content;
 };
 Table.prototype.getProcessedTids = function() {
-    return processedTids;
+    var response = [];
+    for (var i = 0; i < processedTids.length; i++) {
+        response.push(processedTids[i]);
+    }
+    return response;
 };
 Table.prototype.setProcessedTids = function(pIds) {
     if (!isArray(pIds)) {
-        return processedTids;
+        return false;
     }
     processedTids = [];
     for (var i = 0; i < pIds.length; i++) {
@@ -601,7 +607,7 @@ Table.prototype.setProcessedTids = function(pIds) {
             processedTids.push(pIds[i]);
         }
     }
-    return processedTids;
+    return true;
 };
 Table.prototype.clearProcessedTids = function() {
     return this.setProcessedTids([]);
@@ -877,7 +883,7 @@ Stack.extend({
                 }
             }
         }
-        return skipValuesInResult;
+        return true;
     },
     createPosixTree: function(tokenizedExp) {
         var response = [];

@@ -30,7 +30,7 @@ function setValueTobeChecked(values) {
             valueToBeChecked.push(values[i]);
         }
     }
-    return valueToBeChecked;
+    return true;
 }
 function increaseProcessingCount(name) {
     if (isProcessingCountEnable == false) {
@@ -170,15 +170,15 @@ Model.fn = Model.prototype = {
             for (var i = 0; i < extPossibleValues.length; i++) {
                 possibleValues.push(extPossibleValues[i]);
             }
+            setValueTobeChecked(possibleValues);
         }
-        setValueTobeChecked(possibleValues);
-        return possibleValues;
+        return true;
     },
     setValueTobeChecked: function(values) {
         if (isArray(values)) {
             setValueTobeChecked(values);
         }
-        return valueToBeChecked;
+        return true;
     },
     setBinaryOperators: function(opr) {
         var operators = [];
@@ -192,7 +192,7 @@ Model.fn = Model.prototype = {
         binaryOperators = operators;
         binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
         binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
-        return binaryOperators;
+        return true;
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
@@ -480,6 +480,13 @@ Model.extend({
             }
         }
         return 0;
+    },
+    toggleValue: function(key) {
+        var newValue = 1;
+        if (Model(key).isUp()) {
+            newValue = 0;
+        }
+        return Model.setValue(key, newValue);
     }
 });
 Model.extend({
