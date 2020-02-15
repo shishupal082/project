@@ -587,6 +587,10 @@ Table.prototype.getHtml = function() {
 Table.prototype.getContent = function() {
     return content;
 };
+Table.prototype.clearProcessedTids = function() {
+    processedTids = [];
+    return processedTids;
+};
 return Table;
 })();
 var Stack = function(selector, context) {
