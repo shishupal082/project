@@ -516,6 +516,14 @@ function getUniqueTid(tId) {
     }
     return verifiedTid;
 }
+function getTableId() {
+    if (typeof tId != "string") {
+        var max = 9999, min = 1000;
+        var key = Math.floor(Math.random() * (max - min + 1)) + min;
+        tId = key.toString();
+    }
+    return getUniqueTid(tId);
+}
 function Table(tableItems, tableId) {
     content = [];
     rows = 0; cols = 0;
@@ -537,15 +545,7 @@ function Table(tableItems, tableId) {
             }
         }
     }
-    tId = "";
-    if (typeof tableId == "string") {
-        tId += tableId;
-    } else {
-        var max = 9999, min = 1000;
-        var key = Math.floor(Math.random() * (max - min + 1)) + min;
-        tId += key;
-    }
-    tId = getUniqueTid(tId);
+    tId = tableId;
 }
 Table.prototype.generateTdHtml = function(tdContent) {
     var tdHtml = "";
@@ -566,15 +566,16 @@ Table.prototype.generateTdHtml = function(tdContent) {
     return tdHtml;
 };
 Table.prototype.getHtml = function() {
-    var html = '<table id="'+tId+'">',
+    var tableId = getTableId();
+    var html = '<table id="'+tableId+'">',
         displayContent = "",
         attr = "";
     for (var i = 0; i < rows; i++) {
-        var rId = [tId,i].join("-");
+        var rId = [tableId,i].join("-");
         var rClass = i%2 ? "odd" : "even";
         html += '<tr id="'+rId+'" class="'+rClass+'">';
         for (var j = 0; j < cols; j++) {
-            var cId = [tId,i,j].join("-");
+            var cId = [tableId,i,j].join("-");
             attr = (content[i][j] && content[i][j].parentAttr) ? content[i][j].parentAttr : "";
             displayContent = this.generateTdHtml(content[i][j]);
             html += '<td id="'+cId+'" '+attr+'>' + displayContent + '</td>';
