@@ -587,12 +587,27 @@ Table.prototype.getHtml = function() {
 Table.prototype.getContent = function() {
     return content;
 };
-Table.prototype.clearProcessedTids = function() {
-    processedTids = [];
+Table.prototype.getProcessedTids = function() {
     return processedTids;
+};
+Table.prototype.setProcessedTids = function(pIds) {
+    if (!isArray(pIds)) {
+        return processedTids;
+    }
+    processedTids = [];
+    for (var i = 0; i < pIds.length; i++) {
+        if (typeof pIds[i] == "string") {
+            processedTids.push(pIds[i]);
+        }
+    }
+    return processedTids;
+};
+Table.prototype.clearProcessedTids = function() {
+    return this.setProcessedTids([]);
 };
 return Table;
 })();
+
 var Stack = function(selector, context) {
     return new Stack.fn.init(selector, context);
 };
