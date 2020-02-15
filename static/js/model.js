@@ -251,8 +251,8 @@ Model.extend({
     getLocalStorage: function() {
         return $S.getLocalStorage();
     },
-    getTable: function(tableContent) {
-        return $S.getTable(tableContent);
+    getTable: function(tableContent, tableId) {
+        return $S.getTable(tableContent, tableId);
     },
     getDT: function() {
         return $S.getDT();

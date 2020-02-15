@@ -496,8 +496,27 @@ var BT = (function(){
     return BT;
 })();
 var Table = (function() {
-var rows=0, cols=0, content = [];
-function Table(tableItems) {
+var rows=0, cols=0, content = [], tId="", processedTids = [];
+function getUniqueTid(tId) {
+    var verifiedTid = "";
+    if (typeof tId == "string") {
+        verifiedTid = tId;
+    }
+    if (processedTids.indexOf(verifiedTid) >= 0) {
+        var max = 9, min = 1;
+        var key = Math.floor(Math.random() * (max - min + 1)) + min;
+        verifiedTid += "--"+key;
+        if (processedTids.indexOf(verifiedTid) >= 0) {
+            return getUniqueTid(verifiedTid);
+        } else {
+            processedTids.push(verifiedTid);
+        }
+    } else {
+        processedTids.push(verifiedTid);
+    }
+    return verifiedTid;
+}
+function Table(tableItems, tableId) {
     content = [];
     rows = 0; cols = 0;
     if (tableItems && tableItems.length) {
@@ -518,6 +537,15 @@ function Table(tableItems) {
             }
         }
     }
+    tId = "";
+    if (typeof tableId == "string") {
+        tId += tableId;
+    } else {
+        var max = 9999, min = 1000;
+        var key = Math.floor(Math.random() * (max - min + 1)) + min;
+        tId += key;
+    }
+    tId = getUniqueTid(tId);
 }
 Table.prototype.generateTdHtml = function(tdContent) {
     var tdHtml = "";
@@ -537,17 +565,19 @@ Table.prototype.generateTdHtml = function(tdContent) {
     }
     return tdHtml;
 };
-Table.prototype.getHtml = function(attr) {
-    var tableAttr = attr ? attr : "";
-    var html = '<table '+tableAttr+'>',
+Table.prototype.getHtml = function() {
+    var html = '<table id="'+tId+'">',
         displayContent = "",
         attr = "";
     for (var i = 0; i < rows; i++) {
-        html += '<tr>';
+        var rId = [tId,i].join("-");
+        var rClass = i%2 ? "odd" : "even";
+        html += '<tr id="'+rId+'" class="'+rClass+'">';
         for (var j = 0; j < cols; j++) {
+            var cId = [tId,i,j].join("-");
             attr = (content[i][j] && content[i][j].parentAttr) ? content[i][j].parentAttr : "";
             displayContent = this.generateTdHtml(content[i][j]);
-            html += '<td '+attr+'>' + displayContent + '</td>';
+            html += '<td id="'+cId+'" '+attr+'>' + displayContent + '</td>';
         }
         html += '</tr>';
     }
@@ -604,8 +634,8 @@ Stack.extend({
     getBST: function(rootData) {
         return new BST(rootData);
     },
-    getTable: function(tableContent) {
-        return new Table(tableContent);
+    getTable: function(tableContent, tableId) {
+        return new Table(tableContent, tableId);
     },
     log: function(log) {
         Logger.log(log);
