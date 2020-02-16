@@ -80,7 +80,8 @@ function is_file_exist(img_file_name){
 		if(response["status"] == "SUCCESS"){
 			load_convas(response.file_name, response);
 		}else{
-			submit_form();
+			// submit_form();
+			alert("File does not exist.");
 		}
 	}).fail(function(response){
 		console.log(response);
