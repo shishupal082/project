@@ -1,0 +1,100 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<div class="container">
+	<div id="hex" class="inline">HEX: <input type="text"></div>
+	<div id="rgb" class="inline">RGB: <input type="text"></div>
+	<div class="inline">
+		<form action="/upload/do_upload" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+			<input type="file" name="userfile" id="load_image">
+		</form>
+	</div>
+	<div><span>Only for submit : </span><a href="/test/id/325">Click Here</a></div>
+</div>
+<div class="text-center padding-top-10px">
+	<canvas class="border-red bg-green hide padding-5px" id="canvas_picker">
+	</canvas>
+</div>
+
+<script type="text/javascript">
+var Test = {};
+Test.environment = "production1";
+$(document).ready(function(){
+function rgbToHex(R,G,B) {return toHex(R)+toHex(G)+toHex(B);}
+function toHex(n) {
+	  n = parseInt(n,10);
+	  if (isNaN(n)) {
+	  	return "00";
+	  }
+	  n = Math.max(0,Math.min(n,255));
+	  return "0123456789ABCDEF".charAt((n-n%16)/16) + "0123456789ABCDEF".charAt(n%16);
+	}
+function load_convas(img_file_name, cfg){
+	var canvas = document.getElementById('canvas_picker').getContext('2d');
+	var img = new Image();
+	img.src = img_file_name;
+	$(img).load(function(){
+	  canvas.drawImage(img,0,0);
+	});
+	var height = cfg.size[1],
+		width = cfg.size[0];
+	var convas = $('#canvas_picker');
+	convas.removeClass("hide");
+	convas.attr("height",height);
+	convas.attr("width",width);
+	convas.click(function(event){
+	  // getting user coordinates
+	  var x = event.pageX - this.offsetLeft;
+	  var y = event.pageY - this.offsetTop;
+	  // getting image data and RGB values
+	  var img_data = canvas.getImageData(x, y, 1, 1).data;
+	  var R = img_data[0];
+	  var G = img_data[1];
+	  var B = img_data[2];
+	  var rgb = R + ',' + G + ',' + B;
+	  // convert RGB to HEX
+	  var hex = rgbToHex(R,G,B);
+	  // making the color the value of the input
+	  $('#rgb input').val(rgb);
+	  $('#hex input').val('#' + hex);
+	});
+}
+function submit_form(){
+	var form = $("form");
+	if(Test.environment == "production"){
+		form.attr("action","/index.php"+form.attr("action"));
+	}
+	form.submit();
+}
+function is_file_exist(img_file_name){
+	var url = "/upload/is_file_exist/"+img_file_name;
+	if(Test.environment == "production"){
+		url = "/index.php"+url;
+	}
+	$.ajax({
+			url: url,
+			data: {"name": img_file_name},
+			type: "POST",
+			dataType: "json",
+			enctype : "multipart/form-data"
+	}).success(function(response){
+		console.log(response);
+		if(response["status"] == "SUCCESS"){
+			load_convas(response.file_name, response);
+		}else{
+			submit_form();
+		}
+	}).fail(function(response){
+		console.log(response);
+	});
+}
+$("#load_image").change(function(e){
+	var current_target = $(e.currentTarget),
+		form = current_target.parent("form"),
+		img_field = form.find('input[name="userfile"]'),
+		img_val = img_field.val();
+	if(img_val){
+		var img_file_name = img_val.replace("C:\\fakepath\\", "");
+		is_file_exist(img_file_name);
+	}
+});
+});
+</script>
