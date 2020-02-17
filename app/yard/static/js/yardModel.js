@@ -64,8 +64,8 @@ var firstRow = {
 		],
 		[
 			'<button class="evt pink btn tpr 8-TPR-3" value="8-TPR-3"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt slat btn tpr 8-TPR-B" value="8-TPR-B"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn'+'"><span class="badge">S14</span></button>',
+			'<button class="evt slat btn tpr 8-TPR-B circle" value="8-TPR-B"><span class="badge">S14</span></button>',
+			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -82,9 +82,9 @@ var firstRow = {
 			'<button class="btn'+'"></button>'
 		],
 		[
+			'<button class="evt blue btn tpr L-TPR-1 circle" value="L-TPR"><span class="badge">L1</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn'+'"><span class="badge">L2</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -98,8 +98,8 @@ var firstRow = {
 		],
 		[
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
+			'<button class="evt blue btn tpr L-TPR-1 circle" value="L-TPR"><span class="badge">L2</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn'+'"><span class="badge">L3</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -114,8 +114,8 @@ var firstRow = {
 			'<span id="s2-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>'
 		],
 		[
-			'<button class="evt slat btn tpr 9-TPR-A" value="9-TPR-A"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn'+'"><span class="badge">S2</span></button>',
+			'<button class="evt blue btn tpr L-TPR-1" value="L-TPR"><span class="badge">&nbsp;</span></button>',
+			'<button class="evt slat btn tpr 9-TPR-A circle" value="9-TPR-A"><span class="badge">S2</span></button>',
 			'<button class="evt pink btn tpr 9-TPR-1" value="9-TPR-1"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt slat btn tpr 9-TPR-2" value="9-TPR-2"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt pink btn tpr 9-TPR-3" value="9-TPR-3"><span class="badge">&nbsp;</span></button>'
@@ -201,7 +201,7 @@ var thirdRow = {
 		[
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">S1</span></button>',
+			'<button class="evt blue btn tpr 1-TPR circle" value="1-TPR"><span class="badge">S1</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -216,7 +216,7 @@ var thirdRow = {
 		[
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">S16</span></button>',
+			'<button class="evt green btn tpr 16-TPR circle" value="16-TPR"><span class="badge">S16</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -235,7 +235,7 @@ var thirdRow = {
 		[
 			'<button class="evt btn blue tpr 8-TPR" value="8-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn blue tpr 8-TPR" value="8-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">8</span></button>',
+			'<button class="evt btn blue tpr 8-TPR circle" value="8-TPR"><span class="badge">8</span></button>',
 			'<button class="evt btn slat tpr 8-TPR-C" value="8-TPR-C"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn pink tpr 8-TPR-7" value="8-TPR-7"><span class="badge">&nbsp;</span></button>'
 		],
@@ -251,9 +251,9 @@ var thirdRow = {
 		[
 			'<button class="evt btn slat tpr 8-TPR-8" value="8-TPR-8"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn pink tpr 8-TPR-9" value="8-TPR-9"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt btn point-change-request" value="8-WNR=1,NWWNR=1"><span class="badge">N</span></button>',
+			'<button class="evt btn circle point-change-request" value="8-WNR=1,NWWNR=1"><span class="badge">N</span></button>',
 			'<button class="evt btn slat tpr 8-TPR-D" value="8-TPR-D"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt btn blue tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>'
+			'<button class="evt btn slat tpr circle 8-TPR-D" value="8-TPR-D"><span class="badge">S15</span></button>'
 		],
 		[
 			''
@@ -266,8 +266,8 @@ var thirdRow = {
 		[
 			'<button class="evt btn blue tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn blue tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">S15</span></button>',
 			'<button class="evt btn blue tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
+			'<button class="evt btn blue tpr M-TPR-1 circle" value="M-TPR"><span class="badge">M1</span></button>',
 			'<button class="evt btn blue tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>'
 		],
 		[
@@ -284,9 +284,9 @@ var thirdRow = {
 		[
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">M2</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>'
+			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
+			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">M2</span></button>'
 		],
 		[
 			''
@@ -299,7 +299,7 @@ var thirdRow = {
 		[
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">M3</span></button>',
+			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -315,10 +315,10 @@ var thirdRow = {
 			'<span id="s3-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
 		],
 		[
+			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">M3</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt blue btn tpr circle M-TPR-1" value="M-TPR"><span class="badge">S3</span></button>',
-			'<button class="evt blue btn tpr M-TPR-1" value="M-TPR"><span class="badge">&nbsp;</span></button>',
+			'<button class="evt slat btn tpr 9-TPR-C circle" value="9-TPR-C"><span class="badge">S3</span></button>',
 			'<button class="evt slat btn tpr 9-TPR-C" value="9-TPR-C"><span class="badge">&nbsp;</span></button>'
 		],
 		[
@@ -350,10 +350,10 @@ var thirdRow = {
 		],
 		[
 			'<button class="evt blue btn tpr 9-TPR" value="9-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">9</span></button>',
+			'<button class="evt blue btn tpr 9-TPR circle" value="9-TPR"><span class="badge">9</span></button>',
 			'<button class="evt blue btn tpr 9-TPR" value="9-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt green btn tpr 4-TPR" value="4-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">4</span></button>'
+			'<button class="evt green btn tpr 4-TPR circle" value="4-TPR"><span class="badge">4</span></button>'
 		],
 		[
 			''
@@ -366,7 +366,7 @@ var thirdRow = {
 		[
 			'<button class="evt green btn tpr 4-TPR" value="4-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 13-TPR" value="13-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn'+'"><span class="badge">13</span></button>',
+			'<button class="evt blue btn tpr 13-TPR circle" value="13-TPR"><span class="badge">13</span></button>',
 			'<button class="evt blue btn tpr 13-TPR" value="13-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 13-TPR" value="13-TPR"><span class="badge">&nbsp;</span></button>'
 		],
