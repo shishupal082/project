@@ -383,6 +383,8 @@ Object.assign(yardComponent, firstRow);
 Object.assign(yardComponent, secondRow);
 Object.assign(yardComponent, thirdRow);
 
+var tableContent = [];
+
 var YardModel = (function() {
 	function Model() {}
 	Model.prototype.getYardComponent = function(name) {
@@ -390,6 +392,9 @@ var YardModel = (function() {
 			return yardComponent[name];
 		}
 		return [];
+	};
+	Model.prototype.getYardTableContent = function() {
+		return tableContent;
 	};
 	Model.prototype.getTableHtml = function(name) {
 		var yardData = this.getYardComponent(name);
@@ -419,6 +424,46 @@ var verifyFromDomino = true;
 if (verifyFromDomino) {
 	YM.enableDomino();
 }
+
+tableContent.push([]);
+tableContent[0].push("");
+tableContent[0].push("");
+tableContent[0].push(YM.getTableHtml("left-top"));
+tableContent[0].push(YM.getTableHtml("8-point-top"));
+tableContent[0].push(YM.getTableHtml("s14-tpr"));
+tableContent[0].push(YM.getTableHtml("l-tpr-1"));
+tableContent[0].push(YM.getTableHtml("l-tpr-2"));
+tableContent[0].push(YM.getTableHtml("s2-tpr"));
+tableContent[0].push(YM.getTableHtml("right-top"));
+tableContent.push([]);
+tableContent[1].push("");
+tableContent[1].push("");
+tableContent[1].push("");
+tableContent[1].push(YM.getTableHtml("8-point-mid"));
+tableContent[1].push("");
+tableContent[1].push("");
+tableContent[1].push("");
+tableContent[1].push(YM.getTableHtml("9-point-mid-1"));
+tableContent[1].push(YM.getTableHtml("9-point-mid"));
+tableContent.push([]);
+tableContent[2].push(YM.getTableHtml("1-tpr"));
+tableContent[2].push(YM.getTableHtml("16-tpr"));
+tableContent[2].push(YM.getTableHtml("8-tpr"));
+tableContent[2].push(YM.getTableHtml("8c-tpr"));
+tableContent[2].push(YM.getTableHtml("s15-tpr"));
+tableContent[2].push(YM.getTableHtml("m-tpr-1"));
+tableContent[2].push(YM.getTableHtml("m-tpr-2"));
+tableContent[2].push(YM.getTableHtml("s3-tpr"));
+tableContent[2].push(YM.getTableHtml("9d-tpr"));
+tableContent[2].push(YM.getTableHtml("9-tpr"));
+tableContent[2].push(YM.getTableHtml("4-tpr"));
+tableContent.push([]);
+tableContent[3].push("");
+tableContent[3].push("");
+tableContent[3].push("");
+tableContent[3].push("");
+tableContent[3].push("");
+
 $M.extend({
     getYardModel: function() {
     	return YM;
