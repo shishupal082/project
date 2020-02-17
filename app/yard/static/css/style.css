@@ -84,6 +84,11 @@ hr {
 	width: auto;
 	border-radius: 10px;
 }
+.yard .signal-no {
+	font-size: 14px;
+	font-weight: 1000;
+	color: #0b0b0b;
+}
 .yard .signal.badge{
 	min-width: 10px;
 	padding: 5px 9px;

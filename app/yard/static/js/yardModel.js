@@ -74,7 +74,7 @@ var firstRow = {
 			'',
 			'<span id="s14-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>',
 			'<span id="s14-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
-			'<span>S14</span>'
+			'<span class="signal-no">S14</span>'
 		]
 	],
 	"l-tpr-1": [
@@ -109,7 +109,7 @@ var firstRow = {
 	],
 	"s2-tpr": [
 		[
-			'<span>S2</span>',
+			'<span class="signal-no">S2</span>',
 			'<span id="s2-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
 			'<span id="s2-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>'
 		],
@@ -192,7 +192,7 @@ var secondRow = {
 var thirdRow = {
 	"1-tpr": [
 		[
-			'<span>S1</span>',
+			'<span class="signal-no">S1</span>',
 			'<span id="s1-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
 			'<span id="s1-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>',
 			'<span id="s1-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
@@ -201,7 +201,7 @@ var thirdRow = {
 		[
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">1</span></button>',
+			'<button class="btn"><span class="badge">S1</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt blue btn tpr 1-TPR" value="1-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -216,7 +216,7 @@ var thirdRow = {
 		[
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="btn"><span class="badge">16</span></button>',
+			'<button class="btn"><span class="badge">S16</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt green btn tpr 16-TPR" value="16-TPR"><span class="badge">&nbsp;</span></button>'
 		],
@@ -225,7 +225,7 @@ var thirdRow = {
 			'',
 			'<span id="s16-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
 			'<span id="s16-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
-			'<span>S16</span>'
+			'<span class="signal-no">S16</span>'
 		]
 	],
 	"8-tpr": [
@@ -274,7 +274,7 @@ var thirdRow = {
 			'<span id="s15-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
 			'<span id="s15-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>',
 			'<span id="s15-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
-			'<span>S15</span>'
+			'<span class="signal-no">S15</span>'
 		]
 	],
 	"m-tpr-1": [
@@ -309,7 +309,7 @@ var thirdRow = {
 	],
 	"s3-tpr": [
 		[
-			'<span>S3</span>',
+			'<span class="signal-no">S3</span>',
 			'<span id="s3-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
 			'<span id="s3-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>',
 			'<span id="s3-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
@@ -345,7 +345,7 @@ var thirdRow = {
 	"9-tpr": [
 		[
 			'','','',
-			'<span>S4</span>',
+			'<span class="signal-no">S4</span>',
 			'<span id="s4-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
 		],
 		[
@@ -375,7 +375,7 @@ var thirdRow = {
 			'<span id="s13-green" class="badge  signal signal-green alert-success">&nbsp;</span>',
 			'<span id="s13-yellow" class="badge  signal signal-yellow alert-warning">&nbsp;</span>',
 			'<span id="s13-red" class="badge  signal signal-red alert-danger">&nbsp;</span>',
-			'<span>S13</span>'
+			'<span class="signal-no">S13</span>'
 		]
 	]
 };
