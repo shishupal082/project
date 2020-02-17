@@ -83,5 +83,5 @@ $(".evt").on("click", function(e) {
     checkUIStyle();
 });
 checkUIStyle();
-
+$("#help").removeClass("hide");
 });

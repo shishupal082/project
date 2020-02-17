@@ -234,8 +234,8 @@ var thirdRow = {
 		],
 		[
 			'<button class="evt btn blue tpr 8-TPR" value="8-TPR"><span class="badge">&nbsp;</span></button>',
-			'<button class="evt btn blue tpr 8-TPR" value="8-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn blue tpr 8-TPR circle" value="8-TPR"><span class="badge">8</span></button>',
+			'<button class="evt btn blue tpr 8-TPR" value="8-TPR"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn slat tpr 8-TPR-C" value="8-TPR-C"><span class="badge">&nbsp;</span></button>',
 			'<button class="evt btn pink tpr 8-TPR-7" value="8-TPR-7"><span class="badge">&nbsp;</span></button>'
 		],
