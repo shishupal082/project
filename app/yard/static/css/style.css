@@ -7,8 +7,11 @@ hr {
 .container {
 	width: 1450px;
 }
-.yard .table-html.display-domino > table > tbody > tr > td > table {
-	border: 1px solid #0000ae;
+.yard .table-html > table > tbody > tr > td {
+	border: 1px solid #0000ae00;
+}
+.yard .table-html.display-domino > table > tbody > tr > td {
+	border: 1px solid #0000aeff;
 }
 .yard td {
 	text-align: center;
