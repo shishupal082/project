@@ -384,6 +384,8 @@ Object.assign(yardComponent, secondRow);
 Object.assign(yardComponent, thirdRow);
 
 var tableContent = [];
+var lsKey = "displayYardDominoBoundary";
+var LS = $M.getLocalStorage();
 
 var YardModel = (function() {
 	function Model() {}
@@ -416,6 +418,22 @@ var YardModel = (function() {
 			var table = $M.getTable(yardData, name);
 			return table.getHtml();
 		};
+	};
+	Model.prototype.getDisplayYardDominoBoundary = function() {
+		var lsValue = LS.get(lsKey);
+		var response = false;
+		if (lsValue.status && lsValue.value == "true") {
+			response = true;
+		}
+		return response;
+	};
+	Model.prototype.toggleDisplayYardDominoBoundary = function() {
+		if (this.getDisplayYardDominoBoundary()) {
+			LS.set(lsKey, false);
+		} else {
+			LS.set(lsKey, true);
+		}
+		return this.getDisplayYardDominoBoundary();
 	};
 	return Model;
 })();

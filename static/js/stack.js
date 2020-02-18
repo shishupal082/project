@@ -91,10 +91,10 @@ var DT = (function() {
 var LocalStorage = (function(){
     function LocalStorage () {
         var _localStorage = localStorage;
-        var validKeys = [];
+        var validKeys = ["displayYardDominoBoundary"];
         var bypassKeys = ["local_storage_support_test","length","key","getItem","setItem","removeItem","clear"];
         function isValidKey (key) {
-            if (bypassKeys.indexOf(key) >= 0) {
+            if (bypassKeys.indexOf(key) >= 0 || validKeys.indexOf(key) < 0) {
                 return false;
             }
             return true;

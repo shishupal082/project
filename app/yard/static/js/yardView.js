@@ -11,14 +11,20 @@ YardView.fn = YardView.prototype = {
     }
 };
 ExtendObject(YardView);
+var YM = $M.getYardModel();
 YardView.extend({
 	documentLoaded: function() {
     },
     getYardHtml: function() {
-        var YM = $M.getYardModel();
         var yardContent = YM.getYardTableContent();
         var table = $M.getTable(yardContent, "yard");
         return table.getHtml();
+    },
+    getDisplayYardDominoBoundary: function() {
+        return YM.getDisplayYardDominoBoundary();
+    },
+    toggleDisplayYardDominoBoundary: function() {
+        return YM.toggleDisplayYardDominoBoundary();
     }
 });
 YardView.extend({

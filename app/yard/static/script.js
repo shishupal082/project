@@ -4,21 +4,29 @@ $V.documentLoaded();
 var timerCount = 0;
 var tableHtml = $YV.getYardHtml();
 $("#tableHtml").addClass("table-html").html(tableHtml);
-$V.extend({
-	table: function() {
-		var table = $M.getTable([], "name");
-		tIds = table.getProcessedTids();
-		table.clearProcessedTids();
-		for (var i=0; i<900; i++) {
-			table.clearProcessedTids();
-			console.log(table.getHtml());
-		}
-		table.setProcessedTids(tIds);
-		console.log(tIds);
-		return 0;
-	}
-});
 
+// $V.extend({
+// 	table: function() {
+// 		var table = $M.getTable([], "name");
+// 		tIds = table.getProcessedTids();
+// 		table.clearProcessedTids();
+// 		for (var i=0; i<900; i++) {
+// 			table.clearProcessedTids();
+// 			console.log(table.getHtml());
+// 		}
+// 		table.setProcessedTids(tIds);
+// 		console.log(tIds);
+// 		return 0;
+// 	}
+// });
+function checkDominoDisplayStatus() {
+    if ($YV.getDisplayYardDominoBoundary()) {
+        $("#tableHtml").addClass("display-domino");
+    } else {
+        $("#tableHtml").removeClass("display-domino");
+    }
+    return true;
+}
 function checkUIStyle() {
     var possibleValues = $V.getPossibleValues();
     for (var i=0; i<possibleValues.length; i++) {
@@ -42,6 +50,10 @@ function checkUIStyle() {
     // $("#timerCount").html(timerCount);
     $V.addSignalClass();
 }
+$("#toggleDisplayDomino").on("click", function(e) {
+    $YV.toggleDisplayYardDominoBoundary();
+    checkDominoDisplayStatus();
+});
 $(".evt").on("click", function(e) {
     if (timerCount != 0) {
         return;
@@ -84,4 +96,5 @@ $(".evt").on("click", function(e) {
 });
 checkUIStyle();
 $("#help").removeClass("hide");
+checkDominoDisplayStatus();
 });
