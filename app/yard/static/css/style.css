@@ -70,16 +70,14 @@ hr {
 	padding: 4px;
 }
 .indication.btn-warning {
-	/*background-color: #ed9c28;
-    border-color: #d58512;*/
 	background-color:#ff0;
 	border-color: #ff0;
 }
 .yard .tpr .badge {
-	top: 2px;
+	top: 0px;
 	border: 0;
-	height: 8px;
-	width: 19px;
+	height: 14px;
+	width: 23px;
 	border-radius: 2px;
 }
 .yard .tpr.circle .badge {
