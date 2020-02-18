@@ -138,6 +138,21 @@ YardModel.extend({
         var table = $M.getTable(tableData, name);
         return table.getHtml();
     },
+    getYardTableContent: function(yardComponent, requiredContent) {
+        var tableContent = [];
+        for (var i = 0; i < requiredContent.length; i++) {
+            var curData = [];
+            for (var j = 0; j < requiredContent[i].length; j++) {
+                if (requiredContent[i][j] == "") {
+                    curData.push("");
+                } else {
+                    curData.push(YardModel.getTableHtml(yardComponent, requiredContent[i][j]));
+                }
+            }
+            tableContent.push(curData);
+        }
+        return tableContent;
+    },
     enableDomino: function () {
         var domino = new Domino();
         domino.enableValidate();
