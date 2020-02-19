@@ -19,10 +19,12 @@
 <script type="text/javascript">
 $(document).ready(function() {
 $YM.loadJsonData(["/pvt/appData.json"], function(response) {
-    var tableHtml = "", currentIndex = 1;
+    var tableHtml = "";
 
     var table = $M.getTable(response, "dashboard");
-    currentIndex = table.addRowIndex(currentIndex);
+    table.addColIndex(1);
+    table.addRowIndex(0);
+    table.updateTableContent(0,0,"");
     tableHtml += table.getHtml();
 
     $("#tableHtml").html(tableHtml);

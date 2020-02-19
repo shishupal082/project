@@ -620,6 +620,14 @@ Table.prototype.addColIndex = function(currentIndex) {
     }
     return currentIndex;
 };
+Table.prototype.updateTableContent = function(rowIndex, colIndex, item) {
+    if (isNumber(rowIndex) && isNumber(colIndex)) {
+        if (rowIndex < rows && colIndex < cols) {
+            content[rowIndex][colIndex] = item;
+        }
+    }
+    return true;
+}
 Table.prototype.getHtml = function() {
     var tableId = getTableId();
     var html = '<table id="'+tableId+'">',
