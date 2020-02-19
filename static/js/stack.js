@@ -525,6 +525,25 @@ function getTableId() {
     }
     return getUniqueTid(tId);
 }
+generateTdHtml = function(tdContent, rIndex, cIndex) {
+    var tdHtml = "";
+    if (typeof tdContent == "string") {
+        tdHtml = tdContent.replace("$rowIndex+1", rIndex+1);
+        return tdHtml;
+    } else if(isObject(tdContent)) {
+        var attr = tdContent.attr ? tdContent.attr : "";
+        var preTag = tdContent.tag ? '<'+tdContent.tag+' '+attr+'>' : "";
+        var postTag = tdContent.tag ? '</'+tdContent.tag+'>' : "";
+        tdHtml += preTag;
+        tdHtml += generateTdHtml(tdContent.text, rIndex, cIndex);
+        tdHtml += postTag;
+    } else if (isArray(tdContent)) {
+        for (var i = 0; i < tdContent.length; i++) {
+            tdHtml += generateTdHtml(tdContent[i], rIndex, cIndex);
+        }
+    }
+    return tdHtml;
+};
 function Table(tableItems, tableId) {
     content = [];
     rows = 0; cols = 0;
@@ -548,24 +567,6 @@ function Table(tableItems, tableId) {
     }
     tId = tableId;
 }
-Table.prototype.generateTdHtml = function(tdContent) {
-    var tdHtml = "";
-    if (typeof tdContent == "string") {
-        return tdContent;
-    } else if(isObject(tdContent)) {
-        var attr = tdContent.attr ? tdContent.attr : "";
-        var preTag = tdContent.tag ? '<'+tdContent.tag+' '+attr+'>' : "";
-        var postTag = tdContent.tag ? '</'+tdContent.tag+'>' : "";
-        tdHtml += preTag;
-        tdHtml += this.generateTdHtml(tdContent.text);
-        tdHtml += postTag;
-    } else if (isArray(tdContent)) {
-        for (var i = 0; i < tdContent.length; i++) {
-            tdHtml += this.generateTdHtml(tdContent[i]);
-        }
-    }
-    return tdHtml;
-};
 Table.prototype.getHtml = function() {
     var tableId = getTableId();
     var html = '<table id="'+tableId+'">',
@@ -578,7 +579,7 @@ Table.prototype.getHtml = function() {
         for (var j = 0; j < cols; j++) {
             var cId = [tableId,i,j].join("-");
             attr = (content[i][j] && content[i][j].parentAttr) ? content[i][j].parentAttr : "";
-            displayContent = this.generateTdHtml(content[i][j]);
+            displayContent = generateTdHtml(content[i][j], i, j);
             // If id will be in attr then that will be ignored
             html += '<td id="'+cId+'" '+attr+'>' + displayContent + '</td>';
         }
