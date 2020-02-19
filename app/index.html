@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-$YM.loadJsonData(["/app/appData.json"], function(response) {
+$YM.loadJsonData(["/pvt/appData.json"], function(response) {
     var table = $M.getTable(response, "dashboard");
     $("#tableHtml").html(table.getHtml());
     $("#tableHtml table").addClass("table table-bordered");
