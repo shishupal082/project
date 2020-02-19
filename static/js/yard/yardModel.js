@@ -126,8 +126,15 @@ YardModel.fn = YardModel.prototype = {
     }
 };
 ExtendObject(YardModel);
+
 var lsKey = "displayYardDominoBoundary";
+var keyMapping = {
+    "displayYardDominoBoundary": "item1"
+};
+lsKey = keyMapping[lsKey];
+
 var LS = $M.getLocalStorage();
+
 YardModel.extend({
     getTableHtml: function(yardData, name) {
         var tableData = [];
