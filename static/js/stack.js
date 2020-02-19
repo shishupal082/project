@@ -496,6 +496,33 @@ var BT = (function(){
     };
     return BT;
 })();
+
+var Stack = function(selector, context) {
+    return new Stack.fn.init(selector, context);
+};
+Stack.fn = Stack.prototype = {
+    constructor: Stack,
+    init: function(selector, context) {
+        return this;
+    }
+};
+Stack.fn.init.prototype = Stack.fn;
+
+Stack.extend = Stack.fn.extend = function(options) {
+    if (isObject(options)) {
+        for (var key in options) {
+            if (isFunction(options[key])) {
+                /*If method already exist then it will be overwritten*/
+                if (isFunction(this[key])) {
+                    Logger.log("Method " + key + " is overwritten.");
+                }
+                this[key] = options[key];
+            }
+        }
+    }
+    return this;
+};
+
 var Table = (function() {
 var rows=0, cols=0, content = [], tId="", processedTids = [];
 function getUniqueTid(tId) {
@@ -527,9 +554,8 @@ function getTableId() {
 }
 function generateTdHtml(tdContent, rIndex, cIndex) {
     var tdHtml = "";
-    if (typeof tdContent == "string") {
-        tdHtml = tdContent.replace("$rowIndex+1", rIndex+1);
-        return tdHtml;
+    if (["string", "number"].indexOf(typeof tdContent) >= 0) {
+        return tdContent;
     } else if(isObject(tdContent)) {
         var attr = tdContent.attr ? tdContent.attr : "";
         var preTag = tdContent.tag ? '<'+tdContent.tag+' '+attr+'>' : "";
@@ -567,6 +593,13 @@ function Table(tableItems, tableId) {
     }
     tId = tableId;
 }
+Table.prototype.addRowIndex = function() {
+    for (var i = 0; i < rows; i++) {
+        content[i].splice(0, 0, i+1);
+    }
+    cols++;
+    return true;
+};
 Table.prototype.getHtml = function() {
     var tableId = getTableId();
     var html = '<table id="'+tableId+'">',
@@ -589,7 +622,7 @@ Table.prototype.getHtml = function() {
     return html;
 };
 Table.prototype.getContent = function() {
-    return content;
+    return Stack.clone(content);
 };
 Table.prototype.getProcessedTids = function() {
     var response = [];
@@ -616,35 +649,6 @@ Table.prototype.clearProcessedTids = function() {
 return Table;
 })();
 
-var Stack = function(selector, context) {
-    return new Stack.fn.init(selector, context);
-};
-Stack.fn = Stack.prototype = {
-    constructor: Stack,
-    init: function(selector, context) {
-        return this;
-    }
-};
-Stack.fn.init.prototype = Stack.fn;
-
-/*
-End of direct access of ID
-*/
-
-Stack.extend = Stack.fn.extend = function(options) {
-    if (isObject(options)) {
-        for (var key in options) {
-            if (isFunction(options[key])) {
-                /*If method already exist then it will be overwritten*/
-                if (isFunction(this[key])) {
-                    Logger.log("Method " + key + " is overwritten.");
-                }
-                this[key] = options[key];
-            }
-        }
-    }
-    return this;
-};
 Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
@@ -687,6 +691,20 @@ Stack.extend({
     },
     isNumber: function(value) {
         return isNumber(value);
+    }
+});
+Stack.extend({
+    clone: function(obj) {
+        var res = obj;
+        if (isArray(obj)) {
+            res = [].concat(obj)
+        } else if (isObject(obj)) {
+            res = {};
+            for (var key in obj) {
+                res[key] = Stack.clone(obj[key]);
+            }
+        }
+        return res;
     }
 });
 Stack.extend({

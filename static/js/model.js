@@ -338,18 +338,10 @@ Model.extend({
         return {exps: expsResponse, count: count};
     },
     getPossibleValues : function() {
-        var response = [];
-        for (var i = 0; i < possibleValues.length; i++) {
-            response.push(possibleValues[i]);
-        }
-        return response;
+        return $S.clone(possibleValues);
     },
     getValueToBeChecked : function() {
-        var response = [];
-        for (var i = 0; i < valueToBeChecked.length; i++) {
-            response.push(valueToBeChecked[i]);
-        }
-        return response;
+        return $S.clone(valueToBeChecked);;
     },
     getReCheckingStatus: function() {
         return reCheckingStatus;
@@ -403,7 +395,6 @@ Model.extend({
         }
         return response;
     },
-
     getVariableDependenciesByKey: function(name) {
         var dependentVariable = [];
         if (variableDependencies[name]) {
