@@ -593,11 +593,31 @@ function Table(tableItems, tableId) {
     }
     tId = tableId;
 }
-Table.prototype.addRowIndex = function() {
+/* For better functioning: addRowIndex should be called after addColIndex  */
+Table.prototype.addRowIndex = function(startIndex) {
+    if (!isNumber(startIndex)) {
+        startIndex = 1;
+    }
+    startIndex = startIndex*1;
     for (var i = 0; i < rows; i++) {
-        content[i].splice(0, 0, i+1);
+        //Insert first item in each row as index
+        content[i].splice(0, 0, startIndex++);
     }
     cols++;
+    return true;
+};
+/* For better functioning: addColIndex should be called before addRowIndex */
+Table.prototype.addColIndex = function(startIndex) {
+    //Insert first row as empty array
+    content.splice(0, 0, []);
+    rows++;
+    if (!isNumber(startIndex)) {
+        startIndex = 1;
+    }
+    startIndex = startIndex*1;
+    for (var i = 0; i < cols; i++) {
+        content[0].push(startIndex++);
+    }
     return true;
 };
 Table.prototype.getHtml = function() {

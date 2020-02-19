@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -21,7 +20,7 @@
 $(document).ready(function() {
 $YM.loadJsonData(["/pvt/appData.json"], function(response) {
     var table = $M.getTable(response, "dashboard");
-    table.addRowIndex();
+    table.addRowIndex(1);
     $("#tableHtml").html(table.getHtml());
     $("#tableHtml table").addClass("table table-bordered");
 });
