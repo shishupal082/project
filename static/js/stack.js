@@ -594,31 +594,31 @@ function Table(tableItems, tableId) {
     tId = tableId;
 }
 /* For better functioning: addRowIndex should be called after addColIndex  */
-Table.prototype.addRowIndex = function(startIndex) {
-    if (!isNumber(startIndex)) {
-        startIndex = 1;
+Table.prototype.addRowIndex = function(currentIndex) {
+    if (!isNumber(currentIndex)) {
+        currentIndex = 1;
     }
-    startIndex = startIndex*1;
+    currentIndex = currentIndex*1;
     for (var i = 0; i < rows; i++) {
         //Insert first item in each row as index
-        content[i].splice(0, 0, startIndex++);
+        content[i].splice(0, 0, currentIndex++);
     }
     cols++;
-    return true;
+    return currentIndex;
 };
 /* For better functioning: addColIndex should be called before addRowIndex */
-Table.prototype.addColIndex = function(startIndex) {
+Table.prototype.addColIndex = function(currentIndex) {
     //Insert first row as empty array
     content.splice(0, 0, []);
     rows++;
-    if (!isNumber(startIndex)) {
-        startIndex = 1;
+    if (!isNumber(currentIndex)) {
+        currentIndex = 1;
     }
-    startIndex = startIndex*1;
+    currentIndex = currentIndex*1;
     for (var i = 0; i < cols; i++) {
-        content[0].push(startIndex++);
+        content[0].push(currentIndex++);
     }
-    return true;
+    return currentIndex;
 };
 Table.prototype.getHtml = function() {
     var tableId = getTableId();

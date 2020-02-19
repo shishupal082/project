@@ -19,9 +19,13 @@
 <script type="text/javascript">
 $(document).ready(function() {
 $YM.loadJsonData(["/pvt/appData.json"], function(response) {
+    var tableHtml = "", currentIndex = 1;
+
     var table = $M.getTable(response, "dashboard");
-    table.addRowIndex(1);
-    $("#tableHtml").html(table.getHtml());
+    currentIndex = table.addRowIndex(currentIndex);
+    tableHtml += table.getHtml();
+
+    $("#tableHtml").html(tableHtml);
     $("#tableHtml table").addClass("table table-bordered");
 });
 });
