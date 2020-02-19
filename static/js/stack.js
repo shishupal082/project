@@ -525,7 +525,7 @@ function getTableId() {
     }
     return getUniqueTid(tId);
 }
-generateTdHtml = function(tdContent, rIndex, cIndex) {
+function generateTdHtml(tdContent, rIndex, cIndex) {
     var tdHtml = "";
     if (typeof tdContent == "string") {
         tdHtml = tdContent.replace("$rowIndex+1", rIndex+1);
