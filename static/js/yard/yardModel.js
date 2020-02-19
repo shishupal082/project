@@ -191,7 +191,7 @@ YardModel.extend({
     }
 });
 YardModel.extend({
-    loadJsonData: function(urls, apiName, eachApiCallback, callBack) {
+    loadJsonData: function(urls, eachApiCallback, apiName, callBack) {
         if ($M.isArray(urls) == false) {
             return false;
         }
@@ -205,7 +205,7 @@ YardModel.extend({
                 success: function(response, textStatus) {
                     apiReceiveCount++;
                     if ($M.isFunction(eachApiCallback)) {
-                        eachApiCallback(apiName, response);
+                        eachApiCallback(response, apiName);
                     }
                     if (apiSendCount == apiReceiveCount) {
                         if ($M.isFunction(callBack)) {
@@ -217,7 +217,7 @@ YardModel.extend({
                     console.log("Error in api: " + apiName);
                     apiReceiveCount++;
                     if ($M.isFunction(eachApiCallback)) {
-                        eachApiCallback(apiName);
+                        eachApiCallback(null, apiName);
                     }
                     if (apiSendCount == apiReceiveCount) {
                         if ($M.isFunction(callBack)) {
