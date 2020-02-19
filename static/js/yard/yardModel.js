@@ -1,8 +1,7 @@
 /*
-store displayYardDominoBoundary in localStorage
-
-
-Verify each domino data if configured
+    - store displayYardDominoBoundary in localStorage
+    - Verify each domino data if configured
+    - loadJsonData for given api url
 */
 (function($M) {
 var Domino = (function() {
@@ -192,7 +191,10 @@ YardModel.extend({
     }
 });
 YardModel.extend({
-    loadYardData: function(urls, apiName, eachApiCallback, callBack) {
+    loadJsonData: function(urls, apiName, eachApiCallback, callBack) {
+        if ($M.isArray(urls) == false) {
+            return false;
+        }
         var apiSendCount = urls.length, apiReceiveCount = 0;
         var ajax = {};
         ajax.type = "json";
@@ -222,6 +224,7 @@ YardModel.extend({
                 }
             });
         }
+        return true;
     }
 });
 window.YardModel = window.$YM = YardModel;
