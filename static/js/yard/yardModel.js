@@ -214,8 +214,11 @@ YardModel.extend({
                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    apiReceiveCount++;
                     console.log("Error in api: " + apiName);
+                    apiReceiveCount++;
+                    if ($M.isFunction(eachApiCallback)) {
+                        eachApiCallback(apiName);
+                    }
                     if (apiSendCount == apiReceiveCount) {
                         if ($M.isFunction(callBack)) {
                             callBack();
