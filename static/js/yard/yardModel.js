@@ -191,5 +191,38 @@ YardModel.extend({
         return this.getDisplayYardDominoBoundary();
     }
 });
+YardModel.extend({
+    loadYardData: function(urls, apiName, eachApiCallback, callBack) {
+        var apiSendCount = urls.length, apiReceiveCount = 0;
+        var ajax = {};
+        ajax.type = "json";
+        ajax.dataType = "json";
+        for (var i = 0; i < urls.length; i++) {
+            ajax.url = urls[i];
+            $.ajax({url: ajax.url,
+                success: function(response, textStatus) {
+                    apiReceiveCount++;
+                    if ($M.isFunction(eachApiCallback)) {
+                        eachApiCallback(apiName, response);
+                    }
+                    if (apiSendCount == apiReceiveCount) {
+                        if ($M.isFunction(callBack)) {
+                            callBack();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    apiReceiveCount++;
+                    console.log("Error in api: " + apiName);
+                    if (apiSendCount == apiReceiveCount) {
+                        if ($M.isFunction(callBack)) {
+                            callBack();
+                        }
+                    }
+                }
+            });
+        }
+    }
+});
 window.YardModel = window.$YM = YardModel;
 })($M);
