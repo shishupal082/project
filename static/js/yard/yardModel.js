@@ -3,7 +3,7 @@
     - Verify each domino data if configured
     - loadJsonData for given api url
 */
-(function($M) {
+(function($S) {
 var Domino = (function() {
     var maxRow = 3, maxCol = 5, validateDomino = false;
     function isValidIndex(r, c) {
@@ -133,7 +133,7 @@ var keyMapping = {
 };
 lsKey = keyMapping[lsKey];
 
-var LS = $M.getLocalStorage();
+var LS = $S.getLocalStorage();
 
 YardModel.extend({
     getTableHtml: function(yardData, name) {
@@ -141,7 +141,7 @@ YardModel.extend({
         if (yardData && yardData[name]) {
             tableData = yardData[name];
         }
-        var table = $M.getTable(tableData, name);
+        var table = $S.getTable(tableData, name);
         return table.getHtml();
     },
     getYardTableContent: function(yardComponent, requiredContent) {
@@ -175,7 +175,7 @@ YardModel.extend({
                 }
                 tableData = d.getData();
                 /* Checking data intigrity End.*/
-                var table = $M.getTable(tableData, name);
+                var table = $S.getTable(tableData, name);
                 return table.getHtml();
             }
         });
@@ -199,7 +199,7 @@ YardModel.extend({
 });
 YardModel.extend({
     loadJsonData: function(urls, eachApiCallback, apiName, callBack) {
-        if ($M.isArray(urls) == false) {
+        if ($S.isArray(urls) == false) {
             return false;
         }
         var apiSendCount = urls.length, apiReceiveCount = 0;
@@ -211,11 +211,11 @@ YardModel.extend({
             $.ajax({url: ajax.url,
                 success: function(response, textStatus) {
                     apiReceiveCount++;
-                    if ($M.isFunction(eachApiCallback)) {
+                    if ($S.isFunction(eachApiCallback)) {
                         eachApiCallback(response, apiName);
                     }
                     if (apiSendCount == apiReceiveCount) {
-                        if ($M.isFunction(callBack)) {
+                        if ($S.isFunction(callBack)) {
                             callBack();
                         }
                     }
@@ -223,11 +223,11 @@ YardModel.extend({
                 error: function(xhr, textStatus, errorThrown) {
                     console.log("Error in api: " + apiName);
                     apiReceiveCount++;
-                    if ($M.isFunction(eachApiCallback)) {
+                    if ($S.isFunction(eachApiCallback)) {
                         eachApiCallback(null, apiName);
                     }
                     if (apiSendCount == apiReceiveCount) {
-                        if ($M.isFunction(callBack)) {
+                        if ($S.isFunction(callBack)) {
                             callBack();
                         }
                     }
@@ -238,4 +238,4 @@ YardModel.extend({
     }
 });
 window.YardModel = window.$YM = YardModel;
-})($M);
+})($S);
