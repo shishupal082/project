@@ -719,6 +719,12 @@ Stack.extend({
     },
     isNumber: function(value) {
         return isNumber(value);
+    },
+    isBoolean: function(value) {
+        return isBoolean(value);
+    },
+    isBooleanTrue: function(value) {
+        return isBoolean(value) && value == true;
     }
 });
 Stack.extend({

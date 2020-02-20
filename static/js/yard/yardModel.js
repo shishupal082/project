@@ -4,8 +4,9 @@
     - loadJsonData for given api url
 */
 (function($S) {
+var ValidateDomino = false
 var Domino = (function() {
-    var maxRow = 3, maxCol = 5, validateDomino = false;
+    var maxRow = 3, maxCol = 5;
     function isValidIndex(r, c) {
         if (typeof r == "number" && !isNaN(r)) {
             if (typeof c == "number" && !isNaN(c)) {
@@ -17,7 +18,7 @@ var Domino = (function() {
         return false;
     }
     function isValidDominoData(d) {
-        if (validateDomino == false) {
+        if (ValidateDomino == false) {
             return true;
         }
         var validRowCount = 0;
@@ -102,15 +103,15 @@ var Domino = (function() {
         return this.isValidData;
     };
     Domino.prototype.enableValidate = function() {
-        validateDomino = true;
-        return validateDomino;
+        ValidateDomino = true;
+        return ValidateDomino;
     };
     Domino.prototype.disableValidate = function() {
-        validateDomino = false;
-        return validateDomino;
+        ValidateDomino = false;
+        return ValidateDomino;
     };
     Domino.prototype.getValidateStatus = function() {
-        return validateDomino;
+        return ValidateDomino;
     };
     return Domino;
 })();
@@ -141,6 +142,15 @@ YardModel.extend({
         if (yardData && yardData[name]) {
             tableData = yardData[name];
         }
+        if (ValidateDomino) {
+            /* Checking data intigrity.*/
+            var d = new Domino(name);
+            for (var i = 0; i < tableData.length; i++) {
+                d.setRowData(i, tableData[i]);
+            }
+            tableData = d.getData();
+            /* Checking data intigrity End.*/
+        }
         var table = $S.getTable(tableData, name);
         return table.getHtml();
     },
@@ -162,23 +172,12 @@ YardModel.extend({
     enableDomino: function () {
         var domino = new Domino();
         domino.enableValidate();
-        YardModel.extend({
-            getTableHtml: function(yardData, name) {
-                var tableData = [];
-                if (yardData && yardData[name]) {
-                    tableData = yardData[name];
-                }
-                /* Checking data intigrity.*/
-                var d = new Domino(name);
-                for (var i = 0; i < tableData.length; i++) {
-                    d.setRowData(i, tableData[i]);
-                }
-                tableData = d.getData();
-                /* Checking data intigrity End.*/
-                var table = $S.getTable(tableData, name);
-                return table.getHtml();
-            }
-        });
+        return true;
+    },
+    disableDomino: function () {
+        var domino = new Domino();
+        domino.disableValidate();
+        return false;
     },
     getDisplayYardDominoBoundary: function() {
         var lsValue = LS.get(lsKey);
