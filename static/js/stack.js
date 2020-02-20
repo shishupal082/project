@@ -159,6 +159,32 @@ var LocalStorage = (function(){
     }
     return LocalStorage;
 })();
+var UrlParserObj = (function(){
+    var href = "", data = {};
+    function UrlParser(href) {
+        var hrefObj = href.split("?");
+        if (hrefObj.length > 1) {
+            var params = hrefObj[1];
+            var paramsObj = params.split("&");
+            if (paramsObj.length > 0) {
+                for (var i=0; i< paramsObj.length; i++) {
+                    var keyVal = paramsObj[i];
+                    var keyValObj = keyVal.split("=");
+                    if (keyValObj.length > 1) {
+                        data[keyValObj[0]] = keyValObj[1];
+                    }
+                }
+            }
+        }
+    }
+    UrlParser.prototype.getData = function (key, defaultValue) {
+        if (data[key]) {
+            return data[key];
+        }
+        return defaultValue;
+    };
+    return UrlParser;
+})();
 var Log = (function(){
     var dateTimeEnable = false,format,splitter,joiner;
     function Logger(){}
@@ -725,6 +751,10 @@ Stack.extend({
     },
     isBooleanTrue: function(value) {
         return isBoolean(value) && value == true;
+    },
+    getUrlAttribute: function(url, name, defaultValue) {
+        var UrlParser = new UrlParserObj(url);
+        return UrlParser.getData(name, defaultValue);
     }
 });
 Stack.extend({

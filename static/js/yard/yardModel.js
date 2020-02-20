@@ -242,5 +242,10 @@ YardModel.extend({
         return true;
     }
 });
+YardModel.extend({
+    getUrlAttribute: function(name, defaultValue) {
+        return $S.getUrlAttribute(window.location.href, name, defaultValue);
+    }
+});
 window.YardModel = window.$YM = YardModel;
 })($S);
