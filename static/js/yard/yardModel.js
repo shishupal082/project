@@ -199,6 +199,12 @@ YardModel.extend({
 YardModel.extend({
     loadJsonData: function(urls, eachApiCallback, apiName, callBack) {
         if ($S.isArray(urls) == false) {
+            if ($S.isFunction(eachApiCallback)) {
+                eachApiCallback(null, apiName);
+            }
+            if ($S.isFunction(callBack)) {
+                callBack();
+            }
             return false;
         }
         var apiSendCount = urls.length, apiReceiveCount = 0;
