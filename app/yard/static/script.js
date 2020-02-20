@@ -1,24 +1,8 @@
 $(document).ready(function() {
-$YV.documentLoaded();
+
 $V.documentLoaded();
 var timerCount = 0;
-var tableHtml = $YV.getYardHtml();
-$("#tableHtml").addClass("table-html").html(tableHtml);
 
-// $V.extend({
-// 	table: function() {
-// 		var table = $M.getTable([], "name");
-// 		tIds = table.getProcessedTids();
-// 		table.clearProcessedTids();
-// 		for (var i=0; i<900; i++) {
-// 			table.clearProcessedTids();
-// 			console.log(table.getHtml());
-// 		}
-// 		table.setProcessedTids(tIds);
-// 		console.log(tIds);
-// 		return 0;
-// 	}
-// });
 function checkDominoDisplayStatus() {
     if ($YV.getDisplayYardDominoBoundary()) {
         $("#tableHtml").addClass("display-domino");
@@ -50,27 +34,22 @@ function checkUIStyle() {
     // $("#timerCount").html(timerCount);
     $V.addSignalClass();
 }
-$("#toggleDisplayDomino").on("click", function(e) {
-    $YV.toggleDisplayYardDominoBoundary();
-    checkDominoDisplayStatus();
-});
-$(".evt").on("click", function(e) {
+function evtClick (currentTarget) {
     if (timerCount != 0) {
         return;
     }
-    var currentTarget = $(e.currentTarget);
     var value = currentTarget.val();
     var valueArr = value.split(",");
     var finalValue = {}, toggleValues = [];
     for (var i = 0; i < valueArr.length; i++) {
-    	if (currentTarget.hasClass("tpr")) {
-    		toggleValues.push(valueArr[i]);
-    	} else {
-    		var valItem = valueArr[i].split("=");
-    		if (valItem.length == 2) {
-	            finalValue[valItem[0]] = valItem[1];
-	        }
-    	}
+        if (currentTarget.hasClass("tpr")) {
+            toggleValues.push(valueArr[i]);
+        } else {
+            var valItem = valueArr[i].split("=");
+            if (valItem.length == 2) {
+                finalValue[valItem[0]] = valItem[1];
+            }
+        }
     }
     function activateTimers(key) {
         timerCount++;
@@ -93,8 +72,20 @@ $(".evt").on("click", function(e) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
+}
+$("#toggleDisplayDomino").on("click", function(e) {
+    $YV.toggleDisplayYardDominoBoundary();
+    checkDominoDisplayStatus();
 });
-checkUIStyle();
-$("#help").removeClass("hide");
-checkDominoDisplayStatus();
+
+$YV.loadApiData(function() {
+    var tableHtml = $YV.getYardHtml();
+    $("#tableHtml").addClass("table-html").html(tableHtml);
+    $(".evt").on("click", function(e) {
+        evtClick($(e.currentTarget));
+    });
+    checkUIStyle();
+    $("#help").removeClass("hide");
+    checkDominoDisplayStatus();
+});
 });
