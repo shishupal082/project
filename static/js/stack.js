@@ -769,6 +769,13 @@ Stack.extend({
             }
         }
         return res;
+    },
+    getRandomNumber: function(minVal, maxVal) {
+        var random = key;
+        if (isNumber(minVal) && isNumber(maxVal)) {
+            random = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+        }
+        return random;
     }
 });
 Stack.extend({
