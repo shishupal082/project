@@ -29,7 +29,7 @@ class DirectoryLibs extends Libs{
 				}
 			}
 		}
-		log_message_prod($result);
+		log_message_prod($result); // Intentionally not using json_encode
 		return $result;
 	}
 	private function getFolderSize($dir) {
@@ -76,6 +76,14 @@ class DirectoryLibs extends Libs{
 		$url = "/dir/pathLink?recursive=false&path=".$currentPath;
 		return $url;
 	}
+	private function getUrlV2($currentPath, $recursive) {
+		$currentPath = str_replace(" ","\ ",$currentPath);
+		if ($recursive) {
+			return $currentPath;
+		}
+		$url = "/dir/pathLink?recursive=false&path=".$currentPath;
+		return $url;
+	}
 	private function createUrlArray($dirToArray, $dir, $recursive = FALSE){
 		if(!is_array($dirToArray)){
 			if(is_string($dirToArray)){
@@ -109,17 +117,34 @@ class DirectoryLibs extends Libs{
 		}
 		return $urlArray;
 	}
-	public function duplicateFile() {
-		$dirToArray1 = $this->dirToArray(DOCUMENT_ROOT."/pvt/org", FALSE);
-		$dirToArray2 = $this->dirToArray(DOCUMENT_ROOT."/pvt/recovered", FALSE);
-		$dirToArray = array();
-		foreach ($dirToArray2 as $key => $value) {
-			if(in_array($value, $dirToArray1)) {
-			} else {
-				array_push($dirToArray, $value);
+	private function createPathArray($dirToArray, $dir, $recursive = FALSE){
+		if(!is_array($dirToArray)){
+			if(is_string($dirToArray)){
+				array_push($this->urlArray, $this->getUrlV2($dir.$dirToArray, $recursive));
+			}
+			return TRUE;
+		}
+		foreach ($dirToArray as $key => $value) {
+			if(is_string($value)){
+				array_push($this->urlArray, $this->getUrlV2($dir.$value, $recursive));
+			}else{
+				$this->createUrlArray($value, $dir.$key."/", $recursive);
 			}
 		}
-		$this->createUrlArray($dirToArray, "/pvt/recovered/", FALSE);
+		return TRUE;
+	}
+	public function duplicateFile() {
+		$sourceFiles = $this->dirToArray(DOCUMENT_ROOT."/pvt/org", TRUE);
+		$destinFiles = $this->dirToArray(DOCUMENT_ROOT."/pvt/recovered", TRUE);
+		$fileNotInDestination = array();
+		foreach ($sourceFiles as $key => $value) {
+			if(in_array($value, $destinFiles)) {
+			} else {
+				array_push($fileNotInDestination, $value);
+			}
+		}
+		$this->createPathArray($fileNotInDestination, "/pvt/recovered/", TRUE);
+		// $this->createUrlArray($fileNotInDestination, "/pvt/recovered/", TRUE);
 		return $this->urlArray;
 	}
 }
