@@ -56,7 +56,7 @@ class Dir extends CI_Controller {
 		}
 	}
 	public function duplicate(){
-		$urlArray = $this->directory->duplicateFile();
+		$urlArray = $this->directory->duplicateFileV2();
 		$link = "";
 		foreach ($urlArray as $index => $value) {
 			$link .= '<a href="'.$value.'">'.$value.'</a><br>';
