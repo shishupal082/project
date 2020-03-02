@@ -132,26 +132,13 @@ View.extend({
         return 0;
     },
     addSignalClass: function() {
-        $("#s1-red").removeAttr("class").addClass(this.getSignalClass("S1-RECR", "red"));
-        $("#s1-yellow").removeAttr("class").addClass(this.getSignalClass("S1-HECR", "yellow"));
-        $("#s1-green").removeAttr("class").addClass(this.getSignalClass("S1-DECR", "green"));
-        $("#s2-red").removeAttr("class").addClass(this.getSignalClass("S2-RECR", "red"));
-        $("#s2-yellow").removeAttr("class").addClass(this.getSignalClass("S2-HECR", "yellow"));
-        $("#s3-red").removeAttr("class").addClass(this.getSignalClass("S3-RECR", "red"));
-        $("#s3-yellow").removeAttr("class").addClass(this.getSignalClass("S3-HECR", "yellow"));
-        $("#s3-green").removeAttr("class").addClass(this.getSignalClass("S3-DECR", "green"));
-        $("#s4-red").removeAttr("class").addClass(this.getSignalClass("S4-RECR", "red"));
-        $("#s4-green").removeAttr("class").addClass(this.getSignalClass("S4-HECR", "green"));
-        $("#s13-red").removeAttr("class").addClass(this.getSignalClass("S13-RECR", "red"));
-        $("#s13-yellow").removeAttr("class").addClass(this.getSignalClass("S13-HECR", "yellow"));
-        $("#s13-green").removeAttr("class").addClass(this.getSignalClass("S13-DECR", "green"));
-        $("#s14-red").removeAttr("class").addClass(this.getSignalClass("S14-RECR", "red"));
-        $("#s14-yellow").removeAttr("class").addClass(this.getSignalClass("S14-HECR", "yellow"));
-        $("#s15-red").removeAttr("class").addClass(this.getSignalClass("S15-RECR", "red"));
-        $("#s15-yellow").removeAttr("class").addClass(this.getSignalClass("S15-HECR", "yellow"));
-        $("#s15-green").removeAttr("class").addClass(this.getSignalClass("S15-DECR", "green"));
-        $("#s16-red").removeAttr("class").addClass(this.getSignalClass("S16-RECR", "red"));
-        $("#s16-green").removeAttr("class").addClass(this.getSignalClass("S16-HECR", "green"));
+        var signals = ["S1-RECR", "S1-HECR", "S1-DECR", "S2-RECR", "S2-HECR",
+                        "S3-RECR", "S3-HECR", "S3-DECR", "S4-RECR", "S4-HECR",
+                        "S13-RECR", "S13-HECR", "S13-DECR", "S14-RECR", "S14-HECR",
+                        "S15-RECR", "S15-HECR", "S15-DECR", "S16-RECR", "S16-HECR"];
+        for (var i=0; i <signals.length; i++) {
+            $("#"+signals[i]).removeClass("active").addClass(this.getSignalClass(signals[i]));
+        }
     }
 });
 

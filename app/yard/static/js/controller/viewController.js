@@ -67,23 +67,7 @@ Controller.extend({
 });
 Controller.extend({
     getSignalClass: function(name, aspect) {
-        var signalClass = {};
-        signalClass["red"] = "badge signal-red alert-danger";
-        signalClass["yellow"] = "badge signal-yellow alert-warning";
-        signalClass["top-yellow"] = "badge signal-yellow alert-warning";
-        signalClass["green"] = "badge signal-green alert-success";
-        var possibleAspect = ["red", "yellow", "green"];
-        var returnSignalClass = "";
-        if (possibleAspect.indexOf(aspect) >= 0) {
-            if ($M.isUp(name)) {
-                returnSignalClass = signalClass[aspect];
-            } else {
-                returnSignalClass = "badge signal-" + aspect;
-            }
-        } else {
-            returnSignalClass = "badge signal-" + aspect;
-        }
-        return "signal " + returnSignalClass;
+        return $M.isUp(name) ? "active" : "";
     },
     getTableHtml: function(tableId) {
         var tableContent = $M.getYardFromYardModel();

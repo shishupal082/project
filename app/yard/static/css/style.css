@@ -1,100 +1,100 @@
 body {
-	background-color: #A0A28DB0;
+    background-color: #A0A28DB0;
 }
 hr {
-	border-color: #d2d2d2;
+    border-color: #d2d2d2;
 }
 .container {
-	width: 1450px;
-}
-.yard .table-html > table > tbody > tr > td {
-	/*border: 0px solid #0000ae00;*/
+    width: 1450px;
 }
 .yard .table-html.display-domino > table > tbody > tr > td {
-	border: 1px solid #0000aeff;
+    border: 1px solid #0000aeff;
 }
 .yard td {
-	text-align: center;
-	width: 25px;
-	height: 25px;
+    text-align: center;
+    width: 25px;
+    height: 25px;
 }
 .yard td span,
 .yard td button {
-	font-size: 10px;
-	line-height: 1;
+    font-size: 10px;
+    line-height: 1;
 }
 .yard .btn {
-	width: 25px;
-	height: 25px;
-	padding: 0;
-	border: 0;
-	border-radius: 0;
-	background-color: unset;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: unset;
+}
+.yard .btn.red {
+    background-color: #C7422C;
 }
 .yard .btn.blue {
-	background-color: #0010ff87;
+    background-color: #0010ff87;
 }
 .yard .btn.green {
-	background-color: #00ff1078;
+    background-color: #00ff1078;
+}
+.yard .btn.yellow {
+    background-color: #FBB111;
 }
 .yard .btn.slat {
-	background-color: #00ffc382;
+    background-color: #00ffc382;
 }
 .yard .btn.pink {
-	background-color: #a300ff36;
-}
-/*.yard .tpr.btn.btn-danger,*/
-.yard .tpr.btn-danger span {
-	color: #eee;
-	background-color: #ee3333;
-	border-color: #ee3333;
-}
-/*.yard .tpr.btn.btn-warning,*/
-.yard .tpr.btn-warning span {
-	color: #fff;
-	background-color: #ff9600;
-	border-color: #ff9600;
-}
-.alert-success {
-	background-color: #0f0;
-}
-.alert-warning {
-	background-color: #ff0;
-}
-.alert-danger {
-	background-color: #f00;
-}
-.yard .indication {
-	font-size: 2px;
-	min-width: 0px;
-	padding: 4px;
-}
-.indication.btn-warning {
-	background-color:#ff0;
-	border-color: #ff0;
+    background-color: #a300ff36;
 }
 .yard .tpr .badge {
-	top: 0px;
-	border: 0;
-	height: 14px;
-	width: 23px;
-	border-radius: 2px;
+    top: 0px;
+    height: 14px;
+    width: 23px;
+    border-width: 0;
+    border-style: solid;
+    border-radius: 2px;
+}
+.yard .tpr.btn-danger span {
+    color: #fff;
+    background-color: #FB7573;
+}
+.yard .tpr.btn-warning span {
+    color: #555;
+    background-color: #ECEB57;
+}
+.signal-green.active {
+    background-color: #0f0;
+}
+.signal-yellow.active {
+    background-color: #ff0;
+}
+.signal-red.active {
+    background-color: #f00;
+}
+.yard .indication {
+    font-size: 2px;
+    min-width: 0px;
+    padding: 4px;
+}
+.indication.btn-warning {
+    background-color:#ff0;
+    border-color: #ff0;
 }
 .yard .tpr.circle .badge {
-	height: auto;
-	width: auto;
-	border-radius: 10px;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
 }
 .yard .signal-no {
-	font-size: 14px;
-	font-weight: 1000;
-	color: #0b0b0b;
+    font-size: 14px;
+    font-weight: 1000;
+    color: #0b0b0b;
 }
 .yard .signal.badge{
-	min-width: 10px;
-	padding: 5px 9px;
-	font-size: 11px;
+    min-width: 10px;
+    padding: 5px 9px;
+    font-size: 11px;
 }
 .yard .help {
-	margin-top: 20px;
+    margin-top: 20px;
 }
