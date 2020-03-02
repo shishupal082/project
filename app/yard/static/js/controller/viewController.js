@@ -66,9 +66,6 @@ Controller.extend({
     }
 });
 Controller.extend({
-    getSignalClass: function(name, aspect) {
-        return $M.isUp(name) ? "active" : "";
-    },
     getTableHtml: function(tableId) {
         var tableContent = $M.getYardFromYardModel();
         var table = $M.getTable(tableContent, tableId);
@@ -101,11 +98,11 @@ Controller.extend({
         }
         return isLock ? "btn-warning": "";
     },
+    getSignalClass: function(name, aspect) {
+        return $M.isUp(name) ? "active" : "";
+    },
     getIndicationClass: function(name) {
-        if ($M(name).isUp()) {
-            return "btn-warning";
-        }
-        return "";
+        return $M.isUp(name) ? "btn-warning" : "";
     }
 });
 
