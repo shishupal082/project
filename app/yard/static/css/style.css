@@ -27,6 +27,7 @@ hr {
     border: 0;
     border-radius: 0;
     background-color: unset;
+    color: #fff;
 }
 .yard .btn.red {
     background-color: #C7422C;
@@ -35,10 +36,10 @@ hr {
     background-color: #0010ff87;
 }
 .yard .btn.green {
-    background-color: #00ff1078;
+    background-color: #17dc2378;
 }
 .yard .btn.yellow {
-    background-color: #FBB111;
+    background-color: #eaaf2e;
 }
 .yard .btn.slat {
     background-color: #00ffc382;
@@ -62,13 +63,13 @@ hr {
     color: #555;
     background-color: #ECEB57;
 }
-.signal-green.active {
+.signal.green.active {
     background-color: #0f0;
 }
-.signal-yellow.active {
+.signal.yellow.active {
     background-color: #ff0;
 }
-.signal-red.active {
+.signal.red.active {
     background-color: #f00;
 }
 .yard .indication {
@@ -97,4 +98,9 @@ hr {
 }
 .yard .help {
     margin-top: 20px;
+}
+/* Debugging style */
+.yard.debug .btn,
+.yard.debug td {
+    width: 50px;
 }

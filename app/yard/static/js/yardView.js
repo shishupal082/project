@@ -29,7 +29,7 @@ YardView.extend({
         if (verifyFromDomino) {
             $YM.enableDomino();
         }
-        var apiUrl = ["static/js/model/yardData.json"];
+        var apiUrl = ["static/json/yardData.json"];
         $YM.loadJsonData(apiUrl, function(response) {
             if (response) {
                 for (var key in response) {

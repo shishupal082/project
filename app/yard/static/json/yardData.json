@@ -72,8 +72,8 @@
             [
                 "",
                 "",
-                "<span id='S14-HECR' class='badge  signal signal-yellow'>&nbsp;</span>",
-                "<span id='S14-RECR' class='badge  signal signal-red'>&nbsp;</span>",
+                "<span id='S14-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<span id='S14-RECR' class='badge signal active red'>&nbsp;</span>",
                 "<span class='signal-no'>S14</span>"
             ]
         ],
@@ -110,8 +110,8 @@
         "s2-tpr": [
             [
                 "<span class='signal-no'>S2</span>",
-                "<span id='S2-RECR' class='badge  signal signal-red'>&nbsp;</span>",
-                "<span id='S2-HECR' class='badge  signal signal-yellow'>&nbsp;</span>"
+                "<span id='S2-RECR' class='badge signal active red'>&nbsp;</span>",
+                "<span id='S2-HECR' class='badge signal active yellow'>&nbsp;</span>"
             ],
             [
                 "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
@@ -193,9 +193,9 @@
         "1-tpr": [
             [
                 "<span class='signal-no'>S1</span>",
-                "<span id='S1-RECR' class='badge  signal signal-red'>&nbsp;</span>",
-                "<span id='S1-HECR' class='badge  signal signal-yellow'>&nbsp;</span>",
-                "<span id='S1-DECR' class='badge  signal signal-green'>&nbsp;</span>",
+                "<span id='S1-RECR' class='badge signal active red'>&nbsp;</span>",
+                "<span id='S1-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<span id='S1-DECR' class='badge signal active green'>&nbsp;</span>",
                 ""
             ],
             [
@@ -223,8 +223,8 @@
             [
                 "",
                 "",
-                "<span id='S16-HECR' class='badge  signal signal-green'>&nbsp;</span>",
-                "<span id='S16-RECR' class='badge  signal signal-red'>&nbsp;</span>",
+                "<span id='S16-HECR' class='badge signal active green'>&nbsp;</span>",
+                "<span id='S16-RECR' class='badge signal active red'>&nbsp;</span>",
                 "<span class='signal-no'>S16</span>"
             ]
         ],
@@ -271,9 +271,9 @@
                 "<button class='evt btn blue tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<span id='S15-DECR' class='badge  signal signal-green'>&nbsp;</span>",
-                "<span id='S15-HECR' class='badge  signal signal-yellow'>&nbsp;</span>",
-                "<span id='S15-RECR' class='badge  signal signal-red'>&nbsp;</span>",
+                "<span id='S15-DECR' class='badge signal active green'>&nbsp;</span>",
+                "<span id='S15-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<span id='S15-RECR' class='badge signal active red'>&nbsp;</span>",
                 "<span class='signal-no'>S15</span>"
             ]
         ],
@@ -310,9 +310,9 @@
         "s3-tpr": [
             [
                 "<span class='signal-no'>S3</span>",
-                "<span id='S3-RECR' class='badge  signal signal-red'>&nbsp;</span>",
-                "<span id='S3-HECR' class='badge  signal signal-yellow'>&nbsp;</span>",
-                "<span id='S3-DECR' class='badge  signal signal-green'>&nbsp;</span>"
+                "<span id='S3-RECR' class='badge signal active red'>&nbsp;</span>",
+                "<span id='S3-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<span id='S3-DECR' class='badge signal active green'>&nbsp;</span>"
             ],
             [
                 "<button class='evt blue btn tpr circle M-TPR-1' value='M-TPR'><span class='badge'>M3</span></button>",
@@ -346,7 +346,7 @@
             [
                 "","","",
                 "<span class='signal-no'>S4</span>",
-                "<span id='S4-RECR' class='badge  signal signal-red'>&nbsp;</span>"
+                "<span id='S4-RECR' class='badge signal active red'>&nbsp;</span>"
             ],
             [
                 "<button class='evt blue btn tpr 9-TPR' value='9-TPR'><span class='badge'>&nbsp;</span></button>",
@@ -361,7 +361,7 @@
         ],
         "4-tpr": [
             [
-                "<span id='S4-HECR' class='badge  signal signal-green'>&nbsp;</span>"
+                "<span id='S4-HECR' class='badge signal active green'>&nbsp;</span>"
             ],
             [
                 "<button class='evt green btn tpr 4-TPR' value='4-TPR'><span class='badge'>&nbsp;</span></button>",
@@ -372,9 +372,9 @@
             ],
             [
                 "",
-                "<span id='S13-DECR' class='badge  signal signal-green'>&nbsp;</span>",
-                "<span id='S13-HECR' class='badge  signal signal-yellow'>&nbsp;</span>",
-                "<span id='S13-RECR' class='badge  signal signal-red'>&nbsp;</span>",
+                "<span id='S13-DECR' class='badge signal active green'>&nbsp;</span>",
+                "<span id='S13-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<span id='S13-RECR' class='badge signal active red'>&nbsp;</span>",
                 "<span class='signal-no'>S13</span>"
             ]
         ]

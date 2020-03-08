@@ -348,6 +348,48 @@ var St = (function(){
     }
     return St;
 })();
+var Que = (function(){
+    var capacity = 500000, que = [];
+    function Que() {
+        this._FRONT = -1;
+        this._BACK = -1;
+    }
+    Que.prototype.Enque = function(item) {
+        if (this._BACK == capacity - 1) {
+            var logText = "Que full";
+            Logger.log(logText);
+            return 0;
+        }
+        if (this._FRONT == -1) {
+            this._FRONT = 0;
+        }
+        this._BACK++;
+        que[this._BACK] = item;
+        return 1;
+    };
+    Que.prototype.Deque = function() {
+        var item = 0;
+        if (this._FRONT == -1 || this._FRONT > this._BACK) {
+            var logText = "Que under flow";
+            Logger.log(logText);
+            return 0;
+        }
+        item = que[this._FRONT];
+        this._FRONT++;
+        return item;
+    };
+    Que.prototype.getAll = function() {
+        var res = [];
+        for (var i = this._FRONT; i <= this._BACK; i++) {
+            res.push(que[i]);
+        }
+        return res;
+    };
+    Que.prototype.getSize = function() {
+        return this._BACK - this._FRONT+1;
+    };
+    return Que;
+})();
 // After insertion data into BST it will return that particular node
 // That node can be modified as per requirement
 var BST = (function() {
@@ -707,6 +749,9 @@ Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
     },
+    getQue: function(shareStorage) {
+        return new Que();
+    },
     getLocalStorage: function() {
         return new LocalStorage();
     },
@@ -757,6 +802,7 @@ Stack.extend({
         return UrlParser.getData(name, defaultValue);
     }
 });
+var Last100UniqueNumberQue = Stack.getQue();
 Stack.extend({
     clone: function(obj) {
         var res = obj;
@@ -771,11 +817,29 @@ Stack.extend({
         return res;
     },
     getRandomNumber: function(minVal, maxVal) {
+        /* Both number are inclusive. */
         var random = key;
         if (isNumber(minVal) && isNumber(maxVal)) {
             random = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
         }
         return random;
+    },
+    getUniqueNumber: function(x) {
+        // Number of miliseconds elapsed since 1st Jan 1970 + random number
+        var unqieNumber = Date.now();
+        unqieNumber += Stack.getRandomNumber(10,99);
+        /**
+            This is for making sure at least 100 request will give unique number
+        **/
+        if (Last100UniqueNumberQue.getSize() >= 100) {
+            Last100UniqueNumberQue = Stack.getQue();
+        }
+        if (Last100UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
+            unqieNumber = Stack.getUniqueNumber(x);
+        } else {
+            Last100UniqueNumberQue.Enque(unqieNumber);
+        }
+        return unqieNumber;
     }
 });
 Stack.extend({
