@@ -1,0 +1,63 @@
+[
+	{
+		"id": "md5sumInfo",
+		"/app/yard2/static/json/yard-top.json": "",
+		"/app/yard2/static/json/yard-bottom.json": "",
+		"/app/yard/static/json/yardData.json": ""
+	},
+	{
+		"yardId": "yard",
+		"containerStyle": "width: 1700px;",
+		"dominoVerify": false,
+		"yardDetailsApis": ["/app/yard-s14/static/json/yard-top.json", "/app/yard-s14/static/json/yard-bottom.json"],
+		"requiredContent": [
+			{
+				"name": "topLoopLine",
+				"value": ["","","","","216-tpr-top-4","LP2-tpr","LP2-tpr-sh"]
+			},
+			{
+				"name": "topLoopPoint",
+				"value": ["","","","","216-tpr-top-3","216-tpr-top-1","216-tpr-top-2"]
+			},
+			{
+				"name": "mainLine",
+				"value": ["201-tpr","202-tpr","204-tpr","205-tpr","205-tpr-1","UD-Mn-tpr","216-tpr","217-tpr","218-tpr","219-tpr"]
+			},
+			{
+				"name": "bottomLoopPoint",
+				"value": ["","","","101-point","101-point-1","","108-point"]
+			},
+			{
+				"name": "bottomLoopLine",
+				"value": ["","","","LP1-tpr-sh","LP1-tpr-pre","LP1-tpr", "108-point-B"]
+			},
+			{
+				"name": "sidingPoint",
+				"value": ["","","","","","siding-point"]
+			}
+		]
+	},
+	{
+		"yardId": "yard-1",
+		"yardDetailsApis": ["/app/yard/static/json/yardData.json"],
+		"dominoVerify": true,
+		"requiredContent": [
+			{
+				"name": "topLoopLine",
+				"value": ["","","left-top", "8-point-top", "s14-tpr", "l-tpr-1", "l-tpr-2", "s2-tpr", "right-top"]
+			},
+			{
+				"name": "topLoopPoint",
+				"value": ["","","","8-point-mid","","","","9-point-mid-1","9-point-mid"]
+			},
+			{
+				"name": "mainLine",
+				"value": ["1-tpr", "16-tpr", "8-tpr", "8c-tpr", "s15-tpr", "m-tpr-1", "m-tpr-2", "s3-tpr", "9d-tpr", "9-tpr", "4-tpr"]
+			},
+			{
+				"name": "bottomLoopLine",
+				"value": ["","","","","",""]
+			}
+		]
+	}
+]

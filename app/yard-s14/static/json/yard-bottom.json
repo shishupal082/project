@@ -1,0 +1,149 @@
+{
+	"bootomLoopLine": {
+        "LP1-tpr-sh": [
+            [
+                "","","",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>"
+            ],
+            [
+                "","","",
+                "<span class='label label-primary'>|</span>",
+                "<button class='evt btn tpr yellow LP1-sh' value='207-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow LP1-sh' value='207-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>"
+            ]
+        ],
+        "LP1-tpr-pre": [
+            [
+                "",
+                "<span class='badge label label-default indication btn-warning 101-WFK'>&nbsp;</span>",
+                "<button class='evt btn tpr yellow circle p-101-r' value='207-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<button class='evt btn tpr yellow LP1-sh' value='207-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-101a-n' value='207-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-101a-n' value='207-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-101a-c' value='207-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "207","-tpr"
+            ]
+        ],
+        "LP1-tpr": [
+            [
+                "","","","","","LP1","-tpr","","","","",
+                "<span class='signal-no'>S12</span>",
+                "<span id='S12-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S12-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP1-TPR' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-108a-c' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-108a-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<span id='S6-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S6-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span class='signal-no'>S6</span>",
+                "","","","","",
+                "<span class='badge label label-default indication btn-warning 103-WFK'>&nbsp;</span>",
+                "<button class='evt btn tpr blue circle sdg-lp1' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "siding-point": [
+            [
+                "",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>",
+                "","","","",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,103-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn tpr blue circle sdg-lp1' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,103-WNR=1'><span class='badge'>R</span></button>",
+                "103"
+            ],
+            [
+                "",
+                "<span class='label label-primary'>|</span>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='btn tpr circle sdg-TPR' value='sdg-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>"
+            ]
+        ],
+        "101-point": [
+            [
+                "","","","","",
+                "<button class='evt btn tpr green circle p-101-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","","","",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,101-WNR=1'><span class='badge'>N</span></button>"
+            ],
+            []
+        ],
+        "101-point-1": [
+            [],
+            [
+                "<button class='evt btn tpr green circle p-101-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,101-WNR=1'><span class='badge'>R</span></button>",
+                "101"
+            ],
+            [
+                "",
+                "<button class='evt btn tpr yellow circle p-101-r' value='207-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "108-point": [
+            [
+                "","",
+                "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,101-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,101-WNR=1'><span class='badge'>R</span></button>",
+                "108"
+            ],
+            [
+                "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "108-point-B": [
+            [
+                "<span class='badge label label-default indication btn-warning 108-WFK'>&nbsp;</span>"
+            ],
+            [
+                "<button class='evt btn tpr green p-108a-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green LP1-trap' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green LP1-trap open-point-right' value='216-TPR'><span>></span></button>"
+            ],
+            []
+        ]
+    }
+}

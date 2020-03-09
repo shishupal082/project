@@ -1,0 +1,296 @@
+{
+    "topLoopLine": {
+        "LP2-tpr": [
+            [
+                "","","","","","LP2","-tpr","","","","",
+                "<span class=\"signal-no\">S13</span>",
+                "<span id='S13-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S13-HECR' class='badge signal yellow active'>&nbsp;</span>"
+            ],
+            [
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue LP2-TPR' value='LP2-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-107a-c' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-107a-n' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-107a-n' value='215-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<span id='S5-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S5-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span class='signal-no'>S5</span>",
+                "","","","","","","","","","",
+                "<button class='evt btn tpr yellow circle p-107-r' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<span class='badge label label-default indication btn-warning 107-WFK'>&nbsp;</span>"
+            ]
+        ],
+        "LP2-tpr-sh": [
+            [
+                "215","-tpr",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>"
+            ],
+            [
+                "<button class='evt btn tpr yellow LP2-sh' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow LP2-sh' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow LP2-sh' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<span class='label label-primary'>|</span>"
+            ],
+            [
+                "","",
+                "<span class='label label-primary'>--</span>",
+                "<span class='label label-primary'>--</span>"
+            ]
+        ]
+    },
+    "mainLine": {
+        "201-tpr": [
+            [
+                "","201","-tpr",""
+            ],
+            [
+                "<button class='evt btn tpr red 201-TPR' value='201-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 201-TPR' value='201-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 201-TPR' value='201-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 201-TPR' value='201-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                ""
+            ]
+        ],
+        "202-tpr": [
+            [
+                "<span class='signal-no'>S1</span>",
+                "<span id='S1-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S1-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S1-DECR' class='badge signal green active'>&nbsp;</span>",
+                ""
+            ],
+            [
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 202-TPR circle' value='202-TPR'><span class='badge'>202-T</span></button>",
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'></span></button>",
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","","",
+                "<span id='S3-DECR' class='badge signal green active'>&nbsp;</span>"
+            ]
+        ],
+        "204-tpr": [
+            [
+                "","","","204","-tpr"
+            ],
+            [
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 202-TPR' value='202-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 204-TPR' value='204-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 204-TPR' value='204-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 204-TPR' value='204-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<span id='S3-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span class='signal-no'>S3</span>"
+            ]
+        ],
+        "205-tpr": [
+            [
+                "","","","205","-tpr"
+            ],
+            [
+                "<button class='evt btn tpr yellow 204-TPR' value='204-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 204-TPR' value='204-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green 205-TPR' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-101b-c' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-101b-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-102b-c' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","","",
+                "<button class='evt btn tpr green circle p-101-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<span class='badge label label-default indication btn-warning 101-WFK'>&nbsp;</span>"
+            ]
+        ],
+        "205-tpr-1": [
+            [
+                "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<span class='badge label label-default indication btn-warning 102-WFK'>&nbsp;</span>"
+            ],
+            [
+                "<button class='evt btn tpr green p-102b-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-102b-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","",
+                "<span id='S4-DECR' class='badge signal green active'>&nbsp;</span>",
+                "<span id='S4-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S4-RECR' class='badge signal red active'>&nbsp;</span>"
+            ]
+        ],
+        "UD-Mn-tpr": [
+            [
+                "","","","","","U/D","-m","-tpr","","","",
+                "<span class='signal-no'>S14</span>",
+                "<span id='S14-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S14-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S14-DECR' class='badge signal green active'>&nbsp;</span>"
+            ],
+            [
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<span class='signal-no'>S4</span>"
+            ]
+        ],
+        "216-tpr-top-1": [
+            [
+                "","","","","","","","","","","","","",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,107-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn tpr yellow circle p-107-r' value='215-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+            ]
+        ],
+        "216-tpr-top-2": [
+            [
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,107-WNR=1'><span class='badge'>R</span></button>",
+                "107"
+            ],
+            [
+                "<button class='evt btn tpr green circle p-107-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "216-tpr-top-3": [
+            [
+                "",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,102-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,102-WNR=1'><span class='badge'>R</span></button>",
+                "102"
+            ],
+            [
+                "",
+                "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "216-tpr-top-4": [
+            [
+            ],
+            [
+                "<button class='evt btn tpr green LP2-trap open-point-left' value='205-TPR'><span><</span></button>",
+                "<button class='evt btn tpr green LP2-trap' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-102a-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-102a-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-102a-c' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","",
+                "<span class='badge label label-default indication btn-warning 102-WFK'>&nbsp;</span>",
+                "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "216-tpr": [
+            [
+                "<span class='badge label label-default indication btn-warning 107-WFK'>&nbsp;</span>",
+                "<button class='evt btn tpr green p-107-r circle' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "","","216","-tpr"
+            ],
+            [
+                "<button class='evt btn tpr green p-107b-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-107b-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-107b-c' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-108b-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-108b-c' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green 216-TPR' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green 216-TPR' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green 216-TPR' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","",
+                "<span class='badge label label-default indication btn-warning 108-WFK'>&nbsp;</span>",
+                "<button class='evt btn tpr green 216-TPR circle' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "217-tpr": [
+            [
+                "","","217","-tpr"
+            ],
+            [
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                ""
+            ]
+        ],
+        "218-tpr": [
+            [
+                "<span class='signal-no'>S15</span>",
+                "<span id='S15-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S15-DECR' class='badge signal green active'>&nbsp;</span>",
+                "","218","-tpr"
+            ],
+            [
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr blue 218-TPR' value='218-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","","",
+                "<span id='S19-DECR' class='badge signal green active'>&nbsp;</span>",
+                "<span id='S19-HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S19-RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span class='signal-no'>S19</span>"
+            ]
+        ],
+        "219-tpr": [
+            [
+                "","219","-tpr",""
+            ],
+            [
+                "<button class='evt btn tpr red 219-TPR' value='219-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 219-TPR' value='219-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 219-TPR' value='219-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr red 219-TPR' value='219-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                ""
+            ]
+        ]
+    }
+}
