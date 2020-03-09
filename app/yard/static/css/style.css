@@ -99,6 +99,24 @@ hr {
 .yard .help {
     margin-top: 20px;
 }
+.yard .open-point-right,
+.yard .open-point-left {
+    text-align: center;
+    padding-bottom: 3px;
+}
+.yard .open-point-right {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+.yard .open-point-left {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+.yard .open-point-right span,
+.yard .open-point-left span {
+    font-size: 22px;
+    color: #fff;
+}
 /* Debugging style */
 .yard.debug .btn,
 .yard.debug td {

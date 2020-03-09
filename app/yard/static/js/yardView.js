@@ -1,5 +1,5 @@
 (function($M, $YM) {
-var yardComponent = {};
+
 var YardView = function(selector, context) {
     return new YardView.fn.init(selector, context);
 };
@@ -12,6 +12,9 @@ YardView.fn = YardView.prototype = {
     }
 };
 ExtendObject(YardView);
+
+var yardComponent = {};
+var tableContent = [];
 
 var topLoopLine = ["","","left-top", "8-point-top", "s14-tpr", "l-tpr-1", "l-tpr-2", "s2-tpr", "right-top"];
 var topLoopPoint = ["","","","8-point-mid","","","","9-point-mid-1","9-point-mid"];

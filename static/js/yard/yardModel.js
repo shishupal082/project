@@ -197,7 +197,7 @@ YardModel.extend({
     }
 });
 YardModel.extend({
-    loadJsonData: function(urls, eachApiCallback, apiName, callBack) {
+    loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
         if ($S.isArray(urls) == false) {
             if ($S.isFunction(eachApiCallback)) {
                 eachApiCallback(null, apiName);
