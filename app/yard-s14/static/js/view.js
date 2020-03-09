@@ -11,6 +11,7 @@ View.fn = View.prototype = {
         return this;
     }
 };
+
 ExtendObject(View);
 
 var yardComponent = {};
@@ -36,6 +37,10 @@ View.extend({
         var table = $M.getTable(tableContent, "yard");
         return table.getHtml();
     },
+    setValues: function(name, value) {
+        $M.setValue(name, value);
+        return $M(name).get();
+    },
     toggleValues: function(name) {
         return $M.toggleValue(name);
     },
@@ -44,6 +49,14 @@ View.extend({
     },
     toggleDisplayYardDominoBoundary: function() {
         return $YM.toggleDisplayYardDominoBoundary();
+    }
+});
+View.extend({
+    getTprClass: function(name) {
+        if ($M.isDown(name)) {
+            return "btn-danger";
+        }
+        return "";
     }
 });
 View.extend({

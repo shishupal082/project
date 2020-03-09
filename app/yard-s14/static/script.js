@@ -77,15 +77,18 @@ $("#toggleDisplayDomino").on("click", function(e) {
     $V.toggleDisplayYardDominoBoundary();
     checkDominoDisplayStatus();
 });
-
-$V.loadApiData(function() {
-    var tableHtml = $V.getYardHtml();
-    $("#tableHtml").addClass("table-html").html(tableHtml);
-    $(".evt").on("click", function(e) {
-        evtClick($(e.currentTarget));
+$C.documentLoaded(function() {
+    $V.loadApiData(function() {
+        $(".container").attr("style", "width: 1700px;")
+        var tableHtml = $V.getYardHtml();
+        $("#tableHtml").addClass("table-html").html(tableHtml);
+        $(".evt").on("click", function(e) {
+            evtClick($(e.currentTarget));
+        });
+        checkUIStyle();
+        $("#help").removeClass("hide");
+        checkDominoDisplayStatus();
     });
-    checkUIStyle();
-    $("#help").removeClass("hide");
-    checkDominoDisplayStatus();
 });
+
 });

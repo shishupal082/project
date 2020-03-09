@@ -52,7 +52,7 @@ Controller.extend({
     },
     setValues: function(name, value) {
         $M.setValue(name, value);
-        return $M(name).get();
+        return 0;
     },
     toggleValues: function(name) {
         $M.toggleValue(name);

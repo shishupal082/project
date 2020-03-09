@@ -233,9 +233,9 @@
                 "<button class='evt btn tpr green 216-TPR' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "","","",
+                "","",
                 "<span class='badge label label-default indication btn-warning 108-WFK'>&nbsp;</span>",
-                "<button class='evt btn tpr green 216-TPR circle' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "217-tpr": [
