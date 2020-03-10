@@ -40,20 +40,20 @@ function increaseProcessingCount(name) {
     } else {
         processingCount[name] = 1;
     }
-    if (isFunction(Model["processingCallBack"])) {
+    if (Model.isFunction(Model["processingCallBack"])) {
         Model["processingCallBack"](name, processingCount[name]);
     }
     return name;
 }
 function setVariableDependencies (name1, name2) {
-    if ($M.isArray(variableDependencies[name1])) {
+    if (Model.isArray(variableDependencies[name1])) {
         if (variableDependencies[name1].indexOf(name2) < 0) {
             variableDependencies[name1].push(name2);
         }
     } else {
         variableDependencies[name1] = [name2];
     }
-    if ($M.isArray(variableDependencies[name2])){
+    if (Model.isArray(variableDependencies[name2])){
         if (variableDependencies[name2].indexOf(name1) < 0) {
             variableDependencies[name2].push(name1);
         }
@@ -83,24 +83,6 @@ var setValue = (function() {
     };
     return set;
 })();
-function isFunction(value) {
-    if (typeof value == "undefined") {
-        return false;
-    }
-    return typeof value == "function" ? true : false;
-}
-function isObject(value) {
-    if (typeof value == "undefined") {
-        return false;
-    }
-    return (typeof value == "object" && isNaN(value.length)) ? true : false;
-}
-function isArray(value) {
-    if (typeof value == "undefined") {
-        return false;
-    }
-    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
-}
 function isValidValue(value) {
     if (isNaN(value) || [0,1].indexOf(value*1) < 0) {
         return false;
@@ -109,12 +91,6 @@ function isValidValue(value) {
 }
 function isValidKey(key) {
     return possibleValues.indexOf(key) >=0 ? true : false;
-}
-function isBoolean(value) {
-    if (typeof value == "boolean") {
-        return true;
-    }
-    return false;
 }
 /*
 Direct access by id: $M("id").get()
@@ -156,7 +132,7 @@ Model.fn = Model.prototype = {
         return 0;
     },
     initializeCurrentValues: function(extCurrentValues) {
-        if (isObject(extCurrentValues)) {
+        if (Model.isObject(extCurrentValues)) {
             for (var key in extCurrentValues) {
                 currentValues[key] = extCurrentValues[key];
             }
@@ -164,7 +140,7 @@ Model.fn = Model.prototype = {
         return currentValues;
     },
     setPossibleValues: function(extPossibleValues) {
-        if (isArray(extPossibleValues)) {
+        if (Model.isArray(extPossibleValues)) {
             possibleValues = [];
             for (var i = 0; i < extPossibleValues.length; i++) {
                 possibleValues.push(extPossibleValues[i]);
@@ -174,14 +150,14 @@ Model.fn = Model.prototype = {
         return true;
     },
     setValueTobeChecked: function(values) {
-        if (isArray(values)) {
+        if (Model.isArray(values)) {
             setValueTobeChecked(values);
         }
         return true;
     },
     setBinaryOperators: function(opr) {
         var operators = [];
-        if (isArray(opr)) {
+        if (Model.isArray(opr)) {
             for (var i = 0; i < opr.length; i++) {
                 if (["&&","&","*","||","|","#","+","~"].indexOf(opr[i]) >= 0) {
                     operators.push(opr[i]);
@@ -228,7 +204,7 @@ Model.extend({
         return variableDependencies;
     },
     updateVariableDependencies: function(name, dependencies) {
-        if (isValidKey(name) && isArray(dependencies)) {
+        if (isValidKey(name) && Model.isArray(dependencies)) {
             variableDependencies[name] = dependencies;
         }
         return variableDependencies;
@@ -322,16 +298,16 @@ Model.extend({
         return $S.isString(value);
     },
     isArray: function(value) {
-        return isArray(value);
+        return $S.isArray(value);
     },
     isObject: function(value) {
-        return isObject(value);
+        return $S.isObject(value);
     },
     isFunction: function(value) {
-        return isFunction(value);
+        return $S.isFunction(value);
     },
     isMethodDefined: function(name) {
-        return this.isFunction(this[name]);
+        return Model.isFunction(this[name]);
     },
     isExpDefined: function(name) {
         if (exps[name] && exps[name].length) {
@@ -390,7 +366,7 @@ Model.extend({
             response.count++;
             response.dependencies[key] = variableDependencies[key];
         }
-        if (isBoolean(sortedResultRequired) && sortedResultRequired) {
+        if ($S.isBoolean(sortedResultRequired) && sortedResultRequired) {
             for (var key in response.dependencies) {
                 var currentNode = bst.insertData(bst, response.dependencies[key].length);
                 currentNode.item = {count: response.dependencies[key].length, name: key};
@@ -436,7 +412,7 @@ Model.extend({
         return Model(key).isUp();
     },
     isAllUp: function(keys) {
-        if (isArray(keys) && keys.length > 0) {
+        if (Model.isArray(keys) && keys.length > 0) {
             for (var i = 0; i < keys.length; i++) {
                 if (Model(keys[i]).isDown()) {
                     return false;
@@ -450,7 +426,7 @@ Model.extend({
         return Model(key).isDown();
     },
     isAllDown: function(keys) {
-        if (isArray(keys) && keys.length > 0) {
+        if (Model.isArray(keys) && keys.length > 0) {
             for (var i = 0; i < keys.length; i++) {
                 if (Model(keys[i]).isUp()) {
                     return false;
@@ -631,10 +607,10 @@ exps : {
 Model.extend({
     isAllExpressionsTrue: function(name, exps) {
         var status = false, exp = "";
-        if (isArray(exps)) {
+        if (Model.isArray(exps)) {
             for (var i = 0; i < exps.length; i++) {
                 exp = exps[i];
-                if (isObject(exp)) {
+                if (Model.isObject(exp)) {
                     exp = Model.generateExpression(exp);
                 }
                 if (Model.isExpressionTrue(name, exp)) {
@@ -645,7 +621,7 @@ Model.extend({
                     break;
                 }
             }
-        } else if (isObject(exps)) { 
+        } else if (Model.isObject(exps)) { 
             status = Model.isAllExpressionsTrue(name, [exps]);
         }
         return status;

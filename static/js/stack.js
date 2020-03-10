@@ -220,13 +220,13 @@ function isString(value) {
     return typeof value == "string";
 }
 function isArray(value) {
-    if (typeof value == "undefined") {
+    if (typeof value == "undefined" || value == null) {
         return false;
     }
     return (typeof value == "object" && !isNaN(value.length)) ? true : false;
 }
 function isObject(value) {
-    if (typeof value == "undefined") {
+    if (typeof value == "undefined" || value == null) {
         return false;
     }
     return (typeof value == "object" && isNaN(value.length)) ? true : false;

@@ -74,7 +74,7 @@ function loadPossibleValues(callBack) {
     }, callBack);
 }
 function loadCurrentValues(callBack) {
-    var url = ["/app/yard-s14/static/json/currentValues.json?"+RequestId];
+    var url = ["/app/yard-s14/static/json/initial-value.json?"+RequestId];
     $YM.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             Object.assign(CurrentValues, response);

@@ -2,14 +2,6 @@ $(document).ready(function() {
 
 var timerCount = 0;
 
-function checkDominoDisplayStatus() {
-    if ($V.getDisplayYardDominoBoundary()) {
-        $("#tableHtml").addClass("display-domino");
-    } else {
-        $("#tableHtml").removeClass("display-domino");
-    }
-    return true;
-}
 function checkUIStyle() {
     $V.addTprClass();
     $V.addSignalClass();
@@ -53,6 +45,14 @@ function evtClick (currentTarget) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
+}
+function checkDominoDisplayStatus() {
+    if ($V.getDisplayYardDominoBoundary()) {
+        $("#tableHtml").addClass("display-domino");
+    } else {
+        $("#tableHtml").removeClass("display-domino");
+    }
+    return true;
 }
 $("#toggleDisplayDomino").on("click", function(e) {
     $V.toggleDisplayYardDominoBoundary();
