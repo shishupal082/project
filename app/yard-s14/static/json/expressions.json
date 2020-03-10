@@ -1,3 +1,17 @@
 {
-    "S1-RECR": ["~S1-HR"]
+    "S1-RECR": ["~S1-HR"],
+    "S3-RECR": ["~S3-HR"],
+    "S4-RECR": ["~S4-HR"],
+    "S5-RECR": ["~S5-HR"],
+    "S6-RECR": ["~S6-HR"],
+    "S12-RECR": ["~S12-HR"],
+    "S13-RECR": ["~S13-HR"],
+    "S14-RECR": ["~S14-HR"],
+    "S15-RECR": ["~S15-HR"],
+    "S19-RECR": ["~S19-HR"],
+    "101-WFK": ["~S1-HR"],
+    "102-WFK": ["~S1-HR"],
+    "103-WFK": ["~S1-HR"],
+    "107-WFK": ["~S1-HR"],
+    "108-WFK": ["~S1-HR"]
 }

@@ -16,5 +16,8 @@
         "S15-RECR", "S15-DECR",
         "S19-RECR", "S19-HECR", "S19-DECR"
     ],
-    "pointIndication": ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"]
+    "pointIndication": ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"],
+    "common": [
+        "NWWNR", "RWWNR"
+    ]
 }

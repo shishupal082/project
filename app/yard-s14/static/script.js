@@ -61,7 +61,7 @@ $("#toggleDisplayDomino").on("click", function(e) {
 $C.documentLoaded(function() {
     $M.reCheckAllValues();
     $V.loadApiData(function() {
-        $(".container").attr("style", "width: 1700px;")
+        $(".container").attr("style", "width: 1655px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {
