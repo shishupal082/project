@@ -78,6 +78,7 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 $C.documentLoaded(function() {
+    $M.reCheckAllValues();
     $V.loadApiData(function() {
         $(".container").attr("style", "width: 1700px;")
         var tableHtml = $V.getYardHtml();

@@ -1,7 +1,19 @@
 {
-	"tpr": [
-		"201-TPR", "202-TPR", "204-TPR",
-		"205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
-		"215-TPR", "216-TPR", "217-TPR", "218-TPR", "219-TPR"
-	]
+    "tpr": [
+        "201-TPR", "202-TPR", "204-TPR",
+        "205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
+        "215-TPR", "216-TPR", "217-TPR", "218-TPR", "219-TPR"
+    ],
+    "signal": [
+        "S1-RECR", "S1-HECR", "S1-DECR",
+        "S3-RECR", "S3-DECR",
+        "S4-RECR", "S4-HECR", "S4-DECR",
+        "S5-RECR", "S5-HECR",
+        "S6-RECR", "S6-HECR",
+        "S12-RECR", "S12-HECR",
+        "S13-RECR", "S13-HECR",
+        "S14-RECR", "S14-HECR", "S14-DECR",
+        "S15-RECR", "S15-DECR",
+        "S19-RECR", "S19-HECR", "S19-DECR"
+    ]
 }
