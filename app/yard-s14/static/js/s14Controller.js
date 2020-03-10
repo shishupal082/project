@@ -113,19 +113,16 @@ Controller.extend({
         loadPossibleValues(function() {
             PossibleValuesLoadStatus = true;
             $M().setPossibleValues(PossibleValues);
-            if (isApisLoadComplete()) {
-                callBack();
-            }
+            loadExpressions(function() {
+                ExpressionsLoadStatus = true;
+                if (isApisLoadComplete()) {
+                    callBack();
+                }
+            });
         });
         loadCurrentValues(function() {
             CurrentValuesLoadStatus = true;
             $M().initializeCurrentValues(CurrentValues);
-            if (isApisLoadComplete()) {
-                callBack();
-            }
-        });
-        loadExpressions(function() {
-            ExpressionsLoadStatus = true;
             if (isApisLoadComplete()) {
                 callBack();
             }
