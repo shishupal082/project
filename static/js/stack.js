@@ -20,6 +20,7 @@ function ExtendObject(Object) {
 var max = 99999, min = 10000;
 var key = Math.floor(Math.random() * (max - min + 1)) + min;
 var skipValuesInResult = [];
+var RequestId = 0;
 //DateTimeObject
 var DT = (function() {
     var yyyy, mm, dd, hour, min, sec, ms, meridian;
@@ -186,10 +187,11 @@ var UrlParserObj = (function(){
     return UrlParser;
 })();
 var Log = (function(){
-    var dateTimeEnable = false,format,splitter,joiner;
+    var dateTimeEnable = false,format,splitter,joiner,logKey;
+    logKey = key;
     function Logger(){}
     Logger.prototype.updateLoggerKey = function(loggerKey) {
-        key = loggerKey;
+        logKey = loggerKey;
     };
     Logger.prototype.setDateTimeState = function(state,v1,v2) {
         format=v1;
@@ -201,10 +203,10 @@ var Log = (function(){
         }
     };
     Logger.prototype.logInApi = function(log) {
-        console.log(key + ":" + log);
+        console.log(logKey + ":" + log);
     };
     Logger.prototype.log = function(log) {
-        var preLog = key + ":" ;
+        var preLog = logKey + ":" ;
         if (dateTimeEnable) {
             var dt = new DT();
             preLog += dt.getDateTime(format,splitter)+":";
@@ -593,7 +595,6 @@ Stack.extend = Stack.fn.extend = function(options) {
     }
     return this;
 };
-
 var Table = (function() {
 var rows=0, cols=0, content = [], tId="", processedTids = [];
 function getUniqueTid(tId) {
@@ -806,6 +807,9 @@ Stack.extend({
     getUrlAttribute: function(url, name, defaultValue) {
         var UrlParser = new UrlParserObj(url);
         return UrlParser.getData(name, defaultValue);
+    },
+    getRequestId: function() {
+        return RequestId;
     }
 });
 var Last100UniqueNumberQue = Stack.getQue();
@@ -830,7 +834,7 @@ Stack.extend({
         }
         return random;
     },
-    getUniqueNumber: function(x) {
+    getUniqueNumber: function() {
         // Number of miliseconds elapsed since 1st Jan 1970 + random number
         var unqieNumber = Date.now();
         unqieNumber += Stack.getRandomNumber(10,99);
@@ -841,13 +845,16 @@ Stack.extend({
             Last100UniqueNumberQue = Stack.getQue();
         }
         if (Last100UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
-            unqieNumber = Stack.getUniqueNumber(x);
+            unqieNumber = Stack.getUniqueNumber();
         } else {
             Last100UniqueNumberQue.Enque(unqieNumber);
         }
         return unqieNumber;
     }
 });
+
+RequestId = Stack.getUniqueNumber();
+
 Stack.extend({
     /** It follows right hand associativity **/
     //(3*4*5*6) = 360

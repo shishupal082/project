@@ -16,7 +16,6 @@ var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var overwrittenMethodLogExluded = ["createPosixTree"];
 var MStack = $S.getStack();
-var requestId = $S.getUniqueNumber();
 
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
@@ -264,7 +263,7 @@ Model.extend({
         return $S.getBST(data);
     },
     getRequestId: function() {
-        return requestId;
+        return $S.getRequestId();
     },
     getUniqueNumber: function() {
         return $S.getUniqueNumber();
