@@ -262,11 +262,14 @@ Model.extend({
     getBST: function(data) {
         return $S.getBST(data);
     },
-    getRequestId: function() {
-        return $S.getRequestId();
+    getUniqueNumber: function(minVal, maxVal) {
+        return $S.getUniqueNumber();
     },
     getUniqueNumber: function() {
         return $S.getUniqueNumber();
+    },
+    getRequestId: function() {
+        return $S.getRequestId();
     },
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);

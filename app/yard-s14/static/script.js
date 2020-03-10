@@ -11,26 +11,7 @@ function checkDominoDisplayStatus() {
     return true;
 }
 function checkUIStyle() {
-    var possibleValues = $M.getPossibleValues();
-    for (var i=0; i<possibleValues.length; i++) {
-        var key = possibleValues[i];
-        try {
-            var node = $("#yard").find("."+key);
-            if (node.length) {
-                if (node.hasClass("tpr")) {
-                    node.removeClass("btn-warning");
-                    node.removeClass("btn-danger");
-                    node.addClass($V.getTprClass(key));
-                } else if (node.hasClass("indication")) {
-                    node.removeClass("btn-warning");
-                    node.addClass($V.getIndicationClass(key));
-                }
-            }
-        } catch(err) {
-            // console.log("JQUERY error for node: " + key);
-        }
-    }
-    // $("#timerCount").html(timerCount);
+    $V.addTprClass();
     $V.addSignalClass();
     $V.addPointIndicationClass();
 }

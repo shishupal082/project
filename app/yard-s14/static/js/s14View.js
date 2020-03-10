@@ -1,4 +1,4 @@
-(function($S, $M, $YM) {
+(function($M, $YM, $C) {
 
 var View = function(selector, context) {
     return new View.fn.init(selector, context);
@@ -73,32 +73,44 @@ View.extend({
         }, callBack);
         return true;
     },
+    addTprClass: function(name) {
+        var possibleValues = $C.getTprNames();
+        for (var i=0; i<possibleValues.length; i++) {
+            var key = possibleValues[i];
+            try {
+                var node = $("#yard").find("."+key);
+                if (node.length) {
+                    if (node.hasClass("tpr")) {
+                        node.removeClass("btn-warning");
+                        node.removeClass("btn-danger");
+                        node.addClass($V.getTprClass(key));
+                    }
+                }
+            } catch(err) {
+                console.log("JQUERY error for node: " + key);
+            }
+        }
+        return 1;
+    },
     addPointIndicationClass: function(name) {
-        var pointsIndicationName = ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"];
+        var pointsIndicationName = $C.getPointIndicationNames();
         var pointCls = "";
         for (var i=0; i <pointsIndicationName.length; i++) {
             pointCls = $M.isUp(pointsIndicationName[i]) ? "btn-warning" : "";
             $("."+pointsIndicationName[i]).removeClass("btn-warning").addClass(pointCls);
         }
+        return 1;
     },
     addSignalClass: function() {
-        var signals = ["S1-RECR", "S1-HECR", "S1-DECR",
-                        "S3-RECR", "S3-DECR",
-                        "S4-RECR", "S4-HECR", "S4-DECR",
-                        "S5-RECR", "S5-HECR",
-                        "S6-RECR", "S6-HECR",
-                        "S12-RECR", "S12-HECR",
-                        "S13-RECR", "S13-HECR",
-                        "S14-RECR", "S14-HECR", "S14-DECR",
-                        "S15-RECR", "S15-DECR",
-                        "S19-RECR", "S19-HECR", "S19-DECR"];
+        var signals = $C.getSignalNames();
         var signalClass = "";
         for (var i=0; i <signals.length; i++) {
             signalClass = $M.isUp(signals[i]) ? "active" : "";
             $("#"+signals[i]).removeClass("active").addClass(signalClass);
         }
+        return 1;
     }
 });
 
 window.View = window.$V = View;
-})($S, $M, $YM);
+})($M, $YM, $C);
