@@ -1,5 +1,4 @@
-(function(window, $S, $M, $YM) {
-
+(function(window, $M, $YM) {
 
 var Controller = function(selector, context) {
     return new Controller.fn.init(selector, context);
@@ -24,6 +23,8 @@ Controller.fn = Controller.prototype = {
 ExtendObject(Controller);
 
 var possibleValues = [];
+var requestId = $M.getRequestId();
+
 Controller.extend({
     getPossibleValues: function() {
         return $M.getPossibleValues();
@@ -33,15 +34,19 @@ Controller.extend({
         return 0;
     },
     documentLoaded: function(callBack) {
-        var url = ["/app/yard-s14/static/json/items.json?"+$S.getUniqueNumber()];
+        var url = ["/app/yard-s14/static/json/items.json?"+requestId];
         $YM.loadJsonData(url, function(response) {
-            if (response && response.tpr) {
-                if ($M.isArray(response.tpr)) {
-                    for (var i = 0; i < response.tpr.length; i++) {
-                        if (possibleValues.indexOf(response.tpr[i]) >= 0) {
-                            throw "Duplicate entry possibleValues: " + response.tpr[i];
-                        } else {
-                            possibleValues.push(response.tpr[i]);
+            if ($M.isObject(response)) {
+                for (var key in response) {
+                    if ($M.isArray(response[key])) {
+                        for (var i = 0; i < response[key].length; i++) {
+                            if ($M.isString(response[key][i])) {
+                                if (possibleValues.indexOf(response[key][i]) >= 0) {
+                                    throw "Duplicate entry possibleValues: " + response[key][i];
+                                } else {
+                                    possibleValues.push(response.tpr[i]);
+                                }
+                            }
                         }
                     }
                 }
@@ -61,4 +66,4 @@ Controller.extend({
 
 /*End of direct access of methods*/
 window.Controller = window.$C = Controller;
-})(window, $S, $M, $YM);
+})(window, $M, $YM);

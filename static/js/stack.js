@@ -214,11 +214,8 @@ var Log = (function(){
     return Logger;
 })();
 var Logger = new Log();
-function isFunction(value) {
-    if (typeof value == "undefined") {
-        return false;
-    }
-    return typeof value == "function" ? true : false;
+function isString(value) {
+    return typeof value == "string";
 }
 function isArray(value) {
     if (typeof value == "undefined") {
@@ -243,6 +240,12 @@ function isBoolean(value) {
         return true;
     }
     return false;
+}
+function isFunction(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return typeof value == "function" ? true : false;
 }
 function calculateNumericalValue(op1, operator, op2) {
     var val = null;
@@ -776,6 +779,9 @@ Stack.extend({
     setLoggerDateTimeState: function(state,formats,splitter) {
         Logger.setDateTimeState(state,formats,splitter);
     },
+    isString: function(value) {
+        return isString(value);
+    },
     isArray: function(value) {
         return isArray(value);
     },
@@ -785,9 +791,6 @@ Stack.extend({
     isFunction: function(value) {
         return isFunction(value);
     },
-    isMethodDefined: function(name) {
-        return this.isFunction(this[name]);
-    },
     isNumber: function(value) {
         return isNumber(value);
     },
@@ -796,6 +799,9 @@ Stack.extend({
     },
     isBooleanTrue: function(value) {
         return isBoolean(value) && value == true;
+    },
+    isMethodDefined: function(name) {
+        return this.isFunction(this[name]);
     },
     getUrlAttribute: function(url, name, defaultValue) {
         var UrlParser = new UrlParserObj(url);

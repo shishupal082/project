@@ -16,7 +16,7 @@ ExtendObject(View);
 
 var yardComponent = {};
 var tableContent = [];
-var uniqueNumber = $S.getUniqueNumber();
+var requestId = $M.getRequestId();
 
 var topLoopLine = ["","","","","216-tpr-top-4","LP2-tpr","LP2-tpr-sh"];
 var topLoopPoint = ["","","","","216-tpr-top-3","216-tpr-top-1","216-tpr-top-2"]
@@ -61,8 +61,8 @@ View.extend({
 });
 View.extend({
     loadApiData: function(callBack) {
-        var apiUrl = ["/app/yard-s14/static/json/yard-top.json?"+uniqueNumber,
-                      "/app/yard-s14/static/json/yard-bottom.json?"+uniqueNumber];
+        var apiUrl = ["/app/yard-s14/static/json/yard-top.json?"+requestId,
+                      "/app/yard-s14/static/json/yard-bottom.json?"+requestId];
         $YM.loadJsonData(apiUrl, function(response) {
             if (response) {
                 for (var key in response) {

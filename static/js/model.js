@@ -14,9 +14,9 @@ var variableDependencies = {};
 var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
-var MStack = $S.getStack();
 var overwrittenMethodLogExluded = ["createPosixTree"];
-
+var MStack = $S.getStack();
+var requestId = $S.getUniqueNumber();
 
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
@@ -263,6 +263,12 @@ Model.extend({
     getBST: function(data) {
         return $S.getBST(data);
     },
+    getRequestId: function() {
+        return requestId;
+    },
+    getUniqueNumber: function() {
+        return $S.getUniqueNumber();
+    },
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);
     },
@@ -309,6 +315,9 @@ Model.extend({
     },
     isValidKey: function(key) {
         return isValidKey(key);
+    },
+    isString: function(value) {
+        return $S.isString(value);
     },
     isArray: function(value) {
         return isArray(value);
