@@ -4,24 +4,24 @@ var timerCount = 0;
 
 var apisPath = {};
 var commonPath = {
-    "possible-value": ["/app/yard-s14/static/json/items.json"],
+    "possible-value": [],
     "initial-value": ["/app/yard-s14/static/json/initial-value.json"],
     "expressions": []
 };
 
 var type1Path = {
-    "possible-value": [],
+    "possible-value": ["/app/yard-s14/static/json/items.json"],
     "initial-value": [],
     "expressions": ["/app/yard-s14/static/json/expressions.json"]
 };
 
 var type2Path = {
-    "possible-value": [],
+    "possible-value": ["/app/yard-s14/static/json/type2/items.json"],
     "initial-value": [],
     "expressions": []
 };
 
-var version = "type1";
+var version = "type2";
 for (var key in commonPath) {
     apisPath[key] = commonPath[key];
     switch(version) {

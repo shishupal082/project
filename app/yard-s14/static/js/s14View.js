@@ -74,9 +74,14 @@ View.extend({
         return true;
     },
     addTprClass: function(name) {
-        var possibleValues = $C.getTprNames();
-        for (var i=0; i<possibleValues.length; i++) {
-            var key = possibleValues[i];
+        // var tprNames = $C.getTprNames();
+        var tprNames = [
+                "201-TPR", "202-TPR", "204-TPR",
+                "205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
+                "215-TPR", "216-TPR", "217-TPR", "218-TPR", "219-TPR"
+            ];
+        for (var i=0; i<tprNames.length; i++) {
+            var key = tprNames[i];
             try {
                 var node = $("#yard").find("."+key);
                 if (node.length) {
@@ -93,7 +98,8 @@ View.extend({
         return 1;
     },
     addPointIndicationClass: function(name) {
-        var pointsIndicationName = $C.getPointIndicationNames();
+        // var pointsIndicationName = $C.getPointIndicationNames();
+        var pointsIndicationName = ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"];
         var pointCls = "";
         for (var i=0; i <pointsIndicationName.length; i++) {
             pointCls = $M.isUp(pointsIndicationName[i]) ? "btn-warning" : "";
@@ -102,7 +108,19 @@ View.extend({
         return 1;
     },
     addSignalClass: function() {
-        var signals = $C.getSignalNames();
+        // var signals = $C.getSignalNames();
+        var signals = [
+            "S1-RECR", "S1-HECR", "S1-DECR",
+            "S3-RECR", "S3-DECR",
+            "S4-RECR", "S4-HECR", "S4-DECR",
+            "S5-RECR", "S5-HECR",
+            "S6-RECR", "S6-HECR",
+            "S12-RECR", "S12-HECR",
+            "S13-RECR", "S13-HECR",
+            "S14-RECR", "S14-HECR", "S14-DECR",
+            "S15-RECR", "S15-DECR",
+            "S19-RECR", "S19-HECR", "S19-DECR"
+        ];
         var signalClass = "";
         for (var i=0; i <signals.length; i++) {
             signalClass = $M.isUp(signals[i]) ? "active" : "";

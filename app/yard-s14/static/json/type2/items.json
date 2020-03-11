@@ -1,0 +1,16 @@
+{
+    "s1-group-13": [
+        "S1-RECR",          "S1-HECR",
+        "S1-DECR",          "S1-GNR",
+        "S1-EGNR","S1-GLSR","S1-GR1",
+        "S1-GPR1","S1-GR2","S1-RECPR",
+        "S1-DECPR","S1-GR3","S1-HECPR"
+    ],
+    "s3-group-10": [
+        "S3-RECR",          "S3-HECR",
+                            "S3-GNR",
+        "S3-EGNR","S3-GLSR","S3-GR1",
+        "S3-GPR1","S3-GR2","S3-RECPR",
+                           "S3-HECPR"
+    ]
+}
