@@ -18,12 +18,16 @@ ExtendObject(Controller);
 var RequestId = $M.getRequestId();
 
 var PossibleValues = [];
+var InitialValues = {};
 var AllExpressions = [];
-var CurrentValues = {};
 
 var PossibleValuesLoadStatus = false;
+var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
-var CurrentValuesLoadStatus = false;
+
+var PossibleValuePath = [];
+var InitialValuePath = [];
+var ExpressionsPath = [];
 
 var TprNames = [];
 var SignalNames = [];
@@ -32,7 +36,7 @@ var PointIndicationNames = [];
 function isApisLoadComplete() {
     var loadingCheck = [];
     loadingCheck.push(PossibleValuesLoadStatus);
-    loadingCheck.push(CurrentValuesLoadStatus);
+    loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
         if (loadingCheck[i] == false) {
@@ -43,7 +47,10 @@ function isApisLoadComplete() {
 }
 
 function loadPossibleValues(callBack) {
-    var url = ["/app/yard-s14/static/json/items.json?"+RequestId];
+    var url = [];
+    for (var i = 0; i < PossibleValuePath.length; i++) {
+        url.push(PossibleValuePath[i]+"?"+RequestId);
+    }
     $YM.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             for (var key in response) {
@@ -73,16 +80,22 @@ function loadPossibleValues(callBack) {
         }
     }, callBack);
 }
-function loadCurrentValues(callBack) {
-    var url = ["/app/yard-s14/static/json/initial-value.json?"+RequestId];
+function loadInitialValues(callBack) {
+    var url = [];
+    for (var i = 0; i < InitialValuePath.length; i++) {
+        url.push(InitialValuePath[i]+"?"+RequestId);
+    }
     $YM.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
-            Object.assign(CurrentValues, response);
+            Object.assign(InitialValues, response);
         }
     }, callBack);
 }
 function loadExpressions(callBack) {
-    var url = ["/app/yard-s14/static/json/expressions.json?"+RequestId];
+    var url = [];
+    for (var i = 0; i < ExpressionsPath.length; i++) {
+        url.push(ExpressionsPath[i]+"?"+RequestId);
+    }
     $YM.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             AllExpressions.push(response);
@@ -120,9 +133,9 @@ Controller.extend({
                 }
             });
         });
-        loadCurrentValues(function() {
-            CurrentValuesLoadStatus = true;
-            $M().initializeCurrentValues(CurrentValues);
+        loadInitialValues(function() {
+            InitialValuesLoadStatus = true;
+            $M().initializeCurrentValues(InitialValues);
             if (isApisLoadComplete()) {
                 callBack();
             }
@@ -139,6 +152,22 @@ Controller.extend({
     },
     getPointIndicationNames: function() {
         return PointIndicationNames;
+    },
+    setApisPath: function(paths) {
+        for (var key in paths) {
+            switch(key) {
+                case "possible-value":
+                    PossibleValuePath = PossibleValuePath.concat(paths[key]);
+                break;
+                case "initial-value":
+                    InitialValuePath = InitialValuePath.concat(paths[key]);
+                break;
+                case "expressions":
+                    ExpressionsPath = ExpressionsPath.concat(paths[key]);
+                break;
+            }
+        }
+        return 1;
     }
 });
 /*End of direct access of methods*/

@@ -2,6 +2,40 @@ $(document).ready(function() {
 
 var timerCount = 0;
 
+var apisPath = {};
+var commonPath = {
+    "possible-value": ["/app/yard-s14/static/json/items.json"],
+    "initial-value": ["/app/yard-s14/static/json/initial-value.json"],
+    "expressions": []
+};
+
+var type1Path = {
+    "possible-value": [],
+    "initial-value": [],
+    "expressions": ["/app/yard-s14/static/json/expressions.json"]
+};
+
+var type2Path = {
+    "possible-value": [],
+    "initial-value": [],
+    "expressions": []
+};
+
+var version = "type1";
+for (var key in commonPath) {
+    apisPath[key] = commonPath[key];
+    switch(version) {
+        case "type1":
+            apisPath[key] = apisPath[key].concat(type1Path[key]);
+        break;
+        case "type2":
+            apisPath[key] = apisPath[key].concat(type2Path[key]);
+        break;
+    }
+}
+
+$C.setApisPath(apisPath);
+
 function checkUIStyle() {
     $V.addTprClass();
     $V.addSignalClass();
