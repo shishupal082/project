@@ -1,9 +1,4 @@
 {
-    "tpr": [
-        "201-TPR", "202-TPR", "204-TPR",
-        "205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
-        "215-TPR", "216-TPR", "217-TPR", "218-TPR", "219-TPR"
-    ],
     "signal": [
         "S1-RECR", "S1-HECR", "S1-DECR",
         "S3-RECR", "S3-DECR",

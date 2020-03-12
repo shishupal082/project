@@ -117,6 +117,17 @@ hr {
     font-size: 22px;
     color: #fff;
 }
+.yard .shunt {
+    line-height: 0;
+}
+.yard .shunt span {
+    padding: 4px;
+    height: 10px;
+}
+.yard .shunt span.active {
+    color: #555;
+    background-color: #ECEB57;
+}
 /* Debugging style */
 .yard.debug .btn,
 .yard.debug td {

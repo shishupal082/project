@@ -126,7 +126,9 @@ View.extend({
             "S13-RECR", "S13-HECR",
             "S14-RECR", "S14-HECR", "S14-DECR",
             "S15-RECR", "S15-DECR",
-            "S19-RECR", "S19-HECR", "S19-DECR"
+            "S19-RECR", "S19-HECR", "S19-DECR",
+            "SH2-ON-ECR","SH2-OFF-ECR",
+            "SH16-ON-ECR","SH16-OFF-ECR"
         ];
         var signalClass = "";
         for (var i=0; i <signals.length; i++) {

@@ -4,7 +4,7 @@ var timerCount = 0;
 
 var apisPath = {};
 var commonPath = {
-    "possible-value": [],
+    "possible-value": ["/app/yard-s14/static/json/common/items.json"],
     "initial-value": ["/app/yard-s14/static/json/initial-value.json"],
     "expressions": []
 };
