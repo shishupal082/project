@@ -5,18 +5,18 @@
 */
 (function($S) {
 var ValidateDomino = false
-var YardModel = function(selector, context) {
-    return new YardModel.fn.init(selector, context);
+var YardHelper = function(selector, context) {
+    return new YardHelper.fn.init(selector, context);
 };
-YardModel.fn = YardModel.prototype = {
-    constructor: YardModel,
+YardHelper.fn = YardHelper.prototype = {
+    constructor: YardHelper,
     init: function(selector, context) {
         this.selector = selector;
         this.context = context;
         return this;
     }
 };
-ExtendObject(YardModel);
+ExtendObject(YardHelper);
 
 var lsKey = "displayYardDominoBoundary";
 var keyMapping = {
@@ -44,7 +44,7 @@ function getTableHtml(yardData, name) {
     return table.getHtml();
 }
 
-YardModel.extend({
+YardHelper.extend({
     getYardTableContent: function(yardComponent, requiredContent) {
         var tableContent = [];
         for (var i = 0; i < requiredContent.length; i++) {
@@ -53,7 +53,7 @@ YardModel.extend({
                 if (requiredContent[i][j] == "") {
                     curData.push("");
                 } else {
-                    curData.push(YardModel.getTableHtml(yardComponent, requiredContent[i][j]));
+                    curData.push(getTableHtml(yardComponent, requiredContent[i][j]));
                 }
             }
             tableContent.push(curData);
@@ -85,7 +85,7 @@ YardModel.extend({
         return this.getDisplayYardDominoBoundary();
     }
 });
-YardModel.extend({
+YardHelper.extend({
     loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
         if ($S.isArray(urls) == false || urls.length < 1) {
             if ($S.isFunction(eachApiCallback)) {
@@ -131,10 +131,10 @@ YardModel.extend({
         return true;
     }
 });
-YardModel.extend({
+YardHelper.extend({
     getUrlAttribute: function(name, defaultValue) {
         return $S.getUrlAttribute(window.location.href, name, defaultValue);
     }
 });
-window.YardModel = window.$YM = YardModel;
+window.YardHelper = window.$YH = YardHelper;
 })($S);

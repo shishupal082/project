@@ -582,9 +582,6 @@ var Domino = (function() {
         return false;
     }
     function isValidDominoData(d) {
-        if (ValidateDomino == false) {
-            return true;
-        }
         var validRowCount = 0;
         var validColCount = 0, validColCountStatus = false;
         var isRowIncremented = false;

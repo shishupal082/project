@@ -1,4 +1,4 @@
-(function($M, $YM) {
+(function($M, $YH) {
 
 var YardView = function(selector, context) {
     return new YardView.fn.init(selector, context);
@@ -30,16 +30,16 @@ YardView.extend({
     loadApiData: function(callBack) {
         var verifyFromDomino = true;
         if (verifyFromDomino) {
-            $YM.enableDomino();
+            $YH.enableDomino();
         }
         var apiUrl = ["static/json/yardData.json"];
-        $YM.loadJsonData(apiUrl, function(response) {
+        $YH.loadJsonData(apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);
                 }
             }
-            tableContent = $YM.getYardTableContent(yardComponent, requiredContent);
+            tableContent = $YH.getYardTableContent(yardComponent, requiredContent);
             callBack();
         });
         return true;
@@ -49,12 +49,12 @@ YardView.extend({
         return table.getHtml();
     },
     getDisplayYardDominoBoundary: function() {
-        return $YM.getDisplayYardDominoBoundary();
+        return $YH.getDisplayYardDominoBoundary();
     },
     toggleDisplayYardDominoBoundary: function() {
-        return $YM.toggleDisplayYardDominoBoundary();
+        return $YH.toggleDisplayYardDominoBoundary();
     }
 });
 
 window.YardView = window.$YV = YardView;
-})($M, $YM);
+})($M, $YH);

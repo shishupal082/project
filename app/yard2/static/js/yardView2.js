@@ -1,4 +1,4 @@
-(function($S, $YM) {
+(function($S, $YH) {
 var YardInfo = [];
 var CurrentYardComponent = {};
 var CurrentYardInfo = {};
@@ -19,19 +19,19 @@ ExtendObject(YardView);
 
 YardView.extend({
     getDisplayYardDominoBoundary: function() {
-        return $YM.getDisplayYardDominoBoundary();
+        return $YH.getDisplayYardDominoBoundary();
     },
     toggleDisplayYardDominoBoundary: function() {
-        return $YM.toggleDisplayYardDominoBoundary();
+        return $YH.toggleDisplayYardDominoBoundary();
     }
 });
 var loadingStatus = {};
 YardView.extend({
     checkDominoVerifyRequirement: function() {
         if (CurrentYardInfo && $S.isBooleanTrue(CurrentYardInfo["dominoVerify"], true)) {
-            $YM.enableDomino();
+            $YH.enableDomino();
         } else {
-            $YM.disableDomino();
+            $YH.disableDomino();
         }
         return false;
     },
@@ -51,7 +51,7 @@ YardView.extend({
         for (var i = urls.length - 1; i >= 0; i--) {
             urls[i] = urls[i] + "?" + YardView.getMd5Sum(urls[i]);
         }
-        $YM.loadJsonData(urls, YardView.eachApiCallback, function() {
+        $YH.loadJsonData(urls, YardView.eachApiCallback, function() {
             loadingStatus[apiName] = true;
             for (var key in loadingStatus) {
                 if (loadingStatus[key]) {
@@ -78,7 +78,7 @@ YardView.extend({
 });
 YardView.extend({
     setYardsIds: function() {
-        CurrentYardId = $YM.getUrlAttribute("id", "not-found");
+        CurrentYardId = $YH.getUrlAttribute("id", "not-found");
         var yardIds = [], activeClass = "", url = "";
         yardIds.push([]);
         var yardIdOption = '<ul class="nav nav-tabs">';
@@ -157,7 +157,7 @@ YardView.extend({
             requiredContent.push(requiredContentArr[i]["value"]);
         }
         YardView.checkDominoVerifyRequirement();
-        var tableContent = $YM.getYardTableContent(CurrentYardComponent, requiredContent);
+        var tableContent = $YH.getYardTableContent(CurrentYardComponent, requiredContent);
         var table = $S.getTable(tableContent, CurrentYardId);
         // table.addColIndex(1);
         // table.addRowIndex(0);
@@ -190,7 +190,7 @@ YardView.extend({
     documentLoaded: function() {
         var yardInfoUrl = "/app/yard2/static/json/yard-info.json"
         var urls = [yardInfoUrl+"?"+YardView.getMd5Sum(yardInfoUrl)];
-        $YM.loadJsonData(urls, function(response) {
+        $YH.loadJsonData(urls, function(response) {
             YardInfo = response;
             YardView.setYardsIds();
             YardView.loadYardById();
@@ -204,4 +204,4 @@ YardView.extend({
 });
 
 window.YardView = window.$YV = YardView;
-})($S, $YM);
+})($S, $YH);

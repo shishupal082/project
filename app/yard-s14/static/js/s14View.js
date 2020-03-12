@@ -1,4 +1,4 @@
-(function($M, $YM, $C) {
+(function($M, $YH, $YApiModel) {
 
 var View = function(selector, context) {
     return new View.fn.init(selector, context);
@@ -45,10 +45,10 @@ View.extend({
         return $M.toggleValue(name);
     },
     getDisplayYardDominoBoundary: function() {
-        return $YM.getDisplayYardDominoBoundary();
+        return $YH.getDisplayYardDominoBoundary();
     },
     toggleDisplayYardDominoBoundary: function() {
-        return $YM.toggleDisplayYardDominoBoundary();
+        return $YH.toggleDisplayYardDominoBoundary();
     }
 });
 View.extend({
@@ -59,7 +59,7 @@ View.extend({
         return "";
     },
     getUrlAttributeType: function(defaultType) {
-        var type = $YM.getUrlAttribute("type");
+        var type = $YH.getUrlAttribute("type");
         if (["type1","type2"].indexOf(type) >= 0) {
             return type;
         }
@@ -70,18 +70,20 @@ View.extend({
     loadApiData: function(callBack) {
         var apiUrl = ["/app/yard-s14/static/json/yard-top.json?"+requestId,
                       "/app/yard-s14/static/json/yard-bottom.json?"+requestId];
-        $YM.loadJsonData(apiUrl, function(response) {
+        $YApiModel.loadJsonData(apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);
                 }
             }
-            tableContent = $YM.getYardTableContent(yardComponent, requiredContent);
-        }, callBack);
+        }, function() {
+            tableContent = $YH.getYardTableContent(yardComponent, requiredContent);
+            callBack();
+        });
         return true;
     },
     addTprClass: function(name) {
-        // var tprNames = $C.getTprNames();
+        // var tprNames = $YApiModel.getTprNames();
         var tprNames = [
                 "201-TPR", "202-TPR", "204-TPR",
                 "205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
@@ -105,7 +107,7 @@ View.extend({
         return 1;
     },
     addPointIndicationClass: function(name) {
-        // var pointsIndicationName = $C.getPointIndicationNames();
+        // var pointsIndicationName = $YApiModel.getPointIndicationNames();
         var pointsIndicationName = ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"];
         var pointCls = "";
         for (var i=0; i <pointsIndicationName.length; i++) {
@@ -115,7 +117,7 @@ View.extend({
         return 1;
     },
     addSignalClass: function() {
-        // var signals = $C.getSignalNames();
+        // var signals = $YApiModel.getSignalNames();
         var signals = [
             "S1-RECR", "S1-HECR", "S1-DECR",
             "S3-RECR", "S3-DECR",
@@ -140,4 +142,4 @@ View.extend({
 });
 
 window.View = window.$V = View;
-})($M, $YM, $C);
+})($M, $YH, $YApiModel);

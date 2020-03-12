@@ -1,11 +1,17 @@
-(function(window, $M, $YM) {
+/*
+    - Load possibleValue, initialValue and expressions from api
+    - Set these values to model ($M)
+    - loadJsonData for given api url
+*/
 
-var Controller = function(selector, context) {
-    return new Controller.fn.init(selector, context);
+(function(window, $M) {
+
+var YardApiModel = function(selector, context) {
+    return new YardApiModel.fn.init(selector, context);
 };
 
-Controller.fn = Controller.prototype = {
-    constructor: Controller,
+YardApiModel.fn = YardApiModel.prototype = {
+    constructor: YardApiModel,
     init: function(selector, context) {
         this.selector = selector;
         this.context = context;
@@ -13,7 +19,7 @@ Controller.fn = Controller.prototype = {
     }
 };
 
-ExtendObject(Controller);
+ExtendObject(YardApiModel);
 
 var RequestId = $M.getRequestId();
 
@@ -51,7 +57,7 @@ function loadPossibleValues(callBack) {
     for (var i = 0; i < PossibleValuePath.length; i++) {
         url.push(PossibleValuePath[i]+"?"+RequestId);
     }
-    $YM.loadJsonData(url, function(response) {
+    YardApiModel.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             for (var key in response) {
                 if ($M.isArray(response[key])) {
@@ -85,7 +91,7 @@ function loadInitialValues(callBack) {
     for (var i = 0; i < InitialValuePath.length; i++) {
         url.push(InitialValuePath[i]+"?"+RequestId);
     }
-    $YM.loadJsonData(url, function(response) {
+    YardApiModel.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             Object.assign(InitialValues, response);
         }
@@ -96,7 +102,7 @@ function loadExpressions(callBack) {
     for (var i = 0; i < ExpressionsPath.length; i++) {
         url.push(ExpressionsPath[i]+"?"+RequestId);
     }
-    $YM.loadJsonData(url, function(response) {
+    YardApiModel.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             AllExpressions.push(response);
         }
@@ -121,7 +127,51 @@ function loadExpressions(callBack) {
         callBack();
     });
 }
-Controller.extend({
+YardApiModel.extend({
+    loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
+        if ($M.isArray(urls) == false || urls.length < 1) {
+            if ($M.isFunction(eachApiCallback)) {
+                eachApiCallback(null, apiName);
+            }
+            if ($M.isFunction(callBack)) {
+                callBack();
+            }
+            return false;
+        }
+        var apiSendCount = urls.length, apiReceiveCount = 0;
+        var ajax = {};
+        ajax.type = "json";
+        ajax.dataType = "json";
+        for (var i = 0; i < urls.length; i++) {
+            ajax.url = urls[i];
+            $.ajax({url: ajax.url,
+                success: function(response, textStatus) {
+                    apiReceiveCount++;
+                    if ($M.isFunction(eachApiCallback)) {
+                        eachApiCallback(response, apiName);
+                    }
+                    if (apiSendCount == apiReceiveCount) {
+                        if ($M.isFunction(callBack)) {
+                            callBack();
+                        }
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log("Error in api: " + apiName);
+                    apiReceiveCount++;
+                    if ($M.isFunction(eachApiCallback)) {
+                        eachApiCallback(null, apiName);
+                    }
+                    if (apiSendCount == apiReceiveCount) {
+                        if ($M.isFunction(callBack)) {
+                            callBack();
+                        }
+                    }
+                }
+            });
+        }
+        return true;
+    },
     documentLoaded: function(callBack) {
         loadPossibleValues(function() {
             PossibleValuesLoadStatus = true;
@@ -143,7 +193,7 @@ Controller.extend({
     }
 });
 
-Controller.extend({
+YardApiModel.extend({
     getTprNames: function() {
         return TprNames;
     },
@@ -171,5 +221,5 @@ Controller.extend({
     }
 });
 /*End of direct access of methods*/
-window.Controller = window.$C = Controller;
-})(window, $M, $YM);
+window.YardApiModel = window.$YApiModel = YardApiModel;
+})(window, $M);

@@ -35,7 +35,7 @@ for (var key in commonPath) {
     }
 }
 
-$C.setApisPath(apisPath);
+$YApiModel.setApisPath(apisPath);
 
 function checkUIStyle() {
     $V.addTprClass();
@@ -93,7 +93,7 @@ $("#toggleDisplayDomino").on("click", function(e) {
     $V.toggleDisplayYardDominoBoundary();
     checkDominoDisplayStatus();
 });
-$C.documentLoaded(function() {
+$YApiModel.documentLoaded(function() {
     $M.reCheckAllValues();
     $V.loadApiData(function() {
         $(".container").attr("style", "width: 1655px;")
