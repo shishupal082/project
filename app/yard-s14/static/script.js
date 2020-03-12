@@ -21,7 +21,8 @@ var type2Path = {
     "expressions": []
 };
 
-var version = "type2";
+var version = $V.getUrlAttributeType("type2");
+
 for (var key in commonPath) {
     apisPath[key] = commonPath[key];
     switch(version) {

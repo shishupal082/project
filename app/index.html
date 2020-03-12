@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-$YM.loadJsonData(["/pvt/appData.json"], function(response) {
+$YM.loadJsonData(["/pvt/appData.json?"+$S.getRequestId()], function(response) {
     var tableHtml = "";
 
     var table = $S.getTable(response, "dashboard");

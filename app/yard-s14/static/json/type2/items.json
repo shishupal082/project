@@ -12,5 +12,20 @@
         "S3-EGNR","S3-GLSR","S3-GR1",
         "S3-GPR1","S3-GR2","S3-RECPR",
                            "S3-HECPR"
-    ]
+    ],
+    "route-M-11": [
+        "MT-AU_R_S",          "MT-BU_R_S",
+        "MT-AU_N_S",          "MT-BU_N_S",
+                   "MT-ADUCR","MT-BDUCR",
+        "MT-U_R_LR",          "MT-UDKR",
+        "MT-U_N_LR","MT-UYR1","MT-UYR2"
+    ],
+    "point-minor-12":[
+        "101-Z1WR1","101-Z1NWR","101-Z1RWR",
+        "101-W_R_R","101-R_WLR","101-WKR2",
+        "101-W_N_R","101-N_WLR","101-WKR1",
+        "101-WR",               "101-WKR3",
+                                "101-WJR"
+    ],
+    "others": ["101-Z1UR","107-Z1UR","108-Z1UR","ZDUCR"]
 }

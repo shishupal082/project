@@ -57,6 +57,13 @@ View.extend({
             return "btn-danger";
         }
         return "";
+    },
+    getUrlAttributeType: function(defaultType) {
+        var type = $YM.getUrlAttribute("type");
+        if (["type1","type2"].indexOf(type) >= 0) {
+            return type;
+        }
+        return defaultType;
     }
 });
 View.extend({
