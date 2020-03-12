@@ -21,7 +21,7 @@
         "LP1-tpr-pre": [
             [
                 "",
-                "<span class='badge label label-default indication btn-warning 101-WFK'>&nbsp;</span>",
+                "<span class='badge yellow indication 101-WFK active'>&nbsp;</span>",
                 "<button class='evt btn tpr yellow circle p-101-r' value='207-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
@@ -65,7 +65,7 @@
                 "<span id='S6-RECR' class='badge signal red active'>&nbsp;</span>",
                 "<span class='signal-no'>S6</span>",
                 "","","","","",
-                "<span class='badge label label-default indication btn-warning 103-WFK'>&nbsp;</span>",
+                "<span class='badge yellow indication 103-WFK active'>&nbsp;</span>",
                 "<button class='evt btn tpr blue circle sdg-lp1' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
@@ -136,7 +136,7 @@
         ],
         "108-point-B": [
             [
-                "<span class='badge label label-default indication btn-warning 108-WFK'>&nbsp;</span>"
+                "<span class='badge yellow indication 108-WFK active'>&nbsp;</span>"
             ],
             [
                 "<button class='evt btn tpr green p-108a-n' value='216-TPR'><span class='badge'>&nbsp;</span></button>",

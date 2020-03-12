@@ -102,7 +102,7 @@ Controller.extend({
         return $M.isUp(name) ? "active" : "";
     },
     getIndicationClass: function(name) {
-        return $M.isUp(name) ? "btn-warning" : "";
+        return $M.isUp(name) ? "active" : "";
     }
 });
 

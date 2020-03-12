@@ -9,6 +9,8 @@
 <body>
     <div class="container yard">
         <center><h2>Yard S14</h2></center>
+        <hr></hr>
+        <div id="tableHtml"><center>Loading...</center></div>
         <div>
             <button value="S1-GNR=1,MT-UNR=1" class="evt signal_route_btn">S1-MT</button>
             <button value="S1-GNR=1,LP1-UNR=1" class="evt signal_route_btn">S1-LP1</button>
@@ -28,8 +30,6 @@
             <button value="S19-GNR=1,LP1A-UNR=1" class="evt signal_route_btn">S19-LP1A</button>
             <button value="S19-GNR=1,LP2-UNR=1" class="evt signal_route_btn">S19-LP2</button>
         </div>
-        <hr></hr>
-        <div id="tableHtml"><center>Loading...</center></div>
         <div id="timerCount"></div>
         <div id="currentValues"></div>
         <div id="help" class="help hide">
@@ -37,7 +37,7 @@
                 <ul>
                     <li>Single line, 3 road, 14 route station</li>
                     <li><button id="toggleDisplayDomino">Toggle Display Domino</button></li>
-                    <li>
+                    <li class="hide">
                         <audio controls>
                             <source src="/pvt/media/example1.mp3" type="audio/mpeg">
                             <source src="/pvt/media/horse.ogv" type="audio/mpeg">

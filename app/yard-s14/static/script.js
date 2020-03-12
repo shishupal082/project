@@ -5,14 +5,14 @@ var timerCount = 0;
 var apisPath = {};
 var commonPath = {
     "possible-value": ["/app/yard-s14/static/json/common/items.json"],
-    "initial-value": ["/app/yard-s14/static/json/initial-value.json"],
+    "initial-value": ["/app/yard-s14/static/json/common/initial-value.json"],
     "expressions": []
 };
 
 var type1Path = {
-    "possible-value": ["/app/yard-s14/static/json/items.json"],
+    "possible-value": ["/app/yard-s14/static/json/type1/items.json"],
     "initial-value": [],
-    "expressions": ["/app/yard-s14/static/json/expressions.json"]
+    "expressions": ["/app/yard-s14/static/json/type1/expressions.json"]
 };
 
 var type2Path = {

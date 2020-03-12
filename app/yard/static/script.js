@@ -23,7 +23,7 @@ function checkUIStyle() {
                     node.removeClass("btn-danger");
                     node.addClass($V.getTprClass(key));
                 } else if (node.hasClass("indication")) {
-                    node.removeClass("btn-warning");
+                    node.removeClass("active");
                     node.addClass($V.getIndicationClass(key));
                 }
             }

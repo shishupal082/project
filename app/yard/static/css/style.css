@@ -72,15 +72,6 @@ hr {
 .signal.red.active {
     background-color: #f00;
 }
-.yard .indication {
-    font-size: 2px;
-    min-width: 0px;
-    padding: 4px;
-}
-.indication.btn-warning {
-    background-color:#ff0;
-    border-color: #ff0;
-}
 .yard .tpr.circle .badge {
     height: auto;
     width: auto;
@@ -120,13 +111,16 @@ hr {
 .yard .shunt {
     line-height: 0;
 }
+.yard .indication,
 .yard .shunt span {
     padding: 4px;
     height: 10px;
+    line-height: 0;
 }
-.yard .shunt span.active {
+.yard .shunt span.active,
+.yard .indication.active {
     color: #555;
-    background-color: #ECEB57;
+    background-color: #ffff00;
 }
 /* Debugging style */
 .yard.debug .btn,

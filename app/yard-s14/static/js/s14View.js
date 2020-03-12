@@ -109,8 +109,8 @@ View.extend({
         var pointsIndicationName = ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"];
         var pointCls = "";
         for (var i=0; i <pointsIndicationName.length; i++) {
-            pointCls = $M.isUp(pointsIndicationName[i]) ? "btn-warning" : "";
-            $("."+pointsIndicationName[i]).removeClass("btn-warning").addClass(pointCls);
+            pointCls = $M.isUp(pointsIndicationName[i]) ? "active" : "";
+            $("."+pointsIndicationName[i]).removeClass("active").addClass(pointCls);
         }
         return 1;
     },

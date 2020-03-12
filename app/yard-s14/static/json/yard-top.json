@@ -30,7 +30,7 @@
                 "<span class='signal-no'>S5</span>",
                 "","","","","","","","","","",
                 "<button class='evt btn tpr yellow circle p-107-r' value='215-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<span class='badge label label-default indication btn-warning 107-WFK'>&nbsp;</span>"
+                "<span class='badge yellow indication 107-WFK active'>&nbsp;</span>"
             ]
         ],
         "LP2-tpr-sh": [
@@ -121,13 +121,13 @@
             [
                 "","","","",
                 "<button class='evt btn tpr green circle p-101-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<span class='badge label label-default indication btn-warning 101-WFK'>&nbsp;</span>"
+                "<span class='badge yellow indication 101-WFK active'>&nbsp;</span>"
             ]
         ],
         "205-tpr-1": [
             [
                 "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<span class='badge label label-default indication btn-warning 102-WFK'>&nbsp;</span>"
+                "<span class='badge yellow indication 102-WFK active'>&nbsp;</span>"
             ],
             [
                 "<button class='evt btn tpr green p-102b-n' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
@@ -215,13 +215,13 @@
             ],
             [
                 "","",
-                "<span class='badge label label-default indication btn-warning 102-WFK'>&nbsp;</span>",
+                "<span class='badge yellow indication 102-WFK active'>&nbsp;</span>",
                 "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "216-tpr": [
             [
-                "<span class='badge label label-default indication btn-warning 107-WFK'>&nbsp;</span>",
+                "<span class='badge yellow indication 107-WFK active'>&nbsp;</span>",
                 "<button class='evt btn tpr green p-107-r circle' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
                 "","","216","-tpr"
             ],
@@ -237,7 +237,7 @@
             ],
             [
                 "","",
-                "<span class='badge label label-default indication btn-warning 108-WFK'>&nbsp;</span>",
+                "<span class='badge yellow indication 108-WFK active'>&nbsp;</span>",
                 "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
