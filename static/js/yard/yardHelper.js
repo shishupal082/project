@@ -1,7 +1,10 @@
 /*
-    - store displayYardDominoBoundary in localStorage
+    - use localStorage to displayDominoBoundary
+        - getDisplayYardDominoBoundary, toggleDisplayYardDominoBoundary
+    - properly arrange table data for creating html
     - Verify each domino data if configured
     - loadJsonData for given api url
+    - getUrlAttribute using stack
 */
 (function($S) {
 var ValidateDomino = false

@@ -1,17 +1,29 @@
 {
+    "signal-btn": [
+        "S1-GN","S3-GN","S4-GN","S5-GN","S6-GN",
+        "S12-GN","S13-GN","S14-GN","S15-GN","S19-GN",
+        "SH2-GN","SH16-GN"
+    ],
     "s1-group-13": [
-        "S1-RECR",          "S1-HECR",
-        "S1-DECR",          "S1-GNR",
+        "S1-RECR", "__S1-GR1-C", "S1-HECR",
+        "S1-DECR", "__S1-GLSR-C", "S1-GNR",
         "S1-EGNR","S1-GLSR","S1-GR1",
         "S1-GPR1","S1-GR2","S1-RECPR",
         "S1-DECPR","S1-GR3","S1-HECPR"
     ],
     "s3-group-10": [
-        "S3-RECR",          "S3-HECR",
-                            "S3-GNR",
-        "S3-EGNR","S3-GLSR","S3-GR1",
-        "S3-GPR1","S3-GR2","S3-RECPR",
-                           "S3-HECPR"
+        "S3-RECR", "__S3-GR1-C", "S3-HECR",
+                  "__S3-GLSR-C", "S3-GNR",
+        "S3-EGNR", "S3-GLSR", "S3-GR1",
+        "S3-GPR1", "S3-GR2", "S3-RECPR",
+                             "S3-HECPR"
+    ],
+    "shunt-group": [
+        "SH2-RECR", "SH2-HECR", "SH2-GLSR",
+        "SH2-GNR", "SH2/16-EGNR", "SH2-GR1",
+        "SH2-GR2", "__SH2-GR1-C", "SH16-GR2",
+        "SH16-GNR", "__SH16-GR1-C", "SH16-GR1",
+        "SH16-RECR", "SH16-HECR", "SH16-GLSR"
     ],
     "route-M-11": [
         "MT-AU_R_S",          "MT-BU_R_S",
@@ -27,5 +39,22 @@
         "101-WR",               "101-WKR3",
                                 "101-WJR"
     ],
-    "others": ["101-Z1UR","107-Z1UR","108-Z1UR","ZDUCR"]
+    "others": ["101-Z1UR","107-Z1UR","108-Z1UR","ZDUCR"],
+
+    "point": ["101-WNR","102-WNR","103-WNR","107-WNR","108-WNR"],
+
+    "common": ["GNCR","WNCR","UNCR","SMR","YYNR","YYRNR","CH/WW/EW/NCR"],
+
+    "common-1": ["CHYNR","CHYRNR",
+        "NNCR",
+        "MN-GZR","SH-GZR"
+    ],
+
+    "route": ["204-UNR","Mn-UNR","LP1-UNR","LP2-UNR","217-UNR","DN-UNR","UP-UNR"],
+
+    "individual": [
+        "S1-GNPR","S3-GNPR","S4-GNPR","S5-GNPR","S6-GNPR",
+        "S12-GNPR","S13-GNPR","S14-GNPR","S15-GNPR","S19-GNPR",
+        "SH2-GNPR","SH16-GNPR"
+    ]
 }

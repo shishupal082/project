@@ -18,7 +18,7 @@ var type1Path = {
 var type2Path = {
     "possible-value": ["/app/yard-s14/static/json/type2/items.json"],
     "initial-value": [],
-    "expressions": []
+    "expressions": ["/app/yard-s14/static/json/type2/expressions.json"]
 };
 
 var version = $V.getUrlAttributeType("type2");

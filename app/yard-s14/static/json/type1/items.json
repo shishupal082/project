@@ -9,7 +9,9 @@
         "S13-RECR", "S13-HECR",
         "S14-RECR", "S14-HECR", "S14-DECR",
         "S15-RECR", "S15-DECR",
-        "S19-RECR", "S19-HECR", "S19-DECR"
+        "S19-RECR", "S19-HECR", "S19-DECR",
+        "SH2-RECR", "SH2-HECR",
+        "SH16-RECR", "SH16-HECR"
     ],
     "pointIndication": ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"],
     "common": [

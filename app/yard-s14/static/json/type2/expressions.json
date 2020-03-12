@@ -1,0 +1,14 @@
+{
+    "S1-GNR": ["(S1-GN&&~S1-EGNR)"],
+    "S1-EGNR": ["(S1-GN&&EGGNR)"],
+    "GNCR": ["(~S1-GNPR&&~S3-GNPR&&~S4-GNPR&&~S5-GNPR&&~S6-GNPR&&~S12-GNPR&&~S13-GNPR&&~S14-GNPR&&~S15-GNPR&&~S19-GNPR&&~SH2-GNPR&&~SH16-GNPR)"],
+    "WNCR": ["(~101-WNR&&~102-WNR&&~103-WNR&&~107-WNR&&~108-WNR&&~YYNR&&~YYRNR)"],
+    "UNCR": ["(~204-UNR&&~Mn-UNR&&~LP1-UNR&&~LP2-UNR&&~217-UNR&&~DN-UNR&&~UP-UNR)"],
+    "CH/WW/EW/NCR": ["(~WWNR&&~EWNR&&~CHYNR&&~CHYRNR)"],
+    "NNCR": {
+        "op": "&&",
+        "val": ["(GNCR&&WNCR&&UNCR&&CH/WW/EW/NCR)", "(~MN-GZR&&~SH-GZR)",
+                "~ZDUCR", "(~MN-GNPR&&~SH-GNPR)", "~OYNR", "~COGGNR", "~EGNR",
+                "~EUYR", "~EUUYR", "~EUYNR", "~EUUYNR"]
+    }
+}

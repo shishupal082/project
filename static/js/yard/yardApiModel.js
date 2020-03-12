@@ -1,5 +1,6 @@
 /*
     - Load possibleValue, initialValue and expressions from api
+        - It do not care about rendering yardHtml using yard api data
     - Set these values to model ($M)
     - loadJsonData for given api url
 */

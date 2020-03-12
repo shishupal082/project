@@ -107,7 +107,7 @@
         "205-tpr": [
             [
                 "sh2",
-                "<div class='shunt'><div class='text-left'><span class='badge yellow active'>&nbsp;</span></div><div class='text-left'><span id='SH2-ON-ECR' class='badge yellow'>&nbsp;</span><span id='SH2-OFF-ECR' class='badge yellow'>&nbsp;</span></div></div>",
+                "<div class='shunt'><div class='text-left'><span class='badge yellow active'>&nbsp;</span></div><div class='text-left'><span id='SH2-RECR' class='badge yellow'>&nbsp;</span><span id='SH2-HECR' class='badge yellow'>&nbsp;</span></div></div>",
                 "","205","-tpr"
             ],
             [
@@ -254,7 +254,7 @@
                 "<button class='evt btn tpr yellow 217-TPR' value='217-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<div class='shunt'><div class='text-right'><span class='badge yellow active'>&nbsp;</span></div><div class='text-right'><span id='SH16-OFF-ECR' class='badge yellow'>&nbsp;</span><span id='SH16-ON-ECR' class='badge yellow'>&nbsp;</span></div></div>",
+                "<div class='shunt'><div class='text-right'><span class='badge yellow active'>&nbsp;</span></div><div class='text-right'><span id='SH16-HECR' class='badge yellow'>&nbsp;</span><span id='SH16-RECR' class='badge yellow'>&nbsp;</span></div></div>",
                 "SH-","<div class='text-left'>16</div>"
             ]
         ],

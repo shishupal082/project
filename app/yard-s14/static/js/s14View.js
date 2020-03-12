@@ -70,7 +70,7 @@ View.extend({
     loadApiData: function(callBack) {
         var apiUrl = ["/app/yard-s14/static/json/yard-top.json?"+requestId,
                       "/app/yard-s14/static/json/yard-bottom.json?"+requestId];
-        $YApiModel.loadJsonData(apiUrl, function(response) {
+        $YH.loadJsonData(apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);
@@ -129,8 +129,8 @@ View.extend({
             "S14-RECR", "S14-HECR", "S14-DECR",
             "S15-RECR", "S15-DECR",
             "S19-RECR", "S19-HECR", "S19-DECR",
-            "SH2-ON-ECR","SH2-OFF-ECR",
-            "SH16-ON-ECR","SH16-OFF-ECR"
+            "SH2-RECR","SH2-HECR",
+            "SH16-RECR","SH16-HECR"
         ];
         var signalClass = "";
         for (var i=0; i <signals.length; i++) {
