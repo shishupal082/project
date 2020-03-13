@@ -175,7 +175,7 @@
         "216-tpr-top-1": [
             [
                 "","","","","","","","","","","","","",
-                "<button class='evt btn circle point-change-request' value='NWWNR=1,107-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,107-WN=1'><span class='badge'>N</span></button>",
                 "<button class='evt btn tpr yellow circle p-107-r' value='215-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
@@ -183,7 +183,7 @@
         ],
         "216-tpr-top-2": [
             [
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,107-WNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,107-WN=1'><span class='badge'>R</span></button>",
                 "107"
             ],
             [
@@ -193,9 +193,9 @@
         "216-tpr-top-3": [
             [
                 "",
-                "<button class='evt btn circle point-change-request' value='NWWNR=1,102-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,102-WN=1'><span class='badge'>N</span></button>",
                 "<button class='evt btn tpr green circle p-102-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,102-WNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,102-WN=1'><span class='badge'>R</span></button>",
                 "102"
             ],
             [

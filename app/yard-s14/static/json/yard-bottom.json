@@ -75,9 +75,9 @@
                 "<span class='label label-primary'>--</span>",
                 "<span class='label label-primary'>--</span>",
                 "","","","",
-                "<button class='evt btn circle point-change-request' value='NWWNR=1,103-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,103-WN=1'><span class='badge'>N</span></button>",
                 "<button class='evt btn tpr blue circle sdg-lp1' value='LP1-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,103-WNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,103-WN=1'><span class='badge'>R</span></button>",
                 "103"
             ],
             [
@@ -103,7 +103,7 @@
             ],
             [
                 "","","","","",
-                "<button class='evt btn circle point-change-request' value='NWWNR=1,101-WNR=1'><span class='badge'>N</span></button>"
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,101-WN=1'><span class='badge'>N</span></button>"
             ],
             []
         ],
@@ -111,7 +111,7 @@
             [],
             [
                 "<button class='evt btn tpr green circle p-101-r' value='205-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,101-WNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,101-WN=1'><span class='badge'>R</span></button>",
                 "101"
             ],
             [
@@ -125,9 +125,9 @@
                 "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<button class='evt btn circle point-change-request' value='NWWNR=1,101-WNR=1'><span class='badge'>N</span></button>",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,108-WN=1'><span class='badge'>N</span></button>",
                 "<button class='evt btn tpr green circle p-108-r' value='216-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,101-WNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,108-WN=1'><span class='badge'>R</span></button>",
                 "108"
             ],
             [

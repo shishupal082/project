@@ -36,9 +36,7 @@ var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
 
-var TprNames = [];
-var SignalNames = [];
-var PointIndicationNames = [];
+var SepratedValues = {};
 
 function isApisLoadComplete() {
     var loadingCheck = [];
@@ -71,16 +69,8 @@ function loadPossibleValues(callBack) {
                             }
                         }
                     }
-                    switch(key) {
-                        case "tpr":
-                            TprNames = TprNames.concat(response[key]);
-                        break;
-                        case "signal":
-                            SignalNames = SignalNames.concat(response[key]);
-                        break;
-                        case "pointIndication":
-                            PointIndicationNames = PointIndicationNames.concat(response[key]);
-                        break;
+                    if (SepratedValues[key]) {
+                        SepratedValues[key] = SepratedValues[key].concat(response[key]);
                     }
                 }
             }
@@ -195,14 +185,19 @@ YardApiModel.extend({
 });
 
 YardApiModel.extend({
-    getTprNames: function() {
-        return TprNames;
+    getAllSepratedValue: function() {
+        return SepratedValues;
     },
-    getSignalNames: function() {
-        return SignalNames;
+    getSepratedValue: function(key) {
+        if (SepratedValues[key]) {
+            return SepratedValues[key];
+        }
+        return [];
     },
-    getPointIndicationNames: function() {
-        return PointIndicationNames;
+    setSeprateValueKey: function(keys) {
+        for (var i = 0; i < keys.length; i++) {
+            SepratedValues[keys[i]] = [];
+        }
     },
     setApisPath: function(paths) {
         for (var key in paths) {
