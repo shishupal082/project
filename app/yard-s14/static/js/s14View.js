@@ -83,12 +83,7 @@ View.extend({
         return true;
     },
     addTprClass: function(name) {
-        // var tprNames = $YApiModel.getTprNames();
-        var tprNames = [
-                "201-TPR", "202-TPR", "204-TPR",
-                "205-TPR", "207-TPR", "LP1-TPR", "M-TPR", "LP2-TPR",
-                "215-TPR", "216-TPR", "217-TPR", "218-TPR", "219-TPR"
-            ];
+        var tprNames = $YApiModel.getSepratedValue("tpr");
         for (var i=0; i<tprNames.length; i++) {
             var key = tprNames[i];
             try {

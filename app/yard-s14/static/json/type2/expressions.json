@@ -1,14 +1,64 @@
 {
     "S1-GNR": ["(S1-GN&&~S1-EGNR)"],
     "S1-EGNR": ["(S1-GN&&EGGNR)"],
-    "GNCR": ["(~S1-GNPR&&~S3-GNPR&&~S4-GNPR&&~S5-GNPR&&~S6-GNPR&&~S12-GNPR&&~S13-GNPR&&~S14-GNPR&&~S15-GNPR&&~S19-GNPR&&~SH2-GNPR&&~SH16-GNPR)"],
-    "WNCR": ["(~101-WNR&&~102-WNR&&~103-WNR&&~107-WNR&&~108-WNR&&~YYNR&&~YYRNR)"],
-    "UNCR": ["(~204-UNR&&~Mn-UNR&&~LP1-UNR&&~LP2-UNR&&~217-UNR&&~DN-UNR&&~UP-UNR)"],
-    "CH/WW/EW/NCR": ["(~WWNR&&~EWNR&&~CHYNR&&~CHYRNR)"],
-    "NNCR": {
-        "op": "&&",
-        "val": ["(GNCR&&WNCR&&UNCR&&CH/WW/EW/NCR)", "(~MN-GZR&&~SH-GZR)",
-                "~ZDUCR", "(~MN-GNPR&&~SH-GNPR)", "~OYNR", "~COGGNR", "~EGNR",
-                "~EUYR", "~EUUYR", "~EUYNR", "~EUUYNR"]
-    }
+
+    "S3-GNR": ["(S3-GN&&~S3-EGNR)"],
+    "S3-EGNR": ["(S3-GN&&EGGNR)"],
+
+    "S4-GNR": ["(S4-GN&&~S4-EGNR)"],
+    "S4-EGNR": ["(S4-GN&&EGGNR)"],
+
+    "S5-GNR": ["(S5-GN&&~S5-EGNR)"],
+    "S5-EGNR": ["(S5-GN&&EGGNR)"],
+
+    "S6-GNR": ["(S6-GN&&~S6-EGNR)"],
+    "S6-EGNR": ["(S6-GN&&EGGNR)"],
+
+    "S12-GNR": ["(S12-GN&&~S12-EGNR)"],
+    "S12-EGNR": ["(S12-GN&&EGGNR)"],
+
+    "S13-GNR": ["(S13-GN&&~S13-EGNR)"],
+    "S13-EGNR": ["(S13-GN&&EGGNR)"],
+
+    "S14-GNR": ["(S14-GN&&~S14-EGNR)"],
+    "S14-EGNR": ["(S14-GN&&EGGNR)"],
+
+    "S15-GNR": ["(S15-GN&&~S15-EGNR)"],
+    "S15-EGNR": ["(S15-GN&&EGGNR)"],
+
+    "S19-GNR": ["(S19-GN&&~S19-EGNR)"],
+    "S19-EGNR": ["(S19-GN&&EGGNR)"],
+
+    "SH2-GNR": ["(SH2-GN&&~SH2-EGNR)"],
+    "SH16-GNR": ["(SH16-GN&&~SH16-EGNR)"],
+
+    "S1-GNPR": ["(S1-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S3-GNPR": ["(S3-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S4-GNPR": ["(S4-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S5-GNPR": ["(S5-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S6-GNPR": ["(S6-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S12-GNPR": ["(S12-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S13-GNPR": ["(S13-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S14-GNPR": ["(S14-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S15-GNPR": ["(S15-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "S19-GNPR": ["(S19-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "SH2-GNPR": ["(SH2-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "SH16-GNPR": ["(SH16-GNR&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+
+    "204-UNR": ["(204-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "M-UNR": ["(M-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "LP1-UNR": ["(LP1-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "LP2-UNR": ["(LP2-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "217-UNR": ["(217-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "DN-UNR": ["(DN-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+    "UP-UNR": ["(UP-UN&&(WNCR&&CH/WW/EW/NCR&&SMR))"],
+
+    "101-WNR": ["(101-WN&&(~YYNR&&~YYRNR)&&(UNCR&&GNCR&&SMR))"],
+    "102-WNR": ["(102-WN&&(~YYNR&&~YYRNR)&&(UNCR&&GNCR&&SMR))"],
+    "103-WNR": ["(103-WN&&(~YYNR&&~YYRNR)&&(UNCR&&GNCR&&SMR))"],
+    "107-WNR": ["(107-WN&&(~YYNR&&~YYRNR)&&(UNCR&&GNCR&&SMR))"],
+    "108-WNR": ["(108-WN&&(~YYNR&&~YYRNR)&&(UNCR&&GNCR&&SMR))"],
+    
+    "YYNR": ["(YYN&&~YYRNR&&(UNCR&&GNCR&&SMR))"],
+    "YYRNR": ["(YYRN&&(UNCR&&GNCR&&SMR))"]
 }

@@ -1,9 +1,4 @@
 {
-    "signal-btn": [
-        "S1-GN","S3-GN","S4-GN","S5-GN","S6-GN",
-        "S12-GN","S13-GN","S14-GN","S15-GN","S19-GN",
-        "SH2-GN","SH16-GN"
-    ],
     "s1-group-13": [
         "S1-RECR", "__S1-GR1-C", "S1-HECR",
         "S1-DECR", "__S1-GLSR-C", "S1-GNR",
@@ -18,6 +13,62 @@
         "S3-GPR1", "S3-GR2", "S3-RECPR",
                              "S3-HECPR"
     ],
+    "s5-group-10": [
+        "S5-RECR", "__S5-GR1-C", "S5-HECR",
+                  "__S5-GLSR-C", "S5-GNR",
+        "S5-EGNR", "S5-GLSR", "S5-GR1",
+        "S5-GPR1", "S5-GR2", "S5-RECPR",
+                             "S5-HECPR"
+    ],
+    "s6-group-10": [
+        "S6-RECR", "__S6-GR1-C", "S6-HECR",
+                  "__S6-GLSR-C", "S6-GNR",
+        "S6-EGNR", "S6-GLSR", "S6-GR1",
+        "S6-GPR1", "S6-GR2", "S6-RECPR",
+                             "S6-HECPR"
+    ],
+    "s12-group-10": [
+        "S12-RECR", "__S12-GR1-C", "S12-HECR",
+                  "__S12-GLSR-C", "S12-GNR",
+        "S12-EGNR", "S12-GLSR", "S12-GR1",
+        "S12-GPR1", "S12-GR2", "S12-RECPR",
+                             "S12-HECPR"
+    ],
+    "s13-group-10": [
+        "S13-RECR", "__S13-GR1-C", "S13-HECR",
+                  "__S13-GLSR-C", "S13-GNR",
+        "S13-EGNR", "S13-GLSR", "S13-GR1",
+        "S13-GPR1", "S13-GR2", "S13-RECPR",
+                             "S13-HECPR"
+    ],
+    "s4-group-13": [
+        "S4-RECR", "__S4-GR1-C", "S4-HECR",
+        "S4-DECR", "__S4-GLSR-C", "S4-GNR",
+        "S4-EGNR","S4-GLSR","S4-GR1",
+        "S4-GPR1","S4-GR2","S4-RECPR",
+        "S4-DECPR","S4-GR3","S4-HECPR"
+    ],
+    "s14-group-13": [
+        "S14-RECR", "__S14-GR1-C", "S14-HECR",
+        "S14-DECR", "__S14-GLSR-C", "S14-GNR",
+        "S14-EGNR","S14-GLSR","S14-GR1",
+        "S14-GPR1","S14-GR2","S14-RECPR",
+        "S14-DECPR","S14-GR3","S14-HECPR"
+    ],
+    "s15-group-10": [
+        "S15-RECR", "__S15-GR1-C", "S15-HECR",
+                  "__S15-GLSR-C", "S15-GNR",
+        "S15-EGNR", "S15-GLSR", "S15-GR1",
+        "S15-GPR1", "S15-GR2", "S15-RECPR",
+                             "S15-HECPR"
+    ],
+    "s19-group-13": [
+        "S19-RECR", "__S19-GR1-C", "S19-HECR",
+        "S19-DECR", "__S19-GLSR-C", "S19-GNR",
+        "S19-EGNR","S19-GLSR","S19-GR1",
+        "S19-GPR1","S19-GR2","S19-RECPR",
+        "S19-DECPR","S19-GR3","S19-HECPR"
+    ],
     "shunt-group": [
         "SH2-RECR", "SH2-HECR", "SH2-GLSR",
         "SH2-GNR", "SH2/16-EGNR", "SH2-GR1",
@@ -26,11 +77,14 @@
         "SH16-RECR", "SH16-HECR", "SH16-GLSR"
     ],
     "route-M-11": [
-        "MT-AU_R_S",          "MT-BU_R_S",
-        "MT-AU_N_S",          "MT-BU_N_S",
-                   "MT-ADUCR","MT-BDUCR",
-        "MT-U_R_LR",          "MT-UDKR",
-        "MT-U_N_LR","MT-UYR1","MT-UYR2"
+        "M-AU_R_S",          "M-BU_R_S",
+        "M-AU_N_S",          "M-BU_N_S",
+                   "M-ADUCR","M-BDUCR",
+        "M-U_R_LR",          "M-UDKR",
+        "M-U_N_LR","M-UYR1","M-UYR2"
+    ],
+    "interlocked": [
+        "M-ZU_R_R","M-ZU_N_R"
     ],
     "point-minor-12":[
         "101-Z1WR1","101-Z1NWR","101-Z1RWR",
@@ -41,16 +95,20 @@
     ],
     "others": ["101-Z1UR","107-Z1UR","108-Z1UR","ZDUCR"],
 
-    "point": ["101-WNR","102-WNR","103-WNR","107-WNR","108-WNR"],
+    "common": ["GNCR","WNCR","UNCR","SMR"],
 
-    "common": ["GNCR","WNCR","UNCR","SMR","YYNR","YYRNR","CH/WW/EW/NCR"],
+    "common-1": ["CHYNR","CHYRNR","NNCR","MN-GZR","SH-GZR"],
 
-    "common-1": ["CHYNR","CHYRNR",
-        "NNCR",
-        "MN-GZR","SH-GZR"
+    "signal-btn": [
+        "S1-GN","S3-GN","S4-GN","S5-GN","S6-GN",
+        "S12-GN","S13-GN","S14-GN","S15-GN","S19-GN",
+        "SH2-GN","SH16-GN"
     ],
+    "point-btn": ["101-WN","102-WN","103-WN","107-WN","108-WN", "YYN", "YYRN"],
+    "point": ["101-WNR","102-WNR","103-WNR","107-WNR","108-WNR", "YYNR","YYRNR","CH/WW/EW/NCR"],
 
-    "route": ["204-UNR","Mn-UNR","LP1-UNR","LP2-UNR","217-UNR","DN-UNR","UP-UNR"],
+    "route-btn": ["204-UN","M-UN","LP1-UN","LP2-UN","217-UN","DN-UN","UP-UN"],
+    "route": ["204-UNR","M-UNR","LP1-UNR","LP2-UNR","217-UNR","DN-UNR","UP-UNR"],
 
     "individual": [
         "S1-GNPR","S3-GNPR","S4-GNPR","S5-GNPR","S6-GNPR",
