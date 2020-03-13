@@ -16,11 +16,12 @@ var type1Path = {
 };
 
 var type2Path = {
-    "possible-value": ["/app/yard-s14/static/json/type2/items.json"],
+    "possible-value": ["/app/yard-s14/static/json/type2/items-type2.json"],
     "initial-value": ["/app/yard-s14/static/json/type2/initial-value-type2.json"],
-    "expressions": ["/app/yard-s14/static/json/type2/expressions.json",
-                    "/app/yard-s14/static/json/type2/expressions2.json",
-                    "/app/yard-s14/static/json/type2/expressions-direction.json"]
+    "expressions": ["/app/yard-s14/static/json/type2/expressions-evt.json",
+                    "/app/yard-s14/static/json/type2/expressions-common2.json",
+                    "/app/yard-s14/static/json/type2/expressions-direction.json",
+                    "/app/yard-s14/static/json/type2/expressions-routes.json"]
 };
 
 var version = $V.getUrlAttributeType("type2");
