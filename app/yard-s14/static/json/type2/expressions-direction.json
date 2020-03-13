@@ -1,3 +1,4 @@
 {
-	"M-ZU_R_R": ["(S19-GNPR&&M-UNR)"]
+	"M-ZU_R_R": ["((S19-GNPR&&M-UNR&&107A-U_R_S&&OV4-Z2U_R_R&&OV14-Z2U_R_R)&&M-ZU_N_R)"],
+	"M-ZU_N_R": ["((GNCR&&UNCR)&&M-ZU_R_R)"]
 }

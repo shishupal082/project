@@ -84,7 +84,9 @@
         "M-U_N_LR","M-UYR1","M-UYR2"
     ],
     "interlocked": [
-        "M-ZU_R_R","M-ZU_N_R"
+        "M-ZU_R_R", "M-ZU_N_R",
+        "OV14-Z2U_R_R", "OV14-Z2U_N_R",
+        "OV4-Z2U_R_R", "OV4-Z2U_N_R"
     ],
     "point-minor-12":[
         "101-Z1WR1","101-Z1NWR","101-Z1RWR",
@@ -95,7 +97,7 @@
     ],
     "others": ["101-Z1UR","107-Z1UR","108-Z1UR","ZDUCR"],
 
-    "common": ["GNCR","WNCR","UNCR","SMR"],
+    "common": ["GNCR","WNCR","UNCR","SMR", "MN-GNPR", "SH-GNPR"],
 
     "common-1": ["CHYNR","CHYRNR","NNCR","MN-GZR","SH-GZR"],
 

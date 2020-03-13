@@ -1,0 +1,11 @@
+{
+    "MN-GNPR": {
+        "op":"||",
+        "val": ["S1-GNPR","S3-GNPR","S4-GNPR","S5-GNPR","S6-GNPR",
+                "S12-GNPR","S13-GNPR","S14-GNPR","S15-GNPR","S19-GNPR"]
+    },
+    "SH-GNPR": {
+        "op":"||",
+        "val": ["SH2-GNPR","SH16-GNPR"]
+    }
+}

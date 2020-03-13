@@ -19,6 +19,7 @@ var type2Path = {
     "possible-value": ["/app/yard-s14/static/json/type2/items.json"],
     "initial-value": ["/app/yard-s14/static/json/type2/initial-value-type2.json"],
     "expressions": ["/app/yard-s14/static/json/type2/expressions.json",
+                    "/app/yard-s14/static/json/type2/expressions2.json",
                     "/app/yard-s14/static/json/type2/expressions-direction.json"]
 };
 
