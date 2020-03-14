@@ -119,6 +119,9 @@ YardView.extend({
             case "yard-1":
                 containerStyle = "width: 2790px;";
             break;
+            case "yard-3":
+                containerStyle = "width: 2780px;";
+            break;
         }
         $(".container").attr("style", containerStyle);
         var tprNodeDefaultClass = ["evt", "btn", "tpr", "green", "red", "yellow", "blue", "circle", undefined, "pink", "slat"];

@@ -59,5 +59,29 @@
 				"value": ["","","","","",""]
 			}
 		]
+	},
+	{
+		"yardId": "yard-3",
+		"yardDetailsApis": ["/app/yard-s17/static/json/yard.json"],
+		"dominoVerify": false,
+		"containerStyle": "width: 1410px;",
+		"requiredContent": [
+			{
+				"name": "topLoopLineTex",
+				"value": ["","","","","", "ll-text"]
+			},
+			{
+				"name": "topLoopLine",
+				"value": ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr"]
+			},
+			{
+				"name": "topLoopPoint",
+				"value": ["","","","","4-point-mid","5-point-mid","5-point-mid-2"]
+			},
+			{
+				"name": "mainLine",
+				"value": ["1A-tpr","1-tpr", "9-tpr", "10/11-tpr", "4A-tpr", "ml-tpr", "5A-tpr", "2/3-tpr", "13-tpr", "12-tpr", "12A-tpr"]
+			}
+		]
 	}
 ]
