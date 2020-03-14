@@ -64,7 +64,7 @@
 		"yardId": "yard-3",
 		"yardDetailsApis": ["/app/yard-s17/static/json/yard.json"],
 		"dominoVerify": false,
-		"containerStyle": "width: 1410px;",
+		"containerStyle": "width: 1425px;",
 		"requiredContent": [
 			{
 				"name": "topLoopLineText",
