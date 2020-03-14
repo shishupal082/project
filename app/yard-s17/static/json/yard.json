@@ -83,7 +83,7 @@
         "sdg-tpr-0": [
             [
                 "<button class='evt btn tpr yellow p-6a-r' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>",
-                "","","","sdg"
+                "6","","","sdg"
             ],
             [
                 "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",

@@ -48,6 +48,9 @@ YardView.extend({
     },
     loadYardData: function(urls, callBack, apiName) {
         loadingStatus[apiName] = false;
+        if (!$S.isArray(urls)) {
+            urls = [];
+        }
         for (var i = urls.length - 1; i >= 0; i--) {
             urls[i] = urls[i] + "?" + YardView.getMd5Sum(urls[i]);
         }
