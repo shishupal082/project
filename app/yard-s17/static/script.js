@@ -2,12 +2,12 @@ $(document).ready(function() {
 
 var timerCount = 0;
 
-// var apisPath = {};
-// var commonPath = {
-//     "possible-value": ["/app/yard-s17/static/json/common/items.json"],
-//     "initial-value": ["/app/yard-s17/static/json/common/initial-value.json"],
-//     "expressions": []
-// };
+var apisPath = {};
+var commonPath = {
+    "possible-value": ["/app/yard-s17/static/json/possible-values.json"],
+    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
+    "expressions": []
+};
 
 // var type1Path = {
 //     "possible-value": ["/app/yard-s17/static/json/type1/items.json"],
@@ -26,20 +26,20 @@ var timerCount = 0;
 
 // var version = $V.getUrlAttributeType("type2");
 
-// for (var key in commonPath) {
-//     apisPath[key] = commonPath[key];
-//     switch(version) {
-//         case "type1":
-//             apisPath[key] = apisPath[key].concat(type1Path[key]);
-//         break;
-//         case "type2":
-//             apisPath[key] = apisPath[key].concat(type2Path[key]);
-//         break;
-//     }
-// }
+for (var key in commonPath) {
+    apisPath[key] = commonPath[key];
+    // switch(version) {
+    //     case "type1":
+    //         apisPath[key] = apisPath[key].concat(type1Path[key]);
+    //     break;
+    //     case "type2":
+    //         apisPath[key] = apisPath[key].concat(type2Path[key]);
+    //     break;
+    // }
+}
 
-// $YApiModel.setApisPath(apisPath);
-// $YApiModel.setSeprateValueKey(["tpr", "signal", "pointIndication"]);
+$YApiModel.setApisPath(apisPath);
+$YApiModel.setSeprateValueKey(["tpr", "signal", "pointIndication"]);
 
 function checkUIStyle() {
     $V.addTprClass();

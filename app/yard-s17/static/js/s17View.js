@@ -82,8 +82,9 @@ View.extend({
         var tprNames = $YApiModel.getSepratedValue("tpr");
         for (var i=0; i<tprNames.length; i++) {
             var key = tprNames[i];
+            var keyClass = key.replace("/", "_");
             try {
-                var node = $("#yard").find("."+key);
+                var node = $("#yard").find("."+keyClass);
                 if (node.length) {
                     if (node.hasClass("tpr")) {
                         node.removeClass("btn-warning");
