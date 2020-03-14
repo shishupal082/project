@@ -67,7 +67,7 @@
 		"containerStyle": "width: 1410px;",
 		"requiredContent": [
 			{
-				"name": "topLoopLineTex",
+				"name": "topLoopLineText",
 				"value": ["","","","","", "ll-text"]
 			},
 			{
