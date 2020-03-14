@@ -7,6 +7,11 @@
                 "<div class='text-left'><span class='signal-no'>3</span></div>"
             ]
         ],
+        "p-6-text": [
+            [
+                "","<div class='text-right'>6</div>"
+            ]
+        ],
         "4B-tpr": [
             [
                 "<span class='label label-primary'>--</span>",
@@ -83,7 +88,8 @@
         "sdg-tpr-0": [
             [
                 "<button class='evt btn tpr yellow p-6a-r' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>",
-                "6","","","sdg"
+                "<span class='badge yellow indication 6-WFK active'>&nbsp;</span>",
+                "","","sdg"
             ],
             [
                 "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",

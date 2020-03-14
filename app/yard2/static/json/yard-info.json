@@ -68,7 +68,7 @@
 		"requiredContent": [
 			{
 				"name": "topLoopLineText",
-				"value": ["","","","","", "ll-text"]
+				"value": ["","","","","", "ll-text", "p-6-text"]
 			},
 			{
 				"name": "topLoopLine",

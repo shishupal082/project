@@ -18,7 +18,7 @@ var yardComponent = {};
 var tableContent = [];
 var requestId = $M.getRequestId();
 
-var topLoopLineText = ["","","","","", "ll-text"];
+var topLoopLineText = ["","","","","", "ll-text", "p-6-text"];
 var topLoopLine = ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr-0", "sdg-tpr"]
 var topLoopPoint = ["","","","","4-point-mid","5-point-mid","5-point-mid-2"]
 var mainLine = ["1A-tpr","1-tpr", "9-tpr", "10/11-tpr", "4A-tpr", "ml-tpr", "5A-tpr", "2/3-tpr", "13-tpr", "12-tpr", "12A-tpr"];
