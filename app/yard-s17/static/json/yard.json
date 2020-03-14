@@ -66,30 +66,53 @@
             ]
         ],
         "ll-tpr-sh": [
-            [],
+            [
+                "",
+                "<button class='evt btn circle point-change-request' value='NWWNR=1,6-WN=1'><span class='badge'>N</span></button>"
+            ],
             [
 
-                "<button class='evt btn tpr yellow LL-sh-right' value='5B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr yellow LL-sh-right' value='5B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr yellow SDG-TPR-A' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow p-6a-c' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>"
             ],
-            []
+            [
+                "",
+                "<button class='evt btn tpr green' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>"
+            ]
+        ],
+        "sdg-tpr-0": [
+            [
+                "<button class='evt btn tpr yellow p-6a-r' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>",
+                "","","","sdg"
+            ],
+            [
+                "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,6-WN=1'><span class='badge'>R</span></button>",
+                "",
+                "<div class='shunt'><div class='text-right'><span class='badge yellow active'>&nbsp;</span></div><div class='text-right'><span id='SH8-HECR' class='badge yellow active'>&nbsp;</span><span id='SH8-RECR' class='badge yellow active'>&nbsp;</span></div></div>",
+                "sh8"
+            ]
         ],
         "sdg-tpr": [
             [
-                "","<div class='text-right'>sdg</div>","<div class='text-left'></div>",
+                "","",
                 "<span class='label label-primary'>--</span>",
                 "<span class='label label-primary'>--</span>"
             ],
             [
-                "<button class='evt btn tpr green SDG-TPR' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<span class='label label-primary'>|</span>"
             ],
             [
-                "<div class='shunt'><div class='text-right'><span class='badge yellow active'>&nbsp;</span></div><div class='text-right'><span id='SH8-HECR' class='badge yellow active'>&nbsp;</span><span id='SH8-RECR' class='badge yellow active'>&nbsp;</span></div></div>",
-                "sh8","",
+                "","",
                 "<span class='label label-primary'>--</span>",
                 "<span class='label label-primary'>--</span>"
             ]
@@ -128,7 +151,7 @@
             ],
             [
                 "<button class='evt btn tpr yellow circle p-5-r' value='5B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='RWWNR=1,4-WN=1'><span class='badge'>R</span></button>"
+                "<button class='evt btn circle point-change-request' value='RWWNR=1,5-WN=1'><span class='badge'>R</span></button>"
             ],
             [
                 "",

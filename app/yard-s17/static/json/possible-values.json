@@ -1,7 +1,8 @@
 {
     "tpr": [
         "SMR", "1A-TPR", "1-TPR", "9-TPR", "10/11-TPR", "4A-TPR", "M-TPR", "5A-TPR",
-        "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR", "SDG-TPR"
+        "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR",
+        "SDG-TPR-A", "SDG-TPR-B"
     ],
     "sg-btn": [
         "S1-GN", "S2-GN", "S3-GN", "S13-GN", "SH7-GN",
@@ -10,5 +11,8 @@
     "rt-btn": [
         "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
         "DN-UN", "UP-UN", "SDG-UN"
+    ],
+    "pt-btn": [
+        "NWWNR","RWWNR","4-WN","5-WN","6-WN"
     ]
 }

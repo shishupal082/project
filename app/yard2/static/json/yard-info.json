@@ -72,7 +72,7 @@
 			},
 			{
 				"name": "topLoopLine",
-				"value": ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr"]
+				"value": ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr-0", "sdg-tpr"]
 			},
 			{
 				"name": "topLoopPoint",
