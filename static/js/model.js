@@ -250,6 +250,9 @@ Model.extend({
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);
     },
+    log: function(logText) {
+        return $S.log(logText);
+    },
     enableVerifyExpression: function() {
         verifyExpression = true;
         return verifyExpression;

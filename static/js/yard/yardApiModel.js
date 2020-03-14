@@ -74,6 +74,8 @@ function loadPossibleValues(callBack) {
                     }
                 }
             }
+        } else {
+            $M.log("Invalid response (possibleValue):" + response);
         }
     }, callBack);
 }
@@ -85,6 +87,8 @@ function loadInitialValues(callBack) {
     YardApiModel.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             Object.assign(InitialValues, response);
+        } else {
+            $M.log("Invalid response (initialValue):" + response);
         }
     }, callBack);
 }
@@ -96,6 +100,8 @@ function loadExpressions(callBack) {
     YardApiModel.loadJsonData(url, function(response) {
         if ($M.isObject(response)) {
             AllExpressions.push(response);
+        } else {
+            $M.log("Invalid response (expression):" + response);
         }
     }, function() {
         var allExpressions = AllExpressions;
@@ -130,10 +136,10 @@ YardApiModel.extend({
             return false;
         }
         var apiSendCount = urls.length, apiReceiveCount = 0;
-        var ajax = {};
-        ajax.type = "json";
-        ajax.dataType = "json";
         for (var i = 0; i < urls.length; i++) {
+            var ajax = {};
+            ajax.type = "json";
+            ajax.dataType = "json";
             ajax.url = urls[i];
             $.ajax({url: ajax.url,
                 success: function(response, textStatus) {
