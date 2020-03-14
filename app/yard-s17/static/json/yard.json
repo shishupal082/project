@@ -318,13 +318,13 @@
         ],
         "12A-tpr": [
             [
+                "12A","-tpr"
             ],
             [
                 "<button class='evt btn tpr red 12A-TPR' value='12A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr red 12A-TPR' value='12A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "12A","-tpr"
             ]
         ]
     }
