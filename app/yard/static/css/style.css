@@ -122,6 +122,19 @@ hr {
     color: #555;
     background-color: #ffff00;
 }
+.yard .btn-rotate {
+    transform: rotate(-45deg);
+    width: 25px;
+    height: 10px;
+}
+.yard .btn-rotate span.badge {
+    height: 5px;
+    top: 2px;
+}
+.yard .btn-rotate.positive {
+    transform: rotate(45deg);
+}
+
 /* Debugging style */
 .yard.debug .btn,
 .yard.debug td {
