@@ -54,13 +54,6 @@ View.extend({
             return "btn-danger";
         }
         return "";
-    },
-    getUrlAttributeType: function(defaultType) {
-        var type = $YH.getUrlAttribute("type");
-        if (["type1","type2"].indexOf(type) >= 0) {
-            return type;
-        }
-        return defaultType;
     }
 });
 View.extend({
@@ -80,6 +73,7 @@ View.extend({
     },
     addTprClass: function(name) {
         var tprNames = $YApiModel.getSepratedValue("tpr");
+        tprNames = tprNames.concat($YApiModel.getSepratedValue("tpr-class"));
         for (var i=0; i<tprNames.length; i++) {
             var key = tprNames[i];
             var keyClass = key.replace("/", "_");

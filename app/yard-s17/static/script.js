@@ -9,37 +9,12 @@ var commonPath = {
     "expressions": []
 };
 
-// var type1Path = {
-//     "possible-value": ["/app/yard-s17/static/json/type1/items.json"],
-//     "initial-value": [],
-//     "expressions": ["/app/yard-s17/static/json/type1/expressions.json"]
-// };
-
-// var type2Path = {
-//     "possible-value": ["/app/yard-s17/static/json/type2/items-type2.json"],
-//     "initial-value": ["/app/yard-s17/static/json/type2/initial-value-type2.json"],
-//     "expressions": ["/app/yard-s17/static/json/type2/expressions-evt.json",
-//                     "/app/yard-s17/static/json/type2/expressions-common2.json",
-//                     "/app/yard-s17/static/json/type2/expressions-direction.json",
-//                     "/app/yard-s17/static/json/type2/expressions-routes.json"]
-// };
-
-// var version = $V.getUrlAttributeType("type2");
-
 for (var key in commonPath) {
     apisPath[key] = commonPath[key];
-    // switch(version) {
-    //     case "type1":
-    //         apisPath[key] = apisPath[key].concat(type1Path[key]);
-    //     break;
-    //     case "type2":
-    //         apisPath[key] = apisPath[key].concat(type2Path[key]);
-    //     break;
-    // }
 }
 
 $YApiModel.setApisPath(apisPath);
-$YApiModel.setSeprateValueKey(["tpr", "signal", "pointIndication"]);
+$YApiModel.setSeprateValueKey(["tpr", "tpr-class", "signal", "pointIndication"]);
 
 function checkUIStyle() {
     $V.addTprClass();
@@ -100,6 +75,7 @@ $("#toggleDisplayDomino").on("click", function(e) {
 $YApiModel.documentLoaded(function() {
     $M.reCheckAllValues();
     $V.loadApiData(function() {
+        $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {

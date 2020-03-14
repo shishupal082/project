@@ -125,11 +125,11 @@ hr {
 .yard .btn-rotate {
     transform: rotate(-45deg);
     width: 25px;
-    height: 10px;
+    height: 14px;
 }
 .yard .btn-rotate span.badge {
     height: 5px;
-    top: 2px;
+    top: 4px;
 }
 .yard .btn-rotate.positive {
     transform: rotate(45deg);

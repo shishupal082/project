@@ -92,8 +92,8 @@
                 "","","sdg"
             ],
             [
-                "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green p-6a-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-6b-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-6b-n' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr green SDG-TPR-B' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>"

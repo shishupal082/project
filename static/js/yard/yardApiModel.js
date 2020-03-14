@@ -216,6 +216,5 @@ YardApiModel.extend({
         return 1;
     }
 });
-/*End of direct access of methods*/
 window.YardApiModel = window.$YApiModel = YardApiModel;
 })(window, $M);

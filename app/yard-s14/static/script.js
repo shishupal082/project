@@ -100,7 +100,7 @@ $("#toggleDisplayDomino").on("click", function(e) {
 $YApiModel.documentLoaded(function() {
     $M.reCheckAllValues();
     $V.loadApiData(function() {
-        $(".container").attr("style", "width: 1655px;")
+        $(".container").attr("style", "width: 1670px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {

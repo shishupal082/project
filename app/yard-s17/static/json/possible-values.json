@@ -4,6 +4,13 @@
         "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR",
         "SDG-TPR-A", "SDG-TPR-B"
     ],
+    "tpr-class": [
+
+        "LL-sh-left",
+        "p-4b-n", "p-4b-c", "p-4-r", "p-4a-n", "p-4a-c",
+        "p-5b-n", "p-5b-c", "p-5-r", "p-5a-n", "p-5a-c",
+        "p-6a-c","p-6a-r", "p-6b-c","p-6b-r", "p-6b-n"
+    ],
     "sg-btn": [
         "S1-GN", "S2-GN", "S3-GN", "S13-GN", "SH7-GN",
         "S12-GN", "S10-GN", "S11-GN", "S9-GN", "SH8-GN"
