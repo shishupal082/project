@@ -1,3 +1,4 @@
 {
-    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR"]
+    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR"],
+    "common-2": ["YYNR","YYRNR"]
 }

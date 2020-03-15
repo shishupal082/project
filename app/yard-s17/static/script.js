@@ -6,7 +6,8 @@ var apisPath = {};
 var commonPath = {
     "possible-value": ["/app/yard-s17/static/json/possible-values.json",
                         "/app/yard-s17/static/json/possible-values2.json",
-                        "/app/yard-s17/static/json/sequence-1-1.json"],
+                        "/app/yard-s17/static/json/possible-values-seq-1.json",
+                        "/app/yard-s17/static/json/possible-values-group.json"],
     "initial-value": ["/app/yard-s17/static/json/initial-value.json",
                       "/app/yard-s17/static/json/initial-value2.json"],
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",

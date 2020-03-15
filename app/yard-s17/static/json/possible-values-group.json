@@ -1,0 +1,86 @@
+{
+	"S1-group-13": [
+        "S1-RECR", "__S1-GR1-C", "S1-HECR",
+        "S1-DECR", "__S1-GLSR-C", "S1-GNR",
+        "S1-EGNR","S1-GLSR","S1-GR1",
+        "S1-GPR1","S1-GR2","S1-RECPR",
+        "S1-DECPR","S1-GR3","S1-HECPR"
+    ],
+	"S2-group-13": [
+        "S2-RECR", "__S2-GR1-C", "S2-HECR",
+        "S2-DECR", "__S2-GLSR-C", "S2-GNR",
+        "S2-EGNR","S2-GLSR","S2-GR1",
+        "S2-GPR1","S2-GR2","S2-RECPR",
+        "S2-DECPR","S2-GR3","S2-HECPR"
+    ],
+	"S11-group-13": [
+        "S11-RECR", "__S11-GR1-C", "S11-HECR",
+        "S11-DECR", "__S11-GLSR-C", "S11-GNR",
+        "S11-EGNR","S11-GLSR","S11-GR1",
+        "S11-GPR1","S11-GR2","S11-RECPR",
+        "S11-DECPR","S11-GR3","S11-HECPR"
+    ],
+	"S12-group-13": [
+        "S12-RECR", "__S12-GR1-C", "S12-HECR",
+        "S12-DECR", "__S12-GLSR-C", "S12-GNR",
+        "S12-EGNR","S12-GLSR","S12-GR1",
+        "S12-GPR1","S12-GR2","S12-RECPR",
+        "S12-DECPR","S12-GR3","S12-HECPR"
+    ],
+    "S3-group-10": [
+        "S3-RECR", "__S3-GR1-C", "S3-HECR",
+                  "__S3-GLSR-C", "S3-GNR",
+        "S3-EGNR", "S3-GLSR", "S3-GR1",
+        "S3-GPR1", "S3-GR2", "S3-RECPR",
+                             "S3-HECPR"
+    ],
+    "S10-group-10": [
+        "S10-RECR", "__S10-GR1-C", "S10-HECR",
+                  "__S10-GLSR-C", "S10-GNR",
+        "S10-EGNR", "S10-GLSR", "S10-GR1",
+        "S10-GPR1", "S10-GR2", "S10-RECPR",
+                             "S10-HECPR"
+    ],
+    "S9-group-10": [
+        "S9-RECR", "__S9-GR1-C", "S9-HECR",
+                  "__S9-GLSR-C", "S9-GNR",
+        "S9-EGNR", "S9-GLSR", "S9-GR1",
+        "S9-GPR1", "S9-GR2", "S9-RECPR",
+                             "S9-HECPR"
+    ],
+    "S13-group-10": [
+        "S13-RECR", "__S13-GR1-C", "S13-HECR",
+                  "__S13-GLSR-C", "S13-GNR",
+        "S13-EGNR", "S13-GLSR", "S13-GR1",
+        "S13-GPR1", "S13-GR2", "S13-RECPR",
+                             "S13-HECPR"
+    ],
+    "shunt-group": [
+        "SH7-RECR", "SH7-HECR", "SH7-GLSR",
+        "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
+        "SH2-GR2", "__SH7-GR1-C", "SH8-GR2",
+        "SH8-GNR", "__SH8-GR1-C", "SH8-GR1",
+        "SH8-RECR", "SH8-HECR", "SH8-GLSR"
+    ],
+    "point-minor-12":[
+        "4-Z1WR1","4-Z1NWR","4-Z1RWR",
+        "4-W_R_R","4-R_WLR","4-WKR2",
+        "4-W_N_R","4-N_WLR","4-WKR1",
+        "4-WR",             "4-WKR3",
+                            "4-WJR"
+    ],
+    "point-minor-12":[
+        "5-Z1WR1","5-Z1NWR","5-Z1RWR",
+        "5-W_R_R","5-R_WLR","5-WKR2",
+        "5-W_N_R","5-N_WLR","5-WKR1",
+        "5-WR",             "5-WKR3",
+                            "5-WJR"
+    ],
+    "point-minor-12":[
+        "6-Z1WR1","6-Z1NWR","6-Z1RWR",
+        "6-W_R_R","6-R_WLR","6-WKR2",
+        "6-W_N_R","6-N_WLR","6-WKR1",
+        "6-WR",             "6-WKR3",
+                            "6-WJR"
+    ]
+}
