@@ -12,7 +12,7 @@ var commonPath = {
                       "/app/yard-s17/static/json/initial-value2.json"],
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
                     "/app/yard-s17/static/json/expressions-tpr-cls.json",
-                    "/app/yard-s17/static/json/expressions-common.json",
+                    // "/app/yard-s17/static/json/expressions-common.json",
                     "/app/yard-s17/static/json/expressions-common2.json"]
 };
 

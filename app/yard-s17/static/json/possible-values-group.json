@@ -82,5 +82,54 @@
         "6-W_N_R","6-N_WLR","6-WKR1",
         "6-WR",             "6-WKR3",
                             "6-WJR"
+    ],
+    "route-ML-11": [
+        "ML-AU_R_S",          "ML-BU_R_S",
+        "ML-AU_N_S",          "ML-BU_N_S",
+                   "ML-ADUCR","ML-BDUCR",
+        "ML-U_R_LR",          "ML-UDKR",
+        "ML-U_N_LR","ML-UYR1","ML-UYR2"
+    ],
+    "route-LL-11": [
+        "LL-AU_R_S",          "LL-BU_R_S",
+        "LL-AU_N_S",          "LL-BU_N_S",
+                   "LL-ADUCR","LL-BDUCR",
+        "LL-U_R_LR",          "LL-UDKR",
+        "LL-U_N_LR","LL-UYR1","LL-UYR2"
+    ],
+    "route-SDG-11": [
+        "SDG-AU_R_S",          "SDG-BU_R_S",
+        "SDG-AU_N_S",          "SDG-BU_N_S",
+                   "SDG-ADUCR","SDG-BDUCR",
+        "SDG-U_R_LR",          "SDG-UDKR",
+        "SDG-U_N_LR","SDG-UYR1","SDG-UYR2"
+    ],
+    "route-UP-11": [
+        "UP-AU_R_S",          "UP-BU_R_S",
+        "UP-AU_N_S",          "UP-BU_N_S",
+                   "UP-ADUCR","UP-BDUCR",
+        "UP-U_R_LR",          "UP-UDKR",
+        "UP-U_N_LR","UP-UYR1","UP-UYR2"
+    ],
+    "route-DN-11": [
+        "DN-AU_R_S",          "DN-BU_R_S",
+        "DN-AU_N_S",          "DN-BU_N_S",
+                   "DN-ADUCR","DN-BDUCR",
+        "DN-U_R_LR",          "DN-UDKR",
+        "DN-U_N_LR","DN-UYR1","DN-UYR2"
+    ],
+    "route-10/11-11": [
+        "10/11-AU_R_S",          "10/11-BU_R_S",
+        "10/11-AU_N_S",          "10/11-BU_N_S",
+                   "10/11-ADUCR","10/11-BDUCR",
+        "10/11-U_R_LR",          "10/11-UDKR",
+        "10/11-U_N_LR","10/11-UYR1","10/11-UYR2"
+    ],
+    "route-2/3-11": [
+        "2/3-AU_R_S",          "2/3-BU_R_S",
+        "2/3-AU_N_S",          "2/3-BU_N_S",
+                   "2/3-ADUCR","2/3-BDUCR",
+        "2/3-U_R_LR",          "2/3-UDKR",
+        "2/3-U_N_LR","2/3-UYR1","2/3-UYR2"
     ]
 }
