@@ -102,7 +102,18 @@ View.extend({
         return 1;
     },
     addSignalClass: function() {
-        var signals = $YApiModel.getSepratedValue("signal");
+        var signals = [];
+        // signals = $YApiModel.getSepratedValue("signal");
+        signals = ["S1-RECR","S1-HECR","S1-DECR",
+            "S2-RECR","S2-HECR","S2-DECR",
+            "S11-RECR","S11-HECR","S11-DECR",
+            "S12-RECR","S12-HECR","S12-DECR",
+            "S3-RECR","S3-HECR",
+            "S9-RECR","S9-HECR",
+            "S10-RECR","S10-HECR",
+            "S13-RECR","S13-HECR",
+            "SH7-RECR","SH7-HECR",
+            "SH8-RECR","SH8-HECR"];
         var signalClass = "";
         for (var i=0; i <signals.length; i++) {
             signalClass = $M.isUp(signals[i]) ? "active" : "";
