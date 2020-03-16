@@ -10,8 +10,7 @@
     "p-5-r": ["(5A-TPR&&5B-TPR&&5-RWKR)"],
     "p-5a-c": ["(5A-TPR&&5B-TPR&&(5-NWKR||5-RWKR))"],
     "p-5b-c": ["(5A-TPR&&5B-TPR&&(5-NWKR||5-RWKR))"],
-    "p-6a-c": ["(SDG-TPR-A&&(6-NWKR||6-RWKR))"],
-    "p-6a-r": ["(SDG-TPR-B&&6-RWKR)"],
-    "p-6b-n": ["(SDG-TPR-B&&6-NWKR)"],
+    "p-6a-n": ["(SDG-TPR-A&&(6-NWKR||6-RWKR))"],
+    "p-6b-c": ["(SDG-TPR-B&&6-NWKR)"],
     "p-6b-r": ["(SDG-TPR-B&&6-RWKR)"]
 }

@@ -5,14 +5,17 @@ var timerCount = 0;
 var apisPath = {};
 var commonPath = {
     "possible-value": ["/app/yard-s17/static/json/possible-values.json",
-                        "/app/yard-s17/static/json/possible-values2.json",
+                        "/app/yard-s17/static/json/possible-values-common.json",
                         "/app/yard-s17/static/json/possible-values-seq-1.json",
+                        "/app/yard-s17/static/json/possible-values-latched.json",
+                        "/app/yard-s17/static/json//others/possible-values-routes.json",
                         "/app/yard-s17/static/json/possible-values-group.json"],
     "initial-value": ["/app/yard-s17/static/json/initial-value.json",
                       "/app/yard-s17/static/json/initial-value2.json"],
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
                     "/app/yard-s17/static/json/expressions-tpr-cls.json",
-                    // "/app/yard-s17/static/json/expressions-common.json",
+                    "/app/yard-s17/static/json/expressions-common.json",
+                    "/app/yard-s17/static/json/others/expressions-latched.json",
                     "/app/yard-s17/static/json/expressions-common2.json"]
 };
 
@@ -66,6 +69,7 @@ function evtClick (currentTarget) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
+    console.log("Click event completed.");
 }
 function checkDominoDisplayStatus() {
     if ($V.getDisplayYardDominoBoundary()) {

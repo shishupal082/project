@@ -1,6 +1,6 @@
 {
     "tpr": [
-        "SMR", "1A-TPR", "1-TPR", "9-TPR", "10/11-TPR", "4A-TPR", "M-TPR", "5A-TPR",
+        "1A-TPR", "1-TPR", "9-TPR", "10/11-TPR", "4A-TPR", "M-TPR", "5A-TPR",
         "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR",
         "SDG-TPR-A", "SDG-TPR-B"
     ],
@@ -8,7 +8,7 @@
         "LL-sh-left",
         "p-4b-n", "p-4b-c", "p-4-r", "p-4a-n", "p-4a-c",
         "p-5b-n", "p-5b-c", "p-5-r", "p-5a-n", "p-5a-c",
-        "p-6a-c", "p-6a-r", "p-6b-r", "p-6b-n"
+        "p-6a-n", "p-6b-c", "p-6b-r"
     ],
     "sg-btn": [
         "S1-GN", "S2-GN", "S3-GN", "S13-GN", "SH7-GN",
@@ -18,17 +18,15 @@
         "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
         "DN-UN", "UP-UN", "SDG-UN"
     ],
-    "rt-btn": [
-        "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
-        "DN-UN", "UP-UN", "SDG-UN"
-    ],
-    "pt-btn": [
-        "NWWNR","RWWNR","4-WN","5-WN","6-WN"
-    ],
+
+    "pt-btn": ["4-WN","5-WN","6-WN"],
+    "pt-r": ["4-WNR","5-WNR","6-WNR"],
+
     "temp-pt": [
         "4-NWKR", "4-RWKR",
         "5-NWKR", "5-RWKR",
         "6-NWKR", "6-RWKR"
     ],
+
     "pointIndication": ["4-WFK", "5-WFK", "6-WFK"]
 }

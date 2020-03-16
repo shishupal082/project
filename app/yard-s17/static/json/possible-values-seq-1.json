@@ -1,13 +1,18 @@
 {
-	"individual-s": [
+    "individual-unr/unpr": [
+        "10/11-UNPR","ML-UNPR","LL-UNPR",
+        "2/3-UNPR","SDG-UNPR","UP-UNPR","DN-UNPR"
+    ],
+    "individual-gnr-part-of-group": [],
+    "individual-gnpr": [
         "S1-GNPR","S2-GNPR","S3-GNPR",
         "S9-GNPR","S10-GNPR","S11-GNPR","S12-GNPR","S13-GNPR",
         "SH7-GNPR","SH8-GNPR"
     ],
-    "individual-u": [
-        "10/11-UNR","ML-UNR","LL-UNR",
-        "2/3-UNR","SDG-UNR","UP-UNR","DN-UNR"
+    "seq-1": ["MN-GNPR","SH-GNPR"],
+    "seq-1-1": [
+        "ML-ZU_N_R-L"
     ],
-	"seq-1": ["MN-GNPR","SH-GNPR"],
-    "individual-p": ["4-WNR","5-WNR","6-WNR"]
+    "seq-2": ["MN-GZR", "SH-GZR", "COGGNR"],
+    "seq-4": ["ZDUCR"]
 }

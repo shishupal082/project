@@ -1,7 +1,7 @@
 {
-    "GNCR": ["(~S1-GNPR&&~S2-GNPR&&~S3-GNPR&&~S9-GNPR&&~S10-GNPR&&~S11-GNPR&&~S12-GNPR&&~S13-GNPR&&~SH7-GNPR&&~SH8-GNPR)"],
-    "WNCR": ["(~4-WNR&&~5-WNR&&~6-WNR&&~YYNR&&~YYRNR)"],
-    "UNCR": ["(~10/11-UNR&&~M-UNR&&~L-UNR&&~SDG-UNR&&~2/3-UNR&&~DN-UNR&&~UP-UNR)"],
+    "GNCR": ["(~S1-GNPR&&~S2-GNPR&&~S3-GNPR&&~S9-GNPR&&~S10-GNPR&&~S11-GNPR&&~S12-GNPR&&~S13-GNPR&&~SH7-GNPR&&~SH8-GNPR&&~YYNR&&~YRNR)"],
+    "WNCR": ["(~4-WNR&&~5-WNR&&~6-WNR)"],
+    "UNCR": ["(~10/11-UNPR&&~ML-UNPR&&~LL-UNPR&&~SDG-UNPR&&~2/3-UNPR&&~DN-UNPR&&~UP-UNPR&&~LXNR&&~CHYNR)"],
     "NNCR": {
         "op": "&&",
         "val": ["(GNCR&&WNCR&&UNCR&&CH/WW/EW/NCR)", "(~MN-GZR&&~SH-GZR)",

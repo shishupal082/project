@@ -1,0 +1,9 @@
+{
+    "latched": [
+        "ML-ZU_N_R", "ML-ZU_R_R",
+        "LL-ZU_N_R", "LL-ZU_R_R",
+        "SH7/8-G_N_R", "SH7/8-G_R_R",
+        "OV3/1_Z2U_N_R", "OV3/1_Z2U_R_R",
+        "OV3/2_Z2U_N_R", "OV3/2_Z2U_R_R"
+    ]
+}
