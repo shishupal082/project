@@ -31,22 +31,18 @@ var AllExpressions = [];
 var PossibleValuesLoadStatus = false;
 var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
-var LatchedItemsLoadStatus = false;
 
 var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
-var LatchedItemsPath = [];
 
 var SepratedValues = {};
-var LatchedItems = {};
 
 function isApisLoadComplete() {
     var loadingCheck = [];
     loadingCheck.push(PossibleValuesLoadStatus);
     loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
-    loadingCheck.push(LatchedItemsLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
         if (loadingCheck[i] == false) {
             return false;
@@ -91,31 +87,6 @@ function loadInitialValues(callBack) {
             $M.log("Invalid response (initialValue):" + response);
         }
     }, callBack);
-}
-function loadLatchedItems(callBack) {
-    var url = [];
-    for (var i = 0; i < LatchedItemsPath.length; i++) {
-        url.push(LatchedItemsPath[i]+"?"+RequestId);
-    }
-    YardApiModel.loadJsonData(url, function(response) {
-        if ($M.isObject(response)) {
-            Object.assign(LatchedItems, response);
-        } else {
-            $M.log("Invalid response (loadLatchedItems):" + response);
-        }
-    }, function() {
-        for (var key in LatchedItems) {
-            if ($M.isString(LatchedItems[key])) {
-                LatchedItems[LatchedItems[key]] = key;
-            } else {
-                $M.log("Invalid latched items for key: " + key);
-            }
-        }
-        for (var key in LatchedItems) {
-            PossibleValues.push(key);
-        }
-        callBack();
-    });
 }
 function loadExpressions(callBack) {
     var url = [];
@@ -197,19 +168,15 @@ YardApiModel.extend({
     documentLoaded: function(callBack) {
         loadPossibleValues(function() {
             PossibleValuesLoadStatus = true;
-            loadLatchedItems(function() {
-                LatchedItemsLoadStatus = true;
-                $M().setPossibleValues(PossibleValues);
-                $M().setLatchedItems(LatchedItems);
-                loadInitialValues(function() {
-                    InitialValuesLoadStatus = true;
-                    $M().initializeCurrentValues(InitialValues);
-                    loadExpressions(function() {
-                        ExpressionsLoadStatus = true;
-                        if (isApisLoadComplete()) {
-                            callBack();
-                        }
-                    });
+            $M().setPossibleValues(PossibleValues);
+            loadInitialValues(function() {
+                InitialValuesLoadStatus = true;
+                $M().initializeCurrentValues(InitialValues);
+                loadExpressions(function() {
+                    ExpressionsLoadStatus = true;
+                    if (isApisLoadComplete()) {
+                        callBack();
+                    }
                 });
             });
         });
@@ -217,9 +184,6 @@ YardApiModel.extend({
 });
 
 YardApiModel.extend({
-    getLatchedItems: function() {
-        return LatchedItems;
-    },
     getAllSepratedValue: function() {
         return SepratedValues;
     },
@@ -245,9 +209,6 @@ YardApiModel.extend({
                 break;
                 case "expressions":
                     ExpressionsPath = ExpressionsPath.concat(paths[key]);
-                break;
-                case "latched-items":
-                    LatchedItemsPath = LatchedItemsPath.concat(paths[key]);
                 break;
             }
         }

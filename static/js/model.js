@@ -2,7 +2,6 @@
 
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
-var latchedItems = {};
 var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
@@ -72,9 +71,6 @@ var setValue = (function() {
             currentValues[key] = value*1;
             var newValue = Model(key).get();
             if (oldValue != newValue) {
-                if (Model.isValidKey(latchedItems[key])) {
-                    currentValues[latchedItems[key]] = oldValue;
-                }
                 setValueCount++;
                 $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
                 isValueChanged = true;
@@ -164,24 +160,6 @@ Model.fn = Model.prototype = {
             setValueTobeChecked(possibleValues);
         }
         return true;
-    },
-    setLatchedItems: function(items) {
-        var key1, key2;
-        for (var key in items) {
-            if ($S.isString(items[key])) {
-                key1 = key;
-                key2 = items[key];
-                if (isValidKey(key1) && isValidKey(key2)) {
-                    latchedItems[key1] = key2;
-                    latchedItems[key2] = key1;
-                } else {
-                    $S.log("Invalid latched items for keys: " + key1 + " " + key2);
-                }
-            } else {
-                $S.log("Invalid latched items for key: " + key);
-            }
-        }
-        return 1;
     },
     setValueTobeChecked: function(values) {
         if (Model.isArray(values)) {
@@ -434,15 +412,6 @@ Model.extend({
             count++;
         }
         return {currentValues: currentValuesResponse, count: count};
-    },
-    getLatchedItems : function() {
-        var latchedItemsResponse = {};
-        var count = 0;
-        for (var key in latchedItems) {
-            latchedItemsResponse[key] = latchedItems[key];
-            count++;
-        }
-        return {latchedItems: latchedItemsResponse, count: count};
     }
 });
 Model.extend({
