@@ -2,6 +2,7 @@
 
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
 var possibleValues = [];
+var latchedItems = {};
 var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
@@ -71,10 +72,15 @@ var setValue = (function() {
             currentValues[key] = value*1;
             var newValue = Model(key).get();
             if (oldValue != newValue) {
+                if (Model.isValidKey(latchedItems[key])) {
+                    currentValues[latchedItems[key]] = oldValue;
+                }
                 setValueCount++;
                 $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
                 isValueChanged = true;
             }
+        } else {
+            $S.log("Invalid key for set: " + key);
         }
         return isValueChanged;
     }
@@ -90,7 +96,7 @@ function isValidValue(value) {
     return true;
 }
 function isValidKey(key) {
-    return possibleValues.indexOf(key) >=0 ? true : false;
+    return possibleValues.indexOf(key) >= 0 ? true : false;
 }
 /*
 Direct access by id: $M("id").get()
@@ -107,6 +113,7 @@ Model.fn = Model.prototype = {
         if (isValidKey(this.key)) {
             return currentValues[this.key] ? currentValues[this.key] : 0;
         }
+        $S.log("Invalid key for get: " + this.key);
         return 0;
     },
     isUp: function(value) {
@@ -134,7 +141,11 @@ Model.fn = Model.prototype = {
     initializeCurrentValues: function(extCurrentValues) {
         if (Model.isObject(extCurrentValues)) {
             for (var key in extCurrentValues) {
-                currentValues[key] = extCurrentValues[key];
+                if (isValidKey(key)) {
+                    currentValues[key] = extCurrentValues[key];
+                } else {
+                    $S.log("Invalid initializeCurrentValues key: " + key);
+                }
             }
         }
         return currentValues;
@@ -143,11 +154,34 @@ Model.fn = Model.prototype = {
         if (Model.isArray(extPossibleValues)) {
             possibleValues = [];
             for (var i = 0; i < extPossibleValues.length; i++) {
-                possibleValues.push(extPossibleValues[i]);
+                if (possibleValues.indexOf(extPossibleValues[i]) >= 0) {
+                    throw "Duplicate entry in possibleValues: " + extPossibleValues[i];
+                }
+                if ($S.isString(extPossibleValues[i]) && extPossibleValues[i].length > 0) {
+                    possibleValues.push(extPossibleValues[i]);
+                }
             }
             setValueTobeChecked(possibleValues);
         }
         return true;
+    },
+    setLatchedItems: function(items) {
+        var key1, key2;
+        for (var key in items) {
+            if ($S.isString(items[key])) {
+                key1 = key;
+                key2 = items[key];
+                if (isValidKey(key1) && isValidKey(key2)) {
+                    latchedItems[key1] = key2;
+                    latchedItems[key2] = key1;
+                } else {
+                    $S.log("Invalid latched items for keys: " + key1 + " " + key2);
+                }
+            } else {
+                $S.log("Invalid latched items for key: " + key);
+            }
+        }
+        return 1;
     },
     setValueTobeChecked: function(values) {
         if (Model.isArray(values)) {
@@ -400,6 +434,15 @@ Model.extend({
             count++;
         }
         return {currentValues: currentValuesResponse, count: count};
+    },
+    getLatchedItems : function() {
+        var latchedItemsResponse = {};
+        var count = 0;
+        for (var key in latchedItems) {
+            latchedItemsResponse[key] = latchedItems[key];
+            count++;
+        }
+        return {latchedItems: latchedItemsResponse, count: count};
     }
 });
 Model.extend({
