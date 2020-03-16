@@ -46,6 +46,7 @@ function isApisLoadComplete() {
     loadingCheck.push(PossibleValuesLoadStatus);
     loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
+    loadingCheck.push(LatchedItemsLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
         if (loadingCheck[i] == false) {
             return false;
