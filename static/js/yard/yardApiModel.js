@@ -212,5 +212,31 @@ YardApiModel.extend({
         return 1;
     }
 });
+YardApiModel.extend({
+    getExpressionsStatus: function() {
+        var possiblesValueByType = PossibleValuesByTypes;
+        var expressions = $M.getExps().exps;
+        var missingExpressionItems = {};
+        var foundExpressionItens = {};
+
+        for (var type in possiblesValueByType) {
+            for (var i = 0; i < possiblesValueByType[type].length; i++) {
+                if ($M.isArray(expressions[possiblesValueByType[type][i]])) {
+                    if (!$M.isArray(foundExpressionItens[type])) {
+                        foundExpressionItens[type] = [];
+                    }
+                    foundExpressionItens[type].push(possiblesValueByType[type][i]);
+                    continue;
+                }
+                if (!$M.isArray(missingExpressionItems[type])) {
+                    missingExpressionItems[type] = [];
+                }
+                missingExpressionItems[type].push(possiblesValueByType[type][i]);
+            }
+        }
+
+        return {missing: missingExpressionItems, found: foundExpressionItens};
+    }
+});
 window.YardApiModel = window.$YApiModel = YardApiModel;
 })(window, $M);
