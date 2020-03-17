@@ -1,8 +1,16 @@
 {
     "latched": [
+        "SH7/8-G_N_R", "SH7/8-G_R_R",
+
         "ML-ZU_N_R", "ML-ZU_R_R",
         "LL-ZU_N_R", "LL-ZU_R_R",
-        "SH7/8-G_N_R", "SH7/8-G_R_R",
+        "2/3-ZU_N_R", "2/3-ZU_R_R",
+        "10/11-ZU_N_R", "10/11-ZU_R_R",
+        "SDG-ZU_N_R", "SDG-ZU_R_R",
+        "UP-ZU_N_R", "UP-ZU_R_R",
+        "DN-ZU_N_R", "DN-ZU_R_R",
+
+
         "OV3/1_Z2U_N_R", "OV3/1_Z2U_R_R",
         "OV3/2_Z2U_N_R", "OV3/2_Z2U_R_R"
     ]

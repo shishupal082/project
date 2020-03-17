@@ -1,18 +1,16 @@
 {
-    "individual-unr/unpr": [
+    "unr/unpr": [
         "10/11-UNPR","ML-UNPR","LL-UNPR",
         "2/3-UNPR","SDG-UNPR","UP-UNPR","DN-UNPR"
     ],
-    "individual-gnr-part-of-group": [],
-    "individual-gnpr": [
+    "gnpr": [
         "S1-GNPR","S2-GNPR","S3-GNPR",
         "S9-GNPR","S10-GNPR","S11-GNPR","S12-GNPR","S13-GNPR",
         "SH7-GNPR","SH8-GNPR"
     ],
-    "seq-1": ["MN-GNPR","SH-GNPR"],
-    "seq-1-1": [
-        "ML-ZU_N_R-L"
-    ],
-    "seq-2": ["MN-GZR", "SH-GZR", "COGGNR"],
-    "seq-4": ["ZDUCR"]
+    "latched-items-Sh.G(R/N)R,ZU(R/N)R": [],
+    "seq-1-diversion": ["4B-Z1UR1","5B-Z1UR1"],
+    "seq-2-subroute-initiation": ["S1/9-Z1UR", "4-Z1UR", "5-Z1UR", "6-Z1UR", "12/13-Z1UR"],
+    "seq-3-initiaiton": ["MN-GZR", "SH-GZR", "COGGNR"],
+    "seq-4-permissibility": ["ZDUCR"]
 }

@@ -37,8 +37,6 @@
     "S13-GNPR": ["(S13-GNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
     "SH7-GNPR": ["(SH7-GNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
     "SH8-GNPR": ["(SH8-GNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
-    "YYNR": ["(YYN&&~YRNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
-    "YRNR": ["(YRN&&~YYNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
 
     "10/11-UNPR": ["(10/11-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "2/3-UNPR": ["(2/3-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
@@ -46,8 +44,11 @@
     "LL-UNPR": ["(LL-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "UP-UNPR": ["(UP-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "DN-UNPR": ["(DN-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
-    "LXNR": ["(LXN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "SDG-UNPR": ["(SDG-UN&&(OTHER_UN_DN&&WNCR&&SMR))"],
+
+    "YYNR": ["(YYN&&~YRNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
+    "YRNR": ["(YRN&&~YYNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
+    "LXNR": ["(LXN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "CHYNR": ["(CHYN&&(OTHER_UN_DN&&WNCR&&SMR))"],
 
     "4-WNR": ["(4-WN&&(~5-WNR&&~6-WNR)&&(GNCR&&UNCR&&SMR))"],
