@@ -72,8 +72,8 @@ View.extend({
         return true;
     },
     addTprClass: function(name) {
-        var tprNames = $YApiModel.getSepratedValue("tpr");
-        tprNames = tprNames.concat($YApiModel.getSepratedValue("tpr-class"));
+        var tprNames = $YApiModel.getPossiblesValueByType("tpr");
+        tprNames = tprNames.concat($YApiModel.getPossiblesValueByType("tpr-class"));
         for (var i=0; i<tprNames.length; i++) {
             var key = tprNames[i];
             var keyClass = key.replace("/", "_");
@@ -93,7 +93,7 @@ View.extend({
         return 1;
     },
     addPointIndicationClass: function(name) {
-        var pointsIndicationName = $YApiModel.getSepratedValue("pointIndication");
+        var pointsIndicationName = $YApiModel.getPossiblesValueByType("pointIndication");
         var pointCls = "";
         for (var i=0; i <pointsIndicationName.length; i++) {
             pointCls = $M.isUp(pointsIndicationName[i]) ? "active" : "";
@@ -103,7 +103,7 @@ View.extend({
     },
     addSignalClass: function() {
         var signals = [];
-        // signals = $YApiModel.getSepratedValue("signal");
+        // signals = $YApiModel.getPossiblesValueByType("signal");
         signals = ["S1-RECR","S1-HECR","S1-DECR",
             "S2-RECR","S2-HECR","S2-DECR",
             "S11-RECR","S11-HECR","S11-DECR",

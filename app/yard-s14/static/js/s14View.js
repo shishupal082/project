@@ -83,7 +83,7 @@ View.extend({
         return true;
     },
     addTprClass: function(name) {
-        var tprNames = $YApiModel.getSepratedValue("tpr");
+        var tprNames = $YApiModel.getPossiblesValueByType("tpr");
         for (var i=0; i<tprNames.length; i++) {
             var key = tprNames[i];
             try {

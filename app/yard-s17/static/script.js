@@ -24,7 +24,6 @@ for (var key in commonPath) {
 }
 
 $YApiModel.setApisPath(apisPath);
-$YApiModel.setSeprateValueKey(["tpr", "tpr-class", "signal", "pointIndication"]);
 
 function checkUIStyle() {
     $V.addTprClass();

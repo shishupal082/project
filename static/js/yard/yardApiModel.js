@@ -36,7 +36,7 @@ var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
 
-var SepratedValues = {};
+var PossibleValuesByTypes = {};
 
 function isApisLoadComplete() {
     var loadingCheck = [];
@@ -65,8 +65,10 @@ function loadPossibleValues(callBack) {
                             PossibleValues.push(response[key][i]);
                         }
                     }
-                    if (SepratedValues[key]) {
-                        SepratedValues[key] = SepratedValues[key].concat(response[key]);
+                    if ($M.isArray(PossibleValuesByTypes[key])) {
+                        PossibleValuesByTypes[key] = PossibleValuesByTypes[key].concat(response[key]);
+                    } else {
+                        PossibleValuesByTypes[key] = response[key];
                     }
                 }
             }
@@ -184,19 +186,14 @@ YardApiModel.extend({
 });
 
 YardApiModel.extend({
-    getAllSepratedValue: function() {
-        return SepratedValues;
+    getAllPossiblesValueByType: function() {
+        return PossibleValuesByTypes;
     },
-    getSepratedValue: function(key) {
-        if (SepratedValues[key]) {
-            return SepratedValues[key];
+    getPossiblesValueByType: function(key) {
+        if (PossibleValuesByTypes[key]) {
+            return PossibleValuesByTypes[key];
         }
         return [];
-    },
-    setSeprateValueKey: function(keys) {
-        for (var i = 0; i < keys.length; i++) {
-            SepratedValues[keys[i]] = [];
-        }
     },
     setApisPath: function(paths) {
         for (var key in paths) {
