@@ -217,25 +217,36 @@ YardApiModel.extend({
         var possiblesValueByType = PossibleValuesByTypes;
         var expressions = $M.getExps().exps;
         var missingExpressionItems = {};
+        var expMissingList = [];
         var foundExpressionItens = {};
+        var expFoundList = [];
+        var item;
 
         for (var type in possiblesValueByType) {
             for (var i = 0; i < possiblesValueByType[type].length; i++) {
-                if ($M.isArray(expressions[possiblesValueByType[type][i]])) {
+                item = possiblesValueByType[type][i];
+                if ($M.isArray(expressions[item])) {
                     if (!$M.isArray(foundExpressionItens[type])) {
                         foundExpressionItens[type] = [];
                     }
-                    foundExpressionItens[type].push(possiblesValueByType[type][i]);
+                    foundExpressionItens[type].push(item);
+                    expFoundList.push(item);
                     continue;
                 }
                 if (!$M.isArray(missingExpressionItems[type])) {
                     missingExpressionItems[type] = [];
                 }
-                missingExpressionItems[type].push(possiblesValueByType[type][i]);
+                expMissingList.push(item);
+                missingExpressionItems[type].push(item);
             }
         }
-
-        return {missing: missingExpressionItems, found: foundExpressionItens};
+        var response = {
+            missing: missingExpressionItems,
+            found: foundExpressionItens,
+            expMissingList: expMissingList,
+            expFoundList: expFoundList
+        };
+        return response;
     }
 });
 window.YardApiModel = window.$YApiModel = YardApiModel;
