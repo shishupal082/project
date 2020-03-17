@@ -5,18 +5,13 @@ var timerCount = 0;
 var apisPath = {};
 var commonPath = {
     "possible-value": ["/app/yard-s17/static/json/possible-values.json",
-                        "/app/yard-s17/static/json/possible-values-common.json",
-                        "/app/yard-s17/static/json/possible-values-seq-1.json",
-                        "/app/yard-s17/static/json/possible-values-latched.json",
-                        "/app/yard-s17/static/json//others/possible-values-routes.json",
+                        "/app/yard-s17/static/json/possible-values-sequence.json",
                         "/app/yard-s17/static/json/possible-values-group.json"],
-    "initial-value": ["/app/yard-s17/static/json/initial-value.json",
-                      "/app/yard-s17/static/json/initial-value2.json"],
+    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
                     "/app/yard-s17/static/json/expressions-tpr-cls.json",
                     "/app/yard-s17/static/json/expressions-common.json",
-                    "/app/yard-s17/static/json/others/expressions-latched.json",
-                    "/app/yard-s17/static/json/expressions-common2.json"]
+                    "/app/yard-s17/static/json/expressions-latched.json"]
 };
 
 for (var key in commonPath) {

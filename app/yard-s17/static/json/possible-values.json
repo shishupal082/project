@@ -28,5 +28,12 @@
         "6-NWKR", "6-RWKR"
     ],
 
-    "pointIndication": ["4-WFK", "5-WFK", "6-WFK"]
+    "pointIndication": ["4-WFK", "5-WFK", "6-WFK"],
+
+    "common-btn": ["YYN", "YRN", "WWN", "LXN", "CHYN", "EWN", "EGGN", "SMR"],
+    "common-r": ["YYNR", "YRNR", "WWNR", "LXNR", "CHYNR", "EWNR", "EGGNR"],
+
+    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN"],
+    "common-2": ["OYNR", "EGNR", "EUYR",
+                "EUUYR", "EUYNR", "EUUYNR", "CHYRNR"]
 }
