@@ -1,0 +1,53 @@
+{
+    "S1-RECR": ["(~S1-GR2||(~S1-HECR&&~S1-DECR))"],
+    "S1-HECR": [
+        "S1-GR1",
+        "(~S1-GR3||(S1-GR3&&~S1-DECR))",
+        "(~S1-GR3||~S1-DECR)",
+        "S1-GR2"
+    ],
+    "S1-DECR": ["S1-GR1","S1-GR2","S1-GR3"],
+
+    "S2-RECR": ["(~S2-GR2||(~S2-HECR&&~S2-DECR))"],
+    "S2-HECR": [
+        "S2-GR1",
+        "(~S2-GR3||(S2-GR3&&~S2-DECR))",
+        "(~S2-GR3||~S2-DECR)",
+        "S2-GR2"
+    ],
+    "S2-DECR": ["S2-GR1","S2-GR2","S2-GR3"],
+
+    "S11-RECR": ["(~S11-GR2||(~S11-HECR&&~S11-DECR))"],
+    "S11-HECR": [
+        "S11-GR1",
+        "(~S11-GR3||(S11-GR3&&~S11-DECR))",
+        "(~S11-GR3||~S11-DECR)",
+        "S11-GR2"
+    ],
+    "S11-DECR": ["S11-GR1","S11-GR2","S11-GR3"],
+
+    "S12-RECR": ["(~S12-GR2||(~S12-HECR&&~S12-DECR))"],
+    "S12-HECR": [
+        "S12-GR1",
+        "(~S12-GR3||(S12-GR3&&~S12-DECR))",
+        "(~S12-GR3||~S12-DECR)",
+        "S12-GR2"
+    ],
+    "S12-DECR": ["S12-GR1","S12-GR2","S12-GR3"],
+
+
+    "S3-RECR": ["(~S3-GR2||~S3-HECR)"],
+    "S3-HECR": ["S3-GR1","S3-GR2"],
+    "S10-RECR": ["(~S10-GR2||~S10-HECR)"],
+    "S10-HECR": ["S10-GR1","S10-GR2"],
+
+    "S9-RECR": ["(~S9-GR2||~S9-HECR)"],
+    "S9-HECR": ["S9-GR1","S9-GR2"],
+    "S13-RECR": ["(~S13-GR2||~S13-HECR)"],
+    "S13-HECR": ["S13-GR1","S13-GR2"],
+
+    "SH7-RECR": ["~SH7-GR2"],
+    "SH7-HECR": ["SH7-GR2"],
+    "SH8-RECR": ["~SH8-GR2"],
+    "SH8-HECR": ["SH8-GR2"]
+}

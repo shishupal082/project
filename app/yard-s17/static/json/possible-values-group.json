@@ -58,7 +58,7 @@
     "shunt-group": [
         "SH7-RECR", "SH7-HECR", "SH7-GLSR",
         "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
-        "SH2-GR2", "__SH7-GR1-C", "SH8-GR2",
+        "SH7-GR2", "__SH7-GR1-C", "SH8-GR2",
         "SH8-GNR", "__SH8-GR1-C", "SH8-GR1",
         "SH8-RECR", "SH8-HECR", "SH8-GLSR"
     ],
