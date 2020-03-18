@@ -78,7 +78,7 @@
             [
 
                 "<button class='evt btn tpr blue SDG-TPR-A' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr blue p-6a-n' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr blue p-6a-c' value='SDG-TPR-A'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "",
@@ -87,6 +87,7 @@
         ],
         "sdg-tpr-0": [
             [
+                "<button class='evt btn tpr blue p-6a-r btn-rotate' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<span class='badge yellow indication 6-WFK active'>&nbsp;</span>",
                 "","","sdg"
             ],
