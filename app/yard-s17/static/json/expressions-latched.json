@@ -21,14 +21,51 @@
             }
         ]
     },
-    "SH7/8-G_R_R": {
+    "LL-ZU_N_R": {
         "op": "||",
         "val": [
-            "(~SH7/8-G_N_R&&SH7/8-G_R_R)",
+            "(~LL-ZU_R_R&&LL-ZU_N_R)",
             {
                 "op": "&&",
-                "val": ["SH7/8-G_N_R", "((SH7-GNPR&&SDG-UNPR)||(SH8-GNPR&&LL-UNPR))",
-                    "5B-U_N_S", "6A-U_N_S", "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R"]
+                "val": ["LL-ZU_R_R", "GNCR", "UNCR",
+                    "4B-U_N_S","5B-U_N_S", "6A-U_N_S",
+                    "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R", "OV10/1_Z2U_N_R", "OV10/2_Z2U_N_R"]
+            }
+        ]
+    },
+    "LL-ZU_R_R": {
+        "op": "||",
+        "val": [
+            "(~LL-ZU_N_R&&LL-ZU_R_R)",
+            {
+                "op": "&&",
+                "val": ["((S12-GNPR&&LL-UNPR)||(S10-GNPR&&10/11-UNPR))",
+                    "4B-U_N_S","5B-U_N_S", "6A-U_N_S",
+                    "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R", "OV10/1_Z2U_N_R", "OV10/2_Z2U_N_R"]
+            }
+        ]
+    },
+    "10/11-ZU_N_R": {
+        "op": "||",
+        "val": [
+            "(~10/11-ZU_R_R&&10/11-ZU_N_R)",
+            {
+                "op": "&&",
+                "val": ["10/11-ZU_R_R", "GNCR", "UNCR",
+                    "4A-U_N_S","4B-U_N_S",
+                    "OV11_Z2U_N_R", "OV10/2_Z2U_N_R"]
+            }
+        ]
+    },
+    "10/11-ZU_R_R": {
+        "op": "||",
+        "val": [
+            "(~10/11-ZU_N_R&&ML-ZU_R_R)",
+            {
+                "op": "&&",
+                "val": ["((S12-GNPR&&LL-UNPR)||(S10-GNPR&&10/11-UNPR))",
+                    "4A-U_N_S","4B-U_N_S",
+                    "OV11_Z2U_N_R", "OV10/2_Z2U_N_R"]
             }
         ]
     },
@@ -39,6 +76,17 @@
             {
                 "op": "&&",
                 "val": ["SH7/8-G_R_R", "GNCR", "UNCR",
+                    "5B-U_N_S", "6A-U_N_S", "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R"]
+            }
+        ]
+    },
+    "SH7/8-G_R_R": {
+        "op": "||",
+        "val": [
+            "(~SH7/8-G_N_R&&SH7/8-G_R_R)",
+            {
+                "op": "&&",
+                "val": ["SH7/8-G_N_R", "((SH7-GNPR&&SDG-UNPR)||(SH8-GNPR&&LL-UNPR))",
                     "5B-U_N_S", "6A-U_N_S", "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R"]
             }
         ]

@@ -25,10 +25,14 @@
     "UNCR": 1,
     "NNCR": 1,
 
+    "LL-ZU_N_R": 1,
     "ML-ZU_N_R": 1,
+    "10/11-ZU_N_R": 1,
+    "2/3-ZU_N_R": 1,
     "SH7/8-G_N_R": 1,
 
     "4A-U_N_S": 1,
+    "4B-U_N_S": 1,
     "5A-U_N_S": 1,
     "5B-U_N_S": 1,
     "6A-U_N_S": 1,
@@ -36,6 +40,8 @@
     "OV2_Z2U_N_R": 1,
     "OV3/1_Z2U_N_R": 1,
     "OV3/2_Z2U_N_R": 1,
+    "OV10/1_Z2U_N_R": 1,
+    "OV10/2_Z2U_N_R": 1,
     "OV11_Z2U_N_R": 1,
 
     "CH/WW/EW/NCR": 1,

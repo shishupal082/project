@@ -35,7 +35,6 @@
     ],
     "S12-DECR": ["S12-GR1","S12-GR2","S12-GR3"],
 
-
     "S3-RECR": ["(~S3-GR2||~S3-HECR)"],
     "S3-HECR": ["S3-GR1","S3-GR2"],
     "S10-RECR": ["(~S10-GR2||~S10-HECR)"],

@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+// $M.disableChangeLogValueStatus();
 var timerCount = 0;
 
 var apisPath = {};
@@ -64,7 +65,11 @@ function evtClick (currentTarget) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
+    var changeValues = $S17M.getLatestChange();
+    console.log(changeValues.zeroTo1);
+    console.log(changeValues.oneTo0);
     console.log("Click event completed.");
+    $M.disableChangeLogValueStatus();
 }
 function checkDominoDisplayStatus() {
     if ($V.getDisplayYardDominoBoundary()) {
@@ -85,6 +90,8 @@ $YApiModel.documentLoaded(function() {
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {
+            $S17M.resetLatestChange();
+            $M.enableChangeLogValueStatus();
             evtClick($(e.currentTarget));
         });
         checkUIStyle();

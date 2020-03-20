@@ -5,6 +5,7 @@ var possibleValues = [];
 var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
+var changeValueLogStatus = true;
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -72,7 +73,9 @@ var setValue = (function() {
             var newValue = Model(key).get();
             if (oldValue != newValue) {
                 setValueCount++;
-                $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+                if (changeValueLogStatus) {
+                    $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+                }
                 isValueChanged = true;
             }
         } else {
@@ -265,29 +268,37 @@ Model.extend({
     log: function(logText) {
         return $S.log(logText);
     },
+    enableChangeLogValueStatus: function() {
+        changeValueLogStatus = true;
+        return 1;
+    },
+    disableChangeLogValueStatus: function() {
+        changeValueLogStatus = false;
+        return 0;
+    },
     enableVerifyExpression: function() {
         verifyExpression = true;
-        return verifyExpression;
+        return 1;
     },
     disableVerifyExpression: function() {
         verifyExpression = false;
-        return verifyExpression;
+        return 0;
     },
     enableReChecking: function() {
         reCheckingStatus = true;
-        return reCheckingStatus;
+        return 1;
     },
     disableReChecking: function() {
         reCheckingStatus = false;
-        return reCheckingStatus;
+        return 0;
     },
     enableProcessingCount: function() {
         isProcessingCountEnable = true;
-        return isProcessingCountEnable;
+        return 1;
     },
     disableProcessingCount: function() {
         isProcessingCountEnable = false;
-        return isProcessingCountEnable;
+        return 0;
     },
     resetSetValueCount: function(newLimit) {
         setValueCount = 0;
