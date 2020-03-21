@@ -20,9 +20,16 @@
         "val": ["SH7-GNPR","SH8-GNPR"]
     },
     "WWNR": ["(WWN&&~EWNR)"],
+
     "4B-Z1UR1": ["((S1-GNPR&&LL-UNPR)||(S10-GNPR&&10/11-UNPR))"],
     "5B-Z1UR1": ["((S12-GNPR&&LL-UNPR)||(S3-GNPR&&2/3-UNPR))"],
-    "4-Z1UR": [],
+
+    "4-Z1UR": ["~GNCR", "~UNCR", "MN-GNPR",
+            "((S1-GNPR&&10/11-ZU_N_R)||(10/11-UNPR&&~10/11-ZU_N_R))",
+            "~UP-UNPR"],
+
     "5-Z1UR": [],
-    "6-Z1UR": []
+    "6-Z1UR": [],
+    "S1/9-Z1UR": ["~GNCR", "~UNCR", "MN-GNPR",
+            "((S1-GNPR&&10/11-ZU_N_R)||(UP-UNPR&&10/11-ZU_R_R))"]
 }

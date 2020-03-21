@@ -1,7 +1,7 @@
 {
     "topLoopLine": {
         "ll-text": [
-            [   "","","","","","","","","",
+            [   "","","","","---","DN","-->","","",
                 "<span class='signal-no'>sh7</span>",
                 "<div class='text-right'><span class='signal-no'>S</span></div>",
                 "<div class='text-left'><span class='signal-no'>3</span></div>"

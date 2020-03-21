@@ -63,7 +63,7 @@
             "(~10/11-ZU_N_R&&10/11-ZU_R_R)",
             {
                 "op": "&&",
-                "val": ["((S12-GNPR&&LL-UNPR)||(S10-GNPR&&10/11-UNPR))",
+                "val": ["10/11-ZU_N_R", "(((S10-GNPR||S11-GNPR)&&10/11-UNPR)||(S9-GNPR&&UP-UNPR))",
                     "4A-U_N_S","4B-U_N_S",
                     "OV11_Z2U_N_R", "OV10/2_Z2U_N_R"]
             }
