@@ -334,17 +334,20 @@ Model.extend({
         isProcessingCountEnable = false;
         return 0;
     },
+    getSetValueCount: function() {
+        return setValueCount;
+    },
     resetSetValueCount: function(newLimit) {
         setValueCount = 0;
         return 1;
     },
     changeSetValueCountLimit: function(newLimit) {
-        if(isNaN(newLimit)) {
-            $S.log("Invalid newLimit:" + newLimit);
-            return 0;
+        if(Model.isNumber(newLimit)) {
+            setValueCountLimit = newLimit*1;
+            return 1;
         }
-        setValueCountLimit = newLimit*1;
-        return 1;
+        $S.log("Invalid newLimit:" + newLimit);
+        return 0;
     }
 });
 Model.extend({
@@ -362,6 +365,9 @@ Model.extend({
     },
     isObject: function(value) {
         return $S.isObject(value);
+    },
+    isNumber: function(value) {
+        return $S.isNumber(value);
     },
     isFunction: function(value) {
         return $S.isFunction(value);

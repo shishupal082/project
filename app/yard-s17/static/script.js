@@ -77,7 +77,7 @@ function evtClick (currentTarget) {
     console.log(changeValueData["1to0WithIndex"]);
     // console.log(changeValueData["all"]);
     $M.resetChangeValueData();
-    console.log("Click event completed.");
+    console.log("Click event completed: " + $M.getSetValueCount());
     // $M.disableChangeLogValueStatus();
 }
 function checkDominoDisplayStatus() {
