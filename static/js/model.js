@@ -6,6 +6,14 @@ var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
 var changeValueLogStatus = true;
+var changeValueDataLoggingEnable = false;
+var changeValueData = {
+    "0to1": [],
+    "1to0": [],
+    "0to1WithIndex": [],
+    "1to0WithIndex": [],
+    "all": []
+};
 var currentValues = {};
 var exps = {};
 var debug = [];
@@ -67,12 +75,30 @@ var setValue = (function() {
     var isValueChanged = false;
     function set(key, value) {
         isValueChanged = false;
+        var keyEquivalent;
         if (Model.isValidKey(key) && Model.isValidValue(value)) {
             var oldValue = Model(key).get();
             currentValues[key] = value*1;
             var newValue = Model(key).get();
             if (oldValue != newValue) {
                 setValueCount++;
+                keyEquivalent = "";
+                for (var i = 0; i < key.length; i++) {
+                    keyEquivalent += "-";
+                }
+                if (changeValueDataLoggingEnable) {
+                    changeValueData["all"].push(key);
+                    if (oldValue == 0) {
+                        changeValueData["0to1"].push(key);
+                        changeValueData["0to1WithIndex"].push(key);
+                        changeValueData["1to0WithIndex"].push(keyEquivalent);
+                    }
+                    if (oldValue == 1) {
+                        changeValueData["1to0"].push(key);
+                        changeValueData["1to0WithIndex"].push(key);
+                        changeValueData["0to1WithIndex"].push(keyEquivalent);
+                    }
+                }
                 if (changeValueLogStatus) {
                     $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
                 }
@@ -268,6 +294,14 @@ Model.extend({
     log: function(logText) {
         return $S.log(logText);
     },
+    enableChangeValueDataLogging: function() {
+        changeValueDataLoggingEnable = true;
+        return 1;
+    },
+    disableChangeValueDataLogging: function() {
+        changeValueDataLoggingEnable = false;
+        return 0;
+    },
     enableChangeLogValueStatus: function() {
         changeValueLogStatus = true;
         return 1;
@@ -384,6 +418,22 @@ Model.extend({
         }
         response.sortedResult = result;
         return response;
+    },
+    getAllChangeValueData: function (changeValueKey) {
+        return changeValueData;
+    },
+    getChangeValueData: function (changeValueKey) {
+        var response = [];
+        if (Model.isArray(changeValueData[changeValueKey])) {
+            response = changeValueData[changeValueKey];
+        }
+        return response;
+    },
+    resetChangeValueData: function () {
+        for (var key in changeValueData) {
+            changeValueData[key] = [];
+        }
+        return 0;
     },
     getVariableDependencies: function(sortedResultRequired) {
         var bst = Model.getBST();

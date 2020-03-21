@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
-// $M.disableChangeLogValueStatus();
+$M.disableChangeLogValueStatus();
+$M.enableChangeValueDataLogging();
 var timerCount = 0;
 
 var apisPath = {};
@@ -51,6 +52,12 @@ function evtClick (currentTarget) {
             timerCount--;
             $V.setValues(key, 0);
             checkUIStyle();
+            if (timerCount == 0) {
+                var changeValueData = $M.getAllChangeValueData();
+                console.log(changeValueData["0to1WithIndex"]);
+                console.log(changeValueData["1to0WithIndex"]);
+                // console.log(changeValueData["all"]);
+            }
         }, 1000);
     }
     for(var key in finalValue) {
@@ -65,11 +72,13 @@ function evtClick (currentTarget) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
-    var changeValues = $S17M.getLatestChange();
-    console.log(changeValues.zeroTo1);
-    console.log(changeValues.oneTo0);
+    var changeValueData = $M.getAllChangeValueData();
+    console.log(changeValueData["0to1WithIndex"]);
+    console.log(changeValueData["1to0WithIndex"]);
+    // console.log(changeValueData["all"]);
+    $M.resetChangeValueData();
     console.log("Click event completed.");
-    $M.disableChangeLogValueStatus();
+    // $M.disableChangeLogValueStatus();
 }
 function checkDominoDisplayStatus() {
     if ($V.getDisplayYardDominoBoundary()) {
@@ -90,8 +99,8 @@ $YApiModel.documentLoaded(function() {
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {
-            $S17M.resetLatestChange();
-            $M.enableChangeLogValueStatus();
+            $M.resetChangeValueData();
+            // $M.enableChangeLogValueStatus();
             evtClick($(e.currentTarget));
         });
         checkUIStyle();
