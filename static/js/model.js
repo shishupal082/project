@@ -155,7 +155,7 @@ Model.fn = Model.prototype = {
                 if (exps[this.key].indexOf(exp) < 0) {
                     exps[this.key].push(exp);
                 } else {
-                    // $S.log("Trying to add duplicate expression for key:" + this.key + ", expression:"+exp);
+                    $S.log("Trying to add duplicate expression for key:" + this.key + ", expression:"+exp);
                 }
             } else {
                 exps[this.key] = [exp];

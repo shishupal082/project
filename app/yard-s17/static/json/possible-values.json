@@ -12,7 +12,8 @@
     ],
     "sg-btn": [
         "S1-GN", "S2-GN", "S3-GN", "S13-GN", "SH7-GN",
-        "S12-GN", "S10-GN", "S11-GN", "S9-GN", "SH8-GN"
+        "S12-GN", "S10-GN", "S11-GN", "S9-GN", "SH8-GN",
+        "CO-GGN"
     ],
     "rt-btn": [
         "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
@@ -35,5 +36,5 @@
 
     "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN"],
     "common-2": ["OYNR", "EGNR", "EUYR",
-                "EUUYR", "EUYNR", "EUUYNR", "CHYRNR"]
+                "EUUYR", "EUYNR", "EUUYNR", "EUUYNCR", "CHYRNR"]
 }
