@@ -86,7 +86,7 @@ Controller.extend({
                     if ($M.isObject(exp[i])) {
                         exps[i] = $M.generateExpression(exps[i]);
                     }
-                    if ($M.isExpressionTrue(name, exp[i])) {
+                    if ($M.isExpressionTrue(exp[i])) {
                         isLock = true;
                         continue;
                     } else {

@@ -26,6 +26,8 @@ var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
 var overwrittenMethodLogExluded = ["createPosixTree"];
 var MStack = $S.getStack();
 
+var EvaluatingExpressionKey = "";
+
 var Model = function(selector, context) {
     return new Model.fn.init(selector, context);
 };
@@ -617,11 +619,13 @@ exps : {
         var oldValue = Model(name).get();
         var newValue = 0;
         if (debug.indexOf(name) >=0) {
+            EvaluatingExpressionKey = name;
             $S.log("DEBUG: " + name);
         }
-        newValue = Model.isAllExpressionsTrue(name, exp) ? 1 : 0;
+        newValue = Model.isAllExpressionsTrue(exp) ? 1 : 0;
         if (debug.indexOf(name) >=0) {
             $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
+            EvaluatingExpressionKey = "";
         }
         Model.setValue(name, newValue);
         return newValue;
@@ -630,7 +634,7 @@ exps : {
         var tokenizedExp = $S.tokenize(exp, binaryOperatorIncludingBracket);
         return tokenizedExp;
     },
-    isExpressionTrue: function(name, exp) {
+    isExpressionTrue: function(exp) {
         var tokenizedExp = Model.getTokenizedExp(exp);
         var posix = Model["createPosixTree"](tokenizedExp);
         var posixVal = [], posixValue;
@@ -650,7 +654,7 @@ exps : {
             }
         }
         var result = $S.calBinary(posixVal);
-        if (debug.indexOf(name) >=0) {
+        if (debug.indexOf(EvaluatingExpressionKey) >=0) {
             console.log(exp);
             console.log(posix);
             console.log(posixVal);
@@ -664,7 +668,7 @@ exps : {
                     continue;
                 } else {
                     isValidExpression = false;
-                    $S.log(name + ": invalid posixVal: " + posixVal[i]);
+                    $S.log(EvaluatingExpressionKey + ": invalid posixVal: " + posixVal[i]);
                 }
             }
             var tokenizedExpLength = 0;
@@ -676,10 +680,10 @@ exps : {
             }
             if (tokenizedExpLength != posixVal.length) {
                 isValidExpression = false;
-                $S.log(name + ": invalid expression: " + exp);
+                $S.log(EvaluatingExpressionKey + ": invalid expression: " + exp);
             }
             if (isValidExpression == false) {
-                throw name + ": invalid expression:" + exp;
+                throw EvaluatingExpressionKey + ": invalid expression:" + exp;
             }
         }
         /** Expression validation End **/
@@ -687,7 +691,7 @@ exps : {
     }
 });
 Model.extend({
-    isAllExpressionsTrue: function(name, exps) {
+    isAllExpressionsTrue: function(exps) {
         var status = false, exp = "";
         if (Model.isArray(exps)) {
             for (var i = 0; i < exps.length; i++) {
@@ -695,7 +699,7 @@ Model.extend({
                 if (Model.isObject(exp)) {
                     exp = Model.generateExpression(exp);
                 }
-                if (Model.isExpressionTrue(name, exp)) {
+                if (Model.isExpressionTrue(exp)) {
                     status = true;
                     continue;
                 } else {
@@ -704,7 +708,7 @@ Model.extend({
                 }
             }
         } else if (Model.isObject(exps)) { 
-            status = Model.isAllExpressionsTrue(name, [exps]);
+            status = Model.isAllExpressionsTrue([exps]);
         }
         return status;
     },
