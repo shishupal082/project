@@ -13,6 +13,7 @@ var commonPath = {
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
                     "/app/yard-s17/static/json/expressions-tpr-cls.json",
                     "/app/yard-s17/static/json/expressions-common.json",
+                    "/app/yard-s17/static/json/expressions-sequence.json",
                     "/app/yard-s17/static/json/expressions-latched.json",
                     "/app/yard-s17/static/json/expressions-glow.json"]
 };
