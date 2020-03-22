@@ -190,13 +190,14 @@ Model.fn = Model.prototype = {
             }
             setValueTobeChecked(possibleValues);
         }
-        return true;
+        return 1;
     },
     setValueTobeChecked: function(values) {
         if (Model.isArray(values)) {
             setValueTobeChecked(values);
+            return 1;
         }
-        return true;
+        return 0;
     },
     setBinaryOperators: function(opr) {
         var operators = [];
@@ -210,12 +211,13 @@ Model.fn = Model.prototype = {
         binaryOperators = operators;
         binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
         binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
-        return true;
+        return 1;
     },
     addDebug: function() {
         if (isValidKey(this.key)) {
             if (debug.indexOf(this.key) < 0) {
                 debug.push(this.key);
+                return 1;
             }
         } else {
             $S.log("Invalid key for debug:" + this.key);

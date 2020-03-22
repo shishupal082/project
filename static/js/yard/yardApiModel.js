@@ -27,6 +27,9 @@ var RequestId = $M.getRequestId();
 var PossibleValues = [];
 var InitialValues = {};
 var AllExpressions = [];
+var ExpWithoutKey = {};
+
+var ExpressionsAdded = [];
 
 var PossibleValuesLoadStatus = false;
 var InitialValuesLoadStatus = false;
@@ -107,6 +110,11 @@ function loadExpressions(callBack) {
             exps = allExpressions[i];
             for (var key in exps) {
                 if ($M.isArray(exps[key])) {
+                    if (ExpressionsAdded.indexOf(key) < 0) {
+                        ExpressionsAdded.push(key);
+                    } else {
+                        $M.log("Expressions for '" + key + "' already added.");
+                    }
                     for (var j = 0; j < exps[key].length; j++) {
                         if ($M.isObject(exps[key][j])) {
                             $M(key).addExp($M.generateExpression(exps[key][j]));
@@ -244,7 +252,8 @@ YardApiModel.extend({
             missing: missingExpressionItems,
             found: foundExpressionItens,
             expMissingList: expMissingList,
-            expFoundList: expFoundList
+            expFoundList: expFoundList,
+            expWithoutKey: ExpWithoutKey
         };
         return response;
     }
