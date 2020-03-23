@@ -64,6 +64,9 @@ function loadPossibleValues(callBack) {
             for (var key in response) {
                 if ($M.isArray(response[key])) {
                     for (var i = 0; i < response[key].length; i++) {
+                        if (key == "addDebug") {
+                            continue;
+                        }
                         if ($M.isString(response[key][i])) {
                             PossibleValues.push(response[key][i]);
                         }
@@ -179,6 +182,10 @@ YardApiModel.extend({
         loadPossibleValues(function() {
             PossibleValuesLoadStatus = true;
             $M().setPossibleValues(PossibleValues);
+            var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
+            for (var j = 0; j < debugItems.length; j++) {
+                $M(debugItems[j]).addDebug();
+            }
             loadInitialValues(function() {
                 InitialValuesLoadStatus = true;
                 $M().initializeCurrentValues(InitialValues);

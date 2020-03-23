@@ -16,16 +16,16 @@
     "5B-TPR": 1,
     "SDG-TPR-A": 1,
     "SDG-TPR-B": 1,
-    "4-NWKR": 1,
-    "5-NWKR": 1,
-    "6-NWKR": 1,
 
     "GNCR": 1,
     "WNCR": 1,
     "UNCR": 1,
     "NNCR": 1,
+    "UP-LCPR": 1,
+    "DN-LCPR": 1,
 
     "LL-ZU_N_R": 1,
+    "LL-G_N_LR": 1,
     "ML-ZU_N_R": 1,
     "10/11-ZU_N_R": 1,
     "2/3-ZU_N_R": 1,
@@ -36,6 +36,8 @@
     "5A-U_N_S": 1,
     "5B-U_N_S": 1,
     "6A-U_N_S": 1,
+    "1/9-U_N_S": 1,
+    "12/13-U_N_S": 1,
 
     "OV2_Z2U_N_R": 1,
     "OV3/1_Z2U_N_R": 1,

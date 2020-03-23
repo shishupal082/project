@@ -1,4 +1,5 @@
 {
+    "addDebug": [],
     "tpr": [
         "1A-TPR", "1-TPR", "9-TPR", "10/11-TPR", "4A-TPR", "M-TPR", "5A-TPR",
         "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR",
@@ -36,5 +37,6 @@
 
     "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN"],
     "common-2": ["OYNR", "EGNR", "EUYR",
-                "EUUYR", "EUYNR", "EUUYNR", "EUUYNCR", "CHYRNR"]
+                "EUUYR", "EUYNR", "EUUYNR", "EUUYNCR", "CHYRNR",
+                "LL-G_N_LR", "UP-LCPR", "DN-LCPR"]
 }
