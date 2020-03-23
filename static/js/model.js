@@ -218,6 +218,8 @@ Model.fn = Model.prototype = {
             if (debug.indexOf(this.key) < 0) {
                 debug.push(this.key);
                 return 1;
+            } else {
+                $S.log("Trying duplicate entry for debug: " + this.key);
             }
         } else {
             $S.log("Invalid key for debug:" + this.key);
