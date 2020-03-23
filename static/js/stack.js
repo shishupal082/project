@@ -16,11 +16,99 @@ function ExtendObject(Object) {
     };
 }
 (function() {
-//5 digit random number from 10000 to 99999
-var max = 99999, min = 10000;
-var key = Math.floor(Math.random() * (max - min + 1)) + min;
+
+var key;
 var skipValuesInResult = [];
 var RequestId = 0;
+function isString(value) {
+    return typeof value == "string";
+}
+function isArray(value) {
+    if (typeof value == "undefined" || value == null) {
+        return false;
+    }
+    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
+}
+function isObject(value) {
+    if (typeof value == "undefined" || value == null) {
+        return false;
+    }
+    return (typeof value == "object" && isNaN(value.length)) ? true : false;
+}
+function isNumber(data) {
+    if (typeof data == "number" && !isNaN(data)) {
+        return true;
+    }
+    return false;
+}
+function isBoolean(value) {
+    if (typeof value == "boolean") {
+        return true;
+    }
+    return false;
+}
+function isFunction(value) {
+    if (typeof value == "undefined") {
+        return false;
+    }
+    return typeof value == "function" ? true : false;
+}
+function calculateNumericalValue(op1, operator, op2) {
+    var val = null;
+    switch (operator) {
+        case '+':
+            val = op1 + op2;
+        break;
+        case '-':
+            val = op1 - op2;
+        break;
+        case '*':
+            val = op1 * op2;
+        break;
+        case '/':
+            if (op2 != 0) {
+                val = op1 / op2;
+            } else {
+                val = 0;
+            }
+        break;
+        default:
+        break;
+    }
+    return val;
+}
+function calculateValue(op1, operator, op2) {
+    var val = null;
+    switch (operator) {
+        case '*':
+        case "&&":
+        case "&":
+            val = op1 && op2;
+        break;
+        case "||":
+        case "|":
+        case "#":
+        case '+':
+            val = op1 || op2;
+        break;
+        case '~':
+            val = !op1;
+        break;
+        default:
+        break;
+    }
+    return val;
+}
+function getRandomNumber(minVal, maxVal) {
+    /* Both number are inclusive. */
+    var random = key;
+    if (isNumber(minVal) && isNumber(maxVal)) {
+        random = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+    }
+    return random;
+}
+//5 digit random number from 10000 to 99999
+key = getRandomNumber(10000, 99999);
 //DateTimeObject
 var DT = (function() {
     var yyyy, mm, dd, hour, min, sec, ms, meridian;
@@ -216,85 +304,7 @@ var Log = (function(){
     return Logger;
 })();
 var Logger = new Log();
-function isString(value) {
-    return typeof value == "string";
-}
-function isArray(value) {
-    if (typeof value == "undefined" || value == null) {
-        return false;
-    }
-    return (typeof value == "object" && !isNaN(value.length)) ? true : false;
-}
-function isObject(value) {
-    if (typeof value == "undefined" || value == null) {
-        return false;
-    }
-    return (typeof value == "object" && isNaN(value.length)) ? true : false;
-}
-function isNumber(data) {
-    if (typeof data == "number" && !isNaN(data)) {
-        return true;
-    }
-    return false;
-}
-function isBoolean(value) {
-    if (typeof value == "boolean") {
-        return true;
-    }
-    return false;
-}
-function isFunction(value) {
-    if (typeof value == "undefined") {
-        return false;
-    }
-    return typeof value == "function" ? true : false;
-}
-function calculateNumericalValue(op1, operator, op2) {
-    var val = null;
-    switch (operator) {
-        case '+':
-            val = op1 + op2;
-        break;
-        case '-':
-            val = op1 - op2;
-        break;
-        case '*':
-            val = op1 * op2;
-        break;
-        case '/':
-            if (op2 != 0) {
-                val = op1 / op2;
-            } else {
-                val = 0;
-            }
-        break;
-        default:
-        break;
-    }
-    return val;
-}
-function calculateValue(op1, operator, op2) {
-    var val = null;
-    switch (operator) {
-        case '*':
-        case "&&":
-        case "&":
-            val = op1 && op2;
-        break;
-        case "||":
-        case "|":
-        case "#":
-        case '+':
-            val = op1 || op2;
-        break;
-        case '~':
-            val = !op1;
-        break;
-        default:
-        break;
-    }
-    return val;
-}
+
 var St = (function(){
     var MAXSTACK = 500000, STACK = [];
     function St(shareStorage) {
@@ -539,6 +549,9 @@ var BT = (function(){
             } else if(items[i] == ")") {
                 currentTree = st.pop();
             } else if(["+","-","*","/","&&","&","||","|","#"].indexOf(items[i]) >=0) {
+                // Numeric: "+","-","*","/"
+                // Boolean: and: "&&","&","*"
+                // Boolean: or:  "||","|","#","+"
                 var newData = items[i];
                 if (currentTree.data != "") {
                     var oldRight = currentTree.right;
@@ -925,12 +938,7 @@ Stack.extend({
         return res;
     },
     getRandomNumber: function(minVal, maxVal) {
-        /* Both number are inclusive. */
-        var random = key;
-        if (isNumber(minVal) && isNumber(maxVal)) {
-            random = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-        }
-        return random;
+        return getRandomNumber(minVal, maxVal);
     },
     getUniqueNumber: function() {
         // Number of miliseconds elapsed since 1st Jan 1970 + random number
@@ -1063,6 +1071,11 @@ Stack.extend({
         var pre, post;
         var op, values;
         if (isObject(items)) {
+            /*
+                Not using default expression as && or anything because
+                && can be written in multiple ways like &&,&,* etc...
+                || can be written in multiple ways like ||,|,+,# etc...
+            */
             op = items["op"]; //operator
             values = items["val"];
             for (var i = 0; i < values.length; i++) {

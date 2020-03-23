@@ -109,12 +109,12 @@ function loadExpressions(callBack) {
         for (var i = 0; i < allExpressions.length; i++) {
             exps = allExpressions[i];
             for (var key in exps) {
+                if (ExpressionsAdded.indexOf(key) < 0) {
+                    ExpressionsAdded.push(key);
+                } else {
+                    $M.log("Expressions for '" + key + "' already added.");
+                }
                 if ($M.isArray(exps[key])) {
-                    if (ExpressionsAdded.indexOf(key) < 0) {
-                        ExpressionsAdded.push(key);
-                    } else {
-                        $M.log("Expressions for '" + key + "' already added.");
-                    }
                     for (var j = 0; j < exps[key].length; j++) {
                         if ($M.isObject(exps[key][j])) {
                             $M(key).addExp($M.generateExpression(exps[key][j]));
