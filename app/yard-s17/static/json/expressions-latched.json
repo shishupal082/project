@@ -6,7 +6,7 @@
             {
                 "op": "&&",
                 "val": ["SH7/8-G_R_R", "GNCR", "UNCR",
-                    "5B-U_N_S", "6A-U_N_S", "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R"]
+                    "5B-U_N_S", "6A-U_N_S", "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R"]
             }
         ]
     },
@@ -17,7 +17,7 @@
             {
                 "op": "&&",
                 "val": ["SH7/8-G_N_R", "((SH7-GNPR&&SDG-UNPR)||(SH8-GNPR&&LL-UNPR))",
-                    "5B-U_N_S", "6A-U_N_S", "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R"]
+                    "5B-U_N_S", "6A-U_N_S", "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R"]
             }
         ]
     },
@@ -28,7 +28,7 @@
             {
                 "op": "&&",
                 "val": ["ML-ZU_R_R", "GNCR", "UNCR",
-                    "4A-U_N_S","5A-U_N_S", "OV2_Z2U_N_R", "OV11_Z2U_N_R"]
+                    "4A-U_N_S","5A-U_N_S", "OV2-Z2U_N_R", "OV11-Z2U_N_R"]
             }
         ]
     },
@@ -39,7 +39,7 @@
             {
                 "op": "&&",
                 "val": ["((S12-GNPR&&ML-UNPR)||(S11-GNPR&&10/11-UNPR))",
-                    "4A-U_N_S","5A-U_N_S", "OV2_Z2U_N_R", "OV11_Z2U_N_R"]
+                    "4A-U_N_S","5A-U_N_S", "OV2-Z2U_N_R", "OV11-Z2U_N_R"]
             }
         ]
     },
@@ -51,7 +51,7 @@
                 "op": "&&",
                 "val": ["LL-ZU_R_R", "GNCR", "UNCR",
                     "4B-U_N_S","5B-U_N_S", "6A-U_N_S",
-                    "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R", "OV10/1_Z2U_N_R", "OV10/2_Z2U_N_R"]
+                    "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R", "OV10/1-Z2U_N_R", "OV10/2-Z2U_N_R"]
             }
         ]
     },
@@ -63,7 +63,7 @@
                 "op": "&&",
                 "val": ["(((S12-GNPR||SH8-GNPR)&&LL-UNPR)||(S10-GNPR&&10/11-UNPR))",
                     "4B-U_N_S","5B-U_N_S", "6A-U_N_S",
-                    "OV3/1_Z2U_N_R", "OV3/2_Z2U_N_R", "OV10/1_Z2U_N_R", "OV10/2_Z2U_N_R"]
+                    "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R", "OV10/1-Z2U_N_R", "OV10/2-Z2U_N_R"]
             }
         ]
     },
@@ -75,7 +75,7 @@
                 "op": "&&",
                 "val": ["10/11-ZU_R_R", "GNCR", "UNCR",
                     "4A-U_N_S","4B-U_N_S",
-                    "OV11_Z2U_N_R", "OV10/2_Z2U_N_R"]
+                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R"]
             }
         ]
     },
@@ -87,7 +87,7 @@
                 "op": "&&",
                 "val": ["10/11-ZU_N_R", "(((S10-GNPR||S11-GNPR)&&10/11-UNPR)||(S9-GNPR&&UP-UNPR))",
                     "4A-U_N_S","4B-U_N_S",
-                    "OV11_Z2U_N_R", "OV10/2_Z2U_N_R"]
+                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R"]
             }
         ]
     },
@@ -99,7 +99,7 @@
                 "op": "&&",
                 "val": ["2/3-ZU_R_R", "GNCR", "UNCR",
                     "5A-U_N_S","5B-U_N_S",
-                    "OV2_Z2U_N_R", "OV3/2_Z2U_N_R"]
+                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R"]
             }
         ]
     },
@@ -111,7 +111,7 @@
                 "op": "&&",
                 "val": ["2/3-ZU_N_R", "(S12-GNPR&&(ML-UNPR||LL-UNPR))",
                     "5A-U_N_S","5B-U_N_S",
-                    "OV2_Z2U_N_R", "OV3/2_Z2U_N_R"]
+                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R"]
             }
         ]
     }

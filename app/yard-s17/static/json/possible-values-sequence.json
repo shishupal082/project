@@ -28,15 +28,19 @@
         "5A-U_N_S", "5A-U_R_S",
         "5B-U_N_S", "5B-U_R_S",
         "6A-U_N_S", "6A-U_R_S",
-        "1/9-U_N_S", "1/9-U_R_S",
-        "12/13-U_N_S", "12/13-U_R_S"
+        "S1/9-U_N_S", "S1/9-U_R_S",
+        "S12/13-U_N_S", "S12/13-U_R_S"
     ],
     "overlap-Z2U(R/N)R": [
-        "OV2_Z2U_N_R", "OV2_Z2U_R_R",
-        "OV3/1_Z2U_N_R", "OV3/1_Z2U_R_R",
-        "OV3/2_Z2U_N_R", "OV3/2_Z2U_R_R",
-        "OV10/1_Z2U_N_R", "OV10/1_Z2U_R_R",
-        "OV10/2_Z2U_N_R", "OV10/2_Z2U_R_R",
-        "OV11_Z2U_N_R", "OV11_Z2U_R_R"
+        "OV2-Z2U_N_R", "OV2-Z2U_R_R",
+        "OV3/1-Z2U_N_R", "OV3/1-Z2U_R_R",
+        "OV3/2-Z2U_N_R", "OV3/2-Z2U_R_R",
+        "OV10/1-Z2U_N_R", "OV10/1-Z2U_R_R",
+        "OV10/2-Z2U_N_R", "OV10/2-Z2U_R_R",
+        "OV11-Z2U_N_R", "OV11-Z2U_R_R"
+    ],
+    "G(R/N)LR": [
+        "LL-G_N_LR", "LL-G_R_LR",
+        "ML-G_N_LR", "ML-G_R_LR"
     ]
 }
