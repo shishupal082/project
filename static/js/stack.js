@@ -553,6 +553,15 @@ var BT = (function(){
                 // Boolean: and: "&&","&","*"
                 // Boolean: or:  "||","|","#","+"
                 var newData = items[i];
+                /*
+                    Input = [(,A,&&,B,&&,C,)]
+                    Tree structure
+                    ----------------
+                       &&
+                    A       &&
+                         B      C
+                    -----------------
+                */
                 if (currentTree.data != "") {
                     var oldRight = currentTree.right;
                     this.insertRight(currentTree, newData);
@@ -565,6 +574,14 @@ var BT = (function(){
                 st.push(currentTree);
                 currentTree = this.getRightChild(currentTree);
             } else if(["~"].indexOf(items[i]) >=0) {
+                /*
+                    Finding complement
+                    Input = [~,A]
+                    ----------------
+                       ~
+                    A
+                    -----------------
+                */
                 currentTree.data = items[i];
                 if (i < items.length-1) {
                     i++;
