@@ -64,11 +64,11 @@
         "S12-CO-COULR1", "S12-CO-COULR2"
     ],
     "shunt-group": [
-        "SH7-RECR", "SH7-HECR", "SH7-GLSR",
+        "SH7-RECR", "SH7-HECR", "SH7-GSLR",
         "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
         "SH7-GR2", "__SH7-GR1-C", "SH8-GR2",
         "SH8-GNR", "__SH8-GR1-C", "SH8-GR1",
-        "SH8-RECR", "SH8-HECR", "SH8-GLSR"
+        "SH8-RECR", "SH8-HECR", "SH8-GSLR"
     ],
     "point-minor-12":[
         "4-Z1WR1","4-Z1NWR","4-Z1RWR",
