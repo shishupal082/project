@@ -59,6 +59,21 @@
             }
         ]
     },
+    "6-AU_R_S": {
+        "op": "||",
+        "val": [
+            "(~6-AU_N_S&&6-AU_R_S)",
+            {
+                "op": "&&",
+                "val": ["6-AU_N_S", "6-BU_N_S", "~5-BU_R_S",
+                    "6-U_N_LR", "~6-ADUCR", "~6-BDUCR",
+                    "6-Z1UR", "ZDUCR",
+                    "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R",
+                    "~6-UYR1", "~6-UYR2"
+                ]
+            }
+        ]
+    },
     "4-AU_N_S": {
         "op": "||",
         "val": [
@@ -269,6 +284,45 @@
                         "val": [
                             "(5-UDKR&&5-UYR2)",
                             "((5-WNR||5-Z1UR)&&EUYR)"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "6-AU_N_S": {
+        "op": "||",
+        "val": [
+            "(~6-AU_R_S&&6-AU_N_S)",
+            {
+                "op": "&&",
+                "val": [
+                    "6-AU_R_S", "~6-U_R_LR",
+                    {
+                        "op": "||",
+                        "val": [
+                            {
+                                "op": "&&",
+                                "val": [
+                                    "6-Z1UR", "6-UYR1", "6-UDKR",
+                                    "~SH7-HECR", "SH7-GSLR",
+                                    "~SH8-HECR", "SH8-GSLR"
+                                ]
+                            },
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(EUYR&&~EUUYR&&6-WNR&&~6-Z1UR)",
+                                    "(EUYR&&EUUYR&&6-Z1UR)"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "||",
+                        "val": [
+                            "(6-UDKR&&6-UYR2)",
+                            "((6-WNR||6-Z1UR)&&EUYR)"
                         ]
                     }
                 ]
