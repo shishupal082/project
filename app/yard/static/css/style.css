@@ -10,13 +10,13 @@ hr {
 .yard .table-html.display-domino > table > tbody > tr > td {
     border: 1px solid #0000aeff;
 }
-.yard td {
+.yard .table-html td {
     text-align: center;
     width: 25px;
     height: 25px;
 }
-.yard td span,
-.yard td button {
+.yard .table-html td span,
+.yard .table-html td button {
     font-size: 10px;
     line-height: 1;
 }

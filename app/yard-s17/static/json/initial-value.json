@@ -33,8 +33,12 @@
     "LL-G_N_LR": 1,
     "ML-G_N_LR": 1,
 
-    "4A-U_N_S": 1,
-    "4B-U_N_S": 1,
+    "4-U_N_LR": 1,
+    "5-U_N_LR": 1,
+    "6-U_N_LR": 1,
+
+    "4-AU_N_S": 1,
+    "4-BU_N_S": 1,
     "5A-U_N_S": 1,
     "5B-U_N_S": 1,
     "6A-U_N_S": 1,
@@ -50,5 +54,7 @@
 
     "CH/WW/EW/NCR": 1,
     "OTHER_GN_DN": 1,
-    "OTHER_UN_DN": 1
+    "OTHER_UN_DN": 1,
+    "ZR": 1,
+    "COIL": 1
 }

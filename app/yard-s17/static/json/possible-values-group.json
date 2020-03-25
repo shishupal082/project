@@ -104,6 +104,13 @@
         "SDG-U_R_LR",          "SDG-UDKR",
         "SDG-U_N_LR","SDG-UYR1","SDG-UYR2"
     ],
+    "sub-route-4": [
+        "4-AU_R_S",          "4-BU_R_S",
+        "4-AU_N_S",          "4-BU_N_S",
+                   "4-ADUCR","4-BDUCR",
+        "4-U_R_LR",          "4-UDKR",
+        "4-U_N_LR","4-UYR1","4-UYR2"
+    ],
     "route-UP-11": [
         "UP-AU_R_S",          "UP-BU_R_S",
         "UP-AU_N_S",          "UP-BU_N_S",

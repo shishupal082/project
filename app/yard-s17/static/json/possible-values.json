@@ -24,19 +24,29 @@
     "pt-btn": ["4-WN","5-WN","6-WN"],
     "pt-r": ["4-WNR","5-WNR","6-WNR"],
 
+    "timer": [
+        "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+    ],
     "temp-pt": [
         "4-NWKR", "4-RWKR",
         "5-NWKR", "5-RWKR",
         "6-NWKR", "6-RWKR"
     ],
 
+    "power-checking": ["ZR"],
+
     "pointIndication": ["4-WFK", "5-WFK", "6-WFK"],
 
-    "common-btn": ["YYN", "YRN", "WWN", "LXN", "CHYN", "EWN", "EGGN", "SMR"],
-    "common-r": ["YYNR", "YRNR", "WWNR", "LXNR", "CHYNR", "EWNR", "EGGNR"],
+    "common-btn": ["OYN", "YYN", "YRN", "WWN", "LXN", "CHYN", "EWN", "EGGN", "SMR"],
+    "common-r": ["OYNR", "YYNR", "YRNR", "WWNR", "LXNR", "CHYNR", "EWNR", "EGGNR"],
 
-    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN"],
-    "common-2": ["OYNR", "EGNR", "EUYR",
-                "EUUYR", "EUYNR", "EUUYNR", "EUUYNCR", "CHYRNR",
-                "UP-LCPR", "DN-LCPR"]
+    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN",
+                "COIL"],
+    "common-2": ["EGNR",
+                "EUUYR", "EUUYNCR", "CHYRNR",
+                "UP-LCPR", "DN-LCPR"],
+    "emergency-btn": ["EUYN",
+                      "EUUYN"],
+    "emergency-r":   ["EUYNR", "EUYR",
+                      "EUUYNR"]
 }

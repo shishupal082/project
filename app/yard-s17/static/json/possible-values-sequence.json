@@ -23,8 +23,6 @@
     "zonal-route-permissibility": ["ZDUCR"],
 
     "routes-U(R/N)S": [
-        "4A-U_N_S", "4A-U_R_S",
-        "4B-U_N_S", "4B-U_R_S",
         "5A-U_N_S", "5A-U_R_S",
         "5B-U_N_S", "5B-U_R_S",
         "6A-U_N_S", "6A-U_R_S",
@@ -38,6 +36,10 @@
         "OV10/1-Z2U_N_R", "OV10/1-Z2U_R_R",
         "OV10/2-Z2U_N_R", "OV10/2-Z2U_R_R",
         "OV11-Z2U_N_R", "OV11-Z2U_R_R"
+    ],
+    "sub-route": [
+        "5-U_N_LR", "5-U_R_LR",
+        "6-U_N_LR", "6-U_R_LR"
     ],
     "G(R/N)LR": [
         "LL-G_N_LR", "LL-G_R_LR",

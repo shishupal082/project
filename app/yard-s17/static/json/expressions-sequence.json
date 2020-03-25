@@ -99,12 +99,12 @@
                             "val": [
                                 {
                                     "op": "&&",
-                                    "val": ["~4B-Z1UR1", "~4B-U_R_S",
+                                    "val": ["~4B-Z1UR1", "~4-BU_R_S",
                                         "((ML-ZU_N_R&&ML-UNPR)||(ML-ZU_R_R&&S11-GNPR))"]
                                 },
                                 {
                                     "op": "&&",
-                                    "val": ["4B-Z1UR1", "6A-U_N_S", "~4A-U_R_S", "SH7/8-G_N_R",
+                                    "val": ["4B-Z1UR1", "6A-U_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
                                         "((LL-ZU_N_R&&LL-UNPR)||(LL-ZU_R_R&&S10-GNPR))"]
                                 }
                             ]
@@ -168,14 +168,14 @@
                                                 {
                                                     "op": "&&",
                                                     "val": ["~4B-Z1UR1",
-                                                        "~4A-U_R_S", "~4-RWKR",
+                                                        "~4-AU_R_S", "~4-RWKR",
                                                         "(S11-GNPR||(~5-RWKR&&~ML-G_R_LR&&OV2-Z2U_N_R&&ML-UNPR))"
                                                     ]
                                                 },
                                                 {
                                                     "op": "&&",
                                                     "val": ["4B-Z1UR1",
-                                                        "~4-NWKR", "~4B-U_R_S", "~6-RWKR",
+                                                        "~4-NWKR", "~4-BU_R_S", "~6-RWKR",
                                                         "(S10-GNPR||(~LL-G_R_LR&&OV3/1-Z2U_N_R&&OV3/2-Z2U_N_R&&LL-UNPR))"
                                                     ]
                                                 }
@@ -254,12 +254,12 @@
                                         "val": [
                                             {
                                                 "op": "&&",
-                                                "val": ["~4B-Z1UR1", "~4B-U_R_S",
+                                                "val": ["~4B-Z1UR1", "~4-BU_R_S",
                                                     "((ML-ZU_N_R&&ML-UNPR)||(ML-ZU_R_R&&S11-GNPR))"]
                                             },
                                             {
                                                 "op": "&&",
-                                                "val": ["4B-Z1UR1", "6A-U_N_S", "~4A-U_R_S", "SH7/8-G_N_R",
+                                                "val": ["4B-Z1UR1", "6A-U_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
                                                     "((LL-ZU_N_R&&LL-UNPR)||(LL-ZU_R_R&&S10-GNPR))"]
                                             }
                                         ]
@@ -314,5 +314,5 @@
         "~EUUYNR", "~EUYNR", "~EUUYNCR",
 
         "~CO-GGNR", "~EUYR", "~EUUYR"
-    ]
+   ]
 }
