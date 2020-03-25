@@ -55,6 +55,14 @@
         "S13-GPR1", "S13-GR2", "S13-RECPR",
                              "S13-HECPR"
     ],
+    "S1-CO-ON": [
+        "S1-CO-ECR",
+        "S1-CO-COULR1", "S1-CO-COULR2"
+    ],
+    "S12-CO-ON": [
+        "S12-CO-ECR",
+        "S12-CO-COULR1", "S12-CO-COULR2"
+    ],
     "shunt-group": [
         "SH7-RECR", "SH7-HECR", "SH7-GLSR",
         "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
@@ -111,19 +119,33 @@
         "4-U_R_LR",          "4-UDKR",
         "4-U_N_LR","4-UYR1","4-UYR2"
     ],
-    "route-UP-11": [
-        "UP-AU_R_S",          "UP-BU_R_S",
-        "UP-AU_N_S",          "UP-BU_N_S",
-                   "UP-ADUCR","UP-BDUCR",
-        "UP-U_R_LR",          "UP-UDKR",
-        "UP-U_N_LR","UP-UYR1","UP-UYR2"
+    "sub-route-5": [
+        "5-AU_R_S",          "5-BU_R_S",
+        "5-AU_N_S",          "5-BU_N_S",
+                   "5-ADUCR","5-BDUCR",
+        "5-U_R_LR",          "5-UDKR",
+        "5-U_N_LR","5-UYR1","5-UYR2"
     ],
-    "route-DN-11": [
-        "DN-AU_R_S",          "DN-BU_R_S",
-        "DN-AU_N_S",          "DN-BU_N_S",
-                   "DN-ADUCR","DN-BDUCR",
-        "DN-U_R_LR",          "DN-UDKR",
-        "DN-U_N_LR","DN-UYR1","DN-UYR2"
+    "sub-route-6": [
+        "6-AU_R_S",          "6-BU_R_S",
+        "6-AU_N_S",          "6-BU_N_S",
+                   "6-ADUCR","6-BDUCR",
+        "6-U_R_LR",          "6-UDKR",
+        "6-U_N_LR","6-UYR1","6-UYR2"
+    ],
+    "route-S1/9-11": [
+        "S1/9-AU_R_S",          "S1/9-BU_R_S",
+        "S1/9-AU_N_S",          "S1/9-BU_N_S",
+                   "S1/9-ADUCR","S1/9-BDUCR",
+        "S1/9-U_R_LR",          "S1/9-UDKR",
+        "S1/9-U_N_LR","S1/9-UYR1","S1/9-UYR2"
+    ],
+    "route-S12/13-11": [
+        "S12/13-AU_R_S",          "S12/13-BU_R_S",
+        "S12/13-AU_N_S",          "S12/13-BU_N_S",
+                   "S12/13-ADUCR","S12/13-BDUCR",
+        "S12/13-U_R_LR",          "S12/13-UDKR",
+        "S12/13-U_N_LR","S12/13-UYR1","S12/13-UYR2"
     ],
     "route-10/11-11": [
         "10/11-AU_R_S",          "10/11-BU_R_S",

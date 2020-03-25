@@ -29,11 +29,11 @@
                                 "val": [
                                     {
                                         "op": "&&",
-                                        "val": ["((ML-UNPR&&ML-ZU_R_R)||(S2-GNPR&&ML-ZU_N_R))", "~5B-U_R_S", "~5B-Z1UR1"]
+                                        "val": ["((ML-UNPR&&ML-ZU_R_R)||(S2-GNPR&&ML-ZU_N_R))", "~5-BU_R_S", "~5B-Z1UR1"]
                                     },
                                     {
                                         "op": "&&",
-                                        "val": ["((LL-UNPR&&LL-ZU_R_R)||(S3-GNPR&&LL-ZU_N_R))", "~5A-U_R_S", "~SH7/8-G_R_R", "~6A-U_R_S", "5B-Z1UR1"]
+                                        "val": ["((LL-UNPR&&LL-ZU_R_R)||(S3-GNPR&&LL-ZU_N_R))", "~5-AU_R_S", "~SH7/8-G_R_R", "~6-AU_R_S", "5B-Z1UR1"]
                                     }
                                 ]
                             },
@@ -46,7 +46,7 @@
         ],
 
     "SH-GZR": ["~GNCR", "~UNCR", "SH-GNPR",
-        "(SH7-GNPR||LL-UNPR)", "SH7/8-G_R_R", "6-Z1UR", "5B-U_N_S",
+        "(SH7-GNPR||LL-UNPR)", "SH7/8-G_R_R", "6-Z1UR", "5-BU_N_S",
         "((LL-ZU_N_R&&SDG-UNPR)||(LL-ZU_R_R&&SH8-GNPR))",
         "~EUUYNR", "~EUYNR", "~EUUYNCR",
         {
@@ -57,7 +57,7 @@
                     "val": [
                         "~ZDUCR",
                         "(LL-UNPR||SH7-GNPR)","SH7/8-G_R_R",
-                        "~6A-U_R_S", "~5-RWKR", "~6-NWKR",
+                        "~6-AU_R_S", "~5-RWKR", "~6-NWKR",
                         "(SH8-GNPR||(LL-G_N_LR&&SDG-UNPR))",
                         "~MN-GZR"
                     ]
@@ -104,7 +104,7 @@
                                 },
                                 {
                                     "op": "&&",
-                                    "val": ["4B-Z1UR1", "6A-U_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
+                                    "val": ["4B-Z1UR1", "6-AU_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
                                         "((LL-ZU_N_R&&LL-UNPR)||(LL-ZU_R_R&&S10-GNPR))"]
                                 }
                             ]
@@ -120,12 +120,12 @@
                                 {
                                     "op": "&&",
                                     "val": ["((ML-UNPR&&ML-ZU_R_R)||(S2-GNPR&&ML-ZU_N_R))",
-                                        "~5B-U_R_S", "~5B-Z1UR1"]
+                                        "~5-BU_R_S", "~5B-Z1UR1"]
                                 },
                                 {
                                     "op": "&&",
                                     "val": ["((LL-UNPR&&LL-ZU_R_R)||(S3-GNPR&&LL-ZU_N_R))",
-                                        "~5A-U_R_S", "~SH7/8-G_R_R", "~6A-U_R_S", "5B-Z1UR1"]
+                                        "~5-AU_R_S", "~SH7/8-G_R_R", "~6-AU_R_S", "5B-Z1UR1"]
                                 }
                             ]
                         },
@@ -157,11 +157,11 @@
                         {
                             "op": "||",
                             "val": [
-                                "(S9-GNPR&&UP-UNPR&&UP-LCPR&&~10/11-UNPR&&S1/9-U_N_S)",
-                                "(S13-GNPR&&DN-UNPR&&DN-LCPR&&S12/13-U_N_S)",
+                                "(S9-GNPR&&UP-UNPR&&UP-LCPR&&~10/11-UNPR&&S1/9-AU_N_S)",
+                                "(S13-GNPR&&DN-UNPR&&DN-LCPR&&S12/13-AU_N_S)",
                                 {
                                     "op": "&&",
-                                    "val": ["((S1-GNPR&&S1/9-U_N_S)||10/11-UNPR)",
+                                    "val": ["((S1-GNPR&&S1/9-AU_N_S)||10/11-UNPR)",
                                         {
                                             "op": "||",
                                             "val": [
@@ -185,21 +185,21 @@
                                 },
                                 {
                                     "op": "&&",
-                                    "val": ["((S12-GNPR&&~S12/13-U_R_S)||2/3-UNPR)",
+                                    "val": ["((S12-GNPR&&~S12/13-AU_R_S)||2/3-UNPR)",
                                         {
                                             "op": "||",
                                             "val": [
                                                 {
                                                     "op": "&&",
                                                     "val": ["~5B-Z1UR1",
-                                                        "~5A-U_R_S", "~5-RWKR",
+                                                        "~5-AU_R_S", "~5-RWKR",
                                                         "(S2-GNPR||(ML-UNPR&&OV11-Z2U_N_R&&~4-RWKR&&~ML-G_R_LR))"
                                                     ]
                                                 },
                                                 {
                                                     "op": "&&",
                                                     "val": ["5B-Z1UR1",
-                                                        "~5B-U_R_S", "~6-RWKR", "~5-NWKR",
+                                                        "~5-BU_R_S", "~6-RWKR", "~5-NWKR",
                                                         "(S3-GNPR||(LL-UNPR&&OV10/1-Z2U_N_R&&OV10/2-Z2U_N_R&&~LL-G_R_LR))"
                                                     ]
                                                 }
@@ -259,7 +259,7 @@
                                             },
                                             {
                                                 "op": "&&",
-                                                "val": ["4B-Z1UR1", "6A-U_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
+                                                "val": ["4B-Z1UR1", "6-AU_N_S", "~4-AU_R_S", "SH7/8-G_N_R",
                                                     "((LL-ZU_N_R&&LL-UNPR)||(LL-ZU_R_R&&S10-GNPR))"]
                                             }
                                         ]
@@ -275,12 +275,12 @@
                                             {
                                                 "op": "&&",
                                                 "val": ["((ML-UNPR&&ML-ZU_R_R)||(S2-GNPR&&ML-ZU_N_R))",
-                                                    "~5B-U_R_S", "~5B-Z1UR1"]
+                                                    "~5-BU_R_S", "~5B-Z1UR1"]
                                             },
                                             {
                                                 "op": "&&",
                                                 "val": ["((LL-UNPR&&LL-ZU_R_R)||(S3-GNPR&&LL-ZU_N_R))",
-                                                    "~5A-U_R_S", "~SH7/8-G_R_R", "~6A-U_R_S", "5B-Z1UR1"]
+                                                    "~5-AU_R_S", "~SH7/8-G_R_R", "~6-AU_R_S", "5B-Z1UR1"]
                                             }
                                         ]
                                     },
@@ -305,7 +305,7 @@
                 {
                     "op": "&&",
                     "val": ["SH-GZR",
-                        "(SH7-GNPR||LL-UNPR)", "SH7/8-G_R_R", "6-Z1UR", "5B-U_N_S",
+                        "(SH7-GNPR||LL-UNPR)", "SH7/8-G_R_R", "6-Z1UR", "5-BU_N_S",
                         "((LL-ZU_N_R&&SDG-UNPR)||(LL-ZU_R_R&&SH8-GNPR))"
                     ]
                 }
@@ -314,5 +314,5 @@
         "~EUUYNR", "~EUYNR", "~EUUYNCR",
 
         "~CO-GGNR", "~EUYR", "~EUUYR"
-   ]
+  ]
 }

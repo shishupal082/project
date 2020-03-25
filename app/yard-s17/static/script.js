@@ -16,6 +16,7 @@ var commonPath = {
                     "/app/yard-s17/static/json/expressions-sequence.json",
                     "/app/yard-s17/static/json/expressions-latched.json",
                     "/app/yard-s17/static/json/expressions-latched-ov.json",
+                    "/app/yard-s17/static/json/expressions-latched-sub-routes.json",
                     "/app/yard-s17/static/json/expressions-glow.json"]
 };
 

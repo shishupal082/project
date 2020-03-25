@@ -6,7 +6,7 @@
             {
                 "op": "&&",
                 "val": ["OV2-Z2U_N_R", "ZDUCR", "MN-GZR",
-                    "S1-GNPR", "ML-UNPR", "~5B-U_R_S",
+                    "S1-GNPR", "ML-UNPR", "~5-BU_R_S",
                     "OV3/2-Z2U_N_R",
                     "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
                 ]
@@ -20,7 +20,7 @@
             {
                 "op": "&&",
                 "val": ["OV3/2-Z2U_N_R", "ZDUCR", "MN-GZR",
-                    "S1-GNPR", "LL-UNPR", "6A-U_N_S", "5-RWKR", "~5A-U_R_S",
+                    "S1-GNPR", "LL-UNPR", "6-AU_N_S", "5-RWKR", "~5-AU_R_S",
                     "OV3/1-Z2U_N_R",
                     "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
                 ]
@@ -34,7 +34,7 @@
             {
                 "op": "&&",
                 "val": ["OV3/1-Z2U_N_R", "ZDUCR", "MN-GZR",
-                    "S1-GNPR", "LL-UNPR", "6A-U_N_S", "~5-RWKR", "~5B-U_R_S",
+                    "S1-GNPR", "LL-UNPR", "6-AU_N_S", "~5-RWKR", "~5-BU_R_S",
                     "OV3/2-Z2U_N_R",
                     "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
                 ]
@@ -94,8 +94,8 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&ML-UNPR)"
@@ -116,8 +116,8 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&LL-UNPR)"
@@ -138,8 +138,8 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&LL-UNPR)"
@@ -160,14 +160,14 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&ML-UNPR)"
                         ]
                     },
-                    "5A-U_N_S"
+                    "5-AU_N_S"
                 ]
             }
         ]
@@ -182,14 +182,14 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&LL-UNPR)"
                         ]
                     },
-                    "5B-U_N_S"
+                    "5-BU_N_S"
                 ]
             }
         ]
@@ -204,14 +204,14 @@
                     {
                         "op": "||",
                         "val": [
-                            "(~5A-U_N_S&&~5A-TPR&&~ML-ZU_R_R)",
-                            "(~5B-U_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
                             "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
                             "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
                             "(OYN&&LL-UNPR)"
                         ]
                     },
-                    "5B-U_N_S"
+                    "5-BU_N_S"
                 ]
             }
         ]

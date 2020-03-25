@@ -39,5 +39,15 @@
                 }
             ]
         }
-    ]
+    ],
+    "latched-exp-N": {
+        "op": "||",
+        "val": [
+            "(~latched-exp-R&&latched-exp-N)",
+            {
+                "op": "&&",
+                "val": ["latched-exp-R", "other-conditions"]
+            }
+        ]
+    }
 }
