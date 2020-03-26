@@ -88,50 +88,19 @@ YardHelper.extend({
         return this.getDisplayYardDominoBoundary();
     }
 });
+function apiCall(ajax, callBack) {
+    $.ajax({url: ajax.url,
+        success: function(response, textStatus) {
+            callBack(ajax, "SUCCESS", response);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            callBack(ajax, "FAILURE", null);
+        }
+    });
+}
 YardHelper.extend({
     loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
-        if ($S.isArray(urls) == false || urls.length < 1) {
-            if ($S.isFunction(eachApiCallback)) {
-                eachApiCallback(null, apiName);
-            }
-            if ($S.isFunction(callBack)) {
-                callBack();
-            }
-            return false;
-        }
-        var apiSendCount = urls.length, apiReceiveCount = 0;
-        var ajax = {};
-        ajax.type = "json";
-        ajax.dataType = "json";
-        for (var i = 0; i < urls.length; i++) {
-            ajax.url = urls[i];
-            $.ajax({url: ajax.url,
-                success: function(response, textStatus) {
-                    apiReceiveCount++;
-                    if ($S.isFunction(eachApiCallback)) {
-                        eachApiCallback(response, apiName);
-                    }
-                    if (apiSendCount == apiReceiveCount) {
-                        if ($S.isFunction(callBack)) {
-                            callBack();
-                        }
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.log("Error in api: " + apiName);
-                    apiReceiveCount++;
-                    if ($S.isFunction(eachApiCallback)) {
-                        eachApiCallback(null, apiName);
-                    }
-                    if (apiSendCount == apiReceiveCount) {
-                        if ($S.isFunction(callBack)) {
-                            callBack();
-                        }
-                    }
-                }
-            });
-        }
-        return true;
+        return $S.loadJsonData(apiCall, urls, eachApiCallback, callBack, apiName);
     }
 });
 YardHelper.extend({
