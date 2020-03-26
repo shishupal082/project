@@ -32,6 +32,8 @@
     ],
     "G(R/N)LR": [
         "LL-G_N_LR", "LL-G_R_LR",
-        "ML-G_N_LR", "ML-G_R_LR"
+        "ML-G_N_LR", "ML-G_R_LR",
+        "10/11-G_N_LR", "10/11-G_R_LR",
+        "2/3-G_N_LR", "2/3-G_R_LR"
     ]
 }

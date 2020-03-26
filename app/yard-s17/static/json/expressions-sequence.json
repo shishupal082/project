@@ -314,5 +314,23 @@
         "~EUUYNR", "~EUYNR", "~EUUYNCR",
 
         "~CO-GGNR", "~EUYR", "~EUUYR"
+    ],
+    "S1-GR3": [
+        "S1-GR1", "S1-GR2",
+        "~S2-RECR", "S2-DECR",
+        "4-NWKR"
+    ],
+    "S12-GR3": [
+        "S12-GR1", "S12-GR2",
+        "~S11-RECR", "S11-DECR",
+        "5-NWKR"
+    ],
+    "S2-GR3": [
+        "S2-GR1", "S2-GR2",
+        "~S13-RECR", "S13-DECR"
+    ],
+    "S11-GR3": [
+        "S11-GR1", "S11-GR2",
+        "~S9-RECR", "S9-DECR"
     ]
 }

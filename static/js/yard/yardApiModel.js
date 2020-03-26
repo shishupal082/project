@@ -133,6 +133,16 @@ function loadExpressions(callBack) {
         callBack();
     });
 }
+function apiCall(ajax, callBack) {
+    $.ajax({url: ajax.url,
+        success: function(response, textStatus) {
+            callBack(ajax, "SUCCESS", response);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            callBack(ajax, "FAILURE", null);
+        }
+    });
+}
 YardApiModel.extend({
     loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
         if ($M.isArray(urls) == false || urls.length < 1) {
@@ -150,28 +160,18 @@ YardApiModel.extend({
             ajax.type = "json";
             ajax.dataType = "json";
             ajax.url = urls[i];
-            $.ajax({url: ajax.url,
-                success: function(response, textStatus) {
-                    apiReceiveCount++;
-                    if ($M.isFunction(eachApiCallback)) {
-                        eachApiCallback(response, apiName);
-                    }
-                    if (apiSendCount == apiReceiveCount) {
-                        if ($M.isFunction(callBack)) {
-                            callBack();
-                        }
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.log("Error in api: " + apiName);
-                    apiReceiveCount++;
-                    if ($M.isFunction(eachApiCallback)) {
-                        eachApiCallback(null, apiName);
-                    }
-                    if (apiSendCount == apiReceiveCount) {
-                        if ($M.isFunction(callBack)) {
-                            callBack();
-                        }
+            ajax.apiName = apiName;
+            apiCall(ajax, function(ajaxDetails, status, response) {
+                apiReceiveCount++;
+                if (status == "FAILURE") {
+                    console.log("Error in api: " + ajaxDetails.url);
+                }
+                if ($M.isFunction(eachApiCallback)) {
+                    eachApiCallback(response, ajax.apiName);
+                }
+                if (apiSendCount == apiReceiveCount) {
+                    if ($M.isFunction(callBack)) {
+                        callBack();
                     }
                 }
             });

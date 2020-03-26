@@ -13,8 +13,12 @@
         "SH2-RECR", "SH2-HECR",
         "SH16-RECR", "SH16-HECR"
     ],
+    "hr": [
+        "S1-HR","S3-HR","S4-HR","S5-HR","S6-HR",
+        "S12-HR","S13-HR","S14-HR","S15-HR","S19-HR"
+    ],
     "pointIndication": ["101-WFK", "102-WFK", "103-WFK", "107-WFK", "108-WFK"],
     "common": [
-        "NWWNR", "RWWNR"
+        "NWWNR", "RWWNR", "SMR"
     ]
 }
