@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graphics</title>
+</head>
+<body>
+    <div>
+        <center>
+            <svg height="210" width="250">
+                <line x1="0" y1="0" x2="200" y2="200" style="stroke:rgb(255,0,0);stroke-width:2" />
+                <text x="120" y="20" fill="red">Line</text>
+            </svg>
+            <svg height="210" width="300">
+                <polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" />
+                <text x="90" y="100" fill="green">Polygon</text>
+            </svg>
+            <svg height="210" width="250">
+                <polyline points="20,20 40,25 60,40 80,120 120,140 200,180"
+              style="fill:none;stroke:black;stroke-width:3" />
+                <text x="120" y="200" fill="black">PolyLine</text>
+            </svg>
+        </center>
+        <center><h1>SVG graphics</h1></center>
+        <center>
+            <canvas id="canvasLine" width="200" height="200" style="background-color:#ddd"></canvas>
+            <canvas id="canvasPoligon" width="200" height="200" style="background-color:#333"></canvas>
+            <canvas id="canvasPolyline" width="200" height="200" style="background-color:#333"></canvas>
+        </center>
+        <center><h1>Convas graphics</h1></center>
+    </div>
+<script type="text/javascript">
+var ctx = document.getElementById("canvasLine").getContext("2d");
+
+function convasLine(pos, length, width) {
+    // ctx.rotate(0.4);
+    ctx.beginPath();
+    ctx.moveTo(3, 100);
+    ctx.lineTo(197, 100);
+    ctx.strokeStyle = '#f00';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(100, 3);
+    ctx.lineTo(100, 197);
+    ctx.strokeStyle = '#0f0';
+    ctx.stroke();
+
+
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(150, 150);
+    ctx.lineTo(100, 100);
+    ctx.strokeStyle = '#00f';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(100, 100);
+    ctx.lineTo(140, 140);
+    ctx.strokeStyle = '#f00';
+    ctx.stroke();
+
+}
+convasLine();
+
+ctx.strokeStyle = '#000';
+ctx.translate(100, 100);
+var lastAng = {};
+function drawHand(ctx, ang) {
+    ctx.lineCap = "round";
+    // if (!isNaN(lastAng)) {
+    //     ctx.beginPath();
+    //     ctx.lineWidth = 2;
+    //     ctx.moveTo(0,0);
+    //     ctx.rotate(lastAng);
+    //     ctx.lineTo(0, 80);
+    //     ctx.strokeStyle = '#ddd';
+    //     ctx.stroke();
+    //     ctx.rotate(-lastAng);
+    // }
+    lastAng = ang;  
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.moveTo(0,0);
+    ctx.rotate(ang);
+    ctx.lineTo(0, 80);
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
+    ctx.rotate(-ang);
+}
+
+function drawTime(ctx){
+    var now = new Date();
+    var second = now.getSeconds();
+
+    second=(second*Math.PI/30);
+
+    drawHand(ctx, second);
+}
+
+setInterval(function(){
+    drawTime(ctx);
+}, 1000);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chart Js</title>
+    <script type="text/javascript" src="/static/libs/Chart.js"></script>
+<style type="text/css">
+.bar-chart {
+    width: 500px;
+    height: 500px;
+}
+</style>
+</head>
+<body>
+    <center>
+        <div class="bar-chart">
+            <div>
+                <canvas id="barChart" width="400" height="400"></canvas> 
+            </div>
+        </div>
+    </center>
+    <div><a href="https://www.chartjs.org/docs/latest/">Chart JS</a></div>
+<script>
+
+function createChart(type, label, convasId) {
+    var ctx = document.getElementById(convasId).getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: type,
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: label,
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+var type, label, convasId;
+type = "bar";
+label = "Bar Chart";
+convasId = "barChart";
+
+type = "pie";
+type = "line";
+type = "horizontalBar";
+type = "radar";
+type = "doughnut";
+type = "bar";
+
+createChart(type, label, convasId);
+</script>
+</body>
+</html>
