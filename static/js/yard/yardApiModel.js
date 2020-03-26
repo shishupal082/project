@@ -145,38 +145,7 @@ function apiCall(ajax, callBack) {
 }
 YardApiModel.extend({
     loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
-        if ($M.isArray(urls) == false || urls.length < 1) {
-            if ($M.isFunction(eachApiCallback)) {
-                eachApiCallback(null, apiName);
-            }
-            if ($M.isFunction(callBack)) {
-                callBack();
-            }
-            return false;
-        }
-        var apiSendCount = urls.length, apiReceiveCount = 0;
-        for (var i = 0; i < urls.length; i++) {
-            var ajax = {};
-            ajax.type = "json";
-            ajax.dataType = "json";
-            ajax.url = urls[i];
-            ajax.apiName = apiName;
-            apiCall(ajax, function(ajaxDetails, status, response) {
-                apiReceiveCount++;
-                if (status == "FAILURE") {
-                    console.log("Error in api: " + ajaxDetails.url);
-                }
-                if ($M.isFunction(eachApiCallback)) {
-                    eachApiCallback(response, ajax.apiName);
-                }
-                if (apiSendCount == apiReceiveCount) {
-                    if ($M.isFunction(callBack)) {
-                        callBack();
-                    }
-                }
-            });
-        }
-        return true;
+        return $M.loadJsonData(apiCall, urls, eachApiCallback, callBack, apiName);
     },
     documentLoaded: function(callBack) {
         loadPossibleValues(function() {

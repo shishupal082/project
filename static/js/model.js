@@ -228,6 +228,60 @@ Model.fn = Model.prototype = {
     }
 };
 ExtendObject(Model);
+/* Stack warpper */
+Model.extend({
+    getStack: function(shareStorage) {
+        return $S.getStack(shareStorage);
+    },
+    getLocalStorage: function() {
+        return $S.getLocalStorage();
+    },
+    getTable: function(tableContent, tableId) {
+        return $S.getTable(tableContent, tableId);
+    },
+    getDT: function() {
+        return $S.getDT();
+    },
+    getBT: function(data) {
+        return $S.getBT(data);
+    },
+    getBST: function(data) {
+        return $S.getBST(data);
+    },
+    getUniqueNumber: function(minVal, maxVal) {
+        return $S.getUniqueNumber();
+    },
+    getUniqueNumber: function() {
+        return $S.getUniqueNumber();
+    },
+    getRequestId: function() {
+        return $S.getRequestId();
+    },
+    setLoggerDateTimeState: function(state,formats,splitter) {
+        return $S.setLoggerDateTimeState(state,formats,splitter);
+    },
+    log: function(logText) {
+        return $S.log(logText);
+    },
+    isString: function(value) {
+        return $S.isString(value);
+    },
+    isArray: function(value) {
+        return $S.isArray(value);
+    },
+    isObject: function(value) {
+        return $S.isObject(value);
+    },
+    isNumber: function(value) {
+        return $S.isNumber(value);
+    },
+    isFunction: function(value) {
+        return $S.isFunction(value);
+    },
+    loadJsonData: function(ajaxApiCall, urls, eachApiCallback, callBack, apiName) {
+        return $S.loadJsonData(ajaxApiCall, urls, eachApiCallback, callBack, apiName);
+    }
+});
 /*
 End of direct access of ID
 */
@@ -267,39 +321,6 @@ Model.extend({
     }
 });
 Model.extend({
-    getStack: function(shareStorage) {
-        return $S.getStack(shareStorage);
-    },
-    getLocalStorage: function() {
-        return $S.getLocalStorage();
-    },
-    getTable: function(tableContent, tableId) {
-        return $S.getTable(tableContent, tableId);
-    },
-    getDT: function() {
-        return $S.getDT();
-    },
-    getBT: function(data) {
-        return $S.getBT(data);
-    },
-    getBST: function(data) {
-        return $S.getBST(data);
-    },
-    getUniqueNumber: function(minVal, maxVal) {
-        return $S.getUniqueNumber();
-    },
-    getUniqueNumber: function() {
-        return $S.getUniqueNumber();
-    },
-    getRequestId: function() {
-        return $S.getRequestId();
-    },
-    setLoggerDateTimeState: function(state,formats,splitter) {
-        return $S.setLoggerDateTimeState(state,formats,splitter);
-    },
-    log: function(logText) {
-        return $S.log(logText);
-    },
     enableChangeValueDataLogging: function() {
         changeValueDataLoggingEnable = true;
         return 1;
@@ -363,21 +384,6 @@ Model.extend({
     isValidKey: function(key) {
         return isValidKey(key);
     },
-    isString: function(value) {
-        return $S.isString(value);
-    },
-    isArray: function(value) {
-        return $S.isArray(value);
-    },
-    isObject: function(value) {
-        return $S.isObject(value);
-    },
-    isNumber: function(value) {
-        return $S.isNumber(value);
-    },
-    isFunction: function(value) {
-        return $S.isFunction(value);
-    },
     isMethodDefined: function(name) {
         return Model.isFunction(this[name]);
     },
@@ -437,7 +443,7 @@ Model.extend({
     getChangeValueData: function (changeValueKey) {
         var response = [];
         if (Model.isArray(changeValueData[changeValueKey])) {
-            response = changeValueData[changeValueKey];
+            response = $S.clone(changeValueData[changeValueKey]);
         }
         return response;
     },
@@ -478,13 +484,11 @@ Model.extend({
         return dependentVariable;
     },
     getCurrentValues : function() {
-        var currentValuesResponse = {};
         var count = 0;
         for (var key in currentValues) {
-            currentValuesResponse[key] = currentValues[key];
             count++;
         }
-        return {currentValues: currentValuesResponse, count: count};
+        return {currentValues: $S.clone(currentValues), count: count};
     }
 });
 Model.extend({

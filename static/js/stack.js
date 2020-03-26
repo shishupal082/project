@@ -942,7 +942,7 @@ Stack.extend({
 });
 var Last100UniqueNumberQue = Stack.getQue();
 Stack.extend({
-    clone: function(obj) {
+    cloneOld26032020: function(obj) {
         var res = obj;
         if (isArray(obj)) {
             res = [].concat(obj)
@@ -953,6 +953,21 @@ Stack.extend({
             }
         }
         return res;
+    },
+    clone: function(source) {
+        if (isArray(source)) {
+            return source.map(Stack.cloneV2);
+        }
+        if (isObject(source)) {
+            var target = {};
+            var keys = Object.keys(source);
+            var klen = keys.length;
+            for (var k=0; k < klen; k++) {
+                target[keys[k]] = Stack.cloneV2(source[keys[k]]);
+            }
+            return target;
+        }
+        return source;
     },
     getRandomNumber: function(minVal, maxVal) {
         return getRandomNumber(minVal, maxVal);
@@ -1196,6 +1211,55 @@ Stack.extend({
         }
         return response;
     },
+});
+Stack.extend({
+    loadJsonData: function(ajaxApiCall, urls, eachApiCallback, callBack, apiName) {
+        /*
+        ajaxApiCall samples --
+        function ajaxApiCall(ajax, callBack) {
+            $.ajax({url: ajax.url,
+                success: function(response, textStatus) {
+                    callBack(ajax, "SUCCESS", response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    callBack(ajax, "FAILURE", null);
+                }
+            });
+        }
+        */
+        if (isArray(urls) == false || urls.length < 1 || isFunction(ajaxApiCall) == false) {
+            if (isFunction(eachApiCallback)) {
+                eachApiCallback(null, apiName);
+            }
+            if (isFunction(callBack)) {
+                callBack();
+            }
+            return false;
+        }
+        var apiSendCount = urls.length, apiReceiveCount = 0;
+        for (var i = 0; i < urls.length; i++) {
+            var ajax = {};
+            ajax.type = "json";
+            ajax.dataType = "json";
+            ajax.url = urls[i];
+            ajax.apiName = apiName;
+            ajaxApiCall(ajax, function(ajaxDetails, status, response) {
+                apiReceiveCount++;
+                if (status == "FAILURE") {
+                    Stack.log("Error in api: " + ajaxDetails.url);
+                }
+                if (isFunction(eachApiCallback)) {
+                    eachApiCallback(response, ajax.apiName);
+                }
+                if (apiSendCount == apiReceiveCount) {
+                    if (isFunction(callBack)) {
+                        callBack();
+                    }
+                }
+            });
+        }
+        return true;
+    }
 });
 /*End of direct access of methods*/
 window.Stack = window.$S = Stack;
