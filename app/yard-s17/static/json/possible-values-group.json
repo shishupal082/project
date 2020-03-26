@@ -64,32 +64,39 @@
         "S12-CO-COULR1", "S12-CO-COULR2"
     ],
     "shunt-group": [
-        "SH7-RECR", "SH7-HECR", "SH7-GSLR",
+        "SH7-RECR", "SH7-HECR", "SH7-GLSR",
         "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
         "SH7-GR2", "__SH7-GR1-C", "SH8-GR2",
         "SH8-GNR", "__SH8-GR1-C", "SH8-GR1",
-        "SH8-RECR", "SH8-HECR", "SH8-GSLR"
+        "SH8-RECR", "SH8-HECR", "SH8-GLSR"
     ],
     "point-minor-12":[
-        "4-Z1WR1","4-Z1NWR","4-Z1RWR",
-        "4-W_R_R","4-R_WLR","4-WKR2",
-        "4-W_N_R","4-N_WLR","4-WKR1",
-        "4-WR",             "4-WKR3",
-                            "4-WJR"
+        "-Z1WR1","-Z1NWR","-Z1RWR",
+        "-W_R_R","-R_WLR","-WKR2",
+        "-W_N_R","-N_WLR","-WKR1",
+        "-WR",            "-WKR3",
+                          "-WJR"
     ],
-    "point-minor-12":[
-        "5-Z1WR1","5-Z1NWR","5-Z1RWR",
-        "5-W_R_R","5-R_WLR","5-WKR2",
-        "5-W_N_R","5-N_WLR","5-WKR1",
-        "5-WR",             "5-WKR3",
-                            "5-WJR"
+    "point-4-major-24":[
+        "4-Z1WR1","4-Z1NWR",  "4-Z1RWR",  "4-Z1WR",   "4-WLR", "4-WKR1",
+        "4-W_R_R","4-_R_WLR1","4-_R_WLR2","4-_R_WLR3","4-W_R_LR","4-WKR2",
+        "4-W_N_R","4-_N_WLR1","4-_N_WLR2","4-_N_WLR3","4-W_N_LR",
+        "4-WR",               "4-WJR",    "4-Z2WR1",  "4-Z2WR2",
+                              "4-TP1R",   "4-TP2R",   "4-WKR3"
     ],
-    "point-minor-12":[
-        "6-Z1WR1","6-Z1NWR","6-Z1RWR",
-        "6-W_R_R","6-R_WLR","6-WKR2",
-        "6-W_N_R","6-N_WLR","6-WKR1",
-        "6-WR",             "6-WKR3",
-                            "6-WJR"
+    "point-5-major-24":[
+        "5-Z1WR1","5-Z1NWR",  "5-Z1RWR",  "5-Z1WR",   "5-WLR", "5-WKR1",
+        "5-W_R_R","5-_R_WLR1","5-_R_WLR2","5-_R_WLR3","5-W_R_LR","5-WKR2",
+        "5-W_N_R","5-_N_WLR1","5-_N_WLR2","5-_N_WLR3","5-W_N_LR",
+        "5-WR",               "5-WJR",    "5-Z2WR1",  "5-Z2WR2",
+                              "5-TP1R",   "5-TP2R",   "5-WKR3"
+    ],
+    "point-6-major-24":[
+        "6-Z1WR1","6-Z1NWR",  "6-Z1RWR",  "6-Z1WR",   "6-WLR", "6-WKR1",
+        "6-W_R_R","6-_R_WLR1","6-_R_WLR2","6-_R_WLR3","6-W_R_LR","6-WKR2",
+        "6-W_N_R","6-_N_WLR1","6-_N_WLR2","6-_N_WLR3","6-W_N_LR",
+        "6-WR",               "6-WJR",    "6-Z2WR1",  "6-Z2WR2",
+                              "6-TP1R",   "6-TP2R",   "6-WKR3"
     ],
     "route-ML-11": [
         "ML-AU_R_S",          "ML-BU_R_S",

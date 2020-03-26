@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-$M.disableChangeLogValueStatus();
+// $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
 var timerCount = 0;
 
@@ -18,6 +18,7 @@ var commonPath = {
                     "/app/yard-s17/static/json/expressions-latched-ov.json",
                     "/app/yard-s17/static/json/expressions-latched-routes.json",
                     "/app/yard-s17/static/json/expressions-sub-routes.json",
+                    "/app/yard-s17/static/json/expressions-points.json",
                     "/app/yard-s17/static/json/expressions-glow.json"]
 };
 
@@ -110,6 +111,7 @@ $YApiModel.documentLoaded(function() {
         checkUIStyle();
         $("#help").removeClass("hide");
         checkDominoDisplayStatus();
+        $M.disableChangeLogValueStatus();
     });
 });
 

@@ -305,8 +305,8 @@
                                 "op": "&&",
                                 "val": [
                                     "6-Z1UR", "6-UYR1", "6-UDKR",
-                                    "~SH7-HECR", "SH7-GSLR",
-                                    "~SH8-HECR", "SH8-GSLR"
+                                    "~SH7-HECR", "SH7-GLSR",
+                                    "~SH8-HECR", "SH8-GLSR"
                                 ]
                             },
                             {

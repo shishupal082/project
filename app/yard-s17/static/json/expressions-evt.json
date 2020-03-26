@@ -50,6 +50,7 @@
     "YRNR": ["(YRN&&~YYNR&&(WNCR&&OTHER_GN_DN&&SMR))"],
     "LXNR": ["(LXN&&(OTHER_UN_DN&&WNCR&&SMR))"],
     "CHYNR": ["(CHYN&&(OTHER_UN_DN&&WNCR&&SMR))"],
+    "EGGNR": ["EGGN"],
 
     "4-WNR": ["(4-WN&&(~5-WNR&&~6-WNR)&&(GNCR&&UNCR&&SMR))"],
     "5-WNR": ["(5-WN&&(~4-WNR&&~6-WNR)&&(GNCR&&UNCR&&SMR))"],

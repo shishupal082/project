@@ -179,7 +179,7 @@
             "val": [
                 {
                     "op": "&&",
-                    "val": ["~5B-TPR", "~SDG-TPR", "~6-UDKR"]
+                    "val": ["~5B-TPR", "~SDG-TPR-A", "~6-UDKR"]
                 },
                 {
                     "op": "&&",

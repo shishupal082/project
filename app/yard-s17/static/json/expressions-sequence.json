@@ -332,5 +332,93 @@
     "S11-GR3": [
         "S11-GR1", "S11-GR2",
         "~S9-RECR", "S9-DECR"
-    ]
+    ],
+    "SH7-GR1": [
+        "SH7/8-G_R_R",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": ["~SH7-GLSR",
+                        "~SH7-GR1", "~SH7-GR2"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": ["~SH8-GLSR",
+                        "~SH8-GR1", "~SH8-GR2",
+                        "6-AU_R_S", "6-ADUCR"
+                    ]
+                }
+            ]
+        },
+        "~LL-ZU_R_R",
+        "((SH7-GLSR&&SH7-GNPR)||SH7-GR1)",
+        "(~SH7/8-EGNR||~SH7-GNPR)"
+    ],
+    "SH8-GR1": [
+        "SH7/8-G_R_R",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": ["~SH8-GLSR",
+                        "~SH8-GR1", "~SH8-GR2"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": ["~SH7-GLSR",
+                        "~SH7-GR1", "~SH7-GR2",
+                        "6-AU_R_S", "6-ADUCR"
+                    ]
+                }
+            ]
+        },
+        "LL-ZU_R_R",
+        "((SH8-GLSR&&SH8-GNPR)||SH8-GR1)",
+        "(~SH7/8-EGNR||~SH8-GNPR)"
+    ],
+    "SH7-GR2": [
+        "SH7/8-G_R_R",
+        {
+            "op": "||",
+            "val": [
+                "(SH7-GLSR&&~SH7-GR1)",
+                "(SH8-GLSR&&~SH8-GR1&&~6-AU_N_S&&6-ADUCR)"
+            ]
+        },
+        "LL-ZU_N_R",
+        "SH7-GR1",
+        "(~SH7/8-EGNR||~SH7-GNPR)"
+    ],
+    "SH8-GR2": [
+        "SH7/8-G_R_R",
+        {
+            "op": "||",
+            "val": [
+                "(SH8-GLSR&&~SH8-GR1)",
+                "(SH7-GLSR&&~SH7-GR1&&~6-AU_N_S&&6-ADUCR)"
+            ]
+        },
+        "LL-ZU_R_R",
+        "SH8-GR1",
+        "(~SH7/8-EGNR||~SH8-GNPR)"
+    ],
+    "SH7-GLSR": {
+        "op": "||",
+        "val": [
+            "(5-BU_N_S&&6-AU_N_S&&~OV3/1-Z2U_R_R&&~OV3/2-Z2U_R_R&&~SH7-GR1)",
+            "(SH-GZR&&~LL-ZU_R_R&&SH7-GNPR&&SH7-GLSR)"
+        ]
+    },
+    "SH8-GLSR": {
+        "op": "||",
+        "val": [
+            "(5-BU_N_S&&6-AU_N_S&&~OV3/1-Z2U_R_R&&~OV3/2-Z2U_R_R&&~SH8-GR1)",
+            "(SH-GZR&&~LL-ZU_N_R&&SH8-GNPR&&SH8-GLSR)"
+        ]
+    }
 }
