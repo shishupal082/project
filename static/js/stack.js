@@ -944,14 +944,14 @@ Stack.extend({
 });
 var Last100UniqueNumberQue = Stack.getQue();
 Stack.extend({
-    cloneOld26032020: function(obj) {
+    clone26032020: function(obj) {
         var res = obj;
         if (isArray(obj)) {
             res = [].concat(obj)
         } else if (isObject(obj)) {
             res = {};
             for (var key in obj) {
-                res[key] = Stack.clone(obj[key]);
+                res[key] = Stack.clone26032020(obj[key]);
             }
         }
         return res;
