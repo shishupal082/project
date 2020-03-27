@@ -1,5 +1,5 @@
 {
-    "exp-invalid-output=": {
+    "exp-invalid": {
         "op": "&&",
         "val": [
             "1","2",
