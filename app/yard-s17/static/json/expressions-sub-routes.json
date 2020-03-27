@@ -220,5 +220,191 @@
                 }
             ]
         }
-    ]
+    ],
+    "4-U_R_LR": {
+        "op": "||",
+        "val": [
+            "(~4-U_N_LR&&4-U_R_LR)",
+            {
+                "op": "&&",
+                "val": ["4-U_N_LR",
+                    "~4-Z1UR", "(4-ADUCR||4-BDUCR)", "~4-WNR", "4-UDKR",
+                    "~MN-GZR", "~SH-GZR", "~EUYR"
+                ]
+            }
+        ]
+    },
+    "5-U_R_LR": {
+        "op": "||",
+        "val": [
+            "(~5-U_N_LR&&5-U_R_LR)",
+            {
+                "op": "&&",
+                "val": ["5-U_N_LR",
+                    "~5-Z1UR", "(5-ADUCR||5-BDUCR)", "~5-WNR", "5-UDKR",
+                    "~MN-GZR", "~SH-GZR", "~EUYR"
+                ]
+            }
+        ]
+    },
+    "6-U_R_LR": {
+        "op": "||",
+        "val": [
+            "(~6-U_N_LR&&6-U_R_LR)",
+            {
+                "op": "&&",
+                "val": ["6-U_N_LR",
+                    "~6-Z1UR", "6-ADUCR", "~6-WNR", "6-UDKR",
+                    "~MN-GZR", "~SH-GZR", "~EUYR"
+                ]
+            }
+        ]
+    },
+    "4-U_N_LR": {
+        "op": "||",
+        "val": [
+            "(~4-U_R_LR&&4-U_N_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "4-U_R_LR",
+                    {
+                        "op": "||",
+                        "val": [
+                            {
+                                "op": "&&",
+                                "val": [
+                                    "4-Z1UR", "4-UYR1", "4-UDKR",
+                                    {
+                                        "op": "||",
+                                        "val": [
+                                            {
+                                                "op": "&&",
+                                                "val": ["~S11-GR1", "~S11-GR2", "~S11-GR3",
+                                                    "S11-RECR", "4-AU_R_S"
+                                                ]
+                                            },
+                                            {
+                                                "op": "&&",
+                                                "val": ["~S10-GR1", "~S10-GR2",
+                                                    "S10-RECR", "4-BU_R_S"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(EUYR&&~EUUYR&&4-WNR&&~4-Z1UR)",
+                                    "(EUYR&&EUUYR&&4-Z1UR)"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "||",
+                        "val": [
+                            "(4-UDKR&&4-UYR2)",
+                            "((4-WNR||4-Z1UR)&&EUYR)"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "5-U_N_LR": {
+        "op": "||",
+        "val": [
+            "(~5-U_R_LR&&5-U_N_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "5-U_R_LR",
+                    {
+                        "op": "||",
+                        "val": [
+                            {
+                                "op": "&&",
+                                "val": [
+                                    "5-Z1UR", "5-UYR1", "5-UDKR",
+                                    {
+                                        "op": "||",
+                                        "val": [
+                                            {
+                                                "op": "&&",
+                                                "val": ["~S2-GR1", "~S2-GR2", "~S2-GR3",
+                                                    "S2-RECR", "5-AU_R_S"
+                                                ]
+                                            },
+                                            {
+                                                "op": "&&",
+                                                "val": ["~S3-GR1", "~S3-GR2",
+                                                    "S3-RECR", "5-BU_R_S"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(EUYR&&~EUUYR&&5-WNR&&~5-Z1UR)",
+                                    "(EUYR&&EUUYR&&5-Z1UR)"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "||",
+                        "val": [
+                            "(5-UDKR&&5-UYR2)",
+                            "((5-WNR||5-Z1UR)&&EUYR)"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "6-U_N_LR": {
+        "op": "||",
+        "val": [
+            "(~6-U_R_LR&&6-U_N_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "6-U_R_LR",
+                    {
+                        "op": "||",
+                        "val": [
+                            {
+                                "op": "&&",
+                                "val": [
+                                    "6-Z1UR", "6-UYR1", "6-UDKR",
+                                    "~SH7-HECR", "SH7-GLSR",
+                                    "~SH8-HECR", "SH8-GLSR"
+                                ]
+                            },
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(EUYR&&~EUUYR&&6-WNR&&~6-Z1UR)",
+                                    "(EUYR&&EUUYR&&6-Z1UR)"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "||",
+                        "val": [
+                            "(6-UDKR&&6-UYR2)",
+                            "((6-WNR||6-Z1UR)&&EUYR)"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 }
