@@ -54,7 +54,7 @@ YardView.extend({
         for (var i = urls.length - 1; i >= 0; i--) {
             urls[i] = urls[i] + "?" + YardView.getMd5Sum(urls[i]);
         }
-        $YH.loadJsonData(urls, YardView.eachApiCallback, function() {
+        $S.loadJsonData($, urls, YardView.eachApiCallback, function() {
             loadingStatus[apiName] = true;
             for (var key in loadingStatus) {
                 if (loadingStatus[key]) {
@@ -196,7 +196,7 @@ YardView.extend({
     documentLoaded: function() {
         var yardInfoUrl = "/app/yard2/static/json/yard-info.json"
         var urls = [yardInfoUrl+"?"+YardView.getMd5Sum(yardInfoUrl)];
-        $YH.loadJsonData(urls, function(response) {
+        $S.loadJsonData($, urls, function(response) {
             YardInfo = response;
             YardView.setYardsIds();
             YardView.loadYardById();

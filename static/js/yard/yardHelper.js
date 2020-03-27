@@ -3,7 +3,6 @@
         - getDisplayYardDominoBoundary, toggleDisplayYardDominoBoundary
     - properly arrange table data for creating html
     - Verify each domino data if configured
-    - loadJsonData for given api url
     - getUrlAttribute using stack
 */
 (function($S) {
@@ -88,21 +87,7 @@ YardHelper.extend({
         return this.getDisplayYardDominoBoundary();
     }
 });
-function apiCall(ajax, callBack) {
-    $.ajax({url: ajax.url,
-        success: function(response, textStatus) {
-            callBack(ajax, "SUCCESS", response);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            callBack(ajax, "FAILURE", null);
-        }
-    });
-}
-YardHelper.extend({
-    loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
-        return $S.loadJsonData(apiCall, urls, eachApiCallback, callBack, apiName);
-    }
-});
+
 YardHelper.extend({
     getUrlAttribute: function(name, defaultValue) {
         return $S.getUrlAttribute(window.location.href, name, defaultValue);

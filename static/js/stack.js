@@ -958,14 +958,14 @@ Stack.extend({
     },
     clone: function(source) {
         if (isArray(source)) {
-            return source.map(Stack.cloneV2);
+            return source.map(Stack.clone);
         }
         if (isObject(source)) {
             var target = {};
             var keys = Object.keys(source);
             var klen = keys.length;
             for (var k=0; k < klen; k++) {
-                target[keys[k]] = Stack.cloneV2(source[keys[k]]);
+                target[keys[k]] = Stack.clone(source[keys[k]]);
             }
             return target;
         }
@@ -1215,20 +1215,19 @@ Stack.extend({
     },
 });
 Stack.extend({
-    loadJsonData: function(ajaxApiCall, urls, eachApiCallback, callBack, apiName) {
-        /*
-        ajaxApiCall samples --
-        function ajaxApiCall(ajax, callBack) {
-            $.ajax({url: ajax.url,
-                success: function(response, textStatus) {
-                    callBack(ajax, "SUCCESS", response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    callBack(ajax, "FAILURE", null);
-                }
-            });
+    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
+        if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
+            ajaxApiCall = function(ajax, callBack) {
+                JQ.ajax({url: ajax.url,
+                    success: function(response, textStatus) {
+                        callBack(ajax, "SUCCESS", response);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        callBack(ajax, "FAILURE", null);
+                    }
+                });
+            }
         }
-        */
         if (isArray(urls) == false || urls.length < 1 || isFunction(ajaxApiCall) == false) {
             if (isFunction(eachApiCallback)) {
                 eachApiCallback(null, apiName);

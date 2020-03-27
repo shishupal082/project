@@ -2,7 +2,6 @@
     - Load possibleValue, initialValue and expressions from api
         - It do not care about rendering yardHtml using yard api data
     - Set these values to model ($M)
-    - loadJsonData for given api url
 */
 
 (function(window, $M) {
@@ -59,7 +58,7 @@ function loadPossibleValues(callBack) {
     for (var i = 0; i < PossibleValuePath.length; i++) {
         url.push(PossibleValuePath[i]+"?"+RequestId);
     }
-    YardApiModel.loadJsonData(url, function(response) {
+    $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             for (var key in response) {
                 if ($M.isArray(response[key])) {
@@ -88,7 +87,7 @@ function loadInitialValues(callBack) {
     for (var i = 0; i < InitialValuePath.length; i++) {
         url.push(InitialValuePath[i]+"?"+RequestId);
     }
-    YardApiModel.loadJsonData(url, function(response) {
+    $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             Object.assign(InitialValues, response);
         } else {
@@ -101,7 +100,7 @@ function loadExpressions(callBack) {
     for (var i = 0; i < ExpressionsPath.length; i++) {
         url.push(ExpressionsPath[i]+"?"+RequestId);
     }
-    YardApiModel.loadJsonData(url, function(response) {
+    $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             AllExpressions.push(response);
         } else {
@@ -133,20 +132,8 @@ function loadExpressions(callBack) {
         callBack();
     });
 }
-function apiCall(ajax, callBack) {
-    $.ajax({url: ajax.url,
-        success: function(response, textStatus) {
-            callBack(ajax, "SUCCESS", response);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            callBack(ajax, "FAILURE", null);
-        }
-    });
-}
+
 YardApiModel.extend({
-    loadJsonData: function(urls, eachApiCallback, callBack, apiName) {
-        return $M.loadJsonData(apiCall, urls, eachApiCallback, callBack, apiName);
-    },
     documentLoaded: function(callBack) {
         loadPossibleValues(function() {
             PossibleValuesLoadStatus = true;

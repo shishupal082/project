@@ -70,7 +70,7 @@ View.extend({
     loadApiData: function(callBack) {
         var apiUrl = ["/app/yard-s14/static/json/yard-top.json?"+requestId,
                       "/app/yard-s14/static/json/yard-bottom.json?"+requestId];
-        $YH.loadJsonData(apiUrl, function(response) {
+        $M.loadJsonData($, apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);

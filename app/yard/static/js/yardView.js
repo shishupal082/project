@@ -33,7 +33,7 @@ YardView.extend({
             $YH.enableDomino();
         }
         var apiUrl = ["static/json/yardData.json"];
-        $YH.loadJsonData(apiUrl, function(response) {
+        $M.loadJsonData($, apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);

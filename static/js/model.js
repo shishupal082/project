@@ -278,8 +278,8 @@ Model.extend({
     isFunction: function(value) {
         return $S.isFunction(value);
     },
-    loadJsonData: function(ajaxApiCall, urls, eachApiCallback, callBack, apiName) {
-        return $S.loadJsonData(ajaxApiCall, urls, eachApiCallback, callBack, apiName);
+    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
+        return $S.loadJsonData(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall);
     }
 });
 /*
