@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html>
     <title>HTML Convas Clock</title>
+    <script type="text/javascript" src="/static/js/stack.js"></script>
+<style type="text/css">
+* {
+  padding: 0;
+  margin: 0;
+}
+.dig-clock {
+    background-color: #aaa;
+    padding: 4px;
+    border-radius: 12px;
+    color: #fff;
+}
+.padding-5px-0 {
+    padding: 5px 0;
+}
+</style>
 <body>
     <center>
         <h1>HTML Convas Clock</h1>
+        <div class="padding-5px-0"><span class="dig-clock" id="dig-clock"></span></div>
+    </center>
+    <center>
         <canvas id="canvas" width="400" height="400" style="background-color:#333"></canvas>
     </center>
 <script>
@@ -74,6 +93,9 @@ function drawTime(ctx, radius){
     // second
     second=(second*Math.PI/30);
     drawHand(ctx, second, radius*0.9, radius*0.02, "#00f");
+
+    var dt = $S.getDT();
+    document.getElementById("dig-clock").innerHTML = dt.getDateTime("hh/:/mm/:/ss","/");
 }
 
 function drawHand(ctx, pos, length, width, handColor) {
@@ -90,6 +112,5 @@ function drawHand(ctx, pos, length, width, handColor) {
 
 drawClock();
 </script>
-
 </body>
 </html>

@@ -111,8 +111,10 @@ function getRandomNumber(minVal, maxVal) {
 key = getRandomNumber(10000, 99999);
 //DateTimeObject
 var DT = (function() {
-    var yyyy, mm, dd, hour, min, sec, ms, meridian;
-    function DateTime() {}
+    var dateTime, yyyy, mm, dd, hour, min, sec, ms, meridian;
+    function DateTime() {
+        dateTime = new Date();
+    }
     function getFormatedDateTime(formatedValue, format, seprator) {
         var response = "";
         var formatKeys = format.split(seprator);
