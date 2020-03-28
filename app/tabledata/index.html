@@ -3,14 +3,31 @@
 <head>
     <title>Table Data</title>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
-    <script type="text/javascript" src="/static/js/stack.js"></script>
-    <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
-    <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
     <div class="container">
         <div><center>Table Data</center></div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3"><select id="selectItems"></select></div>
+            <div class="col-sm-9">
+                <div id="convasDiv" class="hide">
+                    <canvas id="barChart" width="300" height="70"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
         <div id="tableHtml"></div>
     </div>
+    <div class="links hide">
+        <a href="https://www.labnol.org/code/covid-19-india-tracker-200325">Data Source</a>
+    </div>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="/static/libs/Chart.js"></script>
+<script type="text/javascript" src="static/tabledataModel.js"></script>
+<script type="text/javascript" src="script.js"></script>
 </body>
 </html>

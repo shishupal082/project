@@ -275,8 +275,14 @@ Model.extend({
     isNumber: function(value) {
         return $S.isNumber(value);
     },
+    isNumeric: function(value) {
+        return $S.isNumeric(value);
+    },
     isFunction: function(value) {
         return $S.isFunction(value);
+    },
+    clone: function(source) {
+        return $S.clone(source);
     },
     loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         return $S.loadJsonData(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall);
@@ -438,7 +444,7 @@ Model.extend({
         return response;
     },
     getAllChangeValueData: function (changeValueKey) {
-        return changeValueData;
+        return Model.clone(changeValueData);
     },
     getChangeValueData: function (changeValueKey) {
         var response = [];

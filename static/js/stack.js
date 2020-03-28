@@ -35,8 +35,15 @@ function isObject(value) {
     }
     return (typeof value == "object" && isNaN(value.length)) ? true : false;
 }
-function isNumber(data) {
-    if (typeof data == "number" && !isNaN(data)) {
+function isNumber(value) {
+    if (typeof value == "number" && !isNaN(value)) {
+        return true;
+    }
+    return false;
+}
+function isNumeric(value) {
+    // if value = null then typeof value = "object"
+    if (!isNaN(value) && typeof value != "object") {
         return true;
     }
     return false;
@@ -925,6 +932,9 @@ Stack.extend({
     isNumber: function(value) {
         return isNumber(value);
     },
+    isNumeric: function(value) {
+        return isNumeric(value);
+    },
     isBoolean: function(value) {
         return isBoolean(value);
     },
@@ -1215,6 +1225,13 @@ Stack.extend({
     },
 });
 Stack.extend({
+    callMethod: function(method) {
+        if (Stack.isFunction(method)) {
+            method();
+            return 1;
+        }
+        return 0;
+    },
     loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
             ajaxApiCall = function(ajax, callBack) {
@@ -1232,9 +1249,7 @@ Stack.extend({
             if (isFunction(eachApiCallback)) {
                 eachApiCallback(null, apiName);
             }
-            if (isFunction(callBack)) {
-                callBack();
-            }
+            Stack.callMethod(callBack);
             return false;
         }
         var apiSendCount = urls.length, apiReceiveCount = 0;
@@ -1253,9 +1268,7 @@ Stack.extend({
                     eachApiCallback(response, ajax.apiName);
                 }
                 if (apiSendCount == apiReceiveCount) {
-                    if (isFunction(callBack)) {
-                        callBack();
-                    }
+                    Stack.callMethod(callBack);
                 }
             });
         }
