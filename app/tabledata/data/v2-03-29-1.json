@@ -1,0 +1,774 @@
+{
+  "Kerala": {
+    "districtData": {
+      "Thrissur": {
+        "confirmed": 7,
+        "lastupdatedtime": ""
+      },
+      "Alappuzha": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Kasaragod": {
+        "confirmed": 90,
+        "lastupdatedtime": ""
+      },
+      "Pathanamthitta": {
+        "confirmed": 12,
+        "lastupdatedtime": ""
+      },
+      "Kannur": {
+        "confirmed": 33,
+        "lastupdatedtime": ""
+      },
+      "Ernakulam": {
+        "confirmed": 20,
+        "lastupdatedtime": ""
+      },
+      "Kottayam": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Thiruvananthapuram": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      },
+      "Idukki": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Malappuram": {
+        "confirmed": 10,
+        "lastupdatedtime": ""
+      },
+      "Kozhikode": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      },
+      "Palakkad": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Wayanad": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Kollam": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Delhi": {
+    "districtData": {
+      "East Delhi": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "South West Delhi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "West Delhi": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "North Delhi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "New Delhi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "South Delhi": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "North East Delhi": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "North West Delhi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 53,
+        "lastupdatedtime": ""
+      },
+      "Delhi": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Telangana": {
+    "districtData": {
+      "Hyderabad": {
+        "confirmed": 36,
+        "lastupdatedtime": ""
+      },
+      "Karimnagar": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Bhadradri Kothagudem": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Ranga Reddy": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Medchal Malkajgiri": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 22,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Rajasthan": {
+    "districtData": {
+      "Jaipur": {
+        "confirmed": 11,
+        "lastupdatedtime": ""
+      },
+      "Jhunjhunu": {
+        "confirmed": 7,
+        "lastupdatedtime": ""
+      },
+      "Bhilwara": {
+        "confirmed": 21,
+        "lastupdatedtime": ""
+      },
+      "Jodhpur": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 10,
+        "lastupdatedtime": ""
+      },
+      "Pratapgarh": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Ajmer": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Haryana": {
+    "districtData": {
+      "Gurugram": {
+        "confirmed": 24,
+        "lastupdatedtime": ""
+      },
+      "Faridabad": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Panipat": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Panchkula": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Sonipat": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Palwal": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Ambala": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Uttar Pradesh": {
+    "districtData": {
+      "Agra": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 7,
+        "lastupdatedtime": ""
+      },
+      "Ghaziabad": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Lucknow": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      },
+      "Gautam Buddha Nagar": {
+        "confirmed": 29,
+        "lastupdatedtime": ""
+      },
+      "Moradabad": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Varanasi": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Kanpur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Pilibhit": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Jaunpur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Baghpat": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Meerut": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Ladakh": {
+    "districtData": {
+      "Leh": {
+        "confirmed": 11,
+        "lastupdatedtime": ""
+      },
+      "Kargil": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Tamil Nadu": {
+    "districtData": {
+      "Kancheepuram": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Chennai": {
+        "confirmed": 18,
+        "lastupdatedtime": ""
+      },
+      "Erode": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "Coimbatore": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Tirunelveli": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Tiruppur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Madurai": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Salem": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      },
+      "Vellore": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Tiruchirappalli": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Chengalpattu": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Thanjavur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Virudhunagar": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Jammu and Kashmir": {
+    "districtData": {
+      "Jammu": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      },
+      "Srinagar": {
+        "confirmed": 15,
+        "lastupdatedtime": ""
+      },
+      "Bandipore": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Rajouri": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Budgam": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Baramullab": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Karnataka": {
+    "districtData": {
+      "Bengaluru": {
+        "confirmed": 40,
+        "lastupdatedtime": ""
+      },
+      "Kalaburagi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Kodagu": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Chikkaballapura": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "Mysuru": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      },
+      "Dharwad": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Uttara Kannada": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      },
+      "Dakshina Kannada": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      },
+      "Udupi": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Chitradurga": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Tumakuru": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Davanagere": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Maharashtra": {
+    "districtData": {
+      "Pune": {
+        "confirmed": 37,
+        "lastupdatedtime": ""
+      },
+      "Mumbai": {
+        "confirmed": 72,
+        "lastupdatedtime": ""
+      },
+      "Nagpur": {
+        "confirmed": 10,
+        "lastupdatedtime": ""
+      },
+      "Thane": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Ahmadnagar": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Yavatmal": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Aurangabad": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Ratnagiri": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Mumbai Suburban": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 36,
+        "lastupdatedtime": ""
+      },
+      "Sangli": {
+        "confirmed": 25,
+        "lastupdatedtime": ""
+      },
+      "Satara": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Kolhapur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Gondiya": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Jalgaon": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Punjab": {
+    "districtData": {
+      "Amritsar": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Shahid Bhagat Singh Nagar": {
+        "confirmed": 19,
+        "lastupdatedtime": ""
+      },
+      "S.A.S. Nagar": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      },
+      "Hoshiarpur": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Jalandhar": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Ludhiana": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Andhra Pradesh": {
+    "districtData": {
+      "S.P.S. Nellore": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Prakasam": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Visakhapatnam": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "East Godavari": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Krishna": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Chittoor": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Guntur": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Kurnool": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Uttarakhand": {
+    "districtData": {
+      "Dehradun": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Pauri": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Odisha": {
+    "districtData": {
+      "Khordha": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Puducherry": {
+    "districtData": {
+      "Mahe": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "West Bengal": {
+    "districtData": {
+      "Kolkata": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "North 24 Parganas": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Nadia": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Purba Medinipur": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Kalimpong": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Chandigarh": {
+    "districtData": {
+      "Chandigarh": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Chhattisgarh": {
+    "districtData": {
+      "Raipur": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Rajnandgaon": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Bilaspur": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Durg": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Gujarat": {
+    "districtData": {
+      "Rajkot": {
+        "confirmed": 7,
+        "lastupdatedtime": ""
+      },
+      "Surat": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "Ahmadabad": {
+        "confirmed": 20,
+        "lastupdatedtime": ""
+      },
+      "Vadodara": {
+        "confirmed": 9,
+        "lastupdatedtime": ""
+      },
+      "Gandhinagar": {
+        "confirmed": 7,
+        "lastupdatedtime": ""
+      },
+      "Kachchh": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 13,
+        "lastupdatedtime": ""
+      },
+      "Mehsana": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Himachal Pradesh": {
+    "districtData": {
+      "Kangra": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Madhya Pradesh": {
+    "districtData": {
+      "Jabalpur": {
+        "confirmed": 8,
+        "lastupdatedtime": ""
+      },
+      "Bhopal": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Indore": {
+        "confirmed": 20,
+        "lastupdatedtime": ""
+      },
+      "Ujjain": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Gwalior": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Shivpuri": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Bihar": {
+    "districtData": {
+      "Munger": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Patna": {
+        "confirmed": 4,
+        "lastupdatedtime": ""
+      },
+      "Siwan": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Nalanda": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 6,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Manipur": {
+    "districtData": {
+      "Imphal West": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Mizoram": {
+    "districtData": {
+      "Aizawl": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Goa": {
+    "districtData": {
+      "North Goa": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 2,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Andaman and Nicobar Islands": {
+    "districtData": {
+      "South Andaman": {
+        "confirmed": 5,
+        "lastupdatedtime": ""
+      },
+      "North and Middle Andaman": {
+        "confirmed": 1,
+        "lastupdatedtime": ""
+      },
+      "Unknown": {
+        "confirmed": 3,
+        "lastupdatedtime": ""
+      }
+    }
+  },
+  "Unknown": {
+    "districtData": {
+      "Unknown": {
+        "confirmed": 177,
+        "lastupdatedtime": ""
+      }
+    }
+  }
+}

@@ -18,8 +18,8 @@ var indexingData = [];
 var apiResponse = {};
 var apiNames = [];
 var indexingApi = "indexing";
-apiNames = ["03-27", "03-28", "03-29", "v2-03-29"];
 indexingApi = "v2-indexing";
+apiNames = [];
 var apiLoadStatus = {};
 
 function loadJsonData(callBack) {
@@ -76,7 +76,8 @@ function loadJsonData(callBack) {
 TableDataModel.extend({
     documentLoaded: function(callBack) {
         $S.loadJsonData($, ["/app/tabledata/data/"+indexingApi+".json?"+requestId], function(response) {
-            indexingData = response;
+            indexingData = response["names"];
+            apiNames = response["apiNames"]
             return loadJsonData(callBack);
         });
         return 1;
@@ -200,7 +201,17 @@ TableDataModel.extend({
             lastRow.push(totalCount);
         }
         data.push(lastRow);
-        return data;
+        var finalResponse = $S.clone(data);
+        for (var i = 1; i < data.length; i++) {
+            for (var j = 3; j < data[i].length; j++) {
+                var diff = data[i][j] - data[i][j-1];
+                if (diff > 0) {
+                    diff = "+" + diff;
+                }
+                finalResponse[i][j] = data[i][j] + " ("+diff+")";
+            }
+        }
+        return finalResponse;
     }
 });
 
