@@ -10,10 +10,13 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-sm-3"><select id="selectItems"></select></div>
+            <div class="col-sm-3">
+                <select id="selectItems"></select>
+                <select class="hide" id="selectItems2"></select>
+            </div>
             <div class="col-sm-9">
                 <div id="convasDiv" class="hide">
-                    <canvas id="barChart" width="300" height="70"></canvas>
+                    <canvas id="barChart" width="300" height="80"></canvas>
                 </div>
             </div>
         </div>
@@ -23,6 +26,10 @@
     </div>
     <div class="links hide">
         <a href="https://www.labnol.org/code/covid-19-india-tracker-200325">Data Source</a>
+        <b>|</b>
+        <a href="https://api.covid19india.org/state_district_wise.json">Data Source 2</a>
+        <b>|</b>
+        <a href="https://docs.google.com/spreadsheets/d/1swdjquWqq5tjMm9tpxMa-9C8rjCyWVWHs-ODdAXfWDw/edit#gid=936573058">Excelsheet</a>
     </div>
 <script type="text/javascript" src="/static/js/stack.js"></script>
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>

@@ -2,6 +2,8 @@ $(document).ready(function() {
 
 var myChart;
 
+var apiName = "", changeValueIndex = "";
+
 function createChart(config) {
     if (myChart) {
         myChart.destroy();
@@ -57,8 +59,8 @@ function createChart(config) {
     });
 }
 
-function handleChange(changeValueIndex) {
-    var currentData = $TDM.getDataByIndex(changeValueIndex);
+function handleChange() {
+    var currentData = $TDM.getDataByIndex(changeValueIndex, apiName);
     if (currentData.label) {
         $("#convasDiv").removeClass("hide");
         var config = {};
@@ -87,31 +89,59 @@ function createHtml(tableData) {
     return 1;
 }
 
+function displayDropDown() {
+    if (changeValueIndex == "all") {
+        $("#selectItems2").removeClass("hide");
+    } else {
+        $("#selectItems2").addClass("hide");
+    }
+}
+
 function renderDropDown() {
-    var selectHtml = "";
+    var selectHtml = "", attr = "";
     selectHtml = selectHtml + "<option value='-1'>Select ...</option>";
     var tableIndexData = $TDM.getTableIndexData();
     for (var i = 0; i < tableIndexData.length; i++) {
-        selectHtml = selectHtml + "<option value='"+i+"'>" + tableIndexData[i] + "</option>";
+        selectHtml = selectHtml + "<option value='"+i+"' "+ attr +">" + tableIndexData[i] + "</option>";
     }
+
+    selectHtml = selectHtml + "<option value='all'>All States</option>";
     $("#selectItems").html(selectHtml);
+
+    $("#selectItems").on("change", function(e) {
+        changeValueIndex = $(e.currentTarget).val();
+        if ($S.isNumeric(changeValueIndex)) {
+            changeValueIndex = changeValueIndex*1;
+        }
+        displayDropDown();
+        handleChange();
+    });
+
+    var apiNames = $TDM.getApiNames();
+    selectHtml = "";
+    for (var i = 0; i < apiNames.length; i++) {
+        if (apiName == apiNames[i]) {
+            attr = "selected='selected'";
+        } else {
+            attr = "";
+        }
+        selectHtml = selectHtml + "<option value='"+apiNames[i]+"' "+ attr +">" + apiNames[i] + "</option>";
+    }
+    $("#selectItems2").html(selectHtml);
+    $("#selectItems2").on("change", function(e) {
+        apiName = $(e.currentTarget).val();
+        handleChange();
+    });
     return 1;
 }
 
-function registerEvt() {
-    $("#selectItems").on("change", function(e) {
-        var changeValueIndex = $(e.currentTarget).val();
-        if ($S.isNumeric(changeValueIndex)) {
-            changeValueIndex = changeValueIndex*1;
-            handleChange(changeValueIndex);
-        }
-    });
-}
 $TDM.documentLoaded(function() {
     var tableData = $TDM.getRenderTableData();
     createHtml(tableData);
     renderDropDown();
-    registerEvt();
+    displayDropDown();
+    var apiNames = $TDM.getApiNames();
+    apiName = apiNames.length ? apiNames[0] : "";
     $(".links").removeClass("hide");
 });
 

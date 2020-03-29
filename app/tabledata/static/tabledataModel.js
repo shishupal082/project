@@ -15,8 +15,11 @@ ExtendObject(TableDataModel);
 
 var requestId = $S.getRequestId();
 var indexingData = [];
-var apiResponse = [];
-var apiNames = ["03-27", "03-28", "03-29"];
+var apiResponse = {};
+var apiNames = [];
+var indexingApi = "indexing";
+apiNames = ["03-27", "03-28", "03-29", "v2-03-29"];
+indexingApi = "v2-indexing";
 var apiLoadStatus = {};
 
 function loadJsonData(callBack) {
@@ -24,17 +27,43 @@ function loadJsonData(callBack) {
     for (var i = 0; i < apiNames.length; i++) {
         urls.push({api: "/app/tabledata/data/"+apiNames[i]+".json?"+requestId, name: apiNames[i]});
     }
+    apiNames.push("latest");
+    urls.push({api: "https://api.covid19india.org/state_district_wise.json", name: "latest"});
     for (var i = 0; i < urls.length; i++) {
         apiLoadStatus[urls[i].name] = false;
         $S.loadJsonData($, [urls[i].api], function(response, apiName) {
-            apiResponse.push({apiName: apiName, response: response});
             apiLoadStatus[apiName] = true;
+            apiResponse[apiName] = response;
         }, function() {
             for (var i = 0; i < apiNames.length; i++) {
                 if (apiLoadStatus[apiNames[i]]) {
                     continue;
                 }
                 return 0;
+            }
+            for (var name in apiResponse) {
+                var response = apiResponse[name];
+                if ($S.isObject(response)) {
+                    for (var key in response) {
+                        var count = 0;
+                        if ($S.isObject(response[key])) {
+                            for (var item in response[key]) {
+                                if ($S.isObject(response[key][item])) {
+                                    for (var values in response[key][item]) {
+                                        if (response[key][item][values]) {
+                                            if ($S.isNumber(response[key][item][values].confirmed)) {
+                                                count += response[key][item][values].confirmed;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else if ($S.isNumber(response[key])) {
+                            count = response[key];
+                        }
+                        response[key] = count;
+                    }
+                }
             }
             $S.callMethod(callBack);
             return 1;
@@ -46,7 +75,7 @@ function loadJsonData(callBack) {
 
 TableDataModel.extend({
     documentLoaded: function(callBack) {
-        $S.loadJsonData($, ["/app/tabledata/data/indexing.json?"+requestId], function(response) {
+        $S.loadJsonData($, ["/app/tabledata/data/"+indexingApi+".json?"+requestId], function(response) {
             indexingData = response;
             return loadJsonData(callBack);
         });
@@ -54,9 +83,38 @@ TableDataModel.extend({
     }
 });
 
+function getAllData(index, apiName) {
+    var response = {};
+    response["label"] = index;
+    response["labels"] = [];
+    response["data"] = [];
+    var total = 0;
+    var requiredApiResponse = TableDataModel.getApiResponseByName(apiName);
+    for (var i = 0; i < indexingData.length; i++) {
+        var name = indexingData[i];
+        response["labels"].push(name);
+        total = requiredApiResponse[name] ? requiredApiResponse[name] : 0;
+        response.data.push(total);
+    }
+    return response;
+}
+
+var apiResponseData = [];
 TableDataModel.extend({
     getApiResponseData: function() {
-        return $S.clone(apiResponse);
+        if (apiResponseData.length) {
+            return $S.clone(apiResponseData);
+        }
+        for (var i=0; i<apiNames.length; i++) {
+            apiResponseData.push({apiName: apiNames[i], response: apiResponse[apiNames[i]]});
+        }
+        return $S.clone(apiResponseData);
+    },
+    getApiResponseByName: function(name) {
+        if (apiResponse[name]) {
+            return $S.clone(apiResponse[name]);
+        }
+        return {};
     },
     getTableIndexData: function() {
         return $S.clone(indexingData);
@@ -64,7 +122,13 @@ TableDataModel.extend({
     getTableIndex: function(name) {
         return indexingData.indexOf(name);
     },
-    getDataByIndex: function(index) {
+    getApiNames: function() {
+        return $S.clone(apiNames);
+    },
+    getDataByIndex: function(index, apiName) {
+        if (index == "all") {
+            return getAllData(index, apiName);
+        }
         var response = {};
         if (index < 0 || index >= indexingData.length) {
             return response;
@@ -73,6 +137,7 @@ TableDataModel.extend({
         response["label"] = name;
         response["labels"] = [];
         response["data"] = [];
+        var apiResponse = TableDataModel.getApiResponseData();
         for (var i = 0; i < apiResponse.length; i++) {
             response["labels"].push(apiResponse[i].apiName);
             // response["labels"].push(apiResponse[i].apiName);
@@ -108,18 +173,29 @@ TableDataModel.extend({
             totalCount=0;
             firstRow.push(response[i].apiName);
             var individualResponse = response[i].response;
-            if ($S.isObject(individualResponse)) {
-                for (var key in individualResponse) {
-                    var index = indexingData.indexOf(key);
-                    if (index < 0) {
-                        $S.log("Invalid index for: "+key);
-                    } else {
-                        data[index+1].push(individualResponse[key]);
-                        totalCount += individualResponse[key];
-                    }
-                }
-            } else {
+            if (!$S.isObject(individualResponse)) {
+                individualResponse = {};
                 $S.log("Invalid individualResponse for: "+response[i].apiName);
+            }
+            var maxLength = 0;
+            for (var key in individualResponse) {
+                var index = indexingData.indexOf(key);
+                if (index < 0) {
+                    $S.log("Invalid index for: "+key + ", in api: " + response[i].apiName);
+                } else {
+                    data[index+1].push(individualResponse[key]);
+                    totalCount += individualResponse[key];
+                }
+            }
+            for (var j = 0; j < data.length; j++) {
+                if (maxLength < data[j].length) {
+                    maxLength = data[j].length;
+                }
+            }
+            for (var j = 0; j < data.length; j++) {
+                for (var k = data[j].length; k < maxLength; k++) {
+                    data[j].push(0);
+                }
             }
             lastRow.push(totalCount);
         }
