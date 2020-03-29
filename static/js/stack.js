@@ -15,11 +15,13 @@ function ExtendObject(Object) {
         return Object;
     };
 }
-(function() {
+(function(global, factory) {
+    factory(global, false);
+}(window, function(window, noGlobal) {
 
-var key;
 var skipValuesInResult = [];
 var RequestId = 0;
+var key;
 function isString(value) {
     return typeof value == "string";
 }
@@ -118,7 +120,8 @@ function getRandomNumber(minVal, maxVal) {
 key = getRandomNumber(10000, 99999);
 //DateTimeObject
 var DT = (function() {
-    var dateTime, YYYY, MM, DD, hh, mm, ss, ms, mr;//mr = meridian (AM/PM)
+    //mr = meridian (AM/PM)
+    var dateTime, YYYY, MM, DD, hh, mm, ss, ms, mr;
     function DateTime() {
         dateTime = new Date();
         this.now = dateTime;
@@ -1287,4 +1290,4 @@ Stack.extend({
 });
 /*End of direct access of methods*/
 window.Stack = window.$S = Stack;
-})();
+}));
