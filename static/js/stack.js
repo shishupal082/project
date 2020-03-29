@@ -118,13 +118,14 @@ function getRandomNumber(minVal, maxVal) {
 key = getRandomNumber(10000, 99999);
 //DateTimeObject
 var DT = (function() {
-    var dateTime, yyyy, mm, dd, hour, min, sec, ms, meridian;
+    var dateTime, YYYY, MM, DD, hh, mm, ss, ms, mr;//mr = meridian (AM/PM)
     function DateTime() {
         dateTime = new Date();
+        this.now = dateTime;
     }
     function getFormatedDateTime(formatedValue, format, seprator) {
         var response = "";
-        var formatKeys = format.split(seprator);
+        var formatKeys = format ? format.split(seprator) : [];
         if (formatedValue) {
             for (var i=0; i<formatKeys.length; i++) {
                 if (formatedValue[formatKeys[i]]) {
@@ -136,9 +137,14 @@ var DT = (function() {
         }
         return response;
     };
-    DateTime.prototype.getDateTime = function(format, seprator) {
+    DateTime.prototype.formateDateTime = function(format, seprator, dateObj) {
         // "D/YYYY/-/MM/-/DD/T/hh/:/mm/:/ss/:/ms","/" --> "D2020-01-26T22:34:24:071"
-        var currentDateTime = new Date();
+        var currentDateTime = "";
+        if (dateObj && dateObj.constructor && dateObj.constructor.name == "Date") {
+            currentDateTime = dateObj;
+        } else {
+            currentDateTime = dateTime;
+        }
         var fullYear = currentDateTime.getFullYear();
         var month = currentDateTime.getMonth()+1;
         var date = currentDateTime.getDate();
@@ -161,9 +167,13 @@ var DT = (function() {
         formatedValue["ms"] = miliSeconds;
         return getFormatedDateTime(formatedValue, format, seprator);
     };
+    DateTime.prototype.getDateTime = function(format, seprator) {
+        var currentDateTime = new Date();
+        return this.formateDateTime(format, seprator, currentDateTime);
+    };
     DateTime.prototype.getDayNumberTimeFromSeconds = function(seconds, format, seprator) {
         var response = "";
-        var formatKeys = format.split(seprator);
+        var formatKeys = format ? format.split(seprator) : [];
         var formatedValue = {};
         var dayNum = "000" + Math.ceil(seconds/(24*60*60));//058, day number
         var hours = "00" + Math.floor((seconds/(60*60))%24);
