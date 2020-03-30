@@ -912,34 +912,47 @@ Table.prototype.addRowIndex = function(currentIndex) {
         currentIndex = 1;
     }
     currentIndex = currentIndex*1;
+    var rowIndexAdded = false;
     for (var i = 0; i < rows; i++) {
         //Insert first item in each row as index
         content[i].splice(0, 0, currentIndex++);
+        rowIndexAdded = true;
     }
-    cols++;
+    if (rowIndexAdded) {
+        cols++;
+    }
     return currentIndex;
 };
 /* For better functioning: addColIndex should be called before addRowIndex */
 Table.prototype.addColIndex = function(currentIndex) {
     //Insert first row as empty array
     content.splice(0, 0, []);
-    rows++;
     if (!isNumber(currentIndex)) {
         currentIndex = 1;
     }
     currentIndex = currentIndex*1;
+    var colIndexAdded = false;
     for (var i = 0; i < cols; i++) {
         content[0].push(currentIndex++);
+        colIndexAdded = true;
+    }
+    // Fix for empty content = []
+    // i.e. rows = 0, cols = 0 then rows should not increase
+    if (colIndexAdded) {
+        rows++;
     }
     return currentIndex;
 };
 Table.prototype.updateTableContent = function(rowIndex, colIndex, item) {
     if (isNumber(rowIndex) && isNumber(colIndex)) {
-        if (rowIndex < rows && colIndex < cols) {
-            content[rowIndex][colIndex] = item;
+        if (rowIndex >= 0 && colIndex >= 0) {
+            if (rowIndex < rows && colIndex < cols) {
+                content[rowIndex][colIndex] = item;
+                return true;
+            }
         }
     }
-    return true;
+    return false;
 }
 Table.prototype.getHtml = function() {
     var tableId = getTableId();
