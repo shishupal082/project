@@ -77,8 +77,21 @@ function loadJsonData(callBack) {
     }
     return 1;
 }
-
-
+function hasDuplicateInArray(items) {
+    if (!$S.isArray(items)) {
+        return false;
+    }
+    var obj = {};
+    for (var i = 0; i < items.length; i++) {
+        if ($S.isString(items[i])) {
+            if (obj[items[i]]) {
+                return true;
+            }
+            obj[items[i]] = 1;
+        }
+    }
+    return false;
+}
 TableDataModel.extend({
     documentLoaded: function(callBack) {
         $S.loadJsonData($, ["/pvt/app-data/tabledata/indexing.json?"+requestId], function(response) {
@@ -86,6 +99,12 @@ TableDataModel.extend({
                 indexingData =  $S.isArray(response["names"]) ? response["names"] : [];
                 apiNames = $S.isArray(response["apiNames"]) ? response["apiNames"] : [];
                 latestApi = $S.isString(response["latestApi"]) ? response["latestApi"] : false;
+                if (hasDuplicateInArray(apiNames)) {
+                    throw "'Duplicate entry in apiNames.'";
+                }
+                if (hasDuplicateInArray(indexingData)) {
+                    throw "'Duplicate entry in indexingData.'";
+                }
             }
             return loadJsonData(callBack);
         });
