@@ -1,5 +1,7 @@
 (function($S) {
 
+var LoggerInfo = $S.getScriptFileNameRef();
+
 var TableDataModel = function(selector, context) {
     return new TableDataModel.fn.init(selector, context);
 };
@@ -15,19 +17,20 @@ ExtendObject(TableDataModel);
 
 var requestId = $S.getRequestId();
 var indexingData = [];
-var apiResponse = {};
 var apiNames = [];
-var indexingApi = "indexing";
-apiNames = [];
+var latestApi = false;
+var apiResponse = {};
 var apiLoadStatus = {};
 
 function loadJsonData(callBack) {
     var urls = [];
     for (var i = 0; i < apiNames.length; i++) {
-        urls.push({api: "/app/tabledata/data/"+apiNames[i]+".json?"+requestId, name: apiNames[i]});
+        urls.push({api: "/pvt/app-data/tabledata/"+apiNames[i]+".json?"+requestId, name: apiNames[i]});
     }
-    apiNames.push("latest");
-    urls.push({api: "https://api.covid19india.org/state_district_wise.json?"+requestId, name: "latest"});
+    if (latestApi) {
+        apiNames.push("latest");
+        urls.push({api: latestApi+"?"+requestId, name: "latest"});
+    }
     for (var i = 0; i < urls.length; i++) {
         apiLoadStatus[urls[i].name] = false;
         $S.loadJsonData($, [urls[i].api], function(response, apiName) {
@@ -74,9 +77,12 @@ function loadJsonData(callBack) {
 
 TableDataModel.extend({
     documentLoaded: function(callBack) {
-        $S.loadJsonData($, ["/app/tabledata/data/"+indexingApi+".json?"+requestId], function(response) {
-            indexingData = response["names"];
-            apiNames = response["apiNames"]
+        $S.loadJsonData($, ["/pvt/app-data/tabledata/indexing.json?"+requestId], function(response) {
+            if ($S.isObject(response)) {
+                indexingData =  $S.isArray(response["names"]) ? response["names"] : [];
+                apiNames = $S.isArray(response["apiNames"]) ? response["apiNames"] : [];
+                latestApi = $S.isString(response["latestApi"]) ? response["latestApi"] : false;
+            }
             return loadJsonData(callBack);
         });
         return 1;
@@ -175,13 +181,13 @@ TableDataModel.extend({
             var individualResponse = response[i].response;
             if (!$S.isObject(individualResponse)) {
                 individualResponse = {};
-                $S.log("Invalid individualResponse for: "+response[i].apiName);
+                $S.logV2(LoggerInfo, "Invalid individualResponse for: "+response[i].apiName);
             }
             var maxLength = 0;
             for (var key in individualResponse) {
                 var index = indexingData.indexOf(key);
                 if (index < 0) {
-                    $S.log("Invalid index for: "+key + ", in api: " + response[i].apiName);
+                    $S.logV2(LoggerInfo, "Invalid index for: "+key + ", in api: " + response[i].apiName);
                 } else {
                     data[index+1].push(individualResponse[key]);
                     totalCount += individualResponse[key];

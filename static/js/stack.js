@@ -1015,6 +1015,9 @@ Stack.extend({
     log: function(log, loggerInfo) {
         Logger.log(log, loggerInfo);
     },
+    logV2: function(loggerInfo, log) {
+        Logger.log(log, loggerInfo);
+    },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
     },
