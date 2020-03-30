@@ -1,0 +1,48 @@
+input.switch {
+    position: relative;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    margin: 0;
+    cursor: pointer;
+    width: 22px;
+    height: 12px;
+    background-color: #fff;
+    border: 1px solid #d9dadc;
+    border-radius: 10px;
+    box-shadow: inset -10px 0 0 0 #fff;
+    transition-duration: .2s;
+}
+input.switch:checked {
+    border-color: rgba(108,117,125,.6);
+    box-shadow: inset 10px 0 0 0 rgba(108,117,125,.6);
+}
+input.switch:checked:after {
+    left: 10px;
+    box-shadow: -2px 4px 3px rgba(0,0,0,.05);
+}
+input.switch:after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: 9px;
+    height: 9px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.2);
+}
+input.switch.size-20px {
+    width: 40px;
+    height: 20px;
+    top: 5px;
+}
+input.switch.size-20px:checked {
+    box-shadow: inset 20px 0 0 0 rgba(108,117,125,.6);
+}
+input.switch.size-20px:after {
+    top: -1px;
+    width: 18px;
+    height: 19px;
+}

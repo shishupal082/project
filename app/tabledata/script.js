@@ -142,7 +142,9 @@ $TDM.documentLoaded(function() {
     displayDropDown();
     var apiNames = $TDM.getApiNames();
     apiName = apiNames.length ? apiNames[0] : "";
+    $("#selectItems").removeClass("hide");
     $(".links").removeClass("hide");
+    $(".switch").removeClass("hide");
 });
 
 });

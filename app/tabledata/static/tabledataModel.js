@@ -28,7 +28,7 @@ function loadJsonData(callBack) {
         urls.push({api: "/app/tabledata/data/"+apiNames[i]+".json?"+requestId, name: apiNames[i]});
     }
     apiNames.push("latest");
-    urls.push({api: "https://api.covid19india.org/state_district_wise.json", name: "latest"});
+    urls.push({api: "https://api.covid19india.org/state_district_wise.json?"+requestId, name: "latest"});
     for (var i = 0; i < urls.length; i++) {
         apiLoadStatus[urls[i].name] = false;
         $S.loadJsonData($, [urls[i].api], function(response, apiName) {

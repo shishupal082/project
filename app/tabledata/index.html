@@ -3,6 +3,7 @@
 <head>
     <title>Table Data</title>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 </head>
 <body>
     <div class="container">
@@ -11,8 +12,9 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
-                <select id="selectItems"></select>
+                <select class="hide" id="selectItems"></select>
                 <select class="hide" id="selectItems2"></select>
+                <input type="checkbox" class="hide switch size-20px" aria-label="Checked by default to scale uniformly." checked="">
             </div>
             <div class="col-sm-9">
                 <div id="convasDiv" class="hide">
@@ -22,7 +24,7 @@
         </div>
     </div>
     <div class="container">
-        <div id="tableHtml"></div>
+        <div id="tableHtml"><center><h1>Loading ...<center></h1></div>
     </div>
     <div class="links hide">
         <a href="https://www.labnol.org/code/covid-19-india-tracker-200325">Data Source</a>

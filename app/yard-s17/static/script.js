@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+var LoggerInfo = $S.getScriptFileNameRef();
+
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
 var timerCount = 0;

@@ -22,6 +22,8 @@ function ExtendObject(Object) {
 var skipValuesInResult = [];
 var RequestId = 0;
 var key;
+var LoggerInfo;
+var Last100UniqueNumberQue;
 function isString(value) {
     return typeof value == "string";
 }
@@ -270,6 +272,30 @@ var LocalStorage = (function(){
     }
     return LocalStorage;
 })();
+
+var LocationParser = function() {
+    return new LocationParser.fn.init();
+};
+LocationParser.fn = LocationParser.prototype = {
+    constructor: LocationParser,
+    init: function() {
+        return this;
+    }
+};
+ExtendObject(LocationParser);
+LocationParser.extend({
+    getOrigin: function() {
+        var Location = location;
+        var origin = "";
+        try {
+            origin = Location.origin;
+        } catch(e) {
+
+        }
+        return origin;
+    }
+});
+
 var UrlParserObj = (function(){
     var href = "", data = {};
     function UrlParser(href) {
@@ -312,11 +338,14 @@ var Log = (function(){
             dateTimeEnable = false;
         }
     };
-    Logger.prototype.logInApi = function(log) {
+    Logger.prototype.logInApi = function(log, loggerInfo) {
         console.log(logKey + ":" + log);
     };
-    Logger.prototype.log = function(log) {
+    Logger.prototype.log = function(log, loggerInfo) {
         var preLog = logKey + ":" ;
+        if (isString(loggerInfo)) {
+            preLog += loggerInfo + ":";
+        }
         if (dateTimeEnable) {
             var dt = new DT();
             preLog += dt.getDateTime(format,splitter)+":";
@@ -427,6 +456,7 @@ var Que = (function(){
     };
     return Que;
 })();
+Last100UniqueNumberQue = new Que();
 // After insertion data into BST it will return that particular node
 // That node can be modified as per requirement
 var BST = (function() {
@@ -742,6 +772,70 @@ Stack.extend = Stack.fn.extend = function(options) {
     }
     return this;
 };
+Stack.extend({
+    getQue: function(shareStorage) {
+        return new Que();
+    },
+    getRequestId: function() {
+        return RequestId;
+    },
+    getRandomNumber: function(minVal, maxVal) {
+        return getRandomNumber(minVal, maxVal);
+    },
+    getUniqueNumber: function() {
+        // Number of miliseconds elapsed since 1st Jan 1970 + random number
+        var unqieNumber = Date.now();
+        unqieNumber += Stack.getRandomNumber(10,99);
+        /**
+            This is for making sure at least 100 request will give unique number
+        **/
+        if (Last100UniqueNumberQue.getSize() >= 100) {
+            Last100UniqueNumberQue = Stack.getQue();
+        }
+        if (Last100UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
+            unqieNumber = Stack.getUniqueNumber();
+        } else {
+            Last100UniqueNumberQue.Enque(unqieNumber);
+        }
+        return unqieNumber;
+    },
+    getScriptFileName: function() {
+        var scripts = document.getElementsByTagName('script');
+        var lastScript = scripts[scripts.length-1];
+        var scriptName = lastScript.src;
+
+        var origin = LocationParser.getOrigin();
+        var splitResult = scriptName.split(origin);
+        if (splitResult.length > 1) {
+            scriptName = splitResult[1];
+            splitResult = scriptName.split("?");
+            if (splitResult.length > 1) {
+                scriptName = splitResult[0];
+            }
+            return scriptName;
+        }
+        return scriptName;
+    },
+    getScriptFileNameRef: function() {
+        var scriptName = Stack.getScriptFileName();
+        var result = [];
+        var splitResult = scriptName.split("/");
+        var i=0;
+        result = splitResult.filter(function(el, index, arr) {
+            return el != "";
+        });
+        result = result.map(function(el, index, arr){
+            if (index == this.lastIndex) {
+                return el;
+            }
+            return el.charAt(0).toUpperCase();
+        }, {lastIndex: result.length-1});
+        return result.join(".");
+    }
+});
+LoggerInfo= Stack.getScriptFileNameRef();
+RequestId = Stack.getUniqueNumber();
+
 var Table = (function() {
 var rows=0, cols=0, content = [], tId="", processedTids = [];
 function getUniqueTid(tId) {
@@ -900,9 +994,6 @@ Stack.extend({
     getStack: function(shareStorage) {
         return new St(shareStorage);
     },
-    getQue: function(shareStorage) {
-        return new Que();
-    },
     getLocalStorage: function() {
         return new LocalStorage();
     },
@@ -921,8 +1012,8 @@ Stack.extend({
     getDomino: function(dominoName) {
         return new Domino(dominoName);
     },
-    log: function(log) {
-        Logger.log(log);
+    log: function(log, loggerInfo) {
+        Logger.log(log, loggerInfo);
     },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
@@ -960,12 +1051,9 @@ Stack.extend({
     getUrlAttribute: function(url, name, defaultValue) {
         var UrlParser = new UrlParserObj(url);
         return UrlParser.getData(name, defaultValue);
-    },
-    getRequestId: function() {
-        return RequestId;
     }
 });
-var Last100UniqueNumberQue = Stack.getQue();
+
 Stack.extend({
     clone26032020: function(obj) {
         var res = obj;
@@ -993,30 +1081,8 @@ Stack.extend({
             return target;
         }
         return source;
-    },
-    getRandomNumber: function(minVal, maxVal) {
-        return getRandomNumber(minVal, maxVal);
-    },
-    getUniqueNumber: function() {
-        // Number of miliseconds elapsed since 1st Jan 1970 + random number
-        var unqieNumber = Date.now();
-        unqieNumber += Stack.getRandomNumber(10,99);
-        /**
-            This is for making sure at least 100 request will give unique number
-        **/
-        if (Last100UniqueNumberQue.getSize() >= 100) {
-            Last100UniqueNumberQue = Stack.getQue();
-        }
-        if (Last100UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
-            unqieNumber = Stack.getUniqueNumber();
-        } else {
-            Last100UniqueNumberQue.Enque(unqieNumber);
-        }
-        return unqieNumber;
     }
 });
-
-RequestId = Stack.getUniqueNumber();
 
 Stack.extend({
     /** It follows right hand associativity **/
@@ -1275,7 +1341,7 @@ Stack.extend({
             ajaxApiCall(ajax, function(ajaxDetails, status, response) {
                 apiReceiveCount++;
                 if (status == "FAILURE") {
-                    Stack.log("Error in api: " + ajaxDetails.url);
+                    Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo)
                 }
                 if (isFunction(eachApiCallback)) {
                     eachApiCallback(response, ajax.apiName);
@@ -1290,4 +1356,5 @@ Stack.extend({
 });
 /*End of direct access of methods*/
 window.Stack = window.$S = Stack;
+
 }));

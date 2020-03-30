@@ -5,7 +5,7 @@
 */
 
 (function(window, $M) {
-
+var LoggerInfo = $S.getScriptFileNameRef();
 var YardApiModel = function(selector, context) {
     return new YardApiModel.fn.init(selector, context);
 };
@@ -78,7 +78,7 @@ function loadPossibleValues(callBack) {
                 }
             }
         } else {
-            $M.log("Invalid response (possibleValue):" + response);
+            $M.log("Invalid response (possibleValue):" + response, LoggerInfo);
         }
     }, callBack);
 }
@@ -91,7 +91,7 @@ function loadInitialValues(callBack) {
         if ($M.isObject(response)) {
             Object.assign(InitialValues, response);
         } else {
-            $M.log("Invalid response (initialValue):" + response);
+            $M.log("Invalid response (initialValue):" + response, LoggerInfo);
         }
     }, callBack);
 }
@@ -103,8 +103,6 @@ function loadExpressions(callBack) {
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             AllExpressions.push(response);
-        } else {
-            $M.log("Invalid response (expression):" + response);
         }
     }, function() {
         var allExpressions = AllExpressions;
@@ -114,7 +112,7 @@ function loadExpressions(callBack) {
                 if (ExpressionsAdded.indexOf(key) < 0) {
                     ExpressionsAdded.push(key);
                 } else {
-                    $M.log("Expressions for '" + key + "' already added.");
+                    $M.log("Expressions for '" + key + "' already added.", LoggerInfo);
                 }
                 if ($M.isArray(exps[key])) {
                     for (var j = 0; j < exps[key].length; j++) {

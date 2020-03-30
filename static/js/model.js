@@ -260,8 +260,8 @@ Model.extend({
     setLoggerDateTimeState: function(state,formats,splitter) {
         return $S.setLoggerDateTimeState(state,formats,splitter);
     },
-    log: function(logText) {
-        return $S.log(logText);
+    log: function(logText, loggerInfo) {
+        return $S.log(logText, loggerInfo);
     },
     isString: function(value) {
         return $S.isString(value);
@@ -672,6 +672,16 @@ exps : {
             console.log(exp);
             console.log(posix);
             console.log(posixVal);
+            var posixMapping = {};
+            var tempKey = "";
+            for (var i = 0; i < posix.length; i++) {
+                tempKey = posix[i];
+                if (posixMapping[tempKey]) {
+                    tempKey += ":"+i;
+                }
+                posixMapping[tempKey] = posixVal[i];
+            }
+            console.log(posixMapping);
             console.log(result);
         }
         /** Expression validation start **/
