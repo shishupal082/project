@@ -18,7 +18,6 @@ var indexingData = [];
 var apiResponse = {};
 var apiNames = [];
 var indexingApi = "indexing";
-indexingApi = "v2-indexing";
 apiNames = [];
 var apiLoadStatus = {};
 
