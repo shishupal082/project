@@ -191,11 +191,11 @@ TableDataModel.extend({
     getRenderTableData: function() {
         var response = TableDataModel.getApiResponseData();
         var data = [];
-        var firstRow = ["<b>S.No.</b>","<b>State/UT</b>"];
-        var lastRow = ["", "<b>Total:</b>"];
+        var firstRow = ["<b>State/UT</b>"];
+        var lastRow = ["<b>Total:</b>"];
         data.push(firstRow);
         for (var i = 0; i < indexingData.length; i++) {
-            data.push([i+1, indexingData[i]]);
+            data.push([indexingData[i]]);
         }
         var totalCount = 0;
         for (var i=0; i<response.length; i++) {

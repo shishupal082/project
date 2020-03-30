@@ -83,6 +83,9 @@ function handleChange() {
 function createHtml(tableData) {
     var tableHtml = "";
     var table = $S.getTable(tableData, "dashboard");
+    table.addRowIndex(0);
+    table.updateTableContent(0,0,"<b>S.No.</b>");
+    table.updateTableContent(table.getContent().length-1,0,"");
     tableHtml += table.getHtml();
     $("#tableHtml").html(tableHtml);
     $("#tableHtml table").addClass("table table-bordered table-striped");
