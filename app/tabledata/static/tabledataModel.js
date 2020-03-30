@@ -28,8 +28,12 @@ function loadJsonData(callBack) {
         urls.push({api: "/pvt/app-data/tabledata/"+apiNames[i]+".json?"+requestId, name: apiNames[i]});
     }
     if (latestApi) {
-        apiNames.push("latest");
-        urls.push({api: latestApi+"?"+requestId, name: "latest"});
+        var latestApiName = "latest";
+        if (apiNames.indexOf(latestApiName) >= 0) {
+            latestApiName += "-"+$S.getUniqueNumber();
+        }
+        apiNames.push(latestApiName);
+        urls.push({api: latestApi+"?"+requestId, name: latestApiName});
     }
     for (var i = 0; i < urls.length; i++) {
         apiLoadStatus[urls[i].name] = false;
