@@ -107,7 +107,7 @@ $YApiModel.documentLoaded(function() {
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {
             $M.resetChangeValueData();
-            // $M.enableChangeLogValueStatus();
+            $M.enableChangeLogValueStatus();
             evtClick($(e.currentTarget));
         });
         checkUIStyle();

@@ -1,0 +1,24 @@
+body {
+	background-color: #d2d2d2;
+}
+.container {
+	width: 1350px;
+}
+td.tpr .tpr {
+	width: 100%;
+}
+.signal .badge {
+
+}
+.signal .alert-success {
+	background-color: #0f0;
+}
+.signal .alert-warning {
+	background-color: #ff0;
+}
+.signal .alert-danger {
+	background-color: #f00;
+}
+.custom-table .table {
+	width: auto;
+}

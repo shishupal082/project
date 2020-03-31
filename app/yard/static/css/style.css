@@ -17,7 +17,7 @@ hr {
 }
 .yard .table-html td span,
 .yard .table-html td button {
-    font-size: 10px;
+    /*font-size: 10px;*/
     line-height: 1;
 }
 .yard .btn {
