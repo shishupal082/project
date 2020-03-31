@@ -57,7 +57,7 @@ View.extend({
     }
 });
 View.extend({
-    loadApiData: function(callBack) {
+    loadYardDisplayData: function(callBack) {
         var apiUrl = ["/app/yard-s17/static/json/yard.json?"+requestId];
         $M.loadJsonData($, apiUrl, function(response) {
             if (response) {

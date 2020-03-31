@@ -100,14 +100,14 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 $YApiModel.documentLoaded(function() {
-    $M.reCheckAllValues();
-    $V.loadApiData(function() {
+    $S17M.reCheckAllValues();
+    $V.loadYardDisplayData(function() {
         $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
         $(".evt").on("click", function(e) {
             $M.resetChangeValueData();
-            $M.enableChangeLogValueStatus();
+            // $M.enableChangeLogValueStatus();
             evtClick($(e.currentTarget));
         });
         checkUIStyle();
