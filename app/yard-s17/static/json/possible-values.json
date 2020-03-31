@@ -27,12 +27,22 @@
     "timer": [
         "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
     ],
-    "temp-pt": [
+    "point": [
+        "WWYR","4-WWR", "5-WWR", "6-WWR",
         "4-NWKR", "4-RWKR",
-        "5-NWKR", "5-RWKR",
-        "6-NWKR", "6-RWKR"
+        "5-NWKR", "5-RWKR"
     ],
-
+    "point-6": [
+        "6-NWKR", "6-RWKR",
+        "6-WLR-1", "6-WLR-2",
+        "6-Z1RWR-1", "6-Z1RWR-2",
+        "6-Z1WR1-1", "6-Z1WR1-2",
+        "6-NKR", "6-RKR",
+        "6A-ND", "6B-ND",
+        "6A-RD", "6B-RD",
+        "6A-NC", "6B-NC",
+        "6A-RC", "6B-RC"
+    ],
     "power-checking": ["ZR"],
 
     "pointIndication": ["4-WFK", "5-WFK", "6-WFK"],

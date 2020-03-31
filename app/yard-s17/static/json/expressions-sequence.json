@@ -420,5 +420,151 @@
             "(5-BU_N_S&&6-AU_N_S&&~OV3/1-Z2U_R_R&&~OV3/2-Z2U_R_R&&~SH8-GR1)",
             "(SH-GZR&&~LL-ZU_N_R&&SH8-GNPR&&SH8-GLSR)"
         ]
-    }
+    },
+    "S1-GLSR": [
+            {
+            "op": "||",
+            "val": [
+                    "(S1-GLSR&&S1/9-AU_R_S)",
+                    {
+                        "op": "&&",
+                        "val": [
+                            "ZDUCR", "MN-GZR", "S1-GNPR",
+                            "~S12-GNPR",
+                            "((ML-UNPR&&~S11-GNPR&&4-AU_R_S)||(LL-UNPR&&~S10-GNPR&&4-BU_R_S))",
+                            "~10/11-ZU_R_R", "~S1/9-AU_N_S"
+                        ]
+                    }
+                ]
+            },
+            "~S1-GR1", "~S1-EGNR"
+    ],
+    "S12-GLSR": [
+            {
+            "op": "||",
+            "val": [
+                    "(S12-GLSR&&S12/13-AU_R_S)",
+                    {
+                        "op": "&&",
+                        "val": [
+                            "ZDUCR", "MN-GZR", "S12-GNPR",
+                            "~S1-GNPR",
+                            "((ML-UNPR&&~S2-GNPR&&5-AU_R_S)||(LL-UNPR&&~S3-GNPR&&5-BU_R_S))",
+                            "~2/3-ZU_N_R", "~S12/13-AU_N_S"
+                        ]
+                    }
+                ]
+            },
+            "~S12-GR1", "~S12-EGNR"
+    ],
+    "S3-GLSR": [
+        {
+            "op": "||",
+            "val": [
+                "(S3-GLSR&&(5-AU_R_S||5-BU_R_S))",
+                {
+                    "op": "&&",
+                    "val": [
+                        "ZDUCR", "MN-GZR", "S3-GNPR", "2/3-UNPR",
+                        "~S1-GNPR", "~S12-GNPR",
+                        "5-BU_R_S", "2/3-ZU_N_R", "LL-ZU_N_R"
+                    ]
+                }
+            ]
+        },
+        "~S3-GR1", "~S3-EGNR"
+    ],
+    "S2-GLSR": [
+        {
+            "op": "||",
+            "val": [
+                "(S2-GLSR&&(5-AU_R_S||5-BU_R_S))",
+                {
+                    "op": "&&",
+                    "val": [
+                        "ZDUCR", "MN-GZR", "S2-GNPR", "2/3-UNPR",
+                        "~S1-GNPR", "~S12-GNPR",
+                        "5-AU_R_S", "2/3-ZU_N_R", "ML-ZU_N_R"
+                    ]
+                }
+            ]
+        },
+        "~S2-GR1", "~S2-EGNR"
+    ],
+    "S10-GLSR": [
+        {
+            "op": "||",
+            "val": [
+                "(S10-GLSR&&(4-AU_R_S||4-BU_R_S))",
+                {
+                    "op": "&&",
+                    "val": [
+                        "ZDUCR", "MN-GZR", "S10-GNPR", "10/11-UNPR",
+                        "~S1-GNPR", "~S12-GNPR",
+                        "4-BU_R_S", "10/11-ZU_R_R", "~LL-ZU_N_R"
+                    ]
+                }
+            ]
+        },
+        "~S10-GR1", "~S10-EGNR"
+    ],
+    "S11-GLSR": [
+        {
+            "op": "||",
+            "val": [
+                "(S11-GLSR&&(4-AU_R_S||4-BU_R_S))",
+                {
+                    "op": "&&",
+                    "val": [
+                        "ZDUCR", "MN-GZR", "S11-GNPR", "10/11-UNPR",
+                        "~S1-GNPR", "~S12-GNPR",
+                        "4-AU_R_S", "10/11-ZU_R_R", "~ML-ZU_N_R"
+                    ]
+                }
+            ]
+        },
+        "~S11-GR1", "~S11-EGNR"
+    ],
+    "S9-GLSR": [
+            {
+            "op": "||",
+            "val": [
+                    "(S9-GLSR&&S1/9-AU_R_S)",
+                    {
+                        "op": "&&",
+                        "val": [
+                            "ZDUCR", "MN-GZR", "S9-GNPR",
+                            "~S1-GNPR",
+                            "UP-UNPR", "10/11-ZU_R_R", "~S1/9-AU_N_S"
+                        ]
+                    }
+                ]
+            },
+            "~S9-GR1", "~S9-EGNR"
+    ],
+    "S13-GLSR": [
+            {
+            "op": "||",
+            "val": [
+                    "(S13-GLSR&&S12/13-AU_R_S)",
+                    {
+                        "op": "&&",
+                        "val": [
+                            "ZDUCR", "MN-GZR", "S13-GNPR",
+                            "~S12-GNPR",
+                            "DN-UNPR", "~2/3-ZU_R_R", "~S12/13-AU_N_S"
+                        ]
+                    }
+                ]
+            },
+            "~S13-GR1", "~S13-EGNR"
+    ],
+    "S11-GR1": [
+        "ZDUCR", "MN-GZR", "~S1-GNPR", "10/11-UNPR", "10/11-ZU_R_R",
+        "~10/11-ZU_R_R", "~S1/9-AU_N_S",
+
+        "ML-ZU_R_R",
+        "(S11-GR1||(~S11-GNPR&&S11-GLSR))",
+        "~S11-EGNR"
+    ]
 }
