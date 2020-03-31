@@ -6,7 +6,7 @@ var RequestId = $M.getRequestId();
 var AsyncData = {};
 
 $M.extend({
-    setValueCallback: function(key, oldValue, newValue) {
+    changeValueCallback: function(key, oldValue, newValue) {
         if ($M.isArray(AsyncData[key])) {
             for (var i = 0; i < AsyncData[key].length; i++) {
                 $M.setValueWithExpressionV2(AsyncData[key][i]);

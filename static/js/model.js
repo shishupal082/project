@@ -74,9 +74,8 @@ function setVariableDependencies (name1, name2) {
     return variableDependencies;
 }
 var setValue = (function() {
-    var isValueChanged = false;
     function set(key, value) {
-        isValueChanged = false;
+        this._isValueChanged = false;
         var keyEquivalent;
         if (Model.isValidKey(key) && Model.isValidValue(value)) {
             var oldValue = Model(key).get();
@@ -104,15 +103,15 @@ var setValue = (function() {
                 if (changeValueLogStatus) {
                     $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
                 }
-                isValueChanged = true;
+                this._isValueChanged = true;
             }
         } else {
             $S.log("Invalid key for set: " + key);
         }
-        return isValueChanged;
+        return this._isValueChanged;
     }
     set.prototype.isValueChanged = function() {
-        return isValueChanged;
+        return this._isValueChanged;
     };
     return set;
 })();
@@ -554,10 +553,10 @@ Model.extend({
         }
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
-        if (Model.isFunction(Model["setValueCallback"])) {
-            Model["setValueCallback"](key, oldValue, newValue);
-        }
         if (set.isValueChanged()) {
+            if (Model.isFunction(Model["changeValueCallback"])) {
+                Model["changeValueCallback"](key, oldValue, newValue);
+            }
             if (Model.isFunction(Model["setValueChangedCallback"])) {
                 Model["setValueChangedCallback"](key, oldValue, newValue);
             } else {
