@@ -231,7 +231,7 @@ TableDataModel.extend({
         data.push(lastRow);
         var finalResponse = $S.clone(data);
         for (var i = 1; i < data.length; i++) {
-            for (var j = 3; j < data[i].length; j++) {
+            for (var j = 2; j < data[i].length; j++) {
                 var diff = data[i][j] - data[i][j-1];
                 if (diff > 0) {
                     diff = "+" + diff;
