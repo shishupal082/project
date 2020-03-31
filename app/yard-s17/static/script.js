@@ -99,22 +99,27 @@ $("#toggleDisplayDomino").on("click", function(e) {
     $V.toggleDisplayYardDominoBoundary();
     checkDominoDisplayStatus();
 });
-$YApiModel.documentLoaded(function() {
-    $S17M.reCheckAllValues();
-    $V.loadYardDisplayData(function() {
-        $(".container").attr("style", "width: 1425px;")
-        var tableHtml = $V.getYardHtml();
-        $("#tableHtml").addClass("table-html").html(tableHtml);
-        $(".evt").on("click", function(e) {
-            $M.resetChangeValueData();
-            // $M.enableChangeLogValueStatus();
-            evtClick($(e.currentTarget));
+
+function asyncDataLoaded() {
+    $YApiModel.documentLoaded(function() {
+        $S17M.reCheckAllValues();
+        $V.loadYardDisplayData(function() {
+            $(".container").attr("style", "width: 1425px;")
+            var tableHtml = $V.getYardHtml();
+            $("#tableHtml").addClass("table-html").html(tableHtml);
+            $(".evt").on("click", function(e) {
+                $M.resetChangeValueData();
+                $M.enableChangeLogValueStatus();
+                evtClick($(e.currentTarget));
+            });
+            checkUIStyle();
+            $("#help").removeClass("hide");
+            checkDominoDisplayStatus();
+            $M.disableChangeLogValueStatus();
         });
-        checkUIStyle();
-        $("#help").removeClass("hide");
-        checkDominoDisplayStatus();
-        $M.disableChangeLogValueStatus();
     });
-});
+}
+
+$S17M.loadAsyncData(asyncDataLoaded)
 
 });

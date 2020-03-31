@@ -284,6 +284,9 @@ Model.extend({
     clone: function(source) {
         return $S.clone(source);
     },
+    getScriptFileNameRef: function() {
+        return $S.getScriptFileNameRef();
+    },
     loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         return $S.loadJsonData(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall);
     }
@@ -537,6 +540,10 @@ Model.extend({
     getValue: function(key) {
         return Model(key).get();
     },
+    setValueWithoutRecheck: function(key, newValue) {
+        var set = new setValue(key, newValue);
+        return set.isValueChanged();
+    },
     setValue: function(key, newValue) {
         if (setValueCount >= setValueCountLimit) {
             setValueCount++;
@@ -547,6 +554,9 @@ Model.extend({
         }
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
+        if (Model.isFunction(Model["setValueCallback"])) {
+            Model["setValueCallback"](key, oldValue, newValue);
+        }
         if (set.isValueChanged()) {
             if (Model.isFunction(Model["setValueChangedCallback"])) {
                 Model["setValueChangedCallback"](key, oldValue, newValue);
@@ -565,6 +575,21 @@ Model.extend({
         return Model.setValue(key, newValue);
     }
 });
+function getExpressionValueByName(name) {
+    var exp = exps[name];
+    var oldValue = Model(name).get();
+    var newValue = 0;
+    if (debug.indexOf(name) >=0) {
+        EvaluatingExpressionKey = name;
+        $S.log("DEBUG: " + name);
+    }
+    newValue = Model.isAllExpressionsTrue(exp) ? 1 : 0;
+    if (debug.indexOf(name) >=0) {
+        $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
+        EvaluatingExpressionKey = "";
+    }
+    return newValue;
+}
 Model.extend({
 /*
 possibleValues = [1,2,3,4,5,6,7,8,9,10];
@@ -629,19 +654,13 @@ exps : {
         return itemsWithExp ? itemsWithExp["exp"] : "";
     },
     setValueWithExpression: function(name) {
-        var exp = exps[name];
-        var oldValue = Model(name).get();
-        var newValue = 0;
-        if (debug.indexOf(name) >=0) {
-            EvaluatingExpressionKey = name;
-            $S.log("DEBUG: " + name);
-        }
-        newValue = Model.isAllExpressionsTrue(exp) ? 1 : 0;
-        if (debug.indexOf(name) >=0) {
-            $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
-            EvaluatingExpressionKey = "";
-        }
+        var newValue = getExpressionValueByName(name);
         Model.setValue(name, newValue);
+        return newValue;
+    },
+    setValueWithExpressionV2: function(name) {
+        var newValue = getExpressionValueByName(name);
+        Model.setValueWithoutRecheck(name, newValue);
         return newValue;
     },
     getTokenizedExp: function(exp) {

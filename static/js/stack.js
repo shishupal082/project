@@ -64,6 +64,17 @@ function isFunction(value) {
     }
     return typeof value == "function" ? true : false;
 }
+function addElAt(arr, index, el) {
+    if (isArray(arr) && isNumber(index)) {
+        if (index >= arr.length) {
+            arr.push(el);
+        } else {
+            arr.splice(index, 0, el);
+        }
+        return 1;
+    }
+    return 0;
+}
 function calculateNumericalValue(op1, operator, op2) {
     var val = null;
     switch (operator) {
@@ -1060,6 +1071,9 @@ Stack.extend({
     },
     isBooleanTrue: function(value) {
         return isBoolean(value) && value == true;
+    },
+    addElAt: function(arr, index, el) {
+        return addElAt(arr, index, el);
     },
     isMethodDefined: function(name) {
         return this.isFunction(this[name]);
