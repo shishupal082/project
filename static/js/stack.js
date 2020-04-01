@@ -18,12 +18,20 @@ function ExtendObject(Object) {
 (function(global, factory) {
     factory(global, false);
 }(window, function(window, noGlobal) {
-
+var Stack = function(selector, context) {
+    return new Stack.fn.init(selector, context);
+};
+Stack.fn = Stack.prototype = {
+    constructor: Stack,
+    init: function(selector, context) {
+        return this;
+    }
+};
 var skipValuesInResult = [];
 var RequestId = 0;
 var key;
 var LoggerInfo;
-var Last100UniqueNumberQue;
+var Last1000UniqueNumberQue;
 function isString(value) {
     return typeof value == "string";
 }
@@ -455,6 +463,11 @@ var Que = (function(){
         this._FRONT++;
         return item;
     };
+    Que.prototype.clear = function() {
+        this._FRONT = -1;
+        this._BACK = -1;
+        return 1;
+    };
     Que.prototype.getAll = function() {
         var res = [];
         for (var i = this._FRONT; i <= this._BACK; i++) {
@@ -467,7 +480,116 @@ var Que = (function(){
     };
     return Que;
 })();
-Last100UniqueNumberQue = new Que();
+var CirQue = (function(){
+    function CirQue(size) {
+        this.capacity = 50;
+        this.que = [];
+        if (isNumber(size) && size > 0 && size <= 500000) {
+            this.capacity = size;
+        }
+        for (var i = 0; i < this.capacity; i++) {
+            this.que.push(0);
+        }
+        this._FRONT = -1;
+        this._BACK = -1;
+    }
+    CirQue.prototype.clear = function() {
+        this._FRONT = -1;
+        this._BACK = -1;
+        return 1;
+    };
+    CirQue.prototype.isFull = function() {
+        if( (this._FRONT == this._BACK + 1) || (this._FRONT == 0 && this._BACK == this.capacity-1)) {
+            return true;
+        }
+        return false;
+    };
+    CirQue.prototype.isEmpty = function() {
+        if(this._FRONT == -1) {
+            return true;
+        }
+        return false;
+    };
+    CirQue.prototype.Enque = function(item) {
+        if (this.isFull()) {
+            var logText = "CirQue full";
+            Logger.log(logText);
+            return 0;
+        }
+        if (this._FRONT == -1) {
+            this._FRONT = 0;
+            this._BACK = 0;
+        } else if (this._BACK == this.capacity-1 && this._FRONT != 0) {
+            this._BACK = 0;
+        } else {
+            this._BACK++;
+        }
+        this.que[this._BACK] = item;
+        return 1;
+    };
+    CirQue.prototype.EnqueV2 = function(item) {
+        if (this._FRONT == -1) {
+            this._FRONT = 0;
+            this._BACK = 0;
+        } else if (this._BACK == this.capacity-1 && this._FRONT != 0) {
+            this._BACK = 0;
+        } else if (this.isFull()) {
+            this._BACK = this._FRONT;
+            this._FRONT = (this._FRONT + 1) % this.capacity;
+        } else {
+            this._BACK++;
+        }
+        this.que[this._BACK] = item;
+        return 1;
+    };
+    CirQue.prototype.Deque = function() {
+        var item = 0;
+        if (this.isEmpty()) {
+            var logText = "CirQue under flow";
+            Logger.log(logText);
+            return -1;
+        }
+        item = this.que[this._FRONT];
+        if (this._FRONT == this._BACK) {
+            this._FRONT = -1;
+            this._BACK = -1;
+        } else {
+            this._FRONT = (this._FRONT+ 1) % this.capacity;
+        }
+        return item;
+    };
+    CirQue.prototype.getAll = function() {
+        var res = [];
+        if (this.isEmpty()) {
+            return res;
+        }
+        if (this._BACK >= this._FRONT) {
+            for (var i = this._FRONT; i <= this._BACK; i++) {
+                res.push(this.que[i]);
+            }
+        } else {
+            for (var i = this._FRONT; i < this.capacity; i++) {
+                res.push(this.que[i]);
+            }
+            for (var i = 0; i <= this._BACK; i++) {
+                res.push(this.que[i]);
+            }
+        }
+        return res;
+    };
+    CirQue.prototype.getDetails = function() {
+        var res = {};
+        res.size = this.capacity;
+        res.front = this._FRONT;
+        res.back = this._BACK;
+        res.isFull = this.isFull();
+        res.isEmpty = this.isEmpty();
+        res.items = this.getAll();
+        res.que = Stack.clone(this.que);
+        return res;
+    };
+    return CirQue;
+})();
 // After insertion data into BST it will return that particular node
 // That node can be modified as per requirement
 var BST = (function() {
@@ -758,15 +880,6 @@ var Domino = (function() {
     };
     return Domino;
 })();
-var Stack = function(selector, context) {
-    return new Stack.fn.init(selector, context);
-};
-Stack.fn = Stack.prototype = {
-    constructor: Stack,
-    init: function(selector, context) {
-        return this;
-    }
-};
 Stack.fn.init.prototype = Stack.fn;
 
 Stack.extend = Stack.fn.extend = function(options) {
@@ -784,32 +897,6 @@ Stack.extend = Stack.fn.extend = function(options) {
     return this;
 };
 Stack.extend({
-    getQue: function(shareStorage) {
-        return new Que();
-    },
-    getRequestId: function() {
-        return RequestId;
-    },
-    getRandomNumber: function(minVal, maxVal) {
-        return getRandomNumber(minVal, maxVal);
-    },
-    getUniqueNumber: function() {
-        // Number of miliseconds elapsed since 1st Jan 1970 + random number
-        var unqieNumber = Date.now();
-        unqieNumber += Stack.getRandomNumber(10,99);
-        /**
-            This is for making sure at least 100 request will give unique number
-        **/
-        if (Last100UniqueNumberQue.getSize() >= 100) {
-            Last100UniqueNumberQue = Stack.getQue();
-        }
-        if (Last100UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
-            unqieNumber = Stack.getUniqueNumber();
-        } else {
-            Last100UniqueNumberQue.Enque(unqieNumber);
-        }
-        return unqieNumber;
-    },
     getScriptFileName: function() {
         var scripts = document.getElementsByTagName('script');
         var lastScript = scripts[scripts.length-1];
@@ -844,6 +931,38 @@ Stack.extend({
         return result.join(".");
     }
 });
+var stResponse = {randomNumRes: {}, uniqueNumRes: {}};
+Last1000UniqueNumberQue = new CirQue(1000);
+Stack.extend({
+    getQue: function(shareStorage) {
+        return new Que();
+    },
+    getCirQue: function(size) {
+        return new CirQue(size);
+    },
+    getRequestId: function() {
+        return RequestId;
+    },
+    getRandomNumber: function(minVal, maxVal) {
+        return getRandomNumber(minVal, maxVal);
+    },
+    getUniqueNumber: function() {
+        // Number of miliseconds elapsed since 1st Jan 1970 + random number
+        var unqieNumber = Date.now();
+        var randomNum = Stack.getRandomNumber(10,99);
+        unqieNumber += randomNum;
+        /**
+            This is for making sure at least 1000 request will give unique number
+        **/
+        if (Last1000UniqueNumberQue.getAll().indexOf(unqieNumber) >= 0) {
+            unqieNumber = Stack.getUniqueNumber();
+        } else {
+            Last1000UniqueNumberQue.EnqueV2(unqieNumber);
+        }
+        return unqieNumber;
+    }
+});
+
 LoggerInfo= Stack.getScriptFileNameRef();
 RequestId = Stack.getUniqueNumber();
 

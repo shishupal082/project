@@ -39,6 +39,7 @@ S17Model.fn = S17Model.prototype = {
 ExtendObject(S17Model);
 S17Model.extend({
     loadAsyncData: function(callBack) {
+        return $S.callMethod(callBack);
         var urls = [];
         urls.push("/app/yard-s17/static/json/async-data.json");
         for (var i = 0; i < urls.length; i++) {
