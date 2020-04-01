@@ -481,11 +481,11 @@ var Que = (function(){
     return Que;
 })();
 var CirQue = (function(){
-    function CirQue(size) {
+    function CirQue(capacity) {
         this.capacity = 50;
         this.que = [];
-        if (isNumber(size) && size > 0 && size <= 500000) {
-            this.capacity = size;
+        if (isNumber(capacity) && capacity > 0 && capacity <= 500000) {
+            this.capacity = capacity;
         }
         for (var i = 0; i < this.capacity; i++) {
             this.que.push(0);
@@ -556,7 +556,7 @@ var CirQue = (function(){
         } else {
             this._FRONT = (this._FRONT+ 1) % this.capacity;
         }
-        return item;
+        return Stack.clone(item);
     };
     CirQue.prototype.getAll = function() {
         var res = [];
@@ -575,11 +575,23 @@ var CirQue = (function(){
                 res.push(this.que[i]);
             }
         }
-        return res;
+        return Stack.clone(res);
+    };
+    CirQue.prototype.getSize = function() {
+        var size = 0;
+        if (this.isEmpty()) {
+            size = 0;
+        } else if (this._BACK >= this._FRONT) {
+            size = this._BACK - this._FRONT + 1;
+        } else {
+            size = (capacity - this._FRONT) + this._BACK + 1;
+        }
+        return size;
     };
     CirQue.prototype.getDetails = function() {
         var res = {};
-        res.size = this.capacity;
+        res.capacity = this.capacity;
+        res.size = this.getSize();
         res.front = this._FRONT;
         res.back = this._BACK;
         res.isFull = this.isFull();
