@@ -122,7 +122,7 @@ TableDataModel.extend({
             data: {data: JSON.stringify(savingData)},
             type: "POST",
             success: function(response, textStatus) {
-                console.log(response);
+                // console.log(response);
             },
             error: function(xhr, textStatus, errorThrown) {
                 $S.logV2(LoggerInfo, "Error in savingData.");
