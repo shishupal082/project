@@ -21,6 +21,7 @@ var apiNames = [];
 var latestApi = false;
 var apiResponse = {};
 var apiLoadStatus = {};
+var savingData = {};
 
 function loadJsonData(callBack) {
     var urls = [];
@@ -40,6 +41,9 @@ function loadJsonData(callBack) {
         $S.loadJsonData($, [urls[i].api], function(response, apiName) {
             apiLoadStatus[apiName] = true;
             apiResponse[apiName] = response;
+            if (apiName == "latest") {
+                savingData = $S.isObject(response) ? $S.clone(response) : null;
+            }
         }, function() {
             for (var i = 0; i < apiNames.length; i++) {
                 if (apiLoadStatus[apiNames[i]]) {
@@ -107,6 +111,22 @@ TableDataModel.extend({
                 }
             }
             return loadJsonData(callBack);
+        });
+        return 1;
+    },
+    saveLatestData: function() {
+        if (!$S.isObject(savingData)) {
+            return 0;
+        }
+        $.ajax({url: "/upload/save_data",
+            data: {data: JSON.stringify(savingData)},
+            type: "POST",
+            success: function(response, textStatus) {
+                console.log(response);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                $S.logV2(LoggerInfo, "Error in savingData.");
+            }
         });
         return 1;
     }

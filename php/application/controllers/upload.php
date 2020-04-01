@@ -8,6 +8,18 @@ class Upload extends CI_Controller {
     public function index() {
         echo '<a href="/test/id/325">Click here for submit.</a>';
     }
+    public function save_data() {
+        $savedData = array();
+        if (isset($_POST["data"]) && is_string($_POST["data"])) {
+            log_message("INFO", "Request Post: ".$_POST["data"]);
+            $savedData = json_decode($_POST["data"]);
+        } else {
+            log_message("INFO", "Request Post: null");
+        }
+        $fileName = "";
+        $response = array("status" => "SUCCESS");
+        echo json_encode($response);
+    }
     public function is_file_exist() {
         log_message("INFO", "Request Post: ".json_encode($_POST));
         $relativePath = "uploaded_files/";

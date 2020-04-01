@@ -1476,6 +1476,7 @@ Stack.extend({
         if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
             ajaxApiCall = function(ajax, callBack) {
                 JQ.ajax({url: ajax.url,
+                    type: "GET",
                     success: function(response, textStatus) {
                         callBack(ajax, "SUCCESS", response);
                     },

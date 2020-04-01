@@ -148,6 +148,7 @@ $TDM.documentLoaded(function() {
     $("#selectItems").removeClass("hide");
     $(".links").removeClass("hide");
     $(".switch").removeClass("hide");
+    $TDM.saveLatestData();
 });
 
 });
