@@ -233,10 +233,15 @@ TableDataModel.extend({
         for (var i = 1; i < data.length; i++) {
             for (var j = 2; j < data[i].length; j++) {
                 var diff = data[i][j] - data[i][j-1];
+                var dispText = data[i][j];
                 if (diff > 0) {
-                    diff = "+" + diff;
+                    diff = " (+" + diff + ")";
+                    dispText = '<span class="alert-danger">' + dispText + diff + '</span>';
+                } else if (diff < 0) {
+                    diff = " (" + diff + ")";
+                    dispText = '<span class="alert-success">' + dispText + diff + '</span>';
                 }
-                finalResponse[i][j] = data[i][j] + " ("+diff+")";
+                finalResponse[i][j] = dispText;
             }
         }
         return finalResponse;
