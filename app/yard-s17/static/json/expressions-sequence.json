@@ -387,7 +387,7 @@
             "op": "||",
             "val": [
                 "(SH7-GLSR&&~SH7-GR1)",
-                "(SH8-GLSR&&~SH8-GR1&&~6-AU_N_S&&6-ADUCR)"
+                "(~SH8-GLSR&&~SH8-GR1&&~6-AU_N_S&&6-ADUCR)"
             ]
         },
         "LL-ZU_N_R",
@@ -400,7 +400,7 @@
             "op": "||",
             "val": [
                 "(SH8-GLSR&&~SH8-GR1)",
-                "(SH7-GLSR&&~SH7-GR1&&~6-AU_N_S&&6-ADUCR)"
+                "(~SH7-GLSR&&~SH7-GR1&&~6-AU_N_S&&6-ADUCR)"
             ]
         },
         "LL-ZU_R_R",
