@@ -228,9 +228,9 @@ YardApiModel.extend({
         var oneTo0 = changeValueData["1to0WithIndex"];
         var all = changeValueData["all"];
         $M.addElAt(logData, 0, {zeroTo1: zeroTo1, oneTo0: oneTo0, all: all});
-        console.log(zeroTo1);
-        console.log(oneTo0);
-        // console.log(changeValueData["all"]);
+        // console.log(zeroTo1);
+        // console.log(oneTo0);
+        // console.log(all);
         var displayHtml = "";
         for (var i = 0; i < logData.length; i++) {
             zeroTo1 = logData[i]["zeroTo1"];
@@ -243,19 +243,26 @@ YardApiModel.extend({
             }
             var tempData = [];
             var tableData = [];
+            var dataAddedStatus;
             for (var j = 0; j < zeroTo1.length; j++) {
+                dataAddedStatus = false;
                 if (all.indexOf(zeroTo1[j]) >= 0) {
+                    dataAddedStatus = true;
                     tableData.push('<span class="alert-success">' + zeroTo1[j] + '</span>');
-                } else {
-                    tempData.push(zeroTo1[j]);
                 }
                 if (all.indexOf(oneTo0[j]) >= 0) {
+                    dataAddedStatus = true;
                     tableData.push('<span class="alert-warning">' + oneTo0[j] + '</span>');
-                } else {
+                }
+                if (!dataAddedStatus) {
+                    tempData.push(zeroTo1[j]);
                     tempData.push(oneTo0[j]);
                 }
             }
-            console.log(tempData);
+            if (tempData.length) {
+                $M.logV2(LoggerInfo, "Keys not found in all.");
+                console.log(tempData);
+            }
             var table = $M.getTable([tableData], "display-log");
             table.addColIndex(1);
             displayHtml += table.getHtml();

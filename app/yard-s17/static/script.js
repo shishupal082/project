@@ -20,7 +20,9 @@ var commonPath = {
                     "/app/yard-s17/static/json/expressions-latched-ov.json",
                     "/app/yard-s17/static/json/expressions-latched-routes.json",
                     "/app/yard-s17/static/json/expressions-sub-routes.json",
-                    "/app/yard-s17/static/json/expressions-points.json",
+                    "/app/yard-s17/static/json/expressions-points-common.json",
+                    "/app/yard-s17/static/json/expressions-point-5.json",
+                    "/app/yard-s17/static/json/expressions-point-6.json",
                     "/app/yard-s17/static/json/expressions-glow.json"]
 };
 
@@ -109,7 +111,7 @@ function asyncDataLoaded() {
             checkUIStyle();
             $("#help").removeClass("hide");
             checkDominoDisplayStatus();
-            $M.disableChangeLogValueStatus();
+            // $M.disableChangeLogValueStatus();
         });
     });
 }
