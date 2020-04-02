@@ -1,4 +1,4 @@
-(function(window, $M) {
+(function(window, $M, $RM) {
 var pointPossibleValueLoaded = false;
 var pointExpressionLoaded = false;
 var currentValuesLoaded = false;
@@ -59,22 +59,22 @@ function apiDataLoaded(callBack) {
 }
 $M.extend({
     documentLoaded: function(callBack) {
-        allExpressions.push($M.getExpressionsFromRouteComponentModel());
-        allExpressions.push($M.getPointExpressionsFromPointComponentModel());
-        possibleValues = possibleValues.concat($M.getPossibleValuesFromRouteComponentModel());
-        Object.assign(currentValues, $M.getCurrentValuesFromRouteComponentModel());
-        $M.getCurrentValuesFromRouteComponentModelFromApi(function(res) {
+        allExpressions.push($RM.getExpressionsLocal());
+        allExpressions.push($RM.getPointExpressions());
+        possibleValues = possibleValues.concat($RM.getPossibleValuesLocal());
+        Object.assign(currentValues, $RM.getCurrentValuesLocal());
+        $RM.getCurrentValues(function(res) {
             Object.assign(currentValues, res);
             currentValuesLoaded = true;
             apiDataLoaded(callBack);
         });
-        $M.getPossibleValuesFromPointComponentModel(function(res) {
+        $RM.getPossibleValues(function(res) {
             possibleValues = possibleValues.concat(res);
             pointPossibleValueLoaded = true;
             apiDataLoaded(callBack);
         });
         
-        $M.getExpressionsFromPointComponentModel(function(res) {
+        $RM.getExpressions(function(res) {
             allExpressions.push(res);
             pointExpressionLoaded = true;
             apiDataLoaded(callBack);
@@ -122,4 +122,4 @@ $M.extend({
         }
     }
 });
-})(window, $M);
+})(window, $M, $RM);

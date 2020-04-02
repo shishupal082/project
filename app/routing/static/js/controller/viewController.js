@@ -1,4 +1,4 @@
-(function(window, $M) {
+(function(window, $M, $RM) {
 
 var pointLockExp = {};
 var tableContent = [];
@@ -61,7 +61,7 @@ Controller.extend({
         return table.getHtml(tableAttr);
     },
     documentLoaded: function(callBack) {
-        pointLockExp = $M.getPointLockExpressionsFromPointComponentModel();
+        pointLockExp = $RM.getPointLockExpressions();
         $M.documentLoaded(function() {
             var allExp = $M.getExps();
             Object.assign(pointLockExp, allExp.exps);
@@ -133,4 +133,4 @@ Controller.extend({
 Controller.$M = $M;
 /*End of direct access of methods*/
 window.Controller = window.$VC = Controller;
-})(window, $M);
+})(window, $M, $RM);
