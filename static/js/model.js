@@ -262,6 +262,9 @@ Model.extend({
     log: function(logText, loggerInfo) {
         return $S.log(logText, loggerInfo);
     },
+    logV2: function(loggerInfo, logText) {
+        return $S.logV2(loggerInfo, logText);
+    },
     isString: function(value) {
         return $S.isString(value);
     },
@@ -288,6 +291,9 @@ Model.extend({
     },
     loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         return $S.loadJsonData(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall);
+    },
+    addElAt: function(arr, index, el) {
+        return $S.addElAt(arr, index, el);
     }
 });
 /*

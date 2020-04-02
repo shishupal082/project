@@ -60,10 +60,7 @@ function evtClick (currentTarget) {
             $V.setValues(key, 0);
             checkUIStyle();
             if (timerCount == 0) {
-                var changeValueData = $M.getAllChangeValueData();
-                console.log(changeValueData["0to1WithIndex"]);
-                console.log(changeValueData["1to0WithIndex"]);
-                // console.log(changeValueData["all"]);
+                $YApiModel.displayChangeValueData();
             }
         }, 1000);
     }
@@ -79,10 +76,7 @@ function evtClick (currentTarget) {
         $V.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
-    var changeValueData = $M.getAllChangeValueData();
-    console.log(changeValueData["0to1WithIndex"]);
-    console.log(changeValueData["1to0WithIndex"]);
-    // console.log(changeValueData["all"]);
+    $YApiModel.displayChangeValueData();
     $M.resetChangeValueData();
     console.log("Click event completed: " + $M.getSetValueCount());
     // $M.disableChangeLogValueStatus();

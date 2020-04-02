@@ -5,7 +5,7 @@
 */
 
 (function(window, $M) {
-var LoggerInfo = $S.getScriptFileNameRef();
+var LoggerInfo = $M.getScriptFileNameRef();
 var YardApiModel = function(selector, context) {
     return new YardApiModel.fn.init(selector, context);
 };
@@ -219,5 +219,54 @@ YardApiModel.extend({
         return response;
     }
 });
-window.YardApiModel = window.$YApiModel = YardApiModel;
+var logData = [];
+
+YardApiModel.extend({
+    displayChangeValueData: function() {
+        var changeValueData = $M.getAllChangeValueData();
+        var zeroTo1 = changeValueData["0to1WithIndex"];
+        var oneTo0 = changeValueData["1to0WithIndex"];
+        var all = changeValueData["all"];
+        $M.addElAt(logData, 0, {zeroTo1: zeroTo1, oneTo0: oneTo0, all: all});
+        console.log(zeroTo1);
+        console.log(oneTo0);
+        // console.log(changeValueData["all"]);
+        var displayHtml = "";
+        for (var i = 0; i < logData.length; i++) {
+            zeroTo1 = logData[i]["zeroTo1"];
+            oneTo0 = logData[i]["oneTo0"];
+            all = logData[i]["all"];
+            if (zeroTo1.length != oneTo0.length) {
+                $M.logV2(LoggerInfo, "Invalid data.");
+                console.log(logData[i]);
+                continue;
+            }
+            var tempData = [];
+            var tableData = [];
+            for (var j = 0; j < zeroTo1.length; j++) {
+                if (all.indexOf(zeroTo1[j]) >= 0) {
+                    tableData.push('<span class="alert-success">' + zeroTo1[j] + '</span>');
+                } else {
+                    tempData.push(zeroTo1[j]);
+                }
+                if (all.indexOf(oneTo0[j]) >= 0) {
+                    tableData.push('<span class="alert-warning">' + oneTo0[j] + '</span>');
+                } else {
+                    tempData.push(oneTo0[j]);
+                }
+            }
+            console.log(tempData);
+            var table = $M.getTable([tableData], "display-log");
+            table.addColIndex(1);
+            displayHtml += table.getHtml();
+            displayHtml += "<hr>";
+        }
+        $("#changeValueData").html(displayHtml);
+        $("#changeValueData table").addClass("table table-bordered");
+        $("span.alert-warning").parent("td").addClass("alert-warning")
+        $("span.alert-success").parent("td").addClass("alert-success")
+        return 1;
+    }
+});
+window.$YApiModel = YardApiModel;
 })(window, $M);
