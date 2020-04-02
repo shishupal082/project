@@ -28,11 +28,30 @@
         "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
     ],
     "point": [
-        "WWYR","4-WWR", "5-WWR", "6-WWR",
+        "WWYR",
+        "4-WFK", "5-WFK", "6-WFK",
+        "WXJR", "Z3WR"
+    ],
+    "point-4": [
+        "4-WWR",
         "4-NWKR", "4-RWKR",
-        "5-NWKR", "5-RWKR"
+        "4-NKR", "4-RKR",
+        "4A-ND", "4B-ND",
+        "4A-RD", "4B-RD",
+        "4A-NC", "4B-NC",
+        "4A-RC", "4B-RC"
+    ],
+    "point-5": [
+        "5-WWR",
+        "5-NWKR", "5-RWKR",
+        "5-NKR", "5-RKR",
+        "5A-ND", "5B-ND",
+        "5A-RD", "5B-RD",
+        "5A-NC", "5B-NC",
+        "5A-RC", "5B-RC"
     ],
     "point-6": [
+        "6-WWR",
         "6-NWKR", "6-RWKR",
         "6-NKR", "6-RKR",
         "6A-ND", "6B-ND",
@@ -42,8 +61,6 @@
     ],
     "power-checking": ["ZR"],
 
-    "pointIndication": ["4-WFK", "5-WFK", "6-WFK"],
-
     "common-btn": ["OYN", "YYN", "YRN", "WWN", "LXN", "CHYN", "EWN", "EGGN", "SMR"],
     "common-r": ["OYNR", "YYNR", "YRNR", "WWNR", "LXNR", "CHYNR", "EWNR", "EGGNR"],
 
@@ -51,8 +68,7 @@
                 "COIL"],
     "common-2": ["EGNR",
                 "EUUYR", "EUUYNCR", "CHYRNR",
-                "UP-LCPR", "DN-LCPR",
-                "WXJR", "Z3WR"],
+                "UP-LCPR", "DN-LCPR"],
     "emergency-btn": ["EUYN",
                       "EUUYN"],
     "emergency-r":   ["EUYNR", "EUYR",
