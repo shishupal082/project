@@ -545,6 +545,15 @@ Model.extend({
     getValue: function(key) {
         return Model(key).get();
     },
+    getAllValue: function(keys) {
+        var response = [];
+        if (Model.isArray(keys)) {
+            for (var i = 0; i < keys.length; i++) {
+                response.push(Model(keys[i]).isUp());
+            }
+        }
+        return response;
+    },
     setValueWithoutRecheck: function(key, newValue) {
         var set = new setValue(key, newValue);
         return set.isValueChanged();
