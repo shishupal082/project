@@ -135,7 +135,7 @@
                 "op": "&&",
                 "val": ["10/11-ZU_R_R", "GNCR", "UNCR",
                     "4-AU_N_S","4-BU_N_S",
-                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R"]
+                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R", "S1/9-AU_N_S"]
             }
         ]
     },
@@ -147,7 +147,7 @@
                 "op": "&&",
                 "val": ["10/11-ZU_N_R", "(((S10-GNPR||S11-GNPR)&&10/11-UNPR)||(S9-GNPR&&UP-UNPR))",
                     "4-AU_N_S","4-BU_N_S",
-                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R"]
+                    "OV11-Z2U_N_R", "OV10/2-Z2U_N_R", "S1/9-AU_N_S"]
             }
         ]
     },
@@ -159,7 +159,7 @@
                 "op": "&&",
                 "val": ["2/3-ZU_R_R", "GNCR", "UNCR",
                     "5-AU_N_S","5-BU_N_S",
-                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R"]
+                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R", "S12/13-AU_N_S"]
             }
         ]
     },
@@ -171,7 +171,7 @@
                 "op": "&&",
                 "val": ["2/3-ZU_N_R", "(S12-GNPR&&(ML-UNPR||LL-UNPR))",
                     "5-AU_N_S","5-BU_N_S",
-                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R"]
+                    "OV2-Z2U_N_R", "OV3/2-Z2U_N_R", "S12/13-AU_N_S"]
             }
         ]
     }
