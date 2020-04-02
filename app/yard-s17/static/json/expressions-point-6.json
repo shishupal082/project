@@ -2,6 +2,15 @@
     "6-WR": [
         "~6-W_N_R", "~6-Z1RWR", "~6-Z1NWR", "6-WKR2"
     ],
+    "6-NWKR": [
+        "6-WKR1", "6-_N_WLR1", "6-W_R_LR", "6-NKR",
+        "~6-W_N_LR", "~6-WLR",
+        "~6-_R_WLR1"
+    ],
+    "6-RWKR": [
+        "6-WKR1", "6-_R_WLR1", "6-W_R_LR", "6-RKR",
+        "~6-W_N_LR", "~6-WLR"
+    ],
     "6-WJR": {
         "op": "||",
         "val": [
@@ -64,14 +73,6 @@
         "~6-NKR",
         "6A-RD", "6B-RD",
         "6A-NC", "6B-NC"
-    ],
-    "6-NWKR": [
-        "6-WKR1", "~6-WLR",
-        "~6-W_N_LR", "6-_N_WLR1", "6-NKR", "~6-_R_WLR1"
-    ],
-    "6-RWKR": [
-        "6-WKR1", "~6-WLR",
-        "~6-W_N_LR", "~6-_N_WLR1", "~6-RKR", "6-_R_WLR1"
     ],
     "6-W_N_R": {
         "op": "||",
