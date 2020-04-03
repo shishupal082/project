@@ -95,6 +95,60 @@ function loadInitialValues(callBack) {
         }
     }, callBack);
 }
+var partial = {
+    "PARTIAL-37-4": {
+        "op": "&&",
+        "val": [
+            {
+                "op": "||",
+                "val": [
+                    {
+                        "op": "&&",
+                        "val": ["6-WNR",
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(WWNR&&SDG-TPR-A&&SDG-TPR-B)",
+                                    "(EWNR&&(~SDG-TPR-A||~SDG-TPR-B))"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "&&",
+                        "val": [
+                            "(6-WWR&&6-WLR&&SDG-TPR-A&&SDG-TPR-B)",
+                            {
+                                "op": "||",
+                                "val": [
+                                    "((OV3/2-Z2U_R_R||OV3/1-Z2U_R_R||5-BU_R_S)&&6-W_N_LR&&~6-_N_WLR1)",
+                                    "(6-AU_R_S&&~6-_R_WLR1)"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "~6-NWKR", "~6-RWKR", "~6-W_R_LR"
+        ]
+    }
+};
+var partialKeys = [];
+for (var key in partial) {
+    partialKeys.push(key);
+}
+function addExp(key, exp) {
+    var partialKey, partialExp;
+    for (var i = 0; i < partialKeys.length; i++) {
+        partialKey = partialKeys[i];
+        if (exp.search(partialKey) >= 0) {
+            partialExp = $M.generateExpression(partial[partialKey]);
+            exp = exp.replace(partialKey, partialExp);
+            i = 0;
+        }
+    }
+    return $M(key).addExp(exp);
+}
 function loadExpressions(callBack) {
     var url = [];
     for (var i = 0; i < ExpressionsPath.length; i++) {
@@ -117,13 +171,16 @@ function loadExpressions(callBack) {
                 if ($M.isArray(exps[key])) {
                     for (var j = 0; j < exps[key].length; j++) {
                         if ($M.isObject(exps[key][j])) {
-                            $M(key).addExp($M.generateExpression(exps[key][j]));
+                            addExp(key, $M.generateExpression(exps[key][j]));
+                            // $M(key).addExp($M.generateExpression(exps[key][j]));
                         } else {
-                            $M(key).addExp(exps[key][j]);
+                            addExp(key, exps[key][j]);
+                            // $M(key).addExp(exps[key][j]);
                         }
                     }
                 } else if ($M.isObject(exps[key])) {
-                    $M(key).addExp($M.generateExpression(exps[key]));
+                    addExp(key, $M.generateExpression(exps[key]));
+                    // $M(key).addExp($M.generateExpression(exps[key]));
                 }
             }
         }
