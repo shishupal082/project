@@ -7,6 +7,7 @@ var AsyncData = {};
 
 $M.extend({
     changeValueCallback: function(key, oldValue, newValue) {
+        // Forcing 6-Z1WR1 to execute after 6-WR pickup and before 6-WR down
         if ($M.isArray(AsyncData[key])) {
             for (var i = 0; i < AsyncData[key].length; i++) {
                 $M.setValueWithExpressionV2(AsyncData[key][i]);
@@ -39,7 +40,6 @@ S17Model.fn = S17Model.prototype = {
 ExtendObject(S17Model);
 S17Model.extend({
     loadAsyncData: function(callBack) {
-        return $S.callMethod(callBack);
         var urls = [];
         urls.push("/app/yard-s17/static/json/async-data.json");
         for (var i = 0; i < urls.length; i++) {
