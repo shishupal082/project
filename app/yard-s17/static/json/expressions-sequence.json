@@ -219,7 +219,6 @@
 
         "~CO-GGNR", "~EUYR", "~EUUYR"
     ],
-
     "ZDUCR": ["~GNCR", "~UNCR",
         {
             "op": "||",
@@ -327,7 +326,7 @@
     ],
     "S2-GR3": [
         "S2-GR1", "S2-GR2",
-        "~S13-RECR", "S13-DECR"
+        "~S13-RECR", "S13-HECR"
     ],
     "S11-GR3": [
         "S11-GR1", "S11-GR2",
@@ -594,6 +593,33 @@
         "12A-TPR", "12-TPR", "13-TPR",
         "S13-GR1", "~S13-GLSR",
         "DN-LCPR"
+    ],
+    "S2-GR1": [
+        "5-ADUCR", "5-U_R_LR", "5A-TPR", "2/3-TPR", "~2/3-ZU_R_R",
+        "(S13-RECR||S13-HECR)",
+        "ML-ZU_N_R",
+        "(S2-GR1||(~S2-GNPR&&S2-GLSR))"
+    ],
+    "2/3-G_R_LR": {
+        "op": "||",
+        "val": [
+            "(~2/3-G_N_LR&&2/3-G_R_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "5-ADUCR", "5-U_R_LR", "5A-TPR", "2/3-TPR", "~2/3-ZU_R_R",
+                    "2/3-G_N_LR",
+                    "S2-GR1", "~S2-GLSR"
+                ]
+            }
+        ]
+    },
+    "S2-GR2": [
+        "5-ADUCR", "5-U_R_LR", "5A-TPR", "2/3-TPR", "~2/3-ZU_R_R",
+        "~2/3-G_N_LR",
+        "(S13-RECR||S13-HECR)",
+        "ML-ZU_N_R",
+        "S2-GR1", "~S2-GLSR"
     ],
     "S11-GR1": [
         "ZDUCR", "MN-GZR", "~S1-GNPR", "10/11-UNPR", "10/11-ZU_R_R",
