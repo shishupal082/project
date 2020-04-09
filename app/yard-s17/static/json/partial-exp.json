@@ -25,7 +25,7 @@
                             {
                                 "op": "||",
                                 "val": [
-                                    "((5-AU_R_S||OV2-Z2U_R_R||5-BU_R_S||OV3/1-Z2U_R_R)&&~5-_N_WLR1)",
+                                    "((5-AU_R_S||OV2-Z2U_R_R||6-AU_R_S||OV3/1-Z2U_R_R)&&~5-_N_WLR1)",
                                     "((5-BU_R_S||OV3/2-Z2U_R_R)&&~5-_R_WLR1)"
                                 ]
                             }
