@@ -8,6 +8,7 @@ var timerCount = 0;
 
 var apisPath = {};
 var commonPath = {
+    "partial-expressions-value": "/app/yard-s17/static/json/partial-exp.json",
     "possible-value": ["/app/yard-s17/static/json/possible-values.json",
                         "/app/yard-s17/static/json/possible-values-sequence.json",
                         "/app/yard-s17/static/json/possible-values-group.json"],

@@ -23,6 +23,7 @@ ExtendObject(YardApiModel);
 
 var RequestId = $M.getRequestId();
 
+var PartialExpressions = {};
 var PossibleValues = [];
 var InitialValues = {};
 var AllExpressions = [];
@@ -30,18 +31,23 @@ var ExpWithoutKey = {};
 
 var ExpressionsAdded = [];
 
+var PartialExpressionsLoadStatus = false;
 var PossibleValuesLoadStatus = false;
 var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
 
+var PartialExpressionsPath = [];
 var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
 
 var PossibleValuesByTypes = {};
 
+var partialKeys = [];
+
 function isApisLoadComplete() {
     var loadingCheck = [];
+    loadingCheck.push(PartialExpressionsLoadStatus);
     loadingCheck.push(PossibleValuesLoadStatus);
     loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
@@ -51,6 +57,23 @@ function isApisLoadComplete() {
         }
     }
     return true;
+}
+
+function loadPartialExpressions(callBack) {
+    var url = [];
+    for (var i = 0; i < PartialExpressionsPath.length; i++) {
+        url.push(PartialExpressionsPath[i]+"?"+RequestId);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isObject(response)) {
+            for (var key in response) {
+                PartialExpressions[key] = response[key];
+                partialKeys.push(key);
+            }
+        } else {
+            $M.log("Invalid response (partialExpressions):" + response, LoggerInfo);
+        }
+    }, callBack);
 }
 
 function loadPossibleValues(callBack) {
@@ -95,54 +118,13 @@ function loadInitialValues(callBack) {
         }
     }, callBack);
 }
-var partial = {
-    "PARTIAL-37-4": {
-        "op": "&&",
-        "val": [
-            {
-                "op": "||",
-                "val": [
-                    {
-                        "op": "&&",
-                        "val": ["6-WNR",
-                            {
-                                "op": "||",
-                                "val": [
-                                    "(WWNR&&SDG-TPR-A&&SDG-TPR-B)",
-                                    "(EWNR&&(~SDG-TPR-A||~SDG-TPR-B))"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "op": "&&",
-                        "val": [
-                            "(6-WWR&&6-WLR&&SDG-TPR-A&&SDG-TPR-B)",
-                            {
-                                "op": "||",
-                                "val": [
-                                    "((OV3/2-Z2U_R_R||OV3/1-Z2U_R_R||5-BU_R_S)&&6-W_N_LR&&~6-_N_WLR1)",
-                                    "(6-AU_R_S&&~6-_R_WLR1)"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            "~6-NWKR", "~6-RWKR", "~6-W_R_LR"
-        ]
-    }
-};
-var partialKeys = [];
-for (var key in partial) {
-    partialKeys.push(key);
-}
+
 function addExp(key, exp) {
     var partialKey, partialExp;
     for (var i = 0; i < partialKeys.length; i++) {
         partialKey = partialKeys[i];
         if (exp.search(partialKey) >= 0) {
-            partialExp = $M.generateExpression(partial[partialKey]);
+            partialExp = $M.generateExpression(PartialExpressions[partialKey]);
             exp = exp.replace(partialKey, partialExp);
             i = 0;
         }
@@ -190,21 +172,24 @@ function loadExpressions(callBack) {
 
 YardApiModel.extend({
     documentLoaded: function(callBack) {
-        loadPossibleValues(function() {
-            PossibleValuesLoadStatus = true;
-            $M().setPossibleValues(PossibleValues);
-            var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
-            for (var j = 0; j < debugItems.length; j++) {
-                $M(debugItems[j]).addDebug();
-            }
-            loadInitialValues(function() {
-                InitialValuesLoadStatus = true;
-                $M().initializeCurrentValues(InitialValues);
-                loadExpressions(function() {
-                    ExpressionsLoadStatus = true;
-                    if (isApisLoadComplete()) {
-                        callBack();
-                    }
+        loadPartialExpressions(function() {
+            PartialExpressionsLoadStatus = true;
+            loadPossibleValues(function() {
+                PossibleValuesLoadStatus = true;
+                $M().setPossibleValues(PossibleValues);
+                var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
+                for (var j = 0; j < debugItems.length; j++) {
+                    $M(debugItems[j]).addDebug();
+                }
+                loadInitialValues(function() {
+                    InitialValuesLoadStatus = true;
+                    $M().initializeCurrentValues(InitialValues);
+                    loadExpressions(function() {
+                        ExpressionsLoadStatus = true;
+                        if (isApisLoadComplete()) {
+                            callBack();
+                        }
+                    });
                 });
             });
         });
@@ -232,6 +217,9 @@ YardApiModel.extend({
                 break;
                 case "expressions":
                     ExpressionsPath = ExpressionsPath.concat(paths[key]);
+                break;
+                case "partial-expressions-value":
+                    PartialExpressionsPath = PartialExpressionsPath.concat(paths[key]);
                 break;
             }
         }
