@@ -52,8 +52,18 @@ View.extend({
 });
 View.extend({
     getTprClass: function(name) {
+        if ($M.isValidKey(name + "-R")) {
+            if ($M.isUp(name + "-R")) {
+                return "btn-danger";
+            }
+        }
+        if ($M.isValidKey(name + "-Y")) {
+            if ($M.isUp(name + "-Y")) {
+                return "btn-warning";
+            }
+        }
         if ($M.isDown(name)) {
-            return "btn-danger";
+            // return "btn-danger";
         }
         return "";
     }
@@ -85,7 +95,7 @@ View.extend({
                     if (node.hasClass("tpr")) {
                         node.removeClass("btn-warning");
                         node.removeClass("btn-danger");
-                        node.addClass($V.getTprClass(key));
+                        node.addClass(View.getTprClass(key));
                     }
                 }
             } catch(err) {

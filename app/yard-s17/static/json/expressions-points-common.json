@@ -1,4 +1,20 @@
 {
+    "WWNR": ["(WWN&&~EWNR)"],
+    "WWYR": [
+        "~EUUYNR", "Z3WR", "~6-WLR", "6-WWR"
+    ],
+    "Z3WR": [
+        "~EUUYNR", "~WWYR",
+        {
+            "op": "||",
+            "val": [
+                "(4-Z1WR&&4-WLR)",
+                "(5-Z1WR&&5-WLR)",
+                "(6-Z1WR&&6-WLR)"
+            ]
+        },
+        "((~4-WWR&&~5-WWR)||Z3WR)"
+    ],
     "4-W_N_LR": {
         "op": "||",
         "val": [
@@ -47,22 +63,6 @@
             }
         ]
     },
-    "WWNR": ["(WWN&&~EWNR)"],
-    "WWYR": [
-        "~EUUYNR", "Z3WR", "~6-WLR", "6-WWR"
-    ],
-    "Z3WR": [
-        "~EUUYNR", "~WWYR",
-        {
-            "op": "||",
-            "val": [
-                "(4-Z1WR&&4-WLR)",
-                "(5-Z1WR&&5-WLR)",
-                "(6-Z1WR&&6-WLR)"
-            ]
-        },
-        "((~4-WWR&&~5-WWR)||Z3WR)"
-    ],
     "4-WWR": [
         "~EUUYNR", "Z3WR",
         "~6-WWR", "~WWYR"

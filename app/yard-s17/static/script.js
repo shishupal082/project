@@ -14,7 +14,7 @@ var commonPath = {
                         "/app/yard-s17/static/json/possible-values-group.json"],
     "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
     "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
-                    "/app/yard-s17/static/json/expressions-tpr-cls.json",
+                    "/app/yard-s17/static/json/expressions-indication.json",
                     "/app/yard-s17/static/json/expressions-common.json",
                     "/app/yard-s17/static/json/expressions-sequence.json",
                     "/app/yard-s17/static/json/expressions-latched.json",
