@@ -18,6 +18,7 @@ ExtendObject(TableDataModel);
 var requestId = $S.getRequestId();
 var indexingData = [];
 var apiNames = [];
+var savingDataApi = [];
 var latestApi = false;
 var apiResponse = {};
 var apiLoadStatus = {};
@@ -96,6 +97,18 @@ function hasDuplicateInArray(items) {
     }
     return false;
 }
+function saveData(response) {
+    $.ajax({url: "/upload/save_data",
+        data: {data: JSON.stringify(response)},
+        type: "POST",
+        success: function(response, textStatus) {
+            // console.log(response);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            $S.logV2(LoggerInfo, "Error in savingData.");
+        }
+    });
+}
 TableDataModel.extend({
     documentLoaded: function(callBack) {
         $S.loadJsonData($, ["/pvt/app-data/tabledata/indexing.json?"+requestId], function(response) {
@@ -103,6 +116,7 @@ TableDataModel.extend({
                 indexingData =  $S.isArray(response["names"]) ? response["names"] : [];
                 apiNames = $S.isArray(response["apiNames"]) ? response["apiNames"] : [];
                 latestApi = $S.isString(response["latestApi"]) ? response["latestApi"] : false;
+                savingDataApi = $S.isArray(response["savingDataApi"]) ? response["savingDataApi"] : [];
                 if (hasDuplicateInArray(apiNames)) {
                     throw "'Duplicate entry in apiNames.'";
                 }
@@ -115,18 +129,17 @@ TableDataModel.extend({
         return 1;
     },
     saveLatestData: function() {
-        if (!$S.isObject(savingData)) {
-            return 0;
-        }
-        $.ajax({url: "/upload/save_data",
-            data: {data: JSON.stringify(savingData)},
-            type: "POST",
-            success: function(response, textStatus) {
-                // console.log(response);
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                $S.logV2(LoggerInfo, "Error in savingData.");
+        var urls = [];
+        var requestId2 = $S.getUniqueNumber();
+        for (var i = 0; i < savingDataApi.length; i++) {
+            if (apiNames.indexOf(savingDataApi[i]) >= 0) {
+                saveData(savingData);
+                continue;
             }
+            urls.push(savingDataApi[i] + "?" + requestId2);
+        }
+        $S.loadJsonData($, urls, function(response) {
+            saveData(response);
         });
         return 1;
     }

@@ -9,13 +9,13 @@ class Upload extends CI_Controller {
         echo '<a href="/test/id/325">Click here for submit.</a>';
     }
     public function save_data() {
-        $savedData = array();
+        $postRequest = array();
         if (isset($_POST["data"]) && is_string($_POST["data"])) {
-            log_message("INFO", "Request Post: ".$_POST["data"]);
-            $savedData = json_decode($_POST["data"]);
+            $postRequest["data"] = json_decode($_POST["data"]);
         } else {
-            log_message("INFO", "Request Post: null");
+            $postRequest["data"] = "null";
         }
+        log_message("INFO", "Request Post: ".json_encode($postRequest));
         $fileName = "";
         $response = array("status" => "SUCCESS");
         echo json_encode($response);
