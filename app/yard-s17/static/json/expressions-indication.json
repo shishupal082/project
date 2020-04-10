@@ -1,20 +1,52 @@
 {
     "LL-sh-left": ["4B-TPR"],
-    "p-4a-n": ["(4A-TPR&&4-NWKR)"],
-    "p-4b-n": ["(4B-TPR&&4-NWKR)"],
-    "p-4a-r": ["(4A-TPR&&4B-TPR&&4-RWKR)"],
-    "p-4a-c": ["(4A-TPR&&4B-TPR&&(4-NWKR||4-RWKR))"],
-    "p-4b-c": ["(4A-TPR&&4B-TPR&&(4-NWKR||4-RWKR))"],
+
+    "p-4a-c-R": ["~4A-TPR"],
+    "p-4b-c-R": ["~4B-TPR"],
+    "p-4a-c-Y": ["4-WKR1", "4A-TPR", "4-Z2WR1",
+        "((4-_N_WLR1&&~4-_R_WLR1)||4-_R_WLR1)"
+    ],
+    "p-4b-c-Y": [
+        "4-WKR1", "4B-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(4-_N_WLR1&&(4-Z2WR2||(~4-Z2WR2&&4-Z2WR1)))",
+                "(~4-_N_WLR1&&(4-Z2WR2||(~4-Z2WR2&&4-Z2WR1)))"
+            ]
+        }
+    ],
+    "p-4a-n-R": ["4-WKR1","~4-_R_WLR1", "~4A-TPR"],
+    "p-4b-n-R": ["4-WKR1", "4-_N_WLR1", "~4B-TPR"],
+
+    "p-4a-n-Y": ["4-WKR1","~4-_R_WLR1", "4A-TPR"],
+    "p-4b-n-Y": ["4-WKR1","4-_N_WLR1", "4B-TPR"],
+
+    "p-4a-r-R": ["(~4A-TPR&&~4-NWKR)"],
+    "p-4b-r-R": ["(~4B-TPR&&~4-NWKR)"],
+
+    "p-4a-r-Y": ["4-WKR1", "4A-TPR", "4-_R_WLR1"],
+    "p-4b-r-Y": ["4-WKR1", "4B-TPR", "~4-_N_WLR1"],
+
+
 
 
 
     "p-5a-c-R": ["~5A-TPR"],
     "p-5b-c-R": ["~5B-TPR"],
 
-    "p-5a-c-Y": ["5-WKR1", "5A-TPR", "5-Z2WR1", "((5-_N_WLR1&&~5-_R_WLR1)||5-_R_WLR1)"],
+    "p-5a-c-Y": ["5-WKR1", "5A-TPR", "5-Z2WR1",
+        "((5-_N_WLR1&&~5-_R_WLR1)||5-_R_WLR1)"
+    ],
     "p-5b-c-Y": [
         "5-WKR1", "5B-TPR",
-        "((5-_N_WLR1&&~5-Z2WR1&&5-Z2WR2)||(~5-_N_WLR1&&5-Z2WR1&&~5-Z2WR2))"
+        {
+            "op": "||",
+            "val": [
+                "(5-_N_WLR1&&(5-Z2WR2||(~5-Z2WR2&&5-Z2WR1)))",
+                "(~5-_N_WLR1&&(5-Z2WR2||(~5-Z2WR2&&5-Z2WR1)))"
+            ]
+        }
     ],
     "p-5a-n-R": ["5-WKR1","~5-_R_WLR1", "~5A-TPR"],
     "p-5b-n-R": ["5-WKR1", "5-_N_WLR1", "~5B-TPR"],

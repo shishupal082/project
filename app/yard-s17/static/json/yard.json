@@ -217,7 +217,7 @@
                 "<button class='evt btn tpr blue 10_11-TPR' value='10/11-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr blue 10_11-TPR' value='10/11-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr blue 10_11-TPR' value='10/11-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green 4A-TPR' value='4A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green p-4a-c' value='4A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr green p-4a-c' value='4A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [

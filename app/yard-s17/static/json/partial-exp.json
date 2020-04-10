@@ -1,4 +1,42 @@
 {
+    "P4-partial-01": {
+        "op": "&&",
+        "val": [
+            {
+                "op": "||",
+                "val": [
+                    {
+                        "op": "&&",
+                        "val": [
+                            "4-WNR",
+                            {
+                                "op": "||",
+                                "val": [
+                                    "(WWNR&&4A-TPR&&4B-TPR)",
+                                    "(EWNR&&(~4A-TPR||~4B-TPR))"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "op": "&&",
+                        "val": [
+                            "(4-WWR&&4-WLR&&4A-TPR&&4B-TPR)",
+                            {
+                                "op": "||",
+                                "val": [
+                                    "((4-AU_R_S||OV11-Z2U_R_R)&&~4-_N_WLR1)",
+                                    "((4-BU_R_S||OV10/2-Z2U_R_R)&&~4-_R_WLR1)",
+                                    "(OV10/1-Z2U_R_R&&~4-_N_WLR1)"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "~4-NWKR", "~4-RWKR", "~4-W_R_LR"
+        ]
+    },
     "P5-partial-01": {
         "op": "&&",
         "val": [
