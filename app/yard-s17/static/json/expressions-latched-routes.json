@@ -412,23 +412,23 @@
         ]
     },
     "4-ADUCR": [
-        "(4-AU_R_S||(4-BU_R_S&&4B-TPR))",
+        "4-AU_R_S",
         "4A-TPR", "~4-UYR1", "~4-UYR2",
         "4-NWKR", "~4-AU_N_S"
     ],
     "4-BDUCR": [
-        "(4-AU_R_S||(4-BU_R_S&&4B-TPR))",
+        "4-BU_R_S", "4B-TPR",
         "4A-TPR", "~4-UYR1", "~4-UYR2",
         "4-RWKR", "~4-BU_N_S"
     ],
     "5-ADUCR": [
-        "(5-AU_R_S||(5-BU_R_S&&5B-TPR))",
+        "5-AU_R_S",
         "5A-TPR", "~5-UYR1", "~5-UYR2",
         "5-NWKR", "~5-AU_N_S"
     ],
     "5-BDUCR": [
-        "(5-AU_R_S||(5-BU_R_S&&5B-TPR))",
-        "5A-TPR", "5-UYR1", "5-UYR2",
+        "5-BU_R_S", "5B-TPR",
+        "5A-TPR", "~5-UYR1", "~5-UYR2",
         "5-RWKR", "6-NWKR", "~5-BU_N_S"
     ],
     "6-ADUCR": [
