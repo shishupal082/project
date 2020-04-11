@@ -36,7 +36,7 @@
         "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
         "DN-UN", "UP-UN", "SDG-UN"
     ],
-    "s-1": ["MN-GNPR","SH-GNPR"],
+    "s-1": ["MN-GNPR","SH-GNPR", "S1-UECR", "S12-UECR"],
     "pt-btn": ["4-WN","5-WN","6-WN"],
     "pt-r": ["4-WNR","5-WNR","6-WNR"],
 

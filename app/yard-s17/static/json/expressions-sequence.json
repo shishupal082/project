@@ -713,5 +713,102 @@
         "(S9-RECR||S9-HECR)",
         "~LL-ZU_N_R",
         "S10-GR1", "~S10-GLSR"
+    ],
+    "S1-GR1": [
+        "S1/9-AU_R_S", "~10/11-ZU_R_R", "1-TPR", "9-TPR",
+        "10/11-TPR", "4A-TPR", "4-U_R_LR",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": [
+                        "4-ADUCR", "ML-ZU_N_R", "M-TPR",
+                        "5-NWKR", "5A-TPR", "2/3-TPR", "OV2-Z2U_R_R",
+                        "(S2-RECR||S2-HECR||S2-DECR)"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "4-BDUCR", "4B-TPR", "LL-ZU_N_R", "L-TPR",
+                        "5B-TPR", "6-NWKR",
+                        "((5-NWKR&&OV3/1-Z2U_R_R)||(5-RWKR&&5A-TPR&&2/3-TPR&&OV3/2-Z2U_R_R))",
+                        "(S3-RECR||S3-HECR)"
+                    ]
+                }
+            ]
+        },
+        "(S1-GR1||(~S1-GNPR&&S1-GLSR))",
+        "~S1-EGNR"
+    ],
+    "ML-G_R_LR": {
+        "op": "||",
+        "val": [
+            "(~ML-G_N_LR&&ML-G_R_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "ML-G_N_LR",
+                    "M-TPR",
+
+                    "ML-ZU_N_R",
+                    "4-ADUCR", "4-U_R_LR", "4A-TPR", "10/11-TPR",
+
+                    "10/11-ZU_N_R",
+                    "1-TPR", "9-TPR", "S1/9-AU_R_S",
+                    "(4-NWKR||4-RWKR)", "S1-GR1", "~S1-GLSR"
+                ]
+            }
+        ]
+    },
+    "LL-G_R_LR": {
+        "op": "||",
+        "val": [
+            "(~LL-G_N_LR&&LL-G_R_LR)",
+            {
+                "op": "&&",
+                "val": [
+                    "LL-G_N_LR",
+                    "L-TPR",
+
+                    "LL-ZU_N_R",
+                    "4-BDUCR", "4B-TPR", "4-U_R_LR", "4A-TPR", "10/11-TPR",
+
+                    "10/11-ZU_N_R",
+                    "1-TPR", "9-TPR", "S1/9-AU_R_S",
+                    "(4-NWKR||4-RWKR)", "S1-GR1", "~S1-GLSR"
+                ]
+            }
+        ]
+    },
+    "S1-GR2": [
+        "(4-NWKR||4-RWKR)", "S1-GR1", "~S1-GLSR",
+        "S1/9-AU_R_S", "~10/11-ZU_R_R", "1-TPR", "9-TPR",
+        "10/11-TPR", "4A-TPR", "4-U_R_LR",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": [
+                        "4-ADUCR", "ML-ZU_N_R", "M-TPR",
+                        "~ML-G_N_LR",
+                        "5-NWKR", "5A-TPR", "2/3-TPR", "OV2-Z2U_R_R", "ML-ZU_N_R",
+                        "(S2-RECR||S2-HECR||S2-DECR)"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "4-BDUCR", "4B-TPR", "LL-ZU_N_R", "L-TPR",
+                        "~LL-G_N_LR",
+                        "5B-TPR", "6-NWKR",
+                        "((5-NWKR&&OV3/1-Z2U_R_R)||(5-RWKR&&5A-TPR&&2/3-TPR&&OV3/2-Z2U_R_R))",
+                        "(S3-RECR||S3-HECR)"
+                    ]
+                }
+            ]
+        }
     ]
 }
