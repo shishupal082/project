@@ -24,7 +24,7 @@
                 "val": ["4-W_R_LR",
                     "~OV11-Z2U_R_R", "~OV10/1-Z2U_R_R", "~OV10/2-Z2U_R_R",
                     "4-AU_N_S", "4-BU_N_S",
-                    "(~4-_R_WLR1&&~4-_N_WLR1)",
+                    "(~4-_R_WLR1||~4-_N_WLR1)",
                     "~4-U_R_LR",
                     "~4-Z2WR1", "~4-Z2WR2"
                 ]
@@ -40,7 +40,7 @@
                 "val": ["5-W_R_LR",
                     "~OV2-Z2U_R_R", "~OV3/1-Z2U_R_R", "~OV3/2-Z2U_R_R",
                     "~5-AU_R_S", "5-BU_N_S", "6-AU_N_S",
-                    "(~5-_R_WLR1&&~5-_N_WLR1)",
+                    "(~5-_R_WLR1||~5-_N_WLR1)",
                     "~5-U_R_LR",
                     "~5-Z2WR1", "~5-Z2WR2"
                 ]
@@ -56,7 +56,7 @@
                 "val": ["6-W_R_LR",
                     "~OV3/1-Z2U_R_R", "~OV3/2-Z2U_R_R",
                     "5-BU_N_S", "6-AU_N_S",
-                    "(~6-_R_WLR1&&~6-_N_WLR1)",
+                    "(~6-_R_WLR1||~6-_N_WLR1)",
                     "~6-U_R_LR",
                     "~6-Z2WR1", "~6-Z2WR2"
                 ]
