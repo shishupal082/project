@@ -30,6 +30,9 @@
         "OV10/2-Z2U_N_R", "OV10/2-Z2U_R_R",
         "OV11-Z2U_N_R", "OV11-Z2U_R_R"
     ],
+    "Z4": [
+        "5-BZ4_N_R", "5-BZ4_R_R"
+    ],
     "G(R/N)LR-signal-locking-relay-named-after-exit-or-birthing-track": [
         "LL-G_N_LR", "LL-G_R_LR",
         "ML-G_N_LR", "ML-G_R_LR",

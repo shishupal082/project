@@ -59,6 +59,36 @@
             }
         ]
     },
+    "5-BZ4_N_R": {
+        "op": "||",
+        "val": [
+            "(~5-BZ4_R_R&&5-BZ4_N_R)",
+            {
+                "op": "&&",
+                "val": [
+                    "5-BZ4_R_R",
+                    "5-U_N_LR", "~5-ADUCR", "~5-BDUCR", "~5-Z1UR",
+                    "5-AU_N_S", "5-BU_N_S", "~5-UYR1", "~5-UYR2"
+                ]
+            }
+        ]
+    },
+    "5-BZ4_R_R": {
+        "op": "||",
+        "val": [
+            "(~5-BZ4_N_R&&5-BZ4_R_R)",
+            {
+                "op": "&&",
+                "val": [
+                    "5-BZ4_N_R",
+                    "5-U_N_LR", "~5-ADUCR", "~5-BDUCR", "5-Z1UR",
+                    "5B-Z1UR1", "OV3/1-Z2U_N_R", "OV3/2-Z2U_N_R",
+                    "6-AU_N_S", "5-BU_N_S",
+                    "MN-GNPR"
+                ]
+            }
+        ]
+    },
     "6-AU_R_S": {
         "op": "||",
         "val": [

@@ -156,7 +156,7 @@
                     "ZDUCR",
                     {
                         "op": "||",
-                        "val": ["6-Z1UR", "OV3/1-Z2U_R_R", "OV3/2-Z2U_R_R"]
+                        "val": ["6-Z1UR", "5-BZ4_R_R", "OV3/1-Z2U_R_R", "OV3/2-Z2U_R_R"]
                     },
                     "6-Z1WR",
                     "SDG-TPR-A", "SDG-TPR-B",
