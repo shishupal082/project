@@ -9,7 +9,7 @@
         "LL-sh-left",
         "p-4b-n", "p-4b-c", "p-4b-r", "p-4a-r", "p-4a-n", "p-4a-c",
         "p-5b-n", "p-5b-c", "p-5b-r", "p-5a-r", "p-5a-n", "p-5a-c",
-        "p-6a-c", "p-6a-r", "p-6b-c", "p-6b-r"
+        "p-6b-c", "p-6b-n", "p-6a-c", "p-6a-n"
     ],
     "tpr-class-v2-4": [
         "p-4a-c-R", "p-4a-c-Y",
@@ -26,6 +26,13 @@
         "p-5b-r-R", "p-5b-r-Y",
         "p-5b-c-R", "p-5b-c-Y",
         "p-5b-n-R", "p-5b-n-Y"
+    ],
+    "tpr-class-v2-6": [
+        "p-6b-c-R", "p-6b-c-Y",
+        "p-6b-n-R", "p-6b-n-Y",
+        "p-6a-n-R", "p-6a-n-Y",
+        "p-6a-c-R", "p-6a-c-Y",
+        "SDG-TPR-B-R", "SDG-TPR-B-Y"
     ],
     "tpr-class-v2-straight": [
         "M-TPR-R", "M-TPR-Y",
