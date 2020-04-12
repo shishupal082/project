@@ -99,7 +99,7 @@
                             {
                                 "op": "||",
                                 "val": [
-                                    "((OV3/2-Z2U_R_R||OV3/1-Z2U_R_R||5-BU_R_S)&&6-W_N_LR&&~6-_N_WLR1)",
+                                    "((OV3/2-Z2U_R_R||OV3/1-Z2U_R_R||5-BZ4_R_R)&&6-W_N_LR&&~6-_N_WLR1)",
                                     "(6-AU_R_S&&~6-_R_WLR1)"
                                 ]
                             }
