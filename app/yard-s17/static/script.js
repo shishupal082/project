@@ -1,5 +1,5 @@
 $(document).ready(function() {
-
+$M.changeSetValueCountLimit(800);
 var LoggerInfo = $S.getScriptFileNameRef();
 
 // $M.disableChangeLogValueStatus();
