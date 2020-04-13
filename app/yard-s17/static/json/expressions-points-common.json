@@ -74,7 +74,7 @@
     ],
     "6-WWR": [
         "~EUUYNR", "Z3WR",
-        "((~4-WLR&&~4-WLR&&5-WWR)||6-WWR)",
+        "((~4-WLR&&~5-WLR&&5-WWR)||6-WWR)",
         "~WWYR"
     ]
 }
