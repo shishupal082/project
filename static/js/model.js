@@ -20,6 +20,7 @@ var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
 var variableDependencies = {};
+var AsyncData = {};
 var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
@@ -122,6 +123,9 @@ function isValidValue(value) {
     return true;
 }
 function isValidKey(key) {
+    if (!$S.isString(key)) {
+        return false;
+    }
     return possibleValues.indexOf(key) >= 0 ? true : false;
 }
 /*
@@ -299,6 +303,39 @@ Model.extend({
 /*
 End of direct access of ID
 */
+Model.extend({
+    setAsyncData: function(asyncData) {
+        var key, value, logText;
+        if (Model.isObject(asyncData)) {
+            for (key in asyncData) {
+                value = asyncData[key];
+                if (Model.isArray(value)) {
+                    for (var i = 0; i<value.length; i++) {
+                        if (Model.isString(value[i])) {
+                            if (AsyncData[key]) {
+                                AsyncData[key].push(value[i]);
+                            } else {
+                                AsyncData[key] = [value[i]];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return 1;
+    },
+    getAsyncData: function() {
+        return $S.clone(AsyncData);
+    },
+    checkAsyncDataSetting: function(key, oldValue, newValue) {
+        if (Model.isArray(AsyncData[key])) {
+            for (var i = 0; i < AsyncData[key].length; i++) {
+                Model.setValueWithExpressionV2(AsyncData[key][i]);
+            }
+        }
+        return 1;
+    }
+});
 /*Direct access of methods: $M.methodName*/
 Model.extend({
     setVariableDependencies: function() {
@@ -558,6 +595,10 @@ Model.extend({
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
+            Model.checkAsyncDataSetting(key, oldValue, newValue);
+            if (Model.isFunction(Model["changeValueCallback"])) {
+                Model["changeValueCallback"](key, oldValue, newValue);
+            }
             if (Model.isFunction(Model["setValueChangedCallback"])) {
                 return set.isValueChanged();
             } else {
@@ -577,6 +618,7 @@ Model.extend({
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
+            Model.checkAsyncDataSetting(key, oldValue, newValue);
             if (Model.isFunction(Model["changeValueCallback"])) {
                 Model["changeValueCallback"](key, oldValue, newValue);
             }

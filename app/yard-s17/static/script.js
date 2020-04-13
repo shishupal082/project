@@ -8,7 +8,8 @@ var timerCount = 0;
 
 var apisPath = {};
 var commonPath = {
-    "partial-expressions-value": "/app/yard-s17/static/json/partial-exp.json",
+    "async-data": ["/app/yard-s17/static/json/async-data.json"],
+    "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
     "possible-value": ["/app/yard-s17/static/json/possible-values.json",
                         "/app/yard-s17/static/json/possible-values-sequence.json",
                         "/app/yard-s17/static/json/possible-values-group.json"],
@@ -97,26 +98,22 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 
-function asyncDataLoaded() {
-    $YApiModel.documentLoaded(function() {
-        $S17M.reCheckAllValues();
-        $V.loadYardDisplayData(function() {
-            $(".container").attr("style", "width: 1425px;")
-            var tableHtml = $V.getYardHtml();
-            $("#tableHtml").addClass("table-html").html(tableHtml);
-            $(".evt").on("click", function(e) {
-                $M.resetChangeValueData();
-                // $M.enableChangeLogValueStatus();
-                evtClick($(e.currentTarget));
-            });
-            checkUIStyle();
-            $("#help").removeClass("hide");
-            checkDominoDisplayStatus();
-            // $M.disableChangeLogValueStatus();
+$YApiModel.documentLoaded(function() {
+    $S17M.reCheckAllValues();
+    $V.loadYardDisplayData(function() {
+        $(".container").attr("style", "width: 1425px;")
+        var tableHtml = $V.getYardHtml();
+        $("#tableHtml").addClass("table-html").html(tableHtml);
+        $(".evt").on("click", function(e) {
+            $M.resetChangeValueData();
+            // $M.enableChangeLogValueStatus();
+            evtClick($(e.currentTarget));
         });
+        checkUIStyle();
+        $("#help").removeClass("hide");
+        checkDominoDisplayStatus();
+        // $M.disableChangeLogValueStatus();
     });
-}
-
-$S17M.loadAsyncData(asyncDataLoaded)
+});
 
 });

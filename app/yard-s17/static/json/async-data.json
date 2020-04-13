@@ -18,6 +18,6 @@
     "4-WR": ["4-Z1WR1"],
     "5-WR": ["5-Z1WR1"],
     "6-WR": ["6-Z1WR1"],
-    "4-WKR1": ["4-Z1WR", "4-W_R_R", "4-W_N_R", "4-Z1RWR", "4-Z1NWR"],
-    "5-WKR1": ["5-Z1WR", "5-W_R_R", "5-W_N_R", "5-Z1RWR", "5-Z1NWR"]
+    "4-WKR1": ["4-Z1WR", "4-W_R_R", "4-Z1RWR", "4-Z1NWR"],
+    "5-WKR1": ["5-Z1WR", "5-W_R_R", "5-Z1RWR", "5-Z1NWR"]
 }

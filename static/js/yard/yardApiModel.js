@@ -35,11 +35,13 @@ var PartialExpressionsLoadStatus = false;
 var PossibleValuesLoadStatus = false;
 var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
+var AsyncDataLoadStatus = false;
 
 var PartialExpressionsPath = [];
 var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
+var AsyncDataPath = [];
 
 var PossibleValuesByTypes = {};
 
@@ -51,12 +53,27 @@ function isApisLoadComplete() {
     loadingCheck.push(PossibleValuesLoadStatus);
     loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
+    loadingCheck.push(AsyncDataLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
         if (loadingCheck[i] == false) {
             return false;
         }
     }
     return true;
+}
+
+function loadAsyncData(callBack) {
+    var url = [];
+    for (var i = 0; i < AsyncDataPath.length; i++) {
+        url.push(AsyncDataPath[i]+"?"+RequestId);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isObject(response)) {
+            $M.setAsyncData(response);
+        } else {
+            $M.log("Invalid response (asyncData):" + response, LoggerInfo);
+        }
+    }, callBack);
 }
 
 function loadPartialExpressions(callBack) {
@@ -172,23 +189,26 @@ function loadExpressions(callBack) {
 
 YardApiModel.extend({
     documentLoaded: function(callBack) {
-        loadPartialExpressions(function() {
-            PartialExpressionsLoadStatus = true;
-            loadPossibleValues(function() {
-                PossibleValuesLoadStatus = true;
-                $M().setPossibleValues(PossibleValues);
-                var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
-                for (var j = 0; j < debugItems.length; j++) {
-                    $M(debugItems[j]).addDebug();
-                }
-                loadInitialValues(function() {
-                    InitialValuesLoadStatus = true;
-                    $M().initializeCurrentValues(InitialValues);
-                    loadExpressions(function() {
-                        ExpressionsLoadStatus = true;
-                        if (isApisLoadComplete()) {
-                            callBack();
-                        }
+        loadAsyncData(function() {
+            AsyncDataLoadStatus = true;
+            loadPartialExpressions(function() {
+                PartialExpressionsLoadStatus = true;
+                loadPossibleValues(function() {
+                    PossibleValuesLoadStatus = true;
+                    $M().setPossibleValues(PossibleValues);
+                    var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
+                    for (var j = 0; j < debugItems.length; j++) {
+                        $M(debugItems[j]).addDebug();
+                    }
+                    loadInitialValues(function() {
+                        InitialValuesLoadStatus = true;
+                        $M().initializeCurrentValues(InitialValues);
+                        loadExpressions(function() {
+                            ExpressionsLoadStatus = true;
+                            if (isApisLoadComplete()) {
+                                callBack();
+                            }
+                        });
                     });
                 });
             });
@@ -217,6 +237,9 @@ YardApiModel.extend({
                 break;
                 case "expressions":
                     ExpressionsPath = ExpressionsPath.concat(paths[key]);
+                break;
+                case "async-data":
+                    AsyncDataPath = AsyncDataPath.concat(paths[key]);
                 break;
                 case "partial-expressions-value":
                     PartialExpressionsPath = PartialExpressionsPath.concat(paths[key]);
