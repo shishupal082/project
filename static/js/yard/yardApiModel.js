@@ -67,6 +67,9 @@ function loadAsyncData(callBack) {
     for (var i = 0; i < AsyncDataPath.length; i++) {
         url.push(AsyncDataPath[i]+"?"+RequestId);
     }
+    if (url.length == 0) {
+        return $S.callMethod(callBack);
+    }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             $M.setAsyncData(response);
@@ -80,6 +83,9 @@ function loadPartialExpressions(callBack) {
     var url = [];
     for (var i = 0; i < PartialExpressionsPath.length; i++) {
         url.push(PartialExpressionsPath[i]+"?"+RequestId);
+    }
+    if (url.length == 0) {
+        return $S.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -97,6 +103,9 @@ function loadPossibleValues(callBack) {
     var url = [];
     for (var i = 0; i < PossibleValuePath.length; i++) {
         url.push(PossibleValuePath[i]+"?"+RequestId);
+    }
+    if (url.length == 0) {
+        return $S.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -127,6 +136,9 @@ function loadInitialValues(callBack) {
     for (var i = 0; i < InitialValuePath.length; i++) {
         url.push(InitialValuePath[i]+"?"+RequestId);
     }
+    if (url.length == 0) {
+        return $S.callMethod(callBack);
+    }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
             Object.assign(InitialValues, response);
@@ -152,6 +164,9 @@ function loadExpressions(callBack) {
     var url = [];
     for (var i = 0; i < ExpressionsPath.length; i++) {
         url.push(ExpressionsPath[i]+"?"+RequestId);
+    }
+    if (url.length == 0) {
+        return $S.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
