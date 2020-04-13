@@ -555,7 +555,15 @@ Model.extend({
         return response;
     },
     setValueWithoutRecheck: function(key, newValue) {
+        var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
+        if (set.isValueChanged()) {
+            if (Model.isFunction(Model["setValueChangedCallback"])) {
+                return set.isValueChanged();
+            } else {
+                Model.addInMStack(Model.getVariableDependenciesByKey(key));
+            }
+        }
         return set.isValueChanged();
     },
     setValue: function(key, newValue) {
