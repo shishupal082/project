@@ -126,6 +126,8 @@
     "p-6a-n-Y": ["SDG-TPR-A", "6-_N_WLR1"],
     "p-6b-n-Y": ["SDG-TPR-B", "6-_N_WLR1"],
 
+    "SDG-TPR-R": ["~SDG-TPR"],
+
     "4-WLK": ["~4-Z1WR", "4-W_R_LR"],
     "5-WLK": ["~5-Z1WR", "5-W_R_LR"],
     "6-WLK": ["~6-Z1WR", "6-W_R_LR"],
