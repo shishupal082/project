@@ -4,6 +4,14 @@ Install python
 which python
 python --version
 
+Step-1-1]
+
+If python or pip is not appeared as a command
+Then add /Users/<user>/Library/Python/2.7/bin in .bash_profile
+
+PIP=/Users/<user>/Library/Python/2.7/bin
+PATH=$PATH:$PIP
+
 Step-2]
 Install pip
 

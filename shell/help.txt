@@ -6,3 +6,8 @@ SHELL=shell script folder
 PATH=$PATH:$SHELL
 Create shells script file in shell folder
 chmod +x file // Change file permission
+
+
+----------------------------------------------
+Check availbale paths
+echo $PATH
