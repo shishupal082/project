@@ -21,8 +21,8 @@
             ],
             [
                 "<span class='label label-primary'>|</span>",
-                "<button class='evt btn tpr yellow LL-sh-left' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr yellow LL-sh-left' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green LL-sh-left' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green LL-sh-left' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr yellow p-4b-n' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr yellow p-4b-n' value='4B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr yellow p-4b-c' value='4B-TPR'><span class='badge'>&nbsp;</span></button>"
@@ -94,9 +94,9 @@
             [
                 "<button class='evt btn tpr green p-6b-c btn-warning' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn tpr green p-6b-c btn-warning' value='SDG-TPR-B'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "","",
@@ -111,9 +111,9 @@
                 "<span class='label label-primary'>--</span>"
             ],
             [
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn tpr green SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow SDG-TPR btn-warning' value='SDG-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='label label-primary'>|</span>"
             ],
             [
