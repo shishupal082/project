@@ -98,9 +98,11 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 
+var yardUrl = "/app/yard-s17/static/json/yard.json";
+
 $YApiModel.documentLoaded(function() {
     $S17M.reCheckAllValues();
-    $V.loadYardDisplayData(function() {
+    $V.loadYardDisplayData(yardUrl, function() {
         $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
