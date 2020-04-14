@@ -596,13 +596,13 @@ Model.extend({
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
             Model.checkAsyncDataSetting(key, oldValue, newValue);
-            if (Model.isFunction(Model["changeValueCallback"])) {
-                Model["changeValueCallback"](key, oldValue, newValue);
-            }
             if (Model.isFunction(Model["setValueChangedCallback"])) {
-                return set.isValueChanged();
+                // Do nothing
             } else {
                 Model.addInMStack(Model.getVariableDependenciesByKey(key));
+            }
+            if (Model.isFunction(Model["changeValueCallback"])) {
+                Model["changeValueCallback"](key, oldValue, newValue);
             }
         }
         return set.isValueChanged();
@@ -619,13 +619,16 @@ Model.extend({
         var set = new setValue(key, newValue);
         if (set.isValueChanged()) {
             Model.checkAsyncDataSetting(key, oldValue, newValue);
-            if (Model.isFunction(Model["changeValueCallback"])) {
-                Model["changeValueCallback"](key, oldValue, newValue);
-            }
             if (Model.isFunction(Model["setValueChangedCallback"])) {
+                if (Model.isFunction(Model["changeValueCallback"])) {
+                    Model["changeValueCallback"](key, oldValue, newValue);
+                }
                 Model["setValueChangedCallback"](key, oldValue, newValue);
             } else {
                 Model.addInMStack(Model.getVariableDependenciesByKey(key));
+                if (Model.isFunction(Model["changeValueCallback"])) {
+                    Model["changeValueCallback"](key, oldValue, newValue);
+                }
                 Model.reCheckAllValuesV2();
             }
         }
