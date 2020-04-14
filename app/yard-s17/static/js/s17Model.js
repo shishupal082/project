@@ -4,6 +4,11 @@ var LoggerInfo = $M.getScriptFileNameRef();
 var reChekingVersion = "v2";
 var RequestId = $M.getRequestId();
 
+$M.extend({
+    changeValueCallback: function(key, oldValue, newValue) {
+        return 1;
+    }
+});
 
 if (reChekingVersion != "v2") {
     $M.extend({

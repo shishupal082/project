@@ -24,6 +24,7 @@ var commonPath = {
                     "/app/yard-s17/static/json/expressions-point-4.json",
                     "/app/yard-s17/static/json/expressions-point-5.json",
                     "/app/yard-s17/static/json/expressions-point-6.json",
+                    "/app/yard-s17/static/json/expressions-timer.json",
                     "/app/yard-s17/static/json/expressions-glow.json"]
 };
 

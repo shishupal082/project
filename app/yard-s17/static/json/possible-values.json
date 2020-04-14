@@ -109,5 +109,7 @@
     "emergency-btn": ["EUYN",
                       "EUUYN"],
     "emergency-r":   ["EUYNR", "EUYR",
-                      "EUUYNR"]
+                      "EUUYNR"],
+    "timer": ["OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3", "OV2/3/10/11-AJTR"],
+    "timerDelay": ["delay-200ms"]
 }
