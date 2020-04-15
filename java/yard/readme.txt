@@ -7,7 +7,7 @@ To use this application
 
 2) Type following url in browser (Preferably chrome)
 
-http://127.0.0.1:8000
+http://127.0.0.1:8080
 
 
 Pre requisite
