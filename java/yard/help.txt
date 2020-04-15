@@ -7,3 +7,7 @@ run the command => sh run.sh
 or,
 
 java -jar meta-data/todo-*-SNAPSHOT.jar server meta-data/env_config.yml
+
+To convert text to pdf use free online tools
+
+https://www.sodapdf.com/txt-to-pdf/

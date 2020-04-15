@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo *****Start building application*****
 
 mvn clean install
