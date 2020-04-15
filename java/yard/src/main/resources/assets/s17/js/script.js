@@ -1,5 +1,7 @@
 $(document).ready(function() {
-$M.changeSetValueCountLimit(800000);
+
+$M.changeSetValueCountLimit(UISetValueCountLimit);
+
 var LoggerInfo = $S.getScriptFileNameRef();
 
 // $M.disableChangeLogValueStatus();
@@ -7,29 +9,9 @@ $M.enableChangeValueDataLogging();
 var timerCount = 0;
 
 var apisPath = {};
-var commonPath = {
-    "async-data": ["/assets/s17/json/async-data.json"],
-    "partial-expressions-value": ["/assets/s17/json/partial-exp.json"],
-    "possible-value": ["/assets/s17/json/possible-values.json",
-                        "/assets/s17/json/possible-values-sequence.json",
-                        "/assets/s17/json/possible-values-group.json"],
-    "initial-value": ["/assets/s17/json/initial-value.json"],
-    "expressions": ["/assets/s17/json/expressions-evt.json",
-                    "/assets/s17/json/expressions-common.json",
-                    "/assets/s17/json/expressions-sequence-1.json",
-                    "/assets/s17/json/expressions-sequence-2.json",
-                    "/assets/s17/json/expressions-ov.json",
-                    "/assets/s17/json/expressions-sub-routes.json",
-                    "/assets/s17/json/expressions-points-common.json",
-                    "/assets/s17/json/expressions-point-4.json",
-                    "/assets/s17/json/expressions-point-5.json",
-                    "/assets/s17/json/expressions-point-6.json",
-                    "/assets/s17/json/expressions-timer.json",
-                    "/assets/s17/json/expressions-glow.json"]
-};
 
-for (var key in commonPath) {
-    apisPath[key] = commonPath[key];
+for (var key in UIcommonPath) {
+    apisPath[key] = UIcommonPath[key];
 }
 
 $YApiModel.setApisPath(apisPath);
@@ -98,11 +80,9 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 
-var yardUrl = "/assets/s17/json/yard.json";
-
 $YApiModel.documentLoaded(function() {
     $S17M.reCheckAllValues();
-    $V.loadYardDisplayData(yardUrl, function() {
+    $V.loadYardDisplayData(UIyardUrl, function() {
         $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);

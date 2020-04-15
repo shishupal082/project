@@ -1,5 +1,7 @@
 $(document).ready(function() {
-$M.changeSetValueCountLimit(800);
+
+$M.changeSetValueCountLimit(UISetValueCountLimit);
+
 var LoggerInfo = $S.getScriptFileNameRef();
 
 // $M.disableChangeLogValueStatus();
@@ -7,29 +9,9 @@ $M.enableChangeValueDataLogging();
 var timerCount = 0;
 
 var apisPath = {};
-var commonPath = {
-    "async-data": ["/app/yard-s17/static/json/async-data.json"],
-    "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
-    "possible-value": ["/app/yard-s17/static/json/possible-values.json",
-                        "/app/yard-s17/static/json/possible-values-sequence.json",
-                        "/app/yard-s17/static/json/possible-values-group.json"],
-    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
-    "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
-                    "/app/yard-s17/static/json/expressions-common.json",
-                    "/app/yard-s17/static/json/expressions-sequence-1.json",
-                    "/app/yard-s17/static/json/expressions-sequence-2.json",
-                    "/app/yard-s17/static/json/expressions-ov.json",
-                    "/app/yard-s17/static/json/expressions-sub-routes.json",
-                    "/app/yard-s17/static/json/expressions-points-common.json",
-                    "/app/yard-s17/static/json/expressions-point-4.json",
-                    "/app/yard-s17/static/json/expressions-point-5.json",
-                    "/app/yard-s17/static/json/expressions-point-6.json",
-                    "/app/yard-s17/static/json/expressions-timer.json",
-                    "/app/yard-s17/static/json/expressions-glow.json"]
-};
 
-for (var key in commonPath) {
-    apisPath[key] = commonPath[key];
+for (var key in UIcommonPath) {
+    apisPath[key] = UIcommonPath[key];
 }
 
 $YApiModel.setApisPath(apisPath);
@@ -98,11 +80,9 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 
-var yardUrl = "/app/yard-s17/static/json/yard.json";
-
 $YApiModel.documentLoaded(function() {
     $S17M.reCheckAllValues();
-    $V.loadYardDisplayData(yardUrl, function() {
+    $V.loadYardDisplayData(UIyardUrl, function() {
         $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);

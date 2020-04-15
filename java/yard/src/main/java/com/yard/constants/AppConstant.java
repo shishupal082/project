@@ -13,6 +13,6 @@ public class AppConstant {
     public static final String FAILURE = "FAILURE";
     public static final String REASON = "REASON";
     public static final String RESPONSE = "RESPONSE";
-    public static final String AppVersion = "1.0.0";
+    public static final String AppVersion = "1.0.1";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
 }

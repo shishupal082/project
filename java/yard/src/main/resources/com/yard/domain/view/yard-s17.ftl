@@ -61,6 +61,32 @@
         </div>
     </div>
 
+<script type="text/javascript">
+var UISetValueCountLimit = 800000;
+var UIcommonPath = {
+       "async-data": ["/assets/s17/json/async-data.json"],
+       "partial-expressions-value": ["/assets/s17/json/partial-exp.json"],
+       "possible-value": ["/assets/s17/json/possible-values.json",
+                           "/assets/s17/json/possible-values-sequence.json",
+                           "/assets/s17/json/possible-values-group.json"],
+       "initial-value": ["/assets/s17/json/initial-value.json"],
+       "expressions": ["/assets/s17/json/expressions-evt.json",
+                       "/assets/s17/json/expressions-common.json",
+                       "/assets/s17/json/expressions-sequence-1.json",
+                       "/assets/s17/json/expressions-sequence-2.json",
+                       "/assets/s17/json/expressions-ov.json",
+                       "/assets/s17/json/expressions-sub-routes.json",
+                       "/assets/s17/json/expressions-points-common.json",
+                       "/assets/s17/json/expressions-point-4.json",
+                       "/assets/s17/json/expressions-point-5.json",
+                       "/assets/s17/json/expressions-point-6.json",
+                       "/assets/s17/json/expressions-timer.json",
+                       "/assets/s17/json/expressions-glow.json"]
+   };
+var UIyardUrl = "/assets/s17/json/yard.json";
+</script>
+
+
 <script type="text/javascript" src="/assets/static/js/stack.js?v=${appVersion}"></script>
 <script type="text/javascript" src="/assets/static/js/model.js?v=${appVersion}"></script>
 <script type="text/javascript" src="/assets/static/libs/jquery-2.1.3.js"></script>
