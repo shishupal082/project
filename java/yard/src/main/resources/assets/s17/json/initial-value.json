@@ -1,0 +1,95 @@
+{
+    "SMR": 1,
+    "1A-TPR": 1,
+    "1-TPR": 1,
+    "9-TPR": 1,
+    "10/11-TPR": 1,
+    "4A-TPR": 1,
+    "M-TPR": 1,
+    "5A-TPR": 1,
+    "2/3-TPR": 1,
+    "13-TPR": 1,
+    "12-TPR": 1,
+    "12A-TPR": 1,
+    "4B-TPR": 1,
+    "L-TPR": 1,
+    "5B-TPR": 1,
+    "SDG-TPR-A": 1,
+    "SDG-TPR-B": 1,
+    "SDG-TPR": 1,
+
+    "GNCR": 1,
+    "WNCR": 1,
+    "UNCR": 1,
+    "NNCR": 1,
+    "UP-LCPR": 1,
+    "DN-LCPR": 1,
+
+    "LL-ZU_N_R": 1,
+    "ML-ZU_N_R": 1,
+    "10/11-ZU_N_R": 1,
+    "2/3-ZU_N_R": 1,
+    "SH7/8-G_N_R": 1,
+
+    "LL-G_N_LR": 1,
+    "ML-G_N_LR": 1,
+    "2/3-G_N_LR": 1,
+    "10/11-G_N_LR": 1,
+
+    "4-W_N_R": 1,
+    "4-W_N_LR": 1,
+
+    "5-W_N_R": 1,
+    "5-W_N_LR": 1,
+
+    "6-W_N_R": 1,
+    "6-W_N_LR": 1,
+
+    "4-_N_WLR1": 1,
+    "4A-ND": 1,
+    "4B-ND": 1,
+    "4A-RC": 1,
+    "4B-RC": 1,
+
+    "5-_N_WLR1": 1,
+    "5A-ND": 1,
+    "5B-ND": 1,
+    "5A-RC": 1,
+    "5B-RC": 1,
+
+    "6-_R_WLR1": 1,
+    "6A-RD": 1,
+    "6B-RD": 1,
+    "6A-NC": 1,
+    "6B-NC": 1,
+
+
+    "4-U_N_LR": 1,
+    "5-U_N_LR": 1,
+    "6-U_N_LR": 1,
+
+    "4-AU_N_S": 1,
+    "4-BU_N_S": 1,
+    "5-AU_N_S": 1,
+    "5-BU_N_S": 1,
+    "6-AU_N_S": 1,
+    "6-BU_N_S": 1,
+
+    "S1/9-AU_N_S": 1,
+    "S12/13-AU_N_S": 1,
+
+    "OV2-Z2U_N_R": 1,
+    "OV3/1-Z2U_N_R": 1,
+    "OV3/2-Z2U_N_R": 1,
+    "OV10/1-Z2U_N_R": 1,
+    "OV10/2-Z2U_N_R": 1,
+    "OV11-Z2U_N_R": 1,
+
+    "5-BZ4_N_R": 1,
+
+    "CH/WW/EW/NCR": 1,
+    "OTHER_GN_DN": 1,
+    "OTHER_UN_DN": 1,
+    "ZR": 1,
+    "COIL": 1
+}

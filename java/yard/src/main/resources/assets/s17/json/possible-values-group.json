@@ -1,0 +1,171 @@
+{
+    "S1-group-13": [
+        "S1-RECR", "__S1-GR1-C", "S1-HECR",
+        "S1-DECR", "__S1-GLSR-C", "S1-GNR",
+        "S1-EGNR","S1-GLSR","S1-GR1",
+        "S1-GPR1","S1-GR2","S1-RECPR",
+        "S1-DECPR","S1-GR3","S1-HECPR"
+    ],
+    "S2-group-13": [
+        "S2-RECR", "__S2-GR1-C", "S2-HECR",
+        "S2-DECR", "__S2-GLSR-C", "S2-GNR",
+        "S2-EGNR","S2-GLSR","S2-GR1",
+        "S2-GPR1","S2-GR2","S2-RECPR",
+        "S2-DECPR","S2-GR3","S2-HECPR"
+    ],
+    "S11-group-13": [
+        "S11-RECR", "__S11-GR1-C", "S11-HECR",
+        "S11-DECR", "__S11-GLSR-C", "S11-GNR",
+        "S11-EGNR","S11-GLSR","S11-GR1",
+        "S11-GPR1","S11-GR2","S11-RECPR",
+        "S11-DECPR","S11-GR3","S11-HECPR"
+    ],
+    "S12-group-13": [
+        "S12-RECR", "__S12-GR1-C", "S12-HECR",
+        "S12-DECR", "__S12-GLSR-C", "S12-GNR",
+        "S12-EGNR","S12-GLSR","S12-GR1",
+        "S12-GPR1","S12-GR2","S12-RECPR",
+        "S12-DECPR","S12-GR3","S12-HECPR"
+    ],
+    "S3-group-10": [
+        "S3-RECR", "__S3-GR1-C", "S3-HECR",
+                  "__S3-GLSR-C", "S3-GNR",
+        "S3-EGNR", "S3-GLSR", "S3-GR1",
+        "S3-GPR1", "S3-GR2", "S3-RECPR",
+                             "S3-HECPR"
+    ],
+    "S10-group-10": [
+        "S10-RECR", "__S10-GR1-C", "S10-HECR",
+                  "__S10-GLSR-C", "S10-GNR",
+        "S10-EGNR", "S10-GLSR", "S10-GR1",
+        "S10-GPR1", "S10-GR2", "S10-RECPR",
+                             "S10-HECPR"
+    ],
+    "S9-group-10": [
+        "S9-RECR", "__S9-GR1-C", "S9-HECR",
+                  "__S9-GLSR-C", "S9-GNR",
+        "S9-EGNR", "S9-GLSR", "S9-GR1",
+        "S9-GPR1", "S9-GR2", "S9-RECPR",
+                             "S9-HECPR"
+    ],
+    "S13-group-10": [
+        "S13-RECR", "__S13-GR1-C", "S13-HECR",
+                  "__S13-GLSR-C", "S13-GNR",
+        "S13-EGNR", "S13-GLSR", "S13-GR1",
+        "S13-GPR1", "S13-GR2", "S13-RECPR",
+                             "S13-HECPR"
+    ],
+    "S1-CO-ON": [
+        "S1-CO-ECR",
+        "S1-CO-COULR1", "S1-CO-COULR2"
+    ],
+    "S12-CO-ON": [
+        "S12-CO-ECR",
+        "S12-CO-COULR1", "S12-CO-COULR2"
+    ],
+    "shunt-group": [
+        "SH7-RECR", "SH7-HECR", "SH7-GLSR",
+        "SH7-GNR", "SH7/8-EGNR", "SH7-GR1",
+        "SH7-GR2", "__SH7-GR1-C", "SH8-GR2",
+        "SH8-GNR", "__SH8-GR1-C", "SH8-GR1",
+        "SH8-RECR", "SH8-HECR", "SH8-GLSR"
+    ],
+    "point-minor-12":[
+        "-Z1WR1","-Z1NWR","-Z1RWR",
+        "-W_R_R","-R_WLR","-WKR2",
+        "-W_N_R","-N_WLR","-WKR1",
+        "-WR",            "-WKR3",
+                          "-WJR"
+    ],
+    "point-4-major-24":[
+        "4-Z1WR1","4-Z1NWR",  "4-Z1RWR",  "4-Z1WR",   "4-WLR", "4-WKR1",
+        "4-W_R_R","4-_R_WLR1","4-_R_WLR2","4-_R_WLR3","4-W_R_LR","4-WKR2",
+        "4-W_N_R","4-_N_WLR1","4-_N_WLR2","4-_N_WLR3","4-W_N_LR",
+        "4-WR",               "4-WJR",    "4-Z2WR1",  "4-Z2WR2",
+                              "4-TP1R",   "4-TP2R",   "4-WKR3"
+    ],
+    "point-5-major-24":[
+        "5-Z1WR1","5-Z1NWR",  "5-Z1RWR",  "5-Z1WR",   "5-WLR", "5-WKR1",
+        "5-W_R_R","5-_R_WLR1","5-_R_WLR2","5-_R_WLR3","5-W_R_LR","5-WKR2",
+        "5-W_N_R","5-_N_WLR1","5-_N_WLR2","5-_N_WLR3","5-W_N_LR",
+        "5-WR",               "5-WJR",    "5-Z2WR1",  "5-Z2WR2",
+                              "5-TP1R",   "5-TP2R",   "5-WKR3"
+    ],
+    "point-6-major-24":[
+        "6-Z1WR1","6-Z1NWR",  "6-Z1RWR",  "6-Z1WR",   "6-WLR", "6-WKR1",
+        "6-W_R_R","6-_R_WLR1","6-_R_WLR2","6-_R_WLR3","6-W_R_LR","6-WKR2",
+        "6-W_N_R","6-_N_WLR1","6-_N_WLR2","6-_N_WLR3","6-W_N_LR",
+        "6-WR",               "6-WJR",    "6-Z2WR1",  "6-Z2WR2",
+                              "6-TP1R",   "6-TP2R",   "6-WKR3"
+    ],
+    "route-ML-11": [
+        "ML-AU_R_S",          "ML-BU_R_S",
+        "ML-AU_N_S",          "ML-BU_N_S",
+                   "ML-ADUCR","ML-BDUCR",
+        "ML-U_R_LR",          "ML-UDKR",
+        "ML-U_N_LR","ML-UYR1","ML-UYR2"
+    ],
+    "route-LL-11": [
+        "LL-AU_R_S",          "LL-BU_R_S",
+        "LL-AU_N_S",          "LL-BU_N_S",
+                   "LL-ADUCR","LL-BDUCR",
+        "LL-U_R_LR",          "LL-UDKR",
+        "LL-U_N_LR","LL-UYR1","LL-UYR2"
+    ],
+    "route-SDG-11": [
+        "SDG-AU_R_S",          "SDG-BU_R_S",
+        "SDG-AU_N_S",          "SDG-BU_N_S",
+                   "SDG-ADUCR","SDG-BDUCR",
+        "SDG-U_R_LR",          "SDG-UDKR",
+        "SDG-U_N_LR","SDG-UYR1","SDG-UYR2"
+    ],
+    "sub-route-4": [
+        "4-AU_R_S",          "4-BU_R_S",
+        "4-AU_N_S",          "4-BU_N_S",
+                   "4-ADUCR","4-BDUCR",
+        "4-U_R_LR",          "4-UDKR",
+        "4-U_N_LR","4-UYR1","4-UYR2"
+    ],
+    "sub-route-5": [
+        "5-AU_R_S",          "5-BU_R_S",
+        "5-AU_N_S",          "5-BU_N_S",
+                   "5-ADUCR","5-BDUCR",
+        "5-U_R_LR",          "5-UDKR",
+        "5-U_N_LR","5-UYR1","5-UYR2"
+    ],
+    "sub-route-6": [
+        "6-AU_R_S",          "6-BU_R_S",
+        "6-AU_N_S",          "6-BU_N_S",
+                   "6-ADUCR","6-BDUCR",
+        "6-U_R_LR",          "6-UDKR",
+        "6-U_N_LR","6-UYR1","6-UYR2"
+    ],
+    "route-S1/9-11": [
+        "S1/9-AU_R_S",          "S1/9-BU_R_S",
+        "S1/9-AU_N_S",          "S1/9-BU_N_S",
+                   "S1/9-ADUCR","S1/9-BDUCR",
+        "S1/9-U_R_LR",          "S1/9-UDKR",
+        "S1/9-U_N_LR","S1/9-UYR1","S1/9-UYR2"
+    ],
+    "route-S12/13-11": [
+        "S12/13-AU_R_S",          "S12/13-BU_R_S",
+        "S12/13-AU_N_S",          "S12/13-BU_N_S",
+                   "S12/13-ADUCR","S12/13-BDUCR",
+        "S12/13-U_R_LR",          "S12/13-UDKR",
+        "S12/13-U_N_LR","S12/13-UYR1","S12/13-UYR2"
+    ],
+    "route-10/11-11": [
+        "10/11-AU_R_S",          "10/11-BU_R_S",
+        "10/11-AU_N_S",          "10/11-BU_N_S",
+                   "10/11-ADUCR","10/11-BDUCR",
+        "10/11-U_R_LR",          "10/11-UDKR",
+        "10/11-U_N_LR","10/11-UYR1","10/11-UYR2"
+    ],
+    "route-2/3-11": [
+        "2/3-AU_R_S",          "2/3-BU_R_S",
+        "2/3-AU_N_S",          "2/3-BU_N_S",
+                   "2/3-ADUCR","2/3-BDUCR",
+        "2/3-U_R_LR",          "2/3-UDKR",
+        "2/3-U_N_LR","2/3-UYR1","2/3-UYR2"
+    ]
+}

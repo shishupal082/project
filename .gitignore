@@ -6,9 +6,6 @@
 */*/*/a.out
 */*/*/*/a.out
 
-*/*/node_modules/*
-
-
 .DS_Store
 */.DS_Store
 */*/.DS_Store
@@ -16,8 +13,9 @@
 
 pvt/
 uploaded_files/
-todo/
-todo*
+
+todo-app/
+yard-app/
 
 java/step1/.idea/*
 
@@ -27,6 +25,13 @@ java/todo/src/test/test.iml
 java/todo/todo.iml
 java/todo/target/
 java/todo/meta-data/todo-*.jar
+
+java/yard/.idea/*
+java/yard/src/main/main.iml
+java/yard/src/test/test.iml
+java/yard/yard.iml
+java/yard/target/
+java/yard/meta-data/yard-*.jar
 
 java/example/.idea/
 java/example/example.iml

@@ -1,0 +1,40 @@
+{
+    "GNCR": ["(~S1-GNPR&&~S2-GNPR&&~S3-GNPR&&~S9-GNPR&&~S10-GNPR&&~S11-GNPR&&~S12-GNPR&&~S13-GNPR&&~SH7-GNPR&&~SH8-GNPR&&~YYNR&&~YRNR)"],
+    "WNCR": ["(~4-WNR&&~5-WNR&&~6-WNR)"],
+    "UNCR": ["(~10/11-UNPR&&~ML-UNPR&&~LL-UNPR&&~SDG-UNPR&&~2/3-UNPR&&~DN-UNPR&&~UP-UNPR&&~LXNR&&~CHYNR)"],
+    "NNCR": [
+        "GNCR", "UNCR", "WNCR", "~WWNR", "~EWNR", "~EUYR",
+        "~SH-GZR", "~MN-GZR", "~ZDUCR",
+        "~EGGNR", "~EUUYNCR", "~EUUYR",  "~Z3WR"
+    ],
+    "WXJR": ["4-WKR1", "5-WKR1", "6-WKR1"],
+
+    "CH/WW/EW/NCR": ["(~WWNR&&~EWNR&&~CHYNR&&~CHYRNR)"],
+    "MN-GNPR": [
+        {
+            "op":"||",
+            "val": ["S1-GNPR","S2-GNPR","S3-GNPR","S9-GNPR",
+                    "S10-GNPR","S11-GNPR","S12-GNPR","S13-GNPR"]
+        },
+        "~SH-GNPR"
+    ],
+    "SH-GNPR": [
+        {
+        "op":"||",
+        "val": ["SH7-GNPR","SH8-GNPR"]
+        },
+        "~MN-GNPR"
+    ],
+    "EUYNR" : [
+        "EUYN", "~EUUYNR"
+    ],
+    "EUYR": [
+        {
+            "op": "||",
+            "val": [
+                "4-WNR","5-WNR","6-WNR","2/3-UNPR","10/11-UNPR"
+            ]
+        },
+        "EUYNR", "~WWNR", "~EWNR"
+    ]
+}

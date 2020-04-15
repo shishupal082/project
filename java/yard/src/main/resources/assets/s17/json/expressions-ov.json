@@ -1,0 +1,225 @@
+{
+    "OV2-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV2-Z2U_N_R&&OV2-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV2-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S1-GNPR", "ML-UNPR", "~5-BU_R_S",
+                    "OV3/2-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV3/2-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV3/2-Z2U_N_R&&OV3/2-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV3/2-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S1-GNPR", "LL-UNPR", "6-AU_N_S", "5-RWKR", "~5-AU_R_S",
+                    "OV3/1-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV3/1-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV3/1-Z2U_N_R&&OV3/1-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV3/1-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S1-GNPR", "LL-UNPR", "6-AU_N_S", "~5-RWKR", "~5-BU_R_S",
+                    "OV3/2-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV11-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV11-Z2U_N_R&&OV11-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV11-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S12-GNPR", "ML-UNPR", "~4-BU_R_S",
+                    "OV10/2-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV10/2-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV10/2-Z2U_N_R&&OV10/2-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV10/2-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S12-GNPR", "LL-UNPR", "4-AU_N_S", "4-RWKR",
+                    "OV10/1-Z2U_N_R",
+                    "OV11-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV10/1-Z2U_R_R": {
+        "op": "||",
+        "val": [
+            "(~OV10/1-Z2U_N_R&&OV10/1-Z2U_R_R)",
+            {
+                "op": "&&",
+                "val": ["OV10/1-Z2U_N_R", "ZDUCR", "MN-GZR",
+                    "S12-GNPR", "LL-UNPR", "~4-RWKR", "~4-BU_R_S",
+                    "OV10/2-Z2U_N_R",
+                    "~OV2/3/10/11-AJTR2", "~OV2/3/10/11-AJTR3"
+                ]
+            }
+        ]
+    },
+    "OV2-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV2-Z2U_R_R&&OV2-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV2-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&ML-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "~4-AU_R_S"
+                ]
+            }
+        ]
+    },
+    "OV3/2-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV3/2-Z2U_R_R&&OV3/2-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV3/2-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&LL-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "~4-BU_R_S"
+                ]
+            }
+        ]
+    },
+    "OV3/1-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV3/1-Z2U_R_R&&OV3/1-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV3/1-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&LL-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "~4-BU_R_S"
+                ]
+            }
+        ]
+    },
+    "OV11-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV11-Z2U_R_R&&OV11-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV11-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&ML-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "5-AU_N_S"
+                ]
+            }
+        ]
+    },
+    "OV10/1-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV10/1-Z2U_R_R&&OV10/1-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV10/1-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&LL-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "5-BU_N_S"
+                ]
+            }
+        ]
+    },
+    "OV10/2-Z2U_N_R": {
+        "op": "||",
+        "val": [
+            "(~OV10/2-Z2U_R_R&&OV10/2-Z2U_N_R)",
+            {
+                "op": "&&",
+                "val": ["OV10/2-Z2U_R_R", "~MN-GZR", "~SH-GZR",
+                    {
+                        "op": "||",
+                        "val": [
+                            "(~5-AU_N_S&&~5A-TPR&&~ML-ZU_R_R)",
+                            "(~5-BU_N_S&&~5B-TPR&&~LL-ZU_R_R)",
+                            "(~4-AU_N_S&&~4A-TPR&&~ML-ZU_N_R)",
+                            "(~4-BU_N_S&&~4B-TPR&&~LL-ZU_N_R)",
+                            "(OYN&&LL-UNPR)",
+                            "~OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+                        ]
+                    },
+                    "5-BU_N_S"
+                ]
+            }
+        ]
+    }
+}

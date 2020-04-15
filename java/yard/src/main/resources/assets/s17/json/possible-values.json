@@ -1,0 +1,116 @@
+{
+    "addDebug": [],
+    "tpr": [
+        "1A-TPR", "1-TPR", "9-TPR", "10/11-TPR", "4A-TPR", "M-TPR", "5A-TPR",
+        "2/3-TPR", "13-TPR", "12-TPR", "12A-TPR", "4B-TPR", "L-TPR", "5B-TPR",
+        "SDG-TPR-A", "SDG-TPR-B", "SDG-TPR"
+    ],
+    "tpr-class": [
+        "LL-sh-left",
+        "p-4b-n", "p-4b-c", "p-4b-r", "p-4a-r", "p-4a-n", "p-4a-c",
+        "p-5b-n", "p-5b-c", "p-5b-r", "p-5a-r", "p-5a-n", "p-5a-c",
+        "p-6b-c", "p-6b-n", "p-6a-c", "p-6a-n"
+    ],
+    "tpr-class-v2-4": [
+        "p-4a-c-R", "p-4a-c-Y",
+        "p-4a-n-R", "p-4a-n-Y",
+        "p-4a-r-R", "p-4a-r-Y",
+        "p-4b-r-R", "p-4b-r-Y",
+        "p-4b-c-R", "p-4b-c-Y",
+        "p-4b-n-R", "p-4b-n-Y"
+    ],
+    "tpr-class-v2-5": [
+        "p-5a-c-R", "p-5a-c-Y",
+        "p-5a-n-R", "p-5a-n-Y",
+        "p-5a-r-R", "p-5a-r-Y",
+        "p-5b-r-R", "p-5b-r-Y",
+        "p-5b-c-R", "p-5b-c-Y",
+        "p-5b-n-R", "p-5b-n-Y"
+    ],
+    "tpr-class-v2-6": [
+        "p-6b-c-R", "p-6b-c-Y",
+        "p-6b-n-R", "p-6b-n-Y",
+        "p-6a-n-R", "p-6a-n-Y",
+        "p-6a-c-R", "p-6a-c-Y",
+        "SDG-TPR-B-R", "SDG-TPR-B-Y",
+        "SDG-TPR-R", "SDG-TPR-Y"
+    ],
+    "tpr-class-v2-straight": [
+        "M-TPR-R", "M-TPR-Y",
+        "L-TPR-R", "L-TPR-Y",
+
+        "1A-TPR-R", "1A-TPR-Y",
+        "1-TPR-R", "1-TPR-Y",
+        "9-TPR-R", "9-TPR-Y",
+        "10/11-TPR-R", "10/11-TPR-Y",
+
+        "2/3-TPR-R", "2/3-TPR-Y",
+        "13-TPR-R", "13-TPR-Y",
+        "12-TPR-R", "12-TPR-Y",
+        "12A-TPR-R", "12A-TPR-Y"
+    ],
+    "sg-btn": [
+        "S1-GN", "S2-GN", "S3-GN", "S13-GN", "SH7-GN",
+        "S12-GN", "S10-GN", "S11-GN", "S9-GN", "SH8-GN",
+        "CO-GGN"
+    ],
+    "rt-btn": [
+        "ML-UN", "LL-UN", "2/3-UN", "10/11-UN",
+        "DN-UN", "UP-UN", "SDG-UN"
+    ],
+    "s-1": ["MN-GNPR","SH-GNPR", "S1-UECR", "S12-UECR"],
+    "pt-btn": ["4-WN","5-WN","6-WN"],
+    "pt-r": ["4-WNR","5-WNR","6-WNR"],
+
+    "timer": [
+        "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+    ],
+    "point": [
+        "WWYR",
+        "WXJR", "Z3WR"
+    ],
+    "pointIndication": ["4-WLK", "5-WLK", "6-WLK"],
+    "point-4": [
+        "4-WWR",
+        "4-NWKR", "4-RWKR",
+        "4-NKR", "4-RKR",
+        "4A-ND", "4B-ND",
+        "4A-RD", "4B-RD",
+        "4A-NC", "4B-NC",
+        "4A-RC", "4B-RC"
+    ],
+    "point-5": [
+        "5-WWR",
+        "5-NWKR", "5-RWKR",
+        "5-NKR", "5-RKR",
+        "5A-ND", "5B-ND",
+        "5A-RD", "5B-RD",
+        "5A-NC", "5B-NC",
+        "5A-RC", "5B-RC"
+    ],
+    "point-6": [
+        "6-WWR",
+        "6-NWKR", "6-RWKR",
+        "6-NKR", "6-RKR",
+        "6A-ND", "6B-ND",
+        "6A-RD", "6B-RD",
+        "6A-NC", "6B-NC",
+        "6A-RC", "6B-RC"
+    ],
+    "power-checking": ["ZR"],
+
+    "common-btn": ["OYN", "YYN", "YRN", "WWN", "LXN", "CHYN", "EWN", "EGGN", "SMR"],
+    "common-r": ["OYNR", "YYNR", "YRNR", "WWNR", "LXNR", "CHYNR", "EWNR", "EGGNR"],
+
+    "common": ["GNCR","UNCR","WNCR","NNCR","CH/WW/EW/NCR","OTHER_GN_DN","OTHER_UN_DN",
+                "COIL"],
+    "common-2": ["EGNR",
+                "EUUYR", "EUUYNCR", "CHYRNR",
+                "UP-LCPR", "DN-LCPR"],
+    "emergency-btn": ["EUYN",
+                      "EUUYN"],
+    "emergency-r":   ["EUYNR", "EUYR",
+                      "EUUYNR"],
+    "timer": ["OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3", "OV2/3/10/11-AJTR"],
+    "timerDelay": ["delay-200ms"]
+}
