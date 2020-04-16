@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <div><center><h2 id="title">Loading ...</h2></center></div>
+        <div><center><h2 id="pageTitle">Loading ...</h2></center></div>
         <div style="display:none"><input type="text" name="index-page-re-route" value="${indexPageReRoute}"/></div>
         <hr></hr>
         <div id="tableHtml"></div>
