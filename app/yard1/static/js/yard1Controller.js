@@ -1,4 +1,4 @@
-(function(window, $M) {
+(function(window, $M, $YApiModel) {
 
 $M.extend({
     "S1-RECR": function(name) {
@@ -15,6 +15,8 @@ $M.extend({
         return $M.reCheckAllValues();
     }
 });
+
+var RequestId = $M.getRequestId();
 
 var Controller = function(selector, context) {
     return new Controller.fn.init(selector, context);
@@ -118,6 +120,52 @@ Controller.extend({
     }
 });
 
+
+
+var yardComponent = {};
+var tableContent = [];
+
+var topLoopLine = ["","","left-top", "8-point-top", "s14-tpr", "l-tpr-1", "l-tpr-2", "s2-tpr", "right-top"];
+var topLoopPoint = ["","","","8-point-mid","","","","9-point-mid-1","9-point-mid"];
+var mainLine = ["1-tpr", "16-tpr", "8-tpr", "8c-tpr", "s15-tpr", "m-tpr-1", "m-tpr-2", "s3-tpr", "9d-tpr", "9-tpr", "4-tpr"];
+var bottomLoopLine = ["","","","","",""];
+// bottomLoopLine.push("tc");
+var requiredContent = [];
+requiredContent.push(topLoopLine);
+requiredContent.push(topLoopPoint);
+requiredContent.push(mainLine);
+requiredContent.push(bottomLoopLine);
+
+Controller.extend({
+    loadApiData: function(yardApiUrl, callBack) {
+        var verifyFromDomino = true;
+        if (verifyFromDomino) {
+            $YApiModel.enableDomino();
+        }
+        var apiUrl = [yardApiUrl+"?"+RequestId];
+        $M.loadJsonData($, apiUrl, function(response) {
+            if (response) {
+                for (var key in response) {
+                    Object.assign(yardComponent, response[key]);
+                }
+            }
+            tableContent = $YApiModel.getYardTableContent(yardComponent, requiredContent);
+            callBack();
+        });
+        return true;
+    },
+    getYardHtml: function() {
+        var table = $M.getTable(tableContent, "yard");
+        return table.getHtml();
+    },
+    getDisplayYardDominoBoundary: function() {
+        return $YApiModel.getDisplayYardDominoBoundary();
+    },
+    toggleDisplayYardDominoBoundary: function() {
+        return $YApiModel.toggleDisplayYardDominoBoundary();
+    }
+});
+
 /*End of direct access of methods*/
 window.$VC = Controller;
-})(window, $M);
+})(window, $M, $YApiModel);

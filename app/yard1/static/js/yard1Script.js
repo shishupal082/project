@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+var yardApiUrl = UIYardUrl;
+
 $M.changeSetValueCountLimit(UISetValueCountLimit);
 $M.enableChangeValueDataLogging();
 $VC.documentLoaded();
@@ -7,7 +9,7 @@ $VC.documentLoaded();
 var timerCount = 0;
 
 function checkDominoDisplayStatus() {
-    if ($YV.getDisplayYardDominoBoundary()) {
+    if ($VC.getDisplayYardDominoBoundary()) {
         $("#tableHtml").addClass("display-domino");
     } else {
         $("#tableHtml").removeClass("display-domino");
@@ -83,15 +85,14 @@ function evtClick (currentTarget) {
     console.log("Click event completed: " + $M.getSetValueCount());
 }
 $("#toggleDisplayDomino").on("click", function(e) {
-    $YV.toggleDisplayYardDominoBoundary();
+    $VC.toggleDisplayYardDominoBoundary();
     checkDominoDisplayStatus();
 });
 
-$YV.loadApiData(UIYardApiUrl, function() {
-    var tableHtml = $YV.getYardHtml();
+$VC.loadApiData(yardApiUrl, function() {
+    var tableHtml = $VC.getYardHtml();
     $("#tableHtml").addClass("table-html").html(tableHtml);
     $(".evt").on("click", function(e) {
-        $YApiModel.checkSetValueCountAlarm();
         $M.resetChangeValueData();
         evtClick($(e.currentTarget));
     });

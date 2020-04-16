@@ -6,7 +6,7 @@
     - getUrlAttribute using stack
 */
 (function($S) {
-var ValidateDomino = false
+var ValidateDomino = false;
 var YardHelper = function(selector, context) {
     return new YardHelper.fn.init(selector, context);
 };

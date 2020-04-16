@@ -1,4 +1,4 @@
-(function($M, $YH, $YApiModel) {
+(function($M, $YApiModel) {
 
 var LoggerInfo = $S.getScriptFileNameRef();
 
@@ -44,10 +44,16 @@ View.extend({
         return $M.toggleValue(name);
     },
     getDisplayYardDominoBoundary: function() {
-        return $YH.getDisplayYardDominoBoundary();
+        return $YApiModel.getDisplayYardDominoBoundary();
     },
     toggleDisplayYardDominoBoundary: function() {
-        return $YH.toggleDisplayYardDominoBoundary();
+        return $YApiModel.toggleDisplayYardDominoBoundary();
+    },
+    reCheckAllValues: function() {
+        $M.setVariableDependencies();
+        $M.addInMStack($M.getPossibleValues());
+        $M.reCheckAllValuesV2();
+        return true;
     }
 });
 View.extend({
@@ -78,7 +84,7 @@ View.extend({
                 }
             }
         }, function() {
-            tableContent = $YH.getYardTableContent(yardComponent, requiredContent);
+            tableContent = $YApiModel.getYardTableContent(yardComponent, requiredContent);
             callBack();
         });
         return true;
@@ -135,5 +141,5 @@ View.extend({
     }
 });
 
-window.View = window.$V = View;
-})($M, $YH, $YApiModel);
+window.$V = View;
+})($M, $YApiModel);

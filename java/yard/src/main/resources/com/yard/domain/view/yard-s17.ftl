@@ -40,6 +40,7 @@
                         <button value="OYN=1,LL-UN=1" class="evt signal_route_btn">OYN-LL</button>
                     </div>
                 </td>
+                <td><div><span class="alert-danger badge" id="alarm"></span></div></td>
             </tr>
         </table>
         <hr></hr>
@@ -63,7 +64,9 @@
 
 <script type="text/javascript">
 var UISetValueCountLimit = 800000;
-var UIcommonPath = {
+var UIYardUrl = "/assets/s17/json/yard.json";
+
+var UICommonPath = {
        "async-data": ["/assets/s17/json/async-data.json"],
        "partial-expressions-value": ["/assets/s17/json/partial-exp.json"],
        "possible-value": ["/assets/s17/json/possible-values.json",
@@ -83,18 +86,15 @@ var UIcommonPath = {
                        "/assets/s17/json/expressions-timer.json",
                        "/assets/s17/json/expressions-glow.json"]
    };
-var UIyardUrl = "/assets/s17/json/yard.json";
 </script>
 
+<script type="text/javascript" src="/assets/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript" src="/assets/static/js/stack.js?v=${appVersion}"></script>
 <script type="text/javascript" src="/assets/static/js/model.js?v=${appVersion}"></script>
-<script type="text/javascript" src="/assets/static/libs/jquery-2.1.3.js"></script>
-<script type="text/javascript" src="/assets/static/js/yardHelper.js?v=${appVersion}"></script>
 <script type="text/javascript" src="/assets/static/js/yardApiModel.js?v=${appVersion}"></script>
 
-<script type="text/javascript" src="/assets/s17/js/s17Model.js?v=${appVersion}"></script>
 <script type="text/javascript" src="/assets/s17/js/s17View.js?v=${appVersion}"></script>
-<script type="text/javascript" src="/assets/s17/js/script.js?v=${appVersion}"></script>
+<script type="text/javascript" src="/assets/s17/js/s17Script.js?v=${appVersion}"></script>
 </body>
 </html>

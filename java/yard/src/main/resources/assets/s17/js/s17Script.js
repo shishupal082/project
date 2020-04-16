@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+var yardApiUrl = UIYardUrl;
+
 $M.changeSetValueCountLimit(UISetValueCountLimit);
 
 var LoggerInfo = $S.getScriptFileNameRef();
@@ -10,8 +12,8 @@ var timerCount = 0;
 
 var apisPath = {};
 
-for (var key in UIcommonPath) {
-    apisPath[key] = UIcommonPath[key];
+for (var key in UICommonPath) {
+    apisPath[key] = UICommonPath[key];
 }
 
 $YApiModel.setApisPath(apisPath);
@@ -81,8 +83,8 @@ $("#toggleDisplayDomino").on("click", function(e) {
 });
 
 $YApiModel.documentLoaded(function() {
-    $S17M.reCheckAllValues();
-    $V.loadYardDisplayData(UIyardUrl, function() {
+    $V.reCheckAllValues();
+    $V.loadYardDisplayData(yardApiUrl, function() {
         $(".container").attr("style", "width: 1425px;")
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);

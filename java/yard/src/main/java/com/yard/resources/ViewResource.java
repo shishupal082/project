@@ -3,6 +3,7 @@ package com.yard.resources;
 import com.yard.YardConfiguration;
 import com.yard.domain.view.AvailableResourceView;
 import com.yard.domain.view.CommonView;
+import com.yard.domain.view.IndexView;
 import com.yard.domain.view.S17View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,10 @@ public class ViewResource {
         this.yardConfiguration = yardConfiguration;
     }
     @GET
-    public S17View indexPage() {
+    public IndexView indexPage() {
         logger.info("Loading: S17View");
-        return new S17View(httpServletRequest);
+        String indexPageReRoute = yardConfiguration.getIndexPageReRoute();
+        return new IndexView(httpServletRequest, indexPageReRoute);
     }
     @GET
     @Path("/resource")
@@ -39,10 +41,24 @@ public class ViewResource {
         logger.info("Loading: AvailableResourceView");
         return new AvailableResourceView(httpServletRequest);
     }
+    @GET
+    @Path("/yard-s17")
+    public S17View yardS17() throws URISyntaxException {
+        logger.info("Loading: S17View");
+        return new S17View(httpServletRequest);
+    }
+    @GET
+    @Path("/yard-1")
+    public CommonView yardOne() throws URISyntaxException {
+        logger.info("Loading: CommonView:yardOne yard-1");
+        String pageName = "yard-1.ftl";
+        return new CommonView(httpServletRequest, pageName);
+    }
     @Path("{default: .*}")
     @GET
     public CommonView defaultMethod() throws URISyntaxException {
-        logger.info("Loading: defaultMethod: page_not_found_404");
+        logger.info("Loading: CommonView:defaultMethod: page_not_found_404");
+        String pageName = "page_not_found_404.ftl";
         return new CommonView(httpServletRequest, "page_not_found_404.ftl");
     }
 }

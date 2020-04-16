@@ -21,6 +21,10 @@ YardApiModel.fn = YardApiModel.prototype = {
 
 ExtendObject(YardApiModel);
 
+$M.addCallbackSetValueCountLimitExceed(function() {
+    $("#alarm").html("Limit Exceeds.");
+});
+
 var RequestId = $M.getRequestId();
 
 var PartialExpressions = {};
@@ -68,7 +72,7 @@ function loadAsyncData(callBack) {
         url.push(AsyncDataPath[i]+"?"+RequestId);
     }
     if (url.length == 0) {
-        return $S.callMethod(callBack);
+        return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -85,7 +89,7 @@ function loadPartialExpressions(callBack) {
         url.push(PartialExpressionsPath[i]+"?"+RequestId);
     }
     if (url.length == 0) {
-        return $S.callMethod(callBack);
+        return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -105,7 +109,7 @@ function loadPossibleValues(callBack) {
         url.push(PossibleValuePath[i]+"?"+RequestId);
     }
     if (url.length == 0) {
-        return $S.callMethod(callBack);
+        return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -137,7 +141,7 @@ function loadInitialValues(callBack) {
         url.push(InitialValuePath[i]+"?"+RequestId);
     }
     if (url.length == 0) {
-        return $S.callMethod(callBack);
+        return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -166,7 +170,7 @@ function loadExpressions(callBack) {
         url.push(ExpressionsPath[i]+"?"+RequestId);
     }
     if (url.length == 0) {
-        return $S.callMethod(callBack);
+        return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
         if ($M.isObject(response)) {
@@ -358,5 +362,80 @@ YardApiModel.extend({
         return 1;
     }
 });
+
+
+var lsKey = "displayYardDominoBoundary";
+var keyMapping = {
+    "displayYardDominoBoundary": "item1"
+};
+lsKey = keyMapping[lsKey];
+
+var LS = $M.getLocalStorage();
+
+YardApiModel.extend({
+    getDisplayYardDominoBoundary: function() {
+        var lsValue = LS.get(lsKey);
+        var response = false;
+        if (lsValue.status && lsValue.value == "true") {
+            response = true;
+        }
+        return response;
+    },
+    toggleDisplayYardDominoBoundary: function() {
+        if (YardApiModel.getDisplayYardDominoBoundary()) {
+            LS.set(lsKey, false);
+        } else {
+            LS.set(lsKey, true);
+        }
+        return YardApiModel.getDisplayYardDominoBoundary();
+    }
+});
+
+var ValidateDomino = false;
+function getTableHtml(yardData, name) {
+    var tableData = [];
+    if (yardData && yardData[name]) {
+        tableData = yardData[name];
+    }
+    if (ValidateDomino) {
+        /* Checking data intigrity.*/
+        var d = $M.getDomino(name);
+        for (var i = 0; i < tableData.length; i++) {
+            d.setRowData(i, tableData[i]);
+        }
+        tableData = d.getData();
+        /* Checking data intigrity End.*/
+    }
+    var table = $M.getTable(tableData, name);
+    return table.getHtml();
+}
+
+YardApiModel.extend({
+    getYardTableContent: function(yardComponent, requiredContent) {
+        var tableContent = [];
+        for (var i = 0; i < requiredContent.length; i++) {
+            var curData = [];
+            for (var j = 0; j < requiredContent[i].length; j++) {
+                if (requiredContent[i][j] == "") {
+                    curData.push("");
+                } else {
+                    curData.push(getTableHtml(yardComponent, requiredContent[i][j]));
+                }
+            }
+            tableContent.push(curData);
+        }
+        return tableContent;
+    },
+    enableDomino: function () {
+        ValidateDomino = true;
+        return true;
+    },
+    disableDomino: function () {
+        ValidateDomino = false;
+        return false;
+    }
+});
+
 window.$YApiModel = YardApiModel;
+
 })(window, $M);

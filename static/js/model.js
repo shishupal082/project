@@ -236,7 +236,7 @@ Model.extend({
     fire: function(name) {
         for (var i = 0; i < AllCallbacks.length; i++) {
             if (AllCallbacks[i][name]) {
-                $S.callMethod(AllCallbacks[i][name]);
+                Model.callMethod(AllCallbacks[i][name]);
             }
         }
         return 1;
@@ -309,7 +309,13 @@ Model.extend({
     },
     addElAt: function(arr, index, el) {
         return $S.addElAt(arr, index, el);
-    }
+    },
+    callMethod: function(method) {
+        return $S.callMethod(method);
+    },
+    getDomino: function(dominoName) {
+        return $S.getDomino(dominoName);
+    },
 });
 /*
 End of direct access of ID

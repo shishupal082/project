@@ -11,6 +11,7 @@ public class YardConfiguration extends Configuration{
 
     private TestConfig testConfig;
     private String appConfigPath;
+    private String indexPageReRoute;
 
     /* Locally generated configuration */
     private AppConfig appConfig;
@@ -32,6 +33,14 @@ public class YardConfiguration extends Configuration{
         this.appConfigPath = appConfigPath;
     }
 
+    public String getIndexPageReRoute() {
+        return indexPageReRoute;
+    }
+
+    public void setIndexPageReRoute(String indexPageReRoute) {
+        this.indexPageReRoute = indexPageReRoute;
+    }
+
     public AppConfig getAppConfig() {
         return appConfig;
     }
@@ -45,6 +54,7 @@ public class YardConfiguration extends Configuration{
         return "YardConfiguration{" +
                 "testConfig=" + testConfig +
                 ", appConfigPath='" + appConfigPath + '\'' +
+                ", indexPageReRoute='" + indexPageReRoute + '\'' +
                 ", appConfig=" + appConfig +
                 '}';
     }

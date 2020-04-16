@@ -78,17 +78,21 @@ var tprIndications = [
 
 var point9InfoExt = ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"];
 var point8InfoExt = ["8-WFK", "8-NWKR", "8-RWKR", "8-WNKR", "8-WRKR", "8-NWLR", "8-RWLR"];
+
+var signalEcr = ["S1-RECR", "S1-HECR", "S1-DECR", "S2-RECR", "S2-HECR",
+                "S3-RECR", "S3-HECR", "S3-DECR", "S4-RECR", "S4-HECR",
+                "S13-RECR", "S13-HECR", "S13-DECR", "S14-RECR", "S14-HECR",
+                "S15-RECR", "S15-HECR", "S15-DECR", "S16-RECR", "S16-HECR"];
+
 var miscsExt = ["SMR",
                 "S1-HR", "S1-DR", "S1-UGR",
-                "S1-RECR", "S1-HECR", "S1-DECR",
-                "S2-HR", "S2-RECR", "S2-HECR",
-                "S3-HR", "S3-DR", "S3-RECR", "S3-HECR", "S3-DECR",
-                "S4-HR", "S4-RECR", "S4-HECR",
+                "S2-HR",
+                "S3-HR", "S3-DR",
+                "S4-HR",
                 "S13-HR", "S13-DR", "S13-UGR",
-                "S13-RECR", "S13-HECR", "S13-DECR",
-                "S14-HR", "S14-RECR", "S14-HECR",
-                "S15-HR", "S15-DR", "S15-RECR", "S15-HECR", "S15-DECR",
-                "S16-HR", "S16-RECR", "S16-HECR"];
+                "S14-HR",
+                "S15-HR", "S15-DR",
+                "S16-HR"];
 
 possibleValues = possibleValues.concat(availableASRs);
 possibleValues = possibleValues.concat(availableTSRs);
@@ -99,6 +103,7 @@ possibleValues = possibleValues.concat(tprIndications);
 possibleValues = possibleValues.concat(availableGNRs);
 possibleValues = possibleValues.concat(availableUNRs);
 possibleValues = possibleValues.concat(miscs);
+possibleValues = possibleValues.concat(signalEcr);
 possibleValues = possibleValues.concat(miscsExt);
 possibleValues = possibleValues.concat(uyrs);
 possibleValues = possibleValues.concat(point8Info);
