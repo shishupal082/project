@@ -67,10 +67,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["8-TPR-A", "8-TPR-1", "8-TPR-2", "8-TPR-3", "8-TPR-B",
-                            "8-TPR-5", "8-TPR-C", "8-TPR-7", "8-TPR-8",
-                            "8-TPR-9", "8-TPR-D"
-                    ]
+                    "val": ["8A-TPR", "8B-TPR"]
                 },
                 "8-NWLR",
                 "8-RWLR"
@@ -104,10 +101,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["8-TPR-A", "8-TPR-1", "8-TPR-2", "8-TPR-3", "8-TPR-B",
-                            "8-TPR-5", "8-TPR-C", "8-TPR-7", "8-TPR-8",
-                            "8-TPR-9", "8-TPR-D"
-                    ]
+                    "val": ["8A-TPR", "8B-TPR"]
                 },
                 "8-NWLR",
                 "8-RWLR"
@@ -141,10 +135,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["8-TPR-A", "8-TPR-1", "8-TPR-2", "8-TPR-3", "8-TPR-B",
-                            "8-TPR-5", "8-TPR-C", "8-TPR-7", "8-TPR-8",
-                            "8-TPR-9", "8-TPR-D"
-                    ]
+                    "val": ["8A-TPR", "8B-TPR"]
                 },
                 "8-NWLR",
                 "8-RWLR"
@@ -210,10 +201,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["9-TPR-A", "9-TPR-1", "9-TPR-2", "9-TPR-3", "9-TPR-B",
-                            "9-TPR-5", "9-TPR-C", "9-TPR-7", "9-TPR-8",
-                            "9-TPR-9", "9-TPR-D"
-                    ]
+                    "val": ["9A-TPR", "9B-TPR"]
                 },
                 "9-NWLR",
                 "9-RWLR"
@@ -228,10 +216,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["9-TPR-A", "9-TPR-1", "9-TPR-2", "9-TPR-3", "9-TPR-B",
-                            "9-TPR-5", "9-TPR-C", "9-TPR-7", "9-TPR-8",
-                            "9-TPR-9", "9-TPR-D"
-                    ]
+                    "val": ["9A-TPR", "9B-TPR"]
                 },
                 "9-NWLR",
                 "9-RWLR"
@@ -245,10 +230,7 @@ var pointExp = {
             "val":[
                 {
                     "op": "&&",
-                    "val": ["9-TPR-A", "9-TPR-1", "9-TPR-2", "9-TPR-3", "9-TPR-B",
-                            "9-TPR-5", "9-TPR-C", "9-TPR-7", "9-TPR-8",
-                            "9-TPR-9", "9-TPR-D"
-                    ]
+                    "val": ["9A-TPR", "9B-TPR"]
                 },
                 "9-NWLR",
                 "9-RWLR"

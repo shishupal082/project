@@ -13,6 +13,8 @@ YardView.fn = YardView.prototype = {
 };
 ExtendObject(YardView);
 
+var RequestId = $M.getRequestId();
+
 var yardComponent = {};
 var tableContent = [];
 
@@ -27,12 +29,12 @@ requiredContent.push(topLoopPoint);
 requiredContent.push(mainLine);
 requiredContent.push(bottomLoopLine);
 YardView.extend({
-    loadApiData: function(callBack) {
+    loadApiData: function(yardApiUrl, callBack) {
         var verifyFromDomino = true;
         if (verifyFromDomino) {
             $YH.enableDomino();
         }
-        var apiUrl = ["static/json/yardData.json"];
+        var apiUrl = [yardApiUrl+"?"+RequestId];
         $M.loadJsonData($, apiUrl, function(response) {
             if (response) {
                 for (var key in response) {

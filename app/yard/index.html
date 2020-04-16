@@ -9,23 +9,31 @@
 <body>
     <div class="container yard">
         <center><h2>Yards</h2></center>
-        <div>
-            <button value="S1-GNR=1,MT-UNR=1" class="evt signal_route_btn">S1-MT</button>
-            <button value="S1-GNR=1,LT-UNR=1" class="evt signal_route_btn">S1-LT</button>
-            <button value="S1-GNR=1,LAT-UNR=1" class="evt signal_route_btn">S1-LAT</button>
-            <button value="S2-GNR=1,9-UNR=1" class="evt signal_route_btn">S2-9</button>
-            <button value="S3-GNR=1,9-UNR=1" class="evt signal_route_btn">S3-9</button>
-            <button value="S4-GNR=1,4-UNR=1" class="evt signal_route_btn">S4-4</button>
-        </div><div>
-            <button value="S13-GNR=1,MT-UNR=1" class="evt signal_route_btn">S13-MT</button>
-            <button value="S13-GNR=1,LT-UNR=1" class="evt signal_route_btn">S13-LT</button>
-            <button value="S13-GNR=1,LAT-UNR=1" class="evt signal_route_btn">S13-LAT</button>
-            <button value="S14-GNR=1,8-UNR=1" class="evt signal_route_btn">S14-8</button>
-            <button value="S15-GNR=1,8-UNR=1" class="evt signal_route_btn">S15-8</button>
-            <button value="S16-GNR=1,16-UNR=1" class="evt signal_route_btn">S16-16</button>
-        </div>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <button value="S1-GNR=1,MT-UNR=1" class="evt signal_route_btn">S1-MT</button>
+                        <button value="S1-GNR=1,LT-UNR=1" class="evt signal_route_btn">S1-LT</button>
+                        <button value="S1-GNR=1,LAT-UNR=1" class="evt signal_route_btn">S1-LAT</button>
+                        <button value="S2-GNR=1,9-UNR=1" class="evt signal_route_btn">S2-9</button>
+                        <button value="S3-GNR=1,9-UNR=1" class="evt signal_route_btn">S3-9</button>
+                        <button value="S4-GNR=1,4-UNR=1" class="evt signal_route_btn">S4-4</button>
+                    </div><div>
+                        <button value="S13-GNR=1,MT-UNR=1" class="evt signal_route_btn">S13-MT</button>
+                        <button value="S13-GNR=1,LT-UNR=1" class="evt signal_route_btn">S13-LT</button>
+                        <button value="S13-GNR=1,LAT-UNR=1" class="evt signal_route_btn">S13-LAT</button>
+                        <button value="S14-GNR=1,8-UNR=1" class="evt signal_route_btn">S14-8</button>
+                        <button value="S15-GNR=1,8-UNR=1" class="evt signal_route_btn">S15-8</button>
+                        <button value="S16-GNR=1,16-UNR=1" class="evt signal_route_btn">S16-16</button>
+                    </div>
+                </td>
+                <td><div><span class="alert-danger badge" id="alarm"></span></div></td>
+            </tr>
+        </table>
         <hr></hr>
         <div id="tableHtml"></div>
+        <div id="changeValueData"></div>
         <div id="timerCount"></div>
         <div id="currentValues"></div>
         <div id="help" class="help hide">
@@ -42,9 +50,16 @@
             </div>
         </div>
     </div>
+
+<script type="text/javascript">
+var UISetValueCountLimit = 400;
+var UIYardApiUrl = "static/json/yardData.json";
+</script>
+
 <script type="text/javascript" src="/static/js/stack.js"></script>
 <script type="text/javascript" src="/static/js/model.js"></script>
 <script type="text/javascript" src="/static/js/yard/yardHelper.js"></script>
+<script type="text/javascript" src="/static/js/yard/yardApiModel.js"></script>
 
 <script type="text/javascript" src="/app/yard/static/js/model/componentModel.js"></script>
 <script type="text/javascript" src="/app/yard/static/js/model/pointModel.js"></script>

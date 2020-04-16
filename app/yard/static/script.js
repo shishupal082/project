@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
+$M.changeSetValueCountLimit(UISetValueCountLimit);
+$M.enableChangeValueDataLogging();
 $VC.documentLoaded();
+
 var timerCount = 0;
 
 function checkDominoDisplayStatus() {
@@ -58,6 +61,9 @@ function evtClick (currentTarget) {
             timerCount--;
             $VC.setValues(key, 0);
             checkUIStyle();
+            if (timerCount == 0) {
+                $YApiModel.displayChangeValueData();
+            }
         }, 1000);
     }
     for(var key in finalValue) {
@@ -72,19 +78,26 @@ function evtClick (currentTarget) {
         $VC.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
+    $YApiModel.displayChangeValueData();
+    $M.resetChangeValueData();
+    console.log("Click event completed: " + $M.getSetValueCount());
 }
 $("#toggleDisplayDomino").on("click", function(e) {
     $YV.toggleDisplayYardDominoBoundary();
     checkDominoDisplayStatus();
 });
 
-$YV.loadApiData(function() {
+$YV.loadApiData(UIYardApiUrl, function() {
     var tableHtml = $YV.getYardHtml();
     $("#tableHtml").addClass("table-html").html(tableHtml);
     $(".evt").on("click", function(e) {
+        $YApiModel.checkSetValueCountAlarm();
+        $M.resetChangeValueData();
         evtClick($(e.currentTarget));
     });
     checkUIStyle();
+    // $YApiModel.displayChangeValueData();
+    // $M.resetChangeValueData();
     $("#help").removeClass("hide");
     checkDominoDisplayStatus();
 });

@@ -1,6 +1,5 @@
 (function(window, $M) {
 
-$M.enableProcessingCount();
 $M.extend({
     "S1-RECR": function(name) {
         var newValue = 0;
@@ -15,7 +14,9 @@ $M.extend({
         return $M.reCheckAllValues();
     }
 });
-
+$M.addCallbackSetValueCountLimitExceed(function() {
+    $("#alarm").html("Limit Exceeds.");
+});
 var Controller = function(selector, context) {
     return new Controller.fn.init(selector, context);
 };
@@ -61,6 +62,11 @@ Controller.extend({
                     $M(key).addExp($M.generateExpression(exps[key]));
                 }
             }
+        }
+        var debugRequired = [];
+        // debugRequired.push("1-ASR");
+        for (var i = 0; i < debugRequired.length; i++) {
+            $M(debugRequired[i]).addDebug();
         }
         $M.reCheckAllValues();
         return 0;

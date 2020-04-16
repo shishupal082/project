@@ -257,8 +257,8 @@
                 "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn green tpr 8B-TPR-n2' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-n2' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "",
@@ -325,8 +325,8 @@
                 "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt green btn tpr 9B-TPR-n2' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n2' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 ""

@@ -111,48 +111,7 @@ YardView.extend({
         $("#yardsIds").html(yardIdOption);
     }
 });
-YardView.extend({
-    htmlLoadingComplete: function() {
-        return 1;
-        var containerStyle = "";
-        switch(CurrentYardId) {
-            case "yard":
-                containerStyle = "width: 3290px;";
-            break;
-            case "yard-1":
-                containerStyle = "width: 2790px;";
-            break;
-            case "yard-3":
-                containerStyle = "width: 2780px;";
-            break;
-        }
-        $(".container").attr("style", containerStyle);
-        var tprNodeDefaultClass = ["evt", "btn", "tpr", "btn-rotate", "positive", "green", "red", "yellow", "blue",
-                                    "circle", undefined, "pink", "slat"];
-        tprNodeDefaultClass.push("open-point-left");
-        tprNodeDefaultClass.push("open-point-right");
-        $(".yard").addClass("debug");
-        var allTpr = $(".tpr");
-        for (var i = 0; i < allTpr.length; i++) {
-            var tprNode = $(allTpr[i]);
-            var tprParent = tprNode.parent();
-            var tprNodeHtml = tprNode.val();
-            var tprNodeCls = tprNode.attr("class").split(" ");
-            for (var j = 0; j < tprNodeCls.length; j++) {
-                if(tprNodeDefaultClass.indexOf(tprNodeCls[j]) < 0) {
-                    tprNodeHtml += "<br>" + tprNodeCls[j];
-                }
-            }
-            tprNode.html(tprNodeHtml);
-            console.log("#"+tprNode.parent().attr("id") + "." + tprNode.attr("class") + ",val:" + tprNode.val());
-        }
-        var allSignal = $(".signal");
-        for (var i = 0; i < allSignal.length; i++) {
-            var signalNode = $(allSignal[i]);
-            console.log("#"+signalNode.parent().attr("id") + "." + signalNode.attr("class") + ",id:" + signalNode.attr("id"));
-        }
-    }
-});
+
 YardView.extend({
     dataLoadedCallBack: function() {
         var requiredContentArr = CurrentYardInfo["requiredContent"];
@@ -209,6 +168,48 @@ YardView.extend({
         return true;
     }
 });
-
+YardView.extend({
+    htmlLoadingComplete: function() {
+        return 1;
+        $(".btn-rotate").removeClass("positive").removeClass("btn-rotate");
+        var containerStyle = "";
+        switch(CurrentYardId) {
+            case "yard":
+                containerStyle = "width: 3290px;";
+            break;
+            case "yard-1":
+                containerStyle = "width: 2790px;";
+            break;
+            case "yard-3":
+                containerStyle = "width: 2780px;";
+            break;
+        }
+        $(".container").attr("style", containerStyle);
+        var tprNodeDefaultClass = ["evt", "btn", "tpr", "btn-rotate", "positive", "green", "red", "yellow", "blue",
+                                    "circle", undefined, "pink", "slat"];
+        tprNodeDefaultClass.push("open-point-left");
+        tprNodeDefaultClass.push("open-point-right");
+        $(".yard").addClass("debug");
+        var allTpr = $(".tpr");
+        for (var i = 0; i < allTpr.length; i++) {
+            var tprNode = $(allTpr[i]);
+            var tprParent = tprNode.parent();
+            var tprNodeHtml = tprNode.val();
+            var tprNodeCls = tprNode.attr("class").split(" ");
+            for (var j = 0; j < tprNodeCls.length; j++) {
+                if(tprNodeDefaultClass.indexOf(tprNodeCls[j]) < 0) {
+                    tprNodeHtml += "<br>" + tprNodeCls[j];
+                }
+            }
+            tprNode.html(tprNodeHtml);
+            console.log("#"+tprNode.parent().attr("id") + "." + tprNode.attr("class") + ",val:" + tprNode.val());
+        }
+        var allSignal = $(".signal");
+        for (var i = 0; i < allSignal.length; i++) {
+            var signalNode = $(allSignal[i]);
+            console.log("#"+signalNode.parent().attr("id") + "." + signalNode.attr("class") + ",id:" + signalNode.attr("id"));
+        }
+    }
+});
 window.YardView = window.$YV = YardView;
 })($S, $YH);

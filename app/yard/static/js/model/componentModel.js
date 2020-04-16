@@ -48,15 +48,33 @@ var miscs = ["NWWNR", "RWWNR", "S1-UCR", "S2-UCR", "S3-UCR", "S13-UCR", "S14-UCR
 // var availableTSRs = ["1/16-TSR", "2-TSR", "3-TSR", "4/13-TSR", "14/15-TSR"];
 //8-TPR / 9-TPR method defined for calculating all value of TPR for point 8
 var availableTPRs = ["1-TPR", "16-TPR", "4-TPR", "13-TPR", "M-TPR", "L-TPR",
-                    "8A-TPR", "8B-TPR", "9A-TPR", "9B-TPR", "8-TPR", "9-TPR",
-
-                    "1-TPR-R", "16-TPR-R", "4-TPR-R", "13-TPR-R", "M-TPR-R", "L-TPR-R",
-                    "8A-TPR-R", "8B-TPR-R", "9A-TPR-R", "9B-TPR-R", "8-TPR-R", "9-TPR-R",
-
-                    "1-TPR-Y", "16-TPR-Y", "4-TPR-Y", "13-TPR-Y", "M-TPR-Y", "L-TPR-Y",
-                    "8A-TPR-Y", "8B-TPR-Y", "9A-TPR-Y", "9B-TPR-Y", "8-TPR-Y", "9-TPR-Y"
+                    "8-TPR", "9-TPR",
+                    "8A-TPR", "8B-TPR", "9A-TPR", "9B-TPR"
                     ];
+var tprIndications = [
+    "1-TPR-R", "16-TPR-R", "4-TPR-R", "13-TPR-R", "M-TPR-R", "L-TPR-R",
+    "1-TPR-Y", "16-TPR-Y", "4-TPR-Y", "13-TPR-Y", "M-TPR-Y", "L-TPR-Y",
+    "8-TPR-R", "9-TPR-R",
+    "8-TPR-Y", "9-TPR-Y",
 
+    "8A-TPR-n", "8A-TPR-n-R", "8A-TPR-n-Y",
+    "8A-TPR-r", "8A-TPR-r-R", "8A-TPR-r-Y",
+    "8A-TPR-c", "8A-TPR-c-R", "8A-TPR-c-Y",
+
+    "8B-TPR-n", "8B-TPR-n-R", "8B-TPR-n-Y",
+    "8B-TPR-n2", "8B-TPR-n2-R", "8B-TPR-n2-Y",
+    "8B-TPR-r", "8B-TPR-r-R", "8B-TPR-r-Y",
+    "8B-TPR-c", "8B-TPR-c-R", "8B-TPR-c-Y",
+
+    "9A-TPR-n", "9A-TPR-n-R", "9A-TPR-n-Y",
+    "9A-TPR-r", "9A-TPR-r-R", "9A-TPR-r-Y",
+    "9A-TPR-c", "9A-TPR-c-R", "9A-TPR-c-Y",
+
+    "9B-TPR-n", "9B-TPR-n-R", "9B-TPR-n-Y",
+    "9B-TPR-n2", "9B-TPR-n2-R", "9B-TPR-n2-Y",
+    "9B-TPR-r", "9B-TPR-r-R", "9B-TPR-r-Y",
+    "9B-TPR-c", "9B-TPR-c-R", "9B-TPR-c-Y"
+];
 
 var point9InfoExt = ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"];
 var point8InfoExt = ["8-WFK", "8-NWKR", "8-RWKR", "8-WNKR", "8-WRKR", "8-NWLR", "8-RWLR"];
@@ -77,6 +95,7 @@ possibleValues = possibleValues.concat(availableTSRs);
 possibleValues = possibleValues.concat(availableNRRs);
 possibleValues = possibleValues.concat(availableNNRs);
 possibleValues = possibleValues.concat(availableTPRs);
+possibleValues = possibleValues.concat(tprIndications);
 possibleValues = possibleValues.concat(availableGNRs);
 possibleValues = possibleValues.concat(availableUNRs);
 possibleValues = possibleValues.concat(miscs);
@@ -154,46 +173,43 @@ var asrExp = {
     "2/3-TSR": {
         "op": "&&",
         "val": [
-            "((9-TPR-A||9-NWKR)&&(9-TPR-C||9-RWKR))",
+            "((9A-TPR||9-NWKR)&&(9B-TPR||9-RWKR))",
             "(2/3-TSR||(S2-NNR&&S3-NNR))"
         ]
     },
     "14/15-TSR": {
         "op": "&&",
         "val": [
-            "((8-TPR-B||8-NWKR)&&(8-TPR-D||8-RWKR))",
+            "((8A-TPR||8-NWKR)&&(8B-TPR||8-RWKR))",
             "(14/15-TSR||(S14-NNR&&S15-NNR))"
         ]
     },
-    "1-ASR": {
-        "op": "&&",
-        "val": [
-            "~S1-HR", "~S1-DR", "~S1-UGR", //Indication locking
-            "~S1-UCR",
-            {
-                "op": "||",
-                "val": [
-                    "1-ASR",
-                    {
-                        "op": "&&",
-                        "val": [
-                            "~S1-MT-NRR", "~S1-LT-NRR", "~S1-LAT-NRR", //Back locking
-                            "1-TPR", "16-TPR", "8-TPR", "8-TPR-C", "8-TPR-7", //Approach locking
-                            {
-                                "op": "||",
-                                "val": [
-                                    "(8-NWKR&&((8-TPR-8&&8-TPR-9)&&8-TPR-D))",
-                                    "(8-RWKR&&((8-TPR-5&&8-TPR-3)&&8-TPR-B))",
-                                ]
-                            },
-                            "S1-UYR1", "S1-UYR2", "S1-UYR3"
-                        ]
-                    }
-                ]
-            }
+    "1-ASR": [
+        "~S1-HR", "~S1-DR", "~S1-UGR", //Indication locking
+        "~S1-UCR",
+        {
+            "op": "||",
+            "val": [
+                "1-ASR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "~S1-MT-NRR", "~S1-LT-NRR", "~S1-LAT-NRR", //Back locking
+                        "1-TPR", "16-TPR", "8-TPR", "8B-TPR", //Approach locking
+                        {
+                            "op": "||",
+                            "val": [
+                                "8-NWKR",
+                                "(8-RWKR&&8A-TPR)",
+                            ]
+                        },
+                        "S1-UYR1", "S1-UYR2", "S1-UYR3"
+                    ]
+                }
+            ]
+        }
 
-        ]
-    },
+    ],
     "S1-UYR1": [
         "~S1-HR", "~S1-DR", "~S1-UGR",
         "~1-ASR", "~1/16-TSR",
@@ -202,12 +218,12 @@ var asrExp = {
     "S1-UYR2": [
         "~S1-HR", "~S1-DR", "~S1-UGR",
         "~1-ASR", "S1-UYR1",
-        "(S1-UYR2||((~8-TPR&&~8-TPR-C)&&8-TPR-7))"
+        "(S1-UYR2||(~8-TPR&&~8B-TPR&&((8-NWKR&&16-TPR)||(8-RWKR&&8A-TPR))))"
     ],
     "S1-UYR3": [
         "~S1-HR", "~S1-DR", "~S1-UGR",
         "~1-ASR", "S1-UYR2",
-        "(S1-UYR3||((8-NWKR&&((~8-TPR-D&&~M-TPR)&&8-TPR-9))||(8-RWKR&&((~8-TPR-B&&~L-TPR)&&8-TPR-3))))"
+        "(S1-UYR3||((8-NWKR&&~8B-TPR&&~M-TPR&&8-TPR)||(8-RWKR&&~8A-TPR&&~L-TPR&&8-TPR))"
     ],
     "13-ASR": {
         "op": "&&",
@@ -222,12 +238,12 @@ var asrExp = {
                         "op": "&&",
                         "val": [
                             "~S13-MT-NRR", "~S13-LT-NRR", "~S13-LAT-NRR", //Back locking
-                            "13-TPR", "4-TPR", "9-TPR", "9-TPR-D", "9-TPR-9", //Approach locking
+                            "13-TPR", "4-TPR", "9-TPR", "9B-TPR", //Approach locking
                             {
                                 "op": "||",
                                 "val": [
-                                    "(9-NWKR&&((9-TPR-8&&9-TPR-7)&&9-TPR-C))",
-                                    "(9-RWKR&&((9-TPR-1&&9-TPR-5)&&9-TPR-A))",
+                                    "9-NWKR",
+                                    "9-RWKR&&9A-TPR",
                                 ]
                             },
                             "S13-UYR1", "S13-UYR2", "S13-UYR3"
@@ -241,45 +257,42 @@ var asrExp = {
     "S13-UYR1": [
         "~S13-HR", "~S13-DR", "~S13-UGR",
         "~13-ASR", "~4/13-TSR",
-        "(S13-UYR1||((~13-TPR&&~4-TPR)&&9-TPR))"
+        "(S13-UYR1||(~13-TPR&&~4-TPR&&9-TPR))"
     ],
     "S13-UYR2": [
         "~S13-HR", "~S13-DR", "~S13-UGR",
         "~13-ASR", "S13-UYR1",
-        "(S13-UYR2||((~9-TPR&&~9-TPR-D)&&9-TPR-9))"
+        "(S13-UYR2||(~9-TPR&&~9B-TPR&&((9-NWKR&&4-TPR)||(9-RWKR&&9A-TPR))))"
     ],
     "S13-UYR3": [
         "~S13-HR", "~S13-DR", "~S13-UGR",
         "~13-ASR", "S13-UYR2",
-        "(S13-UYR3||((9-NWKR&&((~9-TPR-C&&~M-TPR)&&9-TPR-7))||(9-RWKR&&((~9-TPR-A&&~L-TPR)&&9-TPR-1))))"
+        "(S13-UYR3||((9-NWKR&&~9B-TPR&&~M-TPR&&9-TPR)||(9-RWKR&&~9A-TPR&&~L-TPR&&9B-TPR))"
     ],
-    "2/3-ASR": {
-        "op": "&&",
-        "val": [ 
-            {
-                "op": "&&",
-                "val": [
-                    "(~S2-HR&&(~S3-HR&&~S3-DR))", //Indication locking
-                    "(~S2-UCR&&~S3-UCR)"
-                ]
-            },
-            {
-                "op": "||",
-                "val": [
-                    "2/3-ASR",
-                    {
-                        "op": "&&",
-                        "val": [
-                            "(~S2-NRR&&~S3-NRR)",//Back locking
-                            "(((9-NWKR&&9-TPR-C)&&(9-TPR-7&&9-TPR-8))||((9-RWKR&&9-TPR-A)&&(9-TPR-1&&9-TPR-5)))",
-                            "((9-TPR-9&&9-TPR-D)&&9-TPR)",//Approach locking
-                            "(S2/3-UYR1&&S2/3-UYR2)"
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
+    "2/3-ASR": [
+        {
+            "op": "&&",
+            "val": [
+                "(~S2-HR&&(~S3-HR&&~S3-DR))", //Indication locking
+                "(~S2-UCR&&~S3-UCR)"
+            ]
+        },
+        {
+            "op": "||",
+            "val": [
+                "2/3-ASR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "(~S2-NRR&&~S3-NRR)",//Back locking
+                        "(9-NWKR||(9-RWKR&&9A-TPR))",
+                        "(9B-TPR&&9-TPR)",//Approach locking
+                        "(S2/3-UYR1&&S2/3-UYR2)"
+                    ]
+                }
+            ]
+        }
+    ],
     "S2/3-UYR1": {
         "op": "&&",
         "val": [
@@ -289,8 +302,8 @@ var asrExp = {
                 "op": "||",
                 "val": [
                     "S2/3-UYR1",
-                    "(9-NWKR&&(9-TPR-8&&(~9-TPR-C&&~9-TPR-7)))",
-                    "(9-RWKR&&(9-TPR-5&&(~9-TPR-A&&~9-TPR-1)))"
+                    "(9-NWKR&&~M-TPR&&~9B-TPR&&9-TPR)",
+                    "(9-RWKR&&~L-TPR&&~9A-TPR&&9B-TPR)"
                 ]
             }
         ]
@@ -304,7 +317,7 @@ var asrExp = {
                 "op": "||",
                 "val": [
                     "S2/3-UYR2",
-                    "(S2/3-UYR1&&(9-TPR&&(~4-TPR&&~13-TPR)))"
+                    "(S2/3-UYR1&&9-TPR&&~4-TPR&&~13-TPR)"
                 ]
             }
         ]
@@ -327,8 +340,8 @@ var asrExp = {
                         "op": "&&",
                         "val": [
                             "(~S14-NRR&&~S15-NRR)",//Back locking
-                            "(((8-NWKR&&8-TPR-D)&&(8-TPR-9&&8-TPR-8))||((8-RWKR&&8-TPR-B)&&(8-TPR-3&&8-TPR-5)))",
-                            "((8-TPR-7&&8-TPR-C)&&8-TPR)",//Approach locking
+                            "(8-NWKR||(8-RWKR&&8A-TPR))",
+                            "(8B-TPR&&8-TPR)",//Approach locking
                             "(S14/15-UYR1&&S14/15-UYR2)"
                         ]
                     }
@@ -345,8 +358,8 @@ var asrExp = {
                 "op": "||",
                 "val": [
                     "S14/15-UYR1",
-                    "(8-NWKR&&(8-TPR-8&&(~8-TPR-D&&~8-TPR-9)))",
-                    "(8-RWKR&&(8-TPR-5&&(~8-TPR-B&&~8-TPR-3)))"
+                    "(8-NWKR&&~M-TPR&&~8B-TPR&&8-TPR)",
+                    "(8-RWKR&&~L-TPR&&~8A-TPR&&8B-TPR)"
                 ]
             }
         ]
@@ -360,7 +373,7 @@ var asrExp = {
                 "op": "||",
                 "val": [
                     "S14/15-UYR2",
-                    "(S14/15-UYR1&&(8-TPR&&(~16-TPR&&~1-TPR)))"
+                    "(S14/15-UYR1&&8-TPR&&~16-TPR&&~1-TPR)"
                 ]
             }
         ]
@@ -423,7 +436,7 @@ var hrExpression = {
             "(~S13-UYR1&&(~S13-UYR2&&~S13-UYR3))",
             "(14/15-ASR&&13-ASR)",
             "(S1-UCR&&(1/16-TSR&&~1-ASR))",
-            "(1-TPR&&((16-TPR&&8-TPR)&&(8-TPR-C&&8-TPR-7)))",
+            "(1-TPR&&16-TPR&&8-TPR&&8B-TPR)",
             {
                 "op": "||",
                 "val": [
@@ -431,27 +444,21 @@ var hrExpression = {
                         "op": "&&",
                         "val": [
                             "S1-MT-NRR","8-NWKR","9-NWKR",
-                            "8-TPR-8", "8-TPR-9", "8-TPR-D", "M-TPR",
-                            "9-TPR-C", "9-TPR-7", "9-TPR-8", "9-TPR-9",
-                            "9-TPR-D", "9-TPR"
+                            "M-TPR", "9A-TPR", "9-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S1-LT-NRR","8-RWKR","9-NWKR",
-                            "8-TPR-5", "8-TPR-3", "8-TPR-B", "L-TPR",
-                            "9-TPR-A", "9-TPR-1", "9-TPR-2", "9-TPR-3",
-                            "9-TPR-B"
+                            "8A-TPR", "L-TPR", "9A-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S1-LAT-NRR","8-RWKR","9-RWKR",
-                            "8-TPR-5", "8-TPR-3", "8-TPR-B", "L-TPR",
-                            "9-TPR-A", "9-TPR-1", "9-TPR-5", "9-TPR-9",
-                            "9-TPR-D", "9-TPR"
+                            "8A-TPR", "L-TPR", "9A-TPR", "9B-TPR", "9-TPR"
                         ]
                     }
                 ]
@@ -466,41 +473,35 @@ var hrExpression = {
             "(~S13-UYR1&&(~S13-UYR2&&~S13-UYR3))",
             "(14/15-ASR&&13-ASR)",
             "(S1-UCR&&(1/16-TSR&&~1-ASR))",
-            "(1-TPR&&((16-TPR&&8-TPR)&&(8-TPR-C&&8-TPR-7)))",
+            "(1-TPR&&16-TPR&&8-TPR&&8B-TPR)",
             {
                 "op": "||",
                 "val": [
                     {
                         "op": "&&",
                         "val": [
-                            "S1-MT-NRR","8-NWKR","9-NWKR",
-                            "8-TPR-8", "8-TPR-9", "8-TPR-D", "M-TPR",
-                            "9-TPR-C", "9-TPR-7", "9-TPR-8", "9-TPR-9",
-                            "9-TPR-D", "9-TPR"
+                            "S1-MT-NRR", "8-NWKR", "9-NWKR",
+                            "M-TPR", "9A-TPR", "9-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S1-LT-NRR","8-RWKR","9-NWKR",
-                            "8-TPR-5", "8-TPR-3", "8-TPR-B", "L-TPR",
-                            "9-TPR-A", "9-TPR-1", "9-TPR-2", "9-TPR-3",
-                            "9-TPR-B"
+                            "8A-TPR", "L-TPR", "9A-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S1-LAT-NRR","8-RWKR","9-RWKR",
-                            "8-TPR-5", "8-TPR-3", "8-TPR-B", "L-TPR",
-                            "9-TPR-A", "9-TPR-1", "9-TPR-5", "9-TPR-9",
-                            "9-TPR-D", "9-TPR"
+                            "8A-TPR", "L-TPR", "9A-TPR", "9B-TPR", "9-TPR"
                         ]
                     }
                 ]
             },
             "(~S1-GNR||S1-HR)",
-            "(8-RWKR&&8-RWKR)"
+            "8-RWKR"
         ]
     },
     "S1-DR": [
@@ -510,65 +511,56 @@ var hrExpression = {
         "13-ASR", "~S3-UCR",
         "S2-UCR", "2/3-TSR",  "~2/3-ASR",
         "S2-NRR", "9-RWKR",
-        "9-TPR-A", "9-TPR-1", "9-TPR-5", "9-TPR-9", "9-TPR-D", "9-TPR"
+        "9A-TPR", "9B-TPR", "9-TPR"
     ],
     "S3-HR": [
         "13-ASR", "~S2-UCR",
         "S3-UCR", "2/3-TSR",  "~2/3-ASR",
         "S3-NRR", "9-NWKR",
-        "9-TPR-C", "9-TPR-7", "9-TPR-8", "9-TPR-9", "9-TPR"
+        "9B-TPR", "9-TPR"
     ],
     "S3-DR": ["(S4-HR&&S3-HR)"],
-    "S13-HR": {
-        "op": "&&",
-        "val": [
-            "(~S13-UYR1&&(~S13-UYR2&&~S13-UYR3))",
-            "(2/3-ASR&&1-ASR)",
-            "(S13-UCR&&(4/13-TSR&&~13-ASR))",
-            "(13-TPR&&((4-TPR&&9-TPR)&&(9-TPR-D&&9-TPR-9)))",
-            {
-                "op": "||",
-                "val": [
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-MT-NRR","9-NWKR","8-NWKR",
-                            "9-TPR-8", "9-TPR-7", "9-TPR-C", "M-TPR",
-                            "8-TPR-D", "8-TPR-9", "8-TPR-8", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
-                        ]
-                    },
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-LT-NRR","9-RWKR","8-NWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-2", "8-TPR-1",
-                            "8-TPR-A"
-                        ]
-                    },
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-LAT-NRR","9-RWKR","8-RWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-5", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
-                        ]
-                    }
-                ]
-            },
-            "(~S13-GNR||S13-HR)",
-            "((9-NWKR&&~S13-UGR)||(9-RWKR&&S13-UGR))"
-        ]
-    },
+    "S13-HR": [
+        "(~S13-UYR1&&(~S13-UYR2&&~S13-UYR3))",
+        "(2/3-ASR&&1-ASR)",
+        "(S13-UCR&&(4/13-TSR&&~13-ASR))",
+        "(13-TPR&&4-TPR&&9-TPR&&9B-TPR)",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-MT-NRR","9-NWKR","8-NWKR",
+                        "M-TPR", "8B-TPR", "8-TPR"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-LT-NRR","9-RWKR","8-NWKR",
+                        "9A-TPR", "L-TPR", "8A-TPR"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-LAT-NRR","9-RWKR","8-RWKR",
+                        "9A-TPR", "L-TPR", "8A-TPR", "8B-TPR", "8-TPR"
+                    ]
+                }
+            ]
+        },
+        "(~S13-GNR||S13-HR)",
+        "((9-NWKR&&~S13-UGR)||(9-RWKR&&S13-UGR))"
+    ],
     "S13-UGR": {
         "op": "&&",
         "val": [
             "(~S13-UYR1&&(~S13-UYR2&&~S13-UYR3))",
             "(2/3-ASR&&1-ASR)",
             "(S13-UCR&&(4/13-TSR&&~13-ASR))",
-            "(13-TPR&&((4-TPR&&9-TPR)&&(9-TPR-D&&9-TPR-9)))",
+            "(13-TPR&&4-TPR&&9-TPR&&9B-TPR)",
             {
                 "op": "||",
                 "val": [
@@ -576,27 +568,21 @@ var hrExpression = {
                         "op": "&&",
                         "val": [
                             "S13-MT-NRR","9-NWKR","8-NWKR",
-                            "9-TPR-8", "9-TPR-7", "9-TPR-C", "M-TPR",
-                            "8-TPR-D", "8-TPR-9", "8-TPR-8", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
+                            "M-TPR", "8B-TPR", "8-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S13-LT-NRR","9-RWKR","8-NWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-2", "8-TPR-1",
-                            "8-TPR-A"
+                            "9A-TPR", "L-TPR", "8A-TPR"
                         ]
                     },
                     {
                         "op": "&&",
                         "val": [
                             "S13-LAT-NRR","9-RWKR","8-RWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-5", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
+                            "9A-TPR", "L-TPR", "8A-TPR", "8B-TPR", "8-TPR"
                         ]
                     }
                 ]
@@ -605,56 +591,47 @@ var hrExpression = {
             "(9-RWKR&&9-RWKR)"
         ]
     },
-    "S13-DR": {
-        "op": "&&",
-        "val": [
-            "(~S13-UYR1&&~S13-UYR2&&~S13-UYR3)",
-            "(2/3-ASR&&1-ASR)",
-            "(S13-UCR&&(4/13-TSR&&~13-ASR))",
-            "(13-TPR&&((4-TPR&&9-TPR)&&(9-TPR-D&&9-TPR-9)))",
-            {
-                "op": "||",
-                "val": [
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-MT-NRR","9-NWKR","8-NWKR",
-                            "9-TPR-8", "9-TPR-7", "9-TPR-C", "M-TPR",
-                            "8-TPR-D", "8-TPR-9", "8-TPR-8", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
-                        ]
-                    },
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-LT-NRR","9-RWKR","8-NWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-2", "8-TPR-1",
-                            "8-TPR-A"
-                        ]
-                    },
-                    {
-                        "op": "&&",
-                        "val": [
-                            "S13-LAT-NRR","9-RWKR","8-RWKR",
-                            "9-TPR-5", "9-TPR-1", "9-TPR-A", "L-TPR",
-                            "8-TPR-B", "8-TPR-3", "8-TPR-5", "8-TPR-7",
-                            "8-TPR-C", "8-TPR"
-                        ]
-                    }
-                ]
-            },
-            "(~S13-GNR||S13-HR)",
-            "((9-NWKR&&~S13-UGR)&&(S13-HR&&S15-DR))"
-        ]
-    },
+    "S13-DR": [
+        "(~S13-UYR1&&~S13-UYR2&&~S13-UYR3)",
+        "(2/3-ASR&&1-ASR)",
+        "(S13-UCR&&(4/13-TSR&&~13-ASR))",
+        "(13-TPR&&4-TPR&&9-TPR&&9B-TPR)",
+        {
+            "op": "||",
+            "val": [
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-MT-NRR","9-NWKR","8-NWKR",
+                        "M-TPR", "8B-TPR", "8-TPR"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-LT-NRR","9-RWKR","8-NWKR",
+                        "9A-TPR", "L-TPR", "8A-TPR"
+                    ]
+                },
+                {
+                    "op": "&&",
+                    "val": [
+                        "S13-LAT-NRR","9-RWKR","8-RWKR",
+                        "9A-TPR", "L-TPR", "8A-TPR", "8B-TPR", "8-TPR"
+                    ]
+                }
+            ]
+        },
+        "(~S13-GNR||S13-HR)",
+        "((9-NWKR&&~S13-UGR)&&(S13-HR&&S15-DR))"
+    ],
     "S14-HR": {
         "op": "&&",
         "val": [
             "1-ASR","~S15-UCR",
             "14/15-TSR","~14/15-ASR","S14-UCR",
             "S14-NRR","8-RWKR",
-            "8-TPR-B","8-TPR-3","8-TPR-5","8-TPR-7","8-TPR-C","8-TPR"
+            "8A-TPR", "8B-TPR", "8-TPR"
         ]
     },
     "S15-HR": {
@@ -663,7 +640,7 @@ var hrExpression = {
             "1-ASR","~S14-UCR",
             "14/15-TSR","~14/15-ASR","S15-UCR",
             "S15-NRR","8-NWKR",
-            "8-TPR-D","8-TPR-9","8-TPR-8","8-TPR-7","8-TPR-C","8-TPR"
+            "8B-TPR", "8-TPR"
         ]
     },
     "S15-DR": ["(S16-HR&&S15-HR)"]
@@ -722,67 +699,75 @@ var tprLockExpression = {
         ]
     },
 
-    "8-TPR-A": ["(~13-ASR&&(9-RWKR&&8-NWKR))"],
-    "8-TPR-B": {
-        "op": "||",
-        "val": [
-            "(~1-ASR&&8-RWKR)",
-            "(~13-ASR&&9-RWKR)",
-            "(~14/15-ASR&&8-RWKR)"
-        ]
-    },
-    "8-TPR-C": {
-        "op": "||",
-        "val": [
-            "~1-ASR","~14/15-ASR",
-            "(~13-ASR&&(9-NWKR||(9-RWKR&&8-RWKR)))"
-        ]
-    },
-    "8-TPR-D": {
-        "op": "||",
-        "val": [
-            "(8-NWKR&&(~1-ASR||~14/15-ASR))",
-            "(~13-ASR&&9-NWKR)"
-        ]
-    },
-    "8-TPR-1": ["8-NWKR"],
-    "8-TPR-2": ["8-NWKR"],
-    "8-TPR-3": ["(8-NWKR||8-RWKR)"],
-    "8-TPR-5": ["8-RWKR"],
-    "8-TPR-7": ["(8-NWKR||8-RWKR)"],
-    "8-TPR-8": ["8-NWKR"],
-    "8-TPR-9": ["8-NWKR"],
+    "8A-TPR-n-R": ["8-NWKR", "~8A-TPR"],
+    "8A-TPR-n-Y": ["8-NWKR", "8A-TPR"],
+    "8B-TPR-n-R": ["8-NWKR", "~8B-TPR"],
+    "8B-TPR-n-Y": ["8-NWKR", "8B-TPR"],
 
-    "9-TPR-A": {
-        "op": "||",
-        "val": [
-            "(~1-ASR&&8-RWKR)",
-            "(~2/3-ASR&&9-RWKR)",
-            "(~13-ASR&&9-RWKR)"
-        ]
-    },
-    "9-TPR-B": ["(~1-ASR&&(8-RWKR&&9-NWKR))"],
-    "9-TPR-C": {
-        "op": "||",
-        "val": [
-            "(~1-ASR&&8-NWKR)","(~2/3-ASR&&9-NWKR)",
-            "(~13-ASR&&9-NWKR)"
-        ]
-    },
-    "9-TPR-D": {
-        "op": "||",
-        "val": [
-            "~13-ASR","~2/3-ASR",
-            "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
-        ]
-    },
-    "9-TPR-1": ["(9-NWKR||9-RWKR)"],
-    "9-TPR-2": ["9-NWKR"],
-    "9-TPR-3": ["9-NWKR"],
-    "9-TPR-5": ["9-RWKR"],
-    "9-TPR-7": ["9-NWKR"],
-    "9-TPR-8": ["9-NWKR"],
-    "9-TPR-9": ["(9-NWKR||9-RWKR)"]
+    "8A-TPR-r-R": ["8-RWKR", "~8A-TPR"],
+    "8A-TPR-r-Y": ["8-RWKR", "8A-TPR"],
+    "8B-TPR-r-R": ["8-RWKR", "~8B-TPR"],
+    "8B-TPR-r-Y": ["8-RWKR", "8B-TPR"],
+
+    "8A-TPR-c-R": ["~8A-TPR"],
+    "8B-TPR-c-R": ["~8B-TPR"],
+
+    "8B-TPR-n2-R": ["8-NWKR", "~8B-TPR"],
+    "9B-TPR-n2-R": ["9-NWKR", "~9B-TPR"],
+    "8A-TPR-c-Y": ["8A-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(~1-ASR&&8-RWKR)",
+                "(~13-ASR&&9-RWKR)",
+                "(~14/15-ASR&&8-RWKR)"
+            ]
+        }
+    ],
+    "8B-TPR-c-Y": ["8B-TPR",
+        {
+            "op": "||",
+            "val": [
+                "~1-ASR", "~14/15-ASR",
+                "(~13-ASR&&(9-NWKR||(9-RWKR&&8-RWKR)))"
+            ]
+        }
+    ],
+    "8B-TPR-n2-Y": ["8-NWKR", "8B-TPR-c-Y"],
+    "9B-TPR-n2-Y": ["9-NWKR", "9B-TPR-c-Y"],
+
+    "9A-TPR-n-R": ["9-NWKR", "~9A-TPR"],
+    "9A-TPR-n-Y": ["9-NWKR", "9A-TPR"],
+    "9B-TPR-n-R": ["9-NWKR", "~9B-TPR"],
+    "9B-TPR-n-Y": ["9-NWKR", "9B-TPR"],
+
+    "9A-TPR-r-R": ["9-RWKR", "~9A-TPR"],
+    "9A-TPR-r-Y": ["9-RWKR", "9A-TPR"],
+    "9B-TPR-r-R": ["9-RWKR", "~9B-TPR"],
+    "9B-TPR-r-Y": ["9-RWKR", "9B-TPR"],
+
+    "9A-TPR-c-R": ["~9A-TPR"],
+    "9B-TPR-c-R": ["~9B-TPR"],
+    "9A-TPR-c-Y": ["9A-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(~1-ASR&&8-RWKR)",
+                "(~2/3-ASR&&9-RWKR)",
+                "(~13-ASR&&9-RWKR)"
+            ]
+        }
+    ],
+    "9B-TPR-c-Y": ["9B-TPR",
+        {
+            "op": "||",
+            "val": [
+                "~13-ASR", "~2/3-ASR",
+                "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
+            ]
+        }
+    ],
+    "9B-TPR-n2-Y": ["9-NWKR", "9B-TPR-c-Y"]
 };
 
 Object.assign(exps, ucrExp);
