@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-$V.documentLoaded();
+$VC.documentLoaded();
 var timerCount = 0;
 
 function checkDominoDisplayStatus() {
@@ -12,7 +12,7 @@ function checkDominoDisplayStatus() {
     return true;
 }
 function checkUIStyle() {
-    var possibleValues = $V.getPossibleValues();
+    var possibleValues = $VC.getPossibleValues();
     for (var i=0; i<possibleValues.length; i++) {
         var key = possibleValues[i];
         try {
@@ -21,10 +21,10 @@ function checkUIStyle() {
                 if (node.hasClass("tpr")) {
                     node.removeClass("btn-warning");
                     node.removeClass("btn-danger");
-                    node.addClass($V.getTprClass(key));
+                    node.addClass($VC.getTprClass(key));
                 } else if (node.hasClass("indication")) {
                     node.removeClass("active");
-                    node.addClass($V.getIndicationClass(key));
+                    node.addClass($VC.getIndicationClass(key));
                 }
             }
         } catch(err) {
@@ -32,7 +32,7 @@ function checkUIStyle() {
         }
     }
     // $("#timerCount").html(timerCount);
-    $V.addSignalClass();
+    $VC.addSignalClass();
 }
 function evtClick (currentTarget) {
     if (timerCount != 0) {
@@ -56,12 +56,12 @@ function evtClick (currentTarget) {
         checkUIStyle();
         setTimeout(function() {
             timerCount--;
-            $V.setValues(key, 0);
+            $VC.setValues(key, 0);
             checkUIStyle();
         }, 1000);
     }
     for(var key in finalValue) {
-        $V.setValues(key, finalValue[key]);
+        $VC.setValues(key, finalValue[key]);
         // checkUIStyle();
         //Activate timer for signal+route button press and manual point operation
         if (currentTarget.hasClass("signal_route_btn") || currentTarget.hasClass("point-change-request")) {
@@ -69,7 +69,7 @@ function evtClick (currentTarget) {
         }
     }
     for (var i = 0; i < toggleValues.length; i++) {
-        $V.toggleValues(toggleValues[i]);
+        $VC.toggleValues(toggleValues[i]);
     }
     checkUIStyle();
 }

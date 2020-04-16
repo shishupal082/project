@@ -41,21 +41,22 @@
         ],
         "8-point-top": [
             [
-                "<span class='label label-primary'>--</span>"
+                "<span class='label label-primary'>--</span>","",
+                "<div class='text-right'>8A-</div>","<div class='text-left'>tpr</div>"
             ],
             [
-                "<button class='evt btn slat tpr 8-TPR-A' value='8-TPR-A'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn slat tpr 8-TPR-A' value='8-TPR-A'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn point-change-request' value='8-WNR=1,RWWNR=1'><span class='badge'>R</span></button>",
-                "<button class='evt btn pink tpr 8-TPR-1' value='8-TPR-1'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn slat tpr 8-TPR-2' value='8-TPR-2'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn green tpr 8A-TPR' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8A-TPR' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "<span class='label label-primary'>--</span>",
                 "",
                 "",
                 "<span class='badge yellow indication 8-WFK active'>&nbsp;</span>",
-                "<button class='evt btn tpr circle 8-TPR-5' value='8-TPR-5'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr yellow btn-rotate 8A-TPR-r' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "s14-tpr": [
@@ -63,11 +64,11 @@
                 "<button class='btn'></button>"
             ],
             [
-                "<button class='evt pink btn tpr 8-TPR-3' value='8-TPR-3'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 8-TPR-B circle' value='8-TPR-B'><span class='badge'>S14</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt yellow btn tpr 8A-TPR-c' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 8A-TPR-c' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "",
@@ -79,50 +80,48 @@
         ],
         "l-tpr-1": [
             [
-                "<button class='btn'></button>"
+                "","","",
+                "<div class='text-right'>L-</div>","<div class='text-left'>tpr</div>"
             ],
             [
-                "<button class='evt blue btn tpr L-TPR-1 circle' value='L-TPR'><span class='badge'>L1</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 ""
             ]
         ],
         "l-tpr-2": [
+            [""],
             [
-                "<button class='btn'></button>"
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
-            [
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1 circle' value='L-TPR'><span class='badge'>L2</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
-            ],
-            [
-                ""
-            ]
+            [""]
         ],
         "s2-tpr": [
             [
                 "<span class='signal-no'>S2</span>",
                 "<span id='S2-RECR' class='badge signal active red'>&nbsp;</span>",
-                "<span id='S2-HECR' class='badge signal active yellow'>&nbsp;</span>"
+                "<span id='S2-HECR' class='badge signal active yellow'>&nbsp;</span>",
+                "<div class='text-right'>9A-</div>","<div class='text-left'>tpr</div>"
             ],
             [
-                "<button class='evt blue btn tpr L-TPR-1' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-A circle' value='9-TPR-A'><span class='badge'>S2</span></button>",
-                "<button class='evt pink btn tpr 9-TPR-1' value='9-TPR-1'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-2' value='9-TPR-2'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt pink btn tpr 9-TPR-3' value='9-TPR-3'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR-c' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR-c' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "","","",
-                "<button class='evt btn tpr circle 9-TPR-5' value='9-TPR-5'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow btn-rotate positive 9A-TPR-r' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='badge yellow indication 9-WFK active'>&nbsp;</span>"
             ]
         ],
@@ -133,9 +132,9 @@
                 "<span class='label label-primary'>|</span>"
             ],
             [
-                "<button class='evt btn point-change-request' value='9-WNR=1,RWWNR=1'><span class='badge'>R</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-B' value='9-TPR-B'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-B' value='9-TPR-B'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='label label-primary'>|</span>",
                 ""
             ],
@@ -150,26 +149,28 @@
         "8-point-mid": [
             [
                 "","","",
-                "<button class='evt btn tpr circle 8-TPR-5' value='8-TPR-5'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow btn-rotate 8A-TPR-r' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
                 ""
             ],
             [
                 "",
-                "",
-                "<button class='evt btn tpr circle' value='8-TPR-5'><span class='badge'>8</span></button>"
+                "<button class='evt btn point-change-request' value='8-WNR=1,RWWNR=1'><span class='badge'>R</span></button>",
+                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn point-change-request' value='8-WNR=1,NWWNR=1'><span class='badge'>N</span></button>"
             ],
             [
                 "",
-                "<button class='evt btn tpr circle 8-TPR-5' value='8-TPR-5'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "9-point-mid-1": [
             [
                 "","","","",
-                "<button class='evt btn tpr circle 9-TPR-5' value='9-TPR-5'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr yellow btn-rotate positive 9A-TPR-r' value='9A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                ""
+                "","","","",
+                "<button class='evt btn point-change-request' value='9-WNR=1,RWWNR=1'><span class='badge'>R</span></button>"
             ],
             [
                 ""
@@ -180,12 +181,13 @@
                 ""
             ],
             [
-                "<button class='evt btn tpr circle' value='9-TPR-5'><span class='badge'>9</span></button>",
-                "","","",""
+                "<button class='evt btn tpr green btn-rotate positive 9B-TPR-r' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn point-change-request' value='9-WNR=1,NWWNR=1'><span class='badge'>N</span></button>",
+                "","",""
             ],
             [
                 "",
-                "<button class='evt btn tpr circle 9-TPR-5' value='9-TPR-5'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr green btn-rotate positive 9B-TPR-r' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ]
     },
@@ -201,22 +203,24 @@
             [
                 "<button class='evt red btn tpr 1-TPR' value='1-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt red btn tpr 1-TPR' value='1-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt red btn tpr 1-TPR circle' value='1-TPR'><span class='badge'>S1</span></button>",
+                "<button class='evt red btn tpr 1-TPR' value='1-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt red btn tpr 1-TPR' value='1-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt red btn tpr 1-TPR' value='1-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<button class='btn'></button>"
+                "","",
+                "<div class='text-right'>1-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "16-tpr": [
             [
-                "<button class='btn'></button>"
+                "","",
+                "<div class='text-right'>16-</div>","<div class='text-left'>tpr</div>"
             ],
             [
                 "<button class='evt green btn tpr 16-TPR' value='16-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 16-TPR' value='16-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt green btn tpr 16-TPR circle' value='16-TPR'><span class='badge'>S16</span></button>",
+                "<button class='evt green btn tpr 16-TPR' value='16-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 16-TPR' value='16-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 16-TPR' value='16-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
@@ -230,33 +234,35 @@
         ],
         "8-tpr": [
             [
-                "<button class='btn'></button>"
-            ],
-            [
-                "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn blue tpr 8-TPR circle' value='8-TPR'><span class='badge'>8</span></button>",
-                "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn slat tpr 8-TPR-C' value='8-TPR-C'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn pink tpr 8-TPR-7' value='8-TPR-7'><span class='badge'>&nbsp;</span></button>"
-            ],
-            [
                 ""
+            ],
+            [
+                "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-c' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-c' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "",
+                "<div class='text-right'>8-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "8c-tpr": [
             [
-                "<button class='evt btn tpr circle 8-TPR-5' value='8-TPR-5'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='badge yellow indication 8-WFK active'>&nbsp;</span>"
             ],
             [
-                "<button class='evt btn slat tpr 8-TPR-8' value='8-TPR-8'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn pink tpr 8-TPR-9' value='8-TPR-9'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn circle point-change-request' value='8-WNR=1,NWWNR=1'><span class='badge'>N</span></button>",
-                "<button class='evt btn slat tpr 8-TPR-D' value='8-TPR-D'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn slat tpr circle 8-TPR-D' value='8-TPR-D'><span class='badge'>S15</span></button>"
+                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                ""
+                "",
+                "<div class='text-right'>8B-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "s15-tpr": [
@@ -264,11 +270,11 @@
                 ""
             ],
             [
-                "<button class='evt btn blue tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn blue tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn blue tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn blue tpr M-TPR-1 circle' value='M-TPR'><span class='badge'>M1</span></button>",
-                "<button class='evt btn blue tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn blue tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn blue tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "<span id='S15-DECR' class='badge signal active green'>&nbsp;</span>",
@@ -282,26 +288,27 @@
                 "<button class='btn'></button>"
             ],
             [
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr circle M-TPR-1' value='M-TPR'><span class='badge'>M2</span></button>"
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                ""
+                "","","",
+                "<div class='text-right'>M-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "m-tpr-2": [
             [
-                "<button class='btn'></button>"
+                ""
             ],
             [
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 ""
@@ -315,11 +322,11 @@
                 "<span id='S3-DECR' class='badge signal active green'>&nbsp;</span>"
             ],
             [
-                "<button class='evt blue btn tpr circle M-TPR-1' value='M-TPR'><span class='badge'>M3</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr M-TPR-1' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-C circle' value='9-TPR-C'><span class='badge'>S3</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-C' value='9-TPR-C'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt blue btn tpr M-TPR' value='M-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 ""
@@ -329,17 +336,18 @@
             [
                 "",
                 "<span class='badge yellow indication 9-WFK active'>&nbsp;</span>",
-                "<button class='evt btn tpr circle 9-TPR-5' value='9-TPR-5'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr green btn-rotate positive 9B-TPR-r' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<button class='evt btn point-change-request' value='9-WNR=1,NWWNR=1'><span class='badge'>N</span></button>",
-                "<button class='evt pink btn tpr 9-TPR-7' value='9-TPR-7'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-8' value='9-TPR-8'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt pink btn tpr 9-TPR-9' value='9-TPR-9'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt slat btn tpr 9-TPR-D' value='9-TPR-D'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-c' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-c' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                ""
+                "",
+                "<div class='text-right'>9B-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "9-tpr": [
@@ -350,23 +358,27 @@
             ],
             [
                 "<button class='evt blue btn tpr 9-TPR' value='9-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt blue btn tpr 9-TPR circle' value='9-TPR'><span class='badge'>9</span></button>",
+                "<button class='evt blue btn tpr 9-TPR' value='9-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr 9-TPR' value='9-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 4-TPR' value='4-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt green btn tpr 4-TPR circle' value='4-TPR'><span class='badge'>4</span></button>"
+                "<button class='evt green btn tpr 4-TPR' value='4-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                ""
+                "<div class='text-right'>9-</div>","<div class='text-left'>tpr</div>",
+                "",
+                "<div class='text-right'>4-</div>","<div class='text-left'>tpr</div>"
             ]
         ],
         "4-tpr": [
             [
-                "<span id='S4-HECR' class='badge signal active green'>&nbsp;</span>"
+                "<span id='S4-HECR' class='badge signal active green'>&nbsp;</span>",
+                "",
+                "<div class='text-right'>13-</div>","<div class='text-left'>tpr</div>"
             ],
             [
                 "<button class='evt green btn tpr 4-TPR' value='4-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt yellow btn tpr 13-TPR' value='13-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt yellow btn tpr 13-TPR circle' value='13-TPR'><span class='badge'>13</span></button>",
+                "<button class='evt yellow btn tpr 13-TPR' value='13-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt yellow btn tpr 13-TPR' value='13-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt yellow btn tpr 13-TPR' value='13-TPR'><span class='badge'>&nbsp;</span></button>"
             ],

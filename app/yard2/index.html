@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="/app/yard/static/css/style.css">
-	<title>Yards 2</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/stylesheet.css">
+    <title>Yards 2</title>
 <style type="text/css">
 .yard .table-html td button {
     font-size: 10px;
@@ -12,29 +13,34 @@
 </style>
 </head>
 <body>
-	<div class="container yard">
-		<center><h2>Yards 2</h2></center>
-		<div id="yardsIds"></div>
-		<div id="tableHtml"></div>
-		<div id="help" class="help hide">
-			<div>
-				<ul>
-					<li><button id="toggleDisplayDomino">Toggle Display Domino</button></li>
-				</ul>
-			</div>
-			<div class="hide">
-				<ul>
-				</ul>
-			</div>
-		</div>
-	</div>
+    <div class="container yard">
+        <center><h2>Yards 2</h2></center>
+        <div id="yardsIds"></div>
+        <div id="tableHtml"></div>
+        <div id="help" class="help hide">
+            <div>
+                <ul>
+                    <li><button id="toggleDisplayDomino">Toggle Display Domino</button></li>
+                    <li>
+                        <label style="margin: 0;" for="toggleDisplayDominoSwitch">Toggle Display Domino</label>
+                        <input type="checkbox" id="toggleDisplayDominoSwitch" class="switch size-20px" aria-label="Checked for Display Domino">
+                        <input type="checkbox" class="switch" aria-label="Checked for Display Domino">
+                    </li>
+                </ul>
+            </div>
+            <div class="hide">
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
 <script type="text/javascript" src="/static/js/stack.js"></script>
 <script type="text/javascript" src="/static/js/yard/yardHelper.js"></script>
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
 <script type="text/javascript" src="/app/yard2/static/js/yardView2.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$YV.documentLoaded();
+    $YV.documentLoaded();
 });
 </script>
 </body>

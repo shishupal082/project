@@ -7,37 +7,13 @@ var currentValues = {
     "1-TPR": 1,
     "16-TPR": 1,
     "8-TPR": 1,
-    "8-TPR-A": 1,
-    "8-TPR-1": 1,
-    "8-TPR-2": 1,
-    "8-TPR-3": 1,
-    "8-TPR-B": 1,
-    "8-TPR-5": 1,
-    "8-TPR-C": 1,
-    "8-TPR-7": 1,
-    "8-TPR-8": 1,
-    "8-TPR-9": 1,
-    "8-TPR-D": 1,
+    "8A-TPR": 1,
+    "8B-TPR": 1,
     "M-TPR": 1,
-    "M-TPR-1": 1,
-    "M-TPR-2": 1,
-    "M-TPR-3": 1,
     "L-TPR": 1,
-    "L-TPR-1": 1,
-    "L-TPR-2": 1,
-    "L-TPR-3": 1,
     "9-TPR": 1,
-    "9-TPR-A": 1,
-    "9-TPR-1": 1,
-    "9-TPR-2": 1,
-    "9-TPR-3": 1,
-    "9-TPR-B": 1,
-    "9-TPR-5": 1,
-    "9-TPR-C": 1,
-    "9-TPR-7": 1,
-    "9-TPR-8": 1,
-    "9-TPR-9": 1,
-    "9-TPR-D": 1,
+    "9A-TPR": 1,
+    "9B-TPR": 1,
     "4-TPR": 1,
     "13-TPR": 1,
     "1-ASR": 1,
@@ -71,17 +47,15 @@ var uyrs = ["S1-UYR1", "S1-UYR2", "S1-UYR3",
 var miscs = ["NWWNR", "RWWNR", "S1-UCR", "S2-UCR", "S3-UCR", "S13-UCR", "S14-UCR", "S15-UCR"];
 // var availableTSRs = ["1/16-TSR", "2-TSR", "3-TSR", "4/13-TSR", "14/15-TSR"];
 //8-TPR / 9-TPR method defined for calculating all value of TPR for point 8
-var availableTPRs = ["1-TPR", "16-TPR", "8-TPR",
-                        "8-TPR-A","8-TPR-1","8-TPR-2","8-TPR-3","8-TPR-B",
-                        "8-TPR-5",
-                        "8-TPR-C", "8-TPR-7", "8-TPR-8", "8-TPR-9", "8-TPR-D",
-                        "9-TPR",
-                        "9-TPR-A","9-TPR-1","9-TPR-2","9-TPR-3","9-TPR-B",
-                        "9-TPR-5",
-                        "9-TPR-C", "9-TPR-7", "9-TPR-8", "9-TPR-9", "9-TPR-D",
-                        "M-TPR", "M-TPR-1", "M-TPR-2", "M-TPR-3",
-                        "L-TPR", "L-TPR-1", "L-TPR-2", "L-TPR-3", 
-                        "4-TPR", "13-TPR"];
+var availableTPRs = ["1-TPR", "16-TPR", "4-TPR", "13-TPR", "M-TPR", "L-TPR",
+                    "8A-TPR", "8B-TPR", "9A-TPR", "9B-TPR", "8-TPR", "9-TPR",
+
+                    "1-TPR-R", "16-TPR-R", "4-TPR-R", "13-TPR-R", "M-TPR-R", "L-TPR-R",
+                    "8A-TPR-R", "8B-TPR-R", "9A-TPR-R", "9B-TPR-R", "8-TPR-R", "9-TPR-R",
+
+                    "1-TPR-Y", "16-TPR-Y", "4-TPR-Y", "13-TPR-Y", "M-TPR-Y", "L-TPR-Y",
+                    "8A-TPR-Y", "8B-TPR-Y", "9A-TPR-Y", "9B-TPR-Y", "8-TPR-Y", "9-TPR-Y"
+                    ];
 
 
 var point9InfoExt = ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"];
@@ -694,13 +668,7 @@ var hrExpression = {
     },
     "S15-DR": ["(S16-HR&&S15-HR)"]
 };
-var tprExp = {
-    "M-TPR-1": ["M-TPR"],
-    "M-TPR-2": ["M-TPR"],
-    "M-TPR-3": ["M-TPR"],
-    "L-TPR-1": ["L-TPR"],
-    "L-TPR-2": ["L-TPR"],
-    "L-TPR-3": ["L-TPR"],
+var signalIndicationExp = {
     "S1-HECR": ["(S1-HR&&~S1-DR)"],
     "S1-DECR": ["(S1-HR&&S1-DR)"],
     "S2-RECR": ["~S2-HR"],
@@ -722,15 +690,38 @@ var tprExp = {
     "S16-HECR": ["S16-HR"]
 };
 var tprLockExpression = {
-    "1-TPR": ["(~1-ASR||~S16-NNR)"],
-    "16-TPR": ["(~1-ASR||~S16-NNR)"],
-    "8-TPR": {
+    "M-TPR-R": ["~M-TPR"],
+    "L-TPR-R": ["~L-TPR"],
+    "1-TPR-R": ["~1-TPR"],
+    "16-TPR-R": ["~16-TPR"],
+    "4-TPR-R": ["~4-TPR"],
+    "13-TPR-R": ["~13-TPR"],
+
+    "M-TPR-Y": ["((8-NWKR&&~1-ASR)||(9-NWKR&&~13-ASR))"],
+    "L-TPR-Y": ["((8-RWKR&&~1-ASR)||(9-RWKR&&~13-ASR))"],
+    "1-TPR-Y": ["(~1-ASR||~S16-NNR)"],
+    "16-TPR-Y": ["(~1-ASR||~S16-NNR)"],
+    "4-TPR-Y": ["(~13-ASR||~S4-NNR)"],
+    "13-TPR-Y": ["(~13-ASR||~S4-NNR)"],
+
+    "8-TPR-R": ["~8-TPR"],
+    "8-TPR-Y": {
         "op": "||",
         "val": [
             "~1-ASR","~14/15-ASR",
             "(~13-ASR&&(9-NWKR||(9-RWKR&&8-RWKR)))"
         ]
     },
+
+    "9-TPR-R": ["~9-TPR"],
+    "9-TPR-Y": {
+        "op": "||",
+        "val": [
+            "~13-ASR","~2/3-ASR",
+            "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
+        ]
+    },
+
     "8-TPR-A": ["(~13-ASR&&(9-RWKR&&8-NWKR))"],
     "8-TPR-B": {
         "op": "||",
@@ -761,13 +752,7 @@ var tprLockExpression = {
     "8-TPR-7": ["(8-NWKR||8-RWKR)"],
     "8-TPR-8": ["8-NWKR"],
     "8-TPR-9": ["8-NWKR"],
-    "9-TPR": {
-        "op": "||",
-        "val": [
-            "~13-ASR","~2/3-ASR",
-            "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
-        ]
-    },
+
     "9-TPR-A": {
         "op": "||",
         "val": [
@@ -797,24 +782,16 @@ var tprLockExpression = {
     "9-TPR-5": ["9-RWKR"],
     "9-TPR-7": ["9-NWKR"],
     "9-TPR-8": ["9-NWKR"],
-    "9-TPR-9": ["(9-NWKR||9-RWKR)"],
-    "4-TPR": ["(~13-ASR||~S4-NNR)"],
-    "13-TPR": ["(~13-ASR||~S4-NNR)"],
-    "M-TPR-1": ["((8-NWKR&&~1-ASR)||(9-NWKR&&~13-ASR))"],
-    "M-TPR-2": ["((8-NWKR&&~1-ASR)||(9-NWKR&&~13-ASR))"],
-    "M-TPR-3": ["((8-NWKR&&~1-ASR)||(9-NWKR&&~13-ASR))"],
-    "L-TPR-1": ["((8-RWKR&&~1-ASR)||(9-RWKR&&~13-ASR))"],
-    "L-TPR-2": ["((8-RWKR&&~1-ASR)||(9-RWKR&&~13-ASR))"],
-    "L-TPR-3": ["((8-RWKR&&~1-ASR)||(9-RWKR&&~13-ASR))"]
+    "9-TPR-9": ["(9-NWKR||9-RWKR)"]
 };
+
 Object.assign(exps, ucrExp);
-Object.assign(exps, tprExp);
 Object.assign(exps, asrExp);
 Object.assign(exps, hrExpression);
+Object.assign(exps, tprLockExpression);
+Object.assign(exps, signalIndicationExp);
+
 $M.extend({
-    getTprLockExpressionFromComponentModel: function() {
-        return tprLockExpression;
-    },
     getPossibleValuesFromComponentModel: function() {
         return possibleValues;
     },

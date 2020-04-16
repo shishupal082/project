@@ -1,6 +1,20 @@
 (function(window, $M) {
 
-var tprLockExpression = {};
+$M.enableProcessingCount();
+$M.extend({
+    "S1-RECR": function(name) {
+        var newValue = 0;
+        if ($M.isDown("S1-HR")) {
+            newValue = 1;
+        }
+        $M.setValue(name, newValue);
+    }
+});
+$M.extend({
+    "setValueChangedCallback": function(name, oldValue, newValue) {
+        return $M.reCheckAllValues();
+    }
+});
 
 var Controller = function(selector, context) {
     return new Controller.fn.init(selector, context);
@@ -8,13 +22,6 @@ var Controller = function(selector, context) {
 /*
 Direct access by id: $C("id").get()
 */
-
-function isFunction(value) {
-    return typeof value == "function" ? true : false;
-}
-function isObject(value) {
-    return (typeof value == "object" && isNaN(value.length)) ? true : false;
-}
 Controller.fn = Controller.prototype = {
     constructor: Controller,
     init: function(selector, context) {
@@ -27,25 +34,38 @@ Controller.fn = Controller.prototype = {
         return this;
     }
 };
-Controller.fn.init.prototype = Controller.fn;
-/*
-End of direct access of ID
-*/
-/*Direct access of methods: $C.methodName*/
-Controller.extend = Controller.fn.extend = function(options) {
-    if (isObject(options)) {
-        for (var key in options) {
-            if (isFunction(options[key])) {
-                /*If method already exist then it will be overwritten*/
-                if (isFunction(this[key])) {
-                    console.log("Method " + key + " is overwritten.");
+
+ExtendObject(Controller);
+
+Controller.extend({
+    documentLoaded: function() {
+        var possibleValues = $M.getPossibleValuesFromComponentModel();
+        var currentValues = $M.getCurrentValuesFromComponentModel();
+        $M().setPossibleValues(possibleValues);
+        $M().initializeCurrentValues(currentValues);
+        var allExpressions = [], exps = {};
+        allExpressions.push($M.getSignalExpressionsFromComponentModel());
+        allExpressions.push($M.getPointExpressionsFromComponentModel());
+        for (var i = 0; i < allExpressions.length; i++) {
+            exps = allExpressions[i];
+            for (var key in exps) {
+                if ($M.isArray(exps[key])) {
+                    for (var j = 0; j < exps[key].length; j++) {
+                        if ($M.isObject(exps[key][j])) {
+                            $M(key).addExp($M.generateExpression(exps[key][j]));
+                        } else {
+                            $M(key).addExp(exps[key][j]);
+                        }
+                    }
+                } else if ($M.isObject(exps[key])) {
+                    $M(key).addExp($M.generateExpression(exps[key]));
                 }
-                this[key] = options[key];
             }
         }
+        $M.reCheckAllValues();
+        return 0;
     }
-    return this;
-};
+});
 Controller.extend({
     getPossibleValues: function() {
         return $M.getPossibleValues();
@@ -58,54 +78,41 @@ Controller.extend({
         $M.toggleValue(name);
         return $M(name).get();
     },
-    documentLoaded: function() {
-        $M.documentLoaded();
-        tprLockExpression = $M.getTprLockExpressionFromComponentModel();
-        $M.reCheckAllValues();
-        return 0;
-    }
-});
-Controller.extend({
-    getTableHtml: function(tableId) {
-        var tableContent = $M.getYardFromYardModel();
-        var table = $M.getTable(tableContent, tableId);
-        return table.getHtml();
-    },
-    getTprClass: function(tprName) {
-        var exp, isLock = false;
-        if ($M.isDown(tprName)) {
-            return "btn-danger";
-        }
-        if (tprLockExpression[tprName]) {
-            exp = tprLockExpression[tprName];
-            if ($M.isObject(exp)) {
-                exp = [$M.generateExpression(exp)];
-            }
-            if (exp && exp.length) {
-                for (var i = 0; i < exp.length; i++) {
-                    if ($M.isObject(exp[i])) {
-                        exps[i] = $M.generateExpression(exps[i]);
-                    }
-                    if ($M.isExpressionTrue(exp[i])) {
-                        isLock = true;
-                        continue;
-                    } else {
-                        isLock = false;
-                        break;
-                    }
-                }
-            }
-        }
-        return isLock ? "btn-warning": "";
-    },
     getSignalClass: function(name, aspect) {
         return $M.isUp(name) ? "active" : "";
     },
     getIndicationClass: function(name) {
         return $M.isUp(name) ? "active" : "";
+    },
+    getTableHtml: function(tableId) {
+        var tableContent = $M.getYardFromYardModel();
+        var table = $M.getTable(tableContent, tableId);
+        return table.getHtml();
+    },
+    getTprClass: function(name) {
+        if ($M.isValidKey(name + "-R")) {
+            if ($M.isUp(name + "-R")) {
+                return "btn-danger";
+            }
+        }
+        if ($M.isValidKey(name + "-Y")) {
+            if ($M.isUp(name + "-Y")) {
+                return "btn-warning";
+            }
+        }
+        return "";
+    },
+    addSignalClass: function() {
+        var signals = ["S1-RECR", "S1-HECR", "S1-DECR", "S2-RECR", "S2-HECR",
+                        "S3-RECR", "S3-HECR", "S3-DECR", "S4-RECR", "S4-HECR",
+                        "S13-RECR", "S13-HECR", "S13-DECR", "S14-RECR", "S14-HECR",
+                        "S15-RECR", "S15-HECR", "S15-DECR", "S16-RECR", "S16-HECR"];
+        for (var i=0; i <signals.length; i++) {
+            $("#"+signals[i]).removeClass("active").addClass(Controller.getSignalClass(signals[i]));
+        }
     }
 });
 
 /*End of direct access of methods*/
-window.Controller = window.$VC = Controller;
+window.$VC = Controller;
 })(window, $M);

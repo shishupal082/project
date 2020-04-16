@@ -113,7 +113,7 @@ YardView.extend({
 });
 YardView.extend({
     htmlLoadingComplete: function() {
-        return;
+        return 1;
         var containerStyle = "";
         switch(CurrentYardId) {
             case "yard":
@@ -127,7 +127,8 @@ YardView.extend({
             break;
         }
         $(".container").attr("style", containerStyle);
-        var tprNodeDefaultClass = ["evt", "btn", "tpr", "green", "red", "yellow", "blue", "circle", undefined, "pink", "slat"];
+        var tprNodeDefaultClass = ["evt", "btn", "tpr", "btn-rotate", "positive", "green", "red", "yellow", "blue",
+                                    "circle", undefined, "pink", "slat"];
         tprNodeDefaultClass.push("open-point-left");
         tprNodeDefaultClass.push("open-point-right");
         $(".yard").addClass("debug");
