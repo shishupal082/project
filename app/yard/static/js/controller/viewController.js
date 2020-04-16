@@ -9,14 +9,13 @@ $M.extend({
         $M.setValue(name, newValue);
     }
 });
+
 $M.extend({
     "setValueChangedCallback": function(name, oldValue, newValue) {
         return $M.reCheckAllValues();
     }
 });
-$M.addCallbackSetValueCountLimitExceed(function() {
-    $("#alarm").html("Limit Exceeds.");
-});
+
 var Controller = function(selector, context) {
     return new Controller.fn.init(selector, context);
 };

@@ -21,6 +21,10 @@ YardApiModel.fn = YardApiModel.prototype = {
 
 ExtendObject(YardApiModel);
 
+$M.addCallbackSetValueCountLimitExceed(function() {
+    $("#alarm").html("Limit Exceeds.");
+});
+
 var RequestId = $M.getRequestId();
 
 var PartialExpressions = {};
