@@ -1,6 +1,7 @@
 (function(window, $S) {
 
 var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
+var AllCallbacks = [];
 var possibleValues = [];
 var reCheckingStatus = true;
 var verifyExpression = true;
@@ -231,6 +232,16 @@ Model.fn = Model.prototype = {
     }
 };
 ExtendObject(Model);
+Model.extend({
+    fire: function(name) {
+        for (var i = 0; i < AllCallbacks.length; i++) {
+            if (AllCallbacks[i][name]) {
+                $S.callMethod(AllCallbacks[i][name]);
+            }
+        }
+        return 1;
+    }
+});
 /* Stack warpper */
 Model.extend({
     getStack: function(shareStorage) {
@@ -426,6 +437,13 @@ Model.extend({
         }
         $S.log("Invalid newLimit:" + newLimit);
         return 0;
+    },
+    getSetValueCountLimit: function() {
+        return setValueCountLimit;
+    },
+    addCallbackSetValueCountLimitExceed: function(callBack) {
+        AllCallbacks.push({"SetValueCountLimitExceed": callBack});
+        return 1;
     }
 });
 Model.extend({
@@ -609,6 +627,7 @@ Model.extend({
     },
     setValue: function(key, newValue) {
         if (setValueCount >= setValueCountLimit) {
+            Model.fire("SetValueCountLimitExceed");
             setValueCount++;
             var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + newValue;
             $S.log(logText);
