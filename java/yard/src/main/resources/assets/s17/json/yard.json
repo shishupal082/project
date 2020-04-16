@@ -17,7 +17,7 @@
                 "<span class='label label-primary'>--</span>",
                 "<span class='label label-primary'>--</span>",
                 "","",
-                "<div class='text-right'>4B</dv>","<div class='text-left'>-tpr</div>"
+                "<div class='text-right'>4B</div>","<div class='text-left'>-tpr</div>"
             ],
             [
                 "<span class='label label-primary'>|</span>",
@@ -37,12 +37,12 @@
         ],
         "ll-tpr": [
             [
-                "","","","","","<div class='text-right'>L</dv>","<div class='text-left'>-tpr</div>","",
+                "","","","","","<div class='text-right'>L</div>","<div class='text-left'>-tpr</div>","",
                 "",
                 "<div class='shunt'><div class='text-left'><span class='badge yellow active'>&nbsp;</span></div><div class='text-left'><span id='SH7-RECR' class='badge yellow active'>&nbsp;</span><span id='SH7-HECR' class='badge yellow active'>&nbsp;</span></div></div>",
                 "<span id='S3-RECR' class='badge signal red active'>&nbsp;</span>",
                 "<span id='S3-HECR' class='badge signal yellow active'>&nbsp;</span>","",
-                "<div class='text-right'>5B</dv>","<div class='text-left'>-tpr</div>"
+                "<div class='text-right'>5B</div>","<div class='text-left'>-tpr</div>"
             ],
             [
                 "<button class='evt btn tpr blue L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
@@ -250,7 +250,7 @@
         ],
         "ml-tpr": [
             [
-                "","","","","","<div class='text-right'>M</dv>","<div class='text-left'>-tpr</div>","","","","",
+                "","","","","","<div class='text-right'>M</div>","<div class='text-left'>-tpr</div>","","","","",
                 "<span class='signal-no'>S2</span>",
                 "<span id='S2-RECR' class='badge signal red active'>&nbsp;</span>",
                 "<span id='S2-HECR' class='badge signal yellow active'>&nbsp;</span>",
@@ -286,7 +286,7 @@
                 "<button class='evt btn tpr green p-5a-n' value='5A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<div class='text-right'>5A</dv>","<div class='text-left'>-tpr</div>"
+                "<div class='text-right'>5A</div>","<div class='text-left'>-tpr</div>"
             ]
         ],
         "2/3-tpr": [
