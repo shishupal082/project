@@ -33,6 +33,7 @@ java/yard/src/test/test.iml
 java/yard/yard.iml
 java/yard/target/
 java/yard/meta-data/yard-*.jar
+java/yard/readme.pdf
 
 java/example/.idea/
 java/example/example.iml

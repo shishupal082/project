@@ -8,6 +8,7 @@ import com.yard.filters.ResponseFilter;
 import com.yard.resources.FaviconResource;
 import com.yard.resources.ViewResource;
 import com.yard.service.ConfigService;
+import com.yard.service.PdfService;
 import com.yard.utils.SystemUtils;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -35,6 +36,10 @@ public class YardApplication extends Application<YardConfiguration> {
         LOGGER.info("commandLineArguments: "+arguments.toString());
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
+        if (arguments.size() > 1 && arguments.get(1).equals("createReadmePdf")) {
+            PdfService pdfService = new PdfService(yardConfiguration);
+            pdfService.convertTextToPdf("readme.txt", "readme.pdf");
+        }
         environment.jersey().register(new FaviconResource());
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());

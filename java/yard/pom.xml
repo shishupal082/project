@@ -6,7 +6,7 @@
 
 <groupId>com.yard</groupId>
 <artifactId>yard</artifactId>
-<version>1.0.2-SNAPSHOT</version>
+<version>1.0.3-SNAPSHOT</version>
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -79,6 +79,11 @@
         <groupId>org.w3c</groupId>
         <artifactId>dom</artifactId>
         <version>2.3.0-jaxb-1.0.6</version>
+    </dependency>
+    <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itextpdf</artifactId>
+        <version>5.5.13</version>
     </dependency>
 </dependencies>
 <build>
