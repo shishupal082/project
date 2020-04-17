@@ -13,17 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 public class AvailableResourceView extends View {
     private static Logger logger = LoggerFactory.getLogger(AvailableResourceView.class);
     private String appVersion;
-    private String indexPageReRoute;
     public AvailableResourceView(HttpServletRequest httpServletRequest) {
-        super("index.ftl");
-        this.indexPageReRoute = "";
+        super("resource.ftl");
         this.appVersion = AppConstant.AppVersion;
         logger.info("Loaded AvailableResourceView.");
     }
     public String getAppVersion() {
         return appVersion;
-    }
-    public String getIndexPageReRoute() {
-        return indexPageReRoute;
     }
 }

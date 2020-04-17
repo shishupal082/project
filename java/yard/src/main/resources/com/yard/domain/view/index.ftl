@@ -24,7 +24,7 @@ if (indexPageReRoute && indexPageReRoute.trim().length > 0) {
 } else {
     $("title").html("App Dashboard");
     $("#pageTitle").html("App Dashboard");
-    var dataUrl = "/assets/data/available_resources.json?"+$S.getRequestId();
+    var dataUrl = "/assets/data/available_resources_index.json?"+$S.getRequestId();
     $S.loadJsonData($, [dataUrl], function(response) {
         var tableHtml = "";
         var table = $S.getTable(response, "dashboard");

@@ -1,5 +1,6 @@
 package com.yard;
 
+import com.yard.constants.AppConstant;
 import com.yard.exceptions.YardExceptionMapper;
 import com.yard.filters.LogFilter;
 import com.yard.filters.RequestFilter;
@@ -31,7 +32,7 @@ public class YardApplication extends Application<YardConfiguration> {
     }
     @Override
     public void run(YardConfiguration yardConfiguration, Environment environment) throws Exception {
-        LOGGER.info("env_config_path: "+arguments.toString());
+        LOGGER.info("commandLineArguments: "+arguments.toString());
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new FaviconResource());
@@ -44,10 +45,10 @@ public class YardApplication extends Application<YardConfiguration> {
     }
     public static void main(String[] args) throws Exception {
         arguments = new ArrayList<String>();
-        for (int i=1; i<args.length; i++) {
+        for (int i=0; i<args.length; i++) {
             arguments.add(args[i]);
         }
         SystemUtils.printLog(arguments.toString());
-        new YardApplication().run(args[0], args[1]);
+        new YardApplication().run(AppConstant.Server, args[0]);
     }
 }

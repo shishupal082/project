@@ -24,4 +24,10 @@ server:
     type: http
   rootPath: /*
 
+testConfig:
+  common:
+    configName: TestConfig
+
+
 indexPageReRoute:
+appConfigPath: meta-data/app_config.yaml

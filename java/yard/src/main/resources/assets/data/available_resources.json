@@ -1,5 +1,10 @@
 [
   [
+    "Index page",
+    "<a href='/'>Index page</a>",
+    "/"
+  ],
+  [
     "Available Resource",
     "<a href='/resource'>/resource</a>",
     "/resource"

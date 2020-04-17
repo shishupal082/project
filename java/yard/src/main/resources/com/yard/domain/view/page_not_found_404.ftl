@@ -6,6 +6,6 @@
 </head>
 <body>
     <center>Page not found : 404</center>
-    <center><a href="/resource">Goto Home page</a></center>
+    <center><a href="/">Goto Home page</a></center>
 </body>
 </html>

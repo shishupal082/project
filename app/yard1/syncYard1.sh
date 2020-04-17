@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "***** Syncing Start *****"
+echo "***** Syncing Start Yard 1 *****"
 
 oldFilesDir=()
 oldFilesDir+=(../../java/yard/src/main/resources/assets/yard1/js/)
@@ -22,4 +22,4 @@ done
 cp -r static/js/* ../../java/yard/src/main/resources/assets/yard1/js/
 cp -r static/json/* ../../java/yard/src/main/resources/assets/yard1/json/
 
-echo "***** Syncing End *****"
+echo "***** Syncing End Yard 1 *****"
