@@ -35,6 +35,15 @@ java/yard/target/
 java/yard/meta-data/yard-*.jar
 java/yard/readme.pdf
 
+java/pdf/.idea/*
+java/pdf/src/main/main.iml
+java/pdf/src/test/test.iml
+java/pdf/pdf.iml
+java/pdf/target/
+java/pdf/meta-data/pdf-*.jar
+java/pdf/meta-data/pdf-dir/
+
+
 java/example/.idea/
 java/example/example.iml
 

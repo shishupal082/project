@@ -11,3 +11,12 @@ java -jar meta-data/yard-*-SNAPSHOT.jar server meta-data/env_config.yml
 To convert text to pdf use free online tools
 
 https://www.sodapdf.com/txt-to-pdf/
+
+1.0.2
+--------
+Yard 1 also added along with Yard S17
+
+1.0.3
+--------
+- Pdf support added for converting readme.txt to readme.pdf automatically
+- Version number added in readme.pdf

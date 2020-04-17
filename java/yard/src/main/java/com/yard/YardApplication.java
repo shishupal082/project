@@ -39,6 +39,8 @@ public class YardApplication extends Application<YardConfiguration> {
         if (arguments.size() > 1 && arguments.get(1).equals("createReadmePdf")) {
             PdfService pdfService = new PdfService(yardConfiguration);
             pdfService.convertTextToPdf("readme.txt", "readme.pdf");
+        } else {
+            LOGGER.info("'createReadmePdf' not configured.");
         }
         environment.jersey().register(new FaviconResource());
         environment.jersey().register(new LogFilter());
