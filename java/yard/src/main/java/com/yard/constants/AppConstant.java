@@ -14,7 +14,7 @@ public class AppConstant {
     public static final String REASON = "REASON";
     public static final String RESPONSE = "RESPONSE";
     public static final String AppVersion = "1.0.3";
-    public static final String Server = "server";
+    public static final String server = "server";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
     public static final String UTF8 = "UTF-8";
 }

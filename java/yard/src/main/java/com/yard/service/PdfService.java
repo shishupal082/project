@@ -73,6 +73,8 @@ public class PdfService {
     }
     public void convertTextToPdf(String textFileName, String pdfFileName) {
         ArrayList<String> fileData = readTextFile(textFileName);
+        fileData.add("");
+        fileData.add("AppVersion: " + AppConstant.AppVersion);
         if (fileData.isEmpty()) {
             logger.info("Unable to read data from textFileName: " +textFileName);
         } else {

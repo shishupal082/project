@@ -54,6 +54,6 @@ public class YardApplication extends Application<YardConfiguration> {
             arguments.add(args[i]);
         }
         SystemUtils.printLog(arguments.toString());
-        new YardApplication().run(AppConstant.Server, args[0]);
+        new YardApplication().run(AppConstant.server, args[0]);
     }
 }
