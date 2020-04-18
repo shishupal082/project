@@ -1,4 +1,4 @@
-package com.pdf.service;
+package com.pdf.pdfService;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;

@@ -3,6 +3,8 @@ package com.pdf.service;
 import com.pdf.PdfConfiguration;
 import com.pdf.objects.PdfPageText;
 import com.pdf.pdfApp.*;
+import com.pdf.pdfService.PdfToTextService;
+import com.pdf.pdfService.TextToPdfService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,6 @@
 package com.yard.objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.Map;
 
 /**

@@ -1,4 +1,4 @@
-package com.pdf.pdfApp;
+package com.pdf.pdfService;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
