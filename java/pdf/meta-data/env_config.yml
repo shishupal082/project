@@ -24,4 +24,4 @@ server:
     type: http
   rootPath: /*
 
-pdfSaveDir: meta-data/pdf/
+pdfSaveDir: meta-data/pdf-dir/

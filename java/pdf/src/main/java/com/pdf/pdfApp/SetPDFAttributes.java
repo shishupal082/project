@@ -1,10 +1,10 @@
 package com.pdf.pdfApp;
 
-import java.io.FileOutputStream;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
 
 public class SetPDFAttributes {
 	public static void main(String[] args) {

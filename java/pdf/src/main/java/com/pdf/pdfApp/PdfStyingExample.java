@@ -1,15 +1,10 @@
 package com.pdf.pdfApp;
 
-import java.io.FileOutputStream;
-
-import com.itextpdf.text.Chapter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Section;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
 
 public class PdfStyingExample {
 	public static void main(String[] args) {

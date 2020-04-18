@@ -1,13 +1,12 @@
 package com.pdf.pdfApp;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.Date;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 public class PasswordProtectedPdfExample {
 	private static String USER_PASSWORD = "password";

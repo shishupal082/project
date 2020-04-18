@@ -1,12 +1,12 @@
 package com.pdf.pdfApp;
 
-import java.io.FileOutputStream;
-import java.net.URL;
-
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+import java.net.URL;
 
 public class AddImageExample {
 	public static void main(String[] args) {

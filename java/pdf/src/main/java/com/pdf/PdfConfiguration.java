@@ -8,7 +8,10 @@ public class PdfConfiguration extends Configuration {
     private String pdfSaveDir;
 
     public String getPdfSaveDir() {
-        return pdfSaveDir;
+        if (pdfSaveDir == null) {
+            return "";
+        }
+        return pdfSaveDir.trim();
     }
 
     public void setPdfSaveDir(String pdfSaveDir) {

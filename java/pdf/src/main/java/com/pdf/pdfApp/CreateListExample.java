@@ -1,17 +1,9 @@
 package com.pdf.pdfApp;
 
-import java.io.FileOutputStream;
-
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.GreekList;
-import com.itextpdf.text.List;
-import com.itextpdf.text.ListItem;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.RomanList;
-import com.itextpdf.text.ZapfDingbatsList;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
 
 public class CreateListExample {
 	public static void main(String[] args) {
