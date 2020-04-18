@@ -87,7 +87,7 @@ public class TextToPdfService {
         ArrayList<String> fileData = readTextFile(textFileName);
         if (fileData.isEmpty()) {
             response.put(AppConstant.STATUS, AppConstant.FAILURE);
-            logger.info("Unable to read data from textFileName: '{}'" +textFileName);
+            logger.info("Unable to read data from textFileName: '{}'", textFileName);
         } else {
             convertTextToPdf(pdfFileName, fileData);
             response.put(AppConstant.STATUS, AppConstant.SUCCESS);
