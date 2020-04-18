@@ -50,7 +50,7 @@ public class PdfResource {
             response += pdfPageText.getPageHtml() + "<hr style='border-style: dashed;'>";
         }
         if (pdfData.size() == 0) {
-            response += "<div>File not found.</div>";
+            response += "<center>File not found.</center>";
         }
         logger.info("readPdfFile: Out");
         return response;

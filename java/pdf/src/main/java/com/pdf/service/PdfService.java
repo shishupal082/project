@@ -35,7 +35,7 @@ public class PdfService {
         ArrayList<PdfPageText> response = pdfToTextService.readPdf(pdfFileName);
         logger.info("Read pdf completed:");
         for (PdfPageText pdfPageText : response) {
-            System.out.println(pdfPageText.toString());
+            logger.info(pdfPageText.toString());
         }
         return response;
     }
