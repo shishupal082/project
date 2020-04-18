@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yard.objects.AppConfig;
 import com.yard.objects.TestConfig;
 import io.dropwizard.Configuration;
-import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class YardConfiguration extends Configuration{
