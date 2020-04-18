@@ -20,6 +20,7 @@ public class ConfigService {
         AppConfig appConfig = ConfigService.getAppConfig(yardConfiguration.getAppConfigPath());
         yardConfiguration.setAppConfig(appConfig);
         logger.info(yardConfiguration.toString());
+
     }
 
     private static AppConfig getAppConfig(String appConfigPath) {

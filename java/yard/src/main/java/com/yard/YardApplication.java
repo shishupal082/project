@@ -37,8 +37,7 @@ public class YardApplication extends Application<YardConfiguration> {
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         if (arguments.size() > 1 && arguments.get(1).equals("createReadmePdf")) {
-            PdfService pdfService = new PdfService(yardConfiguration);
-            pdfService.convertTextToPdf("readme.txt", "readme.pdf");
+            PdfService.convertReadmeToPdf();
         } else {
             LOGGER.info("'createReadmePdf' not configured.");
         }
