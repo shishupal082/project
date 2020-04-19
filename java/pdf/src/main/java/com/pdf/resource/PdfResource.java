@@ -2,8 +2,12 @@ package com.pdf.resource;
 
 
 import com.pdf.PdfConfiguration;
+import com.pdf.constants.AppConstant;
+import com.pdf.file.ScanDir;
+import com.pdf.file.ScanResult;
 import com.pdf.objects.PdfPageText;
 import com.pdf.service.PdfService;
+import com.pdf.view.IndexView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +17,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,13 +34,20 @@ public class PdfResource {
         pdfDir = pdfConfiguration.getPdfSaveDir();
     }
     @GET
-    public ArrayList<String> indexPage() {
-        logger.info("loadingPdfResource : In");
-        ArrayList<String> response = new ArrayList<String>();
-        PdfService pdfService = new PdfService(pdfConfiguration);
-        pdfService.checkPdfUtilities();
-        response.add("PdfGenerated");
-        logger.info("loadingPdfResource : Out : {}", response);
+    @Produces(MediaType.TEXT_HTML)
+    public IndexView indexPage() {
+        logger.info("IndexView: in");
+        IndexView indexView = new IndexView(httpServletRequest);
+        logger.info("IndexView: out");
+        return indexView;
+    }
+    @GET
+    @Path("/scan/pdf-dir")
+    public ScanResult scanPdfDir() throws URISyntaxException {
+        logger.info("scanPdfDir: In");
+        ScanDir scanDir = new ScanDir();
+        ScanResult response = scanDir.scanResult(pdfDir, false);
+        logger.info("scanPdfDir: Out");
         return response;
     }
     @GET

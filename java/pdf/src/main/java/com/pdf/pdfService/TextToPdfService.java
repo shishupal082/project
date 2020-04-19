@@ -35,10 +35,9 @@ public class TextToPdfService {
             }
             in.close();
         } catch (FileNotFoundException e) {
-            logger.info("FileNotFoundException, fileName: {}", textFileName);
+            logger.info("FileNotFoundException, fileName: {}, {}", textFileName, e.getMessage());
         } catch (Exception e) {
-            logger.info("Unknown Exception, fileName: {}", textFileName);
-            e.printStackTrace();
+            logger.info("Unknown Exception, fileName: {}, {}", textFileName, e.getMessage());
         }
         return  response;
     }
@@ -58,7 +57,6 @@ public class TextToPdfService {
             if (fileData.isEmpty()) {
                 document.add(new Paragraph(AppConstant.EmptyParagraph));
             }
-
             document.addCreationDate();
             document.addAuthor(AppConstant.PdfAuther);
             document.addCreator(AppConstant.PdfCreator);
@@ -71,11 +69,9 @@ public class TextToPdfService {
             document.close();
             writer.close();
         } catch (DocumentException e) {
-            logger.info("DocumentException error.");
-            e.printStackTrace();
+            logger.info("DocumentException error, {}, {}", pdfFileName, e.getMessage());
         } catch (FileNotFoundException e) {
-            logger.info("FileNotFoundException error.");
-            e.printStackTrace();
+            logger.info("FileNotFoundException error, {}, {}", pdfFileName, e.getMessage());
         }
     }
     public Map<String, String> convertTextFileToPdf(String textFileName, String pdfFileName) {

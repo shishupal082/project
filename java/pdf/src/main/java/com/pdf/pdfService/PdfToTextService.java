@@ -30,7 +30,7 @@ public class PdfToTextService {
             }
             reader.close();
         } catch (IOException e) {
-            logger.info("IOException in reading file: {}", pdfFileName);
+            logger.info("IOException in reading file: {}, {}", pdfFileName, e.getMessage());
         }
         return response;
     }
