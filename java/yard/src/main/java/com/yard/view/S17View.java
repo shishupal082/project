@@ -1,4 +1,4 @@
-package com.yard.domain.view;
+package com.yard.view;
 
 import com.yard.constants.AppConstant;
 import io.dropwizard.views.View;

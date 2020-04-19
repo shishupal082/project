@@ -1,10 +1,10 @@
 package com.yard.resources;
 
 import com.yard.YardConfiguration;
-import com.yard.domain.view.AvailableResourceView;
-import com.yard.domain.view.CommonView;
-import com.yard.domain.view.IndexView;
-import com.yard.domain.view.S17View;
+import com.yard.view.AvailableResourceView;
+import com.yard.view.CommonView;
+import com.yard.view.IndexView;
+import com.yard.view.S17View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
