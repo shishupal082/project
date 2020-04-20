@@ -6,7 +6,7 @@ import com.pdf.objects.PdfPageText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class PdfToTextService {
@@ -33,5 +33,35 @@ public class PdfToTextService {
             logger.info("IOException in reading file: {}, {}", pdfFileName, e.getMessage());
         }
         return response;
+    }
+    public void createTextFile(ArrayList<PdfPageText> pdfData, String textFilePath) {
+        try {
+            File file = new File(textFilePath);
+            boolean fileDeleteStatus, fileCreatedStatus;
+            if (file.isFile()) {
+                logger.info("File already exist and it will be overwritten : {}", textFilePath);
+                fileDeleteStatus = file.delete();
+            } else {
+                fileDeleteStatus = true;
+            }
+            fileCreatedStatus = file.createNewFile();
+            if (fileDeleteStatus && fileCreatedStatus) {
+                FileWriter writer = new FileWriter(file);
+                for (PdfPageText pdfPageText : pdfData) {
+                    String[] pageTextData = pdfPageText.getPageText();
+                    if (pageTextData != null) {
+                        for (int i=0; i<pageTextData.length; i++) {
+                            writer.write(pageTextData[i] + "\n");
+                        }
+                    }
+                }
+                writer.close();
+                logger.info("pdfData saved in : {}", file);
+            } else {
+                logger.info("Error in file create: {}", textFilePath);
+            }
+        } catch (Exception e) {
+            logger.info("Error saving pdfTextData : {}, {}", e.getMessage(), pdfData.toString());
+        }
     }
 }

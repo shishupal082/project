@@ -28,8 +28,6 @@ public class PdfApplication extends Application<PdfConfiguration> {
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new FaviconResource());
         environment.jersey().register(new PdfResource(pdfConfiguration));
-//        PdfService pdfService = new PdfService(pdfConfiguration);
-//        pdfService.checkPdfUtilities();
     }
     public static void main(String[] args) throws Exception {
         new PdfApplication().run(AppConstant.server, args[0]);

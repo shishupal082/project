@@ -27,20 +27,24 @@ public class PdfPageText {
         response += "<section>";
         if (pageText != null) {
             if (pageText.length > 4) {
-                response += "<div>*** Page Number: " + pageNumber + " Start ***</div>";
+                response += "<p>*** Page Number: " + pageNumber + " Start ***</p>";
             }
-            response += "<div>";
+            response += "<p>";
             for (int i=0; i<pageText.length; i++) {
-                response += "<p>" + pageText[i] + "</p>";
+                String displayText = pageText[i];
+                if (displayText == " ") {
+                    displayText = "&nbsp;";
+                }
+                response += "<div>" + displayText + "</div>";
             }
-            response += "</div>";
+            response += "</p>";
             if (pageText.length > 4) {
-                response += "<div>*** Page Number: " + pageNumber + " End ***</div>";
+                response += "<p>*** Page Number: " + pageNumber + " End ***</p>";
             } else {
-                response += "<div>-- Page Number: " + pageNumber + " End --</div>";
+                response += "<p>-- Page Number: " + pageNumber + " End --</p>";
             }
         } else {
-            response += "<div>Page Number: " + pageNumber + "</div>";
+            response += "<p>Page Number: " + pageNumber + "</p>";
         }
         response += "</section>";
         return response;

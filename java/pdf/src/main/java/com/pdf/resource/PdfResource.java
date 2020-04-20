@@ -27,11 +27,14 @@ public class PdfResource {
     private static Logger logger = LoggerFactory.getLogger(PdfResource.class);
     @Context
     private HttpServletRequest httpServletRequest;
-    private PdfConfiguration pdfConfiguration;
+    private final PdfConfiguration pdfConfiguration;
+    private PdfService pdfService;
     private String pdfDir;
     public PdfResource(PdfConfiguration pdfConfiguration) {
         this.pdfConfiguration = pdfConfiguration;
+        pdfService = new PdfService(pdfConfiguration);
         pdfDir = pdfConfiguration.getPdfSaveDir();
+        pdfService.checkPdfUtilities();
     }
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -44,7 +47,7 @@ public class PdfResource {
     @GET
     @Path("/scan/pdf-dir")
     public ScanResult scanPdfDir() throws URISyntaxException {
-        logger.info("scanPdfDir: In");
+        logger.info("scanPdfDir: In, {}", pdfConfiguration.getPdfSaveDir());
         ScanDir scanDir = new ScanDir();
         ScanResult response = scanDir.scanResult(pdfDir, false);
         logger.info("scanPdfDir: Out");
@@ -55,16 +58,7 @@ public class PdfResource {
     @Produces(MediaType.TEXT_HTML)
     public String readPdfFile(@PathParam("pdfFileName") String pdfFileName) throws URISyntaxException {
         logger.info("readPdfFile: In, pdfFileName: {}", pdfFileName);
-        PdfService pdfService = new PdfService(pdfConfiguration);
-        String pdfFilePath = pdfDir + pdfFileName;
-        ArrayList<PdfPageText> pdfData = pdfService.readPdf(pdfFilePath);
-        String response = "";
-        for (PdfPageText pdfPageText : pdfData) {
-            response += pdfPageText.getPageHtml() + "<hr style='border-style: dashed;'>";
-        }
-        if (pdfData.size() == 0) {
-            response += "<center>File not found.</center>";
-        }
+        String response = pdfService.convertPdfToText(pdfFileName);
         logger.info("readPdfFile: Out");
         return response;
     }
