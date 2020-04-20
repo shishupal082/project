@@ -43,6 +43,11 @@ java/pdf/target/
 java/pdf/meta-data/pdf-*.jar
 java/pdf/meta-data/pdf-dir/
 
+java/mavenProject/.idea/*
+java/mavenProject/mavenProject.iml
+java/mavenProject/target/
+java/mavenProject/meta-data/
+
 
 java/example/.idea/
 java/example/example.iml
