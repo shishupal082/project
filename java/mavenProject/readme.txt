@@ -1,0 +1,1 @@
+Simple maven project created.
