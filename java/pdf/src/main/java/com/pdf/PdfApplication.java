@@ -25,8 +25,9 @@ public class PdfApplication extends Application<PdfConfiguration> {
     public void run(PdfConfiguration pdfConfiguration, Environment environment) throws Exception {
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
-        environment.jersey().register(new FaviconResource());
+        environment.jersey().register(new FaviconResource(pdfConfiguration));
         environment.jersey().register(new PdfResource(pdfConfiguration));
+        LOGGER.info("Start application config: {}", pdfConfiguration);
     }
     public static void main(String[] args) throws Exception {
         new PdfApplication().run(AppConstant.server, args[0]);

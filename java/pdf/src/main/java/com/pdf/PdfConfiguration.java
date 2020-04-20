@@ -6,6 +6,7 @@ import io.dropwizard.Configuration;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PdfConfiguration extends Configuration {
     private String pdfSaveDir;
+    private String icoFilePath;
 
     public String getPdfSaveDir() {
         if (pdfSaveDir == null) {
@@ -18,10 +19,19 @@ public class PdfConfiguration extends Configuration {
         this.pdfSaveDir = pdfSaveDir;
     }
 
+    public String getIcoFilePath() {
+        return icoFilePath;
+    }
+
+    public void setIcoFilePath(String icoFilePath) {
+        this.icoFilePath = icoFilePath;
+    }
+
     @Override
     public String toString() {
         return "PdfConfiguration{" +
                 "pdfSaveDir='" + pdfSaveDir + '\'' +
+                ", icoFilePath='" + icoFilePath + '\'' +
                 '}';
     }
 }

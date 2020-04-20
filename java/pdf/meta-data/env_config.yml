@@ -25,3 +25,4 @@ server:
   rootPath: /*
 
 pdfSaveDir: meta-data/pdf-dir/
+icoFilePath: src/main/resources/assets/favicon.ico
