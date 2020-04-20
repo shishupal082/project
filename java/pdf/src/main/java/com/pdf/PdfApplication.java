@@ -3,7 +3,6 @@ package com.pdf;
 import com.pdf.constants.AppConstant;
 import com.pdf.resource.FaviconResource;
 import com.pdf.resource.PdfResource;
-import com.pdf.service.PdfService;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;

@@ -5,7 +5,6 @@ import com.pdf.PdfConfiguration;
 import com.pdf.constants.AppConstant;
 import com.pdf.file.ScanDir;
 import com.pdf.file.ScanResult;
-import com.pdf.objects.PdfPageText;
 import com.pdf.service.PdfService;
 import com.pdf.view.IndexView;
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ public class PdfResource {
         this.pdfConfiguration = pdfConfiguration;
         pdfService = new PdfService(pdfConfiguration);
         pdfDir = pdfConfiguration.getPdfSaveDir();
-        pdfService.checkPdfUtilities();
     }
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -45,7 +43,18 @@ public class PdfResource {
         return indexView;
     }
     @GET
-    @Path("/scan/pdf-dir")
+    @Path("check-utilities")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Map<String, String> checkUtilities() {
+        logger.info("checkUtilities: in");
+        Map<String, String> response = new HashMap<String, String>();
+        pdfService.checkPdfUtilities();
+        response.put(AppConstant.STATUS, AppConstant.SUCCESS);
+        logger.info("checkUtilities: out");
+        return response;
+    }
+    @GET
+    @Path("scan/pdf-dir")
     public ScanResult scanPdfDir() throws URISyntaxException {
         logger.info("scanPdfDir: In, {}", pdfConfiguration.getPdfSaveDir());
         ScanDir scanDir = new ScanDir();
@@ -54,7 +63,7 @@ public class PdfResource {
         return response;
     }
     @GET
-    @Path("/read/{pdfFileName}")
+    @Path("read/{pdfFileName}")
     @Produces(MediaType.TEXT_HTML)
     public String readPdfFile(@PathParam("pdfFileName") String pdfFileName) throws URISyntaxException {
         logger.info("readPdfFile: In, pdfFileName: {}", pdfFileName);
