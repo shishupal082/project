@@ -1,0 +1,17 @@
+[
+    [
+        "Index page",
+        "<a href='/'>Main page</a>",
+        "/"
+    ],
+    [
+        "Index page",
+        "<a href='/index.html'>Index</a>",
+        "/index.html"
+    ],
+    [
+        "Yard 1",
+        "<a href=\"/app/yard1/\">Yard 1 (British RRI)</a>",
+        "/app/yard1/"
+    ]
+]

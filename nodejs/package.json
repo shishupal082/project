@@ -1,0 +1,13 @@
+{
+  "name": "nodejs",
+  "version": "1.0.1",
+  "description": "Nodejs project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}

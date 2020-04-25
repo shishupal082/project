@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <title>App Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <div><center><h2>App Dashboard</h2></center></div>
+        <hr></hr>
+        <div id="tableHtml"></div>
+    </div>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var dataUrl = "indexData.json?"+$S.getRequestId();
+$S.loadJsonData($, [dataUrl], function(response) {
+    var tableHtml = "";
+    var table = $S.getTable(response, "dashboard");
+    table.addColIndex(1);
+    table.addRowIndex(0);
+    table.updateTableContent(0,0,"");
+    tableHtml += table.getHtml();
+
+    $("#tableHtml").html(tableHtml);
+    $("#tableHtml table").addClass("table table-bordered");
+});
+});
+</script>
+</body>
+</html>
