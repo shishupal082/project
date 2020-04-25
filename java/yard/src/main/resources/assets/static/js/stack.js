@@ -15,9 +15,44 @@ function ExtendObject(Object) {
         return Object;
     };
 }
+
 (function(global, factory) {
-    factory(global, false);
-}(window, function(window, noGlobal) {
+
+function getPlatForm(global) {
+    var checkingWindowStatus = [];
+    var windowStatus = true;
+    checkingWindowStatus.push(typeof global !== 'undefined');
+    checkingWindowStatus.push(typeof global.constructor != 'undefined');
+
+    var checkingNodeStatus = [];
+    var nodeStatus = true;
+    checkingNodeStatus.push(typeof exports === 'object');
+    checkingNodeStatus.push(typeof module !== 'undefined');
+
+    for (var i = 0; i < checkingWindowStatus.length; i++) {
+        if (!checkingWindowStatus[i]) {
+            windowStatus = false;
+        }
+    }
+
+    for (var i = 0; i < checkingNodeStatus.length; i++) {
+        if (!checkingNodeStatus[i]) {
+            nodeStatus = false;
+        }
+    }
+    if (windowStatus && global.constructor.name == "Window") {
+        return "Window";
+    }
+    if (nodeStatus) {
+        return "Node.js";
+    }
+    return "";
+}
+var platform = getPlatForm(global);
+factory(platform);
+
+}(this, function(Platform) {
+
 var Stack = function(selector, context) {
     return new Stack.fn.init(selector, context);
 };
@@ -319,6 +354,9 @@ var UrlParserObj = (function(){
     var href = "", data = {};
     function UrlParser(href) {
         var hrefObj = href.split("?");
+        if (hrefObj.length) {
+            data["hrefPath"] = hrefObj[0];
+        }
         if (hrefObj.length > 1) {
             var params = hrefObj[1];
             var paramsObj = params.split("&");
@@ -910,19 +948,22 @@ Stack.extend = Stack.fn.extend = function(options) {
 };
 Stack.extend({
     getScriptFileName: function() {
-        var scripts = document.getElementsByTagName('script');
-        var lastScript = scripts[scripts.length-1];
-        var scriptName = lastScript.src;
+        var scriptName = "";
+        if (Platform == "Window") {
+            var scripts = document.getElementsByTagName('script');
+            var lastScript = scripts[scripts.length-1];
+            scriptName = lastScript.src;
 
-        var origin = LocationParser.getOrigin();
-        var splitResult = scriptName.split(origin);
-        if (splitResult.length > 1) {
-            scriptName = splitResult[1];
-            splitResult = scriptName.split("?");
+            var origin = LocationParser.getOrigin();
+            var splitResult = scriptName.split(origin);
             if (splitResult.length > 1) {
-                scriptName = splitResult[0];
+                scriptName = splitResult[1];
+                splitResult = scriptName.split("?");
+                if (splitResult.length > 1) {
+                    scriptName = splitResult[0];
+                }
+                scriptName;
             }
-            return scriptName;
         }
         return scriptName;
     },
@@ -1517,6 +1558,9 @@ Stack.extend({
     }
 });
 /*End of direct access of methods*/
-window.Stack = window.$S = Stack;
-
+if (Platform == "Window") {
+    window.$S = Stack;
+} else if (Platform == "Node.js") {
+    module.exports = Stack;
+}
 }));
