@@ -3,17 +3,6 @@ const FS = require("./static/fsmodule.js");
 
 var args = process.argv;
 
-function copyFile(filename, dir) {
-    FS.isDirExist(dir, function(exist) {
-        if (exist) {
-            // console.log(`Coping file '${filename}' to directory '${dir}'`);
-            FS.copyFile(filename, dir);
-        } else {
-            console.log(`Destination directory does not exist: '${dir}'`);
-        }
-    });
-}
-
 var syncData = {
     "jquery": {
         "src": "../static/libs/jquery-2.1.3.js",
@@ -64,13 +53,15 @@ var syncData = {
 };
 
 var syncData = {
-    "jquery": {
-        "src": "../static/libs/jquery-2.1.3.js",
-        "destinationDir": "../java/yard/src/main/resources/assets/static/libs/"
-    },
-    "bootstrap": {
-        "src": "../static/libs/bootstrap-v3.1.1.css",
-        "destinationDir": "../java/yard/src/main/resources/assets/static/libs/"
+    "libs": {
+        "src": [
+            "../static/libs/jquery-2.1.3.js",
+            "../static/libs/bootstrap-v3.1.1.css"
+        ],
+        "destinationDir": [
+            "../java/yard/src/main/resources/assets/static/libs/",
+            "../java/pdf/src/main/resources/assets/static/libs/"
+        ]
     },
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
@@ -79,6 +70,14 @@ var syncData = {
     "stack": {
         "src": [
             "../static/js/stack.js",
+        ],
+        "destinationDir": [
+            "../java/yard/src/main/resources/assets/static/js/",
+            "../java/pdf/src/main/resources/assets/static/js/"
+        ]
+    },
+    "model": {
+        "src": [
             "../static/js/model.js",
             "../static/js/yard/yardApiModel.js"
         ],
@@ -129,6 +128,17 @@ var syncData = {
     }
 };
 
+function copyFile(filename, dir) {
+    FS.isDirExist(dir, function(exist) {
+        if (exist) {
+            // console.log(`Coping file '${filename}' to directory '${dir}'`);
+            FS.copyFile(filename, dir);
+        } else {
+            console.log(`Destination directory does not exist: '${dir}'`);
+        }
+    });
+}
+
 function syncAppFiles(name) {
     if (syncData[name]) {
         var file = syncData[name].src;
@@ -138,16 +148,23 @@ function syncAppFiles(name) {
                 file = [file];
             }
         }
+        if (!$S.isArray(destination)) {
+            if ($S.isString(destination)) {
+                destination = [destination];
+            }
+        }
         for (var i = 0; i < file.length; i++) {
             FS.isFileExist(file[i], function(exist, filename) {
-                if (exist) {
-                    if ($S.isString(destination)) {
-                        copyFile(filename, destination);
+                for (var j = 0; j < destination.length; j++) {
+                    if (exist) {
+                        if ($S.isString(destination[j])) {
+                            copyFile(filename, destination[j]);
+                        } else {
+                            console.log(`Invalid destination directory: '${destination[j]}'`);
+                        }
                     } else {
-                        console.log(`Invalid destination directory: '${destination}'`);
+                        console.log(`Source file '${filename}' does not exist`);
                     }
-                } else {
-                    console.log(`Source file '${filename}' does not exist`);
                 }
             });
         }
@@ -157,10 +174,3 @@ function syncAppFiles(name) {
 for (var key in syncData) {
     syncAppFiles(key);
 }
-
-if (args.length > 2) {
-    for (var i = 2; i < args.length; i++) {
-        // console.log(args[i]);
-    }
-}
-

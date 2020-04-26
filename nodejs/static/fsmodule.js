@@ -51,11 +51,12 @@ FS.extend({
         if (typeof dirPath != "string") {
             return callBack(false);
         }
-        fs.opendir(dirPath, (err, r2, r3) => {
-            if (err == null) {
-                callBack(true);
-            } else {
+        var dirBuf = Buffer.from(dirPath);
+        fs.readdir(dirBuf, (err, files) => {
+            if (err) {
                 callBack(false);
+            } else {
+                callBack(true);
             }
         });
         return false;
