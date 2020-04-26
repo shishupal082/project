@@ -7,6 +7,8 @@ import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
 import com.todo.file.domain.ScanResult;
 import com.todo.file.service.FilesService;
+import com.todo.parser.IniFileParser;
+import com.todo.parser.JsonFileParser;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.IpAddress;
 import com.todo.utils.StringUtils;
@@ -467,8 +469,18 @@ public class FilesResource {
     @GET
     public Object readJsonFile(@QueryParam("fileRef") String fileRef) throws TodoException {
         logger.info("readJsonFile : {}", fileRef);
-        Object obj = filesService.getJsonFileResponse(fileRef);
+        JsonFileParser jsonFileParser = new JsonFileParser(todoConfiguration);
+        Object obj = jsonFileParser.getJsonFileResponse(fileRef);
         logger.info("readJsonFile out.");
+        return obj;
+    }
+    @Path("/v1/read_ini")
+    @GET
+    public Object readIniFile() throws TodoException {
+        logger.info("readIniFile : in");
+        IniFileParser iniFileParser = new IniFileParser(todoConfiguration);
+        Object obj = iniFileParser.parseIni();
+        logger.info("readIniFile out.");
         return obj;
     }
 }

@@ -20,6 +20,7 @@ public class TodoConfiguration extends Configuration {
     private TodoViewConfig todoViewConfig;
     private DirectoryConfig directoryConfig;
     private String yamlObjectPath;
+    private String iniFilePath;
     private String socketRequestDelimiter;
     private ArrayList<String> appConfigPath;
     private String availableResourcePath;
@@ -72,6 +73,14 @@ public class TodoConfiguration extends Configuration {
 
     public void setYamlObjectPath(String yamlObjectPath) {
         this.yamlObjectPath = yamlObjectPath;
+    }
+
+    public String getIniFilePath() {
+        return iniFilePath;
+    }
+
+    public void setIniFilePath(String iniFilePath) {
+        this.iniFilePath = iniFilePath;
     }
 
     public String getSocketRequestDelimiter() {

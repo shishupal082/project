@@ -13,6 +13,7 @@ public class AppConstant {
     public static final String FAILURE = "FAILURE";
     public static final String REASON = "REASON";
     public static final String RESPONSE = "RESPONSE";
+    public static final String FILENAME = "FILENAME";
     public static final String IP = "IP";
     public static final String PORT = "PORT";
     public static final String ProjectDashboard = "projectDashboard";

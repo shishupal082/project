@@ -665,3 +665,12 @@ Now minimum argument length is 4
 4 => env_config_custom_logging
 ....
 
+=================
+2020-04-26
+=================
+added new api
+>> /files/v1/read_ini
+added new parameter in env_config
+>> iniFilePath: meta-data/config/config.ini
+similar to yamlObjectPath
+

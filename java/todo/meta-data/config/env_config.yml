@@ -60,6 +60,7 @@ directoryConfig:
     sh: text/sh
 
 yamlObjectPath: meta-data/config/yaml_object.yaml
+iniFilePath: meta-data/config/config.ini
 availableResourcePath: meta-data/config/available_resources.yaml
 socketRequestDelimiter: "!!!"
 appConfigPath: []
