@@ -99,6 +99,12 @@ resources:
   - url: /files/v1/filter/view?type=txt,csv
     name: Filter - view
     help: /files/v1/filter/view?type=txt,csv
+  - url: /files/v1/read_json?fileRef=sample_json_file2
+    name: File Read json file
+    help: /files/v1/read_json?fileRef=sample_json_file2
+  - url: /files/v1/read_ini
+    name: File Read ini file
+    help: /files/v1/read_ini
   - url: /files/v2/getAll/data
     name: Get all - v2 - data
     help: /files/v2/getAll/data
