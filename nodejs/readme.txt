@@ -82,9 +82,10 @@ index.js
 ---
 const square = require("./square.js")
 
+console.log(__dirname); -->
+	current nodejs folder path <user>/project/nodejs
 console.log(__filename);
-console.log(__dirname);
-
+	__dirname + server filename "/index.js" = <user>/project/nodejs/index.js
 
 console.log("Hello World!");
 console.log(square.area(5));

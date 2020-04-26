@@ -10,6 +10,11 @@
         "/index.html"
     ],
     [
+        "Index Data",
+        "<a href='/indexData.json'>indexData.json</a>",
+        "/indexData.json"
+    ],
+    [
         "Yard 1",
         "<a href=\"/app/yard1/\">Yard 1</a>",
         "/app/yard1/"
