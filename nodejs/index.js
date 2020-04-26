@@ -2,10 +2,11 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const AppConstant = require("./static/AppConstant.js");
+const config = require("./static/config.js");
 const $S = require("../static/js/stack.js");
 
-const hostname = "localhost";
-const port = 3000;
+const hostname = config.hostname;
+const port = config.port;
 
 
 function loadFavicon(req, res) {
