@@ -15,7 +15,6 @@ app.use(express.static(__dirname + "/.."));
 
 function requestLogging(req) {
     $S.log("Request: " + req.url + ", " + req.method);
-    $S.undateRequestId();
 }
 
 function loadIndexPage(req, res) {
