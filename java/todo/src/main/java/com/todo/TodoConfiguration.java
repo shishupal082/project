@@ -5,7 +5,6 @@ import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
 import com.todo.config.TodoViewConfig;
 import com.todo.interfaces.ConfigInterface;
-import com.todo.services.ConfigService;
 import io.dropwizard.Configuration;
 
 import java.util.ArrayList;

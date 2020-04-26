@@ -1,7 +1,6 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
-import com.todo.config.TodoViewConfig;
 import com.todo.domain.view.*;
 import com.todo.interfaces.ConfigInterface;
 import com.todo.services.ConfigService;

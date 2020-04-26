@@ -1,6 +1,7 @@
 package com.todo.file.service;
 
 import com.todo.TodoConfiguration;
+import com.todo.common.TodoException;
 import com.todo.constants.AppConstant;
 import com.todo.file.constant.FilesConstant;
 import com.todo.file.domain.FileDetails;
@@ -8,17 +9,13 @@ import com.todo.file.domain.PathType;
 import com.todo.file.domain.ScanResult;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.StringUtils;
-import com.todo.common.TodoException;
 import com.todo.utils.SystemUtils;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

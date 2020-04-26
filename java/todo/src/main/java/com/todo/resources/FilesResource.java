@@ -1,6 +1,7 @@
 package com.todo.resources;
 
 import com.todo.TodoConfiguration;
+import com.todo.common.TodoException;
 import com.todo.domain.ConfigDetails;
 import com.todo.domain.view.CommonView;
 import com.todo.file.constant.FilesConstant;
@@ -12,7 +13,6 @@ import com.todo.parser.JsonFileParser;
 import com.todo.utils.ErrorCodes;
 import com.todo.utils.IpAddress;
 import com.todo.utils.StringUtils;
-import com.todo.common.TodoException;
 import com.todo.utils.SystemUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;

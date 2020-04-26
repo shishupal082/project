@@ -9,8 +9,6 @@ import com.todo.yaml.todo.AppConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-
 public class ConfigImplementsRAM implements ConfigInterface {
     private static Logger LOGGER = LoggerFactory.getLogger(ConfigImplementsRAM.class);
     private TodoConfiguration todoConfiguration;

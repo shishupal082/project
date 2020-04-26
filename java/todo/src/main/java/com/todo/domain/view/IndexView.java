@@ -1,8 +1,8 @@
 package com.todo.domain.view;
 
+import com.todo.constants.AppConstant;
 import com.todo.yaml.todo.Resource;
 import com.todo.yaml.todo.ResourceDetails;
-import com.todo.constants.AppConstant;
 import io.dropwizard.views.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
