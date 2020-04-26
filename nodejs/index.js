@@ -31,7 +31,7 @@ var availableResources = {
     },
     "/indexData.json": {
         responseType: AppConstant.APPLICATION_JSON,
-        filePath: "./indexData.json"
+        filePath: "./static/data/indexData.json"
     },
     "/app/yard1": {
         responseType: AppConstant.TEXT_HTML,
