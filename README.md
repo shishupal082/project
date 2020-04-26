@@ -14,6 +14,14 @@ class parent {}
 class parent implements interface {}
 class child extends parent{}
 
+JAVA
+----------------
+PDF to Text converter
+Text to PDF converter
+Dropowizard fully functioning
+Customised exception handller
+Customised logger pattern
+
 Angularjs
 ----------------
 stateprovider
@@ -24,6 +32,12 @@ controller
 directive
 service (factory)
 material design
+
+Nodejs
+----------------
+Create server
+set env variables
+sync all interdependent code files using nodejs
 
 Reactjs
 ----------------

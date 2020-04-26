@@ -1,6 +1,8 @@
 
 ---- Temp path above this line ----
 
+nodejs/node_modules/*
+
 */a.out
 */*/a.out
 */*/*/a.out
