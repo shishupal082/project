@@ -20,6 +20,7 @@ todo-app/
 todo-nocommit/
 yard-app/
 yard-app-zip/
+pdf-app/
 
 java/step1/.idea/*
 
@@ -45,6 +46,7 @@ java/pdf/pdf.iml
 java/pdf/target/
 java/pdf/meta-data/pdf-*.jar
 java/pdf/meta-data/pdf-dir/
+java/pdf/readme.pdf
 
 java/mavenProject/.idea/*
 java/mavenProject/mavenProject.iml
