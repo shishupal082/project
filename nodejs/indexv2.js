@@ -43,8 +43,7 @@ app.get('/indexData.json', function(req, res){
 });
 
 app.get('*', function(req, res){
-    requestLogging(req);
-    $S.log("Request: " + req.url + ", 404 not found.");
+    $S.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
     res.statusCode = 404;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);
     res.end('<center>Invalid url.</center>');
