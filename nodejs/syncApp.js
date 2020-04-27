@@ -1,6 +1,6 @@
 const $S = require("../static/js/stack.js");
 const FS = require("./static/fsmodule.js");
-const syncData = require("./static/data/syncAppFilesData.js");
+const syncData = require("./static/syncAppFilesData.js");
 
 var args = process.argv;
 
