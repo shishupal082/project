@@ -1,0 +1,56 @@
+Download and installation
+-------------------------
+If node is not installed already then download and install from
+
+>> https://nodejs.org/en/
+
+This package will install:
+    Node.js v12.16.2 to /usr/local/bin/node
+    npm v6.14.4 to /usr/local/bin/npm
+
+Make sure that /usr/local/bin is in your $PATH
+
+>> node (It will take you to node REPL)
+>> node -v
+>> npm -v (npm is a part of node)
+
+node REPL (Read-Eval-Print-Loop)
+    For exit press CMD+C twice
+    It is same as developer console in chrome
+
+Install dependencies from package.json
+>> npm install
+
+Project setup
+-------------
+>> npm init
+It will create package.json
+
+If package.json already exist then type
+>> type NUL > index.js
+It will create empty index.js file
+
+
+Running of project
+------------------
+>> node index     or,
+>> node index.js
+
+It will execute program written in index.js
+
+
+Starting of applications
+-----------------------------
+
+Add following in package.json
+
+"scripts": {
+    "start": "node index"
+},
+
+To start application
+---------------
+>> npm start
+
+It should start working
+
