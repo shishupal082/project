@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class YardApplication extends Application<YardConfiguration> {
 
     private static Logger LOGGER = LoggerFactory.getLogger(YardApplication.class);
-    private static ArrayList<String> arguments;
+    private static ArrayList<String> arguments = new ArrayList<String>();
     public void initialize(Bootstrap<YardConfiguration> bootstrap) {
         super.initialize(bootstrap);
         bootstrap.addBundle(new ViewBundle<YardConfiguration>());
@@ -50,7 +50,6 @@ public class YardApplication extends Application<YardConfiguration> {
         environment.jersey().register(new ViewResource(yardConfiguration));
     }
     public static void main(String[] args) throws Exception {
-        arguments = new ArrayList<String>();
         for (int i=0; i<args.length; i++) {
             arguments.add(args[i]);
         }

@@ -48,5 +48,6 @@ function syncAppFiles(name) {
 }
 
 for (var key in syncData) {
+    $S.log(`Syncing: '${key}'`);
     syncAppFiles(key);
 }

@@ -2,6 +2,7 @@ package com.pdf.pdfService;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.pdf.constants.AppConstant;
 import com.pdf.objects.PdfPageText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,16 +11,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PdfToTextService {
     private static Logger logger = LoggerFactory.getLogger(PdfToTextService.class);
 
-    public ArrayList<PdfPageText> readPdf(String pdfFileName) {
-
+    public Map<String, Object> readPdf(String pdfFileName) {
+        Map<String, Object> finalResponse = new HashMap<String, Object>();
         ArrayList<PdfPageText> response = new ArrayList<PdfPageText>();
         PdfReader reader;
         PdfPageText pdfPageText;
-
         try {
             reader = new PdfReader(pdfFileName);
             Integer numberOfPages = reader.getNumberOfPages();
@@ -31,10 +33,14 @@ public class PdfToTextService {
                 response.add(pdfPageText);
             }
             reader.close();
+            finalResponse.put(AppConstant.STATUS, AppConstant.SUCCESS);
         } catch (IOException e) {
+            finalResponse.put(AppConstant.STATUS, AppConstant.FAILURE);
+            finalResponse.put(AppConstant.REASON, e.getMessage());
             logger.info("IOException in reading file: {}, {}", pdfFileName, e.getMessage());
         }
-        return response;
+        finalResponse.put(AppConstant.RESPONSE, response);
+        return finalResponse;
     }
     public void createTextFile(ArrayList<PdfPageText> pdfData, String textFilePath) {
         try {
