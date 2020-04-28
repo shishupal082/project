@@ -20,6 +20,7 @@ var allowedCrossOrigin = [];
 allowedCrossOrigin.push("http://localhost");
 
 app.use(function(req, res, next) {
+    Logger.resetLoggerKey();
     for (var i = 0; i < allowedCrossOrigin.length; i++) {
         res.header("Access-Control-Allow-Origin", allowedCrossOrigin[i]);
     }
@@ -28,7 +29,6 @@ app.use(function(req, res, next) {
 });
 
 function requestLogging(req) {
-    Logger.resetLoggerKey();
     Logger.log("Request: " + req.url + ", " + req.method);
 }
 
@@ -91,7 +91,6 @@ app.get('/nasa', function(req, res, next){
 });
 
 app.get('*', function(req, res){
-    Logger.resetLoggerKey();
     Logger.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
     res.statusCode = 404;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);

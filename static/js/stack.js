@@ -380,12 +380,16 @@ var UrlParserObj = (function(){
     return UrlParser;
 })();
 var Log = (function(){
+    var LoggerId = Date.now();
     function Logger(){
         this.dateTimeEnable = false;
         this.format = "";
         this.splitter = "";
         this.logKey = getRandomNumber(10000, 99999);
     }
+    Logger.prototype.getLoggerId = function() {
+        return LoggerId;
+    };
     Logger.prototype.resetLoggerKey = function(loggerKey) {
         this.logKey = Stack.getRandomNumber(10000, 99999);;
         return this.logKey;
@@ -1224,10 +1228,10 @@ Stack.extend({
         return new Log();
     },
     log: function(log, loggerInfo) {
-        Logger.log(log, loggerInfo);
+        return Logger.log(log, loggerInfo);
     },
     logV2: function(loggerInfo, log) {
-        Logger.log(log, loggerInfo);
+        return Logger.log(log, loggerInfo);
     },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
