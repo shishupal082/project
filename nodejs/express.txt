@@ -1,0 +1,28 @@
+Framework of node.js
+---
+Web application server framework
+
+
+To handle post request in express js version 4 or above
+Need to install middleware module called body-parser
+>> npm install body-parser
+
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded{(extended:true)});
+
+post json data = req.body
+
+For live server change
+-----------------------
+nodemon
+>> npm install -g nodemon
+now instead of using node index.js use
+>> nodemon index.js
+
+Types of request
+-----------------
+C  Create - Post
+R  Read   - GET
+U  Update - Put
+D  Delete - Delete

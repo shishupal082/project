@@ -15,6 +15,21 @@
         "/indexData.json"
     ],
     [
+        "JSON Data",
+        "<a href='/json_data'>JSON data</a>",
+        "/json_data"
+    ],
+    [
+        "Twitter Api",
+        "<a href='/twitter'>Twitter Api</a>",
+        "/twitter"
+    ],
+    [
+        "Nasa Api",
+        "<a href='/nasa'>Nasa Api</a>",
+        "/nasa"
+    ],
+    [
         "Yard 1",
         "<a href=\"/app/yard1/\">Yard 1</a>",
         "/app/yard1/"

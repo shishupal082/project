@@ -5,7 +5,8 @@ const AppConstant = {
     TEXT_HTML: "text/html",
     TEXT_CSS: "text/css",
     TEXT_PLAIN: "text/plain",
-    IMAGE_X_ICON: "image/x-icon"
+    IMAGE_X_ICON: "image/x-icon",
+    UNDEFINED: undefined
 };
 module.exports = AppConstant;
 
