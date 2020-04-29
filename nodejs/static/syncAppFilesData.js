@@ -6,7 +6,8 @@ var syncData = {
         ],
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/libs/",
-            "../java/pdf/src/main/resources/assets/static/libs/"
+            "../java/pdf/src/main/resources/assets/static/libs/",
+            "../java/WebApp/src/main/resources/assets/static/libs/"
         ]
     },
     "yardCss": {
@@ -19,7 +20,8 @@ var syncData = {
         ],
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/js/",
-            "../java/pdf/src/main/resources/assets/static/js/"
+            "../java/pdf/src/main/resources/assets/static/js/",
+            "../java/WebApp/src/main/resources/assets/static/js/"
         ]
     },
     "model": {

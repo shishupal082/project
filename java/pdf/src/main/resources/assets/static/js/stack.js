@@ -64,7 +64,6 @@ Stack.fn = Stack.prototype = {
 };
 var skipValuesInResult = [];
 var RequestId = 0;
-var key;
 var LoggerInfo;
 var Last1000UniqueNumberQue;
 function isString(value) {
@@ -166,14 +165,15 @@ function calculateValue(op1, operator, op2) {
 }
 function getRandomNumber(minVal, maxVal) {
     /* Both number are inclusive. */
-    var random = key;
+    var random;
     if (isNumber(minVal) && isNumber(maxVal)) {
         random = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
+    } else {
+        //5 digit random number from 10000 to 99999
+        random = getRandomNumber(10000, 99999);
     }
     return random;
 }
-//5 digit random number from 10000 to 99999
-key = getRandomNumber(10000, 99999);
 //DateTimeObject
 var DT = (function() {
     //mr = meridian (AM/PM)
@@ -380,32 +380,48 @@ var UrlParserObj = (function(){
     return UrlParser;
 })();
 var Log = (function(){
-    var dateTimeEnable = false,format,splitter,joiner,logKey;
-    logKey = key;
-    function Logger(){}
+    var LoggerId = Date.now();
+    function Logger(){
+        this.dateTimeEnable = false;
+        this.format = "";
+        this.splitter = "";
+        this.logKey = getRandomNumber(10000, 99999);
+    }
+    Logger.prototype.getLoggerId = function() {
+        return LoggerId;
+    };
+    Logger.prototype.resetLoggerKey = function(loggerKey) {
+        this.logKey = Stack.getRandomNumber(10000, 99999);;
+        return this.logKey;
+    };
     Logger.prototype.updateLoggerKey = function(loggerKey) {
-        logKey = loggerKey;
+        this.logKey = loggerKey;
+        return this.logKey;
+    };
+    Logger.prototype.setLoggerKeyUnique = function() {
+        this.logKey = Stack.getUniqueNumber();
+        return this.logKey;
     };
     Logger.prototype.setDateTimeState = function(state,v1,v2) {
-        format=v1;
-        splitter=v2;
+        this.format=v1;
+        this.splitter=v2;
         if (state == true) {
-            dateTimeEnable = true;
+            this.dateTimeEnable = true;
         } else {
-            dateTimeEnable = false;
+            this.dateTimeEnable = false;
         }
     };
     Logger.prototype.logInApi = function(log, loggerInfo) {
-        console.log(logKey + ":" + log);
+        console.log(this.logKey + ":" + log);
     };
     Logger.prototype.log = function(log, loggerInfo) {
-        var preLog = logKey + ":" ;
+        var preLog = this.logKey + ":" ;
         if (isString(loggerInfo)) {
             preLog += loggerInfo + ":";
         }
-        if (dateTimeEnable) {
+        if (this.dateTimeEnable) {
             var dt = new DT();
-            preLog += dt.getDateTime(format,splitter)+":";
+            preLog += dt.getDateTime(this.format,this.splitter)+":";
         }
         console.log(preLog+ log);
     };
@@ -1208,11 +1224,14 @@ Stack.extend({
     getDomino: function(dominoName) {
         return new Domino(dominoName);
     },
+    getLogger: function() {
+        return new Log();
+    },
     log: function(log, loggerInfo) {
-        Logger.log(log, loggerInfo);
+        return Logger.log(log, loggerInfo);
     },
     logV2: function(loggerInfo, log) {
-        Logger.log(log, loggerInfo);
+        return Logger.log(log, loggerInfo);
     },
     updateLoggerKey: function(loggerKey) {
         Logger.updateLoggerKey(loggerKey);
