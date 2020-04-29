@@ -27,3 +27,4 @@ server:
 indexPageReRoute: /app
 icoFilePath: meta-data/favicon.ico
 publicDir: ../
+publicPostDir:
