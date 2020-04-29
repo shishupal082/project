@@ -1,0 +1,14 @@
+[
+  [
+    "/",
+    "IndexView"
+  ],
+  [
+    "/index",
+    "IndexView"
+  ],
+  [
+    "/view/resource",
+    "View Resource"
+  ]
+]
