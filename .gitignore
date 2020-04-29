@@ -21,6 +21,7 @@ todo-nocommit/
 yard-app/
 yard-app-zip/
 pdf-app/
+web-app/
 
 java/step1/.idea/*
 
@@ -47,6 +48,11 @@ java/pdf/target/
 java/pdf/meta-data/pdf-*.jar
 java/pdf/meta-data/pdf-dir/
 java/pdf/readme.pdf
+
+java/WebApp/.idea/*
+java/WebApp/WebApp.iml
+java/WebApp/target/
+java/WebApp/meta-data/WebApp-*.jar
 
 java/mavenProject/.idea/*
 java/mavenProject/mavenProject.iml
