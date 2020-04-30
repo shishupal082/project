@@ -18,21 +18,42 @@ public class FileService {
     public FileService(final WebAppConfig webAppConfig) {
         this.webAppConfig = webAppConfig;
     }
-    private PathInfo getPathInfo(String filePath) {
-        PathInfo pathInfo = new PathInfo(filePath);
-        filePath = webAppConfig.getAppConfig().getPublicDir() + filePath;
-        File file = new File(filePath);
+    private PathInfo getPathInfo(String requestedPath) {
+        requestedPath = webAppConfig.getAppConfig().getPublicDir() + requestedPath;
+        PathInfo pathInfo = new PathInfo(requestedPath);
+        File file = new File(requestedPath);
         if (file.isDirectory()) {
             pathInfo.setType(AppConstant.FOLDER);
-            pathInfo.setFilePath(filePath);
         } else if(file.isFile()) {
             pathInfo.setType(AppConstant.FILE);
-            pathInfo.setFilePath(filePath);
+            pathInfo.setFileName(file.getName());
         }
         return pathInfo;
     }
+    private void searchIndexHtmlInFolder(PathInfo pathInfo) {
+        if (AppConstant.FOLDER.equals(pathInfo.getType())) {
+            File file1 = new File(pathInfo.getPath() + "index.html");
+            File file2 = new File(pathInfo.getPath() + "/index.html");
+            File file = null;
+            if (file1.isFile()) {
+                file = file1;
+            } else if (file2.isFile()) {
+                file = file2;
+            }
+            if (file != null) {
+                String pre = pathInfo.toString();
+                pathInfo.setPath(file.getPath());
+                pathInfo.setType(AppConstant.FILE);
+                pathInfo.setFileName(file.getName());
+                logger.info("PathInfo changes from folder to file: {} to {}", pre, pathInfo.toString());
+            }
+        }
+    }
     public PathInfo getFileResponse(final String requestedPath) {
         PathInfo pathInfo = getPathInfo(requestedPath);
+        if (AppConstant.FOLDER.equals(pathInfo.getType())) {
+            searchIndexHtmlInFolder(pathInfo);
+        }
         pathInfo.findExtention();
         pathInfo.findMimeType(webAppConfig);
         logger.info("PathDetails: {}", pathInfo.toString());

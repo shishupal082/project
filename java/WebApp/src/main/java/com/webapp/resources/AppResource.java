@@ -67,36 +67,20 @@ public class AppResource {
         PathInfo pathInfo = fileService.getFileResponse(requestedPath);
         Response.ResponseBuilder r;
         if (AppConstant.FILE.equals(pathInfo.getType())) {
-            if (pathInfo.getMediaType() == null) {
-                logger.info("Mediatype is not found (download now): {}", pathInfo);
-                try {
-                    InputStream inputStream = new FileInputStream(pathInfo.getFilePath());
-                    r = Response.ok(inputStream);
-                    r.header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=" + pathInfo.getType() + "." + pathInfo.getExtention());
-                    return r.build();
-                } catch (Exception e) {
-                    logger.info("Error in downloading file: {}", pathInfo);
+            File file = new File(pathInfo.getPath());
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                r = Response.ok(inputStream);
+                if (pathInfo.getMediaType() == null) {
+                    logger.info("MediaType is not found (download now): {}", pathInfo);
+                    String responseHeader = "attachment; filename=" + pathInfo.getFileName();
+                    r.header(HttpHeaders.CONTENT_DISPOSITION, responseHeader);
+                } else {
+                    r.header(HttpHeaders.CONTENT_TYPE, pathInfo.getMediaType());
                 }
-            }
-            r = Response.ok(new File(pathInfo.getFilePath()));
-            r.header(AppConstant.ContentType, pathInfo.getMediaType());
-            return r.build();
-        } else if (AppConstant.FOLDER.equals(pathInfo.getType())) {
-            File file1 = new File(pathInfo.getFilePath() + "index.html");
-            File file2 = new File(pathInfo.getFilePath() + "/index.html");
-            File file = null;
-            if (file1.isFile()) {
-                file = file1;
-                logger.info("Loading index.html from {}", requestedPath);
-            } else if (file2.isFile()) {
-                file = file2;
-                logger.info("Loading /index.html from {}", requestedPath);
-            }
-            if (file != null) {
-                r = Response.ok(file);
-                r.header(AppConstant.ContentType, FileMimeType.html.getFileMimeType());
                 return r.build();
+            } catch (Exception e) {
+                logger.info("Error in loading file: {}", pathInfo);
             }
         }
         return new CommonView(request, "page_not_found_404.ftl");

@@ -31,16 +31,16 @@ If package.json already exist then type
 It will create empty index.js file
 
 
-Running of project
-------------------
+Running of project from command line
+-------------------------------------
 >> node index     or,
 >> node index.js
 
 It will execute program written in index.js
 
 
-Starting of applications
------------------------------
+Running of project from package.json
+-------------------------------------
 
 Add following in package.json
 
@@ -48,9 +48,6 @@ Add following in package.json
     "start": "node index"
 },
 
-To start application
----------------
 >> npm start
 
 It should start working
-

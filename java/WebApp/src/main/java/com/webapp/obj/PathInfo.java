@@ -4,27 +4,22 @@ import com.webapp.config.DirectoryConfig;
 import com.webapp.config.WebAppConfig;
 import com.webapp.constants.AppConstant;
 import com.webapp.constants.FileMimeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PathInfo {
+    private static Logger logger = LoggerFactory.getLogger(PathInfo.class);
     private String path;
-    private String filePath;
     private String type;
-    private String mediaType;
+    private String fileName;
     private String extention;
+    private String mediaType;
 
     public PathInfo(final String path) {
         this.path = path;
     }
     public String getPath() {
         return path;
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public void setPath(String path) {
@@ -39,12 +34,12 @@ public class PathInfo {
         this.type = type;
     }
 
-    public String getMediaType() {
-        return mediaType;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setMediaType(String mediaType) {
-        this.mediaType = mediaType;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getExtention() {
@@ -54,25 +49,35 @@ public class PathInfo {
     public void setExtention(String extention) {
         this.extention = extention;
     }
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
     public void findExtention() {
-        if (AppConstant.FILE.equals(this.type)) {
-            String[] pathArr = path.split("\\.");
-            if (pathArr.length > 0) {
-                extention = pathArr[pathArr.length-1];
+        if (AppConstant.FILE.equals(this.type) && fileName != null) {
+            String[] fileNameArr = fileName.split("\\.");
+            if (fileNameArr.length > 0) {
+                extention = fileNameArr[fileNameArr.length-1];
             }
         }
     }
-    public void findMimeType(WebAppConfig webAppConfig) {
+    public void findMimeType(final WebAppConfig webAppConfig) {
         if (extention == null) {
             return;
         }
         String mimeType = FileMimeType.getValue(extention);
         if (mimeType == null) {
             DirectoryConfig directoryConfig = webAppConfig.getWebAppConfiguration().getDirectoryConfig();
-            if (directoryConfig != null && extention != null) {
+            if (directoryConfig != null && directoryConfig.getMimeType() != null) {
                 mimeType = directoryConfig.getMimeType().get(extention);
+                logger.info("fileMimeType searching ({}) in directoryConfig:mimeType: {}",
+                        extention, directoryConfig.getMimeType().toString());
             } else {
-                mimeType = FileMimeType.getValue("txt");
+                logger.info("directoryConfig:mimeType not configured in env_config");
             }
         }
         this.mediaType = mimeType;
@@ -82,10 +87,10 @@ public class PathInfo {
     public String toString() {
         return "PathInfo{" +
                 "path='" + path + '\'' +
-                ", filePath='" + filePath + '\'' +
                 ", type='" + type + '\'' +
-                ", mediaType='" + mediaType + '\'' +
+                ", fileName='" + fileName + '\'' +
                 ", extention='" + extention + '\'' +
+                ", mediaType='" + mediaType + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,10 @@ server:
     type: http
   rootPath: /*
 
+directoryConfig:
+  mimeType:
+    srt: text/plain
+
 indexPageReRoute: /app
 icoFilePath: meta-data/favicon.ico
 publicDir: ../
