@@ -1,7 +1,7 @@
 
 ---- Temp path above this line ----
 
-nodejs/node_modules/*
+nodejs/node_modules/
 nodejs/package-lock.json
 
 */a.out
@@ -24,16 +24,16 @@ yard-app-zip/
 pdf-app/
 web-app/
 
-java/step1/.idea/*
+java/step1/.idea/
 
-java/todo/.idea/*
+java/todo/.idea/
 java/todo/src/main/main.iml
 java/todo/src/test/test.iml
 java/todo/todo.iml
 java/todo/target/
 java/todo/meta-data/todo-*.jar
 
-java/yard/.idea/*
+java/yard/.idea/
 java/yard/src/main/main.iml
 java/yard/src/test/test.iml
 java/yard/yard.iml
@@ -41,7 +41,7 @@ java/yard/target/
 java/yard/meta-data/yard-*.jar
 java/yard/readme.pdf
 
-java/pdf/.idea/*
+java/pdf/.idea/
 java/pdf/src/main/main.iml
 java/pdf/src/test/test.iml
 java/pdf/pdf.iml
@@ -50,12 +50,12 @@ java/pdf/meta-data/pdf-*.jar
 java/pdf/meta-data/pdf-dir/
 java/pdf/readme.pdf
 
-java/WebApp/.idea/*
+java/WebApp/.idea/
 java/WebApp/WebApp.iml
 java/WebApp/target/
 java/WebApp/meta-data/WebApp-*.jar
 
-java/mavenProject/.idea/*
+java/mavenProject/.idea/
 java/mavenProject/mavenProject.iml
 java/mavenProject/target/
 java/mavenProject/meta-data/
