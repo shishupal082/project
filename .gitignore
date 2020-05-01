@@ -4,6 +4,11 @@
 nodejs/node_modules/
 nodejs/package-lock.json
 
+reactjs/reactapp/node_modules/
+reactjs/reactapp/src/libs/
+reactjs/reactapp/build/
+reactjs/reactapp/package-lock.json
+
 */a.out
 */*/a.out
 */*/*/a.out

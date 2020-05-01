@@ -10,6 +10,10 @@ var syncData = {
             "../java/WebApp/src/main/resources/assets/static/libs/"
         ]
     },
+    "react": {
+        "src": "../static/libs/bootstrap-react-v3.1.1.css",
+        "destinationDir": "../reactjs/reactapp/src/libs/"
+    },
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
         "destinationDir": "../java/yard/src/main/resources/assets/s17/css/"
@@ -21,7 +25,8 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/js/",
             "../java/pdf/src/main/resources/assets/static/js/",
-            "../java/WebApp/src/main/resources/assets/static/js/"
+            "../java/WebApp/src/main/resources/assets/static/js/",
+            "../reactjs/reactapp/src/libs/"
         ]
     },
     "model": {

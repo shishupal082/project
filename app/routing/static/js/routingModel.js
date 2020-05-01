@@ -1,5 +1,5 @@
 (function(global, $M) {
-var LoggerInfo = $M.getScriptFileNameRef();
+var LoggerInfo = $M.getScriptFileNameRef(location);
 var RoutingModel = function(config) {
     return new RoutingModel.fn.init(config);
 };

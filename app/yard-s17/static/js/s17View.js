@@ -1,6 +1,6 @@
 (function($M, $YApiModel) {
 
-var LoggerInfo = $S.getScriptFileNameRef();
+var LoggerInfo = $S.getScriptFileNameRef(location);
 
 var View = function(selector, context) {
     return new View.fn.init(selector, context);

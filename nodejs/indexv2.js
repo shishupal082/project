@@ -13,19 +13,44 @@ const Get = require("./static/apis/getapi.js");
 const hostname = config.hostname;
 const port = config.port;
 
+
 app.use(express.static(__dirname + "/.."));
 
-var allowedCrossOrigin = [];
 
-allowedCrossOrigin.push("http://localhost");
-allowedCrossOrigin.push("http://localhost:8080");
+var allowedOrigins = [];
+
+allowedOrigins.push("http://localhost:3000"); // nodejs
+allowedOrigins.push("http://localhost:8080");  // java WebApp
+allowedOrigins.push("http://localhost:9000");  // reactjs
+
+function logCrossOriginRequest(req, res) {
+    var logText = "";
+    var origin = req.headers.origin;
+    if (origin === AppConstant.UNDEFINED) {
+        return 1;
+    }
+    if (allowedOrigins.indexOf(origin) >= 0) {
+        logText += "Requester(Allowed): " + origin;
+    } else {
+        logText += "Requester(Not Allowed): " + origin;
+    }
+    logText += req.url;
+    logText += ", " + req.method;
+    $S.log(logText);
+}
 
 app.use(function(req, res, next) {
     Logger.resetLoggerKey();
-    for (var i = 0; i < allowedCrossOrigin.length; i++) {
-        res.header("Access-Control-Allow-Origin", allowedCrossOrigin[i]);
+    var origin = req.headers.origin;
+    logCrossOriginRequest(req, res);
+    if(allowedOrigins.indexOf(origin) > -1){
+       res.setHeader('Access-Control-Allow-Origin', origin);
     }
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', true);
+
     next();
 });
 
@@ -50,14 +75,19 @@ app.get('/index.html', function(req, res){
     res.sendFile(__dirname + "/index.html");
 });
 
-app.get('/indexData.json', function(req, res){
+app.get('/indexData.json', function(req, res, next){
     requestLogging(req);
     var filePath = "./static/data/indexData.json";
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     fs.createReadStream(filePath).pipe(res);
 });
-
+app.get('/appData.json', function(req, res, next){
+    requestLogging(req);
+    res.statusCode = 200;
+    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
+    res.json(AppConstant.appData);
+});
 app.get('/json_data', function(req, res){
     requestLogging(req);
     res.statusCode = 200;

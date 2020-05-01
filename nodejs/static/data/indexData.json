@@ -15,6 +15,11 @@
         "/indexData.json"
     ],
     [
+        "App Data",
+        "<a href='/appData.json'>appData.json</a>",
+        "/appData.json"
+    ],
+    [
         "JSON Data",
         "<a href='/json_data'>JSON data</a>",
         "/json_data"

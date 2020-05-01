@@ -1,3 +1,6 @@
+https://www.taniarascia.com/getting-started-with-react/
+https://reactjs.org/tutorial/tutorial.html
+
 React
 	- not a framework
 	- It is a javascript library for building user interface
@@ -10,8 +13,9 @@ Installation
 Dependencies
 	- nodejs, npm
 
-Goto reactjs folder
 >> npm install -g create-react-app
+
+Goto reactjs folder
 >> create-react-app reactapp
 
 For css install
@@ -85,4 +89,32 @@ import {Link} from 'react-router-dom';
 </ul>
 
 
+Error handling
+------------------
+>> npm install -g create-react-app
+npm ERR! Unexpected end of JSON input while parsing near '...registry.npmjs.org/cr'
+
+Solutions
+----------
+Check proper permission of /usr/local/lib/node_modules
+>> cd /usr/local/lib/
+>> ls -ltrh
+>> chmod 777 node_modules
+
+Still not working
+---
+>> npm cache clean --force
+>> npm install -g @angular/cli@latest
+
+***** Now working
+
+Error handling
+------------------
+>> create-react-app reactapp
+
+npm ERR! Unexpected end of JSON input while parsing near '...a512-MrehJzXWhZGjwASB'
+
+Solutions
+----------
+>> npm cache clean --force
 

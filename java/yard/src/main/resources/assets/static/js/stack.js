@@ -35,8 +35,8 @@ function getPlatForm(global) {
         }
     }
 
-    for (var i = 0; i < checkingNodeStatus.length; i++) {
-        if (!checkingNodeStatus[i]) {
+    for (var j = 0; j < checkingNodeStatus.length; j++) {
+        if (!checkingNodeStatus[j]) {
             nodeStatus = false;
         }
     }
@@ -176,8 +176,8 @@ function getRandomNumber(minVal, maxVal) {
 }
 //DateTimeObject
 var DT = (function() {
-    //mr = meridian (AM/PM)
-    var dateTime, YYYY, MM, DD, hh, mm, ss, ms, mr;
+    var dateTime;
+    // var YYYY, MM, DD, hh, mm, ss, ms, mr; //mr = meridian (AM/PM)
     function DateTime() {
         dateTime = new Date();
         this.now = dateTime;
@@ -338,8 +338,7 @@ LocationParser.fn = LocationParser.prototype = {
 };
 ExtendObject(LocationParser);
 LocationParser.extend({
-    getOrigin: function() {
-        var Location = location;
+    getOrigin: function(Location) {
         var origin = "";
         try {
             origin = Location.origin;
@@ -351,7 +350,7 @@ LocationParser.extend({
 });
 
 var UrlParserObj = (function(){
-    var href = "", data = {};
+    var data = {};
     function UrlParser(href) {
         var hrefObj = href.split("?");
         if (hrefObj.length) {
@@ -622,11 +621,11 @@ var CirQue = (function(){
                 res.push(this.que[i]);
             }
         } else {
-            for (var i = this._FRONT; i < this.capacity; i++) {
-                res.push(this.que[i]);
+            for (var j = this._FRONT; j < this.capacity; j++) {
+                res.push(this.que[j]);
             }
-            for (var i = 0; i <= this._BACK; i++) {
-                res.push(this.que[i]);
+            for (var k = 0; k <= this._BACK; k++) {
+                res.push(this.que[k]);
             }
         }
         return Stack.clone(res);
@@ -638,7 +637,7 @@ var CirQue = (function(){
         } else if (this._BACK >= this._FRONT) {
             size = this._BACK - this._FRONT + 1;
         } else {
-            size = (capacity - this._FRONT) + this._BACK + 1;
+            size = (this.capacity - this._FRONT) + this._BACK + 1;
         }
         return size;
     };
@@ -687,7 +686,6 @@ var BST = (function() {
                 return this.insertData(root.right, data); 
             }
         }
-        return root;
     };
     BST.prototype.getInOrder = function(node, result) {
         if (node != null) {
@@ -901,14 +899,15 @@ var Domino = (function() {
         return this;
     }
     Domino.prototype.setData = function(r, c, data) {
+        var logText;
         if (isValidIndex(r,c)) {
             if (this.data[r][c] !== null) {
-                var logText = "Data already present.";
+                logText = "Data already present.";
                 throw logText;
             }
             this.data[r][c] = data;
         } else {
-            var logText = "Invalid index: r=" + r+", c="+c;
+            logText = "Invalid index: r=" + r+", c="+c;
             console.log("Domino name: " + this.name);
             throw logText;
         }
@@ -969,16 +968,14 @@ Stack.extend({
             var scripts = document.getElementsByTagName('script');
             var lastScript = scripts[scripts.length-1];
             scriptName = lastScript.src;
-
-            var origin = LocationParser.getOrigin();
+            var origin = LocationParser.getOrigin(location);
             var splitResult = scriptName.split(origin);
             if (splitResult.length > 1) {
                 scriptName = splitResult[1];
                 splitResult = scriptName.split("?");
                 if (splitResult.length > 1) {
                     scriptName = splitResult[0];
-                }
-                scriptName;
+                };
             }
         }
         return scriptName;
@@ -987,7 +984,6 @@ Stack.extend({
         var scriptName = Stack.getScriptFileName();
         var result = [];
         var splitResult = scriptName.split("/");
-        var i=0;
         result = splitResult.filter(function(el, index, arr) {
             return el != "";
         });
@@ -1000,7 +996,7 @@ Stack.extend({
         return result.join(".");
     }
 });
-var stResponse = {randomNumRes: {}, uniqueNumRes: {}};
+
 Last1000UniqueNumberQue = new CirQue(1000);
 Stack.extend({
     getQue: function(shareStorage) {
@@ -1083,17 +1079,18 @@ function generateTdHtml(tdContent, rIndex, cIndex) {
     return tdHtml;
 };
 function Table(tableItems, tableId) {
+    var i;
     content = [];
     rows = 0; cols = 0;
     if (tableItems && tableItems.length) {
         rows = tableItems.length;
-        for (var i = 0; i < tableItems.length; i++) {
+        for (i = 0; i < tableItems.length; i++) {
             content.push([]);
             if (tableItems[i] && tableItems[i].length > cols) {
                 cols = tableItems[i].length;
             }
         }
-        for (var i = 0; i < tableItems.length; i++) {
+        for (i = 0; i < tableItems.length; i++) {
             for (var j = 0; j < cols; j++) {
                 if (j >= tableItems[i].length) {
                     content[i].push("");
@@ -1272,6 +1269,9 @@ Stack.extend({
     getUrlAttribute: function(url, name, defaultValue) {
         var UrlParser = new UrlParserObj(url);
         return UrlParser.getData(name, defaultValue);
+    },
+    getPlatform: function() {
+        return Platform;
     }
 });
 
@@ -1484,8 +1484,8 @@ Stack.extend({
         }
         var temp = expression.split(","), tempToken;
         //Remove empty values and trim all token
-        for (var i = 0; i < temp.length; i++) {
-            tempToken = temp[i].trim();
+        for (var j = 0; j < temp.length; j++) {
+            tempToken = temp[j].trim();
             if (tempToken == "") {
                 continue;
             } else {
@@ -1546,7 +1546,7 @@ Stack.extend({
                 });
             }
         }
-        if (isArray(urls) == false || urls.length < 1 || isFunction(ajaxApiCall) == false) {
+        if (isArray(urls) === false || urls.length < 1 || isFunction(ajaxApiCall) === false) {
             if (isFunction(eachApiCallback)) {
                 eachApiCallback(null, apiName);
             }
@@ -1562,13 +1562,13 @@ Stack.extend({
             ajax.apiName = apiName;
             ajaxApiCall(ajax, function(ajaxDetails, status, response) {
                 apiReceiveCount++;
-                if (status == "FAILURE") {
+                if (status === "FAILURE") {
                     Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo)
                 }
                 if (isFunction(eachApiCallback)) {
                     eachApiCallback(response, ajax.apiName);
                 }
-                if (apiSendCount == apiReceiveCount) {
+                if (apiSendCount === apiReceiveCount) {
                     Stack.callMethod(callBack);
                 }
             });
@@ -1577,9 +1577,9 @@ Stack.extend({
     }
 });
 /*End of direct access of methods*/
-if (Platform == "Window") {
+if (Platform === "Window") {
     window.$S = Stack;
-} else if (Platform == "Node.js") {
+} else if (Platform === "Node.js") {
     module.exports = Stack;
 }
 }));

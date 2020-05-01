@@ -1,6 +1,6 @@
 (function($S) {
 
-var LoggerInfo = $S.getScriptFileNameRef();
+var LoggerInfo = $S.getScriptFileNameRef(location);
 
 var TableDataModel = function(selector, context) {
     return new TableDataModel.fn.init(selector, context);
