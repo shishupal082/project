@@ -962,7 +962,7 @@ Stack.extend = Stack.fn.extend = function(options) {
     return this;
 };
 Stack.extend({
-    getScriptFileName: function() {
+    getScriptFileName: function(location) {
         var scriptName = "";
         if (Platform == "Window") {
             var scripts = document.getElementsByTagName('script');
@@ -980,8 +980,8 @@ Stack.extend({
         }
         return scriptName;
     },
-    getScriptFileNameRef: function() {
-        var scriptName = Stack.getScriptFileName();
+    getScriptFileNameRef: function(location) {
+        var scriptName = Stack.getScriptFileName(location);
         var result = [];
         var splitResult = scriptName.split("/");
         result = splitResult.filter(function(el, index, arr) {

@@ -4,7 +4,7 @@ var yardApiUrl = UIYardUrl;
 
 $M.changeSetValueCountLimit(UISetValueCountLimit);
 
-var LoggerInfo = $S.getScriptFileNameRef();
+var LoggerInfo = $S.getScriptFileNameRef(location);
 
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
