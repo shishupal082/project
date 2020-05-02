@@ -2,8 +2,9 @@ import React from 'react';
 import './libs/bootstrap-react-v3.1.1.css';
 import $S from "./libs/stack.js";
 import Table from "./components/Table";
+import AppConstant from "./AppConstant";
 
-var api = "http://localhost:3000/reactIndexData.json";
+var api = AppConstant.api;
 
 class App extends React.Component {
     constructor(props) {

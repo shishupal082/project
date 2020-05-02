@@ -1,3 +1,14 @@
+Before development
+sync required js files to make updated dependent js files
+>> sh sync.sh
+
+After development run
+>> sh build.sh
+
+It will create build and put all js code in desired directory
+
+------------------------------------------
+
 https://www.taniarascia.com/getting-started-with-react/
 https://reactjs.org/tutorial/tutorial.html
 
