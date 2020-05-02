@@ -19,7 +19,7 @@ app.use(express.static(__dirname + "/.."));
 
 var allowedOrigins = [];
 
-allowedOrigins.push("http://localhost:3000"); // nodejs
+allowedOrigins.push("http://localhost");       // php
 allowedOrigins.push("http://localhost:8080");  // java WebApp
 allowedOrigins.push("http://localhost:9000");  // reactjs
 
