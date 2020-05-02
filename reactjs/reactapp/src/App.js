@@ -3,9 +3,7 @@ import './libs/bootstrap-react-v3.1.1.css';
 import $S from "./libs/stack.js";
 import Table from "./components/Table";
 
-var api = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY";
-api = "http://localhost:3000/appData.json";
-// api = "http://localhost:3000/pvt/app-data/appData.json";
+var api = "http://localhost:3000/reactIndexData.json";
 
 class App extends React.Component {
     constructor(props) {
@@ -22,7 +20,7 @@ class App extends React.Component {
         this.fetchData();
     }
     fetchData() {
-        fetch(api)
+        fetch(api + "?" + $S.getUniqueNumber())
             .then(res => res.json())
             .then(
                 (result) => {
@@ -31,6 +29,7 @@ class App extends React.Component {
                         items: result,
                         error: null
                     });
+                    $S.log(this.state.items);
                 },
                 (error) => {
                     this.setState({
@@ -38,6 +37,7 @@ class App extends React.Component {
                         items: [],
                         error: error.toString()
                     });
+                    $S.log(this.state.error);
                 }
             );
     }
@@ -52,7 +52,7 @@ class App extends React.Component {
         if ($S.isArray(this.state.items)) {
             tData = this.state.items;
         }
-        var display = "Loading...";
+        var display = <center>Loading...</center>;
         if (this.state.isLoaded) {
             if (tData.length) {
                 var table = $S.getTable(tData, "dashboard");
@@ -72,7 +72,7 @@ class App extends React.Component {
             <div className="container">
                 <div>
                     <center>
-                        <h2>React.js App Dashboard &nbsp;
+                        <h2>React App &nbsp;
                         <button onClick={this.handleClick} className={btnClassName}>Click to reload</button>
                         </h2>
                     </center>

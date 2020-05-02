@@ -9,50 +9,6 @@ const AppConstant = {
     UNDEFINED: undefined
 };
 
-AppConstant.appData = [
-    [
-        "Index page",
-        "<a href='/'>Main page</a>",
-        "/"
-    ],
-    [
-        "Index page",
-        "<a href='/index.html'>Index</a>",
-        "/index.html"
-    ],
-    [
-        "Index Data",
-        "<a href='/indexData.json'>indexData.json</a>",
-        "/indexData.json"
-    ],
-    [
-        "App Data",
-        "<a href='/appData.json'>appData.json</a>",
-        "/appData.json"
-    ],
-    [
-        "JSON Data",
-        "<a href='/json_data'>JSON data</a>",
-        "/json_data"
-    ],
-    [
-        "Twitter Api",
-        "<a href='/twitter'>Twitter Api</a>",
-        "/twitter"
-    ],
-    [
-        "Nasa Api",
-        "<a href='/nasa'>Nasa Api</a>",
-        "/nasa"
-    ],
-    [
-        "Yard 1",
-        "<a href=\"/app/yard1/\">Yard 1</a>",
-        "/app/yard1/"
-    ]
-];
-
-
 module.exports = AppConstant;
 
 

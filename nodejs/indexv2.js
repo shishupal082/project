@@ -36,7 +36,7 @@ function logCrossOriginRequest(req, res) {
     }
     logText += req.url;
     logText += ", " + req.method;
-    $S.log(logText);
+    Logger.log(logText);
 }
 
 app.use(function(req, res, next) {
@@ -82,11 +82,12 @@ app.get('/indexData.json', function(req, res, next){
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     fs.createReadStream(filePath).pipe(res);
 });
-app.get('/appData.json', function(req, res, next){
+app.get('/reactIndexData.json', function(req, res, next){
     requestLogging(req);
+    var filePath = "./static/data/reactIndexData.json";
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
-    res.json(AppConstant.appData);
+    fs.createReadStream(filePath).pipe(res);
 });
 app.get('/json_data', function(req, res){
     requestLogging(req);

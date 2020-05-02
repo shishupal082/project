@@ -16,8 +16,8 @@
     ],
     [
         "App Data",
-        "<a href='/appData.json'>appData.json</a>",
-        "/appData.json"
+        "<a href='/reactIndexData.json'>reactIndexData.json</a>",
+        "/reactIndexData.json"
     ],
     [
         "JSON Data",

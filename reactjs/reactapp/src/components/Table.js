@@ -8,7 +8,7 @@ function Table(props) {
     tData = props.tData ? props.tData : [];
     var trs = tData.map(function(item, index, arr) {
         var trId = tId+"-"+index;
-        return <Tr id={trId} key={trId} item={item}/>
+        return <Tr id={trId} key={trId} item={item} index={index}/>
     });
     return (
         <table id={tId} className={cName}><tbody>
