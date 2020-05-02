@@ -1,7 +1,7 @@
 import React from 'react';
-import './libs/bootstrap-react-v3.1.1.css';
-import $S from "./libs/stack.js";
-import Table from "./components/Table";
+import '../libs/bootstrap-react-v3.1.1.css';
+import $S from "../libs/stack.js";
+import Table from "../components/Table";
 import AppConstant from "./AppConstant";
 
 var api = AppConstant.api;

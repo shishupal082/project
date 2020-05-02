@@ -2,16 +2,18 @@
 
 echo [INFO] Copying file to desired location
 
-rm -rf dist/*
+distDir=index-app-dist
 
-cp build/static/js/*.js dist/
+rm -rf ${distDir}/*
 
-mv dist/runtime-main.*.js dist/script1.js
-mv dist/main.*.chunk.js dist/script2.js
-mv dist/*.chunk.js dist/script3.js
+cp build/static/js/*.js ${distDir}/
 
-sed -i  ''  '2s/.*//' dist/script1.js
-sed -i  ''  '2s/.*//' dist/script2.js
-sed -i  ''  '3s/.*//' dist/script3.js
+mv ${distDir}/runtime-main.*.js ${distDir}/script1.js
+mv ${distDir}/main.*.chunk.js ${distDir}/script2.js
+mv ${distDir}/*.chunk.js ${distDir}/script3.js
+
+sed -i  ''  '2s/.*//' ${distDir}/script1.js
+sed -i  ''  '2s/.*//' ${distDir}/script2.js
+sed -i  ''  '3s/.*//' ${distDir}/script3.js
 
 echo [INFO] Copy file complete

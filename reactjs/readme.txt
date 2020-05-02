@@ -8,6 +8,25 @@ After development run
 It will create build and put all js code in desired directory
 
 ------------------------------------------
+Changing index.js filename for app start
+
+------------------------------------------
+Load js and css files outside of src directory
+
+------------------------------------------
+Remove //# sourceMappingURL=2.caa3872d.chunk.js.map file line entry from build file
+Using sed command
+>> sed -i  ''  '2s/.*//' build/2.caa3872d.chunk.js
+
+------------------------------------------
+Read global variable in React Application
+inside index.html
+
+>> window.var1 = var1
+
+inside App.js
+>> var var1 = window.var1;
+------------------------------------------
 
 https://www.taniarascia.com/getting-started-with-react/
 https://reactjs.org/tutorial/tutorial.html
