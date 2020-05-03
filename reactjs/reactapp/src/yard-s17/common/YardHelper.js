@@ -7,9 +7,8 @@ function getTableHtml(yardData, name) {
     if (yardData && yardData[name]) {
         tableData = yardData[name];
     }
-    var table = $S.getTable(tableData, name);
-    // return table.getHtml();
-    return <YardTable id={name} yardTableContent={table.getContent()}/>
+    var tableContent = $S.getTable(tableData, name).getContent();
+    return <YardTable id={name} yardTableContent={tableContent}/>
 }
 
 const YardHelper = {
@@ -18,7 +17,7 @@ const YardHelper = {
     for (var i = 0; i < requiredContent.length; i++) {
         var curData = [];
         for (var j = 0; j < requiredContent[i].length; j++) {
-            if (requiredContent[i][j] == "") {
+            if (requiredContent[i][j] === "") {
                 curData.push("");
             } else {
                 curData.push(getTableHtml(yardComponent, requiredContent[i][j]));

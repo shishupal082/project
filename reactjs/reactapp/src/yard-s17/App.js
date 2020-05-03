@@ -1,16 +1,12 @@
 import React from 'react';
 import YardContainer from './component/YardContainer';
 import AppConstant from './common/AppConstant';
-import Api from './common/Api';
 import $S from "../libs/stack.js";
 
 var yardApi = AppConstant.baseapi + AppConstant.yardApi + "?"+ $S.getRequestId();
 
 class App extends React.Component {
 
-    componentDidMount() {
-        // Api.loadJsonData([yardApi]);
-    }
     render() {
         return (
 <div className="container">

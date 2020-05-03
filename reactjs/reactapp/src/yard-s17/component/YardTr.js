@@ -2,14 +2,13 @@ import React from 'react';
 import YardTd from './YardTd'
 
 function YardTr(props) {
-	var trClassName = props.index%2 ? "odd" : "even";
 	var trId = props.id;
 	var tds = props.trData.map(function(tdData, index, arr) {
 		var tdId = trId + "-" + index;
 		return <YardTd key={tdId} id={tdId} tdData={tdData} index={index}/>
 	});
     return (
-        <tr className={trClassName} id={trId}>{tds}</tr>
+        <tr className={props.className} id={trId}>{tds}</tr>
     );
 }
 
