@@ -147,6 +147,7 @@ app.get('/file', function(req, res, next) {
         } else {
             response = {"STATUS": "FAILURE"};
             response["REASON"] = "Invalid filename";
+            console.log(response);
             res.end(JSON.stringify(response));
         }
     } else {

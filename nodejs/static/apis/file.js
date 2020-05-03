@@ -87,8 +87,13 @@ var FileObj = (function() {
 })();
 File.extend({
     getFile: function(filePath) {
+        if (filePath) {
+            var filePathArr = filePath.split("?");
+            if (filePathArr.length > 0) {
+                filePath = filePathArr[0];
+            }
+        }
         return new FileObj(AppConstant.PUBLIC_DIR + filePath);
-        // return new FileObj();
     },
 
 });
