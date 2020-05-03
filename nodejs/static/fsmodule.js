@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-(function(fs) {
+(function(fs, path) {
 var FS = function(config) {
     return new FS.fn.init(config);
 };
@@ -93,5 +93,5 @@ FS.extend({
 
 module.exports = FS;
 
-})(fs);
+})(fs, path);
 

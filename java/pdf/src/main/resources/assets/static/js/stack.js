@@ -1532,6 +1532,9 @@ Stack.extend({
         }
         return 0;
     },
+    extendObject: function(Obj) {
+        ExtendObject(Obj);
+    },
     loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
             ajaxApiCall = function(ajax, callBack) {
@@ -1563,7 +1566,7 @@ Stack.extend({
             ajaxApiCall(ajax, function(ajaxDetails, status, response) {
                 apiReceiveCount++;
                 if (status === "FAILURE") {
-                    Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo)
+                    Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo);
                 }
                 if (isFunction(eachApiCallback)) {
                     eachApiCallback(response, ajax.apiName);

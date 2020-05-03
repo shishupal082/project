@@ -1,9 +1,16 @@
 import React from 'react';
-import '../libs/bootstrap-react-v3.1.1.css';
-import '../yard-s17/css/style.css';
 import YardContainer from './component/YardContainer';
+import AppConstant from './common/AppConstant';
+import Api from './common/Api';
+import $S from "../libs/stack.js";
+
+var yardApi = AppConstant.baseapi + AppConstant.yardApi + "?"+ $S.getRequestId();
 
 class App extends React.Component {
+
+    componentDidMount() {
+        // Api.loadJsonData([yardApi]);
+    }
     render() {
         return (
 <div className="container">
@@ -45,7 +52,7 @@ class App extends React.Component {
     </tbody></table>
     <hr></hr>
 </div>
-<YardContainer/>
+<YardContainer yardApi={yardApi}/>
 <div>
     <div id="changeValueData"></div>
 </div>

@@ -25,6 +25,8 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App Localhost</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost:3000/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet"   type="text/css" href="http://localhost:3000/app/yard1/static/css/style.css">
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -41,7 +43,9 @@
     -->
 <script type="text/javascript">
 var GLOBAL = {
-  api: "http://localhost:3000/reactIndexData.json"
+  baseapi: "http://localhost:3000",
+  api: "http://localhost:3000/reactIndexData.json",
+  yardApi: "/app/yard-s17/static/json/yard.json"
 };
 window.GLOBAL = GLOBAL;
 </script>
