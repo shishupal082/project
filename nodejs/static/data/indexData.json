@@ -30,6 +30,16 @@
         "/twitter"
     ],
     [
+        "Api Call",
+        "<a href='/api?api=https://api.twitter.com/1.1/search/tweets.json'>Api Call</a>",
+        "/api?api=https://api.twitter.com/1.1/search/tweets.json"
+    ],
+    [
+        "Get file",
+        "<a href='/file?file=/nodejs/package.json'>package.json</a>",
+        "/file?/nodejs/package.json"
+    ],
+    [
         "Nasa Api",
         "<a href='/nasa'>Nasa Api</a>",
         "/nasa"

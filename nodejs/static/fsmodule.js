@@ -29,6 +29,34 @@ FS.extend = FS.fn.extend = function(options) {
 };
 
 FS.extend({
+    isFile: function(pathname) {
+        try {
+            var isFile = fs.statSync(pathname).isFile();
+            return isFile;
+        } catch(ex) {
+            return false;
+        }
+    },
+    isDirectory: function(pathname) {
+        try {
+            var isDir = fs.statSync(pathname).isDirectory();
+            return isDir;
+        } catch(ex) {
+            return false;
+        }
+    },
+    getFileName: function(pathname) {
+        if (typeof pathname == "string") {
+            return path.basename(pathname);
+        }
+        return "";
+    },
+    getExtention: function(pathname) {
+        if (typeof pathname == "string") {
+            return path.extname(pathname);
+        }
+        return "";
+    },
     isFileExist: function(filePath, callBack) {
         fs.access(filePath, fs.constants.F_OK, (err) => {
             if (err == null) {

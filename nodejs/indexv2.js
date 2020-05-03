@@ -9,13 +9,16 @@ const config = require("./static/config.js");
 const $S = require("../static/js/stack.js");
 const Logger = require("./static/logger.js");
 const Get = require("./static/apis/getapi.js");
+const File = require("./static/apis/file.js");
 
 const hostname = config.hostname;
 const port = config.port;
 
+// var filePath = "/nodejs/package.json";
+// var file = File.getFile(filePath);
+// console.log(file.getAll());
 
-app.use(express.static(__dirname + "/.."));
-
+app.use(express.static(AppConstant.PUBLIC_DIR));
 
 var allowedOrigins = [];
 
@@ -41,6 +44,7 @@ function logCrossOriginRequest(req, res) {
 
 app.use(function(req, res, next) {
     Logger.resetLoggerKey();
+    Logger.log("Request: " + req.url + ", " + req.method);
     var origin = req.headers.origin;
     logCrossOriginRequest(req, res);
     if(allowedOrigins.indexOf(origin) > -1){
@@ -54,9 +58,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-function requestLogging(req) {
-    Logger.log("Request: " + req.url + ", " + req.method);
-}
+
 
 function loadIndexPage(req, res) {
     var filePath = "index.html";
@@ -66,31 +68,26 @@ function loadIndexPage(req, res) {
 }
 
 app.get('/', function(req, res){
-    requestLogging(req);
     loadIndexPage(req, res);
 });
 
 app.get('/index.html', function(req, res){
-    requestLogging(req);
     res.sendFile(__dirname + "/index.html");
 });
 
 app.get('/indexData.json', function(req, res, next){
-    requestLogging(req);
     var filePath = "./static/data/indexData.json";
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     fs.createReadStream(filePath).pipe(res);
 });
 app.get('/reactIndexData.json', function(req, res, next){
-    requestLogging(req);
     var filePath = "./static/data/reactIndexData.json";
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     fs.createReadStream(filePath).pipe(res);
 });
 app.get('/json_data', function(req, res){
-    requestLogging(req);
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     var response = {"status": "SUCCESS"};
@@ -99,7 +96,6 @@ app.get('/json_data', function(req, res){
 });
 
 app.get('/twitter', function(req, res, next){
-    requestLogging(req);
     var api = "https://api.twitter.com/1.1/search/tweets.json";
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
@@ -111,15 +107,54 @@ app.get('/twitter', function(req, res, next){
 });
 
 app.get('/nasa', function(req, res, next){
-    requestLogging(req);
     var api = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY';
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
-
-    var response = {"status": "SUCCESS"};
     Get.api(api, $S.getUniqueNumber(), function(resp) {
         res.end(JSON.stringify(resp));
     });
+});
+
+app.get('/api', function(req, res, next) {
+    var api = req.query.api;
+    res.statusCode = 200;
+    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
+    var response = {};
+    if (api) {
+        Get.api(api, $S.getUniqueNumber(), function(resp) {
+            response["response"]=resp;
+            res.end(JSON.stringify(response));
+        });
+    } else {
+        var response = {"STATUS": "FAILURE"};
+        response["REASON"] = "Invalid query parameter (api)";
+        res.end(JSON.stringify(response));
+    }
+});
+
+app.get('/file', function(req, res, next) {
+    var filePath = req.query.file;
+    res.statusCode = 200;
+    var response = {};
+    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
+    if (filePath) {
+        var file = File.getFile(filePath);
+        console.log(file.getAll());
+        if (file.isFile()) {
+            res.setHeader(AppConstant.CONTENT_TYPE,
+                file.getFileMediaType(AppConstant.TEXT_PLAIN));
+            fs.createReadStream(file.getPath()).pipe(res);
+        } else {
+            response = {"STATUS": "FAILURE"};
+            response["REASON"] = "Invalid filename";
+            res.end(JSON.stringify(response));
+        }
+    } else {
+        response = {"STATUS": "FAILURE"};
+        response["REASON"] = "Invalid query parameter (file)";
+        console.log(response);
+        res.end(JSON.stringify(response));
+    }
 });
 
 app.get('*', function(req, res){
