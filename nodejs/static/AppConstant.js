@@ -1,7 +1,7 @@
 const AppConstant = {
     CONTENT_TYPE: "Content-Type",
     APPLICATION_JSON: "application/json",
-    TEXT_JS: "application/javascript ",
+    TEXT_JS: "application/javascript",
     TEXT_HTML: "text/html",
     TEXT_CSS: "text/css",
     TEXT_PLAIN: "text/plain",

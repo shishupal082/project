@@ -18,7 +18,7 @@ const port = config.port;
 // var file = File.getFile(filePath);
 // console.log(file.getAll());
 
-app.use(express.static(AppConstant.PUBLIC_DIR));
+// app.use(express.static(AppConstant.PUBLIC_DIR));
 
 var allowedOrigins = [];
 
@@ -159,12 +159,21 @@ app.get('/file', function(req, res, next) {
 });
 
 app.get('*', function(req, res){
-    Logger.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
-    res.statusCode = 404;
-    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);
-    res.end('<center>Invalid url.</center>');
+    var filePath = req.url;
+    var file = File.getFile(filePath);
+    console.log(file.getAll());
+    if (file.isFile()) {
+        res.setHeader(AppConstant.CONTENT_TYPE,
+            file.getFileMediaType(AppConstant.TEXT_PLAIN));
+        fs.createReadStream(file.getPath()).pipe(res);
+    } else {
+        Logger.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
+        res.statusCode = 404;
+        res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);
+        res.end('<center>Invalid url.</center>');
+    }
 });
 
 http.listen(port, hostname, function(){
-  Logger.log(`***server running at http://${hostname}:${port}***`);
+  Logger.log(`***server running at http://${hostname}:${port}, ${__dirname}***`);
 });
