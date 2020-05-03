@@ -14,6 +14,7 @@ public class AppConstant {
     public static final String REASON = "REASON";
     public static final String RESPONSE = "RESPONSE";
     public static final String ContentType = "Content-Type";
+    public static final String ALLOWED_ACCESS= "Access-Control-Allow-Origin";
     public static final String FILE = "FILE";
     public static final String FOLDER = "FOLDER";
     public static final String AppVersion = "1.0.1";
@@ -21,4 +22,5 @@ public class AppConstant {
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
     public static final String UTF8 = "UTF-8";
     public static final String FAVICON_ICO_PATH = "favicon.ico";
+    public static final String ORIGIN = "origin";
 }

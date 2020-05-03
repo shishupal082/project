@@ -39,7 +39,7 @@ public class WebApplication  extends Application<WebAppConfiguration> {
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new LogFilter());
-        environment.jersey().register(new RequestFilter());
+        environment.jersey().register(new RequestFilter(webAppConfig));
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new FaviconResource(webAppConfig));
         environment.jersey().register(new AppResource(webAppConfig));

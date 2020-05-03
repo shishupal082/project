@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.webapp.config.DirectoryConfig;
 import io.dropwizard.Configuration;
 
+import java.util.ArrayList;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WebAppConfiguration extends Configuration {
     private String indexPageReRoute;
     private String icoFilePath;
     private String publicDir;
     private String publicPostDir;
+    private ArrayList<String> allowedOrigin;
     private DirectoryConfig directoryConfig;
 
     public String getIndexPageReRoute() {
@@ -44,6 +47,14 @@ public class WebAppConfiguration extends Configuration {
         this.publicPostDir = publicPostDir;
     }
 
+    public ArrayList<String> getAllowedOrigin() {
+        return allowedOrigin;
+    }
+
+    public void setAllowedOrigin(ArrayList<String> allowedOrigin) {
+        this.allowedOrigin = allowedOrigin;
+    }
+
     public DirectoryConfig getDirectoryConfig() {
         return directoryConfig;
     }
@@ -59,6 +70,7 @@ public class WebAppConfiguration extends Configuration {
                 ", icoFilePath='" + icoFilePath + '\'' +
                 ", publicDir='" + publicDir + '\'' +
                 ", publicPostDir='" + publicPostDir + '\'' +
+                ", allowedOrigin=" + allowedOrigin +
                 ", directoryConfig=" + directoryConfig +
                 '}';
     }

@@ -36,7 +36,7 @@ public class LogFilter implements ContainerRequestFilter {
         MDC.remove(AppConstant.X_REQUEST_ID);
         MDC.put(AppConstant.X_REQUEST_ID, requestId);
     }
-    public static void addSessionIdInLog(String sessionId) throws IOException {
+    public static void addSessionIdInLog(String sessionId)  {
         MDC.remove(AppConstant.X_SESSION_ID);
         MDC.put(AppConstant.X_SESSION_ID, sessionId);
     }

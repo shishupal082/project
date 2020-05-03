@@ -34,6 +34,10 @@ public class ResponseFilter implements ContainerResponseFilter {
         Cookie sessionCookie = new Cookie(AppConstant.COOKIE_NAME, responseCookieData);
         sessionCookie.setPath("/");
         httpServletResponse.addCookie(sessionCookie);
+        String origin = requestContext.getHeaderString(AppConstant.ORIGIN);
+        if (origin != null) {
+            responseContext.getHeaders().add(AppConstant.ALLOWED_ACCESS, origin);
+        }
         String requestedPath = FileService.getPathUrlV2(requestContext);
         if (!AppConstant.FAVICON_ICO_PATH.equals(requestedPath)) {
             logger.info("ResponseFilter executed sessionCookie : {}",

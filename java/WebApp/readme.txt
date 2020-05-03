@@ -2,6 +2,10 @@ Version=1.0.1 (2020/04/29)
 --------------------------
 env_config parameters
 *****************************************
+allowedOrigin:
+  - http://localhost:3000
+  - http://localhost:9000
+  - http://localhost
 indexPageReRoute: /app
 icoFilePath: meta-data/favicon.ico
 publicDir: ../
@@ -27,3 +31,6 @@ directoryConfig:
     sh: text/sh
 *****************************************
 env_config parameters end
+
+allowedOrigin confif parameter added
+If not found, all origin will be allowed
