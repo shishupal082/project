@@ -159,19 +159,33 @@ app.get('/file', function(req, res, next) {
 });
 
 app.get('*', function(req, res){
-    var filePath = req.url;
-    var file = File.getFile(filePath);
+    var url = req.url;
+    var file = File.getFile(url);
     console.log(file.getAll());
-    if (file.isFile()) {
-        res.setHeader(AppConstant.CONTENT_TYPE,
-            file.getFileMediaType(AppConstant.TEXT_PLAIN));
-        fs.createReadStream(file.getPath()).pipe(res);
-    } else {
-        Logger.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
-        res.statusCode = 404;
-        res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);
-        res.end('<center>Invalid url.</center>');
+    if (file.isDirectory()) {
+        var indexFileName = "index.html";
+        Logger.log("searching " + indexFileName);
+        file = File.getFile(url + indexFileName);
+        if (!file.isFile()) {
+            indexFileName = "/index.html";
+            Logger.log("searching " + indexFileName);
+            file = File.getFile(url + indexFileName);
+        }
+        if (file.isFile()) {
+            Logger.log(indexFileName + " found, " + file.getPath());
+        }
     }
+    if (file.isFile()) {
+        res.statusCode = 200;
+        res.setHeader(AppConstant.CONTENT_TYPE,
+                file.getFileMediaType(AppConstant.TEXT_PLAIN));
+        fs.createReadStream(file.getPath()).pipe(res);
+        return 1;
+    }
+    Logger.log("Request: " + req.url + ", " + req.method + ", 404 not found.");
+    res.statusCode = 404;
+    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.TEXT_HTML);
+    res.end('<center>Invalid url.</center>');
 });
 
 http.listen(port, hostname, function(){
