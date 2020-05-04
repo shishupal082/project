@@ -1,0 +1,143 @@
+[
+    [
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "S1-GN=1,ML-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S1-ML"
+                },
+                {
+                    "tag": "button",
+                    "value": "S1-GN=1,LL-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S1-LL"
+                },
+                {
+                    "tag": "button",
+                    "value": "S2-GN=1,2/3-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S2-2/3"
+                },
+                {
+                    "tag": "button",
+                    "value": "S3-GN=1,2/3-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S3-2/3"
+                },
+                {
+                    "tag": "button",
+                    "value": "S13-GN=1,DN-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S13-DN"
+                },
+                {
+                    "tag": "button",
+                    "value": "SH7-GN=1,SDG-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "SH7-SDG"
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "EUYN=1,4-WN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "EUYN-4WN"
+                },
+                {
+                    "tag": "button",
+                    "value": "EUYN=1,5-WN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "EUYN-5WN"
+                },
+                {
+                    "tag": "button",
+                    "value": "EUYN=1,2/3-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "EUYN-2/3UN"
+                },
+                {
+                    "tag": "button",
+                    "value": "EUYN=1,10/11-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "EUYN-10/11UN"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "S12-GN=1,ML-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S12-ML"
+                },
+                {
+                    "tag": "button",
+                    "value": "S12-GN=1,LL-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S12-LL"
+                },
+                {
+                    "tag": "button",
+                    "value": "S10-GN=1,10/11-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S10-10/11"
+                },
+                {
+                    "tag": "button",
+                    "value": "S11-GN=1,10/11-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S11-10/11"
+                },
+                {
+                    "tag": "button",
+                    "value": "S9-GN=1,UP-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S9-UP"
+                },
+                {
+                    "tag": "button",
+                    "value": "SH8-GN=1,LL-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "SH8-LL"
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "OYN=1,ML-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "OYN-ML"
+                },
+                {
+                    "tag": "button",
+                    "value": "OYN=1,LL-UN=1",
+                    "className": "evt signal_route_btn",
+                    "text": "OYN-LL"
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": {
+                "tag": "span",
+                "className": "alert-danger badge",
+                "id": "alarm",
+                "text": ""
+            }
+        }
+    ]
+]
