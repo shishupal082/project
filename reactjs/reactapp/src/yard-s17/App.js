@@ -9,7 +9,7 @@ class App extends React.Component {
 
     render() {
         return (
-<div className="container">
+<div className="container yard">
 <div>
     <center><h2>Yard S17</h2></center>
     <table><tbody>

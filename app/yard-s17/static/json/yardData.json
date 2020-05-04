@@ -1,0 +1,1268 @@
+{
+    "topLoopLine": {
+        "ll-text": [
+            [   "","","","","---","DN","-->","","",
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "sh7"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": {
+                        "tag": "span",
+                        "className": "signal-no",
+                        "text": "S"
+                    }
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": {
+                        "tag": "span",
+                        "className": "signal-no",
+                        "text": "3"
+                    }
+                }
+            ]
+        ],
+        "p-6-text": [
+            [
+                "",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "6"
+                }
+            ]
+        ],
+        "4B-tpr": [
+            [
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                "","",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "4B"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "-tpr"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "|"
+                },
+                {
+                    "tag":"button",
+                    "className": "evt btn tpr green LL-sh-left",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag":"button",
+                    "className": "evt btn tpr green LL-sh-left",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag":"button",
+                    "className": "evt btn tpr yellow p-4b-n",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag":"button",
+                    "className": "evt btn tpr yellow p-4b-n",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag":"button",
+                    "className": "evt btn tpr yellow p-4b-c",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                "",
+                {
+                    "tag": "span",
+                    "className": "badge yellow indication 4-WLK active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-4b-r btn-rotate",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ]
+        ],
+        "ll-tpr": [
+            [
+                "","","","","",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "L"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "-tpr"
+                },
+                "","",
+                {
+                    "tag": "div",
+                    "className": "shunt",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "className": "text-left",
+                            "text": {
+                                "tag": "span",
+                                "className": "badge yellow active",
+                                "text": "\u00a0"
+                            }
+                        },
+                        {
+                            "tag": "div",
+                            "className": "text-left",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "id": "SH7-RECR",
+                                    "className": "badge yellow active",
+                                    "text": "\u00a0"
+
+                                },
+                                {
+                                    "tag": "span",
+                                    "id": "SH7-HECR",
+                                    "className": "badge yellow active",
+                                    "text": "\u00a0"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "span",
+                    "id": "S3-RECR",
+                    "className": "badge signal red active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S3-HECR",
+                    "className": "badge signal yellow active",
+                    "text": "\u00a0"
+                },
+                "",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text":"5B"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text":"-tpr"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue L-TPR",
+                    "value": "L-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-5b-c",
+                    "value": "5B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-5b-n",
+                    "value": "5B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-5b-n",
+                    "value": "5B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S10-HECR",
+                    "className": "badge signal yellow active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S10-RECR",
+                    "className": "badge signal red active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S10"
+                },
+                "","","","","","","","","","",
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-5b-r btn-rotate positive",
+                    "value": "5B-TPR",
+                    "text": {
+                        "tag": "span",
+                        "className":"badge",
+                        "text": "\u00a0"
+                    }
+                },
+                {
+                    "tag": "span",
+                    "className": "badge yellow indication 5-WLK active",
+                    "text": "\u00a0"
+                }
+            ]
+        ],
+        "ll-tpr-sh": [
+            [
+                "",
+                {
+                    "tag": "button",
+                    "className": "evt btn circle point-change-request",
+                    "value": "WWN=1,6-WN=1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge",
+                        "text": "T"
+                    }
+                }
+            ],
+            [
+
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue p-6a-c",
+                    "value": "SDG-TPR-A",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue p-6a-c",
+                    "value": "SDG-TPR-A",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "",
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-6b-n btn-rotate",
+                    "value": "SDG-TPR-B",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ]
+        ],
+        "sdg-tpr-0": [
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue p-6a-n btn-rotate",
+                    "value": "SDG-TPR-A",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "span",
+                    "className": "badge yellow indication 6-WLK active",
+                    "text": "\u00a0"
+                },
+                "","","sdg"
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-6b-c btn-warning",
+                    "value": "SDG-TPR-B",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-6b-c btn-warning",
+                    "value": "SDG-TPR-B",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "","",
+                {
+                    "tag": "div",
+                    "className": "shunt",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "className": "text-right",
+                            "text": {
+                                "tag": "span",
+                                "className": "badge yellow active",
+                                "text": "\u00a0"
+                            }
+                        },
+                        {
+                            "tag": "div",
+                            "className": "text-right",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "id": "SH8-HECR",
+                                    "className": "badge yellow active",
+                                    "text": "\u00a0"
+
+                                },
+                                {
+                                    "tag": "span",
+                                    "id": "SH8-RECR",
+                                    "className": "badge yellow active",
+                                    "text": "\u00a0"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "sh8"
+            ]
+        ],
+        "sdg-tpr": [
+            [
+                "","",
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": {
+                        "tag":"span",
+                        "className": "badge",
+                        "text": "\u00a0"
+                    }
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": {
+                        "tag":"span",
+                        "className": "badge",
+                        "text": "\u00a0"
+                    }
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow SDG-TPR btn-warning",
+                    "value": "SDG-TPR",
+                    "text": {
+                        "tag":"span",
+                        "className": "badge",
+                        "text": "\u00a0"
+                    }
+                },
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "|"
+                }
+            ],
+            [
+                "","",
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                },
+                {
+                    "tag": "span",
+                    "className": "label label-primary",
+                    "text": "--"
+                }
+            ]
+        ]
+    },
+    "pointMid": {
+        "4-point-mid": [
+            [
+                "","","",
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-4b-r btn-rotate",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                "",""
+            ],
+            ["",
+                {
+                    "tag": "button",
+                    "className": "evt btn circle point-change-request",
+                    "value": "WWN=1,4-WN=1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge",
+                        "text": "T"
+                    }
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-4b-r btn-rotate",
+                    "value": "4B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                "4"
+            ],
+            ["",
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-r btn-rotate",
+                    "value": "4A-TPR",
+                    "text": {
+                        "tag":"span",
+                        "className": "badge",
+                        "text": "\u00a0"
+                    }
+                }
+            ]
+        ],
+        "5-point-mid": [
+            [
+                "","","","","","","","","","","","","","",
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow p-5b-r btn-rotate positive",
+                    "value": "5B-TPR",
+                    "text": {
+                        "tag":"span",
+                        "className": "badge",
+                        "text": "\u00a0"
+                    }
+                }
+            ],
+            [
+                "","","","","","","","","","","","","","","5"
+            ],
+            []
+        ],
+        "5-point-mid-2": [
+            [
+            ],
+            [
+                {
+                    "tag" : "button",
+                    "className": "evt btn tpr yellow p-5b-r btn-rotate positive",
+                    "value": "5B-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag" : "button",
+                    "className": "evt btn circle point-change-request",
+                    "value": "WWN=1,5-WN=1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge",
+                        "text": "T"
+                    }
+                }
+            ],
+            [
+                "",
+                {
+                    "tag" : "button",
+                    "className": "evt btn tpr green p-5a-r btn-rotate positive",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ]
+        ]
+    },
+    "mainLine": {
+        "1A-tpr": [
+            [
+            ],
+            [
+                {
+                    "tag" : "button",
+                    "className": "evt btn tpr red 1A-TPR",
+                    "value": "1A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag" : "button",
+                    "className": "evt btn tpr red 1A-TPR",
+                    "value": "1A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "1A","-tpr"
+            ]
+        ],
+        "1-tpr": [
+            [
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S1"
+                },
+                {
+                    "tag": "span",
+                    "id": "S1-RECR",
+                    "className": "badge signal red active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S1-HECR",
+                    "className": "badge signal yellow active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S1-DECR",
+                    "className": "badge signal green active",
+                    "text": "\u00a0"
+                },
+                ""
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow 1-TPR",
+                    "value": "1-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow 1-TPR",
+                    "value": "1-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow 1-TPR",
+                    "value": "1-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow 1-TPR",
+                    "value": "1-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr yellow 1-TPR",
+                    "value": "1-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "1-"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "tpr"
+                }
+            ]
+        ],
+        "9-tpr": [
+            [
+                "",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "9-"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "tpr"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 9-TPR",
+                    "value": "9-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 9-TPR",
+                    "value": "9-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 9-TPR",
+                    "value": "9-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S9-HECR",
+                    "className": "badge signal active green",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S9-RECR",
+                    "className": "badge signal active red",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S9"
+                }
+            ]
+        ],
+        "10/11-tpr": [
+            [
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 10_11-TPR",
+                    "value": "10/11-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 10_11-TPR",
+                    "value": "10/11-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 10_11-TPR",
+                    "value": "10/11-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 10_11-TPR",
+                    "value": "10/11-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-c",
+                    "value": "4A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-c",
+                    "value": "4A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text":"10/"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-center",
+                    "text":"11-"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text":"tpr"
+                }
+            ]
+        ],
+        "4A-tpr": [
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-r btn-rotate",
+                    "value": "4A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "span",
+                    "className": "badge yellow indication 4-WLK active",
+                    "text": "\u00a0"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-n",
+                    "value": "4A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-4a-n",
+                    "value": "4A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "4A"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "-tpr"
+                },
+                {
+                    "tag": "span",
+                    "id": "S11-DECR",
+                    "className": "badge signal green active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S11-HECR",
+                    "className": "badge signal yellow active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S11-RECR",
+                    "className": "badge signal red active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S1"
+                }
+            ]
+        ],
+        "ml-tpr": [
+            [
+                "","","","","",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "M"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "-tpr"
+                }, "","","","",
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S2"
+                },
+                {
+                    "tag": "span",
+                    "id": "S2-RECR",
+                    "className": "badge signal red active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S2-HECR",
+                    "className": "badge signal yellow active",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S2-DECR",
+                    "className": "badge signal green active",
+                    "text": "\u00a0"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue M-TPR",
+                    "value": "M-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+            ]
+        ],
+        "5A-tpr": [
+            [
+                "",
+                {
+                    "tag": "span",
+                    "className": "badge yellow indication 5-WLK active",
+                    "text": "\u00a0"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-5a-n",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-5a-n",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "5A"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left",
+                    "text": "-tpr"
+                }
+            ]
+        ],
+        "2/3-tpr": [
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-5a-r btn-rotate positive",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-5a-n",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr green p-5a-c",
+                    "value": "5A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 2_3-TPR",
+                    "value": "2/3-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 2_3-TPR",
+                    "value": "2/3-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr blue 2_3-TPR",
+                    "value": "2/3-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "","",
+                {
+                    "tag": "div",
+                    "className": "text-right",
+                    "text": "2/3"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-left'",
+                    "text": "-tpr"
+                }
+            ]
+        ],
+        "13-tpr": [
+            [
+                "",
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S13"
+                },
+                {
+                    "tag": "span",
+                    "id": "S13-RECR",
+                    "className": "badge signal active red",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S13-HECR",
+                    "className": "badge signal active green",
+                    "text": "\u00a0"
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 13-TPR",
+                    "value": "13-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 13-TPR",
+                    "value": "13-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 13-TPR",
+                    "value": "13-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt green btn tpr 13-TPR",
+                    "value": "13-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "","13","-tpr"
+            ]
+        ],
+        "12-tpr": [
+            [
+                "","","12","-tpr"
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt yellow btn tpr 12-TPR",
+                    "value": "12-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt yellow btn tpr 12-TPR",
+                    "value": "12-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt yellow btn tpr 12-TPR",
+                    "value": "12-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt yellow btn tpr 12-TPR",
+                    "value": "12-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt yellow btn tpr 12-TPR",
+                    "value": "12-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                "",
+                {
+                    "tag": "span",
+                    "id": "S12-DECR",
+                    "className": "badge signal active green",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S12-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "id": "S12-RECR",
+                    "className": "badge signal active red",
+                    "text": "\u00a0"
+                },
+                {
+                    "tag": "span",
+                    "className": "signal-no",
+                    "text": "S12"
+                }
+            ]
+        ],
+        "12A-tpr": [
+            [
+                "12A","-tpr"
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr red 12A-TPR",
+                    "value": "12A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn tpr red 12A-TPR",
+                    "value": "12A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+            ]
+        ]
+    }
+}
