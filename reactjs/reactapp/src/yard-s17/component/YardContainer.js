@@ -44,6 +44,9 @@ class YardContainer extends React.Component {
         });
     }
     componentDidMount() {
+        if ($S.isFunction(this.props.getYardContainerFetchData)) {
+            this.props.getYardContainerFetchData(this.fetchData.bind(this));
+        }
         this.fetchData();
     }
     render() {

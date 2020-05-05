@@ -4,7 +4,6 @@ import YardControl from './component/YardControl';
 import AppConstant from './common/AppConstant';
 import Api from './common/Api';
 import $S from "../libs/stack.js";
-import YardTable from './component/YardTable';
 
 var baseapi = AppConstant.baseapi;
 var yardApi = baseapi + AppConstant.yardApi;
@@ -24,8 +23,11 @@ class App extends React.Component {
     }
     reloadDataClick(e) {
         this.setState({btnActive: !this.state.btnActive});
-        this.refs.YardContainer.fetchData();
+        this.YardContainerFetchData();
         this.fetchData();
+    }
+    receiveExposedMethod(YardContainerFetchData) {
+        this.YardContainerFetchData = YardContainerFetchData;
     }
     onYardTableDataLoad(tableData) {
         this.setState({
@@ -59,12 +61,14 @@ class App extends React.Component {
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         var btnClassName = this.state.btnActive ? "btn btn-primary" : "btn btn-success";
+        var getYardContainerFetchData = this.receiveExposedMethod.bind(this);
         return (
 <div className="container">
 <div><center><h2>Yard S17 <button onClick={this.reloadDataClick} className={btnClassName}>Click to reload</button></h2></center></div>
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
-<YardContainer ref="YardContainer" onClick={this.onTprClick} onYardTableDataLoad={this.onYardTableDataLoad}
-            yardApi={yardApi} yardTableData={this.state.yardTableData}/>
+<YardContainer onClick={this.onTprClick} onYardTableDataLoad={this.onYardTableDataLoad}
+            yardApi={yardApi} yardTableData={this.state.yardTableData}
+            getYardContainerFetchData={getYardContainerFetchData}/>
 <div>
     <div id="changeValueData"></div>
 </div>
