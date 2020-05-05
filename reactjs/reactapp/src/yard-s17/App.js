@@ -49,7 +49,13 @@ class App extends React.Component {
         console.log("onControlClick: " + e.target.value);
     }
     onTprClick(e) {
-        console.log("onTprClick: " + e.target.value);
+        var value = "";
+        if (e.target.tagName === "SPAN") {
+            value = e.target.parentNode.value;
+        } else {
+            value = e.target.value;
+        }
+        console.log("onTprClick: " + value);
     }
     toggleDisplayDomino(e) {
         console.log("toggleDisplayDomino");

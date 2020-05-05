@@ -2,17 +2,17 @@ import React from 'react';
 import $S from '../../libs/stack';
 import YardTable from '../component/YardTable';
 
-function getTableHtml(yardData, name) {
+function getTableHtml(props, yardData, name) {
     var tableData = [];
     if (yardData && yardData[name]) {
         tableData = yardData[name];
     }
     var tableContent = $S.getTable(tableData, name).getContent();
-    return <YardTable id={name} yardTableContent={tableContent}/>
+    return <YardTable id={name} onClick={props.onClick} yardTableContent={tableContent}/>
 }
 
 const YardHelper = {
-    getYardTableContent: function(yardComponent, requiredContent) {
+    getYardTableContent: function(props, yardComponent, requiredContent) {
     var tableContent = [];
     for (var i = 0; i < requiredContent.length; i++) {
         var curData = [];
@@ -20,7 +20,7 @@ const YardHelper = {
             if (requiredContent[i][j] === "") {
                 curData.push("");
             } else {
-                curData.push(getTableHtml(yardComponent, requiredContent[i][j]));
+                curData.push(getTableHtml(props, yardComponent, requiredContent[i][j]));
             }
         }
         tableContent.push(curData);

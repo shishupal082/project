@@ -35,7 +35,7 @@ class YardContainer extends React.Component {
                 }
             }
         }, function() {
-            tableContent = YardHelper.getYardTableContent(yardComponent, requiredContent);
+            tableContent = YardHelper.getYardTableContent(self.props, yardComponent, requiredContent);
             var table = $S.getTable(tableContent, "yard");
             self.setState({
                 isLoaded: true
