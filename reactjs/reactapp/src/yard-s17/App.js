@@ -1,34 +1,40 @@
 import React from 'react';
 import YardContainer from './component/YardContainer';
+import YardControl from './component/YardControl';
 import AppConstant from './common/AppConstant';
 import Api from './common/Api';
 import $S from "../libs/stack.js";
 import YardTable from './component/YardTable';
 
 var baseapi = AppConstant.baseapi;
-var yardApi = baseapi + AppConstant.yardApi + "?"+ $S.getRequestId();
-var yardControlApi = baseapi + AppConstant.yardControlApi + "?"+ $S.getRequestId();
+var yardApi = baseapi + AppConstant.yardApi;
+var yardControlApi = baseapi + AppConstant.yardControlApi;
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            btnActive: true,
             isLoaded: false,
-            yardControlData: []
+            yardControlData: [],
+            yardTableData: []
         };
+        this.onYardTableDataLoad = this.onYardTableDataLoad.bind(this);
+        this.reloadDataClick = this.reloadDataClick.bind(this);
     }
-    onControlClick(e) {
-        console.log(e.target.value);
+    reloadDataClick(e) {
+        this.setState({btnActive: !this.state.btnActive});
+        this.refs.YardContainer.fetchData();
+        this.fetchData();
     }
-    onTprClick(e) {
-        console.log(e.target.value);
+    onYardTableDataLoad(tableData) {
+        this.setState({
+            yardTableData: tableData
+        });
     }
-    toggleDisplayDomino(e) {
-        console.log("toggleDisplayDomino");
-    }
-    componentDidMount() {
+    fetchData() {
         var self = this;
-        Api.loadJsonData([yardControlApi], function(response) {
+        Api.loadJsonData([yardControlApi + "?"+ $S.getRequestId()], function(response) {
             if (response) {
                 self.setState({
                     isLoaded: true,
@@ -37,17 +43,28 @@ class App extends React.Component {
             }
         });
     }
+    onControlClick(e) {
+        console.log("onControlClick: " + e.target.value);
+    }
+    onTprClick(e) {
+        console.log("onTprClick: " + e.target.value);
+    }
+    toggleDisplayDomino(e) {
+        console.log("toggleDisplayDomino");
+    }
+    componentDidMount() {
+        this.fetchData();
+    }
     render() {
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
+        var btnClassName = this.state.btnActive ? "btn btn-primary" : "btn btn-success";
         return (
-<div className="container yard">
-<div>
-    <center><h2>Yard S17</h2></center>
-    <YardTable onClick={this.onControlClick} id="yardControl" yardTableContent={this.state.yardControlData}/>
-    <hr></hr>
-</div>
-<YardContainer onClick={this.onTprClick} yardApi={yardApi}/>
+<div className="container">
+<div><center><h2>Yard S17 <button onClick={this.reloadDataClick} className={btnClassName}>Click to reload</button></h2></center></div>
+<YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
+<YardContainer ref="YardContainer" onClick={this.onTprClick} onYardTableDataLoad={this.onYardTableDataLoad}
+            yardApi={yardApi} yardTableData={this.state.yardTableData}/>
 <div>
     <div id="changeValueData"></div>
 </div>

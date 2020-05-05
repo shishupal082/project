@@ -23,13 +23,12 @@ class YardContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,
-            yardTable: []
+            isLoaded: false
         };
     }
-    componentDidMount() {
+    fetchData() {
         var self = this;
-        Api.loadJsonData([this.props.yardApi], function(response) {
+        Api.loadJsonData([this.props.yardApi + "?"+ $S.getRequestId()], function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);
@@ -39,21 +38,24 @@ class YardContainer extends React.Component {
             tableContent = YardHelper.getYardTableContent(yardComponent, requiredContent);
             var table = $S.getTable(tableContent, "yard");
             self.setState({
-                isLoaded: true,
-                yardTable: table.getContent()
+                isLoaded: true
             });
+            self.props.onYardTableDataLoad(table.getContent());
         });
+    }
+    componentDidMount() {
+        this.fetchData();
     }
     render() {
         var YardTableComponent = <center>Loading...</center>;
         if (this.state.isLoaded) {
-            YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.state.yardTable}
-                                id="yard" className=""/>;
+            YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.props.yardTableData}
+                                id="yard"/>;
         }
         return (
-            <div id="tableHtml" className="table-html display-domino">
+            <div className="yard"><div id="tableHtml" className="table-html display-domino">
                 {YardTableComponent}
-            </div>
+            </div></div>
         );
     }
 }
