@@ -17,8 +17,7 @@ var syncData = {
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
         "destinationDir": [
-                "../java/yard/src/main/resources/assets/s17/css/",
-                "../reactjs/reactapp/src/yard-s17/css/"
+                "../java/yard/src/main/resources/assets/s17/css/"
         ]
     },
     "stack": {
