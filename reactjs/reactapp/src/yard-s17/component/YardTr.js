@@ -5,7 +5,7 @@ function YardTr(props) {
 	var trId = props.id;
 	var tds = props.trData.map(function(tdData, index, arr) {
 		var tdId = trId + "-" + index;
-		return <YardTd key={tdId} id={tdId} tdData={tdData} index={index}/>
+		return <YardTd onClick={props.onClick} key={tdId} id={tdId} tdData={tdData} index={index}/>
 	});
     return (
         <tr className={props.className} id={trId}>{tds}</tr>

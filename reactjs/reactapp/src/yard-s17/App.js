@@ -17,6 +17,15 @@ class App extends React.Component {
             yardControlData: []
         };
     }
+    onControlClick(e) {
+        console.log(e.target.value);
+    }
+    onTprClick(e) {
+        console.log(e.target.value);
+    }
+    toggleDisplayDomino(e) {
+        console.log("toggleDisplayDomino");
+    }
     componentDidMount() {
         var self = this;
         Api.loadJsonData([yardControlApi], function(response) {
@@ -29,26 +38,27 @@ class App extends React.Component {
         });
     }
     render() {
-
+        var helpContentVisibleClass = "help ";
+        helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         return (
 <div className="container yard">
 <div>
     <center><h2>Yard S17</h2></center>
-    <YardTable id="yardControl" yardTableContent={this.state.yardControlData}/>
+    <YardTable onClick={this.onControlClick} id="yardControl" yardTableContent={this.state.yardControlData}/>
     <hr></hr>
 </div>
-<YardContainer yardApi={yardApi}/>
+<YardContainer onClick={this.onTprClick} yardApi={yardApi}/>
 <div>
     <div id="changeValueData"></div>
 </div>
 <div>
     <div id="timerCount"></div>
     <div id="currentValues"></div>
-    <div id="help" className="help hide">
+    <div id="help" className={helpContentVisibleClass}>
         <div>
             <ul>
                 <li>Single line, 2 road, 14 route station</li>
-                <li><button id="toggleDisplayDomino">Toggle Display Domino</button></li>
+                <li><button id="toggleDisplayDomino" onClick={this.toggleDisplayDomino}>Toggle Display Domino</button></li>
             </ul>
         </div>
     </div>

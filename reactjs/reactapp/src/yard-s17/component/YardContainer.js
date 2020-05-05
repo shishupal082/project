@@ -47,7 +47,7 @@ class YardContainer extends React.Component {
     render() {
         var YardTableComponent = <center>Loading...</center>;
         if (this.state.isLoaded) {
-            YardTableComponent = <YardTable yardTableContent={this.state.yardTable}
+            YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.state.yardTable}
                                 id="yard" className=""/>;
         }
         return (
