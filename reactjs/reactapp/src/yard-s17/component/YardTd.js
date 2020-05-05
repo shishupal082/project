@@ -1,7 +1,33 @@
 import React from 'react';
 import $S from '../../libs/stack';
+import YardHelper from '../common/YardHelper';
+
 
 var validTags = ["div", "span", "button"];
+
+function getBtnClass(props, btnClass, value) {
+    var btnClassArr = [], btnClassRes = [];
+    if (btnClass) {
+        btnClassArr = btnClass.split(" ");
+    }
+    var filterClass = ["btn-warning", "btn-danger"];
+    btnClassRes = btnClassArr.filter(function(el, index, arr) {
+        if (filterClass.indexOf(el) >= 0) {
+            return false;
+        }
+        return true;
+    });
+    if (props && props.state) {
+        if (btnClassRes.indexOf("tpr") >= 0) {
+            if (YardHelper.isUp(props.state.currentValues, value)) {
+                // btnClassRes.push("btn-danger");
+            } else {
+                btnClassRes.push("btn-danger");
+            }
+        }
+    }
+    return btnClassRes.join(" ");
+}
 
 var childGenerator = {
     "div": function(props, data, reactChildText, key) {
@@ -19,7 +45,12 @@ var childGenerator = {
             };
             reactChildText = childGenerator["span"](props, spanData, spanData.text);
         }
-        return <button onClick={props.onClick} key={key} className={data.className} value={data.value}>{reactChildText}</button>;
+        var btnClassName = data.className;
+        // if (btnClassName && btnClassName.includes(data.value)) {
+        //     btnClassName = btnClassName + " btn-danger";
+        // }
+        btnClassName = getBtnClass(props, btnClassName, data.value);
+        return <button onClick={props.onClick} key={key} className={btnClassName} value={data.value}>{reactChildText}</button>;
     },
     "temp": function(props, data, reactChildText, key) {
         return <button>{reactChildText}</button>;

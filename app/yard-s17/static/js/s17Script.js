@@ -16,6 +16,7 @@ for (var key in UICommonPath) {
     apisPath[key] = UICommonPath[key];
 }
 
+$YApiModel.setJquery($);
 $YApiModel.setApisPath(apisPath);
 
 function checkUIStyle() {

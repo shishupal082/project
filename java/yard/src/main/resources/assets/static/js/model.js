@@ -1,6 +1,57 @@
-(function(window, $S) {
+// import $S from './stack';
+(function(global, factory) {
 
-var loopCount = 0, setValueCount = 0, setValueCountLimit = 400;
+function checkStatus(params) {
+    var status = true;
+    for (var i = 0; i < params.length; i++) {
+        if (!params[i]) {
+            status = false;
+            break;
+        }
+    }
+    return status;
+}
+
+function getPlatForm(global) {
+    var checkingWindowStatus = [];
+    checkingWindowStatus.push(typeof global !== 'undefined');
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(typeof global.constructor !== 'undefined');
+    } else {
+        checkingWindowStatus.push(false);
+    }
+
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(global.constructor.name === "Window");
+    } else {
+        checkingWindowStatus.push(false);
+    }
+    var windowStatus = checkStatus(checkingWindowStatus);
+
+    var checkingNodeStatus = [];
+    checkingNodeStatus.push(typeof exports === 'object');
+    checkingNodeStatus.push(typeof module !== 'undefined');
+    var nodeStatus = checkStatus(checkingNodeStatus);
+
+    if (windowStatus) {
+        if (typeof $S === undefined) {
+            $S = window.$S;
+        }
+        return "Window";
+    }
+    if (nodeStatus) {
+        return "Node.js";
+    }
+    return "";
+}
+
+var platform = getPlatForm(global);
+factory(global, platform, $S);
+
+}(window, function(global, Platform, $S) {
+
+// var loopCount = 0;
+var setValueCount = 0, setValueCountLimit = 400;
 var AllCallbacks = [];
 var possibleValues = [];
 var reCheckingStatus = true;
@@ -25,7 +76,6 @@ var AsyncData = {};
 var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
-var overwrittenMethodLogExluded = ["createPosixTree"];
 var MStack = $S.getStack();
 
 var EvaluatingExpressionKey = "";
@@ -186,7 +236,7 @@ Model.fn = Model.prototype = {
             possibleValues = [];
             for (var i = 0; i < extPossibleValues.length; i++) {
                 if (possibleValues.indexOf(extPossibleValues[i]) >= 0) {
-                    throw "Duplicate entry in possibleValues: " + extPossibleValues[i];
+                    throw new Error("Duplicate entry in possibleValues: " + extPossibleValues[i]);
                 }
                 if ($S.isString(extPossibleValues[i]) && extPossibleValues[i].length > 0) {
                     possibleValues.push(extPossibleValues[i]);
@@ -231,7 +281,7 @@ Model.fn = Model.prototype = {
         return 0;
     }
 };
-ExtendObject(Model);
+$S.extendObject(Model);
 Model.extend({
     fire: function(name) {
         for (var i = 0; i < AllCallbacks.length; i++) {
@@ -262,8 +312,8 @@ Model.extend({
     getBST: function(data) {
         return $S.getBST(data);
     },
-    getUniqueNumber: function(minVal, maxVal) {
-        return $S.getUniqueNumber();
+    getRandomNumber: function(minVal, maxVal) {
+        return $S.getRandomNumber(minVal, maxVal);
     },
     getUniqueNumber: function() {
         return $S.getUniqueNumber();
@@ -316,13 +366,16 @@ Model.extend({
     getDomino: function(dominoName) {
         return $S.getDomino(dominoName);
     },
+    extendObject: function(Obj) {
+        return $S.extendObject(Obj);
+    }
 });
 /*
 End of direct access of ID
 */
 Model.extend({
     setAsyncData: function(asyncData) {
-        var key, value, logText;
+        var key, value;
         if (Model.isObject(asyncData)) {
             for (key in asyncData) {
                 value = asyncData[key];
@@ -531,14 +584,15 @@ Model.extend({
     getVariableDependencies: function(sortedResultRequired) {
         var bst = Model.getBST();
         var response = {sortedResult: {}, count: 0, dependencies: {}};
-        for (var key in variableDependencies) {
+        var keyName;
+        for (keyName in variableDependencies) {
             response.count++;
-            response.dependencies[key] = variableDependencies[key];
+            response.dependencies[keyName] = variableDependencies[keyName];
         }
         if ($S.isBoolean(sortedResultRequired) && sortedResultRequired) {
-            for (var key in response.dependencies) {
-                var currentNode = bst.insertData(bst, response.dependencies[key].length);
-                currentNode.item = {count: response.dependencies[key].length, name: key};
+            for (keyName in response.dependencies) {
+                var currentNode = bst.insertData(bst, response.dependencies[keyName].length);
+                currentNode.item = {count: response.dependencies[keyName].length, name: keyName};
             }
             var bstArr = bst.getInOrder(bst, []);
             var result = {};
@@ -559,10 +613,7 @@ Model.extend({
         return dependentVariable;
     },
     getCurrentValues : function() {
-        var count = 0;
-        for (var key in currentValues) {
-            count++;
-        }
+        var count = Object.keys(currentValues).length;
         return {currentValues: $S.clone(currentValues), count: count};
     }
 });
@@ -637,8 +688,7 @@ Model.extend({
             setValueCount++;
             var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + newValue;
             $S.log(logText);
-            throw logText;
-            return 0;
+            throw new Error(logText);
         }
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
@@ -762,9 +812,9 @@ exps : {
     isExpressionTrue: function(exp) {
         var tokenizedExp = Model.getTokenizedExp(exp);
         var posix = Model["createPosixTree"](tokenizedExp);
-        var posixVal = [], posixValue;
+        var posixVal = [], posixValue, i;
         if (posix.length) {
-            for (var i = 0; i < posix.length; i++) {
+            for (i = 0; i < posix.length; i++) {
                 posixValue = posix[i];
                 /*  posixValue can be following:
                         "key","~",
@@ -785,7 +835,7 @@ exps : {
             console.log(posixVal);
             var posixMapping = {};
             var tempKey = "";
-            for (var i = 0; i < posix.length; i++) {
+            for (i = 0; i < posix.length; i++) {
                 tempKey = posix[i];
                 if (posixMapping[tempKey]) {
                     tempKey += ":"+i;
@@ -798,7 +848,7 @@ exps : {
         /** Expression validation start **/
         if (verifyExpression) {
             var isValidExpression = true;
-            for (var i = 0; i < posixVal.length; i++) {
+            for (i = 0; i < posixVal.length; i++) {
                 if (binaryOperatorIncludingValue.indexOf(posixVal[i]) >= 0) {
                     continue;
                 } else {
@@ -807,7 +857,7 @@ exps : {
                 }
             }
             var tokenizedExpLength = 0;
-            for (var i = 0; i < tokenizedExp.length; i++) {
+            for (i = 0; i < tokenizedExp.length; i++) {
                 if (["(",")"].indexOf(tokenizedExp[i]) >= 0) {
                     continue;
                 }
@@ -818,7 +868,7 @@ exps : {
                 $S.log(EvaluatingExpressionKey + ": invalid expression: " + exp);
             }
             if (isValidExpression == false) {
-                throw EvaluatingExpressionKey + ": invalid expression:" + exp;
+                throw new Error(EvaluatingExpressionKey + ": invalid expression:" + exp);
             }
         }
         /** Expression validation End **/
@@ -855,5 +905,5 @@ Model.extend({
 });
 Model.$S = $S;
 /*End of direct access of methods*/
-window.Model = window.$M = Model;
-})(window, $S);
+global.$M = Model;
+}));

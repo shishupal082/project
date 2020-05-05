@@ -16,7 +16,10 @@ var syncData = {
     },
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
-        "destinationDir": "../java/yard/src/main/resources/assets/s17/css/"
+        "destinationDir": [
+                "../java/yard/src/main/resources/assets/s17/css/",
+                "../reactjs/reactapp/src/yard-s17/css/"
+        ]
     },
     "stack": {
         "src": [
@@ -31,10 +34,19 @@ var syncData = {
     },
     "model": {
         "src": [
-            "../static/js/model.js",
-            "../static/js/yard/yardApiModel.js"
+            "../static/js/model.js"
         ],
-        "destinationDir": "../java/yard/src/main/resources/assets/static/js/"
+        "destinationDir": [
+            "../java/yard/src/main/resources/assets/static/js/",
+            "../reactjs/reactapp/src/libs/"
+        ]
+    },
+    "yardApiModel": {
+        "src": "../static/js/yard/yardApiModel.js",
+        "destinationDir": [
+            "../java/yard/src/main/resources/assets/static/js/",
+            "../reactjs/reactapp/src/libs/"
+        ]
     },
     "s17Script_js": {
         "src": [

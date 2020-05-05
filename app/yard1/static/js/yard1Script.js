@@ -5,7 +5,7 @@ var yardApiUrl = UIYardUrl;
 $M.changeSetValueCountLimit(UISetValueCountLimit);
 $M.enableChangeValueDataLogging();
 $VC.documentLoaded();
-
+$YApiModel.setJquery($);
 var timerCount = 0;
 
 function checkDominoDisplayStatus() {

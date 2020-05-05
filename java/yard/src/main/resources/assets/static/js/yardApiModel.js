@@ -1,10 +1,62 @@
+// import './model'; var $M = window.$M;
+
 /*
     - Load possibleValue, initialValue and expressions from api
         - It do not care about rendering yardHtml using yard api data
     - Set these values to model ($M)
 */
 
-(function(window, $M) {
+(function(global, factory) {
+
+function checkStatus(params) {
+    var status = true;
+    for (var i = 0; i < params.length; i++) {
+        if (!params[i]) {
+            status = false;
+            break;
+        }
+    }
+    return status;
+}
+
+function getPlatForm(global) {
+    var checkingWindowStatus = [];
+    checkingWindowStatus.push(typeof global !== 'undefined');
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(typeof global.constructor !== 'undefined');
+    } else {
+        checkingWindowStatus.push(false);
+    }
+
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(global.constructor.name === "Window");
+    } else {
+        checkingWindowStatus.push(false);
+    }
+    var windowStatus = checkStatus(checkingWindowStatus);
+
+    var checkingNodeStatus = [];
+    checkingNodeStatus.push(typeof exports === 'object');
+    checkingNodeStatus.push(typeof module !== 'undefined');
+    var nodeStatus = checkStatus(checkingNodeStatus);
+
+    if (windowStatus) {
+        if (typeof $M === undefined) {
+            $M = window.$M;
+        }
+        return "Window";
+    }
+    if (nodeStatus) {
+        return "Node.js";
+    }
+    return "";
+}
+
+var platform = getPlatForm(global);
+factory(global, platform, $M);
+
+}(window, function(global, Platform, $M) {
+
 var LoggerInfo = $M.getScriptFileNameRef();
 var YardApiModel = function(selector, context) {
     return new YardApiModel.fn.init(selector, context);
@@ -19,7 +71,16 @@ YardApiModel.fn = YardApiModel.prototype = {
     }
 };
 
-ExtendObject(YardApiModel);
+$M.extendObject(YardApiModel);
+var $, ajaxApiCall;
+YardApiModel.extend({
+    setJquery: function(jQuery) {
+        $ = jQuery;
+    },
+    setAjaxApiCall: function(method) {
+        ajaxApiCall = method;
+    }
+});
 
 $M.addCallbackSetValueCountLimitExceed(function() {
     $("#alarm").html("Limit Exceeds.");
@@ -59,7 +120,7 @@ function isApisLoadComplete() {
     loadingCheck.push(ExpressionsLoadStatus);
     loadingCheck.push(AsyncDataLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
-        if (loadingCheck[i] == false) {
+        if (loadingCheck[i] === false) {
             return false;
         }
     }
@@ -71,7 +132,7 @@ function loadAsyncData(callBack) {
     for (var i = 0; i < AsyncDataPath.length; i++) {
         url.push(AsyncDataPath[i]+"?"+RequestId);
     }
-    if (url.length == 0) {
+    if (url.length === 0) {
         return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
@@ -80,7 +141,7 @@ function loadAsyncData(callBack) {
         } else {
             $M.log("Invalid response (asyncData):" + response, LoggerInfo);
         }
-    }, callBack);
+    }, callBack, null, ajaxApiCall);
 }
 
 function loadPartialExpressions(callBack) {
@@ -88,7 +149,7 @@ function loadPartialExpressions(callBack) {
     for (var i = 0; i < PartialExpressionsPath.length; i++) {
         url.push(PartialExpressionsPath[i]+"?"+RequestId);
     }
-    if (url.length == 0) {
+    if (url.length === 0) {
         return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
@@ -100,7 +161,7 @@ function loadPartialExpressions(callBack) {
         } else {
             $M.log("Invalid response (partialExpressions):" + response, LoggerInfo);
         }
-    }, callBack);
+    }, callBack, null, ajaxApiCall);
 }
 
 function loadPossibleValues(callBack) {
@@ -108,7 +169,7 @@ function loadPossibleValues(callBack) {
     for (var i = 0; i < PossibleValuePath.length; i++) {
         url.push(PossibleValuePath[i]+"?"+RequestId);
     }
-    if (url.length == 0) {
+    if (url.length === 0) {
         return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
@@ -116,7 +177,7 @@ function loadPossibleValues(callBack) {
             for (var key in response) {
                 if ($M.isArray(response[key])) {
                     for (var i = 0; i < response[key].length; i++) {
-                        if (key == "addDebug") {
+                        if (key === "addDebug") {
                             continue;
                         }
                         if ($M.isString(response[key][i])) {
@@ -133,14 +194,14 @@ function loadPossibleValues(callBack) {
         } else {
             $M.log("Invalid response (possibleValue):" + response, LoggerInfo);
         }
-    }, callBack);
+    }, callBack, null, ajaxApiCall);
 }
 function loadInitialValues(callBack) {
     var url = [];
     for (var i = 0; i < InitialValuePath.length; i++) {
         url.push(InitialValuePath[i]+"?"+RequestId);
     }
-    if (url.length == 0) {
+    if (url.length === 0) {
         return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
@@ -149,7 +210,7 @@ function loadInitialValues(callBack) {
         } else {
             $M.log("Invalid response (initialValue):" + response, LoggerInfo);
         }
-    }, callBack);
+    }, callBack, null, ajaxApiCall);
 }
 
 function addExp(key, exp) {
@@ -169,7 +230,7 @@ function loadExpressions(callBack) {
     for (var i = 0; i < ExpressionsPath.length; i++) {
         url.push(ExpressionsPath[i]+"?"+RequestId);
     }
-    if (url.length == 0) {
+    if (url.length === 0) {
         return $M.callMethod(callBack);
     }
     $M.loadJsonData($, url, function(response) {
@@ -177,7 +238,7 @@ function loadExpressions(callBack) {
             AllExpressions.push(response);
         }
     }, function() {
-        var allExpressions = AllExpressions;
+        var allExpressions = AllExpressions, exps;
         for (var i = 0; i < allExpressions.length; i++) {
             exps = allExpressions[i];
             for (var key in exps) {
@@ -203,7 +264,7 @@ function loadExpressions(callBack) {
             }
         }
         callBack();
-    });
+    }, null, ajaxApiCall);
 }
 
 YardApiModel.extend({
@@ -262,6 +323,8 @@ YardApiModel.extend({
                 break;
                 case "partial-expressions-value":
                     PartialExpressionsPath = PartialExpressionsPath.concat(paths[key]);
+                break;
+                default:
                 break;
             }
         }
@@ -323,7 +386,7 @@ YardApiModel.extend({
             zeroTo1 = logData[i]["zeroTo1"];
             oneTo0 = logData[i]["oneTo0"];
             all = logData[i]["all"];
-            if (zeroTo1.length != oneTo0.length) {
+            if (zeroTo1.length !== oneTo0.length) {
                 $M.logV2(LoggerInfo, "Invalid data.");
                 console.log(logData[i]);
                 continue;
@@ -376,7 +439,7 @@ YardApiModel.extend({
     getDisplayYardDominoBoundary: function() {
         var lsValue = LS.get(lsKey);
         var response = false;
-        if (lsValue.status && lsValue.value == "true") {
+        if (lsValue.status && lsValue.value === "true") {
             response = true;
         }
         return response;
@@ -416,7 +479,7 @@ YardApiModel.extend({
         for (var i = 0; i < requiredContent.length; i++) {
             var curData = [];
             for (var j = 0; j < requiredContent[i].length; j++) {
-                if (requiredContent[i][j] == "") {
+                if (requiredContent[i][j] === "") {
                     curData.push("");
                 } else {
                     curData.push(getTableHtml(yardComponent, requiredContent[i][j]));
@@ -438,4 +501,4 @@ YardApiModel.extend({
 
 window.$YApiModel = YardApiModel;
 
-})(window, $M);
+}));

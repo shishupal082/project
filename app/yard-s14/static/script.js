@@ -38,6 +38,7 @@ for (var key in commonPath) {
     }
 }
 
+$YApiModel.setJquery($);
 $YApiModel.setApisPath(apisPath);
 
 function checkUIStyle() {

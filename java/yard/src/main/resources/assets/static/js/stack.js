@@ -18,29 +18,39 @@ function ExtendObject(Object) {
 
 (function(global, factory) {
 
+function checkStatus(params) {
+    var status = true;
+    for (var i = 0; i < params.length; i++) {
+        if (!params[i]) {
+            status = false;
+            break;
+        }
+    }
+    return status;
+}
+
 function getPlatForm(global) {
     var checkingWindowStatus = [];
-    var windowStatus = true;
     checkingWindowStatus.push(typeof global !== 'undefined');
-    checkingWindowStatus.push(typeof global.constructor != 'undefined');
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(typeof global.constructor !== 'undefined');
+    } else {
+        checkingWindowStatus.push(false);
+    }
+
+    if (checkStatus(checkingWindowStatus)) {
+        checkingWindowStatus.push(global.constructor.name === "Window");
+    } else {
+        checkingWindowStatus.push(false);
+    }
+    var windowStatus = checkStatus(checkingWindowStatus);
 
     var checkingNodeStatus = [];
-    var nodeStatus = true;
     checkingNodeStatus.push(typeof exports === 'object');
     checkingNodeStatus.push(typeof module !== 'undefined');
+    var nodeStatus = checkStatus(checkingNodeStatus);
 
-    for (var i = 0; i < checkingWindowStatus.length; i++) {
-        if (!checkingWindowStatus[i]) {
-            windowStatus = false;
-        }
-    }
-
-    for (var j = 0; j < checkingNodeStatus.length; j++) {
-        if (!checkingNodeStatus[j]) {
-            nodeStatus = false;
-        }
-    }
-    if (windowStatus && global.constructor.name == "Window") {
+    if (windowStatus) {
         return "Window";
     }
     if (nodeStatus) {
@@ -48,6 +58,7 @@ function getPlatForm(global) {
     }
     return "";
 }
+
 var platform = getPlatForm(global);
 factory(platform);
 

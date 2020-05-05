@@ -28,7 +28,7 @@ class YardContainer extends React.Component {
     }
     fetchData() {
         var self = this;
-        Api.loadJsonData([this.props.yardApi + "?"+ $S.getRequestId()], function(response) {
+        $S.loadJsonData(null, [this.props.yardApi + "?"+ $S.getRequestId()], function(response) {
             if (response) {
                 for (var key in response) {
                     Object.assign(yardComponent, response[key]);
@@ -41,7 +41,7 @@ class YardContainer extends React.Component {
                 isLoaded: true
             });
             self.props.onYardTableDataLoad(table.getContent());
-        });
+        }, null, Api.getAjaxApiCallMethod());
     }
     componentDidMount() {
         if ($S.isFunction(this.props.getYardContainerFetchData)) {
@@ -53,7 +53,7 @@ class YardContainer extends React.Component {
         var YardTableComponent = <center>Loading...</center>;
         if (this.state.isLoaded) {
             YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.props.yardTableData}
-                                id="yard"/>;
+                                id="yard" state={this.props.state}/>;
         }
         return (
             <div className="yard"><div id="tableHtml" className="table-html display-domino">

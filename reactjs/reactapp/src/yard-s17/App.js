@@ -3,11 +3,49 @@ import YardContainer from './component/YardContainer';
 import YardControl from './component/YardControl';
 import AppConstant from './common/AppConstant';
 import Api from './common/Api';
-import $S from "../libs/stack.js";
+import $S from "../interface/stack.js";
+import $M from "../interface/model.js";
+import $YApiModel from "../interface/yardApiModel.js";
 
 var baseapi = AppConstant.baseapi;
 var yardApi = baseapi + AppConstant.yardApi;
 var yardControlApi = baseapi + AppConstant.yardControlApi;
+
+var UICommonPath = {
+    "async-data": ["/app/yard-s17/static/json/async-data.json"],
+    "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
+    "possible-value": ["/app/yard-s17/static/json/possible-values.json",
+                        "/app/yard-s17/static/json/possible-values-sequence.json",
+                        "/app/yard-s17/static/json/possible-values-group.json"],
+    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
+    "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
+                    "/app/yard-s17/static/json/expressions-common.json",
+                    "/app/yard-s17/static/json/expressions-sequence-1.json",
+                    "/app/yard-s17/static/json/expressions-sequence-2.json",
+                    "/app/yard-s17/static/json/expressions-ov.json",
+                    "/app/yard-s17/static/json/expressions-sub-routes.json",
+                    "/app/yard-s17/static/json/expressions-points-common.json",
+                    "/app/yard-s17/static/json/expressions-point-4.json",
+                    "/app/yard-s17/static/json/expressions-point-5.json",
+                    "/app/yard-s17/static/json/expressions-point-6.json",
+                    "/app/yard-s17/static/json/expressions-timer.json",
+                    "/app/yard-s17/static/json/expressions-glow.json"]
+};
+
+for (var key in UICommonPath) {
+    for (var i = 0; i < UICommonPath[key].length; i++) {
+        UICommonPath[key][i] = baseapi + UICommonPath[key][i];
+    }
+}
+
+$YApiModel.setApisPath(UICommonPath);
+$YApiModel.setAjaxApiCall(Api.getAjaxApiCallMethod());
+$YApiModel.documentLoaded(function() {
+    $M.setVariableDependencies();
+    $M.addInMStack($M.getPossibleValues());
+    $M.reCheckAllValuesV2();
+    return true;
+});
 
 class App extends React.Component {
     constructor(props) {
@@ -16,15 +54,16 @@ class App extends React.Component {
             btnActive: true,
             isLoaded: false,
             yardControlData: [],
-            yardTableData: []
+            yardTableData: [],
+            currentValues: {"L-TPR": 1}
         };
         this.onYardTableDataLoad = this.onYardTableDataLoad.bind(this);
         this.reloadDataClick = this.reloadDataClick.bind(this);
     }
     reloadDataClick(e) {
         this.setState({btnActive: !this.state.btnActive});
-        this.YardContainerFetchData();
-        this.fetchData();
+        // this.YardContainerFetchData();
+        // this.fetchData();
     }
     receiveExposedMethod(YardContainerFetchData) {
         this.YardContainerFetchData = YardContainerFetchData;
@@ -36,14 +75,16 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
-        Api.loadJsonData([yardControlApi + "?"+ $S.getRequestId()], function(response) {
-            if (response) {
+        $S.loadJsonData(null, [yardControlApi + "?"+ $S.getRequestId()], function(response) {
+            if ($S.isArray(response)) {
                 self.setState({
                     isLoaded: true,
                     yardControlData: response
                 });
+            } else {
+                $S.log("Invalid response (initialValue):" + response);
             }
-        });
+        }, null, null, Api.getAjaxApiCallMethod());
     }
     onControlClick(e) {
         console.log("onControlClick: " + e.target.value);
@@ -74,7 +115,8 @@ class App extends React.Component {
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
 <YardContainer onClick={this.onTprClick} onYardTableDataLoad={this.onYardTableDataLoad}
             yardApi={yardApi} yardTableData={this.state.yardTableData}
-            getYardContainerFetchData={getYardContainerFetchData}/>
+            getYardContainerFetchData={getYardContainerFetchData}
+            state={this.state}/>
 <div>
     <div id="changeValueData"></div>
 </div>

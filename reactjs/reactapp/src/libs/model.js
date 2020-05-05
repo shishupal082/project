@@ -1,4 +1,4 @@
-// import $S from './stack';
+import $S from './stack';
 (function(global, factory) {
 
 function checkStatus(params) {

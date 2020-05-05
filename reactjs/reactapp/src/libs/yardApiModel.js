@@ -1,4 +1,4 @@
-// import './model'; var $M = window.$M;
+import './model'; var $M = window.$M;
 
 /*
     - Load possibleValue, initialValue and expressions from api
