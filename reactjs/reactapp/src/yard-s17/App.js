@@ -1,6 +1,7 @@
 import React from 'react';
 import YardContainer from './component/YardContainer';
 import YardControl from './component/YardControl';
+import ChangeValueLog from './component/ChangeValueLog';
 import AppConstant from './common/AppConstant';
 import Api from './common/Api';
 import $S from "../interface/stack.js";
@@ -45,6 +46,16 @@ for (var key in UICommonPath) {
 
 $YApiModel.setApisPath(UICommonPath);
 $YApiModel.setAjaxApiCall(Api.getAjaxApiCallMethod());
+
+var logData = [];
+
+function clearLogData() {
+    var changeValueData = $M.getAllChangeValueData();
+    if (changeValueData["all"].length > 0) {
+        logData.push($M.getAllChangeValueData());
+    }
+    $M.resetChangeValueData();
+}
 
 
 class App extends React.Component {
@@ -105,12 +116,15 @@ class App extends React.Component {
                 activateTimers(key);
             // }
         }
+        clearLogData();
     }
     onControlClick(e) {
+        clearLogData();
         var value = e.target.value;
         this.handleControlClick(value);
     }
     onTprClick(e) {
+        clearLogData();
         var key = "";
         if (e.target.tagName === "SPAN") {
             key = e.target.parentNode.value;
@@ -137,6 +151,7 @@ class App extends React.Component {
             $M.setVariableDependencies();
             $M.addInMStack($M.getPossibleValues());
             $M.reCheckAllValuesV2();
+            $M.resetChangeValueData();
             // console.log("Dataload complete.");
             self.setState({
                 isLoaded: true
@@ -150,7 +165,6 @@ class App extends React.Component {
         });
     }
     render() {
-        // console.log("App Render");
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         return (
@@ -162,16 +176,14 @@ class App extends React.Component {
     yardApi={yardApi}
     state={this.state}
 />
-<div>
-    <div id="changeValueData"></div>
-</div>
+<ChangeValueLog logData={logData} changeValueData={$M.getAllChangeValueData()} />
 <div>
     <div id="timerCount"></div>
     <div id="currentValues"></div>
     <div id="help" className={helpContentVisibleClass}>
         <div>
             <ul>
-                <li>Single line, 2 road, 14 route station</li>
+                <li>Single line,  road, 14 route station</li>
                 <li><button id="toggleDisplayDomino" onClick={this.toggleDisplayDomino}>Toggle Display Domino</button></li>
             </ul>
         </div>
@@ -181,3 +193,6 @@ class App extends React.Component {
 }
 }
 export default App;
+
+
+

@@ -97,15 +97,19 @@ function generateReactChild(props, data, key) {
 function YardTd(props) {
     var tdData = props.tdData;
     var tdId = props.id;
+    var tdClassName = "";
     if ($S.isArray(tdData)) {
         var tId = tdId + "-0";
         tdData = <YardTable onClick={props.onClick} yardTableContent={tdData}
                                 id={tId} state={props.state}/>;
     } else if ($S.isObject(tdData)) {
+        if (tdData.tdClassName) {
+            tdClassName = tdData.tdClassName;
+        }
         tdData = generateReactChild(props, tdData);
     }
     return (
-        <td id={tdId}>{tdData}</td>
+        <td id={tdId} className={tdClassName}>{tdData}</td>
     );
 }
 
