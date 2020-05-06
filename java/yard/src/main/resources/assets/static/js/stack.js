@@ -859,6 +859,55 @@ var BT = (function(){
     };
     return BT;
 })();
+var TextFilter;
+(function() {
+var Filter = function(className) {
+    return new Filter.fn.init(className);
+};
+Filter.fn = Filter.prototype = {
+    constructor: Filter,
+    init: function(className) {
+        if (!isString(className)) {
+            className = "";
+        }
+        this.className = className;
+        return this;
+    },
+    addClass: function(className) {
+        if (!isString(className)) {
+            className = "";
+        }
+        this.className += " " + className;
+        return this;
+    },
+    removeClass: function(className) {
+        if (!isString(className)) {
+            className = "";
+        }
+        className = className.trim();
+        var filterClass = [className];
+        var btnClassArr = this.className.split(" ").filter(function(el, index, arr) {
+                if (filterClass.indexOf(el) >= 0) {
+                    return false;
+                }
+                return true;
+            });
+        this.className = btnClassArr.join(" ");
+        return this;
+    },
+    getClassName: function() {
+        return this.className;
+    },
+    contains: function(className) {
+        if (!isString(className)) {
+            className = "";
+        }
+        return this.className.split(" ").indexOf(className) >= 0;
+    }
+};
+ExtendObject(Filter);
+TextFilter = Filter;
+})();
 var Domino = (function() {
     var maxRow = 3, maxCol = 5;
     function isValidIndex(r, c) {
@@ -1234,6 +1283,9 @@ Stack.extend({
     },
     getLogger: function() {
         return new Log();
+    },
+    getTextFilter: function() {
+        return TextFilter;
     },
     log: function(log, loggerInfo) {
         return Logger.log(log, loggerInfo);

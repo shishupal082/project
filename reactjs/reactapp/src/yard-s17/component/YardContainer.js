@@ -1,11 +1,10 @@
 import React from 'react';
 import Api from '../common/Api';
-import YardHelper from '../common/YardHelper';
 import $S from '../../interface/stack';
+import $YApiModel from "../../interface/yardApiModel.js";
 import YardTable from './YardTable';
 
 var yardComponent = {};
-var tableContent = [];
 
 var topLoopLineText = ["","","","","", "ll-text", "p-6-text"];
 var topLoopLine = ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr-0", "sdg-tpr"]
@@ -36,11 +35,10 @@ class YardContainer extends React.Component {
                 }
             }
         }, function() {
-            tableContent = YardHelper.getYardTableContent(self.props, yardComponent, requiredContent);
-            var table = $S.getTable(tableContent, "yard");
+            var tableContent = $YApiModel.getYardTableContentV2(yardComponent, requiredContent);
             self.setState({
                 isLoaded: true,
-                yardTableData: table.getContent()
+                yardTableData: tableContent
             });
         }, null, Api.getAjaxApiCallMethod());
     }

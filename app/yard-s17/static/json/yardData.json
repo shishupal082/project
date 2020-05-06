@@ -112,6 +112,7 @@
                 "",
                 {
                     "tag": "span",
+                    "id": "4-WLK",
                     "className": "badge yellow indication 4-WLK active",
                     "text": "\u00a0"
                 },
@@ -318,6 +319,7 @@
                 },
                 {
                     "tag": "span",
+                    "id": "5-WLK",
                     "className": "badge yellow indication 5-WLK active",
                     "text": "\u00a0"
                 }
@@ -372,6 +374,7 @@
                 },
                 {
                     "tag": "span",
+                    "id": "6-WLK",
                     "className": "badge yellow indication 6-WLK active",
                     "text": "\u00a0"
                 },
@@ -828,6 +831,7 @@
                 },
                 {
                     "tag": "span",
+                    "id": "4-WLK",
                     "className": "badge yellow indication 4-WLK active",
                     "text": "\u00a0"
                 }
@@ -1043,6 +1047,7 @@
                 "",
                 {
                     "tag": "span",
+                    "id": "5-WLK",
                     "className": "badge yellow indication 5-WLK active",
                     "text": "\u00a0"
                 }

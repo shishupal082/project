@@ -91,15 +91,17 @@ class App extends React.Component {
             $M.setVariableDependencies();
             $M.addInMStack($M.getPossibleValues());
             $M.reCheckAllValuesV2();
+            // console.log("Dataload complete.");
             self.setState({
                 isLoaded: true,
                 currentValues: $M.getCurrentValues().currentValues
             });
+            // console.log("set state complete.");
             return true;
         });
     }
     render() {
-        // console.log(this.state.currentValues);
+        // console.log("App Render");
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         var btnClassName = this.state.btnActive ? "btn btn-primary" : "btn btn-success";

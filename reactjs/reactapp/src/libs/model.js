@@ -903,6 +903,24 @@ Model.extend({
         Model.extend({"createPosixTree": $S.createPosixTree});
     }
 });
+Model.extend({
+    getTprClass: function(name) {
+        if (Model.isValidKey(name + "-R")) {
+            if (Model.isUp(name + "-R")) {
+                return "btn-danger";
+            }
+        }
+        if (Model.isValidKey(name + "-Y")) {
+            if (Model.isUp(name + "-Y")) {
+                return "btn-warning";
+            }
+        }
+        if (Model.isDown(name)) {
+            // return "btn-danger";
+        }
+        return "";
+    }
+});
 Model.$S = $S;
 /*End of direct access of methods*/
 global.$M = Model;

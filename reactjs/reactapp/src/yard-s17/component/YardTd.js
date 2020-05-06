@@ -1,32 +1,43 @@
 import React from 'react';
 import $S from '../../interface/stack';
-import YardHelper from '../common/YardHelper';
+import $M from '../../interface/model';
+import YardTable from './YardTable';
 
 
 var validTags = ["div", "span", "button"];
 
-function getBtnClass(props, btnClass, value) {
-    var btnClassArr = [], btnClassRes = [];
-    if (btnClass) {
-        btnClassArr = btnClass.split(" ");
-    }
-    var filterClass = ["btn-warning", "btn-danger"];
-    btnClassRes = btnClassArr.filter(function(el, index, arr) {
-        if (filterClass.indexOf(el) >= 0) {
-            return false;
-        }
-        return true;
-    });
-    if (props && props.state) {
-        if (btnClassRes.indexOf("tpr") >= 0) {
-            if (YardHelper.isUp(props.state.currentValues, value)) {
-                // btnClassRes.push("btn-danger");
-            } else {
-                btnClassRes.push("btn-danger");
+var tprClassMapping = {
+    "4A-TPR": ["p-4a-r", "p-4a-n", "p-4a-c"],
+    "4B-TPR": ["LL-sh-left", "p-4b-n", "p-4b-c", "p-4b-r"],
+    "5A-TPR": ["p-5a-r", "p-5a-n", "p-5a-c"],
+    "5B-TPR": ["p-5b-n", "p-5b-c", "p-5b-r"],
+    "SDG-TPR-A": ["p-6a-c", "p-6a-n"],
+    "SDG-TPR-B": ["p-6b-c", "p-6b-n"]
+};
+
+var textFilter = $S.getTextFilter();
+
+function getTprClassName(tprClasses, tprName) {
+    if (tprClassMapping[tprName]) {
+        for (var i = 0; i < tprClassMapping[tprName].length; i++) {
+            if (tprClasses.indexOf(tprClassMapping[tprName][i]) >= 0) {
+                return tprClassMapping[tprName][i];
             }
         }
     }
-    return btnClassRes.join(" ");
+    return tprName;
+}
+
+function getBtnClass(btnClass, tprName) {
+    if ($M.getPossibleValues().length < 1) {
+        return btnClass;
+    }
+    btnClass = textFilter(btnClass).removeClass("btn-warning").removeClass("btn-danger").getClassName();
+    tprName = getTprClassName(btnClass.split(" "), tprName);
+    if (textFilter(btnClass).contains("tpr")) {
+        btnClass = textFilter(btnClass).addClass($M.getTprClass(tprName)).getClassName();
+    }
+    return btnClass;
 }
 
 var childGenerator = {
@@ -34,7 +45,14 @@ var childGenerator = {
         return <div key={key} className={data.className}>{reactChildText}</div>;
     },
     "span": function(props, data, reactChildText, key) {
-        return <span key={key} className={data.className}>{reactChildText}</span>;
+        var spanClassName = data.className;
+        if (data && data.id && $M.getPossibleValues().length > 0) {
+            if (!textFilter(spanClassName).contains("alert-danger")) {
+                var signalClass = $M.isUp(data.id) ? "active" : "";
+                spanClassName = textFilter(spanClassName).removeClass("active").addClass(signalClass).getClassName();
+            }
+        }
+        return <span key={key} className={spanClassName}>{reactChildText}</span>;
     },
     "button": function(props, data, reactChildText, key) {
         if (reactChildText === "$$BTN_SPAN_TEXT") {
@@ -45,11 +63,7 @@ var childGenerator = {
             };
             reactChildText = childGenerator["span"](props, spanData, spanData.text);
         }
-        var btnClassName = data.className;
-        // if (btnClassName && btnClassName.includes(data.value)) {
-        //     btnClassName = btnClassName + " btn-danger";
-        // }
-        btnClassName = getBtnClass(props, btnClassName, data.value);
+        var btnClassName = getBtnClass(data.className, data.value);
         return <button onClick={props.onClick} key={key} className={btnClassName} value={data.value}>{reactChildText}</button>;
     },
     "temp": function(props, data, reactChildText, key) {
@@ -75,17 +89,16 @@ function generateReactChild(props, data, key) {
 
 function YardTd(props) {
     var tdData = props.tdData;
-    if ($S.isObject(tdData)) {
-        if (tdData.tag) {
-            if (validTags.indexOf(tdData.tag) >= 0) {
-                tdData = generateReactChild(props, tdData);
-            } else {
-                $S.log("Invalid tag:" + tdData.tag + "::" + validTags.toString());
-            }
-        }
+    var tdId = props.id;
+    if ($S.isArray(tdData)) {
+        var tId = tdId + "-0";
+        tdData = <YardTable onClick={props.onClick} yardTableContent={tdData}
+                                id={tId} state={props.state}/>;
+    } else if ($S.isObject(tdData)) {
+        tdData = generateReactChild(props, tdData);
     }
     return (
-        <td id={props.id}>{tdData}</td>
+        <td id={tdId}>{tdData}</td>
     );
 }
 

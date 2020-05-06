@@ -489,6 +489,29 @@ YardApiModel.extend({
         }
         return tableContent;
     },
+    getYardTableContentV2: function(yardComponent, requiredContent) {
+        var tableContent = [], tableData, name;
+        if (!$M.isObject(yardComponent)) {
+            return tableContent;
+        }
+        for (var i = 0; i < requiredContent.length; i++) {
+            var curData = [];
+            for (var j = 0; j < requiredContent[i].length; j++) {
+                if (requiredContent[i][j] === "") {
+                    curData.push("");
+                } else {
+                    name = requiredContent[i][j];
+                    tableData = [];
+                    if (yardComponent[name]) {
+                        tableData = yardComponent[name];
+                    }
+                    curData.push($M.getTable(tableData, name).getContent());
+                }
+            }
+            tableContent.push(curData);
+        }
+        return $M.getTable(tableContent, "yard").getContent();
+    },
     enableDomino: function () {
         ValidateDomino = true;
         return true;
