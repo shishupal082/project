@@ -82,9 +82,6 @@ YardApiModel.extend({
     }
 });
 
-$M.addCallbackSetValueCountLimitExceed(function() {
-    $("#alarm").html("Limit Exceeds.");
-});
 
 var RequestId = $M.getRequestId();
 

@@ -2,6 +2,10 @@ $(document).ready(function() {
 
 var yardApiUrl = UIYardUrl;
 
+$M.addCallbackSetValueCountLimitExceed(function() {
+    $("#alarm").html("Limit Exceeds.");
+});
+
 $M.changeSetValueCountLimit(UISetValueCountLimit);
 $M.enableChangeValueDataLogging();
 $VC.documentLoaded();

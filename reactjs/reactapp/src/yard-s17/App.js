@@ -11,6 +11,11 @@ var baseapi = AppConstant.baseapi;
 var yardApi = baseapi + AppConstant.yardApi;
 var yardControlApi = baseapi + AppConstant.yardControlApi;
 
+// $M.changeSetValueCountLimit(100);
+
+// $M.disableChangeLogValueStatus();
+$M.enableChangeValueDataLogging();
+
 var UICommonPath = {
     "async-data": ["/app/yard-s17/static/json/async-data.json"],
     "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
@@ -49,12 +54,15 @@ class App extends React.Component {
             btnActive: true,
             isLoaded: false,
             yardControlData: [],
-            currentValues: {}
+            dominoDisplayEnable: false,
+            key: null
         };
         this.reloadDataClick = this.reloadDataClick.bind(this);
+        this.onTprClick = this.onTprClick.bind(this);
+        this.onControlClick = this.onControlClick.bind(this);
+        this.toggleDisplayDomino = this.toggleDisplayDomino.bind(this);
     }
     reloadDataClick(e) {
-        console.log("reloadDataClick");
         this.setState({btnActive: !this.state.btnActive});
     }
     fetchData() {
@@ -71,33 +79,71 @@ class App extends React.Component {
     }
     onControlClick(e) {
         console.log("onControlClick: " + e.target.value);
+        var value = e.target.value, self = this;
+        var valueArr = value.split(",");
+        var finalValue = {};
+        for (var i = 0; i < valueArr.length; i++) {
+            var valItem = valueArr[i].split("=");
+            if (valItem.length === 2) {
+                finalValue[valItem[0]] = valItem[1];
+            }
+        }
+        var timerCount = 0;
+        function activateTimers(key) {
+            timerCount++;
+            // checkUIStyle();
+            setTimeout(function() {
+                timerCount--;
+                $M.setValue(key, 0);
+                self.setState({key: key});
+                // checkUIStyle();
+                if (timerCount === 0) {
+                    // $YApiModel.displayChangeValueData();
+                }
+            }, 1000);
+        }
+        for(var key in finalValue) {
+            $M.setValue(key, finalValue[key]);
+            this.setState({key: key});
+            // checkUIStyle();
+            //Activate timer for signal+route button press and manual point operation
+            // if (currentTarget.hasClass("signal_route_btn") || currentTarget.hasClass("point-change-request")) {
+                activateTimers(key);
+            // }
+        }
     }
     onTprClick(e) {
-        var value = "";
+        var key = "";
         if (e.target.tagName === "SPAN") {
-            value = e.target.parentNode.value;
+            key = e.target.parentNode.value;
         } else {
-            value = e.target.value;
+            key = e.target.value;
         }
-        console.log("onTprClick: " + value);
+        $M.toggleValue(key);
+        this.setState({key: key});
     }
     toggleDisplayDomino(e) {
-        console.log("toggleDisplayDomino");
+        $YApiModel.toggleDisplayYardDominoBoundary();
+        this.setState({dominoDisplayEnable: $YApiModel.getDisplayYardDominoBoundary()});
     }
     componentDidMount() {
         this.fetchData();
         var self = this;
+        this.setState({dominoDisplayEnable: $YApiModel.getDisplayYardDominoBoundary()});
         $YApiModel.documentLoaded(function() {
             $M.setVariableDependencies();
             $M.addInMStack($M.getPossibleValues());
             $M.reCheckAllValuesV2();
             // console.log("Dataload complete.");
             self.setState({
-                isLoaded: true,
-                currentValues: $M.getCurrentValues().currentValues
+                isLoaded: true
             });
             // console.log("set state complete.");
             return true;
+        });
+        $M.addCallbackSetValueCountLimitExceed(function() {
+            self.state.yardControlData[1][2]["text"] =  "Limit Exceeds.";
+            self.setState({yardControlData: self.state.yardControlData});
         });
     }
     render() {

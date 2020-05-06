@@ -1,7 +1,9 @@
 (function($M, $YApiModel) {
 
 var LoggerInfo = $S.getScriptFileNameRef(location);
-
+$M.addCallbackSetValueCountLimitExceed(function() {
+    $("#alarm").html("Limit Exceeds.");
+});
 var View = function(selector, context) {
     return new View.fn.init(selector, context);
 };

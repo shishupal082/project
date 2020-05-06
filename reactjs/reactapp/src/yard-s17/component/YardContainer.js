@@ -47,12 +47,14 @@ class YardContainer extends React.Component {
     }
     render() {
         var YardTableComponent = <center>Loading...</center>;
+        var tableHtmlDivClass = "table-html";
+        tableHtmlDivClass += this.props.state.dominoDisplayEnable ? " display-domino" : "";
         if (this.state.isLoaded) {
             YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.state.yardTableData}
                                 id="yard" state={this.props.state}/>;
         }
         return (
-            <div className="yard"><div id="tableHtml" className="table-html display-domino">
+            <div className="yard"><div id="tableHtml" className={tableHtmlDivClass}>
                 {YardTableComponent}
             </div></div>
         );

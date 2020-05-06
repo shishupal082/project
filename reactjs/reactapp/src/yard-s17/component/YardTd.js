@@ -44,15 +44,22 @@ var childGenerator = {
     "div": function(props, data, reactChildText, key) {
         return <div key={key} className={data.className}>{reactChildText}</div>;
     },
+    "temp2": function(props, data, reactChildText, key) {
+        return <button>{reactChildText}</button>;
+    },
     "span": function(props, data, reactChildText, key) {
         var spanClassName = data.className;
         if (data && data.id && $M.getPossibleValues().length > 0) {
+            // For signal class (RED, GREEN, YELLOW) and point indication (WLK)
             if (!textFilter(spanClassName).contains("alert-danger")) {
                 var signalClass = $M.isUp(data.id) ? "active" : "";
                 spanClassName = textFilter(spanClassName).removeClass("active").addClass(signalClass).getClassName();
             }
         }
         return <span key={key} className={spanClassName}>{reactChildText}</span>;
+    },
+    "temp3": function(props, data, reactChildText, key) {
+        return <button>{reactChildText}</button>;
     },
     "button": function(props, data, reactChildText, key) {
         if (reactChildText === "$$BTN_SPAN_TEXT") {
