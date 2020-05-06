@@ -1,7 +1,7 @@
 import React from 'react';
 import Api from '../common/Api';
 import YardHelper from '../common/YardHelper';
-import $S from '../../libs/stack';
+import $S from '../../interface/stack';
 import YardTable from './YardTable';
 
 var yardComponent = {};
@@ -23,7 +23,8 @@ class YardContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false
+            isLoaded: false,
+            yardTableData: []
         };
     }
     fetchData() {
@@ -38,21 +39,18 @@ class YardContainer extends React.Component {
             tableContent = YardHelper.getYardTableContent(self.props, yardComponent, requiredContent);
             var table = $S.getTable(tableContent, "yard");
             self.setState({
-                isLoaded: true
+                isLoaded: true,
+                yardTableData: table.getContent()
             });
-            self.props.onYardTableDataLoad(table.getContent());
         }, null, Api.getAjaxApiCallMethod());
     }
     componentDidMount() {
-        if ($S.isFunction(this.props.getYardContainerFetchData)) {
-            this.props.getYardContainerFetchData(this.fetchData.bind(this));
-        }
         this.fetchData();
     }
     render() {
         var YardTableComponent = <center>Loading...</center>;
         if (this.state.isLoaded) {
-            YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.props.yardTableData}
+            YardTableComponent = <YardTable onClick={this.props.onClick} yardTableContent={this.state.yardTableData}
                                 id="yard" state={this.props.state}/>;
         }
         return (

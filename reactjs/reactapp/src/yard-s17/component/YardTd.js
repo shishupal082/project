@@ -1,5 +1,5 @@
 import React from 'react';
-import $S from '../../libs/stack';
+import $S from '../../interface/stack';
 import YardHelper from '../common/YardHelper';
 
 

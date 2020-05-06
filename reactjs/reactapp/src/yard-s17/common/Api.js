@@ -1,4 +1,4 @@
-import $S from '../../libs/stack.js';
+import $S from '../../interface/stack.js';
 var Api;
 (function() {
 Api = function(config) {

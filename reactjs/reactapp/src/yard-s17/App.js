@@ -40,12 +40,7 @@ for (var key in UICommonPath) {
 
 $YApiModel.setApisPath(UICommonPath);
 $YApiModel.setAjaxApiCall(Api.getAjaxApiCallMethod());
-$YApiModel.documentLoaded(function() {
-    $M.setVariableDependencies();
-    $M.addInMStack($M.getPossibleValues());
-    $M.reCheckAllValuesV2();
-    return true;
-});
+
 
 class App extends React.Component {
     constructor(props) {
@@ -54,31 +49,19 @@ class App extends React.Component {
             btnActive: true,
             isLoaded: false,
             yardControlData: [],
-            yardTableData: [],
-            currentValues: {"L-TPR": 1}
+            currentValues: {}
         };
-        this.onYardTableDataLoad = this.onYardTableDataLoad.bind(this);
         this.reloadDataClick = this.reloadDataClick.bind(this);
     }
     reloadDataClick(e) {
+        console.log("reloadDataClick");
         this.setState({btnActive: !this.state.btnActive});
-        // this.YardContainerFetchData();
-        // this.fetchData();
-    }
-    receiveExposedMethod(YardContainerFetchData) {
-        this.YardContainerFetchData = YardContainerFetchData;
-    }
-    onYardTableDataLoad(tableData) {
-        this.setState({
-            yardTableData: tableData
-        });
     }
     fetchData() {
         var self = this;
         $S.loadJsonData(null, [yardControlApi + "?"+ $S.getRequestId()], function(response) {
             if ($S.isArray(response)) {
                 self.setState({
-                    isLoaded: true,
                     yardControlData: response
                 });
             } else {
@@ -103,20 +86,32 @@ class App extends React.Component {
     }
     componentDidMount() {
         this.fetchData();
+        var self = this;
+        $YApiModel.documentLoaded(function() {
+            $M.setVariableDependencies();
+            $M.addInMStack($M.getPossibleValues());
+            $M.reCheckAllValuesV2();
+            self.setState({
+                isLoaded: true,
+                currentValues: $M.getCurrentValues().currentValues
+            });
+            return true;
+        });
     }
     render() {
+        // console.log(this.state.currentValues);
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         var btnClassName = this.state.btnActive ? "btn btn-primary" : "btn btn-success";
-        var getYardContainerFetchData = this.receiveExposedMethod.bind(this);
         return (
 <div className="container">
 <div><center><h2>Yard S17 <button onClick={this.reloadDataClick} className={btnClassName}>Click to reload</button></h2></center></div>
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
-<YardContainer onClick={this.onTprClick} onYardTableDataLoad={this.onYardTableDataLoad}
-            yardApi={yardApi} yardTableData={this.state.yardTableData}
-            getYardContainerFetchData={getYardContainerFetchData}
-            state={this.state}/>
+<YardContainer
+    onClick={this.onTprClick}
+    yardApi={yardApi}
+    state={this.state}
+/>
 <div>
     <div id="changeValueData"></div>
 </div>

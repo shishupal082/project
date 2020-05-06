@@ -5,8 +5,7 @@ class YardControl extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,
-            yardTable: []
+            isLoaded: false
         };
     }
     render() {

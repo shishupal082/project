@@ -1,5 +1,5 @@
 import React from 'react';
-import $S from '../../libs/stack';
+import $S from '../../interface/stack';
 import YardTable from '../component/YardTable';
 
 function getTableHtml(props, yardData, name) {
