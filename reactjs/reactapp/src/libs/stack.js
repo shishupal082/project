@@ -903,6 +903,12 @@ Filter.fn = Filter.prototype = {
             className = "";
         }
         return this.className.split(" ").indexOf(className) >= 0;
+    },
+    includes: function(str) {
+        if (!isString(str)) {
+            str = "";
+        }
+        return this.className.includes(str);
     }
 };
 ExtendObject(Filter);

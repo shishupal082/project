@@ -51,19 +51,14 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            btnActive: true,
             isLoaded: false,
             yardControlData: [],
             dominoDisplayEnable: false,
             key: null
         };
-        this.reloadDataClick = this.reloadDataClick.bind(this);
         this.onTprClick = this.onTprClick.bind(this);
         this.onControlClick = this.onControlClick.bind(this);
         this.toggleDisplayDomino = this.toggleDisplayDomino.bind(this);
-    }
-    reloadDataClick(e) {
-        this.setState({btnActive: !this.state.btnActive});
     }
     fetchData() {
         var self = this;
@@ -77,9 +72,8 @@ class App extends React.Component {
             }
         }, null, null, Api.getAjaxApiCallMethod());
     }
-    onControlClick(e) {
-        console.log("onControlClick: " + e.target.value);
-        var value = e.target.value, self = this;
+    handleControlClick(value) {
+        var self = this;
         var valueArr = value.split(",");
         var finalValue = {};
         for (var i = 0; i < valueArr.length; i++) {
@@ -112,6 +106,10 @@ class App extends React.Component {
             // }
         }
     }
+    onControlClick(e) {
+        var value = e.target.value;
+        this.handleControlClick(value);
+    }
     onTprClick(e) {
         var key = "";
         if (e.target.tagName === "SPAN") {
@@ -119,8 +117,13 @@ class App extends React.Component {
         } else {
             key = e.target.value;
         }
-        $M.toggleValue(key);
-        this.setState({key: key});
+        // Fix for point change request
+        if ($S.getTextFilter()(key).includes(",")) {
+            this.handleControlClick(key);
+        } else {
+            $M.toggleValue(key);
+            this.setState({key: key});
+        }
     }
     toggleDisplayDomino(e) {
         $YApiModel.toggleDisplayYardDominoBoundary();
@@ -150,10 +153,9 @@ class App extends React.Component {
         // console.log("App Render");
         var helpContentVisibleClass = "help ";
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
-        var btnClassName = this.state.btnActive ? "btn btn-primary" : "btn btn-success";
         return (
 <div className="container">
-<div><center><h2>Yard S17 <button onClick={this.reloadDataClick} className={btnClassName}>Click to reload</button></h2></center></div>
+<div><center><h2>Yard S17</h2></center></div>
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
 <YardContainer
     onClick={this.onTprClick}
