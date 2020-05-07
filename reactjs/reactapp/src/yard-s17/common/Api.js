@@ -18,13 +18,11 @@ var ajaxApiCall = function(ajax, callBack) {
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result);
                     if ($S.isFunction(callBack)) {
                         callBack(ajax, "SUCCESS", result);
                     }
                 },
                 (error) => {
-                    // console.log(error);
                     if ($S.isFunction(callBack)) {
                         callBack(ajax, "FAILURE", null);
                     }

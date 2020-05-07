@@ -85,6 +85,7 @@ YardApiModel.extend({
 
 var RequestId = $M.getRequestId();
 
+var YardData = {};
 var PartialExpressions = {};
 var PossibleValues = [];
 var InitialValues = {};
@@ -99,6 +100,7 @@ var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
 var AsyncDataLoadStatus = false;
 
+var YardDataPath = [];
 var PartialExpressionsPath = [];
 var PossibleValuePath = [];
 var InitialValuePath = [];
@@ -122,6 +124,26 @@ function isApisLoadComplete() {
         }
     }
     return true;
+}
+
+
+function loadYardTableData(callBack) {
+    var url = [];
+    for (var i = 0; i < YardDataPath.length; i++) {
+        url.push(YardDataPath[i]+"?"+RequestId);
+    }
+    if (url.length === 0) {
+        return $M.callMethod(callBack);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isObject(response)) {
+            for (var key in response) {
+                Object.assign(YardData, response[key]);
+            }
+        } else {
+            $M.log("Invalid response (yardData):" + response, LoggerInfo);
+        }
+    }, callBack, null, ajaxApiCall);
 }
 
 function loadAsyncData(callBack) {
@@ -265,6 +287,11 @@ function loadExpressions(callBack) {
 }
 
 YardApiModel.extend({
+    loadYardData: function(callBack) {
+        loadYardTableData(function() {
+            callBack(YardData);
+        });
+    },
     documentLoaded: function(callBack) {
         loadAsyncData(function() {
             AsyncDataLoadStatus = true;
@@ -306,6 +333,9 @@ YardApiModel.extend({
     setApisPath: function(paths) {
         for (var key in paths) {
             switch(key) {
+                case "yard-data":
+                    YardDataPath = PossibleValuePath.concat(paths[key]);
+                break;
                 case "possible-value":
                     PossibleValuePath = PossibleValuePath.concat(paths[key]);
                 break;

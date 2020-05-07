@@ -1,24 +1,17 @@
 import React from 'react';
 import $S from '../../interface/stack';
 import $M from '../../interface/model';
+import $$ from '../common/global';
 import YardTable from './YardTable';
-
 
 var validTags = ["div", "span", "button"];
 
-var tprClassMapping = {
-    "4A-TPR": ["p-4a-r", "p-4a-n", "p-4a-c"],
-    "4B-TPR": ["LL-sh-left", "p-4b-n", "p-4b-c", "p-4b-r"],
-    "5A-TPR": ["p-5a-r", "p-5a-n", "p-5a-c"],
-    "5B-TPR": ["p-5b-n", "p-5b-c", "p-5b-r"],
-    "SDG-TPR-A": ["p-6a-c", "p-6a-n"],
-    "SDG-TPR-B": ["p-6b-c", "p-6b-n"]
-};
+var tprClassMapping = $$.tprClassMapping;
 
 var textFilter = $S.getTextFilter();
 
 function getTprClassName(tprClasses, tprName) {
-    if (tprClassMapping[tprName]) {
+    if (tprClassMapping && tprClassMapping[tprName]) {
         for (var i = 0; i < tprClassMapping[tprName].length; i++) {
             if (tprClasses.indexOf(tprClassMapping[tprName][i]) >= 0) {
                 return tprClassMapping[tprName][i];

@@ -11,32 +11,17 @@ import $YApiModel from "../interface/yardApiModel.js";
 var baseapi = $$.baseapi;
 var yardApi = baseapi + $$.yardApi;
 var yardControlApi = baseapi + $$.yardControlApi;
+var UICommonPath = $$.UICommonPath;
+
+var appHeading = $$.appHeading;
+var appInfo = $$.appInfo;
+var requiredContent = $$.requiredContent;
 
 $M.changeSetValueCountLimit($$.UISetValueCountLimit);
 
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
 
-var UICommonPath = {
-    "async-data": ["/app/yard-s17/static/json/async-data.json"],
-    "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
-    "possible-value": ["/app/yard-s17/static/json/possible-values.json",
-                        "/app/yard-s17/static/json/possible-values-sequence.json",
-                        "/app/yard-s17/static/json/possible-values-group.json"],
-    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
-    "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
-                    "/app/yard-s17/static/json/expressions-common.json",
-                    "/app/yard-s17/static/json/expressions-sequence-1.json",
-                    "/app/yard-s17/static/json/expressions-sequence-2.json",
-                    "/app/yard-s17/static/json/expressions-ov.json",
-                    "/app/yard-s17/static/json/expressions-sub-routes.json",
-                    "/app/yard-s17/static/json/expressions-points-common.json",
-                    "/app/yard-s17/static/json/expressions-point-4.json",
-                    "/app/yard-s17/static/json/expressions-point-5.json",
-                    "/app/yard-s17/static/json/expressions-point-6.json",
-                    "/app/yard-s17/static/json/expressions-timer.json",
-                    "/app/yard-s17/static/json/expressions-glow.json"]
-};
 
 for (var key in UICommonPath) {
     for (var i = 0; i < UICommonPath[key].length; i++) {
@@ -57,7 +42,6 @@ function clearLogData() {
     $M.resetChangeValueData();
 }
 
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -65,6 +49,7 @@ class App extends React.Component {
             isLoaded: false,
             yardControlData: [],
             dominoDisplayEnable: false,
+            yardTableContent: null,
             key: null
         };
         this.onTprClick = this.onTprClick.bind(this);
@@ -147,6 +132,12 @@ class App extends React.Component {
         this.fetchData();
         var self = this;
         this.setState({dominoDisplayEnable: $YApiModel.getDisplayYardDominoBoundary()});
+        $YApiModel.loadYardData(function(response){
+            self.setState({
+                isLoaded: true,
+                yardTableContent: $YApiModel.getYardTableContentV2(response, requiredContent)
+            });
+        });
         $YApiModel.documentLoaded(function() {
             $M.setVariableDependencies();
             $M.addInMStack($M.getPossibleValues());
@@ -175,7 +166,7 @@ class App extends React.Component {
         helpContentVisibleClass += this.state.isLoaded ? "" : "hide";
         return (
 <div className="container">
-<div><center><h2>Yard S17</h2></center></div>
+<div><center><h2>{appHeading}</h2></center></div>
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
 <YardContainer
     onClick={this.onTprClick}
@@ -189,7 +180,7 @@ class App extends React.Component {
     <div id="help" className={helpContentVisibleClass}>
         <div>
             <ul>
-                <li>Single line,  road, 14 route station</li>
+                <li>{appInfo}</li>
                 <li><button id="toggleDisplayDomino" onClick={this.toggleDisplayDomino}>Toggle Display Domino</button></li>
             </ul>
         </div>
