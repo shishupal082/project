@@ -1,5 +1,4 @@
 import React from 'react';
-import $S from '../interface/stack';
 
 class Child extends React.Component {
     /* constructor required for state and binding methods */
@@ -31,7 +30,7 @@ class Child extends React.Component {
     }
     componentDidMount() {
         console.log("componentDidMount");
-        if ($S.isBoolean(this.props.btnStatus) && this.props.btnStatus !== this.state.btnStatus) {
+        if (typeof this.props.btnStatus == "boolean" && this.props.btnStatus !== this.state.btnStatus) {
             /* this.props.btnStatus !== this.state.btnStatus
                 Above check is required for stopping un necessary rendering
             */

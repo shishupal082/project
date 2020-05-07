@@ -1,5 +1,4 @@
 import React from 'react';
-import $S from '../interface/stack';
 
 class Child2 extends React.Component {
     /* constructor required for state and binding methods */
@@ -24,10 +23,10 @@ class Child2 extends React.Component {
     }
     componentDidMount() {
         console.log("Child2 componentDidMount");
-        if ($S.isFunction(this.props.getChildExposedMethod)) {
+        if (typeof this.props.getChildExposedMethod === "function") {
             this.props.getChildExposedMethod(this.ToggleBtnStatus.bind(this));
         }
-        if ($S.isBoolean(this.props.btnStatus)) {
+        if (typeof this.props.btnStatus === "boolean") {
             this.setState({
                 btnStatus: this.props.btnStatus
             });

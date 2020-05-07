@@ -2,17 +2,17 @@ import React from 'react';
 import YardContainer from './component/YardContainer';
 import YardControl from './component/YardControl';
 import ChangeValueLog from './component/ChangeValueLog';
-import AppConstant from './common/AppConstant';
+import $$ from './common/global';
 import Api from './common/Api';
 import $S from "../interface/stack.js";
 import $M from "../interface/model.js";
 import $YApiModel from "../interface/yardApiModel.js";
 
-var baseapi = AppConstant.baseapi;
-var yardApi = baseapi + AppConstant.yardApi;
-var yardControlApi = baseapi + AppConstant.yardControlApi;
+var baseapi = $$.baseapi;
+var yardApi = baseapi + $$.yardApi;
+var yardControlApi = baseapi + $$.yardControlApi;
 
-$M.changeSetValueCountLimit(AppConstant.global.UISetValueCountLimit);
+$M.changeSetValueCountLimit($$.UISetValueCountLimit);
 
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
