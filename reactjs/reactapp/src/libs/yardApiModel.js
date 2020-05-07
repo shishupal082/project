@@ -86,6 +86,7 @@ YardApiModel.extend({
 var RequestId = $M.getRequestId();
 
 var YardData = {};
+var YardControlData = {};
 var PartialExpressions = {};
 var PossibleValues = [];
 var InitialValues = {};
@@ -101,6 +102,7 @@ var ExpressionsLoadStatus = false;
 var AsyncDataLoadStatus = false;
 
 var YardDataPath = [];
+var YardControlDataPath = [];
 var PartialExpressionsPath = [];
 var PossibleValuePath = [];
 var InitialValuePath = [];
@@ -127,7 +129,7 @@ function isApisLoadComplete() {
 }
 
 
-function loadYardTableData(callBack) {
+function loadYardData(callBack) {
     var url = [];
     for (var i = 0; i < YardDataPath.length; i++) {
         url.push(YardDataPath[i]+"?"+RequestId);
@@ -140,6 +142,23 @@ function loadYardTableData(callBack) {
             for (var key in response) {
                 Object.assign(YardData, response[key]);
             }
+        } else {
+            $M.log("Invalid response (yardData):" + response, LoggerInfo);
+        }
+    }, callBack, null, ajaxApiCall);
+}
+
+function loadYardControlData(callBack) {
+    var url = [];
+    for (var i = 0; i < YardControlDataPath.length; i++) {
+        url.push(YardControlDataPath[i]+"?"+RequestId);
+    }
+    if (url.length === 0) {
+        return $M.callMethod(callBack);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isArray(response)) {
+            YardControlData = response;
         } else {
             $M.log("Invalid response (yardData):" + response, LoggerInfo);
         }
@@ -288,8 +307,13 @@ function loadExpressions(callBack) {
 
 YardApiModel.extend({
     loadYardData: function(callBack) {
-        loadYardTableData(function() {
+        loadYardData(function() {
             callBack(YardData);
+        });
+    },
+    loadYardControlData: function(callBack) {
+        loadYardControlData(function() {
+            callBack(YardControlData);
         });
     },
     documentLoaded: function(callBack) {
@@ -335,6 +359,9 @@ YardApiModel.extend({
             switch(key) {
                 case "yard-data":
                     YardDataPath = PossibleValuePath.concat(paths[key]);
+                break;
+                case "yard-control-btn-data":
+                    YardControlDataPath = PossibleValuePath.concat(paths[key]);
                 break;
                 case "possible-value":
                     PossibleValuePath = PossibleValuePath.concat(paths[key]);
@@ -518,7 +545,7 @@ YardApiModel.extend({
     },
     getYardTableContentV2: function(yardComponent, requiredContent) {
         var tableContent = [], tableData, name;
-        if (!$M.isObject(yardComponent)) {
+        if (!$M.isObject(yardComponent) || !$M.isArray(requiredContent)) {
             return tableContent;
         }
         for (var i = 0; i < requiredContent.length; i++) {

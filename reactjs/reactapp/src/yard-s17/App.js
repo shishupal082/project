@@ -56,18 +56,6 @@ class App extends React.Component {
         this.onControlClick = this.onControlClick.bind(this);
         this.toggleDisplayDomino = this.toggleDisplayDomino.bind(this);
     }
-    fetchData() {
-        var self = this;
-        $S.loadJsonData(null, [yardControlApi + "?"+ $S.getRequestId()], function(response) {
-            if ($S.isArray(response)) {
-                self.setState({
-                    yardControlData: response
-                });
-            } else {
-                $S.log("Invalid response (initialValue):" + response);
-            }
-        }, null, null, Api.getAjaxApiCallMethod());
-    }
     handleControlClick(value) {
         var self = this;
         var valueArr = value.split(",");
@@ -129,9 +117,14 @@ class App extends React.Component {
         this.setState({dominoDisplayEnable: $YApiModel.getDisplayYardDominoBoundary()});
     }
     componentDidMount() {
-        this.fetchData();
         var self = this;
         this.setState({dominoDisplayEnable: $YApiModel.getDisplayYardDominoBoundary()});
+        $YApiModel.loadYardControlData(function(response){
+            self.setState({
+                isLoaded: true,
+                yardControlData: response
+            });
+        });
         $YApiModel.loadYardData(function(response){
             self.setState({
                 isLoaded: true,
