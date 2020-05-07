@@ -3,6 +3,7 @@
 echo [INFO] Copying file to desired location
 
 distDir=index-app-dist
+distDir=yard-s17-dist
 
 rm -rf ${distDir}/*
 

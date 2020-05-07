@@ -1,4 +1,5 @@
 var AppConstant = {
+	global: window.GLOBAL,
 	baseapi: window.GLOBAL.baseapi,
 	api: window.GLOBAL.api,
 	yardApi: window.GLOBAL.yardApi,

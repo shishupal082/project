@@ -12,7 +12,7 @@ var baseapi = AppConstant.baseapi;
 var yardApi = baseapi + AppConstant.yardApi;
 var yardControlApi = baseapi + AppConstant.yardControlApi;
 
-// $M.changeSetValueCountLimit(100);
+$M.changeSetValueCountLimit(AppConstant.global.UISetValueCountLimit);
 
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
@@ -160,7 +160,13 @@ class App extends React.Component {
             return true;
         });
         $M.addCallbackSetValueCountLimitExceed(function() {
-            self.state.yardControlData[1][2]["text"] =  "Limit Exceeds.";
+            if (self.state.yardControlData[1][2] && self.state.yardControlData[1][2]["text"]) {
+                if ($S.isString(self.state.yardControlData[1][2]["text"]["text"])) {
+                    self.state.yardControlData[1][2]["text"]["text"] =  "Limit Exceeds.";
+                } else {
+                    self.state.yardControlData[1][2]["text"] =  "Limit Exceeds.";
+                }
+            }
             self.setState({yardControlData: self.state.yardControlData});
         });
     }

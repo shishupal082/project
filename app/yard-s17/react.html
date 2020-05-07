@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>Yard-S17</title>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+<script type="text/javascript">
+var UISetValueCountLimit = 800;
+var UIYardUrl = "/app/yard-s17/static/json/yard.json";
+
+var UICommonPath = {
+    "async-data": ["/app/yard-s17/static/json/async-data.json"],
+    "partial-expressions-value": ["/app/yard-s17/static/json/partial-exp.json"],
+    "possible-value": ["/app/yard-s17/static/json/possible-values.json",
+                        "/app/yard-s17/static/json/possible-values-sequence.json",
+                        "/app/yard-s17/static/json/possible-values-group.json"],
+    "initial-value": ["/app/yard-s17/static/json/initial-value.json"],
+    "expressions": ["/app/yard-s17/static/json/expressions-evt.json",
+                    "/app/yard-s17/static/json/expressions-common.json",
+                    "/app/yard-s17/static/json/expressions-sequence-1.json",
+                    "/app/yard-s17/static/json/expressions-sequence-2.json",
+                    "/app/yard-s17/static/json/expressions-ov.json",
+                    "/app/yard-s17/static/json/expressions-sub-routes.json",
+                    "/app/yard-s17/static/json/expressions-points-common.json",
+                    "/app/yard-s17/static/json/expressions-point-4.json",
+                    "/app/yard-s17/static/json/expressions-point-5.json",
+                    "/app/yard-s17/static/json/expressions-point-6.json",
+                    "/app/yard-s17/static/json/expressions-timer.json",
+                    "/app/yard-s17/static/json/expressions-glow.json"]
+};
+</script>
+
+<script type="text/javascript">
+var GLOBAL = {
+    UISetValueCountLimit: 100,
+    baseapi: "",
+    api: "http://localhost:3000/reactIndexData.json",
+    yardApi: "/app/yard-s17/static/json/yardData.json",
+    yardControlApi: "/app/yard-s17/static/json/yard-control.json"
+};
+window.GLOBAL = GLOBAL;
+</script>
+
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script3.js"></script>
+
+</body>
+</html>

@@ -236,7 +236,7 @@ Model.fn = Model.prototype = {
             possibleValues = [];
             for (var i = 0; i < extPossibleValues.length; i++) {
                 if (possibleValues.indexOf(extPossibleValues[i]) >= 0) {
-                    throw new Error("Duplicate entry in possibleValues: " + extPossibleValues[i]);
+                    throw "Duplicate entry in possibleValues: " + extPossibleValues[i];
                 }
                 if ($S.isString(extPossibleValues[i]) && extPossibleValues[i].length > 0) {
                     possibleValues.push(extPossibleValues[i]);
@@ -688,7 +688,7 @@ Model.extend({
             setValueCount++;
             var logText = setValueCount + ": Limit exceed, key:" + key + ", value:" + newValue;
             $S.log(logText);
-            throw new Error(logText);
+            throw logText;
         }
         var oldValue = Model(key).get();
         var set = new setValue(key, newValue);
@@ -868,7 +868,7 @@ exps : {
                 $S.log(EvaluatingExpressionKey + ": invalid expression: " + exp);
             }
             if (isValidExpression == false) {
-                throw new Error(EvaluatingExpressionKey + ": invalid expression:" + exp);
+                throw EvaluatingExpressionKey + ": invalid expression:" + exp;
             }
         }
         /** Expression validation End **/

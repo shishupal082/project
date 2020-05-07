@@ -51,10 +51,9 @@ var childGenerator = {
         var spanClassName = data.className;
         if (data && data.id && $M.getPossibleValues().length > 0) {
             // For signal class (RED, GREEN, YELLOW) and point indication (WLK)
-            if (!textFilter(spanClassName).contains("alert-danger")) {
-                var signalClass = $M.isUp(data.id) ? "active" : "";
-                spanClassName = textFilter(spanClassName).removeClass("active").addClass(signalClass).getClassName();
-            }
+            // All above <span> contains id
+            var signalClass = $M.isUp(data.id) ? "active" : "";
+            spanClassName = textFilter(spanClassName).removeClass("active").addClass(signalClass).getClassName();
         }
         return <span key={key} className={spanClassName}>{reactChildText}</span>;
     },

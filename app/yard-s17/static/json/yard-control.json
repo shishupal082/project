@@ -135,7 +135,6 @@
             "text": {
                 "tag": "span",
                 "className": "alert-danger badge",
-                "id": "alarm",
                 "text": ""
             }
         }
