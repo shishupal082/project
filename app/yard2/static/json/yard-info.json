@@ -3,7 +3,7 @@
 		"id": "md5sumInfo",
 		"/app/yard2/static/json/yard-top.json": "",
 		"/app/yard2/static/json/yard-bottom.json": "",
-		"/app/yard1/static/json/yardData.json": ""
+		"/app/yard1/static/json/yard.json": ""
 	},
 	{
 		"yardId": "yard",
@@ -39,7 +39,7 @@
 	},
 	{
 		"yardId": "yard-1",
-		"yardDetailsApis": ["/app/yard1/static/json/yardData.json"],
+		"yardDetailsApis": ["/app/yard1/static/json/yard.json"],
 		"dominoVerify": true,
 		"requiredContent": [
 			{
