@@ -9,8 +9,6 @@ import $M from "../interface/model.js";
 import $YApiModel from "../interface/yardApiModel.js";
 
 var baseapi = $$.baseapi;
-var yardApi = baseapi + $$.yardApi;
-var yardControlApi = baseapi + $$.yardControlApi;
 var UICommonPath = $$.UICommonPath;
 
 var appHeading = $$.appHeading;
@@ -163,7 +161,6 @@ class App extends React.Component {
 <YardControl onClick={this.onControlClick} yardTableContent={this.state.yardControlData}/>
 <YardContainer
     onClick={this.onTprClick}
-    yardApi={yardApi}
     state={this.state}
 />
 <ChangeValueLog logData={logData} changeValueData={$M.getAllChangeValueData()} />
