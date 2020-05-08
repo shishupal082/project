@@ -20,6 +20,13 @@ $M.changeSetValueCountLimit($$.UISetValueCountLimit);
 // $M.disableChangeLogValueStatus();
 $M.enableChangeValueDataLogging();
 
+if ($S.isBooleanTrue($$.onSetValueRecheckAll)) {
+    $M.extend({
+        "setValueChangedCallback": function(name, oldValue, newValue) {
+            return $M.reCheckAllValues();
+        }
+    });
+}
 
 for (var key in UICommonPath) {
     for (var i = 0; i < UICommonPath[key].length; i++) {
@@ -130,9 +137,13 @@ class App extends React.Component {
             });
         });
         $YApiModel.documentLoaded(function() {
-            $M.setVariableDependencies();
-            $M.addInMStack($M.getPossibleValues());
-            $M.reCheckAllValuesV2();
+            if ($S.isBooleanTrue($$.onSetValueRecheckAll)) {
+                $M.reCheckAllValues();
+            } else {
+                $M.setVariableDependencies();
+                $M.addInMStack($M.getPossibleValues());
+                $M.reCheckAllValuesV2();
+            }
             $M.resetChangeValueData();
             // console.log("Dataload complete.");
             self.setState({
