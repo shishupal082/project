@@ -100,6 +100,7 @@ class App extends React.Component {
         clearLogData();
         var value = e.target.value;
         this.handleControlClick(value);
+        console.log("Click event completed: " + $M.getSetValueCount());
     }
     onTprClick(e) {
         clearLogData();
@@ -116,6 +117,7 @@ class App extends React.Component {
             $M.toggleValue(key);
             this.setState({key: key});
         }
+        console.log("Click event completed: " + $M.getSetValueCount());
     }
     toggleDisplayDomino(e) {
         $YApiModel.toggleDisplayYardDominoBoundary();
