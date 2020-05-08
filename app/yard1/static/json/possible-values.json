@@ -1,0 +1,68 @@
+{
+    "availableGNRs": ["S1-GNR", "S2-GNR", "S3-GNR", "S4-GNR", "S13-GNR", "S14-GNR", "S15-GNR", "S16-GNR"],
+    "availableUNRs": ["LT-UNR", "LAT-UNR", "MT-UNR", "8-UNR", "9-UNR", "4-UNR", "16-UNR"],
+
+    "availableNNRs": ["S1-MT-NNR", "S1-LT-NNR", "S1-LAT-NNR", "S2-NNR", "S3-NNR", "S4-NNR",
+            "S13-MT-NNR", "S13-LT-NNR", "S13-LAT-NNR", "S14-NNR", "S15-NNR", "S16-NNR"],
+
+    "availableNRRs": ["S1-MT-NRR", "S1-LT-NRR", "S1-LAT-NRR", "S2-NRR", "S3-NRR", "S4-NRR",
+            "S13-MT-NRR", "S13-LT-NRR", "S13-LAT-NRR", "S14-NRR", "S15-NRR", "S16-NRR"],
+
+    "availableASRs": ["1-ASR", "2/3-ASR", "13-ASR", "14/15-ASR"],
+    "availableTSRs": ["1/16-TSR", "2/3-TSR", "4/13-TSR", "14/15-TSR"],
+    "point8Info": ["8-NLR", "8-RLR", "8-NCR", "8-RCR", "8-ASWR", "8-WNR"],
+    "point9Info": ["9-NLR", "9-RLR", "9-NCR", "9-RCR", "9-ASWR", "9-WNR"],
+    "uyrs": ["S1-UYR1", "S1-UYR2", "S1-UYR3",
+            "S2/3-UYR1", "S2/3-UYR2",
+            "S4-UYR",
+            "S13-UYR1", "S13-UYR2", "S13-UYR3",
+            "S14/15-UYR1", "S14/15-UYR2",
+            "S16-UYR"],
+    "miscs": ["NWWNR", "RWWNR", "S1-UCR", "S2-UCR", "S3-UCR", "S13-UCR", "S14-UCR", "S15-UCR"],
+    "availableTPRs": ["1-TPR", "16-TPR", "4-TPR", "13-TPR", "M-TPR", "L-TPR",
+                    "8-TPR", "9-TPR",
+                    "8A-TPR", "8B-TPR", "9A-TPR", "9B-TPR"
+                    ],
+    "tprIndications": [
+        "1-TPR-R", "16-TPR-R", "4-TPR-R", "13-TPR-R", "M-TPR-R", "L-TPR-R",
+        "1-TPR-Y", "16-TPR-Y", "4-TPR-Y", "13-TPR-Y", "M-TPR-Y", "L-TPR-Y",
+        "8-TPR-R", "9-TPR-R",
+        "8-TPR-Y", "9-TPR-Y",
+
+        "8A-TPR-n", "8A-TPR-n-R", "8A-TPR-n-Y",
+        "8A-TPR-r", "8A-TPR-r-R", "8A-TPR-r-Y",
+        "8A-TPR-c", "8A-TPR-c-R", "8A-TPR-c-Y",
+
+        "8B-TPR-n", "8B-TPR-n-R", "8B-TPR-n-Y",
+        "8B-TPR-n2", "8B-TPR-n2-R", "8B-TPR-n2-Y",
+        "8B-TPR-r", "8B-TPR-r-R", "8B-TPR-r-Y",
+        "8B-TPR-c", "8B-TPR-c-R", "8B-TPR-c-Y",
+
+        "9A-TPR-n", "9A-TPR-n-R", "9A-TPR-n-Y",
+        "9A-TPR-r", "9A-TPR-r-R", "9A-TPR-r-Y",
+        "9A-TPR-c", "9A-TPR-c-R", "9A-TPR-c-Y",
+
+        "9B-TPR-n", "9B-TPR-n-R", "9B-TPR-n-Y",
+        "9B-TPR-n2", "9B-TPR-n2-R", "9B-TPR-n2-Y",
+        "9B-TPR-r", "9B-TPR-r-R", "9B-TPR-r-Y",
+        "9B-TPR-c", "9B-TPR-c-R", "9B-TPR-c-Y"
+    ],
+
+    "point9InfoExt": ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"],
+    "point8InfoExt": ["8-WFK", "8-NWKR", "8-RWKR", "8-WNKR", "8-WRKR", "8-NWLR", "8-RWLR"],
+
+    "signalEcr": ["S1-RECR", "S1-HECR", "S1-DECR", "S2-RECR", "S2-HECR",
+                "S3-RECR", "S3-HECR", "S3-DECR", "S4-RECR", "S4-HECR",
+                "S13-RECR", "S13-HECR", "S13-DECR", "S14-RECR", "S14-HECR",
+                "S15-RECR", "S15-HECR", "S15-DECR", "S16-RECR", "S16-HECR"],
+
+    "miscsExt": ["SMR",
+                "S1-HR", "S1-DR", "S1-UGR",
+                "S2-HR",
+                "S3-HR", "S3-DR",
+                "S4-HR",
+                "S13-HR", "S13-DR", "S13-UGR",
+                "S14-HR",
+                "S15-HR", "S15-DR",
+                "S16-HR"]
+}

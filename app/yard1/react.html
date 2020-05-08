@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>Yard-1</title>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+<script type="text/javascript">
+
+var topLoopLineText = ["","","","","", "ll-text", "p-6-text"];
+var topLoopLine = ["","","","","4B-tpr", "ll-tpr", "ll-tpr-sh", "sdg-tpr-0", "sdg-tpr"]
+var topLoopPoint = ["","","","","4-point-mid","5-point-mid","5-point-mid-2"]
+var mainLine = ["1A-tpr","1-tpr", "9-tpr", "10/11-tpr", "4A-tpr", "ml-tpr", "5A-tpr", "2/3-tpr", "13-tpr", "12-tpr", "12A-tpr"];
+
+var requiredContent = [];
+requiredContent.push(topLoopLineText);
+requiredContent.push(topLoopLine);
+requiredContent.push(topLoopPoint);
+requiredContent.push(mainLine);
+
+
+var topLoopLine = ["","","left-top", "8-point-top", "s14-tpr", "l-tpr-1", "l-tpr-2", "s2-tpr", "right-top"];
+var topLoopPoint = ["","","","8-point-mid","","","","9-point-mid-1","9-point-mid"];
+var mainLine = ["1-tpr", "16-tpr", "8-tpr", "8c-tpr", "s15-tpr", "m-tpr-1", "m-tpr-2", "s3-tpr", "9d-tpr", "9-tpr", "4-tpr"];
+var bottomLoopLine = ["","","","","",""];
+// bottomLoopLine.push("tc");
+var requiredContent = [];
+requiredContent.push(topLoopLine);
+requiredContent.push(topLoopPoint);
+requiredContent.push(mainLine);
+requiredContent.push(bottomLoopLine);
+
+
+var GLOBAL = {
+    UISetValueCountLimit: 800,
+    baseapi: "",
+    UICommonPath: {
+        "yard-control-btn-data": ["/app/yard1/static/json/yard-control.json"],
+        "yard-data": ["/app/yard1/static/json/yard-data.json"],
+        "possible-value": ["/app/yard1/static/json/possible-values.json"],
+        "initial-value": ["/app/yard1/static/json/initial-value.json"],
+        "expressions": ["/app/yard1/static/json/expressions-point.json",
+                        "/app/yard-s17/static/json/expressions-component.json"]
+    },
+    appHeading: "Yard 1",
+    appInfo: "Single line, 2 road, 12 route station",
+    tprClassMapping: {
+        "4A-TPR": ["p-4a-r", "p-4a-n", "p-4a-c"],
+        "4B-TPR": ["LL-sh-left", "p-4b-n", "p-4b-c", "p-4b-r"],
+        "5A-TPR": ["p-5a-r", "p-5a-n", "p-5a-c"],
+        "5B-TPR": ["p-5b-n", "p-5b-c", "p-5b-r"],
+        "SDG-TPR-A": ["p-6a-c", "p-6a-n"],
+        "SDG-TPR-B": ["p-6b-c", "p-6b-n"]
+    },
+    requiredContent: requiredContent
+};
+window.GLOBAL = GLOBAL;
+</script>
+
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/yard-s17-dist/script3.js"></script>
+
+</body>
+</html>
