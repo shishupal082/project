@@ -141,7 +141,7 @@ function calculateNumericalValue(op1, operator, op2) {
             val = op1 * op2;
         break;
         case '/':
-            if (op2 != 0) {
+            if (op2 !== 0) {
                 val = op1 / op2;
             } else {
                 val = 0;
@@ -210,7 +210,7 @@ var DT = (function() {
     DateTime.prototype.formateDateTime = function(format, seprator, dateObj) {
         // "D/YYYY/-/MM/-/DD/T/hh/:/mm/:/ss/:/ms","/" --> "D2020-01-26T22:34:24:071"
         var currentDateTime = "";
-        if (dateObj && dateObj.constructor && dateObj.constructor.name == "Date") {
+        if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
             currentDateTime = dateObj;
         } else {
             currentDateTime = dateTime;
@@ -415,7 +415,7 @@ var Log = (function(){
     Logger.prototype.setDateTimeState = function(state,v1,v2) {
         this.format=v1;
         this.splitter=v2;
-        if (state == true) {
+        if (state === true) {
             this.dateTimeEnable = true;
         } else {
             this.dateTimeEnable = false;
@@ -504,12 +504,12 @@ var Que = (function(){
         this._BACK = -1;
     }
     Que.prototype.Enque = function(item) {
-        if (this._BACK == capacity - 1) {
+        if (this._BACK === capacity - 1) {
             var logText = "Que full";
             Logger.log(logText);
             return 0;
         }
-        if (this._FRONT == -1) {
+        if (this._FRONT === -1) {
             this._FRONT = 0;
         }
         this._BACK++;
@@ -518,7 +518,7 @@ var Que = (function(){
     };
     Que.prototype.Deque = function() {
         var item = 0;
-        if (this._FRONT == -1 || this._FRONT > this._BACK) {
+        if (this._FRONT === -1 || this._FRONT > this._BACK) {
             var logText = "Que under flow";
             Logger.log(logText);
             return 0;
@@ -563,13 +563,13 @@ var CirQue = (function(){
         return 1;
     };
     CirQue.prototype.isFull = function() {
-        if( (this._FRONT == this._BACK + 1) || (this._FRONT == 0 && this._BACK == this.capacity-1)) {
+        if( (this._FRONT === this._BACK + 1) || (this._FRONT === 0 && this._BACK === this.capacity-1)) {
             return true;
         }
         return false;
     };
     CirQue.prototype.isEmpty = function() {
-        if(this._FRONT == -1) {
+        if(this._FRONT === -1) {
             return true;
         }
         return false;
@@ -580,10 +580,10 @@ var CirQue = (function(){
             Logger.log(logText);
             return 0;
         }
-        if (this._FRONT == -1) {
+        if (this._FRONT === -1) {
             this._FRONT = 0;
             this._BACK = 0;
-        } else if (this._BACK == this.capacity-1 && this._FRONT != 0) {
+        } else if (this._BACK === this.capacity-1 && this._FRONT !== 0) {
             this._BACK = 0;
         } else {
             this._BACK++;
@@ -592,10 +592,10 @@ var CirQue = (function(){
         return 1;
     };
     CirQue.prototype.EnqueV2 = function(item) {
-        if (this._FRONT == -1) {
+        if (this._FRONT === -1) {
             this._FRONT = 0;
             this._BACK = 0;
-        } else if (this._BACK == this.capacity-1 && this._FRONT != 0) {
+        } else if (this._BACK === this.capacity-1 && this._FRONT !== 0) {
             this._BACK = 0;
         } else if (this.isFull()) {
             this._BACK = this._FRONT;
@@ -614,7 +614,7 @@ var CirQue = (function(){
             return -1;
         }
         item = this.que[this._FRONT];
-        if (this._FRONT == this._BACK) {
+        if (this._FRONT === this._BACK) {
             this._FRONT = -1;
             this._BACK = -1;
         } else {
@@ -675,10 +675,10 @@ var BST = (function() {
         this.left = null;
     }
     BST.prototype.insertData = function(root, data) { 
-        if (isNumber(data) == false) {
+        if (isNumber(data) === false) {
             return root;
         }
-        if (isNumber(root.data) == false) {
+        if (isNumber(root.data) === false) {
             root.data = data;
             return root;
         }
@@ -802,11 +802,11 @@ var BT = (function(){
         st.push(eTree);
         currentTree = eTree;
         for (var i = 0; i < items.length; i++) {
-            if (items[i] == "(") {
+            if (items[i] === "(") {
                 this.insertLeft(currentTree, "");
                 st.push(currentTree);
                 currentTree = this.getLeftChild(currentTree);
-            } else if(items[i] == ")") {
+            } else if(items[i] === ")") {
                 currentTree = st.pop();
             } else if(["+","-","*","/","&&","&","||","|","#"].indexOf(items[i]) >=0) {
                 // Numeric: "+","-","*","/"
@@ -822,7 +822,7 @@ var BT = (function(){
                          B      C
                     -----------------
                 */
-                if (currentTree.data != "") {
+                if (currentTree.data !== "") {
                     var oldRight = currentTree.right;
                     this.insertRight(currentTree, newData);
                     currentTree = this.getRightChild(currentTree);
@@ -936,17 +936,17 @@ var Domino = (function() {
             for (var j = 0; j < d.data[i].length; j++) {
                 if (d.data[i][j] !== null) {
                     validColCount++;
-                    if (isRowIncremented == false) {
+                    if (isRowIncremented === false) {
                         validRowCount++;
                         isRowIncremented = true;
                     }
                 }
-                if (validColCount == 5) {
+                if (validColCount === 5) {
                     validColCountStatus = true;
                 }
             }
         }
-        if (validRowCount == maxRow && validColCountStatus) {
+        if (validRowCount === maxRow && validColCountStatus) {
             return true;
         }
         return false;
@@ -1030,7 +1030,7 @@ Stack.extend = Stack.fn.extend = function(options) {
 Stack.extend({
     getScriptFileName: function(location) {
         var scriptName = "";
-        if (Platform == "Window") {
+        if (Platform === "Window") {
             var scripts = document.getElementsByTagName('script');
             var lastScript = scripts[scripts.length-1];
             scriptName = lastScript.src;
@@ -1051,10 +1051,10 @@ Stack.extend({
         var result = [];
         var splitResult = scriptName.split("/");
         result = splitResult.filter(function(el, index, arr) {
-            return el != "";
+            return el !== "";
         });
         result = result.map(function(el, index, arr){
-            if (index == this.lastIndex) {
+            if (index === this.lastIndex) {
                 return el;
             }
             return el.charAt(0).toUpperCase();
@@ -1327,7 +1327,7 @@ Stack.extend({
         return isBoolean(value);
     },
     isBooleanTrue: function(value) {
-        return isBoolean(value) && value == true;
+        return isBoolean(value) && value === true;
     },
     addElAt: function(arr, index, el) {
         return addElAt(arr, index, el);
@@ -1520,9 +1520,9 @@ Stack.extend({
         var tokens = Stack.tokenize(expression, ["(",")","&&","*","||","#","+","~"]);
         var posix = Stack.createPosixTree(tokens);
         for (var i = 0; i < posix.length; i++) {
-            if (posix[i] == "true") {
+            if (posix[i] === "true") {
                 posix[i] = true;
-            } else if (posix[i] == "false") {
+            } else if (posix[i] === "false") {
                 posix[i] = false;
             } else {
                 continue;
@@ -1534,9 +1534,9 @@ Stack.extend({
         var tokens = Stack.tokenize(expression, ["(",")","&","*","|","#","+","~"]);
         var posix = Stack.createPosixTree(tokens);
         for (var i = 0; i < posix.length; i++) {
-            if (posix[i] == "true") {
+            if (posix[i] === "true") {
                 posix[i] = true;
-            } else if (posix[i] == "false") {
+            } else if (posix[i] === "false") {
                 posix[i] = false;
             } else {
                 continue;
@@ -1555,7 +1555,7 @@ Stack.extend({
         //Remove empty values and trim all token
         for (var j = 0; j < temp.length; j++) {
             tempToken = temp[j].trim();
-            if (tempToken == "") {
+            if (tempToken === "") {
                 continue;
             } else {
                 tokens.push(tempToken);

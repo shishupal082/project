@@ -10,6 +10,13 @@ var syncData = {
             "../java/WebApp/src/main/resources/assets/static/libs/"
         ]
     },
+    "bootstrap-v4.4.1": {
+        "src": [
+            "../static/libs/bootstrap-v4.4.1.css"
+        ],
+        "destinationDir": [
+        ]
+    },
     "react": {
         "src": "../static/libs/bootstrap-react-v3.1.1.css",
         "destinationDir": "../reactjs/reactapp/src/libs/"
