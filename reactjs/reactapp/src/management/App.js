@@ -47,7 +47,7 @@ class App extends React.Component {
     render() {
         var logoUrl = baseapi + LOGO_URL;
         return (<div className="container">
-                    <Home logoUrl={logoUrl} listItems={homeListItems}/>
+                    <Home logoUrl={logoUrl} isLoaded={this.state.isLoaded} listItems={homeListItems}/>
                     <Instructions listItems={instructionsListItems}/>
                 </div>
         );

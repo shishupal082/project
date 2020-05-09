@@ -12,10 +12,16 @@ function Home(props) {
             return <a href={item.url} key={index} className={itemCls}>{item.text}</a>
         });
     }
+
+    var logo = "";
+    if (props.isLoaded) {
+        logo = <img src={props.logoUrl} alt="Logo" className="logo"/>
+    }
+
     return (
         <div>
             <div className="text-center">
-                <img src={props.logoUrl} alt="Logo" className="logo"/>
+                {logo}
             </div>
             <div>
                 <div className="list-group">

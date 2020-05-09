@@ -6,6 +6,8 @@ const AppConstant = {
     TEXT_CSS: "text/css",
     TEXT_PLAIN: "text/plain",
     IMAGE_X_ICON: "image/x-icon",
+    IMAGE_JPG: "image/jpg",
+    IMAGE_JPEG: "image/jpeg",
     PUBLIC_DIR: __dirname + "/../..",
     UNDEFINED: undefined
 };
@@ -14,7 +16,10 @@ AppConstant["fileMediaType"] = {
 	".html": AppConstant.TEXT_HTML,
 	".json": AppConstant.APPLICATION_JSON,
 	".js": AppConstant.TEXT_JS,
-	".css": AppConstant.TEXT_CSS
+	".css": AppConstant.TEXT_CSS,
+    ".ico": AppConstant.IMAGE_X_ICON,
+    ".jpg": AppConstant.IMAGE_JPG,
+    ".jpeg": AppConstant.IMAGE_JPEG
 };
 module.exports = AppConstant;
 
