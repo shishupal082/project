@@ -14,8 +14,8 @@ function Home(props) {
     }
 
     var logo = "";
-    if (props.isLoaded) {
-        logo = <img src={props.logoUrl} alt="Logo" className="logo"/>
+    if (props.state.isLoaded) {
+        logo = <img src={props.logoUrl} alt="App Logo" className="logo"/>
     }
 
     return (
