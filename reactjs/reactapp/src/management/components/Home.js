@@ -14,7 +14,7 @@ function Home(props) {
     }
 
     var logo = "";
-    if (props.state.isLoaded) {
+    if (props.state.isLoaded && props.logoUrl) {
         logo = <img src={props.logoUrl} alt="App Logo" className="logo"/>
     }
 
@@ -26,7 +26,7 @@ function Home(props) {
             <div>
                 <div className="list-group">
                     {listItemsJSX}
-                    <button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button>
+                    <a href="/"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></a>
                 </div>
             </div>
         </div>
