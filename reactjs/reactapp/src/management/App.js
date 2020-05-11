@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 import $$ from '../interface/global';
 import Api from "../common/Api";
@@ -90,7 +90,7 @@ class App extends React.Component {
         var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}/>;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
         var instructions = <Instructions listItems={instructionsListItems}/>;
-         return (<div className="container"><Router><Switch>
+         return (<div className="container"><BrowserRouter><Switch>
                   <Route exact path="/">
                     {home}
                   </Route>
@@ -106,7 +106,7 @@ class App extends React.Component {
                   <Route>
                     {home}
                   </Route>
-            </Switch></Router></div>);
+            </Switch></BrowserRouter></div>);
     }
 }
 

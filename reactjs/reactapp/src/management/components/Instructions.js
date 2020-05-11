@@ -9,14 +9,14 @@ function Instruction(props) {
         });
     }
     return (
-        <div>
+        <div className="row"><div className="col-md-6 offset-md-3">
             <div className="list-group">
                 <a href="/" className="list-group-item list-group-item-primary text-center">Instructions</a>
             </div>
             <div className="list-group">
                 {listItemsJSX}
             </div>
-        </div>
+        </div></div>
     );
 }
 export default Instruction;

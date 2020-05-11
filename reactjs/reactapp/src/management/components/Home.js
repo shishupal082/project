@@ -19,11 +19,11 @@ function Home(props) {
     }
 
     return (
-        <div>
-            <div className="text-center">
-                {logo}
-            </div>
-            <div>
+        <div className="row">
+            <div className="col-md-6 offset-md-3">
+                <div className="text-center">
+                    {logo}
+                </div>
                 <div className="list-group">
                     {listItemsJSX}
                     <a href="/form"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></a>
