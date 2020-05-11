@@ -97,7 +97,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 App.js
 ----
-<BrowserRouter />
+<BrowserRouter>
 <div>
 	<Menu />
 	<Switch>
@@ -106,7 +106,7 @@ App.js
 		<Router path="/contact" component={Contact} />
 	</Switch>
 </div>
-<BrowserRouter />
+</BrowserRouter>
 
 Menu.js
 ----

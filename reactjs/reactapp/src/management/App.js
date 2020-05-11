@@ -1,4 +1,5 @@
 import React from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 import $$ from '../interface/global';
 import Api from "../common/Api";
@@ -85,13 +86,27 @@ class App extends React.Component {
         if ($S.isString(LOGO_URL) && LOGO_URL.length > 0) {
             logoUrl = baseapi + LOGO_URL;
         }
-        return (<div className="container">
-                    <PrintDisplay state={this.state} printData={this.printData}/>
-                    <Form state={this.state} formHeading={this.formHeading} formData={this.formData}/>
-                    <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>
-                    <Instructions listItems={instructionsListItems}/>
-                </div>
-        );
+        var printDisplay = <PrintDisplay state={this.state} printData={this.printData}/>;
+        var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}/>;
+        var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
+        var instructions = <Instructions listItems={instructionsListItems}/>;
+         return (<div className="container"><Router><Switch>
+                  <Route exact path="/">
+                    {home}
+                  </Route>
+                  <Route exact path="/form">
+                    {form}
+                  </Route>
+                  <Route exact path="/credits">
+                    {printDisplay}
+                  </Route>
+                  <Route path="/instructions">
+                    {instructions}
+                  </Route>
+                  <Route>
+                    {home}
+                  </Route>
+            </Switch></Router></div>);
     }
 }
 

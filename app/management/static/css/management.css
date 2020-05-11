@@ -16,6 +16,9 @@ html{
 .logo {
     width: 100px;
 }
+.print-logo {
+    width: 70px;
+}
 .font-10px {
     font-size: 10px;
 }

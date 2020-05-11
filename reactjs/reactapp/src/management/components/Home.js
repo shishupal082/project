@@ -26,7 +26,7 @@ function Home(props) {
             <div>
                 <div className="list-group">
                     {listItemsJSX}
-                    <a href="/"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></a>
+                    <a href="/form"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></a>
                 </div>
             </div>
         </div>

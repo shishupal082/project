@@ -5,7 +5,7 @@ function Instruction(props) {
     var listItemsJSX = "";
     if (listItems.length) {
         listItemsJSX = listItems.map(function(item, index, arr) {
-            return <li href={item.url} key={index}>{item.text}</li>
+            return <li href={item.url} className="list-group-item" key={index}>{item.text}</li>
         });
     }
     return (
