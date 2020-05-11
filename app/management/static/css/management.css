@@ -1,3 +1,52 @@
-.logo {
-	width: 100px;
+/*
+10px = 0.625rem
+12px = 0.75rem
+14px = 0.875rem
+16px = 1rem (base)
+18px = 1.125rem
+20px = 1.25rem
+24px = 1.5rem
+30px = 1.875rem
+32px = 2rem
+*/
+
+html{
+    font-size: 14px;
 }
+.logo {
+    width: 100px;
+}
+.font-10px {
+    font-size: 10px;
+}
+.w10 {
+    width: 10%;
+}
+.w24 {
+    width: 24%;
+}
+.w28 {
+    width: 28%;
+}
+.w100 {
+    width: 100%;
+}
+.table-boundary {
+    border: 1px solid;
+}
+.span-block {
+    display: block;
+    width: 100%;
+}
+/*For table */
+.vertical-align-top {
+    vertical-align: top;
+}
+.signature td > p {
+    padding-top: 65px;
+    padding-left: 5px;
+}
+.print-body table tr {
+    border: 2px solid;
+}
+

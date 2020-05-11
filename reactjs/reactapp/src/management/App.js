@@ -6,10 +6,13 @@ import Api from "../common/Api";
 import Home from "./components/Home";
 import Instructions from "./components/Instructions";
 import Form from "./components/Form";
+import PrintDisplay from "./components/PrintDisplay";
+
 
 var baseapi = $$.baseapi;
 var api = $$.api;
 var formApi = $$.formApi;
+var printDataApi = $$.printDataApi;
 
 if ($S.isArray(formApi)) {
     for(var i=0; i<formApi.length; i++) {
@@ -28,6 +31,7 @@ class App extends React.Component {
             isLoaded: false
         };
         this.formData = {};
+        this.printData = {};
         this.handleClick = this.handleClick.bind(this);
     }
     componentDidMount() {
@@ -43,6 +47,15 @@ class App extends React.Component {
                 self.formHeading = response.formHeading;
             } else {
                 $S.log("Invalid response (appData):" + response);
+            }
+            self.setState({isLoaded: true});
+        }, null, null, Api.getAjaxApiCallMethod());
+
+        $S.loadJsonData(null, [baseapi + printDataApi + "?" + $S.getRequestId()], function(response) {
+            if ($S.isObject(response)) {
+                self.printData = response;
+            } else {
+                $S.log("Invalid response (printData):" + response);
             }
             self.setState({isLoaded: true});
         }, null, null, Api.getAjaxApiCallMethod());
@@ -73,6 +86,7 @@ class App extends React.Component {
             logoUrl = baseapi + LOGO_URL;
         }
         return (<div className="container">
+                    <PrintDisplay state={this.state} printData={this.printData}/>
                     <Form state={this.state} formHeading={this.formHeading} formData={this.formData}/>
                     <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>
                     <Instructions listItems={instructionsListItems}/>

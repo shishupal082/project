@@ -21,17 +21,34 @@ var childGenerator = {};
 function generateReactChild(props, data, key) {
     var reactChild = "", reactChildText = "";
     if ($S.isString(data)) {
-        reactChild = data;
-    } else if ($S.isObject(data) && validTags.indexOf(data.tag) >= 0) {
-        reactChildText = data.text;
-        if ($S.isObject(reactChildText)) {
-            reactChildText = generateReactChild(props, reactChildText, key);
-        } if ($S.isArray(reactChildText)) {
-            reactChildText = reactChildText.map(function(item, index, arr) {
-                return generateReactChild(props, item, index);
-            });
+        return data;
+    }
+    if ($S.isObject(data)) {
+        if ($S.isString(data.tag) && data.tag.length > 0) {
+            var tags = data.tag.split(".");
+            for (var i = tags.length-1; i > 0; i--) {
+                data.text = {
+                    "tag": tags[i],
+                    "text": data.text
+                };
+            }
+            data.tag = tags[0];
         }
-        reactChild = childGenerator[data.tag](props, data, reactChildText, key);
+        if (validTags.indexOf(data.tag) >= 0) {
+            reactChildText = data.text;
+            if ($S.isObject(reactChildText)) {
+                reactChildText = generateReactChild(props, reactChildText, key);
+            } if ($S.isArray(reactChildText)) {
+                reactChildText = reactChildText.map(function(item, index, arr) {
+                    return generateReactChild(props, item, index);
+                });
+            }
+            reactChild = childGenerator[data.tag](props, data, reactChildText, key);
+        } else if ($S.isString(data.text)) {
+            reactChild = data.text;
+        } else {
+            console.log("Invalid tag: " + JSON.stringify(data));
+        }
     }
     return reactChild;
 }
@@ -81,14 +98,44 @@ Api.extend({
 });
 
 childGenerator = {
+    "b": function(props, data, reactChildText, key) {
+        return <b key={key} className={data.className}>{reactChildText}</b>;
+    },
+    "p": function(props, data, reactChildText, key) {
+        return <p key={key} className={data.className}>{reactChildText}</p>;
+    },
+    "h6": function(props, data, reactChildText, key) {
+        return <h6 key={key} className={data.className}>{reactChildText}</h6>;
+    },
     "div": function(props, data, reactChildText, key) {
         return <div key={key} className={data.className}>{reactChildText}</div>;
+    },
+    "table": function(props, data, reactChildText, key) {
+        return <table key={key} id={data.id} className={data.className}>{reactChildText}</table>;
+    },
+    "tbody": function(props, data, reactChildText, key) {
+        return <tbody key={key}>{reactChildText}</tbody>;
+    },
+    "tr": function(props, data, reactChildText, key) {
+        return <tr key={key} id={data.id} className={data.className}>{reactChildText}</tr>;
+    },
+    "td": function(props, data, reactChildText, key) {
+        return <td key={key} id={data.id} rowSpan={data.rowSpan} colSpan={data.colSpan} className={data.className}>{reactChildText}</td>;
     },
     "hr": function(props, data, reactChildText, key) {
         return <hr key={key} className={data.className}/>;
     },
     "br": function(props, data, reactChildText, key) {
         return <br key={key} className={data.className}/>;
+    },
+    "img": function(props, data, reactChildText, key) {
+        return <img src={data.src} alt={data.alt} className={data.className}/>;
+    },
+    "ol": function(props, data, reactChildText, key) {
+        return <ol key={key} type={data.type} className={data.className}>{reactChildText}</ol>;
+    },
+    "li": function(props, data, reactChildText, key) {
+        return <li key={key} className={data.className}>{reactChildText}</li>;
     },
     "span": function(props, data, reactChildText, key) {
         return <span key={key} className={data.className}>{reactChildText}</span>;

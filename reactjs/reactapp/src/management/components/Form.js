@@ -9,7 +9,7 @@ function Form(props) {
     var formTemplate2 = props.formData["formTemplate2"];
     return (
         <div>
-            <form method='POST' target='_blank' action='trial.php'>
+            <form method='POST' action='trial.php'>
                 <hr className="form-control-range border-top-0"/>
                 <div className="form-row justify-content-center form-heading">
                     <a href = "/"><h2>{props.formHeading}</h2></a>
