@@ -30,7 +30,8 @@ class App extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            formRowFields: []
+            formRowFields: [],
+            formValues: {}
         };
         this.formData = {};
         this.printData = {};
@@ -111,8 +112,11 @@ class App extends React.Component {
             } else {
                 $S.log("Invalid response (formData):" + response);
             }
-            self.setState({isLoaded: true});
-        }, null, null, Api.getAjaxApiCallMethod());
+        }, function() {
+            var formRowFields = self.state.formRowFields;
+            formRowFields.push({templateData: self.formData["userDetails"], formRowId: "form-row-"+$S.getUniqueNumber()});
+            self.setState({formRowFields: formRowFields});
+        }, null, Api.getAjaxApiCallMethod());
     }
     render() {
         var logoUrl = false;

@@ -24,6 +24,7 @@ Template.fn = Template.prototype = {
             // name will be unique in each template
             if (this.template["name"] === fieldName) {
                 this.template["value"] = value;
+                console.log(fieldName + ":::" + value);
             } else {
                 Template(this.template["text"]).updateField(fieldName, value);
             }

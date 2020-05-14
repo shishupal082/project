@@ -15,15 +15,17 @@ class Form extends React.Component {
     }
     handleClick(e) {
         var fieldName = e.target.name;
-        var value = e.target.value;
-        var fieldRow = e.target.parentElement.parentElement;
-        var rowClassName = fieldRow.className;
         if (fieldName === "addNewRow") {
+            var value = e.target.value;
             this.props.addNewRow(value);
             return false;
         }
-        if (TextFilter(rowClassName).hasClass("form-row")) {
-            this.props.removeRow(fieldRow.id);
+        if (fieldName === "delete") {
+            var fieldRow = e.target.parentElement.parentElement;
+            var rowClassName = fieldRow.className;
+            if (TextFilter(rowClassName).hasClass("form-row")) {
+                this.props.removeRow(fieldRow.id);
+            }
             return false;
         }
         return false;
@@ -40,12 +42,11 @@ class Form extends React.Component {
     }
     render () {
         var formActionData = this.props.formData["formAction"];
-        var formUserData = this.props.formData["userDetails"];
         var formRowFields = this.props.state.formRowFields;
         var formFields = "", self = this;
         if ($S.isArray(formRowFields)) {
             formFields = formRowFields.map(function(item, index, arr) {
-                var row = <div key={index} id={item.formRowId} className= 'form-row text-center font-weight-bold'>
+                var row = <div key={index} id={item.formRowId} className='form-row text-center font-weight-bold'>
                         <hr className="form-control-range"/>
                         <FormFields fieldData={item.templateData} onChange={self.handleChange} onClick={self.handleClick}/>
                     </div>
@@ -58,10 +59,6 @@ class Form extends React.Component {
                     <hr className="form-control-range border-top-0"/>
                     <div className="form-row justify-content-center form-heading">
                         <a href = "/"><h2>{this.props.formHeading}</h2></a>
-                    </div>
-                    <hr className="form-control-range"/>
-                    <div className= 'form-row text-center font-weight-bold form-user'>
-                        <FormFields fieldData={formUserData} onChange={this.handleChange} onClick={this.handleClick}/>
                     </div>
                     {formFields}
                     <div className="row justify-content-center form-action">
