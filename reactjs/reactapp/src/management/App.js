@@ -31,13 +31,25 @@ class App extends React.Component {
         this.state = {
             isLoaded: false,
             formRowFields: [],
-            formValues: {}
+            formValues: []
         };
         this.formData = {};
         this.printData = {};
         this.addNewRow = this.addNewRow.bind(this);
         this.removeRow = this.removeRow.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    }
+    getFormValues() {
+        var formValues = [], formValue = {};
+        for(var i=0; i<this.state.formRowFields.length; i++) {
+            formValue = {};
+            formValue["formRowId"] = this.state.formRowFields[i]["formRowId"];
+            TemplateHelper(this.state.formRowFields[i].templateData).getFieldData(formValue);
+            formValues.push(formValue);
+        }
+        // console.log(formValues);
+        return formValues;
     }
     removeRow(formRowId) {
         if (!$S.isString(formRowId)) {
@@ -50,7 +62,7 @@ class App extends React.Component {
             return true;
         });
         this.setState({formRowFields: updatedRowFields});
-        console.log(this.state.formRowFields);
+        // console.log(this.state.formRowFields);
     }
     addNewRow(templateName) {
         if($S.isString(templateName)) {
@@ -61,7 +73,7 @@ class App extends React.Component {
                 this.setState({formRowFields: formRowFields});
             }
         }
-        console.log(this.state.formRowFields);
+        // console.log(this.state.formRowFields);
     }
     handleClick(e, fieldName, currentValue, formRowId) {
 
@@ -114,9 +126,15 @@ class App extends React.Component {
             }
         }, function() {
             var formRowFields = self.state.formRowFields;
-            formRowFields.push({templateData: self.formData["userDetails"], formRowId: "form-row-"+$S.getUniqueNumber()});
+            formRowFields.push({templateData: self.formData["userDetails"],
+                formRowId: "form-row-"+$S.getUniqueNumber()});
             self.setState({formRowFields: formRowFields});
         }, null, Api.getAjaxApiCallMethod());
+    }
+    handleFormSubmit() {
+        var formValues = this.getFormValues();
+        this.setState({formValues: formValues});
+        console.log(formValues);
     }
     render() {
         var logoUrl = false;
@@ -126,7 +144,7 @@ class App extends React.Component {
         var printDisplay = <PrintDisplay state={this.state} printData={this.printData}/>;
         var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}
                     addNewRow={this.addNewRow} removeRow={this.removeRow}
-                    handleChange={this.handleChange} />;
+                    handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}/>;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
         var instructions = <Instructions listItems={instructionsListItems}/>;
          return (<div className="container"><BrowserRouter><Switch>

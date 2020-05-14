@@ -12,6 +12,7 @@ class Form extends React.Component {
         };
         this.handleClick = this.handleClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
     handleClick(e) {
         var fieldName = e.target.name;
@@ -25,6 +26,8 @@ class Form extends React.Component {
             var rowClassName = fieldRow.className;
             if (TextFilter(rowClassName).hasClass("form-row")) {
                 this.props.removeRow(fieldRow.id);
+            } else {
+                alert("Invalid row for delete.");
             }
             return false;
         }
@@ -38,6 +41,7 @@ class Form extends React.Component {
     }
     onSubmit(e) {
         e.preventDefault();
+        this.props.handleFormSubmit();
         return false;
     }
     render () {
