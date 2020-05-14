@@ -151,12 +151,12 @@ childGenerator = {
         var inputField = <input key={key} type={data.type} name={data.name}
                             placeholder={data.placeholder} className={data.className}
                             value={data.value} defaultValue={data.defaultValue}
-                            id={data.id} />;
+                            id={data.id} onChange={props.onChange} />;
         if (data.required) {
             inputField = <input key={key} type={data.type} name={data.name}
                     placeholder={data.placeholder} className={data.className}
                     value={data.value} defaultValue={data.defaultValue}
-                    id={data.id} required/>;
+                    id={data.id} onChange={props.onChange} required/>;
         }
         return inputField;
     }

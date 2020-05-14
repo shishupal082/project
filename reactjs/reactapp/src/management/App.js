@@ -29,12 +29,37 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false
+            isLoaded: false,
+            formRowFields: []
         };
         this.formData = {};
         this.printData = {};
-        this.handleClick = this.handleClick.bind(this);
+        this.addNewRow = this.addNewRow.bind(this);
+        this.removeRow = this.removeRow.bind(this);
     }
+    removeRow(formRowId) {
+        if (!$S.isNumber(formRowId)) {
+            return false;
+        }
+        var updatedRowFields = this.state.formRowFields.filter(function(el, index, arr) {
+            return index !== formRowId;
+        });
+        this.setState({formRowFields: updatedRowFields});
+    }
+    addNewRow(templateName) {
+        if($S.isString(templateName)) {
+            var templateData = this.formData[templateName];
+            if (templateData) {
+                var formRowFields = this.state.formRowFields;
+                formRowFields.push(templateData);
+                this.setState({formRowFields: formRowFields});
+            }
+        }
+    }
+    handleClick(e, fieldName) {
+
+    }
+    handleChange(e, fieldName, newValue) {}
     componentDidMount() {
         this.fetchData();
     }
@@ -75,19 +100,14 @@ class App extends React.Component {
             self.setState({isLoaded: true});
         }, null, null, Api.getAjaxApiCallMethod());
     }
-    handleClick() {
-        this.setState({
-            btnActive: !this.state.btnActive
-        });
-        this.fetchData();
-    }
     render() {
         var logoUrl = false;
         if ($S.isString(LOGO_URL) && LOGO_URL.length > 0) {
             logoUrl = baseapi + LOGO_URL;
         }
         var printDisplay = <PrintDisplay state={this.state} printData={this.printData}/>;
-        var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}/>;
+        var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}
+                    addNewRow={this.addNewRow} removeRow={this.removeRow}/>;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
         var instructions = <Instructions listItems={instructionsListItems}/>;
          return (<div className="container"><BrowserRouter><Switch>
@@ -98,6 +118,7 @@ class App extends React.Component {
                     {form}
                   </Route>
                   <Route exact path="/credits">
+                    {form}
                     {printDisplay}
                   </Route>
                   <Route path="/instructions">

@@ -898,11 +898,14 @@ Filter.fn = Filter.prototype = {
     getClassName: function() {
         return this.className;
     },
-    contains: function(className) {
+    hasClass: function(className) {
         if (!isString(className)) {
             className = "";
         }
         return this.className.split(" ").indexOf(className) >= 0;
+    },
+    contains: function(className) {
+        return this.hasClass(className);
     },
     includes: function(str) {
         if (!isString(str)) {

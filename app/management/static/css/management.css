@@ -51,7 +51,7 @@ html{
     padding-top: 65px;
     padding-left: 5px;
 }
-.print-body table tr {
-    border: 2px solid;
+.print-body table tr td {
+    border: 1px solid;
 }
 
