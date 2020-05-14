@@ -132,8 +132,21 @@ class App extends React.Component {
         }, null, Api.getAjaxApiCallMethod());
     }
     handleFormSubmit() {
-        var formValues = this.getFormValues();
+        var formValues = this.getFormValues(), fieldRow;
         this.setState({formValues: formValues});
+        this.printData["fieldRow"] = [];
+        var totalRow = this.printData["totalRow"];
+        for(var i=0; i<formValues.length; i++) {
+            if ($S.isString(formValues[i].name)) {
+                fieldRow = TemplateHelper($S.clone(this.printData["printBodyUser"])).assignDisplayText(formValues[i]);
+            } else if ($S.isString(formValues[i].distance)) {
+                fieldRow = TemplateHelper($S.clone(this.printData["type1RowTemplate"])).assignDisplayText(formValues[i]);
+            } else {
+                fieldRow = TemplateHelper($S.clone(this.printData["type2RowTemplate"])).assignDisplayText(formValues[i]);
+            }
+            this.printData["fieldRow"].push(fieldRow);
+        }
+        this.printData["fieldRow"].push(totalRow);
         console.log(formValues);
     }
     render() {

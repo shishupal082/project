@@ -19,7 +19,7 @@ var validTags = [];
 var childGenerator = {};
 
 function generateReactChild(props, data, key) {
-    var reactChild = "", reactChildText = "";
+    var reactChild = null, reactChildText = null;
     if ($S.isString(data)) {
         return data;
     }
@@ -49,6 +49,11 @@ function generateReactChild(props, data, key) {
         } else {
             console.log("Invalid tag: " + JSON.stringify(data));
         }
+    } else if ($S.isArray(data)) {
+        // For array of array fields
+        reactChild = data.map(function(item, index, arr) {
+            return generateReactChild(props, item, index);
+        });
     }
     return reactChild;
 }
@@ -83,7 +88,7 @@ Api.extend({
         return str;
     },
     generateFields: function(props, fieldItems) {
-        var fields = "";
+        var fields = null;
         if ($S.isArray(fieldItems)) {
             fields = fieldItems.map(function(item, index, arr) {
                 return generateReactChild(props, item, index);

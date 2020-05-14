@@ -24,9 +24,8 @@ Template.fn = Template.prototype = {
             if (this.template["name"] === fieldName) {
                 this.template["value"] = value;
                 // console.log(fieldName + ":::" + value);
-            } else {
-                Template(this.template["text"]).updateField(fieldName, value);
             }
+            Template(this.template["text"]).updateField(fieldName, value);
             return true;
         }
         return false;
@@ -50,6 +49,26 @@ Template.fn = Template.prototype = {
             }
         }
         return res;
+    },
+    assignDisplayText: function(templateData) {
+        var i;
+        if ($S.isObject(this.template)) {
+            if ($S.isString(this.template.name) && templateData[this.template.name]) {
+                this.template.text = templateData[this.template.name];
+            }
+            if ($S.isArray(this.template.text)) {
+                for (i = 0; i<this.template.text.length; i++) {
+                    Template(this.template.text[i]).assignDisplayText(templateData);
+                }
+            } else if ($S.isObject(this.template.text)) {
+                Template(this.template.text).assignDisplayText(templateData);
+            }
+        } else if ($S.isArray(this.template)) {
+            for (i = 0; i<this.template.length; i++) {
+                Template(this.template[i]).assignDisplayText(templateData);
+            }
+        }
+        return this.template;
     }
 };
 $S.extendObject(Template);
