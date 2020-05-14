@@ -150,13 +150,14 @@ childGenerator = {
     "input": function(props, data, reactChildText, key) {
         var inputField = <input key={key} type={data.type} name={data.name}
                             placeholder={data.placeholder} className={data.className}
-                            value={data.value} defaultValue={data.defaultValue}
-                            id={data.id} onChange={props.onChange} />;
+                            id={data.id} onChange={props.onChange}
+                            value={data.value}/>;
+
         if (data.required) {
             inputField = <input key={key} type={data.type} name={data.name}
                     placeholder={data.placeholder} className={data.className}
-                    value={data.value} defaultValue={data.defaultValue}
-                    id={data.id} onChange={props.onChange} required/>;
+                    id={data.id} onChange={props.onChange}
+                    value={data.value} required/>;
         }
         return inputField;
     }

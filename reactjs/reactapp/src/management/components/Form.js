@@ -23,40 +23,38 @@ class Form extends React.Component {
             return false;
         }
         if (TextFilter(rowClassName).hasClass("form-row")) {
-            var formRowId = value;
-            if ($S.isString(formRowId)) {
-                formRowId = formRowId.split("-")[0] * 1;
-                if (!$S.isNumber(formRowId)) {
-                    formRowId = null;
-                }
-            }
-            this.props.removeRow(formRowId);
+            this.props.removeRow(fieldRow.id);
             return false;
         }
-
+        return false;
     }
     handleChange(e) {
-        console.log(e.target.name);
+        var fieldName = e.target.name;
+        var value = e.target.value;
+        var formRowId = e.target.parentElement.parentElement.id;
+        this.props.handleChange(e, fieldName, value, formRowId);
+    }
+    onSubmit(e) {
+        e.preventDefault();
+        return false;
     }
     render () {
         var formActionData = this.props.formData["formAction"];
         var formUserData = this.props.formData["userDetails"];
-        // var formTemplate1 = this.props.formData["formTemplate1"];
-        // var formTemplate2 = this.props.formData["formTemplate2"];
         var formRowFields = this.props.state.formRowFields;
         var formFields = "", self = this;
         if ($S.isArray(formRowFields)) {
             formFields = formRowFields.map(function(item, index, arr) {
-                var formRowId = index + "-formRow";
-                return <div key={index} id={formRowId} className= 'form-row text-center font-weight-bold'>
+                var row = <div key={index} id={item.formRowId} className= 'form-row text-center font-weight-bold'>
                         <hr className="form-control-range"/>
-                        <FormFields fieldData={item} onChange={self.handleChange} onClick={self.handleClick}/>
+                        <FormFields fieldData={item.templateData} onChange={self.handleChange} onClick={self.handleClick}/>
                     </div>
+                return row;
             });
         }
         return (
             <div>
-                <form method='POST' action='trial.php'>
+                <form method='POST' onSubmit={this.onSubmit}>
                     <hr className="form-control-range border-top-0"/>
                     <div className="form-row justify-content-center form-heading">
                         <a href = "/"><h2>{this.props.formHeading}</h2></a>

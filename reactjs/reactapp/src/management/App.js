@@ -3,12 +3,12 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 import $$ from '../interface/global';
 import Api from "../common/Api";
+import TemplateHelper from "../common/TemplateHelper";
 
 import Home from "./components/Home";
 import Instructions from "./components/Instructions";
 import Form from "./components/Form";
 import PrintDisplay from "./components/PrintDisplay";
-
 
 var baseapi = $$.baseapi;
 var api = $$.api;
@@ -36,30 +36,44 @@ class App extends React.Component {
         this.printData = {};
         this.addNewRow = this.addNewRow.bind(this);
         this.removeRow = this.removeRow.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     removeRow(formRowId) {
-        if (!$S.isNumber(formRowId)) {
+        if (!$S.isString(formRowId)) {
             return false;
         }
         var updatedRowFields = this.state.formRowFields.filter(function(el, index, arr) {
-            return index !== formRowId;
+            if (el.formRowId === formRowId) {
+                return false;
+            }
+            return true;
         });
         this.setState({formRowFields: updatedRowFields});
+        console.log(this.state.formRowFields);
     }
     addNewRow(templateName) {
         if($S.isString(templateName)) {
-            var templateData = this.formData[templateName];
+            var templateData = $S.clone(this.formData[templateName]);
             if (templateData) {
                 var formRowFields = this.state.formRowFields;
-                formRowFields.push(templateData);
+                formRowFields.push({templateData: templateData, formRowId: "form-row-"+$S.getUniqueNumber()});
                 this.setState({formRowFields: formRowFields});
             }
         }
+        console.log(this.state.formRowFields);
     }
-    handleClick(e, fieldName) {
+    handleClick(e, fieldName, currentValue, formRowId) {
 
     }
-    handleChange(e, fieldName, newValue) {}
+    handleChange(e, fieldName, currentValue, formRowId) {
+        var formRowFields = this.state.formRowFields.filter(function(item, index, arr) {
+            if (formRowId === item.formRowId) {
+                TemplateHelper(item.templateData).updateField(fieldName, currentValue);
+            }
+            return true;
+        });
+        this.setState({formRowFields: formRowFields});
+    }
     componentDidMount() {
         this.fetchData();
     }
@@ -107,7 +121,8 @@ class App extends React.Component {
         }
         var printDisplay = <PrintDisplay state={this.state} printData={this.printData}/>;
         var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}
-                    addNewRow={this.addNewRow} removeRow={this.removeRow}/>;
+                    addNewRow={this.addNewRow} removeRow={this.removeRow}
+                    handleChange={this.handleChange} />;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
         var instructions = <Instructions listItems={instructionsListItems}/>;
          return (<div className="container"><BrowserRouter><Switch>
