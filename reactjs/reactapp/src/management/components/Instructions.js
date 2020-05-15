@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 function Instruction(props) {
     var listItems = props.listItems;
@@ -11,7 +12,7 @@ function Instruction(props) {
     return (
         <div className="row"><div className="col-md-6 offset-md-3">
             <div className="list-group">
-                <a href="/" className="list-group-item list-group-item-primary text-center">Instructions</a>
+                <Link to="/" className="list-group-item list-group-item-primary text-center">Instructions</Link>
             </div>
             <div className="list-group">
                 {listItemsJSX}

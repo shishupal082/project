@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 // import App from './yard-s17/App';
 // import App from './Demo/App';
 import App from './management/App';
+// import App from './hooks/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

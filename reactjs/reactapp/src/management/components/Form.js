@@ -1,6 +1,10 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
 import FormFields from './FormFields';
 import $S from "../../interface/stack.js";
+
+
 
 var TextFilter = $S.getTextFilter();
 
@@ -40,7 +44,9 @@ class Form extends React.Component {
         this.props.handleChange(e, fieldName, value, formRowId);
     }
     onSubmit(e) {
-        e.preventDefault();
+        if (e.target.name !== "printDisplay") {
+            e.preventDefault();
+        }
         this.props.handleFormSubmit();
         return false;
     }
@@ -59,15 +65,18 @@ class Form extends React.Component {
         }
         return (
             <div>
-                <form method='POST' onSubmit={this.onSubmit}>
+                <form method='GET' action='/credits' onSubmit={this.onSubmit}>
                     <hr className="form-control-range border-top-0"/>
                     <div className="form-row justify-content-center form-heading">
-                        <a href = "/"><h2>{this.props.formHeading}</h2></a>
+                        <Link to="/"><h2>{this.props.formHeading}</h2></Link>
                     </div>
                     {formFields}
                     <div className="row justify-content-center form-action">
                         <FormFields fieldData={formActionData} onChange={this.handleChange} onClick={this.handleClick}/>
                     </div>
+                    <div className="row justify-content-center form-action"><div className="col">
+                        <Link to="/credits"><button name="printDisplay" onClick={this.onSubmit} className="list-group-item list-group-item-action list-group-item-success text-center">Print Display</button></Link>
+                    </div></div>
                     <hr className="form-control-range"/>
                 </form>
             </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 function Home(props) {
     var listItems = props.listItems;
@@ -9,7 +10,7 @@ function Home(props) {
             if (item.className) {
                 itemCls += item.className;
             }
-            return <a href={item.url} key={index} className={itemCls}>{item.text}</a>
+            return <Link key={index} to={item.url} className={itemCls}>{item.text}</Link>;
         });
     }
 
@@ -26,7 +27,7 @@ function Home(props) {
                 </div>
                 <div className="list-group">
                     {listItemsJSX}
-                    <a href="/form"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></a>
+                    <Link to="/form"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></Link>
                 </div>
             </div>
         </div>

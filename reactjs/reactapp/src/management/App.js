@@ -168,7 +168,6 @@ class App extends React.Component {
                     {form}
                   </Route>
                   <Route exact path="/credits">
-                    {form}
                     {printDisplay}
                   </Route>
                   <Route path="/instructions">
