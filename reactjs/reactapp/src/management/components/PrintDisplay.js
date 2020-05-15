@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import FormFields from './FormFields';
 
 class PrintDisplay extends React.Component {
@@ -23,8 +24,13 @@ class PrintDisplay extends React.Component {
                     </tbody></table>
                 </div>;
         }
+        var backIconStyle = {height: "20px", margin:"0px 5px 5px 0px"}
+        var backIcon = <img style={backIconStyle} src={this.props.backIconUrl} alt="back"/>;
         return (
             <div>
+                <table className="d-print-none"><tbody><tr><td>
+                    <Link to="/form"><h2>{backIcon}Go Back</h2></Link>
+                </td></tr></tbody></table>
                 <FormFields fieldData={printHeading}/>
                 {bodyTag}
                 <FormFields fieldData={printFooter}/>

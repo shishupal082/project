@@ -4,6 +4,7 @@ const AppConstant = {
     TEXT_JS: "application/javascript",
     TEXT_HTML: "text/html",
     TEXT_CSS: "text/css",
+    TEXT_SVG: "text/xml",
     TEXT_PLAIN: "text/plain",
     IMAGE_X_ICON: "image/x-icon",
     IMAGE_JPG: "image/jpg",
@@ -19,7 +20,8 @@ AppConstant["fileMediaType"] = {
 	".css": AppConstant.TEXT_CSS,
     ".ico": AppConstant.IMAGE_X_ICON,
     ".jpg": AppConstant.IMAGE_JPG,
-    ".jpeg": AppConstant.IMAGE_JPEG
+    ".jpeg": AppConstant.IMAGE_JPEG,
+    ".svg": AppConstant.TEXT_SVG
 };
 module.exports = AppConstant;
 

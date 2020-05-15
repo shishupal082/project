@@ -14,6 +14,7 @@ var baseapi = $$.baseapi;
 var api = $$.api;
 var formApi = $$.formApi;
 var printDataApi = $$.printDataApi;
+var backIconUrl = baseapi + $$.backIconUrl;
 
 if ($S.isArray(formApi)) {
     for(var i=0; i<formApi.length; i++) {
@@ -154,7 +155,7 @@ class App extends React.Component {
         if ($S.isString(LOGO_URL) && LOGO_URL.length > 0) {
             logoUrl = baseapi + LOGO_URL;
         }
-        var printDisplay = <PrintDisplay state={this.state} printData={this.printData}/>;
+        var printDisplay = <PrintDisplay state={this.state} printData={this.printData} backIconUrl={backIconUrl}/>;
         var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}
                     addNewRow={this.addNewRow} removeRow={this.removeRow}
                     handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}/>;
