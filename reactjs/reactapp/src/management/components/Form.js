@@ -21,11 +21,13 @@ class Form extends React.Component {
     handleClick(e) {
         var fieldName = e.target.name;
         if (fieldName === "addNewRow") {
+            e.preventDefault();
             var value = e.target.value;
             this.props.addNewRow(value);
             return false;
         }
         if (fieldName === "delete") {
+            e.preventDefault();
             var fieldRow = e.target.parentElement.parentElement;
             var rowClassName = fieldRow.className;
             if (TextFilter(rowClassName).hasClass("form-row")) {
@@ -45,6 +47,7 @@ class Form extends React.Component {
     }
     onSubmit(e) {
         var targetName = e.target.name;
+        targetName = $S.isString(targetName) ? targetName : "";
         if (targetName !== "printDisplay") {
             e.preventDefault();
         }

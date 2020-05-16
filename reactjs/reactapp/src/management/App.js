@@ -58,7 +58,7 @@ class App extends React.Component {
             return false;
         }
         var updatedRowFields = this.state.formRowFields.filter(function(el, index, arr) {
-            if (el.formRowId === formRowId) {
+            if (el.formRowId.toString() === formRowId) {
                 return false;
             }
             return true;
