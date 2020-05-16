@@ -21,6 +21,14 @@ html{
 .print-logo {
     width: 70px;
 }
+hr.line-spacer {
+    margin: 0;
+    padding: 10px 0;
+    border-top: 0;
+}
+.page-break {
+    page-break-before: always;
+}
 .font-10px {
     font-size: 10px;
 }

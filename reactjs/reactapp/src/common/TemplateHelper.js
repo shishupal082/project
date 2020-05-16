@@ -94,7 +94,7 @@ Template.extend({
         }
         var field = {};
         for (var i = 0; i < formRowFields.length; i++) {
-            if (formRowFields[i].formRowId.toString() === formRowId) {
+            if (formRowFields[i].formRowId === formRowId) {
                 field = TemplateHelper(formRowFields[i].templateData).searchField(fieldName);
                 break;
             }
@@ -104,6 +104,18 @@ Template.extend({
         }
         // console.log(field);
         return formRowFields;
+    },
+    updateTemplateValue: function(template, values) {
+        var field = {};
+        if ($S.isObject(values)) {
+            for (var fieldName in values) {
+                field = TemplateHelper(template).searchField(fieldName);
+                if (field.name === fieldName) {
+                    updateField(field, {"setValue": values[fieldName]});
+                }
+            }
+        }
+        return template;
     }
 });
 Template.extend({

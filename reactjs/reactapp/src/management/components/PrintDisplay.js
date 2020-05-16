@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import FormFields from './FormFields';
+import $S from "../../interface/stack.js";
 
 class PrintDisplay extends React.Component {
     constructor(props) {
@@ -13,14 +14,34 @@ class PrintDisplay extends React.Component {
     }
     render () {
         var printData = this.props.printData;
+        var emptyRowTemplate = $S.clone(printData["type1RowTemplate"]);
         var printHeading = printData["printHeading"];
         var printFooter = printData["printFooter"];
         var fieldRow = printData["fieldRow"];
+        var totalRow = printData["totalRow"];
+        var emptyRow = [];
+        if ($S.isArray(fieldRow)) {
+            var emptyRowCount = 0;
+            if (fieldRow.length < 5) {
+                emptyRowCount = 30;
+            } else if (fieldRow.length < 15) {
+                emptyRowCount = 20;
+            } else if (fieldRow.length < 30) {
+                emptyRowCount = 5;
+            } else {
+                emptyRowCount = 2;
+            }
+            for(var i=0; i < emptyRowCount; i++) {
+                emptyRow.push(emptyRowTemplate);
+            }
+        }
         var bodyTag = "";
         if (fieldRow && fieldRow.length > 0) {
             bodyTag = <div className="print-body">
                     <table className="table"><tbody>
                         <FormFields fieldData={fieldRow}/>
+                        <FormFields fieldData={emptyRow}/>
+                        <FormFields fieldData={totalRow}/>
                     </tbody></table>
                 </div>;
         }

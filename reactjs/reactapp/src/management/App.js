@@ -4,17 +4,26 @@ import $S from "../interface/stack.js";
 import $$ from '../interface/global';
 import Api from "../common/Api";
 import TemplateHelper from "../common/TemplateHelper";
+import PrintHelper from "./PrintHelper";
 
 import Home from "./components/Home";
 import Instructions from "./components/Instructions";
 import Form from "./components/Form";
 import PrintDisplay from "./components/PrintDisplay";
+import initialize from "./Initialize";
 
 var baseapi = $$.baseapi;
-var api = $$.api;
-var formApi = $$.formApi;
-var printDataApi = $$.printDataApi;
+var homeDataApi = baseapi + $$.homeDataApi;
+var printDataApi = baseapi + $$.printDataApi;
 var backIconUrl = baseapi + $$.backIconUrl;
+var formPostUrl = baseapi + $$.formPostUrl;
+var initialPrintDataApi = null;
+if ($S.isString($$.initialPrintDataApi)) {
+    initialPrintDataApi = baseapi + $$.initialPrintDataApi;
+}
+
+
+var formApi = $$.formApi;
 
 if ($S.isArray(formApi)) {
     for(var i=0; i<formApi.length; i++) {
@@ -58,7 +67,7 @@ class App extends React.Component {
             return false;
         }
         var updatedRowFields = this.state.formRowFields.filter(function(el, index, arr) {
-            if (el.formRowId.toString() === formRowId) {
+            if (el.formRowId === formRowId) {
                 return false;
             }
             return true;
@@ -72,15 +81,12 @@ class App extends React.Component {
             if (templateData) {
                 var formRowFields = this.state.formRowFields;
                 formRowFields.push({templateData: templateData,
-                                formRowId: this.state.formRowFields.length+1,//"form-row-"+$S.getUniqueNumber()
+                                formRowId: "row-" + this.state.formRowFields.length,//"form-row-"+$S.getUniqueNumber()
                                 templateName: templateName});
                 this.setState({formRowFields: formRowFields});
             }
         }
         // console.log(this.state.formRowFields);
-    }
-    handleClick(e, fieldName, currentValue, formRowId) {
-
     }
     handleChange(e, fieldName, currentValue, formRowId) {
         var formRowFields = this.state.formRowFields;
@@ -93,7 +99,10 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
-        $S.loadJsonData(null, [baseapi + api + "?" + $S.getRequestId()], function(response) {
+        if ($S.isString(initialPrintDataApi)) {
+            initialize(self, $S, TemplateHelper, Api, initialPrintDataApi);
+        }
+        $S.loadJsonData(null, [homeDataApi + "?" + $S.getRequestId()], function(response) {
             if ($S.isObject(response)) {
                 LOGO_URL = response.LOGO_URL;
                 homeListItems = response.homeListItems;
@@ -105,14 +114,16 @@ class App extends React.Component {
             self.setState({isLoaded: true});
         }, null, null, Api.getAjaxApiCallMethod());
 
-        $S.loadJsonData(null, [baseapi + printDataApi + "?" + $S.getRequestId()], function(response) {
+        $S.loadJsonData(null, [printDataApi + "?" + $S.getRequestId()], function(response) {
             if ($S.isObject(response)) {
                 self.printData = response;
             } else {
                 $S.log("Invalid response (printData):" + response);
             }
             self.setState({isLoaded: true});
-        }, null, null, Api.getAjaxApiCallMethod());
+        }, function() {
+            self.printData["fieldRow"] = [$S.clone(self.printData["printBodyUser"])];
+        }, null, Api.getAjaxApiCallMethod());
 
         $S.loadJsonData(null, formApi, function(response) {
             if ($S.isObject(response)) {
@@ -128,7 +139,7 @@ class App extends React.Component {
         }, function() {
             var formRowFields = self.state.formRowFields;
             formRowFields.push({templateData: self.formData["userDetails"],
-                formRowId: 1});//"form-row-"+$S.getUniqueNumber()
+                formRowId: "row-0", templateName: "userDetails"});//"form-row-"+$S.getUniqueNumber()
             self.setState({formRowFields: formRowFields});
         }, null, Api.getAjaxApiCallMethod());
     }
@@ -137,7 +148,6 @@ class App extends React.Component {
         this.setState({formValues: formValues});
         this.formData["formValues"] = formValues;
         this.printData["fieldRow"] = [];
-        var totalRow = this.printData["totalRow"];
         for(var i=0; i<formValues.length; i++) {
             if ($S.isString(formValues[i].name)) {
                 template = $S.clone(this.printData["printBodyUser"]);
@@ -149,7 +159,6 @@ class App extends React.Component {
             TemplateHelper.setTemplateTextByFormValues(template, formValues[i]);
             this.printData["fieldRow"].push(template);
         }
-        this.printData["fieldRow"].push(totalRow);
         var validationResult = TemplateHelper.validateData(this.formData.formValues);
         if (validationResult.status === "FAILURE") {
             var formRowFields = this.state.formRowFields;
@@ -160,6 +169,9 @@ class App extends React.Component {
         } else if (targetName !== "printDisplay") {
             window.alert(validationResult.alertMessage);
         }
+        console.log(this.state.formRowFields);
+        var Print = PrintHelper(this.formData.formValues);
+        console.log(PrintHelper.getDetails(Print));
         // console.log("App.handleFormSubmit:");
         // console.log(this.formData.formValues);
     }
@@ -169,7 +181,7 @@ class App extends React.Component {
             logoUrl = baseapi + LOGO_URL;
         }
         var form = <Form state={this.state} formHeading={this.formHeading}
-                    formData={this.formData}
+                    formData={this.formData} formPostUrl={formPostUrl}
                     addNewRow={this.addNewRow} removeRow={this.removeRow}
                     handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}/>;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;

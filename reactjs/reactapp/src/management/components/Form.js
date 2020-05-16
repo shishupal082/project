@@ -71,7 +71,7 @@ class Form extends React.Component {
         }
         return (
             <div>
-                <form method='GET' action='/print' onSubmit={this.onSubmit}>
+                <form method="POST" action={this.props.formPostUrl} onSubmit={this.onSubmit}>
                     <div className="form-row justify-content-center form-heading">
                         <Link to="/"><h2>{this.props.formHeading}</h2></Link>
                     </div>
