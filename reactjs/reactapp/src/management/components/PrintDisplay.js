@@ -29,7 +29,7 @@ class PrintDisplay extends React.Component {
         return (
             <div>
                 <table className="d-print-none"><tbody><tr><td>
-                    <Link to="/form"><h2 className="d-inline-block">{backIcon}Go Back</h2></Link> (Not be printed)
+                    <Link to="/form"><h2 className="d-inline-block">{backIcon}Edit</h2></Link>
                 </td></tr></tbody></table>
                 <FormFields fieldData={printHeading}/>
                 {bodyTag}

@@ -34,7 +34,7 @@ class App extends React.Component {
             formRowFields: [],
             formValues: []
         };
-        this.formData = {};
+        this.formData = {"formValues": []};
         this.printData = {};
         this.addNewRow = this.addNewRow.bind(this);
         this.removeRow = this.removeRow.bind(this);
@@ -46,7 +46,8 @@ class App extends React.Component {
         for(var i=0; i<this.state.formRowFields.length; i++) {
             formValue = {};
             formValue["formRowId"] = this.state.formRowFields[i]["formRowId"];
-            TemplateHelper(this.state.formRowFields[i].templateData).getFieldData(formValue);
+            formValue["templateName"] = this.state.formRowFields[i]["templateName"];
+            TemplateHelper(this.state.formRowFields[i].templateData).generateFormValues(formValue);
             formValues.push(formValue);
         }
         // console.log(formValues);
@@ -70,7 +71,9 @@ class App extends React.Component {
             var templateData = $S.clone(this.formData[templateName]);
             if (templateData) {
                 var formRowFields = this.state.formRowFields;
-                formRowFields.push({templateData: templateData, formRowId: "form-row-"+$S.getUniqueNumber()});
+                formRowFields.push({templateData: templateData,
+                                formRowId: this.state.formRowFields.length+1,//"form-row-"+$S.getUniqueNumber()
+                                templateName: templateName});
                 this.setState({formRowFields: formRowFields});
             }
         }
@@ -80,12 +83,9 @@ class App extends React.Component {
 
     }
     handleChange(e, fieldName, currentValue, formRowId) {
-        var formRowFields = this.state.formRowFields.filter(function(item, index, arr) {
-            if (formRowId === item.formRowId) {
-                TemplateHelper(item.templateData).updateField(fieldName, currentValue);
-            }
-            return true;
-        });
+        var formRowFields = this.state.formRowFields;
+        var attr = {"removeClass": "is-invalid", "setValue": currentValue};
+        TemplateHelper.updateFieldByAttr(formRowFields, formRowId, fieldName, attr);
         this.setState({formRowFields: formRowFields});
     }
     componentDidMount() {
@@ -128,39 +128,51 @@ class App extends React.Component {
         }, function() {
             var formRowFields = self.state.formRowFields;
             formRowFields.push({templateData: self.formData["userDetails"],
-                formRowId: "form-row-"+$S.getUniqueNumber()});
+                formRowId: 1});//"form-row-"+$S.getUniqueNumber()
             self.setState({formRowFields: formRowFields});
         }, null, Api.getAjaxApiCallMethod());
     }
-    handleFormSubmit() {
-        var formValues = this.getFormValues(), fieldRow;
+    handleFormSubmit(targetName) {
+        var formValues = this.getFormValues(), template = {};
         this.setState({formValues: formValues});
+        this.formData["formValues"] = formValues;
         this.printData["fieldRow"] = [];
         var totalRow = this.printData["totalRow"];
         for(var i=0; i<formValues.length; i++) {
             if ($S.isString(formValues[i].name)) {
-                fieldRow = TemplateHelper($S.clone(this.printData["printBodyUser"])).assignDisplayText(formValues[i]);
+                template = $S.clone(this.printData["printBodyUser"]);
             } else if ($S.isString(formValues[i].distance)) {
-                fieldRow = TemplateHelper($S.clone(this.printData["type1RowTemplate"])).assignDisplayText(formValues[i]);
+                template = $S.clone(this.printData["type1RowTemplate"]);
             } else {
-                fieldRow = TemplateHelper($S.clone(this.printData["type2RowTemplate"])).assignDisplayText(formValues[i]);
+                template = $S.clone(this.printData["type2RowTemplate"]);
             }
-            this.printData["fieldRow"].push(fieldRow);
+            TemplateHelper.setTemplateTextByFormValues(template, formValues[i]);
+            this.printData["fieldRow"].push(template);
         }
         this.printData["fieldRow"].push(totalRow);
-        console.log(formValues);
+        var validationResult = TemplateHelper.validateData(this.formData.formValues);
+        if (validationResult.status === "FAILURE") {
+            var formRowFields = this.state.formRowFields;
+            TemplateHelper.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
+                        {"addClass": "is-invalid"});
+            this.setState({formRowFields: formRowFields});
+            window.alert(validationResult.alertMessage);
+        } else if (targetName !== "printDisplay") {
+            window.alert(validationResult.alertMessage);
+        }
+        // console.log("App.handleFormSubmit:");
+        // console.log(this.formData.formValues);
     }
     render() {
         var logoUrl = false;
         if ($S.isString(LOGO_URL) && LOGO_URL.length > 0) {
             logoUrl = baseapi + LOGO_URL;
         }
-        var printDisplay = <PrintDisplay state={this.state} printData={this.printData} backIconUrl={backIconUrl}/>;
-        var form = <Form state={this.state} formHeading={this.formHeading} formData={this.formData}
+        var form = <Form state={this.state} formHeading={this.formHeading}
+                    formData={this.formData}
                     addNewRow={this.addNewRow} removeRow={this.removeRow}
                     handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}/>;
         var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
-        var instructions = <Instructions listItems={instructionsListItems}/>;
          return (<div className="container"><BrowserRouter><Switch>
                   <Route exact path="/">
                     {home}
@@ -168,11 +180,11 @@ class App extends React.Component {
                   <Route exact path="/form">
                     {form}
                   </Route>
-                  <Route exact path="/credits">
-                    {printDisplay}
+                  <Route exact path="/print">
+                    <PrintDisplay printData={this.printData} backIconUrl={backIconUrl}/>
                   </Route>
                   <Route path="/instructions">
-                    {instructions}
+                    <Instructions listItems={instructionsListItems}/>
                   </Route>
                   <Route>
                     {home}

@@ -33,15 +33,11 @@ html{
 .w28 {
     width: 28%;
 }
-.w100 {
-    width: 100%;
-}
 .table-boundary {
     border: 1px solid;
 }
-.span-block {
-    display: block;
-    width: 100%;
+.padding-0_5-rem {
+    padding: 0.5rem;
 }
 /*For table */
 .vertical-align-top {
@@ -53,5 +49,9 @@ html{
 }
 .print-body table tr td {
     border: 1px solid;
+}
+.form-heading {
+    padding-top: 44px;
+    padding-bottom: 44px;
 }
 

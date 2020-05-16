@@ -44,10 +44,13 @@ class Form extends React.Component {
         this.props.handleChange(e, fieldName, value, formRowId);
     }
     onSubmit(e) {
-        if (e.target.name !== "printDisplay") {
+        var targetName = e.target.name;
+        if (targetName !== "printDisplay") {
             e.preventDefault();
         }
-        this.props.handleFormSubmit();
+        this.props.handleFormSubmit(targetName);
+        // console.log("Form.onSubmit:");
+        // console.log(this.props.formData.formValues);
         return false;
     }
     render () {
@@ -65,8 +68,7 @@ class Form extends React.Component {
         }
         return (
             <div>
-                <form method='GET' action='/credits' onSubmit={this.onSubmit}>
-                    <hr className="form-control-range border-top-0"/>
+                <form method='GET' action='/print' onSubmit={this.onSubmit}>
                     <div className="form-row justify-content-center form-heading">
                         <Link to="/"><h2>{this.props.formHeading}</h2></Link>
                     </div>
@@ -75,7 +77,7 @@ class Form extends React.Component {
                         <FormFields fieldData={formActionData} onChange={this.handleChange} onClick={this.handleClick}/>
                     </div>
                     <div className="row justify-content-center form-action"><div className="col">
-                        <Link to="/credits"><button name="printDisplay" onClick={this.onSubmit} className="list-group-item list-group-item-action list-group-item-success text-center">Print Display</button></Link>
+                        <Link to="/print"><button name="printDisplay" onClick={this.onSubmit} className="list-group-item list-group-item-action list-group-item-success text-center">Print Display</button></Link>
                     </div></div>
                     <hr className="form-control-range"/>
                 </form>

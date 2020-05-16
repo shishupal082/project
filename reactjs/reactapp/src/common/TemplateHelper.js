@@ -1,5 +1,6 @@
 import $S from '../interface/stack.js';
-var TemplateHelper
+var TemplateHelper;
+var TextFilter = $S.getTextFilter();
 (function($S) {
 var Template = function(template) {
     return new Template.fn.init(template);
@@ -10,69 +11,166 @@ Template.fn = Template.prototype = {
         this.template = template;
         return this;
     },
-    updateField: function(fieldName, value) {
-        if (!$S.isString(fieldName) || !$S.isString(value)) {
-            console.log("Invalid fieldName or value: " + fieldName + ", " + value);
-            return false;
+    searchField: function (fieldName) {
+        if (!$S.isString(fieldName)) {
+            return {};
         }
+        var field = {};
         if ($S.isArray(this.template)) {
-            for (var i = this.template.length - 1; i >= 0; i--) {
-                Template(this.template[i]).updateField(fieldName, value);
+            for (var i = 0; i<this.template.length; i++) {
+                field = Template(this.template[i]).searchField(fieldName);
+                if (field.name === fieldName) {
+                    return field;
+                }
             }
         } else if ($S.isObject(this.template)) {
-            // name will be unique in each template
             if (this.template["name"] === fieldName) {
-                this.template["value"] = value;
-                // console.log(fieldName + ":::" + value);
+                return this.template;
             }
-            Template(this.template["text"]).updateField(fieldName, value);
-            return true;
+            return Template(this.template["text"]).searchField(fieldName);
         }
-        return false;
+        return {};
     },
-    getFieldData: function(res) {
+    generateFormValues: function(formValue) {
         var i;
         if ($S.isObject(this.template)) {
             if ($S.isString(this.template.name)) {
-                res[this.template.name] = this.template.value;
+                formValue[this.template.name] = this.template.value;
             }
             if ($S.isArray(this.template.text)) {
                 for (i = 0; i<this.template.text.length; i++) {
-                    Template(this.template.text[i]).getFieldData(res);
+                    Template(this.template.text[i]).generateFormValues(formValue);
                 }
             } else if ($S.isObject(this.template.text)) {
-                Template(this.template.text).getFieldData(res);
+                Template(this.template.text).generateFormValues(formValue);
             }
         } else if ($S.isArray(this.template)) {
             for (i = 0; i<this.template.length; i++) {
-                Template(this.template[i]).getFieldData(res);
+                Template(this.template[i]).generateFormValues(formValue);
             }
         }
-        return res;
-    },
-    assignDisplayText: function(templateData) {
-        var i;
-        if ($S.isObject(this.template)) {
-            if ($S.isString(this.template.name) && templateData[this.template.name]) {
-                this.template.text = templateData[this.template.name];
-            }
-            if ($S.isArray(this.template.text)) {
-                for (i = 0; i<this.template.text.length; i++) {
-                    Template(this.template.text[i]).assignDisplayText(templateData);
-                }
-            } else if ($S.isObject(this.template.text)) {
-                Template(this.template.text).assignDisplayText(templateData);
-            }
-        } else if ($S.isArray(this.template)) {
-            for (i = 0; i<this.template.length; i++) {
-                Template(this.template[i]).assignDisplayText(templateData);
-            }
-        }
-        return this.template;
+        return formValue;
     }
 };
 $S.extendObject(Template);
-
+function updateField(field, attr) {
+    if ($S.isObject(field) && $S.isObject(attr)) {
+        for (var key in attr) {
+            switch(key) {
+                case "addClass":
+                    field.className = TextFilter(field.className).addClass(attr[key]).getClassName();
+                break;
+                case "removeClass":
+                    field.className = TextFilter(field.className).removeClass(attr[key]).getClassName();
+                break;
+                case "setValue":
+                    field.value = attr[key];
+                break;
+                case "setText":
+                    field.text = attr[key];
+                break;
+                default:
+                break;
+            }
+        }
+    }
+}
+Template.extend({
+    setTemplateTextByFormValues: function(template, formValues) {
+        var field = {};
+        if ($S.isObject(formValues)) {
+            for (var fieldName in formValues) {
+                field = TemplateHelper(template).searchField(fieldName);
+                if (field.name === fieldName) {
+                    updateField(field, {"setText": formValues[fieldName]});
+                }
+            }
+        }
+        return template;
+    },
+    updateFieldByAttr: function (formRowFields, formRowId, fieldName, attr) {
+        if (!$S.isArray(formRowFields) || !$S.isString(formRowId) || !$S.isString(fieldName)) {
+            return formRowFields;
+        }
+        var field = {};
+        for (var i = 0; i < formRowFields.length; i++) {
+            if (formRowFields[i].formRowId.toString() === formRowId) {
+                field = TemplateHelper(formRowFields[i].templateData).searchField(fieldName);
+                break;
+            }
+        }
+        if (field.name === fieldName) {
+            updateField(field, attr);
+        }
+        // console.log(field);
+        return formRowFields;
+    }
+});
+Template.extend({
+    validateData: function(formValues) {
+        var response = {"status": "SUCCESS", "alertMessage": "Data saved: Click on Print Display."};
+        var formRowId, fieldName;
+        if ($S.isArray(formValues) && formValues.length > 1) {
+            var lastDateTime = 0, keys =[], sd, ed, dt, at, sdO, edO;
+            for (var i = 1; i < formValues.length; i++) {
+                formRowId = formValues[i]["formRowId"];
+                if (!$S.isObject(formValues[i])) {
+                    continue;
+                }
+                keys = Object.keys(formValues[i]);
+                sd = formValues[i]["startDate"];
+                ed = formValues[i]["endDate"];
+                dt = "";
+                at = "";
+                sdO = new Date(sd);
+                edO = new Date(ed);
+                if (!$S.isNumber(sdO.getTime()) || !$S.isNumber(edO.getTime())) {
+                    fieldName = $S.isNumber(sdO.getTime()) ? "endDate" : "startDate";
+                    response["status"] = "FAILURE";
+                    response["reason"] = "InvalidDate";
+                    response["alertMessage"] = "Invalid start date or end date";
+                    break;
+                }
+                if (sdO.getTime() > edO.getTime()) {
+                    fieldName = "endDate";
+                    response["status"] = "FAILURE";
+                    response["reason"] = "InvalidStartDate";
+                    response["alertMessage"] = "End Date should not be before Start Date";
+                    break;
+                }
+                if (keys.length > 6) {
+                    dt = formValues[i]["departureTime"];
+                    at = formValues[i]["arrivalTime"];
+                    if (sdO.getTime() === edO.getTime()) {
+                        if (at < dt) {
+                            fieldName = "arrivalTime";
+                            response["status"] = "FAILURE";
+                            response["reason"] = "InvalidDepartureTime";
+                            response["alertMessage"] = "Departure time cannot be after arrival time";
+                            break;
+                        }
+                    }
+                }
+                sdO = new Date(sd + " " + dt);
+                if ($S.isNumber(lastDateTime) && lastDateTime > sdO.getTime()) {
+                    fieldName = "startDate";
+                    response["status"] = "FAILURE";
+                    response["reason"] = "InvalidDepartureTime";
+                    response["alertMessage"] = "Start date of next journey cannot be before end date of previous journey";
+                    break;
+                }
+                lastDateTime = new Date(ed + " " + at).getTime();
+            }
+        } else {
+            response["status"] = "FAILURE";
+            response["reason"] = "AtLeastOneEntry";
+            response["alertMessage"] = "At least one entry required";
+        }
+        response["formRowId"] = formRowId;
+        response["fieldName"] = fieldName;
+        return response;
+    }
+});
 TemplateHelper = Template;
 })($S);
 export default TemplateHelper;
