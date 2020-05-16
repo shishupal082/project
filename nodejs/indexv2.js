@@ -3,6 +3,7 @@ const app = express();
 const http = require('http').Server(app);
 const fs = require("fs");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 const AppConstant = require("./static/AppConstant.js");
 const config = require("./static/config.js");
@@ -13,6 +14,10 @@ const File = require("./static/apis/file.js");
 
 const hostname = config.hostname;
 const port = config.port;
+
+//For post request parsing data
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
 
 // var filePath = "/nodejs/package.json";
 // var file = File.getFile(filePath);
@@ -156,6 +161,14 @@ app.get('/file', function(req, res, next) {
         console.log(response);
         res.end(JSON.stringify(response));
     }
+});
+
+app.post("/post", function(req, res) {
+    var postData = req.body;
+    console.log(postData);
+    res.statusCode = 200;
+    res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
+    res.end(JSON.stringify(postData));
 });
 
 app.get('*', function(req, res){

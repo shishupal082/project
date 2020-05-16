@@ -32,4 +32,8 @@ class App extends CI_Controller {
 	public function multiple_view() {
 		$this->load->view("app/multiple_view");
 	}
+	public function post() {
+		log_message_prod("Post request: ".json_encode($_POST));
+		echo(json_encode($_POST));
+	}
 }
