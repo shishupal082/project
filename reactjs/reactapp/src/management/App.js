@@ -50,6 +50,33 @@ class App extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
+    getFormRowTemplate(templateName) {
+        if ($S.isString(templateName) && !$S.isUndefined(this.formData[templateName])) {
+            return $S.clone(this.formData[templateName]);
+        }
+        return null;
+    }
+    getPrintDataTemplate(templateName) {
+        if ($S.isString(templateName) && !$S.isUndefined(this.printData[templateName])) {
+            return $S.clone(this.printData[templateName]);
+        }
+        return null;
+    }
+    adjustFormRowFieldsRowId(formRowFields) {
+        if (!$S.isArray(formRowFields)) {
+            return [];
+        }
+        formRowFields = formRowFields.filter(function(el, index, arr) {
+            if ($S.isObject(el)) {
+                return true;
+            }
+            return false;
+        });
+        for(var i=0; i<formRowFields.length; i++) {
+            formRowFields[i].formRowId = "row-" + i;
+        }
+        return formRowFields;
+    }
     getFormValues() {
         var formValues = [], formValue = {};
         for(var i=0; i<this.state.formRowFields.length; i++) {
@@ -72,12 +99,17 @@ class App extends React.Component {
             }
             return true;
         });
-        this.setState({formRowFields: updatedRowFields});
+        updatedRowFields = this.adjustFormRowFieldsRowId(updatedRowFields);
+        this.setState({formRowFields: updatedRowFields}, function() {
+            var formValues = this.getFormValues();
+            this.formData["formValues"] = formValues;
+            this.setState({formValues: formValues});
+        });
         // console.log(this.state.formRowFields);
     }
     addNewRow(templateName) {
         if($S.isString(templateName)) {
-            var templateData = $S.clone(this.formData[templateName]);
+            var templateData = this.getFormRowTemplate(templateName);
             if (templateData) {
                 var formRowFields = this.state.formRowFields;
                 formRowFields.push({templateData: templateData,
@@ -122,7 +154,7 @@ class App extends React.Component {
             }
             self.setState({isLoaded: true});
         }, function() {
-            self.printData["fieldRow"] = [$S.clone(self.printData["printBodyUser"])];
+            self.printData["fieldRow"] = self.getPrintDataTemplate("printBodyUser");
         }, null, Api.getAjaxApiCallMethod());
 
         $S.loadJsonData(null, formApi, function(response) {
@@ -138,7 +170,7 @@ class App extends React.Component {
             }
         }, function() {
             var formRowFields = self.state.formRowFields;
-            formRowFields.push({templateData: self.formData["userDetails"],
+            formRowFields.push({templateData: self.getFormRowTemplate("userDetails"),
                 formRowId: "row-0", templateName: "userDetails"});//"form-row-"+$S.getUniqueNumber()
             self.setState({formRowFields: formRowFields});
         }, null, Api.getAjaxApiCallMethod());
@@ -150,11 +182,11 @@ class App extends React.Component {
         this.printData["fieldRow"] = [];
         for(var i=0; i<formValues.length; i++) {
             if ($S.isString(formValues[i].name)) {
-                template = $S.clone(this.printData["printBodyUser"]);
+                template = this.getPrintDataTemplate("printBodyUser");
             } else if ($S.isString(formValues[i].distance)) {
-                template = $S.clone(this.printData["type1RowTemplate"]);
+                template = this.getPrintDataTemplate("type1RowTemplate");
             } else {
-                template = $S.clone(this.printData["type2RowTemplate"]);
+                template = this.getPrintDataTemplate("type2RowTemplate");
             }
             TemplateHelper.setTemplateTextByFormValues(template, formValues[i]);
             this.printData["fieldRow"].push(template);
@@ -169,7 +201,7 @@ class App extends React.Component {
         } else if (targetName !== "printDisplay") {
             window.alert(validationResult.alertMessage);
         }
-        console.log(this.state.formRowFields);
+        // console.log(this.state.formRowFields);
         var Print = PrintHelper(this.formData.formValues);
         console.log(PrintHelper.getDetails(Print));
         // console.log("App.handleFormSubmit:");

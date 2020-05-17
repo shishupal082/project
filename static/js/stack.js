@@ -77,6 +77,12 @@ var skipValuesInResult = [];
 var RequestId = 0;
 var LoggerInfo;
 var Last1000UniqueNumberQue;
+function isUndefined(value) {
+    if (typeof value == "undefined") {
+        return true;
+    }
+    return false;
+}
 function isString(value) {
     return typeof value == "string";
 }
@@ -1307,6 +1313,9 @@ Stack.extend({
     },
     setLoggerDateTimeState: function(state,formats,splitter) {
         Logger.setDateTimeState(state,formats,splitter);
+    },
+    isUndefined: function(value) {
+        return isUndefined(value);
     },
     isString: function(value) {
         return isString(value);
