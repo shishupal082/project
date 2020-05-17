@@ -69,6 +69,11 @@ function updateField(field, attr) {
                 case "setText":
                     field.text = attr[key];
                 break;
+                case "replaceTextPattern":
+                    if ($S.isString(field.text) && $S.isString(field.pattern)) {
+                        field.text = field.text.replace(field.pattern, attr[key]);
+                    }
+                break;
                 default:
                 break;
             }
@@ -113,6 +118,16 @@ Template.extend({
                 if (field.name === fieldName) {
                     updateField(field, {"setValue": values[fieldName]});
                 }
+            }
+        }
+        return template;
+    },
+    replaceTextPattern: function(template, fieldName, patternValue) {
+        var field = {};
+        if ($S.isString(fieldName) && $S.isString(patternValue)) {
+            field = TemplateHelper(template).searchField(fieldName);
+            if (field.name === fieldName) {
+                updateField(field, {"replaceTextPattern": patternValue});
             }
         }
         return template;

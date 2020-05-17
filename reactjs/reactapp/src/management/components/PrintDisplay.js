@@ -18,7 +18,10 @@ class PrintDisplay extends React.Component {
         var printHeading = printData["printHeading"];
         var printFooter = printData["printFooter"];
         var fieldRow = printData["fieldRow"];
-        var totalRow = printData["totalRow"];
+        var totalRow = null;
+        if (this.props.totalRow && this.props.totalRow.tag) {
+            totalRow = this.props.totalRow;
+        }
         var emptyRow = [];
         if ($S.isArray(fieldRow)) {
             var emptyRowCount = 0;

@@ -44,7 +44,9 @@ class App extends React.Component {
             formValues: []
         };
         this.formData = {"formValues": []};
+        this.printDataTemplate = {};
         this.printData = {};
+        this.printTotalRow = {};
         this.addNewRow = this.addNewRow.bind(this);
         this.removeRow = this.removeRow.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -57,8 +59,8 @@ class App extends React.Component {
         return null;
     }
     getPrintDataTemplate(templateName) {
-        if ($S.isString(templateName) && !$S.isUndefined(this.printData[templateName])) {
-            return $S.clone(this.printData[templateName]);
+        if ($S.isString(templateName) && !$S.isUndefined(this.printDataTemplate[templateName])) {
+            return $S.clone(this.printDataTemplate[templateName]);
         }
         return null;
     }
@@ -148,13 +150,16 @@ class App extends React.Component {
 
         $S.loadJsonData(null, [printDataApi + "?" + $S.getRequestId()], function(response) {
             if ($S.isObject(response)) {
-                self.printData = response;
+                self.printDataTemplate = response;
             } else {
                 $S.log("Invalid response (printData):" + response);
             }
             self.setState({isLoaded: true});
         }, function() {
             self.printData["fieldRow"] = self.getPrintDataTemplate("printBodyUser");
+            self.printData["type1RowTemplate"] = self.getPrintDataTemplate("type1RowTemplate");
+            self.printData["printHeading"] = self.getPrintDataTemplate("printHeading");
+            self.printData["printFooter"] = self.getPrintDataTemplate("printFooter");
         }, null, Api.getAjaxApiCallMethod());
 
         $S.loadJsonData(null, formApi, function(response) {
@@ -179,18 +184,6 @@ class App extends React.Component {
         var formValues = this.getFormValues(), template = {};
         this.setState({formValues: formValues});
         this.formData["formValues"] = formValues;
-        this.printData["fieldRow"] = [];
-        for(var i=0; i<formValues.length; i++) {
-            if ($S.isString(formValues[i].name)) {
-                template = this.getPrintDataTemplate("printBodyUser");
-            } else if ($S.isString(formValues[i].distance)) {
-                template = this.getPrintDataTemplate("type1RowTemplate");
-            } else {
-                template = this.getPrintDataTemplate("type2RowTemplate");
-            }
-            TemplateHelper.setTemplateTextByFormValues(template, formValues[i]);
-            this.printData["fieldRow"].push(template);
-        }
         var validationResult = TemplateHelper.validateData(this.formData.formValues);
         if (validationResult.status === "FAILURE") {
             var formRowFields = this.state.formRowFields;
@@ -202,8 +195,40 @@ class App extends React.Component {
             window.alert(validationResult.alertMessage);
         }
         // console.log(this.state.formRowFields);
-        var Print = PrintHelper(this.formData.formValues);
-        console.log(PrintHelper.getDetails(Print));
+        this.printData["fieldRow"] = [];
+        this.printData["printFooter"] = [];
+        this.printData["totalRow"] = [];
+        var Print = PrintHelper(this.printData, this.formData.formValues);
+        var printRowData = PrintHelper.getDetails(Print);
+        var footerTemplate = null;
+        for(var i=0; i<printRowData.length; i++) {
+            if ($S.isString(printRowData[i].name)) {
+                template = this.getPrintDataTemplate("printBodyUser");
+                if (footerTemplate === null) {
+                    footerTemplate = this.getPrintDataTemplate("printFooter");
+                }
+                TemplateHelper.replaceTextPattern(footerTemplate, "acceptance", printRowData[i].name);
+                this.printData["printFooter"] = footerTemplate;
+            } else if ($S.isString(printRowData[i].distance)) {
+                template = this.getPrintDataTemplate("type1RowTemplate");
+            } else if ($S.isString(printRowData[i].totalAmount)) {
+                template = this.getPrintDataTemplate("totalRow");
+                TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
+                this.printTotalRow = template;
+                if (footerTemplate === null) {
+                    footerTemplate = this.getPrintDataTemplate("printFooter");
+                }
+                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmount", printRowData[i].totalAmount);
+                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmountText", printRowData[i].totalAmountText);
+                this.printData["printFooter"] = footerTemplate;
+                continue;
+            } else {
+                template = this.getPrintDataTemplate("type2RowTemplate");
+            }
+            TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
+            this.printData["fieldRow"].push(template);
+        }
+        console.log(printRowData);
         // console.log("App.handleFormSubmit:");
         // console.log(this.formData.formValues);
     }
@@ -225,7 +250,7 @@ class App extends React.Component {
                     {form}
                   </Route>
                   <Route exact path="/print">
-                    <PrintDisplay printData={this.printData} backIconUrl={backIconUrl}/>
+                    <PrintDisplay printData={this.printData} totalRow={this.printTotalRow} backIconUrl={backIconUrl}/>
                   </Route>
                   <Route path="/instructions">
                     <Instructions listItems={instructionsListItems}/>

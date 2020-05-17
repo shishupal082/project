@@ -1,12 +1,12 @@
 function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
-    var i;
+    var i, template;
     setTimeout(function() {
         $S.loadJsonData(null, [initialPrintDataApi + "?" + $S.getRequestId()], function(response) {
             if ($S.isArray(response)) {
                 var formRowFields = self.state.formRowFields;
                 if (formRowFields.length > response.length) {
                     for(i=0; i<response.length; i++) {
-                        var template = self.getFormRowTemplate(response[i].templateName);
+                        template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields[i] = {
                                 templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
@@ -17,7 +17,7 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                     }
                 } else {
                     for(i=0; i<formRowFields.length; i++) {
-                        var template = self.getFormRowTemplate(response[i].templateName);
+                        template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields[i] = {
                                 templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
@@ -27,7 +27,7 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                         }
                     }
                     for(i=formRowFields.length; i<response.length; i++) {
-                        var template = self.getFormRowTemplate(response[i].templateName);
+                        template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields.push({
                                 templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
