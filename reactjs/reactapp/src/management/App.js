@@ -133,7 +133,7 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
-        if ($S.isString(initialPrintDataApi)) {
+        if ($S.isString(initialPrintDataApi) && false) {
             initialize(self, $S, TemplateHelper, Api, initialPrintDataApi);
         }
         $S.loadJsonData(null, [homeDataApi + "?" + $S.getRequestId()], function(response) {
@@ -156,10 +156,12 @@ class App extends React.Component {
             }
             self.setState({isLoaded: true});
         }, function() {
-            self.printData["fieldRow"] = self.getPrintDataTemplate("printBodyUser");
-            self.printData["type1RowTemplate"] = self.getPrintDataTemplate("type1RowTemplate");
+            self.printData["fieldRow"] = [self.getPrintDataTemplate("printBodyUser")];
+            // Use for setting empty row
+            self.printData["printTemplate2"] = self.getPrintDataTemplate("printTemplate2");
             self.printData["printHeading"] = self.getPrintDataTemplate("printHeading");
             self.printData["printFooter"] = self.getPrintDataTemplate("printFooter");
+            self.handleFormSubmit("printDisplay");
         }, null, Api.getAjaxApiCallMethod());
 
         $S.loadJsonData(null, formApi, function(response) {
@@ -190,45 +192,60 @@ class App extends React.Component {
             TemplateHelper.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
                         {"addClass": "is-invalid"});
             this.setState({formRowFields: formRowFields});
-            window.alert(validationResult.alertMessage);
-        } else if (targetName !== "printDisplay") {
+        }
+        if (targetName !== "printDisplay") {
             window.alert(validationResult.alertMessage);
         }
         // console.log(this.state.formRowFields);
         this.printData["fieldRow"] = [];
         this.printData["printFooter"] = [];
         this.printData["totalRow"] = [];
-        var Print = PrintHelper(this.printData, this.formData.formValues);
+        var Print = PrintHelper(this.formData.formValues);
         var printRowData = PrintHelper.getDetails(Print);
-        var footerTemplate = null;
+        this.adjustFormRowFieldsRowId(printRowData);
+        console.log("printRowData");
+        console.log(printRowData);
+        var footerTemplate = null, footerName = PrintHelper.getDotted(30);
+        var footerTotalAmount = "";
+        var footerTotalAmountText = PrintHelper.getSpaces(150);
         for(var i=0; i<printRowData.length; i++) {
-            if ($S.isString(printRowData[i].name)) {
+            if (printRowData[i].templateName === "userDetails") {
                 template = this.getPrintDataTemplate("printBodyUser");
                 if (footerTemplate === null) {
                     footerTemplate = this.getPrintDataTemplate("printFooter");
                 }
-                TemplateHelper.replaceTextPattern(footerTemplate, "acceptance", printRowData[i].name);
+                if ($S.isString(printRowData[i].name) && printRowData[i].name.length) {
+                    footerName = printRowData[i].name;
+                }
+                TemplateHelper.replaceTextPattern(footerTemplate, "acceptance", footerName);
                 this.printData["printFooter"] = footerTemplate;
-            } else if ($S.isString(printRowData[i].distance)) {
-                template = this.getPrintDataTemplate("type1RowTemplate");
-            } else if ($S.isString(printRowData[i].totalAmount)) {
+            } else if (printRowData[i].templateName === "formTemplate1") {
+                template = this.getPrintDataTemplate("printTemplate1");
+            } else if (printRowData[i].templateName === "totalRow") {
                 template = this.getPrintDataTemplate("totalRow");
                 TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
                 this.printTotalRow = template;
                 if (footerTemplate === null) {
                     footerTemplate = this.getPrintDataTemplate("printFooter");
                 }
-                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmount", printRowData[i].totalAmount);
-                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmountText", printRowData[i].totalAmountText);
+                if ($S.isString(printRowData[i].totalAmount) && printRowData[i].totalAmount.length) {
+                    footerTotalAmount = printRowData[i].totalAmount;
+                }
+                if ($S.isString(printRowData[i].totalAmountText) && printRowData[i].totalAmountText.length) {
+                    footerTotalAmountText = printRowData[i].totalAmountText;
+                }
+                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmount", footerTotalAmount);
+                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmountText", footerTotalAmountText);
                 this.printData["printFooter"] = footerTemplate;
                 continue;
             } else {
-                template = this.getPrintDataTemplate("type2RowTemplate");
+                template = this.getPrintDataTemplate("printTemplate2");
             }
             TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
             this.printData["fieldRow"].push(template);
         }
-        console.log(printRowData);
+        console.log("this.printData");
+        console.log(this.printData);
         // console.log("App.handleFormSubmit:");
         // console.log(this.formData.formValues);
     }

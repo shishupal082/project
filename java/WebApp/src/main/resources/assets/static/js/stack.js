@@ -195,6 +195,14 @@ function getRandomNumber(minVal, maxVal) {
 var DT = (function() {
     var dateTime;
     // var YYYY, MM, DD, hh, mm, ss, ms, mr; //mr = meridian (AM/PM)
+    function isDateObject(dateObj) {
+        if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
+            if (isNumber(dateObj.getDate())) {
+                return true;
+            }
+        }
+        return false;
+    }
     function DateTime() {
         dateTime = new Date();
         this.now = dateTime;
@@ -216,7 +224,7 @@ var DT = (function() {
     DateTime.prototype.formateDateTime = function(format, seprator, dateObj) {
         // "D/YYYY/-/MM/-/DD/T/hh/:/mm/:/ss/:/ms","/" --> "D2020-01-26T22:34:24:071"
         var currentDateTime = "";
-        if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
+        if (isDateObject(dateObj)) {
             currentDateTime = dateObj;
         } else {
             currentDateTime = dateTime;
@@ -270,6 +278,16 @@ var DT = (function() {
         }
         return response;
     };
+    DateTime.prototype.getDateObj = function(dateStr) {
+        if (isString(dateStr)) {
+            var dateObj = new Date(dateStr);
+            if (isDateObject(dateObj)) {
+                return dateObj;
+            }
+        }
+        return null;
+    };
+
     return DateTime;
 })();
 var LocalStorage = (function(){
@@ -1317,6 +1335,9 @@ Stack.extend({
     isUndefined: function(value) {
         return isUndefined(value);
     },
+    isDefined: function(value) {
+        return !isUndefined(value);
+    },
     isString: function(value) {
         return isString(value);
     },
@@ -1661,6 +1682,21 @@ Stack.extend({
     }
 });
 Stack.extend({
+    /*
+        () ==> ""
+        (0) => Zero
+        (1) => One
+        (81) => Eighty One
+        (19) => Nineteen
+        (190) => One Hundred and Ninety
+        (1900) => One Thousand Nine Hundred
+        (1912) => One Thousand Nine Hundred and Twelve
+        (1922) => One Thousand Nine Hundred and Twenty Two
+        (190000) => One Lakh Ninety Thousand
+        (190001) => One Lakh Ninety Thousand and One
+        (190018) => One Lakh Ninety Thousand and Eighteen
+        (190118) => One Lakh Ninety Thousand One Hundred and Eighteen
+    */
     numberToWord: function(n) {
         if (!Stack.isNumeric(n)) {
             return "";
@@ -1674,7 +1710,7 @@ Stack.extend({
         var and = 'and';
         /* Is number zero? */
         if (parseInt(string) === 0) {
-            return 'zero';
+            return 'Zero';
         }
         /* Array of units as words */
         units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',

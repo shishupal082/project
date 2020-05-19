@@ -14,7 +14,7 @@ class PrintDisplay extends React.Component {
     }
     render () {
         var printData = this.props.printData;
-        var emptyRowTemplate = $S.clone(printData["type1RowTemplate"]);
+        var emptyRowTemplate = printData["printTemplate2"];
         var printHeading = printData["printHeading"];
         var printFooter = printData["printFooter"];
         var fieldRow = printData["fieldRow"];
