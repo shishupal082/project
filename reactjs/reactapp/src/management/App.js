@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
-import $$ from '../interface/global';
+import $$$ from '../interface/global';
 import Api from "../common/Api";
 import TemplateHelper from "../common/TemplateHelper";
 import PrintHelper from "./PrintHelper";
@@ -12,14 +12,14 @@ import Form from "./components/Form";
 import PrintDisplay from "./components/PrintDisplay";
 import initialize from "./Initialize";
 
-var baseapi = $$.baseapi;
-var homeDataApi = baseapi + $$.homeDataApi;
-var printDataApi = baseapi + $$.printDataApi;
-var backIconUrl = baseapi + $$.backIconUrl;
-var formPostUrl = baseapi + $$.formPostUrl;
+var baseapi = $$$.baseapi;
+var homeDataApi = baseapi + $$$.homeDataApi;
+var printDataApi = baseapi + $$$.printDataApi;
+var backIconUrl = baseapi + $$$.backIconUrl;
+var formPostUrl = baseapi + $$$.formPostUrl;
 var initialPrintDataApi = null;
 var initialDataFile = $S.getLocalStorage().get("item1");
-if ($S.isString($$.initialPrintDataApi) && initialDataFile.status) {
+if ($S.isString($$$.initialPrintDataApi) && initialDataFile.status) {
     // name:actualData1.json,startTime:2020-05-20T20:00,duration:10
     // localStorage.setItem("name:actualData1.json,startTime:2020-05-20T20:00,duration:10");
     var value = initialDataFile.value;
@@ -33,19 +33,24 @@ if ($S.isString($$.initialPrintDataApi) && initialDataFile.status) {
                 t.setHours(t.getHours()+duration[1]*1);
                 if (t.getTime() > new Date().getTime()) {
                     initialDataFile = valueArr[0].split("name:")[1];
-                    initialPrintDataApi = baseapi + $$.initialPrintDataApi + initialDataFile;
+                    initialPrintDataApi = baseapi + $$$.initialPrintDataApi + initialDataFile;
                 }
             }
         }
     }
 }
 
-var formApi = $$.formApi;
+var formApi = $$$.formApi;
 
 if ($S.isArray(formApi)) {
     for(var i=0; i<formApi.length; i++) {
         formApi[i] = baseapi + formApi[i] + "?" + $S.getRequestId();
     }
+}
+var isPrintPage = false;
+var hrefPath = $S.getUrlAttribute($$$.location.pathname, "hrefPath", null);
+if (["/print", "/print/"].indexOf(hrefPath) >= 0) {
+    isPrintPage = true;
 }
 
 var homeListItems = [];
@@ -150,7 +155,9 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
+        var isInitialDataLoading = false;
         if ($S.isString(initialPrintDataApi)) {
+            isInitialDataLoading = true;
             initialize(self, $S, TemplateHelper, Api, initialPrintDataApi);
         }
         $S.loadJsonData(null, [homeDataApi + "?" + $S.getRequestId()], function(response) {
@@ -178,7 +185,9 @@ class App extends React.Component {
             self.printData["printTemplate2"] = self.getPrintDataTemplate("printTemplate2");
             self.printData["printHeading"] = self.getPrintDataTemplate("printHeading");
             self.printData["printFooter"] = self.getPrintDataTemplate("printFooter");
-            self.handleFormSubmit("printDisplay");
+            if (isPrintPage && isInitialDataLoading === false) {
+                self.handleFormSubmit("printDisplay");
+            }
         }, null, Api.getAjaxApiCallMethod());
 
         $S.loadJsonData(null, formApi, function(response) {
@@ -209,9 +218,11 @@ class App extends React.Component {
             TemplateHelper.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
                         {"addClass": "is-invalid"});
             this.setState({formRowFields: formRowFields});
-        }
-        if (targetName !== "printDisplay") {
             window.alert(validationResult.alertMessage);
+        } else {
+            if (targetName !== "printDisplay") {
+                window.alert(validationResult.alertMessage);
+            }
         }
         // console.log(this.state.formRowFields);
         this.printData["fieldRow"] = [];

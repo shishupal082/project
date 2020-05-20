@@ -387,6 +387,9 @@ LocationParser.extend({
 var UrlParserObj = (function(){
     var data = {};
     function UrlParser(href) {
+        if (!isString(href)) {
+            href = "";
+        }
         var hrefObj = href.split("?");
         if (hrefObj.length) {
             data["hrefPath"] = hrefObj[0];

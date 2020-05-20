@@ -2,12 +2,12 @@ import $S from "../interface/stack.js";
 var P2;
 (function($S) {
 var DT = $S.getDT();
-var Hour = 0;
-var TimeRef00 = "00:00";
-var TimeRef24 = "24:00";
-var TimeRef = "00:00";
+// var Hour = 0;
+// var TimeRef00 = "00:00";
+// var TimeRef24 = "24:00";
+// var TimeRef = "00:00";
 var DateFormate = "YYYY/-/MM/-/DD";
-var Rate = 900;
+// var Rate = 900;
 var Print;
 P2 = function(print) {
     Print = print;
