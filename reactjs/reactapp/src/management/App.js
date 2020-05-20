@@ -20,7 +20,24 @@ var formPostUrl = baseapi + $$.formPostUrl;
 var initialPrintDataApi = null;
 var initialDataFile = $S.getLocalStorage().get("item1");
 if ($S.isString($$.initialPrintDataApi) && initialDataFile.status) {
-    initialPrintDataApi = baseapi + $$.initialPrintDataApi + initialDataFile.value;
+    // name:actualData1.json,startTime:2020-05-20T20:00,duration:10
+    // localStorage.setItem("name:actualData1.json,startTime:2020-05-20T20:00,duration:10");
+    var value = initialDataFile.value;
+    var valueArr = value.split(",");
+    if (valueArr.length === 3) {
+        var t = valueArr[1].split("startTime:");
+        var duration = valueArr[2].split(":");
+        if (t.length === 2 && duration.length === 2) {
+            t = $S.getDT().getDateObj(t[1]);
+            if ($S.isNumeric(duration[1])) {
+                t.setHours(t.getHours()+duration[1]*1);
+                if (t.getTime() > new Date().getTime()) {
+                    initialDataFile = valueArr[0].split("name:")[1];
+                    initialPrintDataApi = baseapi + $$.initialPrintDataApi + initialDataFile;
+                }
+            }
+        }
+    }
 }
 
 var formApi = $$.formApi;
