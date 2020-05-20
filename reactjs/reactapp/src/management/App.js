@@ -18,10 +18,10 @@ var printDataApi = baseapi + $$.printDataApi;
 var backIconUrl = baseapi + $$.backIconUrl;
 var formPostUrl = baseapi + $$.formPostUrl;
 var initialPrintDataApi = null;
-if ($S.isString($$.initialPrintDataApi)) {
-    initialPrintDataApi = baseapi + $$.initialPrintDataApi;
+var initialDataFile = $S.getLocalStorage().get("item1");
+if ($S.isString($$.initialPrintDataApi) && initialDataFile.status) {
+    initialPrintDataApi = baseapi + $$.initialPrintDataApi + initialDataFile.value;
 }
-
 
 var formApi = $$.formApi;
 
@@ -133,7 +133,7 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
-        if ($S.isString(initialPrintDataApi) && false) {
+        if ($S.isString(initialPrintDataApi)) {
             initialize(self, $S, TemplateHelper, Api, initialPrintDataApi);
         }
         $S.loadJsonData(null, [homeDataApi + "?" + $S.getRequestId()], function(response) {

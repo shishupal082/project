@@ -1,21 +1,24 @@
 import $S from "../interface/stack.js";
+import P2 from "./PrintHelper2.js";
 var PrintHelper;
 (function($S) {
 var DT = $S.getDT();
-var AddHour = 0;
-var TimeRef = "00:00";
+// var AddHour = 0;
+// var TimeRef = "00:00";
 var DateFormate = "YYYY/-/MM/-/DD";
 var UserData = {};
 var PrintRowData = [];
 var Rate = 900;
+var P21;
 var Print = function(formValues) {
-    UserData = {"formRowId": "row-0", "templateName": "userDetails"};
-    PrintRowData = [];
     return new Print.fn.init(formValues);
 };
 Print.fn = Print.prototype = {
     constructor: Print,
     init: function(formValues) {
+        UserData = {"formRowId": "row-0", "templateName": "userDetails"};
+        PrintRowData = [];
+        P21 = P2(this);
         this.formValues = formValues;
         return this;
     },
@@ -23,6 +26,10 @@ Print.fn = Print.prototype = {
         if ($S.isArray(this.formValues) && this.formValues.length) {
             UserData = this.formValues[0];
         }
+        return true;
+    },
+    pushPrintRowData: function(rowData) {
+        PrintRowData.push(rowData);
         return true;
     }
 };
@@ -142,13 +149,20 @@ var methods = {
         totalRow.totalAmountText = amount>0 ? $S.numberToWord(amount) : "";
         return totalRow;
     },
-    getTemplate2RowDataFull: function(formValue) {
-        var printRowData = $S.clone(formValue);
-        printRowData.date = formValue.startDate;
-        var startTime = formValue["departureTime"];
-        var endTime = formValue["arrivalTime"];
-        printRowData.day = this.getRate(this.getHours(startTime, endTime));
-        this._verifyDayAndAmount(printRowData);
+    getTemplate2RowDataFull: function(formValue, isMid) {
+        var printRowData = {};
+        if ($S.isBooleanTrue(isMid)) {
+            printRowData.formRowId = formValue.formRowId;
+            printRowData.templateName = formValue.templateName;
+            printRowData.date = formValue.startDate;
+            printRowData.trainNumber = formValue.trainNumber;
+            printRowData.objectiveOfJourney = formValue.objectiveOfJourney;
+            printRowData.day = "-";
+        } else {
+            printRowData = formValue;
+            printRowData.date = formValue.startDate;
+            printRowData.day = this.getRate(this.getHours(formValue.departureTime, formValue.arrivalTime));
+        }
         return printRowData;
     },
     getTemplate2RowDataHalf: function(formValue, position) {
@@ -178,12 +192,18 @@ var methods = {
         return printRowData;
     },
     getTemplate2RowDataMid: function(formValue) {
-        var printRowData = $S.clone(formValue);
-        printRowData.date = formValue.startDate;
-        var startTime = formValue["departureTime"];
-        var endTime = formValue["arrivalTime"];
-        printRowData.day = this.getRate(this.getHours(startTime, endTime));
-        this._verifyDayAndAmount(printRowData);
+        var printRowData = $S.clone(formValue), startDate, rowData;
+        var dateDiff = this.getDateDiff(formValue.startDate, formValue.endDate);
+        if (dateDiff > 1) {
+            startDate = printRowData.startDate;
+            printRowData = this.getTemplate2RowDataFull(printRowData, true);
+            for(var i=0; i<dateDiff; i++) {
+                rowData = $S.clone(printRowData);
+                rowData.date = this.incrementDate(startDate);
+                rowData.day = 1;
+                PrintRowData.push(rowData);
+            }
+        }
         return printRowData;
     },
     getTemplate1RowData: function(formValue) {
@@ -204,6 +224,7 @@ var methods = {
         return false;
     }
 };
+/*
 function handleCase(caseName, print, rowIndex) {
     var current = {}, next = {}, rowData = {};
     if (print.formValues.length > rowIndex) {
@@ -214,10 +235,52 @@ function handleCase(caseName, print, rowIndex) {
     }
     switch(caseName) {
         case "template2.firstRow.onlyRow":
-
+            if (current.startDate === current.endDate) {
+                rowData = methods.getTemplate2RowDataFull(current);
+                PrintRowData.push(rowData);
+            } else {
+                rowData = methods.getTemplate2RowDataHalf(current, 0);
+                PrintRowData.push(rowData);
+                methods.getTemplate2RowDataMid(current);
+                rowData = methods.getTemplate2RowDataHalf(current, 1);
+                PrintRowData.push(rowData);
+            }
         break;
-        case "template2.firstRow.notOnlyRow":
-            
+        case "template2.firstRow.notOnlyRow.nextTemplate2":
+            if (current.endDate === next.startDate) {
+                if (current.startDate === current.endDate) {
+                    rowData = methods.getTemplate2RowDataFull(current);
+                    PrintRowData.push(rowData);
+                    AddHour += methods.getHours(current.departureTime, current.arrivalTime);
+                    if (current.arrivalTime === next.departureTime) {
+                        TimeRef = next.departureTime;
+                    } else {
+                        AddHour += methods.getHours(current.arrivalTime, next.departureTime);
+                    }
+                } else {
+                    rowData = methods.getTemplate2RowDataHalf(current, 0);
+                    PrintRowData.push(rowData);
+                    rowData = methods.getTemplate2RowDataHalf(current, 1);
+                    PrintRowData.push(rowData);
+                    TimeRef = "00:00";
+                }
+            } else {
+                if (current.startDate === current.endDate) {
+                    rowData = methods.getTemplate2RowDataFull(current);
+                    // Over writting day
+                    rowData.day = methods.getRate(methods.getHours(current.departureTime, "24:00"));
+                    PrintRowData.push(rowData);
+                    this.handleCase("setContinuousRow", print, rowIndex);
+                    TimeRef = "00:00";
+                } else {
+                    rowData = methods.getTemplate2RowDataHalf(current, 0);
+                    PrintRowData.push(rowData);
+                    methods.getTemplate2RowDataMid(current);
+                    rowData = methods.getTemplate2RowDataHalf(current, 1);
+                    this.handleCase("setContinuousRow", print, rowIndex);
+                    TimeRef = "00:00";
+                }
+            }
         break;
         case "template2.midRow.next.template2":
             
@@ -310,8 +373,42 @@ function handleSSS(current, next, prev, print, index) {
     AddHour = 0;
     return rowData;
 }
+*/
 Print.extend({
     getDetails: function(print) {
+        print.setUserData();
+        PrintRowData.push(UserData);
+        console.log(print.formValues);
+        var current, rowCount, i;
+        if ($S.isArray(print.formValues) && print.formValues.length > 1) {
+            rowCount = print.formValues.length;
+            //skipping first row
+            for(i=1; i<rowCount; i++) {
+                current = print.formValues[i];
+                P21.formTemplate(current.templateName, i);
+                // if (current.templateName === "formTemplate2") {// More data row
+                    
+                // } else if (current.templateName === "formTemplate1") {// Less data row
+                //     P21.formTemplate1(current.templateName, i);
+                // }
+            }
+            for(i=1; i<PrintRowData.length; i++) {
+                if (PrintRowData[i].day === 0 || !$S.isNumber(PrintRowData[i].day)) {
+                    PrintRowData[i].day = "-";
+                }
+                if ($S.isNumber(PrintRowData[i].day) && PrintRowData[i].day > 0) {
+                    PrintRowData[i].rateAmount = Rate +" x "+ PrintRowData[i].day +" = "+ Rate*PrintRowData[i].day;
+                } else {
+                    PrintRowData[i].rateAmount = "-";
+                }
+            }
+            PrintRowData.push(methods.getTotalRow(print));
+        } else {
+            PrintRowData.push(methods.getTotalRow(print));
+        }
+        return PrintRowData;
+    },/*
+    getDetails2: function(print) {
         AddHour = 0;
         TimeRef = "00:00";
         print.setUserData();
@@ -345,18 +442,51 @@ Print.extend({
                     prevEndTime = print.formValues[i-1]["arrivalTime"];
                 }
                 if (current.templateName === "formTemplate2") {// More data row
-                    if ($S.isString(startDate) && startDate.length > 1 && $S.isString(endDate) && endDate.length > 1) {
-                        if (startDate === endDate) {
-                            rowData = methods.getTemplate2RowDataFull(current);
-                            PrintRowData.push(rowData);
-                        } else {
-                            rowData = methods.getTemplate2RowDataHalf(current, 0);
-                            PrintRowData.push(rowData);
-                            methods.getTemplate2RowDataMid(current);
-                            rowData = methods.getTemplate2RowDataHalf(current, 1);
-                            PrintRowData.push(rowData);
+                    P21.formTemplate2(current.templateName, i);
+                    if (i === 1) { // isFirstRow
+                        if (methods.isSingleEntry(print)) {
+                            // handleCase("template2.firstRow.onlyRow", print, i);
+                            continue;
+                        } else if (next.templateName === "formTemplate2") {
+                            // handleCase("template2.firstRow.notOnlyRow.nextTemplate2", print, i);
+                            continue;
+                        //     rowData = handleCase("template2.firstRow.notOnlyRow", print, i);
+                        //     if (startDate === endDate) {
+                        //         if (endDate === nextStartDate) {
+                        //             PrintRowData.push(rowData);
+                        //         } else {
+                        //             AddHour += 24;
+                        //             rowData.day = methods.getRate(AddHour);
+                        //             PrintRowData.push(rowData);
+                        //             handleCase("setContinuousRow", print, i);
+                        //         }
+                        //     } else {
+                        //         if (endDate === nextStartDate) {
+                        //             rowData.day = methods.getDayBetweenDate(startDate, methods.decrementDate(endDate));
+                        //             PrintRowData.push(rowData);
+                        //         } else {
+                        //             rowData.day = methods.getDayBetweenDate(startDate, endDate);
+                        //             PrintRowData.push(rowData);
+                        //             handleCase("setContinuousRow", print, i);
+                        //         }
+                        //     }
+                        //     TimeRef = "00:00";
+                        //     AddHour = 0;
+                        //     continue;
                         }
                     }
+                    // if ($S.isString(startDate) && startDate.length > 1 && $S.isString(endDate) && endDate.length > 1) {
+                    //     if (startDate === endDate) {
+                    //         rowData = methods.getTemplate2RowDataFull(current);
+                    //         PrintRowData.push(rowData);
+                    //     } else {
+                    //         rowData = methods.getTemplate2RowDataHalf(current, 0);
+                    //         PrintRowData.push(rowData);
+                    //         methods.getTemplate2RowDataMid(current);
+                    //         rowData = methods.getTemplate2RowDataHalf(current, 1);
+                    //         PrintRowData.push(rowData);
+                    //     }
+                    // }
                 } else if (current.templateName === "formTemplate1") {// Less data row
                     if (i === 1) { // isFirstRow
                         if (methods.isSingleEntry(print)) {
@@ -426,7 +556,7 @@ Print.extend({
             PrintRowData.push(methods.getTotalRow(print));
         }
         return PrintRowData;
-    }
+    }*/
 });
 PrintHelper = Print;
 })($S);
