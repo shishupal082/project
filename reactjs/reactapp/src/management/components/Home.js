@@ -10,7 +10,8 @@ function Home(props) {
             if (item.className) {
                 itemCls += item.className;
             }
-            return <Link key={index} to={item.url} className={itemCls}>{item.text}</Link>;
+            var url = props.pages.basepathname + item.url;
+            return <Link key={index} to={url} className={itemCls}>{item.text}</Link>;
         });
     }
 
@@ -27,7 +28,7 @@ function Home(props) {
                 </div>
                 <div className="list-group">
                     {listItemsJSX}
-                    <Link to="/form"><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></Link>
+                    <Link to={props.pages.form}><button className="list-group-item list-group-item-action list-group-item-success text-center">Click here to get started.</button></Link>
                 </div>
             </div>
         </div>

@@ -12,7 +12,7 @@ function Instruction(props) {
     return (
         <div className="row"><div className="col-md-6 offset-md-3">
             <div className="list-group">
-                <Link to="/" className="list-group-item list-group-item-primary text-center">Instructions</Link>
+                <Link to={props.pages.main} className="list-group-item list-group-item-primary text-center">Instructions</Link>
             </div>
             <div className="list-group">
                 {listItemsJSX}

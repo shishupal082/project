@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <title>Management App</title>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/management/static/css/management.css">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+<script type="text/javascript">
+var GLOBAL = {
+    baseapi: "",
+    basepathname: "/app/management"
+};
+
+GLOBAL.homeDataApi = "/pvt/app-data/management/data.json";
+GLOBAL.printDataApi = "/pvt/app-data/management/printData.json";
+GLOBAL.initialPrintDataApi = "/pvt/app-data/management/initial-data/";
+GLOBAL.backIconUrl = "/static/img/icons/back-32.png";
+GLOBAL.formPostUrl = "/post";
+GLOBAL.formApi = [
+  "/pvt/app-data/management/form.json",
+  "/pvt/app-data/management/formTemplate.json"
+];
+
+window.GLOBAL = GLOBAL;
+</script>
+
+<script type="text/javascript" src="/reactjs/reactapp/dist-management-app/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-management-app/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-management-app/script3.js"></script>
+
+</body>
+</html>

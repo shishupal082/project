@@ -174,8 +174,8 @@ P2.extend({
             printRowData.date = current.startDate;
         } else {
             printRowData.date = current.startDate + " to " + current.endDate;
-            printRowData.day = P2.getDayBetweenDate(current.startDate, current.endDate);
         }
+        printRowData.day = P2.getDayBetweenDate(current.startDate, current.endDate);
         return printRowData;
     },
 });

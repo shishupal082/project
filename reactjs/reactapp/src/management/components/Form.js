@@ -73,14 +73,14 @@ class Form extends React.Component {
             <div>
                 <form method="POST" action={this.props.formPostUrl} onSubmit={this.onSubmit}>
                     <div className="form-row justify-content-center form-heading">
-                        <Link to="/"><h2>{this.props.formHeading}</h2></Link>
+                        <Link to={this.props.pages.main}><h2>{this.props.formHeading}</h2></Link>
                     </div>
                     {formFields}
                     <div className="row justify-content-center form-action">
                         <FormFields fieldData={formActionData} onChange={this.handleChange} onClick={this.handleClick}/>
                     </div>
                     <div className="row justify-content-center form-action"><div className="col">
-                        <Link to="/print"><button name="printDisplay" onClick={this.onSubmit} className="list-group-item list-group-item-action list-group-item-success text-center">Print Display</button></Link>
+                        <Link to={this.props.pages.print}><button name="printDisplay" onClick={this.onSubmit} className="list-group-item list-group-item-action list-group-item-success text-center">Print Display</button></Link>
                     </div></div>
                     <hr className="form-control-range"/>
                 </form>

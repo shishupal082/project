@@ -13,6 +13,9 @@ import PrintDisplay from "./components/PrintDisplay";
 import initialize from "./Initialize";
 
 var baseapi = $$$.baseapi;
+var basepathname = $$$.basepathname;
+var pages = {basepathname: basepathname, main: basepathname + "/", print: basepathname+"/print",
+            instructions: basepathname + "/instructions", form: basepathname+"/form"};
 var homeDataApi = baseapi + $$$.homeDataApi;
 var printDataApi = baseapi + $$$.printDataApi;
 var backIconUrl = baseapi + $$$.backIconUrl;
@@ -48,11 +51,17 @@ if ($S.isArray(formApi)) {
     }
 }
 var isPrintPage = false;
-var hrefPath = $S.getUrlAttribute($$$.location.pathname, "hrefPath", null);
-if (["/print", "/print/"].indexOf(hrefPath) >= 0) {
-    isPrintPage = true;
+var isFormPage = false;
+function verifyPageName() {
+    var hrefPath = $S.getUrlAttribute($$$.location.pathname, "hrefPath", null);
+    if ([basepathname+"/print", basepathname+"/print/"].indexOf(hrefPath) >= 0) {
+        isPrintPage = true;
+    }
+    if ([basepathname+"/form", basepathname+"/form/"].indexOf(hrefPath) >= 0) {
+        isFormPage = true;
+    }
 }
-
+verifyPageName();
 var homeListItems = [];
 var instructionsListItems = [];
 var LOGO_URL = "";
@@ -209,6 +218,7 @@ class App extends React.Component {
         }, null, Api.getAjaxApiCallMethod());
     }
     handleFormSubmit(targetName) {
+        verifyPageName();
         var formValues = this.getFormValues(), template = {};
         this.setState({formValues: formValues});
         this.formData["formValues"] = formValues;
@@ -218,9 +228,11 @@ class App extends React.Component {
             TemplateHelper.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
                         {"addClass": "is-invalid"});
             this.setState({formRowFields: formRowFields});
-            window.alert(validationResult.alertMessage);
+            if (isPrintPage || isFormPage) {
+                window.alert(validationResult.alertMessage);
+            }
         } else {
-            if (targetName !== "printDisplay") {
+            if (isFormPage && targetName !== "printDisplay") {
                 window.alert(validationResult.alertMessage);
             }
         }
@@ -285,20 +297,22 @@ class App extends React.Component {
         var form = <Form state={this.state} formHeading={this.formHeading}
                     formData={this.formData} formPostUrl={formPostUrl}
                     addNewRow={this.addNewRow} removeRow={this.removeRow}
-                    handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}/>;
-        var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems}/>;
-         return (<div className="container"><BrowserRouter><Switch>
-                  <Route exact path="/">
+                    handleChange={this.handleChange} handleFormSubmit={this.handleFormSubmit}
+                    pages={pages}/>;
+        var home = <Home logoUrl={logoUrl} state={this.state} listItems={homeListItems} pages={pages}/>;
+        return (<div className="container"><BrowserRouter><Switch>
+                  <Route exact path={pages.main}>
                     {home}
                   </Route>
-                  <Route exact path="/form">
+                  <Route exact path={pages.form}>
                     {form}
                   </Route>
-                  <Route exact path="/print">
-                    <PrintDisplay printData={this.printData} totalRow={this.printTotalRow} backIconUrl={backIconUrl}/>
+                  <Route exact path={pages.print}>
+                    <PrintDisplay printData={this.printData} totalRow={this.printTotalRow}
+                    backIconUrl={backIconUrl} pages={pages}/>
                   </Route>
-                  <Route path="/instructions">
-                    <Instructions listItems={instructionsListItems}/>
+                  <Route path={pages.instructions}>
+                    <Instructions listItems={instructionsListItems} pages={pages}/>
                   </Route>
                   <Route>
                     {home}
