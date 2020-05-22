@@ -23,7 +23,7 @@ class App extends React.Component {
         this.state = {
             isLoaded: false,
             journalRowData: [],
-            ledgerData: {"companyName": "", ledgerRowData: []}
+            ledgerData: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -40,13 +40,16 @@ class App extends React.Component {
         return null;
     }
     setLedgerRowData() {
-        var ledgerData = {};
-        var ledgerRowData = [];
-        ledgerData.companyName = "Company";
-        ledgerRowData.push(this.getTemplate("ledgerHeading"));
+        var ledgerData = [];
+
+        var ledgerRowData = {companyName: "", ledgerRowFields: []};
+        ledgerRowData.companyName = "Company";
+        ledgerRowData.ledgerRowFields.push(this.getTemplate("ledgerHeading"));
         var ledgerRowTemplate = this.getTemplate("ledgerRow");
-        ledgerRowData.push(ledgerRowTemplate);
-        ledgerData.ledgerRowData = ledgerRowData;
+        ledgerRowData.ledgerRowFields.push(ledgerRowTemplate);
+
+        ledgerData.push(ledgerRowData);
+        ledgerData.push(ledgerRowData);
         this.setState({ledgerData: ledgerData});
     }
     dataLoadComplete() {

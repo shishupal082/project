@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from "./partial/Header";
+import LedgerBookRow from "./partial/LedgerBookRow";
 
-import Api from "../../common/Api";
 // import $S from "../../interface/stack.js";
 
 class LedgerBook extends React.Component {
@@ -14,15 +14,12 @@ class LedgerBook extends React.Component {
     componentDidMount() {
     }
     render() {
-        var LedgerTableTr = Api.generateFields(this.props, this.props.state.ledgerData.ledgerRowData);
+        var LedgerBookByCompany = this.props.state.ledgerData.map(function(el, i, arr) {
+            return <LedgerBookRow key={i} companyName={el.companyName} ledgerRowFields={el.ledgerRowFields}/>;
+        });
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading}/>
-                    <div className="row">
-                        <h4>{this.props.state.ledgerData.companyName}</h4>
-                        <table className="table table-bordered table-striped"><tbody>
-                            {LedgerTableTr}
-                        </tbody></table>
-                    </div>
+                    {LedgerBookByCompany}
             </div>);
     }
 }
