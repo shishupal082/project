@@ -1,6 +1,7 @@
 import React from 'react';
-import Api from "../../common/Api";
 import Header from "./partial/Header";
+
+import Api from "../../common/Api";
 // import $S from "../../interface/stack.js";
 
 class Journal extends React.Component {
@@ -14,7 +15,7 @@ class Journal extends React.Component {
     }
     render() {
         var self = this;
-        var JournalTableTr = this.props.data.journalRowData.map(function(el, i, arr) {
+        var JournalTableTr = this.props.state.journalRowData.map(function(el, i, arr) {
             return Api.generateFields(self.props, el);
         });
         return (<div className="container">

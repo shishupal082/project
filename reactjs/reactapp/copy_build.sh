@@ -5,6 +5,7 @@ echo [INFO] Copying file to desired location
 distDir=dist-index-app
 distDir=dist-yard-app
 distDir=dist-management-app
+distDir=dist-account-app
 
 rm -rf ${distDir}/*
 

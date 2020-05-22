@@ -22,7 +22,8 @@ class App extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            journalRowData: []
+            journalRowData: [],
+            ledgerData: {"companyName": "", ledgerRowData: []}
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -37,6 +38,16 @@ class App extends React.Component {
             return $S.clone(this.accountTemplate[templateName]);
         }
         return null;
+    }
+    setLedgerRowData() {
+        var ledgerData = {};
+        var ledgerRowData = [];
+        ledgerData.companyName = "Company";
+        ledgerRowData.push(this.getTemplate("ledgerHeading"));
+        var ledgerRowTemplate = this.getTemplate("ledgerRow");
+        ledgerRowData.push(ledgerRowTemplate);
+        ledgerData.ledgerRowData = ledgerRowData;
+        this.setState({ledgerData: ledgerData});
     }
     dataLoadComplete() {
         var dataLoadStatus = [], i, j, k;
@@ -78,7 +89,9 @@ class App extends React.Component {
                 }
             }
         }
-        this.setState({journalRowData: journalRowData});
+        this.setState({journalRowData: journalRowData}, function() {
+            this.setLedgerRowData();
+        });
         return true;
     }
     componentDidMount() {
@@ -117,11 +130,10 @@ class App extends React.Component {
     render() {
         var home = <Home state={this.state}/>;
         var data = {accountTemplate: this.accountTemplate, journalData: this.journalData,
-                    journalRowData: this.state.journalRowData, companyName: this.companyName,
-                    backIconUrl: backIconUrl};
+                    companyName: this.companyName, backIconUrl: backIconUrl};
         var journal = <Journal state={this.state} data={data} heading="Journal"/>;
         var ledger = <LedgerBook state={this.state} data={data} heading="Ledger Book"/>;
-        return (<div className="container"><BrowserRouter><Switch>
+        return (<BrowserRouter><Switch>
                   <Route exact path="/">
                     {home}
                   </Route>
@@ -134,7 +146,7 @@ class App extends React.Component {
                   <Route>
                     {home}
                   </Route>
-            </Switch></BrowserRouter></div>);
+            </Switch></BrowserRouter>);
     }
 }
 

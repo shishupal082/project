@@ -87,14 +87,14 @@ Api.extend({
         }
         return str;
     },
-    generateFields: function(props, fieldItems) {
+    generateFields: function(props, fieldItems, i) {
         var fields = null;
         if ($S.isArray(fieldItems)) {
             fields = fieldItems.map(function(item, index, arr) {
                 return generateReactChild(props, item, index);
             });
         } else if ($S.isObject(fieldItems)) {
-            fields = generateReactChild(props, fieldItems);
+            fields = generateReactChild(props, fieldItems, i);
         } else if ($S.isString(fieldItems)) {
             fields = fieldItems;
         }

@@ -1,5 +1,7 @@
 import React from 'react';
 import Header from "./partial/Header";
+
+import Api from "../../common/Api";
 // import $S from "../../interface/stack.js";
 
 class LedgerBook extends React.Component {
@@ -12,9 +14,15 @@ class LedgerBook extends React.Component {
     componentDidMount() {
     }
     render() {
-        // var self = this;
+        var LedgerTableTr = Api.generateFields(this.props, this.props.state.ledgerData.ledgerRowData);
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading}/>
+                    <div className="row">
+                        <h4>{this.props.state.ledgerData.companyName}</h4>
+                        <table className="table table-bordered table-striped"><tbody>
+                            {LedgerTableTr}
+                        </tbody></table>
+                    </div>
             </div>);
     }
 }
