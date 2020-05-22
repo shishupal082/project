@@ -15,7 +15,7 @@ class LedgerBook extends React.Component {
     }
     render() {
         var LedgerBookByCompany = this.props.state.ledgerData.map(function(el, i, arr) {
-            return <LedgerBookRow key={i} companyName={el.companyName} ledgerRowFields={el.ledgerRowFields}/>;
+            return <LedgerBookRow key={i} accountName={el.accountName} fields={el.fields}/>;
         });
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading}/>

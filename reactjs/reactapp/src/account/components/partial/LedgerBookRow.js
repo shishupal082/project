@@ -13,10 +13,10 @@ class LedgerBookRow extends React.Component {
     componentDidMount() {
     }
     render() {
-        var companyName = this.props.companyName;
-        var LedgerTableTr = Api.generateFields(this.props, this.props.ledgerRowFields);
+        var accountName = this.props.accountName;
+        var LedgerTableTr = Api.generateFields(this.props, this.props.fields);
         return (<div className="row"><div className="col">
-                    <p><b>{companyName}</b></p>
+                    <p><b>{accountName}</b></p>
                     <table className="table table-bordered table-striped"><tbody>
                         {LedgerTableTr}
                     </tbody></table>

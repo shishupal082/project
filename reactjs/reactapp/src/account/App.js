@@ -40,16 +40,57 @@ class App extends React.Component {
         return null;
     }
     setLedgerRowData() {
-        var ledgerData = [];
+        var ledgerData = [], entry = {}, dataByCompany = {};
+        var ledgerRowTemplate = {}, particularEntry = {};
+        var i, j, k, accountName, companyData, ledgerRowFields;
 
-        var ledgerRowData = {companyName: "", ledgerRowFields: []};
-        ledgerRowData.companyName = "Company";
-        ledgerRowData.ledgerRowFields.push(this.getTemplate("ledgerHeading"));
-        var ledgerRowTemplate = this.getTemplate("ledgerRow");
-        ledgerRowData.ledgerRowFields.push(ledgerRowTemplate);
-
-        ledgerData.push(ledgerRowData);
-        ledgerData.push(ledgerRowData);
+        for (i=0; i<this.journalData.length; i++) {
+            if ($S.isArray(this.journalData[i].entry)) {
+                for (j = 0; j < this.journalData[i].entry.length; j++) {
+                    entry = this.journalData[i].entry[j];
+                    if ($S.isArray(entry.particularEntry)) {
+                        for (k = 0; k < entry.particularEntry.length; k++) {
+                            accountName = entry.particularEntry[k].account;
+                            if ($S.isString(accountName) && accountName.length) {
+                                if ($S.isUndefined(dataByCompany[accountName])) {
+                                    dataByCompany[accountName] = {"accountName": accountName, ledgerRowData: []};
+                                }
+                                particularEntry = $S.clone(entry.particularEntry[k]);
+                                particularEntry.date = entry.date;
+                                dataByCompany[accountName].ledgerRowData.push(particularEntry);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // console.log(dataByCompany);
+        for (i=0; i<this.accountData.length; i++) {
+            if (dataByCompany[this.accountData[i].accountName]) {
+                companyData = dataByCompany[this.accountData[i].accountName];
+                ledgerRowFields = {accountName: "", fields: []};
+                ledgerRowFields.accountName = this.accountData[i].accountName;
+                ledgerRowFields.fields.push(this.getTemplate("ledgerHeading"));
+                if ($S.isArray(companyData.ledgerRowData)) {
+                    for (j=0; j<companyData.ledgerRowData.length; j++) {
+                        ledgerRowTemplate = this.getTemplate("ledgerRow");
+                        if ($S.isDefined(companyData.ledgerRowData[j].dr)) {
+                            companyData.ledgerRowData[j].debitDate = companyData.ledgerRowData[j].date;
+                            companyData.ledgerRowData[j].debitAmount = companyData.ledgerRowData[j].dr;
+                            companyData.ledgerRowData[j].debitParticular = companyData.ledgerRowData[j].particularText;
+                        } else if ($S.isDefined(companyData.ledgerRowData[j].cr)) {
+                            companyData.ledgerRowData[j].creditDate = companyData.ledgerRowData[j].date;
+                            companyData.ledgerRowData[j].creditAmount = companyData.ledgerRowData[j].cr;
+                            companyData.ledgerRowData[j].creditParticular = companyData.ledgerRowData[j].particularText;
+                        }
+                        TemplateHelper.setTemplateTextByFormValues(ledgerRowTemplate, companyData.ledgerRowData[j]);
+                        ledgerRowFields.fields.push(ledgerRowTemplate);
+                    }
+                }
+                ledgerData.push(ledgerRowFields);
+            }
+        }
+        // console.log(ledgerData);
         this.setState({ledgerData: ledgerData});
     }
     dataLoadComplete() {
