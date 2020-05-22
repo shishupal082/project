@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
 import Journal from "./components/Journal";
 import LedgerBook from "./components/LedgerBook";
+import TrialBalance from "./components/TrialBalance";
 
 import $S from "../interface/stack.js";
 import $$$ from '../interface/global';
@@ -14,7 +15,7 @@ var baseapi = $$$.baseapi;
 var backIconUrl = baseapi + "/static/img/icons/back-32.png";
 
 var accountTemplateApi = [baseapi+"/pvt/app-data/account/accountTemplate.json"];
-var journalDataApi = [baseapi+"/pvt/app-data/account/journalData.json"];
+var journalDataApi = [baseapi+"/pvt/app-data/account/journalData2.json"];
 var accountDataApi = [baseapi+"/pvt/app-data/account/accounts.json"];
 
 class App extends React.Component {
@@ -177,6 +178,7 @@ class App extends React.Component {
                     companyName: this.companyName, backIconUrl: backIconUrl};
         var journal = <Journal state={this.state} data={data} heading="Journal"/>;
         var ledger = <LedgerBook state={this.state} data={data} heading="Ledger Book"/>;
+        var trial = <TrialBalance state={this.state} data={data} heading="Ledger Book"/>;
         return (<BrowserRouter><Switch>
                   <Route exact path="/">
                     {home}
@@ -186,6 +188,9 @@ class App extends React.Component {
                   </Route>
                   <Route path="/ledger">
                     {ledger}
+                  </Route>
+                  <Route path="/trial">
+                    {trial}
                   </Route>
                   <Route>
                     {home}
