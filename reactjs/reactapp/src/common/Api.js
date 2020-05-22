@@ -127,6 +127,9 @@ childGenerator = {
     "td": function(props, data, reactChildText, key) {
         return <td key={key} id={data.id} rowSpan={data.rowSpan} colSpan={data.colSpan} className={data.className}>{reactChildText}</td>;
     },
+    "th": function(props, data, reactChildText, key) {
+        return <th key={key} id={data.id} rowSpan={data.rowSpan} colSpan={data.colSpan} className={data.className}>{reactChildText}</th>;
+    },
     "hr": function(props, data, reactChildText, key) {
         return <hr key={key} className={data.className}/>;
     },
