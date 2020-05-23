@@ -101,6 +101,7 @@ Account.extend({
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
                                 console.log("Invalid accountName: " + accountName);
+                                continue;
                             }
                             if ($S.isString(accountName) && accountName.length) {
                                 if ($S.isUndefined(dataByCompany[accountName])) {
@@ -215,6 +216,8 @@ Account.extend({
                 if ($S.isNumeric(temp.creditBalance)) {
                     totalCredit += temp.creditBalance*1;
                 }
+            } else {
+                continue;
             }
             template = self.getTemplate("trialBalanceRow");
             TemplateHelper.setTemplateTextByFormValues(template, temp);
