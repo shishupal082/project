@@ -25,7 +25,7 @@ class Home extends React.Component {
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Ledger</button>
                                 </Link>
                                 <Link to="/trial">
-                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial</button>
+                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial Balance</button>
                                 </Link>
                             </div>
                         </div>

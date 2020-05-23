@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from "./partial/Header";
 
+import Api from "../../common/Api";
+
 class TrialBalance extends React.Component {
     constructor(props) {
         super(props);
@@ -11,10 +13,10 @@ class TrialBalance extends React.Component {
     componentDidMount() {
     }
     render() {
-        var trialBalance = null;
+        var trialBalanceTr = Api.generateFields(this.props, this.props.state.trialBalanceFields);
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading}/>
-                    {trialBalance}
+                    <table className="table table-bordered"><tbody>{trialBalanceTr}</tbody></table>
             </div>);
     }
 }

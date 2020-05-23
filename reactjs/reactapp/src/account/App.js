@@ -27,7 +27,8 @@ class App extends React.Component {
             isLoaded: false,
             journalRowData: [],
             dataByCompany: {},
-            ledgerData: []
+            ledgerDataFields: [],
+            trialBalanceFields: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -54,15 +55,19 @@ class App extends React.Component {
         return null;
     }
     setLedgerRowData() {
-        var dataByCompany = {}, ledgerData = [];
+        var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [];
         var validAccountName = this.accountData.map(function(el, index, arr) {
             return el.accountName;
         });
         dataByCompany = AccountHelper.getDataByCompany(this.journalData, validAccountName);
         console.log(dataByCompany);
-        ledgerData = AccountHelper.getLeaderBookFields(this, this.accountData, dataByCompany);
-        this.setState({dataByCompany: dataByCompany, ledgerData: ledgerData})
-        console.log(ledgerData);
+        ledgerDataFields = AccountHelper.getLeaderBookFields(this, this.accountData, dataByCompany);
+        console.log(ledgerDataFields);
+
+        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany);
+        this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
+                trialBalanceFields: trialBalanceFields});
+
         return true;
     }
     dataLoadComplete() {
