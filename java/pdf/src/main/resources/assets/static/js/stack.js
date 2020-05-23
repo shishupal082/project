@@ -134,6 +134,12 @@ function addElAt(arr, index, el) {
     }
     return 0;
 }
+function capitalize(str) {
+    if (isString(str)) {
+        return str.replace(/^./, str[0].toUpperCase());
+    }
+    return str;
+}
 function calculateNumericalValue(op1, operator, op2) {
     var val = null;
     switch (operator) {
@@ -1343,6 +1349,9 @@ Stack.extend({
     },
     isString: function(value) {
         return isString(value);
+    },
+    capitalize: function(str) {
+        return capitalize(str);
     },
     isArray: function(value) {
         return isArray(value);

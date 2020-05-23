@@ -137,7 +137,7 @@ Account.extend({
             if (dataByCompany[accountData[i].accountName]) {
                 companyData = dataByCompany[accountData[i].accountName];
                 ledgerRowFields = {accountName: "", fields: []};
-                ledgerRowFields.accountName = accountData[i].accountName;
+                ledgerRowFields.accountName = $S.capitalize(accountData[i].accountName) + " A/C";
                 ledgerRowFields.fields.push(self.getTemplate("ledgerHeading"));
                 if ($S.isArray(companyData.ledgerRowData.dr) && $S.isArray(companyData.ledgerRowData.cr)) {
                     maxLength = companyData.ledgerRowData.dr.length;
@@ -207,7 +207,7 @@ Account.extend({
             temp["s.no"] = count++;
             balanceBdField = TemplateHelper(dataByCompany[key]).searchFieldV2("balanceBd");
             if (balanceBdField.name === "balanceBd") {
-                temp.particular = key.replace(/^./, key[0].toUpperCase());
+                temp.particular = $S.capitalize(key) + " A/C";
                 temp.debitBalance = balanceBdField.dr;
                 temp.creditBalance = balanceBdField.cr;
                 if ($S.isNumeric(temp.debitBalance)) {

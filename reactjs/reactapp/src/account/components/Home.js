@@ -18,13 +18,13 @@ class Home extends React.Component {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="list-group">
-                                <Link to="/journal">
+                                <Link to={this.props.data.pages.journal}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Journal</button>
                                 </Link>
-                                <Link to="/ledger">
+                                <Link to={this.props.data.pages.ledger}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Ledger</button>
                                 </Link>
-                                <Link to="/trial">
+                                <Link to={this.props.data.pages.trail}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial Balance</button>
                                 </Link>
                             </div>

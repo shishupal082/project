@@ -13,12 +13,33 @@ import Api from "../common/Api";
 import TemplateHelper from "../common/TemplateHelper";
 
 var baseapi = $$$.baseapi;
+var basepathname = $$$.basepathname;
 
-var backIconUrl = baseapi + "/static/img/icons/back-32.png";
+var backIconUrl = baseapi + $$$.backIconUrl;
+var accountTemplateApi = [];
+var journalDataApi = [];
+var accountDataApi = [];
 
-var accountTemplateApi = [baseapi+"/pvt/app-data/account/accountTemplate.json"];
-var journalDataApi = [baseapi+"/pvt/app-data/account/journalData2.json"];
-var accountDataApi = [baseapi+"/pvt/app-data/account/accounts.json"];
+var pages = {home: basepathname+"/", journal: basepathname+"/journal",
+            ledger: basepathname+"/ledger", trail: basepathname+"/trail"};
+
+if ($S.isArray($$$.accountTemplateApi)) {
+    accountTemplateApi = $$$.accountTemplateApi.map(function(el, i, arr) {
+        return baseapi+el;
+    });
+}
+
+if ($S.isArray($$$.journalDataApi)) {
+    journalDataApi = $$$.journalDataApi.map(function(el, i, arr) {
+        return baseapi+el;
+    });
+}
+
+if ($S.isArray($$$.accountDataApi)) {
+    accountDataApi = $$$.accountDataApi.map(function(el, i, arr) {
+        return baseapi+el;
+    });
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -150,27 +171,28 @@ class App extends React.Component {
     }
     render() {
         var methods = {};
-        var home = <Home state={this.state}/>;
-        var data = {accountTemplate: this.accountTemplate, journalData: this.journalData,
+        var homeData = {pages: pages};
+        var home = <Home state={this.state} data={homeData}/>;
+        var data = {pages: pages, accountTemplate: this.accountTemplate, journalData: this.journalData,
                     companyName: this.companyName, backIconUrl: backIconUrl};
 
-        var ledgerData = {accountTemplate: this.accountTemplate, backIconUrl: backIconUrl,
+        var ledgerData = {pages: pages, accountTemplate: this.accountTemplate, backIconUrl: backIconUrl,
                         companyName: this.companyName};
 
         var journal = <Journal state={this.state} data={data} heading="Journal"/>;
         var ledger = <LedgerBook state={this.state} data={ledgerData} methods={methods} heading="Ledger Book"/>;
         var trial = <TrialBalance state={this.state} data={data} methods={methods} heading="Trial Balance"/>;
         return (<BrowserRouter><Switch>
-                  <Route exact path="/">
+                  <Route exact path={pages.home}>
                     {home}
                   </Route>
-                  <Route path="/journal">
+                  <Route path={pages.journal}>
                     {journal}
                   </Route>
-                  <Route path="/ledger">
+                  <Route path={pages.ledger}>
                     {ledger}
                   </Route>
-                  <Route path="/trial">
+                  <Route path={pages.trial}>
                     {trial}
                   </Route>
                   <Route>

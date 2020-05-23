@@ -43,18 +43,14 @@
 <script type="text/javascript">
 var GLOBAL = {
     baseapi: "http://localhost:3000",
-    basepathname: ""
+    basepathname: "",
+    backIconUrl: "/static/img/icons/back-32.png"
 };
 
-GLOBAL.homeDataApi = "/pvt/app-data/management/data.json";
-GLOBAL.printDataApi = "/pvt/app-data/management/printData.json";
-GLOBAL.initialPrintDataApi = "/pvt/app-data/management/initial-data/";
-GLOBAL.backIconUrl = "/static/img/icons/back-32.png";
-GLOBAL.formPostUrl = "/post";
-GLOBAL.formApi = [
-  "/pvt/app-data/management/form.json",
-  "/pvt/app-data/management/formTemplate.json"
-];
+GLOBAL.accountTemplateApi = ["/pvt/app-data/account/accountTemplate.json"];
+GLOBAL.journalDataApi = ["/pvt/app-data/account/journalData3.json"];
+GLOBAL.accountDataApi = ["/pvt/app-data/account/accounts.json"];
+
 window.GLOBAL = GLOBAL;
 </script>
   </body>
