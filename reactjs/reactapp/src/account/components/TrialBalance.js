@@ -1,8 +1,5 @@
 import React from 'react';
 import Header from "./partial/Header";
-import LedgerBookRow from "./partial/LedgerBookRow";
-
-// import $S from "../../interface/stack.js";
 
 class TrialBalance extends React.Component {
     constructor(props) {
@@ -14,12 +11,10 @@ class TrialBalance extends React.Component {
     componentDidMount() {
     }
     render() {
-        var LedgerBookByCompany = this.props.state.ledgerData.map(function(el, i, arr) {
-            return <LedgerBookRow key={i} accountName={el.accountName} fields={el.fields}/>;
-        });
+        var trialBalance = null;
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading}/>
-                    {LedgerBookByCompany}
+                    {trialBalance}
             </div>);
     }
 }

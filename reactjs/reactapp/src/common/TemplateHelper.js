@@ -31,6 +31,31 @@ Template.fn = Template.prototype = {
         }
         return {};
     },
+    searchFieldV2: function(fieldName) {
+        if (!$S.isString(fieldName)) {
+            return {};
+        }
+        var field = {};
+        if ($S.isArray(this.template)) {
+            for (var i = 0; i<this.template.length; i++) {
+                field = Template(this.template[i]).searchField(fieldName);
+                if (field.name === fieldName) {
+                    return field;
+                }
+            }
+        } else if ($S.isObject(this.template)) {
+            if (this.template["name"] === fieldName) {
+                return this.template;
+            }
+            for (var key in this.template) {
+                field = Template(this.template[key]).searchFieldV2(fieldName);
+                if (field.name === fieldName) {
+                    return field;
+                }
+            }
+        }
+        return {};
+    },
     generateFormValues: function(formValue) {
         var i;
         if ($S.isObject(this.template)) {

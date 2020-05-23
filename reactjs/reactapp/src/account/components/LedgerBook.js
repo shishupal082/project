@@ -2,8 +2,6 @@ import React from 'react';
 import Header from "./partial/Header";
 import LedgerBookRow from "./partial/LedgerBookRow";
 
-// import $S from "../../interface/stack.js";
-
 class LedgerBook extends React.Component {
     constructor(props) {
         super(props);
