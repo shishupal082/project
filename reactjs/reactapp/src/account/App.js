@@ -86,7 +86,7 @@ class App extends React.Component {
         ledgerDataFields = AccountHelper.getLeaderBookFields(this, this.accountData, dataByCompany);
         console.log(ledgerDataFields);
 
-        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany);
+        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
         this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields});
 

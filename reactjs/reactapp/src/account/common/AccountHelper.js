@@ -84,7 +84,7 @@ Account.extend({
 //getDataByCompany
 Account.extend({
     getDataByCompany: function(finalJournalData, validAccountName) {
-        var i, j, k, particularEntry, accountName, entry;
+        var i, j, k, particularEntry, accountName, entry, temp;
         var dataByCompany = {};
         if (!$S.isArray(finalJournalData)) {
             return dataByCompany;
@@ -97,6 +97,17 @@ Account.extend({
                 for (j = 0; j < finalJournalData[i].entry.length; j++) {
                     entry = finalJournalData[i].entry[j];
                     if ($S.isArray(entry.particularEntry)) {
+                        if (entry.particularEntry.length >= 2) {
+                            temp = entry.particularEntry[0].particularText;
+                            // Swap debit and credit
+                            if ($S.isDefined(entry.particularEntry[0].dr) && $S.isDefined(entry.particularEntry[1].cr)) {
+                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
+                                entry.particularEntry[1].particularText = "By " + temp;
+                            } else if ($S.isDefined(entry.particularEntry[1].dr) && $S.isDefined(entry.particularEntry[0].cr)) {
+                                entry.particularEntry[0].particularText = "By " + entry.particularEntry[1].particularText;
+                                entry.particularEntry[1].particularText = temp;
+                            }
+                        }
                         for (k = 0; k < entry.particularEntry.length; k++) {
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
@@ -295,15 +306,19 @@ Account.extend({
 });
 //getTrialBalanceFields
 Account.extend({
-    getTrialBalanceFields: function(self, dataByCompany) {
+    getTrialBalanceFields: function(self, dataByCompany, validAccountName) {
         var trialBalanceFields = [];
-        if (!$S.isObject(dataByCompany)) {
+        if (!$S.isObject(dataByCompany) || !$S.isArray(validAccountName)) {
             return trialBalanceFields;
         }
         var key, temp, template, count = 1, balanceBdField;
-        var totalDebit = 0, totalCredit = 0
+        var totalDebit = 0, totalCredit = 0, i;
         trialBalanceFields.push(self.getTemplate("trialBalance1stRow"));
-        for (key in dataByCompany) {
+        for (i = 0; i < validAccountName.length; i++) {
+            key = validAccountName[i];
+            if ($S.isUndefined(dataByCompany[key])) {
+                continue;
+            }
             temp = {};
             temp["s.no"] = count++;
             balanceBdField = TemplateHelper(dataByCompany[key]).searchFieldV2("balanceBd");
@@ -318,7 +333,7 @@ Account.extend({
                     totalCredit += temp.creditBalance*1;
                 }
             } else {
-                continue;
+                temp.particular = $S.capitalize(key) + " A/C";
             }
             template = self.getTemplate("trialBalanceRow");
             TemplateHelper.setTemplateTextByFormValues(template, temp);
