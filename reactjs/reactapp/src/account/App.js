@@ -4,6 +4,7 @@ import Home from "./components/Home";
 import Journal from "./components/Journal";
 import LedgerBook from "./components/LedgerBook";
 import TrialBalance from "./components/TrialBalance";
+import CurrentBal from "./components/CurrentBal";
 
 import AccountHelper from "./common/AccountHelper";
 
@@ -21,7 +22,8 @@ var journalDataApi = [];
 var accountDataApi = [];
 
 var pages = {home: basepathname+"/", journal: basepathname+"/journal",
-            ledger: basepathname+"/ledger", trail: basepathname+"/trail"};
+            ledger: basepathname+"/ledger", trail: basepathname+"/trail",
+            currentbal: basepathname+"/currentbal"};
 
 if ($S.isArray($$$.accountTemplateApi)) {
     accountTemplateApi = $$$.accountTemplateApi.map(function(el, i, arr) {
@@ -49,7 +51,8 @@ class App extends React.Component {
             journalRowData: [],
             dataByCompany: {},
             ledgerDataFields: [],
-            trialBalanceFields: []
+            trialBalanceFields: [],
+            currentBalanceFields: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -77,7 +80,7 @@ class App extends React.Component {
         return null;
     }
     setLedgerRowData() {
-        var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [];
+        var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
         var validAccountName = this.accountData.map(function(el, index, arr) {
             return el.accountName;
         });
@@ -88,7 +91,7 @@ class App extends React.Component {
 
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
         this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
-                trialBalanceFields: trialBalanceFields});
+                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
 
         return true;
     }
@@ -184,12 +187,18 @@ class App extends React.Component {
         var journal = <Journal state={this.state} data={data} heading="Journal"/>;
         var ledger = <LedgerBook state={this.state} data={ledgerData} methods={methods} heading="Ledger Book"/>;
         var trial = <TrialBalance state={this.state} data={data} methods={methods} heading="Trial Balance"/>;
+
+        var currentbalData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName};
+        var currentbal = <CurrentBal state={this.state} data={currentbalData} methods={methods} heading="Current Balance"/>;
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>
                     {home}
                   </Route>
                   <Route path={pages.journal}>
                     {journal}
+                  </Route>
+                  <Route path={pages.currentbal}>
+                    {currentbal}
                   </Route>
                   <Route path={pages.ledger}>
                     {ledger}

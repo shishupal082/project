@@ -1,0 +1,196 @@
+{
+    "journalEntry1stRow": [
+        {
+            "tag": "tr",
+            "text": [
+                {
+                    "tag": "th",
+                    "className": "w-120px",
+                    "text": "Date"
+                },
+                {
+                    "tag": "th",
+                    "className": "p-0",
+                    "text": {
+                        "tag": "table.tbody.tr",
+                        "className": "table table-bordered m-0",
+                        "text": [
+                            {
+                                "tag": "td",
+                                "text": "Particulars"
+                            },
+                            {
+                                "tag": "td",
+                                "className": "w-120px",
+                                "text": "Debit"
+                            },
+                            {
+                                "tag": "td",
+                                "className": "w-120px",
+                                "text": "Credit"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "journalEntry": [
+        {
+            "tag": "tr",
+            "text": [
+                {
+                    "tag": "td",
+                    "name": "date",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "particular",
+                    "text": []
+                }
+            ]
+        }
+    ],
+    "journalEntryParticular": [
+        {
+            "tag": "table.tbody.tr",
+            "className": "table table-bordered m-0",
+            "text": [
+                {
+                    "tag": "td",
+                    "name": "particularText",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "className": "w-120px",
+                    "name": "dr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "className": "w-120px",
+                    "name": "cr",
+                    "text": ""
+                }
+            ]
+        }
+    ],
+    "ledgerHeading": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "name": "debitDate",
+                "text": "Date"
+            },
+            {
+                "tag": "th",
+                "name": "debitParticular",
+                "text": "Debit Particular"
+            },
+            {
+                "tag": "th",
+                "name": "debitAmount",
+                "text": "Debit Amount"
+            },
+            {
+                "tag": "th",
+                "name": "creditDate",
+                "text": "Date"
+            },
+            {
+                "tag": "th",
+                "name": "creditParticular",
+                "text": "Credit Particular"
+            },
+            {
+                "tag": "th",
+                "name": "creditAmount",
+                "text": "Credit Amount"
+            }
+        ]
+    },
+    "ledgerRow": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "debitDate",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "debitParticular",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "debitAmount",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "creditDate",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "creditParticular",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "creditAmount",
+                "text": ""
+            }
+        ]
+    },
+    "trialBalance1stRow": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "text": "Particular"
+            },
+            {
+                "tag": "th",
+                "text": "Dr. Balance"
+            },
+            {
+                "tag": "th",
+                "text": "Cr. Balance"
+            }
+        ]
+    },
+    "trialBalanceRow": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "s.no",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "particular",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "debitBalance",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "creditBalance",
+                "text": ""
+            }
+        ]
+    }
+}

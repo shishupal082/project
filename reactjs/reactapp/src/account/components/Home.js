@@ -27,6 +27,9 @@ class Home extends React.Component {
                                 <Link to={this.props.data.pages.trail}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial Balance</button>
                                 </Link>
+                                <Link to={this.props.data.pages.currentbal}>
+                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Current Balance</button>
+                                </Link>
                             </div>
                         </div>
                     </div>
