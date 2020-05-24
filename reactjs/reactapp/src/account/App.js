@@ -56,6 +56,7 @@ class App extends React.Component {
         this.accountDataLoaded = false;
         this.accountTemplate = {};
         this.journalData = []; // [{}]
+        this.finalJournalData = []; // [{}]
         this.accountData = [];
         this.companyName = "";
         this.childrenMethod = {};
@@ -80,7 +81,7 @@ class App extends React.Component {
         var validAccountName = this.accountData.map(function(el, index, arr) {
             return el.accountName;
         });
-        dataByCompany = AccountHelper.getDataByCompany(this.journalData, validAccountName);
+        dataByCompany = AccountHelper.getDataByCompany(this.finalJournalData, validAccountName);
         console.log(dataByCompany);
         ledgerDataFields = AccountHelper.getLeaderBookFields(this, this.accountData, dataByCompany);
         console.log(ledgerDataFields);
@@ -166,6 +167,7 @@ class App extends React.Component {
                 $S.log("Invalid response (journalData):" + response);
             }
         }, function() {
+            self.finalJournalData = AccountHelper.getFinalJournalData(self.journalData);
             self.dataLoadComplete();
         }, null, Api.getAjaxApiCallMethod());
     }

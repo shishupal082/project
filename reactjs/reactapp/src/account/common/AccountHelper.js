@@ -81,21 +81,21 @@ Account.extend({
         return dataByCompany;
     }
 });
-
+//getDataByCompany
 Account.extend({
-    getDataByCompany: function(journalData, validAccountName) {
+    getDataByCompany: function(finalJournalData, validAccountName) {
         var i, j, k, particularEntry, accountName, entry;
         var dataByCompany = {};
-        if (!$S.isArray(journalData)) {
+        if (!$S.isArray(finalJournalData)) {
             return dataByCompany;
         }
         if (!$S.isArray(validAccountName)) {
             validAccountName = [];
         }
-        for (i=0; i<journalData.length; i++) {
-            if ($S.isArray(journalData[i].entry)) {
-                for (j = 0; j < journalData[i].entry.length; j++) {
-                    entry = journalData[i].entry[j];
+        for (i=0; i<finalJournalData.length; i++) {
+            if ($S.isArray(finalJournalData[i].entry)) {
+                for (j = 0; j < finalJournalData[i].entry.length; j++) {
+                    entry = finalJournalData[i].entry[j];
                     if ($S.isArray(entry.particularEntry)) {
                         for (k = 0; k < entry.particularEntry.length; k++) {
                             accountName = entry.particularEntry[k].account;
@@ -125,6 +125,107 @@ Account.extend({
     }
 });
 
+Account.extend({
+    _getRequiredAmount: function(entry, accountName) {
+        var amount = 0, i;
+        if ($S.isArray(entry)) {
+            for (i = 0; i < entry.length; i++) {
+                if (entry[i].account === accountName) {
+                    if ($S.isDefined(entry[i].dr)) {
+                        amount = entry[i].dr;
+                    } else if ($S.isDefined(entry[i].cr)) {
+                        amount = entry[i].cr;
+                    }
+                    break;
+                }
+            }
+        }
+        return amount.toString();
+    },
+    _serachEntryByAccount: function(entry, accountName) {
+        var result = {}, i;
+        if ($S.isArray(entry)) {
+            for (i = 0; i < entry.length; i++) {
+                if (entry[i].account === accountName) {
+                    result = entry[i];
+                    break;
+                }
+            }
+        }
+        return result;
+    },
+    getFinalJournalData: function(journalData) {
+        var finalJournalData = [];
+        var i, j, k, particularEntry, accountName, entry, temp, temp2;
+        var debitEntry, creditEntry, tempEntry;
+        if (!$S.isArray(journalData)) {
+            return finalJournalData;
+        }
+        var journalEntry = {};;
+        for (i=0; i<journalData.length; i++) {
+            journalEntry = {};
+            journalEntry["entry"] = [];
+            if ($S.isArray(journalData[i].entry)) {
+                for (j = 0; j < journalData[i].entry.length; j++) {
+                    entry = $S.clone(journalData[i].entry[j]);
+                    temp = {"debitAccounts": [], "creditAccounts": []};
+                    if ($S.isArray(entry.particularEntry)) {
+                        for (k = 0; k < entry.particularEntry.length; k++) {
+                            accountName = entry.particularEntry[k].account;
+                            if ($S.isString(accountName) && accountName.length) {
+                                particularEntry = $S.clone(entry.particularEntry[k]);
+                                if ($S.isDefined(particularEntry.dr)) {
+                                    debitEntry = particularEntry;
+                                    temp.debitAccounts.push(accountName);
+                                } else if ($S.isDefined(particularEntry.cr)) {
+                                    creditEntry = particularEntry;
+                                    temp.creditAccounts.push(accountName);
+                                }
+                            }
+                        }
+                        if (temp.debitAccounts.length < 2 && temp.creditAccounts.length < 2) {
+                            journalEntry["entry"].push(entry);
+                            continue;
+                        }
+                        if (temp.debitAccounts.length > 1 && temp.creditAccounts.length > 1) {
+                            console.log("Invalid journal entry: (multiple debit and credit row)");
+                            console.log(entry);
+                            continue;
+                        }
+                        // i.e. single debit entry and multiple credit entry
+                        if (temp.debitAccounts.length < temp.creditAccounts.length) {
+                            for (k = 0; k < entry.particularEntry.length; k++) {
+                                tempEntry = {date: entry.date, particularEntry: []};
+                                if ($S.isDefined(entry.particularEntry[k].cr)) {
+                                    tempEntry.particularEntry.push($S.clone(entry.particularEntry[k]));
+                                    temp2 = $S.clone(debitEntry);
+                                    temp2.dr = entry.particularEntry[k].cr;
+                                    tempEntry.particularEntry.push(temp2);
+                                    journalEntry["entry"].push(tempEntry);
+                                }
+                            }
+                        } else if (temp.debitAccounts.length > temp.creditAccounts.length) {
+                            for (k = 0; k < entry.particularEntry.length; k++) {
+                                tempEntry = {date: entry.date, particularEntry: []};
+                                if ($S.isDefined(entry.particularEntry[k].dr)) {
+                                    tempEntry.particularEntry.push($S.clone(entry.particularEntry[k]));
+                                    temp2 = $S.clone(creditEntry);
+                                    temp2.cr = entry.particularEntry[k].dr;
+                                    tempEntry.particularEntry.push(temp2);
+                                    journalEntry["entry"].push(tempEntry);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            finalJournalData.push(journalEntry);
+        }
+        return finalJournalData;
+    }
+});
+
+//getLeaderBookFields
 Account.extend({
     getLeaderBookFields: function(self, accountData, dataByCompany) {
         var ledgerData = [];
@@ -192,7 +293,7 @@ Account.extend({
         return ledgerData;
     }
 });
-
+//getTrialBalanceFields
 Account.extend({
     getTrialBalanceFields: function(self, dataByCompany) {
         var trialBalanceFields = [];
