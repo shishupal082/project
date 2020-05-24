@@ -90,7 +90,7 @@ class App extends React.Component {
 
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
 
-        currentBalanceFields = ledgerDataFields;
+        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, this.finalJournalData, validAccountName);;
         this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
 
@@ -188,7 +188,7 @@ class App extends React.Component {
                     renderFieldRow={this.state.ledgerDataFields} heading="Ledger Book"/>;
 
         var currentbal = <LedgerBook state={this.state} data={commonData}
-                    renderFieldRow={this.state.ledgerDataFields} heading="Current Balance"/>;
+                    renderFieldRow={this.state.currentBalanceFields} heading="Current Balance"/>;
 
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>

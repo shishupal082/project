@@ -92,6 +92,7 @@ Account.extend({
         if (!$S.isArray(validAccountName)) {
             validAccountName = [];
         }
+        finalJournalData = $S.clone(finalJournalData);
         for (i=0; i<finalJournalData.length; i++) {
             if ($S.isArray(finalJournalData[i].entry)) {
                 for (j = 0; j < finalJournalData[i].entry.length; j++) {
@@ -132,6 +133,57 @@ Account.extend({
             }
         }
         Account._generateLedgerBalance(dataByCompany);
+        return dataByCompany;
+    }
+});
+
+//getDataByCompanyV2
+Account.extend({
+    getDataByCompanyV2: function(finalJournalData, validAccountName) {
+        var i, j, k, particularEntry, accountName, entry, temp;
+        var dataByCompany = {};
+        if (!$S.isArray(finalJournalData)) {
+            return dataByCompany;
+        }
+        if (!$S.isArray(validAccountName)) {
+            validAccountName = [];
+        }
+        finalJournalData = $S.clone(finalJournalData);
+        for (i=0; i<finalJournalData.length; i++) {
+            if ($S.isArray(finalJournalData[i].entry)) {
+                for (j = 0; j < finalJournalData[i].entry.length; j++) {
+                    entry = finalJournalData[i].entry[j];
+                    if ($S.isArray(entry.particularEntry)) {
+                        if (entry.particularEntry.length >= 2) {
+                            temp = entry.particularEntry[0].particularText;
+                            // Swap debit and credit
+                            if ($S.isDefined(entry.particularEntry[0].dr) && $S.isDefined(entry.particularEntry[1].cr)) {
+                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
+                                entry.particularEntry[1].particularText = "By " + temp;
+                            } else if ($S.isDefined(entry.particularEntry[1].dr) && $S.isDefined(entry.particularEntry[0].cr)) {
+                                entry.particularEntry[0].particularText = "By " + entry.particularEntry[1].particularText;
+                                entry.particularEntry[1].particularText = temp;
+                            }
+                        }
+                        for (k = 0; k < entry.particularEntry.length; k++) {
+                            accountName = entry.particularEntry[k].account;
+                            if (validAccountName.indexOf(accountName) < 0) {
+                                console.log("Invalid accountName: " + accountName);
+                                continue;
+                            }
+                            if ($S.isString(accountName) && accountName.length) {
+                                if ($S.isUndefined(dataByCompany[accountName])) {
+                                    dataByCompany[accountName] = {"accountName": accountName, currentBalRowData: []};
+                                }
+                                particularEntry = $S.clone(entry.particularEntry[k]);
+                                particularEntry.date = entry.date;
+                                dataByCompany[accountName].currentBalRowData.push(particularEntry);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return dataByCompany;
     }
 });
@@ -349,6 +401,44 @@ Account.extend({
         return trialBalanceFields;
     }
 });
+//getCurrentBalanceFields
+Account.extend({
+    getCurrentBalanceFields: function(self, finalJournalData, validAccountName) {
+        var currentBalanceFields = [], currentBalanceData = [];
+        var dataByCompany = AccountHelper.getDataByCompanyV2(finalJournalData, validAccountName);
+        var i, j, key;
+        if(!$S.isArray(validAccountName)) {
+            return currentBalanceFields;
+        }
+        for (i = 0; i < validAccountName.length; i++) {
+            key = validAccountName[i];
+            if ($S.isUndefined(dataByCompany[key])) {
+                continue;
+            }
+            currentBalanceData.push(dataByCompany[key]);
+        }
+        console.log("currentBalanceData");
+        console.log(currentBalanceData);
+        var template = {accountName:"", fields: []}, fieldTemplate, rowData;
+        var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
+        for (i = 0; i < currentBalanceData.length; i++) {
+            currentBalanceFields.push($S.clone(template));
+            currentBalanceFields[i].accountName = $S.capitalize(currentBalanceData[i].accountName);
+            currentBalanceFields[i].fields.push(fieldHeaderTemplate);
+            if ($S.isArray(currentBalanceData[i].currentBalRowData)) {
+                for (j = 0; j < currentBalanceData[i].currentBalRowData.length; j++) {
+                    rowData = currentBalanceData[i].currentBalRowData[j];
+                    fieldTemplate = self.getTemplate("currentBalRow");
+                    TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
+                    currentBalanceFields[i].fields.push(fieldTemplate);
+                }
+            }
+        }
+        console.log("currentBalanceFields");
+        console.log(currentBalanceFields);
+        return currentBalanceFields;
+    }
+})
 AccountHelper = Account;
 })($S);
 
