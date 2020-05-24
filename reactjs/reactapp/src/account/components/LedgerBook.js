@@ -12,7 +12,7 @@ class LedgerBook extends React.Component {
     componentDidMount() {
     }
     render() {
-        var LedgerBookByCompany = this.props.state.ledgerDataFields.map(function(el, i, arr) {
+        var LedgerBookByCompany = this.props.renderFieldRow.map(function(el, i, arr) {
             return <LedgerBookRow key={i} accountName={el.accountName} fields={el.fields}/>;
         });
         return (<div className="container">

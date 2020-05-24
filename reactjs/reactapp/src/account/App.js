@@ -4,7 +4,6 @@ import Home from "./components/Home";
 import Journal from "./components/Journal";
 import LedgerBook from "./components/LedgerBook";
 import TrialBalance from "./components/TrialBalance";
-import CurrentBal from "./components/CurrentBal";
 
 import AccountHelper from "./common/AccountHelper";
 
@@ -90,6 +89,8 @@ class App extends React.Component {
         console.log(ledgerDataFields);
 
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
+
+        currentBalanceFields = ledgerDataFields;
         this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
 
@@ -175,21 +176,20 @@ class App extends React.Component {
         }, null, Api.getAjaxApiCallMethod());
     }
     render() {
-        var methods = {};
-        var homeData = {pages: pages};
-        var home = <Home state={this.state} data={homeData}/>;
-        var data = {pages: pages, accountTemplate: this.accountTemplate, journalData: this.journalData,
-                    companyName: this.companyName, backIconUrl: backIconUrl};
+        var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName};
 
-        var ledgerData = {pages: pages, accountTemplate: this.accountTemplate, backIconUrl: backIconUrl,
-                        companyName: this.companyName};
+        var home = <Home state={this.state} data={commonData}/>;
 
-        var journal = <Journal state={this.state} data={data} heading="Journal"/>;
-        var ledger = <LedgerBook state={this.state} data={ledgerData} methods={methods} heading="Ledger Book"/>;
-        var trial = <TrialBalance state={this.state} data={data} methods={methods} heading="Trial Balance"/>;
+        var trial = <TrialBalance state={this.state} data={commonData} heading="Trial Balance"/>;
 
-        var currentbalData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName};
-        var currentbal = <CurrentBal state={this.state} data={currentbalData} methods={methods} heading="Current Balance"/>;
+        var journal = <Journal state={this.state} data={commonData} heading="Journal"/>;
+
+        var ledger = <LedgerBook state={this.state} data={commonData}
+                    renderFieldRow={this.state.ledgerDataFields} heading="Ledger Book"/>;
+
+        var currentbal = <LedgerBook state={this.state} data={commonData}
+                    renderFieldRow={this.state.ledgerDataFields} heading="Current Balance"/>;
+
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>
                     {home}
