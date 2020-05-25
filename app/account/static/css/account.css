@@ -5,3 +5,7 @@
 .w-120px {
 	width: 120px;
 }
+.table th,
+.table td {
+	padding: 4px;
+}

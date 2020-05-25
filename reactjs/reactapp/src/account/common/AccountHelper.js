@@ -103,9 +103,9 @@ Account.extend({
                             // Swap debit and credit
                             if ($S.isDefined(entry.particularEntry[0].dr) && $S.isDefined(entry.particularEntry[1].cr)) {
                                 entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
-                                entry.particularEntry[1].particularText = "By " + temp;
+                                entry.particularEntry[1].particularText = temp;
                             } else if ($S.isDefined(entry.particularEntry[1].dr) && $S.isDefined(entry.particularEntry[0].cr)) {
-                                entry.particularEntry[0].particularText = "By " + entry.particularEntry[1].particularText;
+                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
                                 entry.particularEntry[1].particularText = temp;
                             }
                         }
@@ -161,9 +161,9 @@ Account.extend({
                             // Swap debit and credit
                             if ($S.isDefined(entry.particularEntry[0].dr) && $S.isDefined(entry.particularEntry[1].cr)) {
                                 entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
-                                entry.particularEntry[1].particularText = "By " + temp;
+                                entry.particularEntry[1].particularText = temp;
                             } else if ($S.isDefined(entry.particularEntry[1].dr) && $S.isDefined(entry.particularEntry[0].cr)) {
-                                entry.particularEntry[0].particularText = "By " + entry.particularEntry[1].particularText;
+                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
                                 entry.particularEntry[1].particularText = temp;
                             }
                         }

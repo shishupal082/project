@@ -63,19 +63,19 @@
         "accountName": "coin"
     },
     {
-        "accountName": "spin"
-    },
-    {
-        "accountName": "gift"
+        "accountName": "computerwin"
     },
     {
         "accountName": "win"
     },
     {
-        "accountName": "computerwin"
+        "accountName": "loss"
     },
     {
-        "accountName": "loss"
+        "accountName": "spin"
+    },
+    {
+        "accountName": "gift"
     },
     {
         "accountName": "bonus"
