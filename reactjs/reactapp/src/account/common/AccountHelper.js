@@ -112,7 +112,9 @@ Account.extend({
                         for (k = 0; k < entry.particularEntry.length; k++) {
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
-                                console.log("Invalid accountName: " + accountName);
+                                if ($S.isDefined(accountName)) {
+                                    console.log("Invalid accountName: " + accountName);
+                                }
                                 continue;
                             }
                             if ($S.isString(accountName) && accountName.length) {
@@ -168,7 +170,9 @@ Account.extend({
                         for (k = 0; k < entry.particularEntry.length; k++) {
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
-                                console.log("Invalid accountName: " + accountName);
+                                if ($S.isDefined(accountName)) {
+                                    console.log("Invalid accountName: " + accountName);
+                                }
                                 continue;
                             }
                             if ($S.isString(accountName) && accountName.length) {
@@ -406,7 +410,8 @@ Account.extend({
     getCurrentBalanceFields: function(self, finalJournalData, validAccountName) {
         var currentBalanceFields = [], currentBalanceData = [];
         var dataByCompany = AccountHelper.getDataByCompanyV2(finalJournalData, validAccountName);
-        var i, j, key;
+        var i, j, key, lastAmount, temp;
+        var debitAmount, creditAmount, currentAmount = 0;
         if(!$S.isArray(validAccountName)) {
             return currentBalanceFields;
         }
@@ -414,6 +419,52 @@ Account.extend({
             key = validAccountName[i];
             if ($S.isUndefined(dataByCompany[key])) {
                 continue;
+            }
+            lastAmount = 0;
+            debitAmount = 0;
+            creditAmount = 0;
+            if ($S.isArray(dataByCompany[key].currentBalRowData)) {
+                for (j = 0; j < dataByCompany[key].currentBalRowData.length; j++) {
+                    if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].dr)) {
+                        currentAmount = dataByCompany[key].currentBalRowData[j].dr * 1;
+                        debitAmount += currentAmount;
+                    }
+                    if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].cr)) {
+                        currentAmount = (-1)* dataByCompany[key].currentBalRowData[j].cr * 1;
+                        creditAmount += (-1) * currentAmount;
+                    }
+                    dataByCompany[key].currentBalRowData[j].balance = lastAmount + currentAmount;
+                    lastAmount = dataByCompany[key].currentBalRowData[j].balance;
+                }
+                if (j > 0) {
+                    temp = {};
+                    if (lastAmount > 0) {
+                        temp.cr = lastAmount;
+                        creditAmount += lastAmount;
+                        temp.particularText = {"tag":"b", "text":"By Balance C/D"};
+                        dataByCompany[key].currentBalRowData.push(temp);
+                    } else if (lastAmount < 0) {
+                        temp.dr = (-1)*lastAmount;
+                        debitAmount += temp.dr;
+                        temp.particularText = {"tag":"b", "text":"By Balance C/D"};
+                        dataByCompany[key].currentBalRowData.push(temp);
+                    }
+                    temp = {};
+                    temp.particularText = {"tag":"div.b", "className": "text-right", "text":"Total"};
+                    temp.dr = debitAmount;
+                    temp.cr = creditAmount;
+                    dataByCompany[key].currentBalRowData.push(temp);
+                    temp = {};
+                    temp.particularText = {"tag":"b", "text":"By Balance B/D"};
+                    if (lastAmount > 0) {
+                        temp.dr = lastAmount;
+                        dataByCompany[key].currentBalRowData.push(temp);
+                    } else if (lastAmount < 0) {
+                        temp.cr = (-1)*lastAmount;
+                        debitAmount += temp.cr;
+                        dataByCompany[key].currentBalRowData.push(temp);
+                    }
+                }
             }
             currentBalanceData.push(dataByCompany[key]);
         }
@@ -428,6 +479,9 @@ Account.extend({
             if ($S.isArray(currentBalanceData[i].currentBalRowData)) {
                 for (j = 0; j < currentBalanceData[i].currentBalRowData.length; j++) {
                     rowData = currentBalanceData[i].currentBalRowData[j];
+                    if ($S.isNumber(rowData.balance) && rowData.balance < 0) {
+                        rowData.balance = "("+(-1*rowData.balance)+")";
+                    }
                     fieldTemplate = self.getTemplate("currentBalRow");
                     TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
                     currentBalanceFields[i].fields.push(fieldTemplate);
