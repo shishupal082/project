@@ -15,7 +15,7 @@ class TrialBalance extends React.Component {
     render() {
         var trialBalanceTr = Api.generateFields(this.props, this.props.state.trialBalanceFields);
         return (<div className="container">
-                    <Header data={this.props.data} heading={this.props.heading}/>
+                    <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
                     <table className="table table-bordered table-striped"><tbody>{trialBalanceTr}</tbody></table>
             </div>);
     }

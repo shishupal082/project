@@ -19,7 +19,7 @@ class Journal extends React.Component {
             return Api.generateFields(self.props, el);
         });
         return (<div className="container">
-                    <Header data={this.props.data} heading={this.props.heading}/>
+                    <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
                     <div className="row">
                         <table className="table2 table-bordered table-striped"><tbody>
                             {JournalTableTr}

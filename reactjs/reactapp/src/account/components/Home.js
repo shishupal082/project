@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import SelectUser from "./partial/SelectUser";
 // import $S from "../../interface/stack.js";
 
 class Home extends React.Component {
@@ -30,6 +31,7 @@ class Home extends React.Component {
                                 <Link to={this.props.data.pages.trail}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial Balance</button>
                                 </Link>
+                                <SelectUser data={this.props.data} methods={this.props.methods}/>
                             </div>
                         </div>
                     </div>

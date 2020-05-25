@@ -16,6 +16,9 @@ var baseapi = $$$.baseapi;
 var basepathname = $$$.basepathname;
 
 var backIconUrl = baseapi + $$$.backIconUrl;
+
+var userControlDataApi = baseapi + $$$.userControlDataApi;
+
 var accountTemplateApi = [];
 var journalDataApi = [];
 var accountDataApi = [];
@@ -24,20 +27,14 @@ var pages = {home: basepathname+"/", journal: basepathname+"/journal",
             ledger: basepathname+"/ledger", trail: basepathname+"/trail",
             currentbal: basepathname+"/currentbal"};
 
-if ($S.isArray($$$.accountTemplateApi)) {
-    accountTemplateApi = $$$.accountTemplateApi.map(function(el, i, arr) {
+function setDataApi(userData) {
+    accountTemplateApi = userData.accountTemplateApi.map(function(el, i, arr) {
         return baseapi+el;
     });
-}
-
-if ($S.isArray($$$.journalDataApi)) {
-    journalDataApi = $$$.journalDataApi.map(function(el, i, arr) {
+    journalDataApi = userData.journalDataApi.map(function(el, i, arr) {
         return baseapi+el;
     });
-}
-
-if ($S.isArray($$$.accountDataApi)) {
-    accountDataApi = $$$.accountDataApi.map(function(el, i, arr) {
+    accountDataApi = userData.accountDataApi.map(function(el, i, arr) {
         return baseapi+el;
     });
 }
@@ -60,10 +57,15 @@ class App extends React.Component {
         this.journalData = []; // [{}]
         this.finalJournalData = []; // [{}]
         this.accountData = [];
-        this.companyName = "";
-        this.childrenMethod = {};
+
         this.getChildExposedMethod = this.getChildExposedMethod.bind(this);
         this.getTemplate = this.getTemplate.bind(this);
+        this.userChange = this.userChange.bind(this);
+
+        this.childrenMethod = {};
+        this.companyName = "Loading ...";
+        this.userControlData = [];
+        this.currentUserName = "";
     }
     getChildExposedMethod(name, method) {
         if (this.childrenMethod[name]) {
@@ -111,9 +113,6 @@ class App extends React.Component {
         if (template) {
             journalRowData.push(template);
         }
-        if (this.journalData.length && this.journalData[0]["name"]) {
-            this.companyName = this.journalData[0]["name"];
-        }
         var entry = [], particularFieldTemplate = {}, temp;
         for (i = 0; i < this.journalData.length; i++) {
             if ($S.isArray(this.journalData[i].entry)) {
@@ -141,7 +140,7 @@ class App extends React.Component {
         });
         return true;
     }
-    componentDidMount() {
+    fetchData() {
         var self = this;
         $S.loadJsonData(null, accountDataApi, function(response) {
             self.accountDataLoaded = true;
@@ -175,19 +174,70 @@ class App extends React.Component {
             self.dataLoadComplete();
         }, null, Api.getAjaxApiCallMethod());
     }
+    userChange(currentUserName) {
+        this.currentUserName = currentUserName;
+        /*Reseting all values */
+        this.accountTemplateLoaded = false;
+        this.journalDataLoaded = false;
+        this.accountDataLoaded = false;
+        this.accountTemplate = {};
+        this.journalData = [];
+        this.finalJournalData = [];
+        this.accountData = [];
+        this.setState({
+            isLoaded: false,
+            journalRowData: [],
+            dataByCompany: {},
+            ledgerDataFields: [],
+            trialBalanceFields: [],
+            currentBalanceFields: []
+        }, function() {
+            var userDataNotFound = true;
+            for(var i=0; i<this.userControlData.length; i++) {
+                if (this.userControlData[i].username === this.currentUserName) {
+                    this.companyName = this.userControlData[i]["companyname"];
+                    setDataApi(this.userControlData[i]);
+                    userDataNotFound = false;
+                    this.fetchData();
+                    break;
+                }
+            }
+            if (userDataNotFound) {
+                this.companyName = "No Data Found";
+                this.setState({isLoaded: false});
+            }
+        });
+        return 1;
+    }
+    componentDidMount() {
+        var self = this;
+        $S.loadJsonData(null, [userControlDataApi], function(response) {
+            if ($S.isArray(response)) {
+                self.userControlData = response;
+                if (response.length > 0) {
+                    self.currentUserName = response[0].username;
+                }
+            } else {
+                $S.log("Invalid response (userControlDataApi):" + response);
+            }
+            self.userChange(self.currentUserName);
+        }, null, null, Api.getAjaxApiCallMethod());
+    }
     render() {
-        var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName};
+        var methods = {userChange: this.userChange};
+        var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
+                        userControlData: this.userControlData, currentUserName: this.currentUserName};
 
-        var home = <Home state={this.state} data={commonData}/>;
+        var home = <Home state={this.state} data={commonData} methods={methods}/>;
 
-        var trial = <TrialBalance state={this.state} data={commonData} heading="Trial Balance"/>;
+        var trial = <TrialBalance state={this.state} data={commonData} methods={methods} heading="Trial Balance"/>;
 
-        var journal = <Journal state={this.state} data={commonData} heading="Journal"/>;
+        var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"/>;
 
-        var ledger = <LedgerBook state={this.state} data={commonData}
+        var ledger = <LedgerBook state={this.state} data={commonData} methods={methods}
                     renderFieldRow={this.state.ledgerDataFields} heading="Ledger Book"/>;
 
-        var currentbal = <LedgerBook state={this.state} data={commonData}
+        var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods}
                     renderFieldRow={this.state.currentBalanceFields} heading="Current Balance"/>;
 
         return (<BrowserRouter><Switch>
