@@ -206,9 +206,7 @@ var Data = (function() {
         }
         return false;
     }
-    function Data() {
-        this.resetData();
-    }
+    function Data() {}
     Data.prototype.setKeys = function(keysArray) {
         if (Stack.isArray(keysArray)) {
             for (var i = 0; i < keysArray.length; i++) {
@@ -239,7 +237,7 @@ var Data = (function() {
         } else {
             console.log("Invalid key: "+key);
         }
-        return 1;
+        return this.getData(key, null);
     };
     Data.prototype.getData = function(key, defaultData) {
         if (isValidKey(key)) {

@@ -54,7 +54,8 @@
         "accountName": "bankloan"
     },
     {
-        "accountName": "capital"
+        "accountName": "capital",
+        "accountDisplayName": "Capital Account"
     },
     {
         "accountName": "discountreceived"

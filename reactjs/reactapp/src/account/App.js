@@ -44,6 +44,7 @@ var keys = ["userControlData", "apiJournalData", "finalJournalData", "apiJournal
 keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("journalRowFields");
+keys.push("dataByCompany");
 
 Data.getTemplate = function(key, defaultTemplate) {
     var allTemplate = Data.getData("accountTemplate");
@@ -100,25 +101,30 @@ class App extends React.Component {
         return Data.getTemplate(templateName, null);
     }
     setLedgerRowData() {
-        var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
-        var validAccountName = Data.getData("accountData",[]).map(function(el, index, arr) {
-            return el.accountName;
-        });
+        var dataByCompany = {}, accountData = [];
+        var ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
 
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
 
         var finalJournalData = AccountHelper.getFinalJournalData(Data.getData("apiJournalDataByDate",[]));
-        Data.setData("finalJournalData", finalJournalData);
+        finalJournalData = Data.setData("finalJournalData", finalJournalData);
 
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
 
-        dataByCompany = AccountHelper.getDataByCompany(Data.getData("finalJournalData",[]), validAccountName);
-        ledgerDataFields = AccountHelper.getLeaderBookFields(this, Data.getData("accountData",[]), dataByCompany);
+        accountData = Data.getData("accountData", []);
 
-        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
+        dataByCompany = AccountHelper.getDataByCompany(finalJournalData, accountData);
+        dataByCompany = Data.setData("dataByCompany", dataByCompany);
 
-        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, Data.getData("finalJournalData",[]), validAccountName);;
+        ledgerDataFields = AccountHelper.getLedgerBookFields(this, accountData, dataByCompany);
+
+        dataByCompany = Data.getData("dataByCompany", {});
+        finalJournalData = Data.getData("finalJournalData", []);
+        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, finalJournalData, dataByCompany, accountData);;
+        dataByCompany = Data.getData("dataByCompany", {});
+        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, accountData);
+
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
 

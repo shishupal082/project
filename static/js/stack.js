@@ -237,7 +237,7 @@ var Data = (function() {
         } else {
             console.log("Invalid key: "+key);
         }
-        return 1;
+        return this.getData(key, null);
     };
     Data.prototype.getData = function(key, defaultData) {
         if (isValidKey(key)) {

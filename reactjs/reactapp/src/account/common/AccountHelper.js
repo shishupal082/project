@@ -83,15 +83,17 @@ Account.extend({
 });
 //getDataByCompany
 Account.extend({
-    getDataByCompany: function(finalJournalData, validAccountName) {
+    getDataByCompany: function(finalJournalData, accountData) {
         var i, j, k, particularEntry, accountName, entry, temp;
         var dataByCompany = {};
-        if (!$S.isArray(finalJournalData)) {
+        if (!$S.isArray(finalJournalData) && !$S.isArray(accountData)) {
             return dataByCompany;
         }
-        if (!$S.isArray(validAccountName)) {
-            validAccountName = [];
-        }
+        var accountMapping = {};
+        var validAccountName = accountData.map(function(el, index, arr) {
+            accountMapping[el.accountName] = el;
+            return el.accountName;
+        });
         finalJournalData = $S.clone(finalJournalData);
         for (i=0; i<finalJournalData.length; i++) {
             if ($S.isArray(finalJournalData[i].entry)) {
@@ -119,69 +121,21 @@ Account.extend({
                             }
                             if ($S.isString(accountName) && accountName.length) {
                                 if ($S.isUndefined(dataByCompany[accountName])) {
-                                    dataByCompany[accountName] = {"accountName": accountName, ledgerRowData: {"dr": [], "cr": []}};
+                                    dataByCompany[accountName] = {
+                                        accountName: accountName,
+                                        accountDisplayName: Account._getAccountDisplayName(accountMapping[accountName]),
+                                        ledgerRowData: {"dr": [], "cr": []},
+                                        currentBalRowData: []
+                                    };
                                 }
                                 particularEntry = $S.clone(entry.particularEntry[k]);
                                 particularEntry.date = entry.date;
+                                dataByCompany[accountName].currentBalRowData.push(particularEntry);
                                 if ($S.isDefined(particularEntry.dr)) {
                                     dataByCompany[accountName].ledgerRowData["dr"].push(particularEntry);
                                 } else if ($S.isDefined(particularEntry.cr)) {
                                     dataByCompany[accountName].ledgerRowData["cr"].push(particularEntry);
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        Account._generateLedgerBalance(dataByCompany);
-        return dataByCompany;
-    }
-});
-
-//getDataByCompanyV2
-Account.extend({
-    getDataByCompanyV2: function(finalJournalData, validAccountName) {
-        var i, j, k, particularEntry, accountName, entry, temp;
-        var dataByCompany = {};
-        if (!$S.isArray(finalJournalData)) {
-            return dataByCompany;
-        }
-        if (!$S.isArray(validAccountName)) {
-            validAccountName = [];
-        }
-        finalJournalData = $S.clone(finalJournalData);
-        for (i=0; i<finalJournalData.length; i++) {
-            if ($S.isArray(finalJournalData[i].entry)) {
-                for (j = 0; j < finalJournalData[i].entry.length; j++) {
-                    entry = finalJournalData[i].entry[j];
-                    if ($S.isArray(entry.particularEntry)) {
-                        if (entry.particularEntry.length >= 2) {
-                            temp = entry.particularEntry[0].particularText;
-                            // Swap debit and credit
-                            if ($S.isDefined(entry.particularEntry[0].dr) && $S.isDefined(entry.particularEntry[1].cr)) {
-                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
-                                entry.particularEntry[1].particularText = temp;
-                            } else if ($S.isDefined(entry.particularEntry[1].dr) && $S.isDefined(entry.particularEntry[0].cr)) {
-                                entry.particularEntry[0].particularText = entry.particularEntry[1].particularText;
-                                entry.particularEntry[1].particularText = temp;
-                            }
-                        }
-                        for (k = 0; k < entry.particularEntry.length; k++) {
-                            accountName = entry.particularEntry[k].account;
-                            if (validAccountName.indexOf(accountName) < 0) {
-                                if ($S.isDefined(accountName)) {
-                                    console.log("Invalid accountName: " + accountName);
-                                }
-                                continue;
-                            }
-                            if ($S.isString(accountName) && accountName.length) {
-                                if ($S.isUndefined(dataByCompany[accountName])) {
-                                    dataByCompany[accountName] = {"accountName": accountName, currentBalRowData: []};
-                                }
-                                particularEntry = $S.clone(entry.particularEntry[k]);
-                                particularEntry.date = entry.date;
-                                dataByCompany[accountName].currentBalRowData.push(particularEntry);
                             }
                         }
                     }
@@ -220,6 +174,15 @@ Account.extend({
             }
         }
         return result;
+    },
+    _getAccountDisplayName: function(accountData) {
+        if ($S.isObject(accountData)) {
+            if ($S.isString(accountData.accountDisplayName)) {
+                return accountData.accountDisplayName + " A/C";
+            }
+            return $S.capitalize(accountData.accountName) + " A/C";
+        }
+        return "Account A/C";
     },
     getFinalJournalData: function(journalData) {
         var finalJournalData = [];
@@ -296,20 +259,21 @@ Account.extend({
     }
 });
 
-//getLeaderBookFields
+//getLedgerBookFields
 Account.extend({
-    getLeaderBookFields: function(self, accountData, dataByCompany) {
+    getLedgerBookFields: function(self, accountData, dataByCompany) {
         var ledgerData = [];
         if (!$S.isArray(accountData) || !$S.isObject(dataByCompany)) {
             return ledgerData;
         }
+        Account._generateLedgerBalance(dataByCompany);
         var ledgerRowTemplate = {};
         var i, j, minLength, maxLength, temp, companyData, ledgerRowFields;
         for (i=0; i<accountData.length; i++) {
             if (dataByCompany[accountData[i].accountName]) {
                 companyData = dataByCompany[accountData[i].accountName];
-                ledgerRowFields = {accountName: "", fields: []};
-                ledgerRowFields.accountName = $S.capitalize(accountData[i].accountName) + " A/C";
+                ledgerRowFields = {accountDisplayName: "", fields: []};
+                ledgerRowFields.accountDisplayName = Account._getAccountDisplayName(accountData[i]);
                 ledgerRowFields.fields.push(self.getTemplate("ledgerHeading"));
                 if ($S.isArray(companyData.ledgerRowData.dr) && $S.isArray(companyData.ledgerRowData.cr)) {
                     maxLength = companyData.ledgerRowData.dr.length;
@@ -366,16 +330,19 @@ Account.extend({
 });
 //getTrialBalanceFields
 Account.extend({
-    getTrialBalanceFields: function(self, dataByCompany, validAccountName) {
+    getTrialBalanceFields: function(self, dataByCompany, accountData) {
         var trialBalanceFields = [];
-        if (!$S.isObject(dataByCompany) || !$S.isArray(validAccountName)) {
+        if (!$S.isObject(dataByCompany) || !$S.isArray(accountData)) {
             return trialBalanceFields;
         }
+        Account._generateLedgerBalance(dataByCompany);
         var key, temp, template, count = 1, balanceBdField;
         var totalDebit = 0, totalCredit = 0, i;
+        var accountDisplayName;
         trialBalanceFields.push(self.getTemplate("trialBalance1stRow"));
-        for (i = 0; i < validAccountName.length; i++) {
-            key = validAccountName[i];
+        for (i = 0; i < accountData.length; i++) {
+            key = accountData[i].accountName;
+            accountDisplayName = Account._getAccountDisplayName(accountData[i]);
             if ($S.isUndefined(dataByCompany[key])) {
                 continue;
             }
@@ -383,7 +350,7 @@ Account.extend({
             temp["s.no"] = count++;
             balanceBdField = TemplateHelper(dataByCompany[key]).searchFieldV2("balanceBd");
             if (balanceBdField.name === "balanceBd") {
-                temp.particular = $S.capitalize(key) + " A/C";
+                temp.particular = accountDisplayName;
                 temp.debitBalance = balanceBdField.dr;
                 temp.creditBalance = balanceBdField.cr;
                 if ($S.isNumeric(temp.debitBalance)) {
@@ -393,7 +360,7 @@ Account.extend({
                     totalCredit += temp.creditBalance*1;
                 }
             } else {
-                temp.particular = $S.capitalize(key) + " A/C";
+                temp.particular = accountDisplayName;
             }
             template = self.getTemplate("trialBalanceRow");
             TemplateHelper.setTemplateTextByFormValues(template, temp);
@@ -411,16 +378,15 @@ Account.extend({
 });
 //getCurrentBalanceFields
 Account.extend({
-    getCurrentBalanceFields: function(self, finalJournalData, validAccountName) {
+    getCurrentBalanceFields: function(self, finalJournalData, dataByCompany, accountData) {
         var currentBalanceFields = [], currentBalanceData = [];
-        var dataByCompany = AccountHelper.getDataByCompanyV2(finalJournalData, validAccountName);
         var i, j, key, lastAmount, temp;
         var debitAmount, creditAmount, currentAmount = 0;
-        if(!$S.isArray(validAccountName)) {
+        if(!$S.isArray(accountData)) {
             return currentBalanceFields;
         }
-        for (i = 0; i < validAccountName.length; i++) {
-            key = validAccountName[i];
+        for (i = 0; i < accountData.length; i++) {
+            key = accountData[i].accountName;
             if ($S.isUndefined(dataByCompany[key])) {
                 continue;
             }
@@ -481,11 +447,11 @@ Account.extend({
         }
         console.log("currentBalanceData");
         console.log(currentBalanceData);
-        var template = {accountName:"", fields: []}, fieldTemplate, rowData;
+        var template = {accountDisplayName:"", fields: []}, fieldTemplate, rowData;
         var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
         for (i = 0; i < currentBalanceData.length; i++) {
             currentBalanceFields.push($S.clone(template));
-            currentBalanceFields[i].accountName = $S.capitalize(currentBalanceData[i].accountName);
+            currentBalanceFields[i].accountDisplayName = currentBalanceData[i].accountDisplayName;
             currentBalanceFields[i].fields.push(fieldHeaderTemplate);
             if ($S.isArray(currentBalanceData[i].currentBalRowData)) {
                 for (j = 0; j < currentBalanceData[i].currentBalRowData.length; j++) {
