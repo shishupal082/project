@@ -435,9 +435,16 @@ Account.extend({
                     }
                     if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].cr)) {
                         currentAmount = (-1)* dataByCompany[key].currentBalRowData[j].cr * 1;
-                        creditAmount += (-1) * currentAmount;
+                        creditAmount += (-1)* currentAmount;
                     }
                     dataByCompany[key].currentBalRowData[j].balance = lastAmount + currentAmount;
+                    if (j === dataByCompany[key].currentBalRowData.length-1) {
+                        temp = lastAmount + currentAmount;
+                        if (lastAmount + currentAmount < 0) {
+                            temp = "("+(-1)*temp+")";
+                        }
+                        dataByCompany[key].currentBalRowData[j].balanceText = {"tag":"b", "className": "text-danger", "text": temp};
+                    }
                     lastAmount = dataByCompany[key].currentBalRowData[j].balance;
                 }
                 if (j > 0) {
@@ -485,6 +492,9 @@ Account.extend({
                     rowData = currentBalanceData[i].currentBalRowData[j];
                     if ($S.isNumber(rowData.balance) && rowData.balance < 0) {
                         rowData.balance = "("+(-1*rowData.balance)+")";
+                    }
+                    if (rowData.balanceText) {
+                        rowData.balance = rowData.balanceText;
                     }
                     fieldTemplate = self.getTemplate("currentBalRow");
                     TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
