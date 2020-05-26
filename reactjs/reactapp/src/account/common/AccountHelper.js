@@ -495,8 +495,7 @@ Account.extend({
 });
 //getJournalFields
 Account.extend({
-    getJournalFields: function(Data) {
-        var journalData = Data.getData("apiJournalData");
+    getJournalFields: function(Data, journalData) {
         var journalRowData = [], i, j, k;
         var template = Data.getTemplate("journalEntry1stRow", null);
         if (template) {

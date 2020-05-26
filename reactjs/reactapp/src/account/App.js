@@ -94,14 +94,14 @@ class App extends React.Component {
         }
     }
     getTemplate(templateName) {
-        return Data.getTemplate(templateName, null);;
+        return Data.getTemplate(templateName, null);
     }
     setLedgerRowData() {
         var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
         var validAccountName = Data.getData("accountData",[]).map(function(el, index, arr) {
             return el.accountName;
         });
-        var journalDataFields = AccountHelper.getJournalFields(Data);
+        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
 
         dataByCompany = AccountHelper.getDataByCompany(Data.getData("finalJournalData",[]), validAccountName);
         ledgerDataFields = AccountHelper.getLeaderBookFields(this, Data.getData("accountData",[]), dataByCompany);
@@ -132,6 +132,9 @@ class App extends React.Component {
     }
     fetchData() {
         var self = this;
+        this.accountTemplateLoaded = false;
+        this.journalDataLoaded = false;
+        this.accountDataLoaded = false;
         $S.loadJsonData(null, accountDataApi, function(response) {
             self.accountDataLoaded = true;
             if ($S.isArray(response)) {
@@ -173,9 +176,6 @@ class App extends React.Component {
         Data.initData();
         this.currentUserName = currentUserName;
         /*Reseting all values */
-        this.accountTemplateLoaded = false;
-        this.journalDataLoaded = false;
-        this.accountDataLoaded = false;
         this.setState({
             isLoaded: false,
             journalDataFields: [],
