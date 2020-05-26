@@ -100,37 +100,27 @@ class App extends React.Component {
     getTemplate(templateName) {
         return Data.getTemplate(templateName, null);
     }
-    setLedgerRowData() {
-        var dataByCompany = {}, accountData = [];
-        var ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
-
-        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
-        Data.setData("apiJournalDataByDate", apiJournalDataByDate);
-
-        var finalJournalData = AccountHelper.getFinalJournalData(Data.getData("apiJournalDataByDate",[]));
-        finalJournalData = Data.setData("finalJournalData", finalJournalData);
-
-        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
-
+    getLedgerRowData() {
+        var dataByCompany, accountData, ledgerDataFields;
         accountData = Data.getData("accountData", []);
-
-        dataByCompany = AccountHelper.getDataByCompany(finalJournalData, accountData);
-        dataByCompany = Data.setData("dataByCompany", dataByCompany);
-
+        dataByCompany = Data.getData("dataByCompany", {});
         ledgerDataFields = AccountHelper.getLedgerBookFields(this, accountData, dataByCompany);
-
+        return ledgerDataFields;
+    }
+    getCurrentBalRowData() {
+        var accountData, dataByCompany, finalJournalData, currentBalanceFields;
+        accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
         finalJournalData = Data.getData("finalJournalData", []);
-        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, finalJournalData, dataByCompany, accountData);;
+        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, finalJournalData, dataByCompany, accountData);
+        return currentBalanceFields;
+    }
+    getTrialBalanceRowData() {
+        var accountData, dataByCompany, trialBalanceFields;
+        accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, accountData);
-
-        this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
-                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
-
-        $S.log("Data.getAllData()");
-        console.log(Data.getAllData());
-        return true;
+        return trialBalanceFields;
     }
     dataLoadComplete() {
         var dataLoadStatus = [], i;
@@ -142,7 +132,22 @@ class App extends React.Component {
                 return false;
             }
         }
-        this.setLedgerRowData();
+        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
+        apiJournalDataByDate = Data.setData("apiJournalDataByDate", apiJournalDataByDate);
+
+        var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);
+        finalJournalData = Data.setData("finalJournalData", finalJournalData);
+
+        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
+        var dataByCompany = AccountHelper.getDataByCompany(finalJournalData, Data.getData("accountData",[]));
+        Data.setData("dataByCompany", dataByCompany);
+        var ledgerDataFields = this.getLedgerRowData();
+        var currentBalanceFields = this.getCurrentBalRowData();
+        var trialBalanceFields = this.getTrialBalanceRowData();
+        this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
+                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
+        $S.log("Data.getAllData()");
+        console.log(Data.getAllData());
         return true;
     }
     fetchData() {
