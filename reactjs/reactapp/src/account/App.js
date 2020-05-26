@@ -104,7 +104,11 @@ class App extends React.Component {
         var validAccountName = Data.getData("accountData",[]).map(function(el, index, arr) {
             return el.accountName;
         });
-        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
+
+        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
+        Data.setData("apiJournalDataByDate", apiJournalDataByDate);
+
+        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalDataByDate",[]));
 
         dataByCompany = AccountHelper.getDataByCompany(Data.getData("finalJournalData",[]), validAccountName);
         ledgerDataFields = AccountHelper.getLeaderBookFields(this, Data.getData("accountData",[]), dataByCompany);
@@ -115,8 +119,6 @@ class App extends React.Component {
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
 
-        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
-        Data.setData("apiJournalDataByDate", apiJournalDataByDate);
         $S.log("Data.getAllData()");
         console.log(Data.getAllData());
         return true;

@@ -560,7 +560,7 @@ Account.extend({
         }
         temp = BST.getInOrder(BST);
         for (i=0; i<temp.length; i++) {
-            apiJournalDataByDate.push(temp[i].item);
+            apiJournalDataByDate.push({entry: temp[i].item});
         }
         return apiJournalDataByDate;
     }
