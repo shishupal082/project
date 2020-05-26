@@ -254,6 +254,10 @@ Account.extend({
                             journalEntry["entry"].push(entry);
                             continue;
                         }
+                        if (temp.debitAccounts.length === 0 || temp.creditAccounts.length === 0) {
+                            journalEntry["entry"].push(entry);
+                            continue;
+                        }
                         if (temp.debitAccounts.length > 1 && temp.creditAccounts.length > 1) {
                             console.log("Invalid journal entry: (multiple debit and credit row)");
                             console.log(entry);
