@@ -526,6 +526,45 @@ Account.extend({
         return journalRowData;
     }
 });
+//getApiJournalDataByDate
+Account.extend({
+    getApiJournalDataByDate: function(apiJournalData) {
+        var dataByDate = {}, apiJournalDataByDate = [];
+        var i, j, entry;
+        if (!$S.isArray(apiJournalData)) {
+            return apiJournalDataByDate;
+        }
+        for (i=0; i<apiJournalData.length; i++) {
+            if ($S.isArray(apiJournalData[i].entry)) {
+                for (j = 0; j < apiJournalData[i].entry.length; j++) {
+                    entry = apiJournalData[i].entry[j];
+                    if ($S.isString(entry.date)) {
+                        if (!$S.isArray(dataByDate[entry.date])) {
+                            dataByDate[entry.date] = [];
+                        }
+                    } else {
+                        continue;
+                    }
+                    dataByDate[entry.date].push(entry);
+                }
+            }
+        }
+        var dateObj, node, temp;
+        var BST = $S.getBST(), DT = $S.getDT();
+        for (var date in dataByDate) {
+            dateObj = DT.getDateObj(date);
+            if (dateObj) {
+                node = BST.insertData(BST, dateObj.getTime());
+                node.item = dataByDate[date];
+            }
+        }
+        temp = BST.getInOrder(BST);
+        for (i=0; i<temp.length; i++) {
+            apiJournalDataByDate.push(temp[i].item);
+        }
+        return apiJournalDataByDate;
+    }
+});
 AccountHelper = Account;
 })($S);
 

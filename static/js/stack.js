@@ -212,6 +212,7 @@ var Data = (function() {
             for (var i = 0; i < keysArray.length; i++) {
                 if (Stack.isString(keysArray[i])) {
                     keys.push(keysArray[i]);
+                    localData[keys[i]] = null;
                 }
             }
         }
@@ -240,7 +241,7 @@ var Data = (function() {
     };
     Data.prototype.getData = function(key, defaultData) {
         if (isValidKey(key)) {
-            return Stack.clone(localData[key]);
+            return localData[key] === null ? defaultData : Stack.clone(localData[key]);
         } else {
             console.log("Invalid key: "+key);
         }
@@ -787,6 +788,9 @@ var BST = (function() {
         }
     };
     BST.prototype.getInOrder = function(node, result) {
+        if (!isArray(result)) {
+            result = [];
+        }
         if (node != null) {
             this.getInOrder(node.left, result);
             result.push(node);
@@ -795,6 +799,9 @@ var BST = (function() {
         return result;
     };
     BST.prototype.getPostOrder = function(node, result) {
+        if (!isArray(result)) {
+            result = [];
+        }
         if (node != null) {
             this.getInOrder(node.left, result);
             this.getInOrder(node.right, result);
@@ -803,6 +810,9 @@ var BST = (function() {
         return result;
     };
     BST.prototype.getPreOrder = function(node, result) {
+        if (!isArray(result)) {
+            result = [];
+        }
         if (node != null) {
             result.push(node);
             this.getInOrder(node.left, result);

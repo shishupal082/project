@@ -40,7 +40,7 @@ function setDataApi(userData) {
 
 var Data = $S.getDataObj();
 
-var keys = ["userControlData", "apiJournalData", "finalJournalData", "journalDataByCompany", "journalDataByDate"];
+var keys = ["userControlData", "apiJournalData", "finalJournalData", "apiJournalDataByDate"];
 keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("journalRowFields");
@@ -57,6 +57,9 @@ Data.getTemplate = function(key, defaultTemplate) {
 
 Data.initData = function() {
     for (var i = 0; i < keys.length; i++) {
+        if (keys[i] === "userControlData") {
+            continue;
+        }
         Data.setData(keys[i], []);
     }
 };
@@ -111,7 +114,10 @@ class App extends React.Component {
         currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, Data.getData("finalJournalData",[]), validAccountName);;
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
-        console.log("Data.getAllData()");
+
+        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
+        Data.setData("apiJournalDataByDate", apiJournalDataByDate);
+        $S.log("Data.getAllData()");
         console.log(Data.getAllData());
         return true;
     }
@@ -138,6 +144,15 @@ class App extends React.Component {
         $S.loadJsonData(null, accountDataApi, function(response) {
             self.accountDataLoaded = true;
             if ($S.isArray(response)) {
+                // checking unique accountName
+                var temp = {};
+                for (var i=0; i<response.length; i++) {
+                    if (temp[response[i].accountName]) {
+                        alert("Duplicate entry: " + response[i].accountName);
+                    } else {
+                        temp[response[i].accountName] = 1;
+                    }
+                }
                 Data.setData("accountData", response);
             } else {
                 $S.log("Invalid response (accountData):" + response);
@@ -205,6 +220,15 @@ class App extends React.Component {
         var self = this;
         $S.loadJsonData(null, [userControlDataApi], function(response) {
             if ($S.isArray(response)) {
+                // checking unique username
+                var temp = {};
+                for (var i=0; i<response.length; i++) {
+                    if (temp[response[i].username]) {
+                        alert("Duplicate entry: " + response[i].username);
+                    } else {
+                        temp[response[i].username] = 1;
+                    }
+                }
                 Data.setData("userControlData", response);
                 if (response.length > 0) {
                     self.currentUserName = response[0].username;
