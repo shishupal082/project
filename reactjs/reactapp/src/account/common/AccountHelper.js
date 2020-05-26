@@ -382,7 +382,7 @@ Account.extend({
 Account.extend({
     getCurrentBalanceFields: function(self, finalJournalData, dataByCompany, accountData) {
         var currentBalanceFields = [], currentBalanceData = [];
-        var i, j, key, lastAmount, temp;
+        var i, j, key, lastAmount, temp, count;
         var debitAmount, creditAmount, currentAmount = 0;
         if(!$S.isArray(accountData)) {
             return currentBalanceFields;
@@ -454,6 +454,7 @@ Account.extend({
             currentBalanceFields[i].accountDisplayName = currentBalanceData[i].accountDisplayName;
             currentBalanceFields[i].fields.push(fieldHeaderTemplate);
             if ($S.isArray(currentBalanceData[i].currentBalRowData)) {
+                count = 1;
                 for (j = 0; j < currentBalanceData[i].currentBalRowData.length; j++) {
                     rowData = currentBalanceData[i].currentBalRowData[j];
                     if ($S.isNumber(rowData.balance) && rowData.balance < 0) {
@@ -463,6 +464,7 @@ Account.extend({
                         rowData.balance = rowData.balanceText;
                     }
                     fieldTemplate = self.getTemplate("currentBalRow");
+                    rowData["s.no"] = count++;
                     TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
                     currentBalanceFields[i].fields.push(fieldTemplate);
                 }
@@ -474,7 +476,7 @@ Account.extend({
 //getJournalFields
 Account.extend({
     getJournalFields: function(Data, journalData) {
-        var journalRowData = [], i, j, k;
+        var journalRowData = [], i, j, k, count = 1;
         var template = Data.getTemplate("journalEntry1stRow", null);
         if (template) {
             journalRowData.push(template);
@@ -484,6 +486,7 @@ Account.extend({
             if ($S.isArray(journalData[i].entry)) {
                 for (j = 0; j < journalData[i].entry.length; j++) {
                     entry = journalData[i].entry[j];
+                    entry["s.no"] = count++;
                     template = Data.getTemplate("journalEntry", null);
                     temp = TemplateHelper(template).searchField("particular");
                     if (temp.name === "particular") {

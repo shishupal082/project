@@ -144,9 +144,12 @@ class App extends React.Component {
         var currentBalanceFields = this.getCurrentBalRowData();
         var trialBalanceFields = this.getTrialBalanceRowData();
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
-                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
-        $S.log("Data.getAllData()");
-        console.log(Data.getAllData());
+                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields}, function() {
+                    $S.log("Data.getAllData()");
+                    console.log(Data.getAllData());
+                    $S.log("this.state");
+                    console.log(this.state);
+                });
         return true;
     }
     fetchData() {

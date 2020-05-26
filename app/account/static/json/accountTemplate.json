@@ -5,6 +5,10 @@
             "text": [
                 {
                     "tag": "th",
+                    "text": "S.No."
+                },
+                {
+                    "tag": "th",
                     "className": "w-120px",
                     "text": "Date"
                 },
@@ -39,6 +43,11 @@
         {
             "tag": "tr",
             "text": [
+                {
+                    "tag": "td",
+                    "name": "s.no",
+                    "text": ""
+                },
                 {
                     "tag": "td",
                     "name": "date",
