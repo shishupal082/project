@@ -361,6 +361,8 @@ Account.extend({
                 }
             } else {
                 temp.particular = accountDisplayName;
+                count--;
+                continue;
             }
             template = self.getTemplate("trialBalanceRow");
             TemplateHelper.setTemplateTextByFormValues(template, temp);
@@ -445,8 +447,6 @@ Account.extend({
             }
             currentBalanceData.push(dataByCompany[key]);
         }
-        console.log("currentBalanceData");
-        console.log(currentBalanceData);
         var template = {accountDisplayName:"", fields: []}, fieldTemplate, rowData;
         var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
         for (i = 0; i < currentBalanceData.length; i++) {
@@ -468,8 +468,6 @@ Account.extend({
                 }
             }
         }
-        console.log("currentBalanceFields");
-        console.log(currentBalanceFields);
         return currentBalanceFields;
     }
 });

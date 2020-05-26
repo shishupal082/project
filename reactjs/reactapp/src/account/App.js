@@ -43,7 +43,6 @@ var Data = $S.getDataObj();
 var keys = ["userControlData", "apiJournalData", "finalJournalData", "apiJournalDataByDate"];
 keys.push("accountTemplate");
 keys.push("accountData");
-keys.push("journalRowFields");
 keys.push("dataByCompany");
 
 Data.getTemplate = function(key, defaultTemplate) {
