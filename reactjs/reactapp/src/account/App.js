@@ -108,7 +108,10 @@ class App extends React.Component {
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
 
-        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalDataByDate",[]));
+        var finalJournalData = AccountHelper.getFinalJournalData(Data.getData("apiJournalDataByDate",[]));
+        Data.setData("finalJournalData", finalJournalData);
+
+        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
 
         dataByCompany = AccountHelper.getDataByCompany(Data.getData("finalJournalData",[]), validAccountName);
         ledgerDataFields = AccountHelper.getLeaderBookFields(this, Data.getData("accountData",[]), dataByCompany);
@@ -133,8 +136,6 @@ class App extends React.Component {
                 return false;
             }
         }
-        var finalJournalData = AccountHelper.getFinalJournalData(Data.getData("apiJournalData"));
-        Data.setData("finalJournalData", finalJournalData);
         this.setLedgerRowData();
         return true;
     }
