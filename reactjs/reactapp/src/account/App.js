@@ -10,7 +10,6 @@ import AccountHelper from "./common/AccountHelper";
 import $S from "../interface/stack.js";
 import $$$ from '../interface/global';
 import Api from "../common/Api";
-import TemplateHelper from "../common/TemplateHelper";
 
 var baseapi = $$$.baseapi;
 var basepathname = $$$.basepathname;
@@ -39,13 +38,38 @@ function setDataApi(userData) {
     });
 }
 
+var Data = $S.getDataObj();
+
+var keys = ["userControlData", "apiJournalData", "finalJournalData", "journalDataByCompany", "journalDataByDate"];
+keys.push("accountTemplate");
+keys.push("accountData");
+keys.push("journalRowFields");
+
+Data.getTemplate = function(key, defaultTemplate) {
+    var allTemplate = Data.getData("accountTemplate");
+    if ($S.isObject(allTemplate)) {
+        if ($S.isDefined(allTemplate[key])) {
+            return allTemplate[key];
+        }
+    }
+    return defaultTemplate;
+};
+
+Data.initData = function() {
+    for (var i = 0; i < keys.length; i++) {
+        Data.setData(keys[i], []);
+    }
+};
+
+Data.setKeys(keys);
+Data.initData();
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             isLoaded: false,
-            journalRowData: [],
-            dataByCompany: {},
+            journalDataFields: [],
             ledgerDataFields: [],
             trialBalanceFields: [],
             currentBalanceFields: []
@@ -53,18 +77,13 @@ class App extends React.Component {
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
         this.accountDataLoaded = false;
-        this.accountTemplate = {};
-        this.journalData = []; // [{}]
-        this.finalJournalData = []; // [{}]
-        this.accountData = [];
 
         this.getChildExposedMethod = this.getChildExposedMethod.bind(this);
-        this.getTemplate = this.getTemplate.bind(this);
+        this.childrenMethod = {};
+
         this.userChange = this.userChange.bind(this);
 
-        this.childrenMethod = {};
         this.companyName = "Loading ...";
-        this.userControlData = [];
         this.currentUserName = "";
     }
     getChildExposedMethod(name, method) {
@@ -75,31 +94,29 @@ class App extends React.Component {
         }
     }
     getTemplate(templateName) {
-        if ($S.isDefined(this.accountTemplate[templateName])) {
-            return $S.clone(this.accountTemplate[templateName]);
-        }
-        return null;
+        return Data.getTemplate(templateName, null);;
     }
     setLedgerRowData() {
         var dataByCompany = {}, ledgerDataFields = [], trialBalanceFields = [], currentBalanceFields = [];
-        var validAccountName = this.accountData.map(function(el, index, arr) {
+        var validAccountName = Data.getData("accountData",[]).map(function(el, index, arr) {
             return el.accountName;
         });
-        dataByCompany = AccountHelper.getDataByCompany(this.finalJournalData, validAccountName);
-        console.log(dataByCompany);
-        ledgerDataFields = AccountHelper.getLeaderBookFields(this, this.accountData, dataByCompany);
-        console.log(ledgerDataFields);
+        var journalDataFields = AccountHelper.getJournalFields(Data);
+
+        dataByCompany = AccountHelper.getDataByCompany(Data.getData("finalJournalData",[]), validAccountName);
+        ledgerDataFields = AccountHelper.getLeaderBookFields(this, Data.getData("accountData",[]), dataByCompany);
 
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, validAccountName);
 
-        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, this.finalJournalData, validAccountName);;
-        this.setState({dataByCompany: dataByCompany, ledgerDataFields: ledgerDataFields,
+        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, Data.getData("finalJournalData",[]), validAccountName);;
+        this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields});
-
+        console.log("Data.getAllData()");
+        console.log(Data.getAllData());
         return true;
     }
     dataLoadComplete() {
-        var dataLoadStatus = [], i, j, k;
+        var dataLoadStatus = [], i;
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
         dataLoadStatus.push(this.accountDataLoaded);
@@ -108,36 +125,9 @@ class App extends React.Component {
                 return false;
             }
         }
-        var journalRowData = [];
-        var template = this.getTemplate("journalEntry1stRow");
-        if (template) {
-            journalRowData.push(template);
-        }
-        var entry = [], particularFieldTemplate = {}, temp;
-        for (i = 0; i < this.journalData.length; i++) {
-            if ($S.isArray(this.journalData[i].entry)) {
-                for (j = 0; j < this.journalData[i].entry.length; j++) {
-                    entry = this.journalData[i].entry[j];
-                    template = this.getTemplate("journalEntry");
-                    temp = TemplateHelper(template).searchField("particular");
-                    if (temp.name === "particular") {
-                        temp.text = [];
-                    }
-                    TemplateHelper.setTemplateTextByFormValues(template, entry);
-                    if ($S.isArray(entry.particularEntry)) {
-                        for (k = 0; k < entry.particularEntry.length; k++) {
-                            particularFieldTemplate = this.getTemplate("journalEntryParticular");
-                            TemplateHelper.setTemplateTextByFormValues(particularFieldTemplate, entry.particularEntry[k]);
-                            temp.text.push(particularFieldTemplate);
-                        }
-                    }
-                    journalRowData.push(template);
-                }
-            }
-        }
-        this.setState({journalRowData: journalRowData}, function() {
-            this.setLedgerRowData();
-        });
+        var finalJournalData = AccountHelper.getFinalJournalData(Data.getData("apiJournalData"));
+        Data.setData("finalJournalData", finalJournalData);
+        this.setLedgerRowData();
         return true;
     }
     fetchData() {
@@ -145,58 +135,60 @@ class App extends React.Component {
         $S.loadJsonData(null, accountDataApi, function(response) {
             self.accountDataLoaded = true;
             if ($S.isArray(response)) {
-                self.accountData = response;
+                Data.setData("accountData", response);
             } else {
                 $S.log("Invalid response (accountData):" + response);
             }
         }, function() {
             self.dataLoadComplete();
         }, null, Api.getAjaxApiCallMethod());
+
+        var accountTemplate = {};
         $S.loadJsonData(null, accountTemplateApi, function(response) {
             self.accountTemplateLoaded = true;
             if ($S.isObject(response)) {
-                Object.assign(self.accountTemplate, response);
+                Object.assign(accountTemplate, response);
             } else {
                 $S.log("Invalid response (accountTemplate):" + response);
             }
         }, function() {
+            Data.setData("accountTemplate", accountTemplate);
             self.dataLoadComplete();
         }, null, Api.getAjaxApiCallMethod());
+
+        var journalData = [];
         $S.loadJsonData(null, journalDataApi, function(response) {
             self.journalDataLoaded = true;
             if ($S.isObject(response)) {
-                self.journalData.push(response);
+                journalData.push(response);
             } else {
                 $S.log("Invalid response (journalData):" + response);
             }
         }, function() {
-            self.finalJournalData = AccountHelper.getFinalJournalData(self.journalData);
+            Data.setData("apiJournalData", journalData);
             self.dataLoadComplete();
         }, null, Api.getAjaxApiCallMethod());
     }
     userChange(currentUserName) {
+        Data.initData();
         this.currentUserName = currentUserName;
         /*Reseting all values */
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
         this.accountDataLoaded = false;
-        this.accountTemplate = {};
-        this.journalData = [];
-        this.finalJournalData = [];
-        this.accountData = [];
         this.setState({
             isLoaded: false,
-            journalRowData: [],
-            dataByCompany: {},
+            journalDataFields: [],
             ledgerDataFields: [],
             trialBalanceFields: [],
             currentBalanceFields: []
         }, function() {
             var userDataNotFound = true;
-            for(var i=0; i<this.userControlData.length; i++) {
-                if (this.userControlData[i].username === this.currentUserName) {
-                    this.companyName = this.userControlData[i]["companyname"];
-                    setDataApi(this.userControlData[i]);
+            var userControlData = Data.getData("userControlData", []);
+            for(var i=0; i<userControlData.length; i++) {
+                if (userControlData[i].username === this.currentUserName) {
+                    this.companyName = userControlData[i]["companyname"];
+                    setDataApi(userControlData[i]);
                     userDataNotFound = false;
                     this.fetchData();
                     break;
@@ -213,7 +205,7 @@ class App extends React.Component {
         var self = this;
         $S.loadJsonData(null, [userControlDataApi], function(response) {
             if ($S.isArray(response)) {
-                self.userControlData = response;
+                Data.setData("userControlData", response);
                 if (response.length > 0) {
                     self.currentUserName = response[0].username;
                 }
@@ -226,19 +218,20 @@ class App extends React.Component {
     render() {
         var methods = {userChange: this.userChange};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
-                        userControlData: this.userControlData, currentUserName: this.currentUserName};
+                        userControlData: Data.getData("userControlData", []), currentUserName: this.currentUserName};
 
         var home = <Home state={this.state} data={commonData} methods={methods}/>;
 
         var trial = <TrialBalance state={this.state} data={commonData} methods={methods} heading="Trial Balance"/>;
 
-        var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"/>;
+        var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"
+                    renderFieldRow={this.state.journalDataFields}/>;
 
-        var ledger = <LedgerBook state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.state.ledgerDataFields} heading="Ledger Book"/>;
+        var ledger = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Ledger Book"
+                    renderFieldRow={this.state.ledgerDataFields}/>;
 
-        var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.state.currentBalanceFields} heading="Current Balance"/>;
+        var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Current Balance"
+                    renderFieldRow={this.state.currentBalanceFields}/>;
 
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>

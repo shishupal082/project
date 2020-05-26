@@ -15,7 +15,7 @@ class Journal extends React.Component {
     }
     render() {
         var self = this;
-        var JournalTableTr = this.props.state.journalRowData.map(function(el, i, arr) {
+        var JournalTableTr = this.props.renderFieldRow.map(function(el, i, arr) {
             return Api.generateFields(self.props, el);
         });
         return (<div className="container">

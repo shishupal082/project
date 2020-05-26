@@ -197,6 +197,61 @@ function getRandomNumber(minVal, maxVal) {
     }
     return random;
 }
+var Data = (function() {
+    var keys = [];
+    var localData = {};
+    function isValidKey(key) {
+        if (keys.indexOf(key) >= 0) {
+            return true;
+        }
+        return false;
+    }
+    function Data() {}
+    Data.prototype.setKeys = function(keysArray) {
+        if (Stack.isArray(keysArray)) {
+            for (var i = 0; i < keysArray.length; i++) {
+                if (Stack.isString(keysArray[i])) {
+                    keys.push(keysArray[i]);
+                }
+            }
+        }
+        return 1;
+    };
+    Data.prototype.resetKeys = function(keysArray) {
+        keys = [];
+        return 0;
+    };
+    Data.prototype.getKeys = function() {
+        return Stack.clone(keys);
+    };
+    Data.prototype.resetData = function() {
+        for (var i = 0; i < keys.length; i++) {
+            localData[keys[i]] = null;
+        }
+        return 0;
+    };
+    Data.prototype.setData = function(key, value) {
+        if (isValidKey(key)) {
+            localData[key] = Stack.clone(value);
+        } else {
+            console.log("Invalid key: "+key);
+        }
+        return 1;
+    };
+    Data.prototype.getData = function(key, defaultData) {
+        if (isValidKey(key)) {
+            return Stack.clone(localData[key]);
+        } else {
+            console.log("Invalid key: "+key);
+        }
+        return defaultData;
+    };
+    Data.prototype.getAllData = function() {
+        return Stack.clone(localData);
+    };
+    return Data;
+})();
+
 //DateTimeObject
 var DT = (function() {
     var dateTime;
@@ -1310,6 +1365,9 @@ Stack.extend({
     },
     getDT: function() {
         return new DT();
+    },
+    getDataObj: function() {
+        return new Data();
     },
     getBT: function(data) {
         return new BT(data);

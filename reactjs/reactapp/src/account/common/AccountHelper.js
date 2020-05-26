@@ -492,7 +492,41 @@ Account.extend({
         console.log(currentBalanceFields);
         return currentBalanceFields;
     }
-})
+});
+//getJournalFields
+Account.extend({
+    getJournalFields: function(Data) {
+        var journalData = Data.getData("apiJournalData");
+        var journalRowData = [], i, j, k;
+        var template = Data.getTemplate("journalEntry1stRow", null);
+        if (template) {
+            journalRowData.push(template);
+        }
+        var entry = [], particularFieldTemplate = {}, temp;
+        for (i = 0; i < journalData.length; i++) {
+            if ($S.isArray(journalData[i].entry)) {
+                for (j = 0; j < journalData[i].entry.length; j++) {
+                    entry = journalData[i].entry[j];
+                    template = Data.getTemplate("journalEntry", null);
+                    temp = TemplateHelper(template).searchField("particular");
+                    if (temp.name === "particular") {
+                        temp.text = [];
+                    }
+                    TemplateHelper.setTemplateTextByFormValues(template, entry);
+                    if ($S.isArray(entry.particularEntry)) {
+                        for (k = 0; k < entry.particularEntry.length; k++) {
+                            particularFieldTemplate = Data.getTemplate("journalEntryParticular", null);
+                            TemplateHelper.setTemplateTextByFormValues(particularFieldTemplate, entry.particularEntry[k]);
+                            temp.text.push(particularFieldTemplate);
+                        }
+                    }
+                    journalRowData.push(template);
+                }
+            }
+        }
+        return journalRowData;
+    }
+});
 AccountHelper = Account;
 })($S);
 
