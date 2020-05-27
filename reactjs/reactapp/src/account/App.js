@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Home from "./components/Home";
 import Journal from "./components/Journal";
+import JournalByDate from "./components/JournalByDate";
 import LedgerBook from "./components/LedgerBook";
 import TrialBalance from "./components/TrialBalance";
 
@@ -22,7 +23,7 @@ var accountTemplateApi = [];
 var journalDataApi = [];
 var accountDataApi = [];
 
-var pages = {home: basepathname+"/", journal: basepathname+"/journal",
+var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalbydate: basepathname+"/journalbydate",
             ledger: basepathname+"/ledger", trail: basepathname+"/trail",
             currentbal: basepathname+"/currentbal"};
 
@@ -73,6 +74,7 @@ class App extends React.Component {
         this.state = {
             isLoaded: false,
             journalDataFields: [],
+            journalDataByDateFields: [],
             ledgerDataFields: [],
             trialBalanceFields: [],
             currentBalanceFields: []
@@ -121,6 +123,12 @@ class App extends React.Component {
         trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, accountData);
         return trialBalanceFields;
     }
+    getJournalDataByDateFields() {
+        var journalDataByDateFields, apiJournalDataByDate;
+        apiJournalDataByDate = Data.getData("apiJournalDataByDate", []);
+        journalDataByDateFields = AccountHelper.getJournalDataByDateFields(Data, apiJournalDataByDate);
+        return journalDataByDateFields;
+    }
     dataLoadComplete() {
         var dataLoadStatus = [], i;
         dataLoadStatus.push(this.accountTemplateLoaded);
@@ -143,8 +151,11 @@ class App extends React.Component {
         var ledgerDataFields = this.getLedgerRowData();
         var currentBalanceFields = this.getCurrentBalRowData();
         var trialBalanceFields = this.getTrialBalanceRowData();
+
+        var journalDataByDateFields = this.getJournalDataByDateFields();
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
-                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields}, function() {
+                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
+                journalDataByDateFields: journalDataByDateFields}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -267,6 +278,9 @@ class App extends React.Component {
         var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"
                     renderFieldRow={this.state.journalDataFields}/>;
 
+        var journalbydate = <JournalByDate state={this.state} data={commonData} methods={methods} heading="Journal"
+                    renderFieldRow={this.state.journalDataByDateFields}/>;
+
         var ledger = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Ledger Book"
                     renderFieldRow={this.state.ledgerDataFields}/>;
 
@@ -279,6 +293,9 @@ class App extends React.Component {
                   </Route>
                   <Route path={pages.journal}>
                     {journal}
+                  </Route>
+                  <Route path={pages.journalbydate}>
+                    {journalbydate}
                   </Route>
                   <Route path={pages.currentbal}>
                     {currentbal}

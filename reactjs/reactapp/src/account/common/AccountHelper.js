@@ -546,6 +546,26 @@ Account.extend({
         return apiJournalDataByDate;
     }
 });
+//getJournalDataByDateFields
+Account.extend({
+    getJournalDataByDateFields: function(Data, apiJournalDataByDate) {
+        var journalDataByDateFields = [], template, templateData;
+        if (!$S.isArray(apiJournalDataByDate)) {
+            return journalDataByDateFields;
+        }
+        for (var i = 0; i < apiJournalDataByDate.length; i++) {
+            template = Data.getTemplate("journalByDate", null);
+            templateData = {"date": null, "journalEntryTable": null};
+            if ($S.isArray(apiJournalDataByDate[i].entry) && apiJournalDataByDate[i].entry.length) {
+                templateData["date"] = apiJournalDataByDate[i].entry[0].date;
+            }
+            templateData["journalEntryTable"] = AccountHelper.getJournalFields(Data, [apiJournalDataByDate[i]]);
+            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            journalDataByDateFields.push(template);
+        }
+        return journalDataByDateFields;
+    }
+});
 AccountHelper = Account;
 })($S);
 

@@ -22,6 +22,9 @@ class Home extends React.Component {
                                 <Link to={this.props.data.pages.journal}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Journal</button>
                                 </Link>
+                                <Link to={this.props.data.pages.journalbydate}>
+                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Journal By Date</button>
+                                </Link>
                                 <Link to={this.props.data.pages.ledger}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Ledger</button>
                                 </Link>

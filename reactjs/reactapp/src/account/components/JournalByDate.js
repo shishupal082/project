@@ -4,7 +4,7 @@ import Header from "./partial/Header";
 import Api from "../../common/Api";
 // import $S from "../../interface/stack.js";
 
-class Journal extends React.Component {
+class JournalByDate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,16 +18,13 @@ class Journal extends React.Component {
         var JournalTableTr = this.props.renderFieldRow.map(function(el, i, arr) {
             return Api.generateFields(self.props, el);
         });
+        var journalByDate = JournalTableTr;
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
-                    <div className="row"><div className="col">
-                        <table className="table2 table-bordered table-striped"><tbody>
-                            {JournalTableTr}
-                        </tbody></table>
-                    </div></div>
+                    <div className="row"><div className="col">{journalByDate}</div></div>
             </div>);
     }
 }
 
-export default Journal;
+export default JournalByDate;
 
