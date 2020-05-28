@@ -12,6 +12,9 @@ import $S from "../interface/stack.js";
 import $$$ from '../interface/global';
 import Api from "../common/Api";
 
+var DT = $S.getDT();
+var DateFormate = "YYYY/-/MM/-/DD";
+
 var baseapi = $$$.baseapi;
 var basepathname = $$$.basepathname;
 
@@ -25,7 +28,7 @@ var accountDataApi = [];
 
 var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalbydate: basepathname+"/journalbydate",
             ledger: basepathname+"/ledger", trail: basepathname+"/trail",
-            currentbal: basepathname+"/currentbal"};
+            currentbal: basepathname+"/currentbal", currentbalbydate: basepathname+"/currentbalbydate"};
 
 function setDataApi(userData) {
     accountTemplateApi = userData.accountTemplateApi.map(function(el, i, arr) {
@@ -77,7 +80,8 @@ class App extends React.Component {
             journalDataByDateFields: [],
             ledgerDataFields: [],
             trialBalanceFields: [],
-            currentBalanceFields: []
+            currentBalanceFields: [],
+            currentBalanceByDateFields: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -90,6 +94,32 @@ class App extends React.Component {
 
         this.companyName = "Loading ...";
         this.currentUserName = "";
+        this.dateSelectionType = "daily";
+    }
+    getDateSelectionParameter() {
+        var dateSelection = [], finalJournalData, i, j, allDate = [], temp;
+        finalJournalData = Data.getData("finalJournalData", []);
+        for (i=0; i<finalJournalData.length; i++) {
+            if ($S.isArray(finalJournalData[i].entry)) {
+                for (j=0; j<finalJournalData[i].entry.length; j++) {
+                    temp = finalJournalData[i].entry[j].date;
+                    temp = DT.getDateObj(temp);
+                    if (temp !== null) {
+                        temp = DT.formateDateTime(DateFormate, "/", temp);
+                        if (allDate.indexOf(temp) < 0) {
+                            allDate.push(temp);
+                        }
+                    }
+                }
+            }
+        }
+        if (this.dateSelectionType === "daily") {
+            for (i=0; i<allDate.length; i++) {
+                temp = allDate[i];
+                dateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
+            }
+        }
+        return dateSelection;
     }
     getChildExposedMethod(name, method) {
         if (this.childrenMethod[name]) {
@@ -109,11 +139,18 @@ class App extends React.Component {
         return ledgerDataFields;
     }
     getCurrentBalRowData() {
-        var accountData, dataByCompany, finalJournalData, currentBalanceFields;
+        var accountData, dataByCompany, currentBalanceFields;
         accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
-        finalJournalData = Data.getData("finalJournalData", []);
-        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, finalJournalData, dataByCompany, accountData);
+        currentBalanceFields = AccountHelper.getCurrentBalanceFields(this, dataByCompany, accountData);
+        return currentBalanceFields;
+    }
+    getCurrentBalByDateRowData() {
+        var accountData, dataByCompany, currentBalanceFields, dateSelection;
+        accountData = Data.getData("accountData", []);
+        dataByCompany = Data.getData("dataByCompany", {});
+        dateSelection = this.getDateSelectionParameter();
+        currentBalanceFields = AccountHelper.getCurrentBalByDateRowData(Data, dataByCompany, accountData, dateSelection);
         return currentBalanceFields;
     }
     getTrialBalanceRowData() {
@@ -153,9 +190,11 @@ class App extends React.Component {
         var trialBalanceFields = this.getTrialBalanceRowData();
 
         var journalDataByDateFields = this.getJournalDataByDateFields();
+        var currentBalanceByDateFields = this.getCurrentBalByDateRowData();
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
-                journalDataByDateFields: journalDataByDateFields}, function() {
+                journalDataByDateFields: journalDataByDateFields,
+                currentBalanceByDateFields: currentBalanceByDateFields}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -286,6 +325,8 @@ class App extends React.Component {
 
         var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Current Balance"
                     renderFieldRow={this.state.currentBalanceFields}/>;
+        var currentbalbydate = <JournalByDate state={this.state} data={commonData} methods={methods} heading="Current Balance By Date"
+                    renderFieldRow={this.state.currentBalanceByDateFields}/>;
 
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>
@@ -299,6 +340,9 @@ class App extends React.Component {
                   </Route>
                   <Route path={pages.currentbal}>
                     {currentbal}
+                  </Route>
+                  <Route path={pages.currentbalbydate}>
+                    {currentbalbydate}
                   </Route>
                   <Route path={pages.ledger}>
                     {ledger}

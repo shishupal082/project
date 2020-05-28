@@ -222,6 +222,42 @@
             }
         ]
     },
+    "currentBalByDate": [
+        {
+            "tag": "div.h1",
+            "text": {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "accountDisplayName",
+                "text": ""
+            }
+        },
+        {
+            "tag": "div",
+            "name": "currentBalByDateRow",
+            "text": []
+        }
+    ],
+    "currentBalByDateRow": [
+        {
+            "tag": "div",
+            "text": {
+                "tag": "span",
+                "className": "",
+                "name": "dateHeading",
+                "text": ""
+            }
+        },
+        {
+            "tag": "div",
+            "text": {
+                "tag": "table.tbody",
+                "className": "table table-bordered table-striped",
+                "name": "currentBalRow",
+                "text": []
+            }
+        }
+    ],
     "currentBal1stRow": {
         "tag": "tr",
         "text": [

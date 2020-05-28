@@ -109,6 +109,9 @@ childGenerator = {
     "h1": function(props, data, reactChildText, key) {
         return <h1 key={key} className={data.className}>{reactChildText}</h1>;
     },
+    "h4": function(props, data, reactChildText, key) {
+        return <h4 key={key} className={data.className}>{reactChildText}</h4>;
+    },
     "p": function(props, data, reactChildText, key) {
         return <p key={key} className={data.className}>{reactChildText}</p>;
     },
