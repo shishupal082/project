@@ -95,7 +95,8 @@ class App extends React.Component {
 
         this.companyName = "Loading ...";
         this.currentUserName = "";
-        this.dateSelectionType = "";
+        this.dateSelectionType = "all";
+        this.validDateSelectionType = ["all", "daily", "monthly", "yearly"];
     }
     getDateSelectionParameter() {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
@@ -331,7 +332,7 @@ class App extends React.Component {
         return 1;
     }
     onDateSelectionTypeChange(dateSelectionType) {
-        if (this.dateSelectionType === dateSelectionType) {
+        if (this.dateSelectionType === dateSelectionType || this.validDateSelectionType.indexOf(dateSelectionType) < 0) {
             return false;
         }
         this.dateSelectionType = dateSelectionType;
@@ -380,7 +381,11 @@ class App extends React.Component {
                 Data.setData("userControlData", response);
                 if (response.length > 0) {
                     self.currentUserName = response[0].username;
-                    self.dateSelectionType = response[0].dateSelectionType;
+                    if ($S.isString(response[0].dateSelectionType)) {
+                        if (self.validDateSelectionType.indexOf(response[0].dateSelectionType) >= 0) {
+                            self.dateSelectionType = response[0].dateSelectionType;
+                        }
+                    }
                 }
             } else {
                 $S.log("Invalid response (userControlDataApi):" + response);
