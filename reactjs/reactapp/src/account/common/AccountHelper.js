@@ -387,14 +387,17 @@ Account.extend({
         if (!companyData || !$S.isArray(companyData.currentBalRowData)) {
             return trs;
         }
-        var i;
-        var template, templateDate;
+        var i, count = 1;
+        var template, templateData;
         template = Data.getTemplate("currentBal1stRow", null);
         trs.push(template);
         for (i = 0; i < companyData.currentBalRowData.length; i++) {
             template = Data.getTemplate("currentBalRow", null);
-            templateDate = companyData.currentBalRowData[i];
-            TemplateHelper.setTemplateTextByFormValues(template, templateDate);
+            templateData = companyData.currentBalRowData[i];
+            if ($S.isObject(templateData)) {
+                templateData["s.no"] = count++;
+            }
+            TemplateHelper.setTemplateTextByFormValues(template, templateData);
             trs.push(template);
         }
         return trs;

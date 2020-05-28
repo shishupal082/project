@@ -91,14 +91,16 @@ class App extends React.Component {
         this.childrenMethod = {};
 
         this.userChange = this.userChange.bind(this);
+        this.onDateSelectionTypeChange = this.onDateSelectionTypeChange.bind(this);
 
         this.companyName = "Loading ...";
         this.currentUserName = "";
-        this.dateSelectionType = "daily";
+        this.dateSelectionType = "";
     }
     getDateSelectionParameter() {
-        var dateSelection = [], finalJournalData, i, j, allDate = [], temp;
+        var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
         finalJournalData = Data.getData("finalJournalData", []);
+        var startDate, endDate, heading;
         for (i=0; i<finalJournalData.length; i++) {
             if ($S.isArray(finalJournalData[i].entry)) {
                 for (j=0; j<finalJournalData[i].entry.length; j++) {
@@ -118,7 +120,52 @@ class App extends React.Component {
                 temp = allDate[i];
                 dateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
             }
+        } else if (this.dateSelectionType === "monthly") {
+            temp = [];
+            for (i=0; i<allDate.length; i++) {
+                dObj = DT.getDateObj(allDate[i]);
+                if (dObj !== null) {
+                    dObj.setDate(1);
+                    heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
+                    startDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", dObj);
+                    dObj.setMonth(dObj.getMonth()+1);
+                    dObj.setDate(0);
+                    endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
+                } else {
+                    continue;
+                }
+                if (temp.indexOf(heading) < 0) {
+                    dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                    temp.push(heading);
+                }
+            }
+        } else if (this.dateSelectionType === "yearly") {
+            temp = [];
+            for (i=0; i<allDate.length; i++) {
+                dObj = DT.getDateObj(allDate[i]);
+                if (dObj !== null) {
+                    dObj.setDate(1);
+                    heading = DT.formateDateTime("YYYY", "/", dObj);
+                    startDate = heading +"-01-01 00:00";
+                    endDate = heading +"-12-31 23:59";
+                } else {
+                    continue;
+                }
+                if (temp.indexOf(heading) < 0) {
+                    dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                    temp.push(heading);
+                }
+            }
+        } else if (this.dateSelectionType === "all") {
+            heading = "";
+            if (allDate.length > 0) {
+                startDate = allDate[0] + " 00:00";
+                endDate = allDate[allDate.length-1] + " 23:59";
+            }
+            dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
         }
+        console.log("dateSelection");
+        console.log(dateSelection);
         return dateSelection;
     }
     getChildExposedMethod(name, method) {
@@ -269,6 +316,7 @@ class App extends React.Component {
             for(var i=0; i<userControlData.length; i++) {
                 if (userControlData[i].username === this.currentUserName) {
                     this.companyName = userControlData[i]["companyname"];
+                    // this.dateSelectionType = userControlData[i]["dateSelectionType"];
                     setDataApi(userControlData[i]);
                     userDataNotFound = false;
                     this.fetchData();
@@ -281,6 +329,40 @@ class App extends React.Component {
             }
         });
         return 1;
+    }
+    onDateSelectionTypeChange(dateSelectionType) {
+        if (this.dateSelectionType === dateSelectionType) {
+            return false;
+        }
+        this.dateSelectionType = dateSelectionType;
+
+        var dataLoadStatus = [], i;
+        dataLoadStatus.push(this.accountTemplateLoaded);
+        dataLoadStatus.push(this.journalDataLoaded);
+        dataLoadStatus.push(this.accountDataLoaded);
+        for (i = 0; i < dataLoadStatus.length; i++) {
+            if (dataLoadStatus[i] === false) {
+                return false;
+            }
+        }
+
+        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
+        var ledgerDataFields = this.getLedgerRowData();
+        var currentBalanceFields = this.getCurrentBalRowData();
+        var trialBalanceFields = this.getTrialBalanceRowData();
+
+        var journalDataByDateFields = this.getJournalDataByDateFields();
+        var currentBalanceByDateFields = this.getCurrentBalByDateRowData();
+        this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
+                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
+                journalDataByDateFields: journalDataByDateFields,
+                currentBalanceByDateFields: currentBalanceByDateFields}, function() {
+                    $S.log("Data.getAllData()");
+                    console.log(Data.getAllData());
+                    $S.log("this.state");
+                    console.log(this.state);
+                });
+        return true;
     }
     componentDidMount() {
         var self = this;
@@ -298,6 +380,7 @@ class App extends React.Component {
                 Data.setData("userControlData", response);
                 if (response.length > 0) {
                     self.currentUserName = response[0].username;
+                    self.dateSelectionType = response[0].dateSelectionType;
                 }
             } else {
                 $S.log("Invalid response (userControlDataApi):" + response);
@@ -306,9 +389,11 @@ class App extends React.Component {
         }, null, null, Api.getAjaxApiCallMethod());
     }
     render() {
-        var methods = {userChange: this.userChange};
+        var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
-                        userControlData: Data.getData("userControlData", []), currentUserName: this.currentUserName};
+                        userControlData: Data.getData("userControlData", []),
+                        dateSelectionType: this.dateSelectionType,
+                        currentUserName: this.currentUserName};
 
         var home = <Home state={this.state} data={commonData} methods={methods}/>;
 

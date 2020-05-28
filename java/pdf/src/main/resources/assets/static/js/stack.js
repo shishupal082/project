@@ -257,6 +257,7 @@ var Data = (function() {
 var DT = (function() {
     var dateTime;
     // var YYYY, MM, DD, hh, mm, ss, ms, mr; //mr = meridian (AM/PM)
+    var MMMList = ["JAN", "FEB", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"];
     function isDateObject(dateObj) {
         if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
             if (isNumber(dateObj.getDate())) {
@@ -301,6 +302,7 @@ var DT = (function() {
         var formatedValue = {};
         formatedValue["YYYY"] = fullYear;
         formatedValue["MM"] = month <= 9 ? "0"+month : month;
+        formatedValue["MMM"] = MMMList[month-1];
         formatedValue["DD"] = date <= 9 ? "0"+date : date;
         formatedValue["hh"] = horus <= 9 ? "0"+horus : horus;
         formatedValue["mm"] = minutes <= 9 ? "0"+minutes : minutes;
