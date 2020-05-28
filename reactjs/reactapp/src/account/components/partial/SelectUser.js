@@ -9,11 +9,6 @@ class SelectUser extends React.Component {
         };
         this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
-        this.dateSelection = [];
-        this.dateSelection.push({"name": "Daily", "value": "daily"});
-        this.dateSelection.push({"name": "Monthly", "value": "monthly"});
-        this.dateSelection.push({"name": "Yearly", "value": "yearly"});
-        this.dateSelection.push({"name": "All", "value": "all"});
     }
     componentDidMount() {
     }
@@ -28,7 +23,7 @@ class SelectUser extends React.Component {
         var selectOptions = this.props.data.userControlData.map(function(el, i, arr) {
             return <option key={i} value={el.username}>{el.displayName}</option>
         });
-        var dateSelection = this.dateSelection.map(function(el, i, arr) {
+        var dateSelection = this.props.data.dateSelection.map(function(el, i, arr) {
             var className = "btn ";
             if (el.value === self.props.data.dateSelectionType) {
                 className += "btn-secondary";

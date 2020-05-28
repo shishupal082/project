@@ -95,8 +95,17 @@ class App extends React.Component {
 
         this.companyName = "Loading ...";
         this.currentUserName = "";
+
+        this.dateSelection = [];
+        this.dateSelection.push({"name": "Daily", "value": "daily"});
+        this.dateSelection.push({"name": "Monthly", "value": "monthly"});
+        this.dateSelection.push({"name": "Yearly", "value": "yearly"});
+        this.dateSelection.push({"name": "All", "value": "all"});
+
         this.dateSelectionType = "all";
-        this.validDateSelectionType = ["all", "daily", "monthly", "yearly"];
+        this.validDateSelectionType = this.dateSelection.map(function(el, i, isArray) {
+            return el.value;
+        });
     }
     getDateSelectionParameter() {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
@@ -209,9 +218,10 @@ class App extends React.Component {
         return trialBalanceFields;
     }
     getJournalDataByDateFields() {
-        var journalDataByDateFields, apiJournalDataByDate;
+        var journalDataByDateFields, apiJournalDataByDate, dateSelection;
         apiJournalDataByDate = Data.getData("apiJournalDataByDate", []);
-        journalDataByDateFields = AccountHelper.getJournalDataByDateFields(Data, apiJournalDataByDate);
+        dateSelection = this.getDateSelectionParameter();
+        journalDataByDateFields = AccountHelper.getJournalDataByDateFields(Data, apiJournalDataByDate, dateSelection);
         return journalDataByDateFields;
     }
     dataLoadComplete() {
@@ -397,8 +407,12 @@ class App extends React.Component {
         var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
                         userControlData: Data.getData("userControlData", []),
-                        dateSelectionType: this.dateSelectionType,
-                        currentUserName: this.currentUserName};
+                        currentUserName: this.currentUserName,
+                        dateSelection: [], dateSelectionType: ""};
+
+        var currentbalvalByDate = $S.clone(commonData);
+        currentbalvalByDate["dateSelection"] = this.dateSelection;
+        currentbalvalByDate["dateSelectionType"] = this.dateSelectionType;
 
         var home = <Home state={this.state} data={commonData} methods={methods}/>;
 
@@ -407,7 +421,7 @@ class App extends React.Component {
         var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"
                     renderFieldRow={this.state.journalDataFields}/>;
 
-        var journalbydate = <JournalByDate state={this.state} data={commonData} methods={methods} heading="Journal"
+        var journalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Journal By Date"
                     renderFieldRow={this.state.journalDataByDateFields}/>;
 
         var ledger = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Ledger Book"
@@ -415,7 +429,7 @@ class App extends React.Component {
 
         var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Current Balance"
                     renderFieldRow={this.state.currentBalanceFields}/>;
-        var currentbalbydate = <JournalByDate state={this.state} data={commonData} methods={methods} heading="Current Balance By Date"
+        var currentbalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Current Balance By Date"
                     renderFieldRow={this.state.currentBalanceByDateFields}/>;
 
         return (<BrowserRouter><Switch>
