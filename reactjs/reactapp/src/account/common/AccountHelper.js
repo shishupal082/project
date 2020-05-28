@@ -382,18 +382,18 @@ Account.extend({
 });
 //partial
 Account.extend({
-    generateCurrentBalanaceTrs: function(Data, companyData) {
+    generateCurrentBalanaceTrs: function(Data, currentBalRowData) {
         var trs = [];
-        if (!companyData || !$S.isArray(companyData.currentBalRowData)) {
+        if (!$S.isArray(currentBalRowData)) {
             return trs;
         }
         var i, count = 1;
         var template, templateData;
         template = Data.getTemplate("currentBal1stRow", null);
         trs.push(template);
-        for (i = 0; i < companyData.currentBalRowData.length; i++) {
+        for (i = 0; i < currentBalRowData.length; i++) {
             template = Data.getTemplate("currentBalRow", null);
-            templateData = companyData.currentBalRowData[i];
+            templateData = currentBalRowData[i];
             if ($S.isObject(templateData)) {
                 templateData["s.no"] = count++;
             }
@@ -501,12 +501,12 @@ Account.extend({
 //getCurrentBalByDateRowData
 Account.extend({
     getCurrentBalByDateRowData: function(Data, dataByCompany, accountData, dateSelection) {
-        var currentBalanceFields = [];
+        var currentBalanceFields = [], currentBalanceFieldsData = [];
         var i, j, k, accountName, accountDisplayName;
         // var debitAmount, creditAmount, currentAmount = 0;
         var template, templateData, template2, template2Data;
 
-        var startDate, endDate, currentDate, companyData;
+        var startDate, endDate, currentDate, currentBalRowData;
         if(!$S.isArray(accountData) || !$S.isArray(dateSelection)) {
             return currentBalanceFields;
         }
@@ -516,8 +516,66 @@ Account.extend({
             if ($S.isUndefined(dataByCompany[accountName])) {
                 continue;
             }
+            templateData = {"accountDisplayName": accountDisplayName, "currentBalByDateRow": []};
+            for (j = 0; j < dateSelection.length; j++) {
+                if ($S.isArray(dateSelection[j].dateRange) && dateSelection[j].dateRange.length >= 2) {
+                    startDate = DT.getDateObj(dateSelection[j].dateRange[0]);
+                    endDate = DT.getDateObj(dateSelection[j].dateRange[1]);
+                    if (startDate === null || endDate === null) {
+                        console.log("Invalid date range: " + JSON.stringify(dateSelection[j].dateRange));
+                        continue;
+                    }
+                }
+                if ($S.isString(dateSelection[j].dateHeading)) {
+                    template2Data = {"dateHeading": dateSelection[j].dateHeading, "currentBalRowData": []};
+                    if ($S.isArray(dataByCompany[accountName].currentBalRowData)) {
+                        currentBalRowData = [];
+                        for (k=0; k<dataByCompany[accountName].currentBalRowData.length; k++) {
+                            currentDate = dataByCompany[accountName].currentBalRowData[k].date;
+                            currentDate = DT.getDateObj(currentDate);
+                            if (currentDate === null) {
+                                continue;
+                            }
+                            if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
+                                currentBalRowData.push(dataByCompany[accountName].currentBalRowData[k]);
+                            } else {
+                                continue;
+                            }
+                        }
+                        if (currentBalRowData.length < 1) {
+                            continue;
+                        }
+                        template2Data.currentBalRowData = template2Data.currentBalRowData.concat(currentBalRowData);
+                        templateData.currentBalByDateRow.push(template2Data);
+                    }
+                }
+            }
+            currentBalanceFieldsData.push(templateData);
+        }
+        for (i = 0; i < currentBalanceFieldsData.length; i++) {
             template = Data.getTemplate("currentBalByDate", null);
-            templateData = {accountDisplayName: accountDisplayName, currentBalByDateRow: []};
+            templateData = {};
+            templateData["accountDisplayName"] = currentBalanceFieldsData[i].accountDisplayName;
+            templateData["currentBalByDateRow"] = [];
+            for(j=0; j<currentBalanceFieldsData[i].currentBalByDateRow.length; j++) {
+                template2 = Data.getTemplate("currentBalByDateRow", null);
+                template2Data = {"dateHeading": currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
+                template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
+                TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                templateData["currentBalByDateRow"].push(template2);
+            }
+            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            currentBalanceFields.push(template);
+        }
+        /*
+        for (i = 0; i < accountData.length; i++) {
+            accountName = accountData[i].accountName;
+            accountDisplayName = AccountHelper._getAccountDisplayName(accountData[i]);
+            if ($S.isUndefined(dataByCompany[accountName])) {
+                continue;
+            }
+            template = Data.getTemplate("currentBalByDate", null);
+            templateData = {"accountDisplayName": accountDisplayName, "currentBalByDateRow": []};
             for (j = 0; j < dateSelection.length; j++) {
                 if ($S.isArray(dateSelection[j].dateRange) && dateSelection[j].dateRange.length >= 2) {
                     startDate = DT.getDateObj(dateSelection[j].dateRange[0]);
@@ -609,7 +667,7 @@ Account.extend({
             //     }
             // }
             // currentBalanceData.push(dataByCompany[key]);
-        }
+        }*/
         // var template = {accountDisplayName:"", fields: []}, fieldTemplate, rowData;
         // var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
         // for (i = 0; i < currentBalanceData.length; i++) {
