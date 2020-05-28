@@ -559,7 +559,7 @@ Account.extend({
             templateData["currentBalByDateRow"] = [];
             for(j=0; j<currentBalanceFieldsData[i].currentBalByDateRow.length; j++) {
                 template2 = Data.getTemplate("currentBalByDateRow", null);
-                template2Data = {"dateHeading": currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
+                template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
                 template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
                 TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
                 templateData["currentBalByDateRow"].push(template2);
