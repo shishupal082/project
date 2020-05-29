@@ -224,7 +224,7 @@
     },
     "currentBalByDate": [
         {
-            "tag": "div.h1",
+            "tag": "div.h4",
             "text": {
                 "tag": "span",
                 "className": "badge badge-primary",
@@ -397,7 +397,7 @@
     },
     "accountSummary": [
         {
-            "tag": "div.h1",
+            "tag": "div.h4",
             "text": {
                 "tag": "span",
                 "className": "badge badge-primary",

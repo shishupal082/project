@@ -169,7 +169,7 @@ class App extends React.Component {
                 }
             }
         } else if (this.dateSelectionType === "all") {
-            heading = "";
+            heading = "All";
             if (allDate.length > 0) {
                 startDate = allDate[0] + " 00:00";
                 endDate = allDate[allDate.length-1] + " 23:59";
