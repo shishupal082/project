@@ -12,6 +12,7 @@ import $S from "../interface/stack.js";
 import $$$ from '../interface/global';
 import Api from "../common/Api";
 
+var RequestId = $S.getRequestId();
 var DT = $S.getDT();
 var DateFormate = "YYYY/-/MM/-/DD";
 
@@ -20,7 +21,7 @@ var basepathname = $$$.basepathname;
 
 var backIconUrl = baseapi + $$$.backIconUrl;
 
-var userControlDataApi = baseapi + $$$.userControlDataApi;
+var userControlDataApi = baseapi + $$$.userControlDataApi + "?" + RequestId;
 
 var accountTemplateApi = [];
 var journalDataApi = [];
@@ -33,13 +34,13 @@ var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalby
 
 function setDataApi(userData) {
     accountTemplateApi = userData.accountTemplateApi.map(function(el, i, arr) {
-        return baseapi+el;
+        return baseapi+el + "?" + RequestId;
     });
     journalDataApi = userData.journalDataApi.map(function(el, i, arr) {
-        return baseapi+el;
+        return baseapi+el + "?" + RequestId;
     });
     accountDataApi = userData.accountDataApi.map(function(el, i, arr) {
-        return baseapi+el;
+        return baseapi+el + "?" + RequestId;
     });
 }
 
