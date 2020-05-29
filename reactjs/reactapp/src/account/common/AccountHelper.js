@@ -387,24 +387,49 @@ Account.extend({
         if (!$S.isArray(currentBalRowData)) {
             return trs;
         }
-        var i, j, count = 1;
-        var num, signCorrection = ["dr", "cr", "currentBal", "balance"];
+        var i, j, count = 1, prev = {}, current = {}, isTotalRow = false;
+        var num, signCorrection = ["dr", "cr", "currentBal", "balance"], attr;
         var template, templateData;
         template = Data.getTemplate("currentBal1stRowByDate", null);
         trs.push(template);
+        for (j=0; j<signCorrection.length; j++) {
+            prev[signCorrection[j]] = null;
+            current[signCorrection[j]] = null;
+        }
         for (i = 0; i < currentBalRowData.length; i++) {
             template = Data.getTemplate("currentBalRowByDate", null);
             templateData = currentBalRowData[i];
             if ($S.isObject(templateData)) {
                 templateData["s.no"] = count++;
             }
+            if (templateData.name === "totalRow") {
+                isTotalRow = true;
+            }
             for (j=0; j<signCorrection.length; j++) {
-                if ($S.isNumeric(templateData[signCorrection[j]])) {
-                    num = templateData[signCorrection[j]]*1;
+                attr = signCorrection[j];
+                if ($S.isNumeric(templateData[attr])) {
+                    num = templateData[attr]*1;
                     if (num < 0) {
+                        if (prev[attr] === null) {
+                            prev[attr] = "neg";
+                        } else {
+                            prev[attr] = current[attr];
+                        }
+                        current[attr] = "neg";
                         num = "("+(-1*num)+")";
+                    } else {
+                        if (prev[attr] === null) {
+                            prev[attr] = "pos";
+                        } else {
+                            prev[attr] = current[attr];
+                        }
+                        current[attr] = "pos";
                     }
-                    templateData[signCorrection[j]] = num;
+                    if (prev[attr] !== current[attr] || isTotalRow) {
+                        templateData[attr] = {"tag":"b", "className": "text-danger", "text": num};
+                    } else {
+                        templateData[attr] = num;
+                    }
                 }
             }
             TemplateHelper.setTemplateTextByFormValues(template, templateData);
