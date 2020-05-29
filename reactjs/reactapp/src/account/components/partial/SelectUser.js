@@ -32,20 +32,25 @@ class SelectUser extends React.Component {
             }
             return <button key={i} type="button" className={className} onClick={self.onClick} value={el.value}>{el.name}</button>;
         });
+        var seleUserOptionsDropDown = null;
+        if (this.props.data.userControlData.length > 1) {
+            seleUserOptionsDropDown = <td><div className="form-group row m-0">
+                    <label className="col-sm-4 col-form-label">Select user</label>
+                    <div className="col-sm-8">
+                        <select className="form-control" onChange={this.onChange} value={this.props.data.currentUserName}>
+                            {selectOptions}
+                        </select>
+                    </div>
+                </div></td>;
+        }
         var seleUserOptions = <div className="row">
                     <div className="col"><table><tbody><tr>
-                        <td>Select user</td>
-                        <td><select onChange={this.onChange} value={this.props.data.currentUserName}>
-                            {selectOptions}
-                        </select></td>
+                        {seleUserOptionsDropDown}
                         <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
                         </div></td>
                     </tr></tbody></table></div>
             </div>;
-        if (this.props.data.userControlData.length < 2) {
-            seleUserOptions = null;
-        }
         return (seleUserOptions);
     }
 }
