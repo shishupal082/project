@@ -38,7 +38,7 @@ class Home extends React.Component {
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center">Trial Balance</button>
                                 </Link>
                                 <Link to={this.props.data.pages.summary}>
-                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Summary</button>
+                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center">Account Summary</button>
                                 </Link>
                                 <SelectUser data={this.props.data} methods={this.props.methods}/>
                             </div>

@@ -1718,8 +1718,8 @@ Stack.extend({
     },
     extendObject: function(Obj) {
         ExtendObject(Obj);
-    },
-    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
+    },/*
+    loadJsonDataOld: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
         if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
             ajaxApiCall = function(ajax, callBack) {
                 JQ.ajax({url: ajax.url,
@@ -1760,6 +1760,60 @@ Stack.extend({
                 }
             });
         }
+        return true;
+    },*/
+    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
+        if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
+            ajaxApiCall = function(ajax, callBack) {
+                JQ.ajax({url: ajax.url,
+                    type: "GET",
+                    success: function(response, textStatus) {
+                        callBack(ajax, "SUCCESS", response);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        callBack(ajax, "FAILURE", null);
+                    }
+                });
+            }
+        }
+        if (isArray(urls) === false || urls.length < 1 || isFunction(ajaxApiCall) === false) {
+            if (isFunction(eachApiCallback)) {
+                eachApiCallback(null, apiName);
+            }
+            Stack.callMethod(callBack);
+            return false;
+        }
+
+        var apiSendCount = urls.length, apiReceiveCount = 0;
+        var st = Stack.getStack(), temp;
+        for (var i = 0; i < urls.length; i++) {
+            var ajax = {};
+            ajax.type = "json";
+            ajax.dataType = "json";
+            ajax.url = urls[i];
+            ajax.apiName = apiName;
+            st.push(ajax);
+        }
+        function loadAjaxSequentially() {
+            if (st.getTop() >= 0) {
+                temp = st.pop();
+                ajaxApiCall(temp, function(ajaxDetails, status, response) {
+                    apiReceiveCount++;
+                    if (status === "FAILURE") {
+                        Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo);
+                    }
+                    if (isFunction(eachApiCallback)) {
+                        eachApiCallback(response, temp.apiName);
+                    }
+                    if (apiSendCount === apiReceiveCount) {
+                        Stack.callMethod(callBack);
+                    } else {
+                        loadAjaxSequentially();
+                    }
+                });
+            }
+        }
+        loadAjaxSequentially();
         return true;
     }
 });
