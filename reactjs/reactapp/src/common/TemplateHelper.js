@@ -38,7 +38,7 @@ Template.fn = Template.prototype = {
         var field = {};
         if ($S.isArray(this.template)) {
             for (var i = 0; i<this.template.length; i++) {
-                field = Template(this.template[i]).searchField(fieldName);
+                field = Template(this.template[i]).searchFieldV2(fieldName);
                 if (field.name === fieldName) {
                     return field;
                 }

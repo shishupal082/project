@@ -185,6 +185,23 @@ Account.extend({
         }
         return "Account A/C";
     },
+    correctSign: function(fieldData) {
+        var signCorrection = ["dr", "cr", "currentBal", "balance"];
+        var amount;
+        if ($S.isObject(fieldData)) {
+            for (var i=0; i<signCorrection.length; i++) {
+                amount = fieldData[signCorrection[i]];
+                if ($S.isNumeric(amount)) {
+                    amount = amount*1;
+                    if (amount < 0) {
+                        amount = "("+(-1)*amount+")";
+                        fieldData[signCorrection[i]] = amount;
+                    }
+                }
+            }
+        }
+        return true;
+    },
     getFinalJournalData: function(journalData) {
         //journalData is apiJournalDataByDate
         var finalJournalData = [];
@@ -533,17 +550,16 @@ Account.extend({
         return currentBalanceFields;
     }
 });
-//getCurrentBalByDateRowData
+//_getCurrentBalanceDataByDate
 Account.extend({
-    getCurrentBalByDateRowData: function(Data, dataByCompany, accountData, dateSelection) {
-        var currentBalanceFields = [], currentBalanceFieldsData = [];
+    _getCurrentBalanceDataByDate: function(Data, dataByCompany, accountData, dateSelection) {
+        var currentBalanceFieldsData = [];
         var i, j, k, accountName, accountDisplayName;
-        // var debitAmount, creditAmount, currentAmount = 0;
-        var template, templateData, template2, template2Data;
+        var templateData, template2Data;
 
         var startDate, endDate, currentDate, currentBalRowData = [];
         if(!$S.isArray(accountData) || !$S.isArray(dateSelection)) {
-            return currentBalanceFields;
+            return currentBalanceFieldsData;
         }
         for (i = 0; i < accountData.length; i++) {
             accountName = accountData[i].accountName;
@@ -626,6 +642,17 @@ Account.extend({
                 }
             }
         }
+        return currentBalanceFieldsData;
+    }
+});
+//getCurrentBalByDateRowData
+Account.extend({
+    getCurrentBalByDateRowData: function(Data, dataByCompany, accountData, dateSelection) {
+        var currentBalanceFields = [], currentBalanceFieldsData = [];
+        var i, j;
+        // var debitAmount, creditAmount, currentAmount = 0;
+        var template, templateData, template2, template2Data;
+        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(Data, dataByCompany, accountData, dateSelection);
         // Generating template data
         for (i = 0; i < currentBalanceFieldsData.length; i++) {
             template = Data.getTemplate("currentBalByDate", null);
@@ -638,6 +665,45 @@ Account.extend({
                 template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
                 TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
                 templateData["currentBalByDateRow"].push(template2);
+            }
+            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            currentBalanceFields.push(template);
+        }
+        return currentBalanceFields;
+    }
+});
+//getAccountSummaryFields
+Account.extend({
+    getAccountSummaryFields: function(Data, dataByCompany, accountData, dateSelection) {
+        var currentBalanceFields = [], currentBalanceFieldsData = [];
+        var i, j, count = 1, totalRow;
+        var template, templateData, template2, template2Data, currentBalByDateRow = [];
+        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(Data, dataByCompany, accountData, dateSelection);
+        // Generating template data
+        for (i = 0; i < currentBalanceFieldsData.length; i++) {
+            template = Data.getTemplate("accountSummary", null);
+            templateData = {};
+            templateData["accountDisplayName"] = currentBalanceFieldsData[i].accountDisplayName;
+            templateData["accountSummaryRow"] = [];
+
+            currentBalByDateRow = currentBalanceFieldsData[i].currentBalByDateRow;
+            if ($S.isArray(currentBalByDateRow) && currentBalByDateRow.length) {
+                template2 = Data.getTemplate("accountSummary1stRow", null);
+                templateData["accountSummaryRow"].push(template2);
+                count = 1;
+                for (j=0; j<currentBalByDateRow.length; j++) {
+                    template2 = Data.getTemplate("accountSummaryRow", null);
+                    template2Data = {};
+                    totalRow = TemplateHelper(currentBalByDateRow[j]).searchFieldV2("totalRow");
+                    template2Data = $S.clone(totalRow);
+                    template2Data.dateHeading = currentBalByDateRow[j].dateHeading;
+                    template2Data["s.no"] = count++;
+                    if (template2Data.name === "totalRow") {
+                        AccountHelper.correctSign(template2Data);
+                        TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                        templateData["accountSummaryRow"].push(template2);
+                    }
+                }
             }
             TemplateHelper.setTemplateTextByFormValues(template, templateData);
             currentBalanceFields.push(template);
