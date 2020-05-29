@@ -387,15 +387,25 @@ Account.extend({
         if (!$S.isArray(currentBalRowData)) {
             return trs;
         }
-        var i, count = 1;
+        var i, j, count = 1;
+        var num, signCorrection = ["dr", "cr", "currentBal", "balance"];
         var template, templateData;
-        template = Data.getTemplate("currentBal1stRow", null);
+        template = Data.getTemplate("currentBal1stRowByDate", null);
         trs.push(template);
         for (i = 0; i < currentBalRowData.length; i++) {
-            template = Data.getTemplate("currentBalRow", null);
+            template = Data.getTemplate("currentBalRowByDate", null);
             templateData = currentBalRowData[i];
             if ($S.isObject(templateData)) {
                 templateData["s.no"] = count++;
+            }
+            for (j=0; j<signCorrection.length; j++) {
+                if ($S.isNumeric(templateData[signCorrection[j]])) {
+                    num = templateData[signCorrection[j]]*1;
+                    if (num < 0) {
+                        num = "("+(-1*num)+")";
+                    }
+                    templateData[signCorrection[j]] = num;
+                }
             }
             TemplateHelper.setTemplateTextByFormValues(template, templateData);
             trs.push(template);
@@ -506,7 +516,7 @@ Account.extend({
         // var debitAmount, creditAmount, currentAmount = 0;
         var template, templateData, template2, template2Data;
 
-        var startDate, endDate, currentDate, currentBalRowData;
+        var startDate, endDate, currentDate, currentBalRowData = [];
         if(!$S.isArray(accountData) || !$S.isArray(dateSelection)) {
             return currentBalanceFields;
         }
@@ -552,6 +562,46 @@ Account.extend({
             }
             currentBalanceFieldsData.push(templateData);
         }
+        //Adding currentBal and balance
+        var lastAmount, debitAmount, creditAmount, currentBalAmount, temp;
+        lastAmount = 0;
+        debitAmount = 0;
+        creditAmount = 0;
+        currentBalAmount = 0;
+        var currentBalByDateRow = [];
+        for (i = 0; i < currentBalanceFieldsData.length; i++) {
+            currentBalByDateRow = currentBalanceFieldsData[i].currentBalByDateRow;
+            lastAmount = 0;
+            if ($S.isArray(currentBalByDateRow)) {
+                for (j = 0; j < currentBalByDateRow.length; j++) {
+                    currentBalRowData = currentBalByDateRow[j].currentBalRowData;
+                    if ($S.isArray(currentBalRowData)) {
+                        currentBalAmount = 0;
+                        debitAmount = 0;
+                        creditAmount = 0;
+                        for(k=0; k<currentBalRowData.length; k++) {
+                            if ($S.isNumeric(currentBalRowData[k].dr)) {
+                                currentBalAmount += currentBalRowData[k].dr*1;
+                                debitAmount += currentBalRowData[k].dr*1;
+                            } else if ($S.isNumeric(currentBalRowData[k].cr)) {
+                                currentBalAmount -= currentBalRowData[k].cr*1;
+                                creditAmount += currentBalRowData[k].cr*1;
+                            }
+                            currentBalRowData[k]["currentBal"] = currentBalAmount;
+                            currentBalRowData[k]["balance"] = lastAmount + currentBalAmount;
+                        }
+                        temp = {"name": "totalRow", "particularText": {"tag":"div.b", "className": "text-right", "text":"Total"}};
+                        temp.dr = debitAmount;
+                        temp.cr = creditAmount;
+                        temp.currentBal = currentBalAmount;
+                        temp.balance = lastAmount + currentBalAmount;
+                        currentBalRowData.push(temp);
+                        lastAmount += currentBalAmount;
+                    }
+                }
+            }
+        }
+        // Generating template data
         for (i = 0; i < currentBalanceFieldsData.length; i++) {
             template = Data.getTemplate("currentBalByDate", null);
             templateData = {};
@@ -567,130 +617,6 @@ Account.extend({
             TemplateHelper.setTemplateTextByFormValues(template, templateData);
             currentBalanceFields.push(template);
         }
-        /*
-        for (i = 0; i < accountData.length; i++) {
-            accountName = accountData[i].accountName;
-            accountDisplayName = AccountHelper._getAccountDisplayName(accountData[i]);
-            if ($S.isUndefined(dataByCompany[accountName])) {
-                continue;
-            }
-            template = Data.getTemplate("currentBalByDate", null);
-            templateData = {"accountDisplayName": accountDisplayName, "currentBalByDateRow": []};
-            for (j = 0; j < dateSelection.length; j++) {
-                if ($S.isArray(dateSelection[j].dateRange) && dateSelection[j].dateRange.length >= 2) {
-                    startDate = DT.getDateObj(dateSelection[j].dateRange[0]);
-                    endDate = DT.getDateObj(dateSelection[j].dateRange[1]);
-                    if (startDate === null || endDate === null) {
-                        console.log("Invalid date range: " + JSON.stringify(dateSelection[j].dateRange));
-                        continue;
-                    }
-                }
-                if ($S.isString(dateSelection[j].dateHeading)) {
-                    template2 = Data.getTemplate("currentBalByDateRow", null);
-                    template2Data = {"dateHeading": dateSelection[j].dateHeading, "currentBalRow": []};
-                    if ($S.isArray(dataByCompany[accountName].currentBalRowData)) {
-                        companyData = {currentBalRowData: []};
-                        for (k=0; k<dataByCompany[accountName].currentBalRowData.length; k++) {
-                            currentDate = dataByCompany[accountName].currentBalRowData[k].date;
-                            currentDate = DT.getDateObj(currentDate);
-                            if (currentDate === null) {
-                                continue;
-                            }
-                            if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
-                                companyData.currentBalRowData.push(dataByCompany[accountName].currentBalRowData[k]);
-                            } else {
-                                continue;
-                            }
-                        }
-                        if (companyData.currentBalRowData.length < 1) {
-                            continue;
-                        }
-                    }
-                    template2Data.currentBalRow.push(Account.generateCurrentBalanaceTrs(Data, companyData));
-                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
-                    templateData.currentBalByDateRow.push(template2);
-                }
-            }
-            TemplateHelper.setTemplateTextByFormValues(template, templateData);
-            // lastAmount = 0;
-            // debitAmount = 0;
-            // creditAmount = 0;
-            currentBalanceFields.push(template);
-            // if ($S.isArray(dataByCompany[key].currentBalRowData)) {
-            //     for (j = 0; j < dataByCompany[key].currentBalRowData.length; j++) {
-            //         if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].dr)) {
-            //             currentAmount = dataByCompany[key].currentBalRowData[j].dr * 1;
-            //             debitAmount += currentAmount;
-            //         }
-            //         if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].cr)) {
-            //             currentAmount = (-1)* dataByCompany[key].currentBalRowData[j].cr * 1;
-            //             creditAmount += (-1)* currentAmount;
-            //         }
-            //         dataByCompany[key].currentBalRowData[j].balance = lastAmount + currentAmount;
-            //         if (j === dataByCompany[key].currentBalRowData.length-1) {
-            //             temp = lastAmount + currentAmount;
-            //             if (lastAmount + currentAmount < 0) {
-            //                 temp = "("+(-1)*temp+")";
-            //             }
-            //             dataByCompany[key].currentBalRowData[j].balanceText = {"tag":"b", "className": "text-danger", "text": temp};
-            //         }
-            //         lastAmount = dataByCompany[key].currentBalRowData[j].balance;
-            //     }
-            //     if (j > 0) {
-            //         temp = {};
-            //         if (lastAmount > 0) {
-            //             temp.cr = lastAmount;
-            //             creditAmount += lastAmount;
-            //             temp.particularText = {"tag":"b", "text":"By Balance C/D"};
-            //             dataByCompany[key].currentBalRowData.push(temp);
-            //         } else if (lastAmount < 0) {
-            //             temp.dr = (-1)*lastAmount;
-            //             debitAmount += temp.dr;
-            //             temp.particularText = {"tag":"b", "text":"By Balance C/D"};
-            //             dataByCompany[key].currentBalRowData.push(temp);
-            //         }
-            //         temp = {};
-            //         temp.particularText = {"tag":"div.b", "className": "text-right", "text":"Total"};
-            //         temp.dr = debitAmount;
-            //         temp.cr = creditAmount;
-            //         dataByCompany[key].currentBalRowData.push(temp);
-            //         temp = {};
-            //         temp.particularText = {"tag":"b", "text":"By Balance B/D"};
-            //         if (lastAmount > 0) {
-            //             temp.dr = lastAmount;
-            //             dataByCompany[key].currentBalRowData.push(temp);
-            //         } else if (lastAmount < 0) {
-            //             temp.cr = (-1)*lastAmount;
-            //             debitAmount += temp.cr;
-            //             dataByCompany[key].currentBalRowData.push(temp);
-            //         }
-            //     }
-            // }
-            // currentBalanceData.push(dataByCompany[key]);
-        }*/
-        // var template = {accountDisplayName:"", fields: []}, fieldTemplate, rowData;
-        // var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
-        // for (i = 0; i < currentBalanceData.length; i++) {
-        //     currentBalanceFields.push($S.clone(template));
-        //     currentBalanceFields[i].accountDisplayName = currentBalanceData[i].accountDisplayName;
-        //     currentBalanceFields[i].fields.push(fieldHeaderTemplate);
-        //     if ($S.isArray(currentBalanceData[i].currentBalRowData)) {
-        //         count = 1;
-        //         for (j = 0; j < currentBalanceData[i].currentBalRowData.length; j++) {
-        //             rowData = currentBalanceData[i].currentBalRowData[j];
-        //             if ($S.isNumber(rowData.balance) && rowData.balance < 0) {
-        //                 rowData.balance = "("+(-1*rowData.balance)+")";
-        //             }
-        //             if (rowData.balanceText) {
-        //                 rowData.balance = rowData.balanceText;
-        //             }
-        //             fieldTemplate = self.getTemplate("currentBalRow");
-        //             rowData["s.no"] = count++;
-        //             TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
-        //             currentBalanceFields[i].fields.push(fieldTemplate);
-        //         }
-        //     }
-        // }
         return currentBalanceFields;
     }
 });

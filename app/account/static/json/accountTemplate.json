@@ -258,6 +258,79 @@
             }
         }
     ],
+    "currentBal1stRowByDate": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "text": "Date"
+            },
+            {
+                "tag": "th",
+                "text": "Particular"
+            },
+            {
+                "tag": "th",
+                "text": "Debit"
+            },
+            {
+                "tag": "th",
+                "text": "Credit"
+            },
+            {
+                "tag": "th",
+                "text": "Current Bal"
+            },
+            {
+                "tag": "th",
+                "text": "Balance"
+            }
+        ]
+    },
+    "currentBalRowByDate": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "s.no",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "date",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "particularText",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "dr",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "cr",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "currentBal",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "balance",
+                "text": ""
+            }
+        ]
+    },
     "currentBal1stRow": {
         "tag": "tr",
         "text": [
