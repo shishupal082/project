@@ -51,6 +51,8 @@ keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("dataByCompany");
 
+var ErrorsData = [];
+
 Data.getTemplate = function(key, defaultTemplate) {
     var allTemplate = Data.getData("accountTemplate");
     if ($S.isObject(allTemplate)) {
@@ -70,8 +72,13 @@ Data.initData = function() {
     }
 };
 
+Data.addError = function(er) {
+    ErrorsData.push(er);
+};
+
 Data.setKeys(keys);
 Data.initData();
+
 
 class App extends React.Component {
     constructor(props) {
@@ -104,6 +111,7 @@ class App extends React.Component {
         this.dateSelection.push({"name": "Monthly", "value": "monthly"});
         this.dateSelection.push({"name": "Yearly", "value": "yearly"});
         this.dateSelection.push({"name": "All", "value": "all"});
+
 
         this.dateSelectionType = "all";
         this.validDateSelectionType = this.dateSelection.map(function(el, i, isArray) {
@@ -252,7 +260,7 @@ class App extends React.Component {
         finalJournalData = Data.setData("finalJournalData", finalJournalData);
 
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
-        var dataByCompany = AccountHelper.getDataByCompany(finalJournalData, Data.getData("accountData",[]));
+        var dataByCompany = AccountHelper.getDataByCompany(Data, finalJournalData, Data.getData("accountData",[]));
         Data.setData("dataByCompany", dataByCompany);
         var ledgerDataFields = this.getLedgerRowData();
         var currentBalanceFields = this.getCurrentBalRowData();
@@ -280,7 +288,7 @@ class App extends React.Component {
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
         this.accountDataLoaded = false;
-        $S.loadJsonData(null, accountDataApi, function(response) {
+        $S.loadJsonData(null, accountDataApi, function(response, apiName, ajaxDetails) {
             self.accountDataLoaded = true;
             if ($S.isArray(response)) {
                 // checking unique accountName
@@ -294,6 +302,7 @@ class App extends React.Component {
                 }
                 Data.setData("accountData", response);
             } else {
+                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
                 $S.log("Invalid response (accountData):" + response);
             }
         }, function() {
@@ -301,11 +310,12 @@ class App extends React.Component {
         }, null, Api.getAjaxApiCallMethod());
 
         var accountTemplate = {};
-        $S.loadJsonData(null, accountTemplateApi, function(response) {
+        $S.loadJsonData(null, accountTemplateApi, function(response, apiName, ajaxDetails) {
             self.accountTemplateLoaded = true;
             if ($S.isObject(response)) {
                 Object.assign(accountTemplate, response);
             } else {
+                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
                 $S.log("Invalid response (accountTemplate):" + response);
             }
         }, function() {
@@ -314,11 +324,12 @@ class App extends React.Component {
         }, null, Api.getAjaxApiCallMethod());
 
         var journalData = [];
-        $S.loadJsonData(null, journalDataApi, function(response) {
+        $S.loadJsonData(null, journalDataApi, function(response, apiName, ajaxDetails) {
             self.journalDataLoaded = true;
             if ($S.isObject(response)) {
                 journalData.push(response);
             } else {
+                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
                 $S.log("Invalid response (journalData):" + response);
             }
         }, function() {
@@ -368,6 +379,7 @@ class App extends React.Component {
         dataLoadStatus.push(this.accountDataLoaded);
         for (i = 0; i < dataLoadStatus.length; i++) {
             if (dataLoadStatus[i] === false) {
+                this.setState({isLoaded: false});
                 return false;
             }
         }
@@ -396,7 +408,7 @@ class App extends React.Component {
     }
     componentDidMount() {
         var self = this;
-        $S.loadJsonData(null, [userControlDataApi], function(response) {
+        $S.loadJsonData(null, [userControlDataApi], function(response, apiName, ajaxDetails) {
             if ($S.isArray(response)) {
                 // checking unique username
                 var temp = {};
@@ -417,6 +429,7 @@ class App extends React.Component {
                     }
                 }
             } else {
+                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
                 $S.log("Invalid response (userControlDataApi):" + response);
             }
             self.userChange(self.currentUserName);
@@ -427,7 +440,7 @@ class App extends React.Component {
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
                         userControlData: Data.getData("userControlData", []),
                         currentUserName: this.currentUserName,
-                        dateSelection: [], dateSelectionType: ""};
+                        dateSelection: [], dateSelectionType: "", errorsData: ErrorsData};
 
         var currentbalvalByDate = $S.clone(commonData);
         currentbalvalByDate["dateSelection"] = this.dateSelection;

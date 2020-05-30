@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import SelectUser from "./partial/SelectUser";
-// import $S from "../../interface/stack.js";
+import Errors from "./partial/Errors";
+
 
 class Home extends React.Component {
     constructor(props) {
@@ -15,7 +15,8 @@ class Home extends React.Component {
     }
     render() {
         return (<div className="container">
-                    <center><h1>Account Application</h1></center>
+                    <center><h1>{this.props.data.companyName}</h1></center>
+                    <Errors data={this.props.data}/>
                     <div className="row">
                         <div className="col-md-12">
                             <div className="list-group">
@@ -42,9 +43,6 @@ class Home extends React.Component {
                                 <Link to={this.props.data.pages.summary}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Account Summary</button>
                                 </Link>
-                            </div>
-                            <div>
-                                <SelectUser data={this.props.data} methods={this.props.methods}/>
                             </div>
                         </div>
                     </div>

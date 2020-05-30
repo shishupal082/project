@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from "./partial/Header";
 import LedgerBookRow from "./partial/LedgerBookRow";
+import Errors from "./partial/Errors";
 
 class LedgerBook extends React.Component {
     constructor(props) {
@@ -17,6 +18,7 @@ class LedgerBook extends React.Component {
         });
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
+                    <Errors data={this.props.data}/>
                     {LedgerBookByCompany}
             </div>);
     }

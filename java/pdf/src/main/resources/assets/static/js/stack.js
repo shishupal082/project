@@ -1803,7 +1803,7 @@ Stack.extend({
                         Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo);
                     }
                     if (isFunction(eachApiCallback)) {
-                        eachApiCallback(response, temp.apiName);
+                        eachApiCallback(response, ajaxDetails.apiName, ajaxDetails);
                     }
                     if (apiSendCount === apiReceiveCount) {
                         Stack.callMethod(callBack);

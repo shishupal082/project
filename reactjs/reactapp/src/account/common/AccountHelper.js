@@ -84,7 +84,7 @@ Account.extend({
 });
 //getDataByCompany
 Account.extend({
-    getDataByCompany: function(finalJournalData, accountData) {
+    getDataByCompany: function(Data, finalJournalData, accountData) {
         var i, j, k, particularEntry, accountName, entry, temp;
         var dataByCompany = {};
         if (!$S.isArray(finalJournalData) && !$S.isArray(accountData)) {
@@ -116,6 +116,7 @@ Account.extend({
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
                                 if ($S.isDefined(accountName)) {
+                                    Data.addError("Invalid accountName: " + accountName);
                                     console.log("Invalid accountName: " + accountName);
                                 }
                                 continue;
