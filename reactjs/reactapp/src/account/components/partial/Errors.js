@@ -17,6 +17,9 @@ class Errors extends React.Component {
             } else if ($S.isObject(el) && $S.isString(el.href)) {
                 alertComponent = <div key={i} className="alert alert-danger" role="alert">
                   Erorr in <a href={el.href} className="alert-link">{el.text}</a></div>
+            } else if ($S.isObject(el) && $S.isString(el.code)) {
+                alertComponent = <div key={i} className="alert alert-danger" role="alert">
+                  <code>{el.code}</code></div>
             } else {
                 alertComponent = <div key={i} className="alert alert-danger" role="alert">Unknown error</div>
             }

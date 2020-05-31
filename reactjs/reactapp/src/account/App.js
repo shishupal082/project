@@ -50,6 +50,7 @@ var keys = ["userControlData", "apiJournalData", "finalJournalData", "apiJournal
 keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("dataByCompany");
+keys.push("dateSelectionParameter");
 
 var ErrorsData = [];
 
@@ -74,6 +75,10 @@ Data.initData = function() {
 
 Data.addError = function(er) {
     ErrorsData.push(er);
+};
+
+Data.clearError = function() {
+    ErrorsData = [];
 };
 
 Data.setKeys(keys);
@@ -118,7 +123,7 @@ class App extends React.Component {
             return el.value;
         });
     }
-    getDateSelectionParameter() {
+    setDateSelectionParameter() {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
         finalJournalData = Data.getData("finalJournalData", []);
         var startDate, endDate, heading;
@@ -185,6 +190,7 @@ class App extends React.Component {
             }
             dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
         }
+        Data.setData("dateSelectionParameter", dateSelection);
         console.log("dateSelection");
         console.log(dateSelection);
         return dateSelection;
@@ -217,7 +223,7 @@ class App extends React.Component {
         var accountData, dataByCompany, currentBalanceFields, dateSelection;
         accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
-        dateSelection = this.getDateSelectionParameter();
+        dateSelection = Data.getData("dateSelectionParameter", []);
         currentBalanceFields = AccountHelper.getCurrentBalByDateRowData(Data, dataByCompany, accountData, dateSelection);
         return currentBalanceFields;
     }
@@ -225,7 +231,7 @@ class App extends React.Component {
         var accountData, dataByCompany, accountSummaryFields, dateSelection;
         accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
-        dateSelection = this.getDateSelectionParameter();
+        dateSelection = Data.getData("dateSelectionParameter", []);
         accountSummaryFields = AccountHelper.getAccountSummaryFields(Data, dataByCompany, accountData, dateSelection);
         return accountSummaryFields;
     }
@@ -239,29 +245,12 @@ class App extends React.Component {
     getJournalDataByDateFields() {
         var journalDataByDateFields, apiJournalDataByDate, dateSelection;
         apiJournalDataByDate = Data.getData("apiJournalDataByDate", []);
-        dateSelection = this.getDateSelectionParameter();
+        dateSelection = Data.getData("dateSelectionParameter", []);
         journalDataByDateFields = AccountHelper.getJournalDataByDateFields(Data, apiJournalDataByDate, dateSelection);
         return journalDataByDateFields;
     }
-    dataLoadComplete() {
-        var dataLoadStatus = [], i;
-        dataLoadStatus.push(this.accountTemplateLoaded);
-        dataLoadStatus.push(this.journalDataLoaded);
-        dataLoadStatus.push(this.accountDataLoaded);
-        for (i = 0; i < dataLoadStatus.length; i++) {
-            if (dataLoadStatus[i] === false) {
-                return false;
-            }
-        }
-        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data.getData("apiJournalData",[]), Data.getData("accountData",[]));
-        apiJournalDataByDate = Data.setData("apiJournalDataByDate", apiJournalDataByDate);
-
-        var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);
-        finalJournalData = Data.setData("finalJournalData", finalJournalData);
-
+    dataSetComplete() {
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
-        var dataByCompany = AccountHelper.getDataByCompany(Data, finalJournalData, Data.getData("accountData",[]));
-        Data.setData("dataByCompany", dataByCompany);
         var ledgerDataFields = this.getLedgerRowData();
         var currentBalanceFields = this.getCurrentBalRowData();
         var trialBalanceFields = this.getTrialBalanceRowData();
@@ -281,6 +270,27 @@ class App extends React.Component {
                     $S.log("this.state");
                     console.log(this.state);
                 });
+        return true;
+    }
+    dataLoadComplete() {
+        var dataLoadStatus = [], i;
+        dataLoadStatus.push(this.accountTemplateLoaded);
+        dataLoadStatus.push(this.journalDataLoaded);
+        dataLoadStatus.push(this.accountDataLoaded);
+        for (i = 0; i < dataLoadStatus.length; i++) {
+            if (dataLoadStatus[i] === false) {
+                return false;
+            }
+        }
+        var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data, Data.getData("apiJournalData",[]));
+        Data.setData("apiJournalDataByDate", apiJournalDataByDate);
+
+        var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);
+        Data.setData("finalJournalData", finalJournalData);
+        this.setDateSelectionParameter();
+        var dataByCompany = AccountHelper.getDataByCompany(Data, finalJournalData, Data.getData("accountData",[]));
+        Data.setData("dataByCompany", dataByCompany);
+        this.dataSetComplete();
         return true;
     }
     fetchData() {
@@ -348,6 +358,7 @@ class App extends React.Component {
             trialBalanceFields: [],
             currentBalanceFields: []
         }, function() {
+            Data.clearError();
             var userDataNotFound = true;
             var userControlData = Data.getData("userControlData", []);
             for(var i=0; i<userControlData.length; i++) {
@@ -372,7 +383,7 @@ class App extends React.Component {
             return false;
         }
         this.dateSelectionType = dateSelectionType;
-
+        this.setDateSelectionParameter();
         var dataLoadStatus = [], i;
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
@@ -383,27 +394,7 @@ class App extends React.Component {
                 return false;
             }
         }
-
-        var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
-        var ledgerDataFields = this.getLedgerRowData();
-        var currentBalanceFields = this.getCurrentBalRowData();
-        var trialBalanceFields = this.getTrialBalanceRowData();
-
-        var journalDataByDateFields = this.getJournalDataByDateFields();
-        var currentBalanceByDateFields = this.getCurrentBalByDateRowData();
-
-        var accountSummaryFields = this.getAccountSummaryFields();
-
-        this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
-                trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
-                journalDataByDateFields: journalDataByDateFields,
-                currentBalanceByDateFields: currentBalanceByDateFields,
-                accountSummaryFields: accountSummaryFields}, function() {
-                    $S.log("Data.getAllData()");
-                    console.log(Data.getAllData());
-                    $S.log("this.state");
-                    console.log(this.state);
-                });
+        this.dataSetComplete();
         return true;
     }
     componentDidMount() {

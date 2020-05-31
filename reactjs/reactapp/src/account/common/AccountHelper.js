@@ -748,16 +748,35 @@ Account.extend({
 });
 //getApiJournalDataByDate
 Account.extend({
-    getApiJournalDataByDate: function(apiJournalData) {
+    getApiJournalDataByDate: function(Data, apiJournalData) {
         var dataByDate = {}, apiJournalDataByDate = [];
-        var i, j, entry;
+        var i, j, k, entry;
         if (!$S.isArray(apiJournalData)) {
             return apiJournalDataByDate;
         }
+        var debitAmount = 0, creditAmount = 0;
+        var particularEntry;
         for (i=0; i<apiJournalData.length; i++) {
             if ($S.isArray(apiJournalData[i].entry)) {
                 for (j = 0; j < apiJournalData[i].entry.length; j++) {
                     entry = apiJournalData[i].entry[j];
+                    particularEntry = entry.particularEntry;
+                    if ($S.isArray(particularEntry)) {
+                        debitAmount = 0;
+                        creditAmount = 0;
+                        for (k=0; k<particularEntry.length; k++) {
+                            if ($S.isNumeric(particularEntry[k].cr)) {
+                                creditAmount += particularEntry[k].cr*1;
+                            }
+                            if ($S.isNumeric(particularEntry[k].dr)) {
+                                debitAmount += particularEntry[k].dr*1;
+                            }
+                        }
+                        if (debitAmount !== creditAmount && debitAmount > 0 && creditAmount > 0) {
+                            Data.addError({"code": "Total amount mismatch: " + JSON.stringify(entry)});
+                            continue;
+                        }
+                    }
                     if ($S.isString(entry.date)) {
                         if (!$S.isArray(dataByDate[entry.date])) {
                             dataByDate[entry.date] = [];
