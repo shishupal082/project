@@ -158,7 +158,7 @@ Account.extend({
         // Month more than 12 and less than 1 are handle at date obj
         // Date more than 31 and less than 1 handleed at date obj
         // Hour more than 24 handle at date obj (but not 24:00)
-        // Minute more than 59 handle at date obj (but not 24:00)
+        // Minute more than 59 handle at date obj
 
         // Case which are not handled
         // 1) Date from 28/29/30 to 31 in the month of feb, april, june, sep, nov
