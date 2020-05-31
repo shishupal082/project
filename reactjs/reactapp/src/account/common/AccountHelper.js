@@ -149,6 +149,32 @@ Account.extend({
 });
 
 Account.extend({
+    _isValidDateStr: function(dateStr) {
+        //2020-05-31
+        var p1 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9]/i;
+        //2020-05-31 00:00
+        var p2 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]/i;
+        // Years more than 4 digit and less than 3 are handle at pattern searching
+        // Month more than 12 and less than 1 are handle at date obj
+        // Date more than 31 and less than 1 handleed at date obj
+        // Hour more than 24 handle at date obj (but not 24:00)
+        // Minute more than 59 handle at date obj (but not 24:00)
+
+        // Case which are not handled
+        // 1) Date from 28/29/30 to 31 in the month of feb, april, june, sep, nov
+        // 2) Hour 24:00
+
+        var dateObj;
+        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10)) {
+            dateObj = DT.getDateObj(dateStr);
+            if (dateObj !== null) {
+                if (dateStr.search(p1) >= 0 || dateStr.search(p2) >= 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
     _getRequiredAmount: function(entry, accountName) {
         var amount = 0, i;
         if ($S.isArray(entry)) {
@@ -777,11 +803,12 @@ Account.extend({
                             continue;
                         }
                     }
-                    if ($S.isString(entry.date)) {
+                    if (AccountHelper._isValidDateStr(entry.date)) {
                         if (!$S.isArray(dataByDate[entry.date])) {
                             dataByDate[entry.date] = [];
                         }
                     } else {
+                        Data.addError({"code": "Invalid date: " + JSON.stringify(entry)});
                         continue;
                     }
                     dataByDate[entry.date].push(entry);
