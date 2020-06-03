@@ -376,7 +376,7 @@ Account.extend({
 });
 //getTrialBalanceFields
 Account.extend({
-    getTrialBalanceFields: function(self, dataByCompany, accountData) {
+    getTrialBalanceFields: function(Data, dataByCompany, accountData) {
         var trialBalanceFields = [];
         if (!$S.isObject(dataByCompany) || !$S.isArray(accountData)) {
             return trialBalanceFields;
@@ -385,7 +385,7 @@ Account.extend({
         var key, temp, template, count = 1, balanceBdField;
         var totalDebit = 0, totalCredit = 0, i;
         var accountDisplayName;
-        trialBalanceFields.push(self.getTemplate("trialBalance1stRow"));
+        trialBalanceFields.push(Data.getTemplate("trialBalance1stRow"));
         for (i = 0; i < accountData.length; i++) {
             key = accountData[i].accountName;
             accountDisplayName = Account._getAccountDisplayName(accountData[i]);
@@ -410,15 +410,18 @@ Account.extend({
                 count--;
                 continue;
             }
-            template = self.getTemplate("trialBalanceRow");
+            template = Data.getTemplate("trialBalanceRow");
             TemplateHelper.setTemplateTextByFormValues(template, temp);
             trialBalanceFields.push(template);
         }
         temp = {};
-        template = self.getTemplate("trialBalanceRow");
+        template = Data.getTemplate("trialBalanceRow");
         temp.particular = {"tag":"div.b", "className": "text-right", "text":"Total"};
         temp.debitBalance = totalDebit;
         temp.creditBalance = totalCredit;
+        if (totalDebit !== totalCredit) {
+            Data.addError("Trial balance mismatch: "+totalDebit +" !== "+ totalCredit);
+        }
         TemplateHelper.setTemplateTextByFormValues(template, temp);
         trialBalanceFields.push(template);
         return trialBalanceFields;
@@ -949,6 +952,8 @@ Account.extend({
                                 k++;
                                 if ($S.isNumeric(textLineArr[k])) {
                                     particularEntry[textLineArr[k-1]] = textLineArr[k];
+                                } else {
+                                    Data.addError({"code": "Invalid amount '"+textLineArr[k]+"' in csv text: " + textLineArr.join(",")});
                                 }
                                 k++;
                                 if (k < textLineArr.length) {

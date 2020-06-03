@@ -257,7 +257,7 @@ class App extends React.Component {
         var accountData, dataByCompany, trialBalanceFields;
         accountData = Data.getData("accountData", []);
         dataByCompany = Data.getData("dataByCompany", {});
-        trialBalanceFields = AccountHelper.getTrialBalanceFields(this, dataByCompany, accountData);
+        trialBalanceFields = AccountHelper.getTrialBalanceFields(Data, dataByCompany, accountData);
         return trialBalanceFields;
     }
     getJournalDataByDateFields() {

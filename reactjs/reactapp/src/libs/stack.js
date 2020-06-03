@@ -107,6 +107,10 @@ function isNumber(value) {
 function isNumeric(value) {
     // if value = null then typeof value = "object"
     if (!isNaN(value) && typeof value != "object") {
+        // if value = "" then it should return false
+        if (typeof value === "string" && value.trim() === "") {
+            return false;
+        }
         return true;
     }
     return false;
