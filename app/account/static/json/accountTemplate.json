@@ -52,6 +52,11 @@
                                 "tag": "td",
                                 "className": "w-120px",
                                 "text": "Credit"
+                            },
+                            {
+                                "tag": "td",
+                                "className": "w-120px",
+                                "text": "Account"
                             }
                         ]
                     }
@@ -101,6 +106,12 @@
                     "tag": "td",
                     "className": "w-120px",
                     "name": "cr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "className": "w-120px",
+                    "name": "account",
                     "text": ""
                 }
             ]

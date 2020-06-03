@@ -25,6 +25,7 @@ var userControlDataApi = baseapi + $$$.userControlDataApi + "?" + RequestId;
 
 var accountTemplateApi = [];
 var journalDataApi = [];
+var journalDataApiCSV = [];
 var accountDataApi = [];
 
 var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalbydate: basepathname+"/journalbydate",
@@ -33,20 +34,36 @@ var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalby
             summary: basepathname+"/summary"};
 
 function setDataApi(userData) {
-    accountTemplateApi = userData.accountTemplateApi.map(function(el, i, arr) {
-        return baseapi+el + "?" + RequestId;
-    });
-    journalDataApi = userData.journalDataApi.map(function(el, i, arr) {
-        return baseapi+el + "?" + RequestId;
-    });
-    accountDataApi = userData.accountDataApi.map(function(el, i, arr) {
-        return baseapi+el + "?" + RequestId;
-    });
+    accountTemplateApi = [];
+    journalDataApi = [];
+    journalDataApiCSV = [];
+    accountDataApi = [];
+    if ($S.isArray(userData.accountTemplateApi)) {
+        accountTemplateApi = userData.accountTemplateApi.map(function(el, i, arr) {
+            return baseapi+el + "?" + RequestId;
+        });
+    }
+    if ($S.isArray(userData.journalDataApi)) {
+        journalDataApi = userData.journalDataApi.map(function(el, i, arr) {
+            return baseapi+el + "?" + RequestId;
+        });
+    }
+    if ($S.isArray(userData.journalDataApiCSV)) {
+        journalDataApiCSV = userData.journalDataApiCSV.map(function(el, i, arr) {
+            return baseapi+el + "?" + RequestId;
+        });
+    }
+    if ($S.isArray(userData.accountDataApi)) {
+        accountDataApi = userData.accountDataApi.map(function(el, i, arr) {
+            return baseapi+el + "?" + RequestId;
+        });
+    }
 }
 
 var Data = $S.getDataObj();
 
-var keys = ["userControlData", "apiJournalData", "finalJournalData", "apiJournalDataByDate"];
+var keys = ["userControlData", "apiJournalData", "apiJournalDataCSV",
+            "finalJournalData", "apiJournalDataByDate"];
 keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("dataByCompany");
@@ -100,6 +117,7 @@ class App extends React.Component {
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
+        this.journalDataCSVLoaded = false;
         this.accountDataLoaded = false;
 
         this.getChildExposedMethod = this.getChildExposedMethod.bind(this);
@@ -276,12 +294,14 @@ class App extends React.Component {
         var dataLoadStatus = [], i;
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
+        dataLoadStatus.push(this.journalDataCSVLoaded);
         dataLoadStatus.push(this.accountDataLoaded);
         for (i = 0; i < dataLoadStatus.length; i++) {
             if (dataLoadStatus[i] === false) {
                 return false;
             }
         }
+
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data, Data.getData("apiJournalData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
 
@@ -297,55 +317,88 @@ class App extends React.Component {
         var self = this;
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
+        this.journalDataCSVLoaded = false;
         this.accountDataLoaded = false;
-        $S.loadJsonData(null, accountDataApi, function(response, apiName, ajaxDetails) {
-            self.accountDataLoaded = true;
-            if ($S.isArray(response)) {
-                // checking unique accountName
-                var temp = {};
-                for (var i=0; i<response.length; i++) {
-                    if (temp[response[i].accountName]) {
-                        alert("Duplicate entry: " + response[i].accountName);
-                    } else {
-                        temp[response[i].accountName] = 1;
+        if ($S.isArray(accountDataApi) && accountDataApi.length) {
+            $S.loadJsonData(null, accountDataApi, function(response, apiName, ajaxDetails) {
+                self.accountDataLoaded = true;
+                if ($S.isArray(response)) {
+                    // checking unique accountName
+                    var temp = {};
+                    for (var i=0; i<response.length; i++) {
+                        if (temp[response[i].accountName]) {
+                            alert("Duplicate entry: " + response[i].accountName);
+                        } else {
+                            temp[response[i].accountName] = 1;
+                        }
                     }
+                    Data.setData("accountData", response);
+                } else {
+                    Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
+                    $S.log("Invalid response (accountData):" + response);
                 }
-                Data.setData("accountData", response);
-            } else {
-                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
-                $S.log("Invalid response (accountData):" + response);
-            }
-        }, function() {
-            self.dataLoadComplete();
-        }, null, Api.getAjaxApiCallMethod());
-
-        var accountTemplate = {};
-        $S.loadJsonData(null, accountTemplateApi, function(response, apiName, ajaxDetails) {
+            }, function() {
+                self.dataLoadComplete();
+            }, null, Api.getAjaxApiCallMethod());
+        } else {
+            self.accountDataLoaded = true;
+        }
+        if ($S.isArray(accountTemplateApi) && accountTemplateApi.length) {
+            var accountTemplate = {};
+            $S.loadJsonData(null, accountTemplateApi, function(response, apiName, ajaxDetails) {
+                if ($S.isObject(response)) {
+                    Object.assign(accountTemplate, response);
+                } else {
+                    Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
+                    $S.log("Invalid response (accountTemplate):" + response);
+                }
+            }, function() {
+                self.accountTemplateLoaded = true;
+                Data.setData("accountTemplate", accountTemplate);
+                self.dataLoadComplete();
+            }, null, Api.getAjaxApiCallMethod());
+        } else {
             self.accountTemplateLoaded = true;
-            if ($S.isObject(response)) {
-                Object.assign(accountTemplate, response);
-            } else {
-                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
-                $S.log("Invalid response (accountTemplate):" + response);
-            }
-        }, function() {
-            Data.setData("accountTemplate", accountTemplate);
-            self.dataLoadComplete();
-        }, null, Api.getAjaxApiCallMethod());
-
-        var journalData = [];
-        $S.loadJsonData(null, journalDataApi, function(response, apiName, ajaxDetails) {
+        }
+        if ($S.isArray(journalDataApi) && journalDataApi.length) {
+            var journalData = [];
+            $S.loadJsonData(null, journalDataApi, function(response, apiName, ajaxDetails) {
+                if ($S.isObject(response)) {
+                    journalData.push(response);
+                } else {
+                    Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
+                    $S.log("Invalid response (journalData):" + response);
+                }
+            }, function() {
+                self.journalDataLoaded = true;
+                var apiJournalData = Data.getData("apiJournalData",[]);
+                apiJournalData = apiJournalData.concat(journalData);
+                Data.setData("apiJournalData", apiJournalData);
+                self.dataLoadComplete();
+            }, null, Api.getAjaxApiCallMethod());
+        } else {
             self.journalDataLoaded = true;
-            if ($S.isObject(response)) {
-                journalData.push(response);
-            } else {
-                Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
-                $S.log("Invalid response (journalData):" + response);
-            }
-        }, function() {
-            Data.setData("apiJournalData", journalData);
-            self.dataLoadComplete();
-        }, null, Api.getAjaxApiCallMethod());
+        }
+        if ($S.isArray(journalDataApiCSV) && journalDataApiCSV.length) {
+            var apiJournalDataCSV = [];
+            $S.loadJsonData(null, journalDataApiCSV, function(response, apiName, ajaxDetails) {
+                if ($S.isString(response)) {
+                    apiJournalDataCSV.push(response);
+                } else {
+                    Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
+                    $S.log("Invalid response (journalData):" + response);
+                }
+            }, function() {
+                self.journalDataCSVLoaded = true;
+                var csvToJSONJournalData = AccountHelper.convertCSVToJsonJournalData(Data, apiJournalDataCSV);;
+                var apiJournalData = Data.getData("apiJournalData",[]);
+                apiJournalData = apiJournalData.concat(csvToJSONJournalData);
+                Data.setData("apiJournalData", apiJournalData);
+                self.dataLoadComplete();
+            }, null, Api.getAjaxApiCallMethodV2());
+        } else {
+            self.journalDataCSVLoaded = true;
+        }
     }
     userChange(currentUserName) {
         Data.initData();

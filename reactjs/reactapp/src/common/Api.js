@@ -74,9 +74,28 @@ var ajaxApiCall = function(ajax, callBack) {
                 }
             );
 };
+var ajaxApiCallV2 = function(ajax, callBack) {
+        fetch(ajax.url)
+            .then(res => res.text())
+            .then(
+                (result) => {
+                    if ($S.isFunction(callBack)) {
+                        callBack(ajax, "SUCCESS", result);
+                    }
+                },
+                (error) => {
+                    if ($S.isFunction(callBack)) {
+                        callBack(ajax, "FAILURE", null);
+                    }
+                }
+            );
+};
 Api.extend({
     getAjaxApiCallMethod: function() {
         return ajaxApiCall;
+    },
+    getAjaxApiCallMethodV2: function() {
+        return ajaxApiCallV2;
     },
     getSpace: function(count) {
         var str = "\u00a0";

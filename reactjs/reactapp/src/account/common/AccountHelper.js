@@ -885,6 +885,88 @@ Account.extend({
         return journalDataByDateFields;
     }
 });
+// convertCSVToJsonJournalData
+Account.extend({
+    convertCSVToJsonJournalData: function(Data, csvData) {
+        var response = [];
+        /**
+        2020-06-03,To Coin A/C,dr,2000,coin,Daily voucher,cr,2000,bonus
+        response.push({"entry": []});
+        var e = {
+            "date": "2020-06-05",
+            "particularEntry": [
+                {
+                    "particularText": "Cash a/c",
+                    "account": "cash",
+                    "dr": "500000"
+                },
+                {
+                    "particularText": "By Owner",
+                    "account": "owner",
+                    "cr": "500000"
+                },
+                {
+                    "particularText": "(Being bussiness started with capital, by Owner)"
+                }
+            ]
+        };
+        response[0].entry.push(e);
+        **/
+        var i, j, k, csvFileTextArr, textLineArr, entry, particularEntry;
+        if ($S.isArray(csvData)) {
+            for (i = 0; i < csvData.length; i++) {
+                response.push({"entry": []});
+                csvFileTextArr = [];
+                if ($S.isString(csvData[i])) {
+                    csvFileTextArr = csvData[i].split("\n");
+                }
+                for(j=0; j<csvFileTextArr.length; j++) {
+                    textLineArr = [];
+                    entry = {"date": "", "particularEntry": []};
+                    if ($S.isString(csvFileTextArr[j]) && csvFileTextArr[j].length > 1) {
+                        textLineArr = csvFileTextArr[j].split(",");
+                        for(k=0; k<textLineArr.length; k++) {
+                            textLineArr[k] = textLineArr[k].trim();
+                        }
+                    } else {
+                        continue;
+                    }
+                    if (textLineArr.length < 2) {
+                        Data.addError({"code": "Invalid csv text: " + csvFileTextArr[j]});
+                        continue;
+                    }
+                    if (AccountHelper._isValidDateStr(textLineArr[0])) {
+                        entry.date = textLineArr[0];
+                    } else {
+                        Data.addError({"code": "Invalid date in csv text: " + csvFileTextArr[j]});
+                        continue;
+                    }
+                    for(k=1; k<textLineArr.length; k++) {
+                        particularEntry = {"particularText": textLineArr[k]};
+                        k++;
+                        if (k < textLineArr.length) {
+                            if (["dr", "cr"].indexOf(textLineArr[k]) >= 0) {
+                                k++;
+                                if ($S.isNumeric(textLineArr[k])) {
+                                    particularEntry[textLineArr[k-1]] = textLineArr[k];
+                                }
+                                k++;
+                                if (k < textLineArr.length) {
+                                    particularEntry["account"] = textLineArr[k];
+                                }
+                            } else {
+                                k--;
+                            }
+                        }
+                        entry.particularEntry.push(particularEntry);
+                    }
+                    response[i].entry.push(entry);
+                }
+            }
+        }
+        return response;
+    }
+});
 AccountHelper = Account;
 })($S);
 

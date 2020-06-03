@@ -6,6 +6,7 @@ const AppConstant = {
     TEXT_CSS: "text/css",
     TEXT_XML: "text/xml",
     TEXT_PLAIN: "text/plain",
+    TEXT_CSV: "text/plain",
     IMAGE_PNG: "image/png",
     IMAGE_X_ICON: "image/x-icon",
     IMAGE_JPG: "image/jpg",
@@ -15,15 +16,16 @@ const AppConstant = {
 };
 
 AppConstant["fileMediaType"] = {
-	".html": AppConstant.TEXT_HTML,
-	".json": AppConstant.APPLICATION_JSON,
-	".js": AppConstant.TEXT_JS,
-	".css": AppConstant.TEXT_CSS,
+    ".html": AppConstant.TEXT_HTML,
+    ".svg": AppConstant.TEXT_XML,
+    ".csv": AppConstant.TEXT_CSV,
+    ".js": AppConstant.TEXT_JS,
+    ".css": AppConstant.TEXT_CSS,
+    ".json": AppConstant.APPLICATION_JSON,
     ".ico": AppConstant.IMAGE_X_ICON,
     ".jpg": AppConstant.IMAGE_JPG,
     ".png": AppConstant.IMAGE_PNG,
-    ".jpeg": AppConstant.IMAGE_JPEG,
-    ".svg": AppConstant.TEXT_XML
+    ".jpeg": AppConstant.IMAGE_JPEG
 };
 module.exports = AppConstant;
 
