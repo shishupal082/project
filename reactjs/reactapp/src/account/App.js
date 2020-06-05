@@ -7,31 +7,27 @@ import LedgerBook from "./components/LedgerBook";
 import TrialBalance from "./components/TrialBalance";
 
 import AccountHelper from "./common/AccountHelper";
+import Config from "./common/Config";
 
 import $S from "../interface/stack.js";
-import $$$ from '../interface/global';
 import Api from "../common/Api";
 
 var RequestId = $S.getRequestId();
 var DT = $S.getDT();
-var DateFormate = "YYYY/-/MM/-/DD";
 
-var baseapi = $$$.baseapi;
-var basepathname = $$$.basepathname;
+var baseapi = Config.baseapi;
 
-var backIconUrl = baseapi + $$$.backIconUrl;
+var backIconUrl = baseapi + Config.backIconUrl;
 
-var userControlDataApi = baseapi + $$$.userControlDataApi + "?" + RequestId;
+var userControlDataApi = baseapi + Config.userControlDataApi + "?" + RequestId;
 
 var accountTemplateApi = [];
 var journalDataApi = [];
 var journalDataApiCSV = [];
 var accountDataApi = [];
 
-var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalbydate: basepathname+"/journalbydate",
-            ledger: basepathname+"/ledger", trail: basepathname+"/trail",
-            currentbal: basepathname+"/currentbal", currentbalbydate: basepathname+"/currentbalbydate",
-            summary: basepathname+"/summary", accountsummarybydate: basepathname+"/summarybydate"};
+var pages = Config.pages;
+var pageHeading = Config.pageHeading;
 
 function setDataApi(userData) {
     accountTemplateApi = [];
@@ -107,16 +103,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
-            homeFields: [
-                {"toUrl": pages.journalbydate, "toText": "Journal By Date"},
-                {"toUrl": pages.currentbalbydate, "toText": "Current Balance By Date"},
-                {"toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
-                {"toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
-                {"toUrl": pages.trail, "toText": "Trial Balance"},
-                {"toUrl": pages.journal, "toText": "Journal"},
-                {"toUrl": pages.ledger, "toText": "Ledger"},
-                {"toUrl": pages.currentbal, "toText": "Current Balance"}
-            ],
+            homeFields: Config.homeFields,
             journalDataFields: [],
             journalDataByDateFields: [],
             ledgerDataFields: [],
@@ -137,17 +124,13 @@ class App extends React.Component {
         this.userChange = this.userChange.bind(this);
         this.onDateSelectionTypeChange = this.onDateSelectionTypeChange.bind(this);
 
-        this.companyName = "Loading ...";
-        this.currentUserName = "";
+        this.companyName = Config.defaultCompanyName;
+        this.currentUserName = Config.defaultUserName;
 
-        this.dateSelection = [];
-        this.dateSelection.push({"name": "Daily", "value": "daily"});
-        this.dateSelection.push({"name": "Monthly", "value": "monthly"});
-        this.dateSelection.push({"name": "Yearly", "value": "yearly"});
-        this.dateSelection.push({"name": "All", "value": "all"});
+        this.dateSelection = Config.dateSelection;
 
+        this.dateSelectionType = Config.defaultDateSelectionType;
 
-        this.dateSelectionType = "all";
         this.validDateSelectionType = this.dateSelection.map(function(el, i, isArray) {
             return el.value;
         });
@@ -162,7 +145,7 @@ class App extends React.Component {
                     temp = finalJournalData[i].entry[j].date;
                     temp = DT.getDateObj(temp);
                     if (temp !== null) {
-                        temp = DT.formateDateTime(DateFormate, "/", temp);
+                        temp = DT.formateDateTime("YYYY/-/MM/-/DD", "/", temp);
                         if (allDate.indexOf(temp) < 0) {
                             allDate.push(temp);
                         }
@@ -517,26 +500,26 @@ class App extends React.Component {
 
         var home = <Home state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>;
 
-        var trial = <TrialBalance state={this.state} data={commonData} methods={methods} heading="Trial Balance"/>;
+        var trial = <TrialBalance state={this.state} data={commonData} methods={methods} heading={pageHeading.trail}/>;
 
-        var journal = <Journal state={this.state} data={commonData} methods={methods} heading="Journal"
+        var journal = <Journal state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
                     renderFieldRow={this.state.journalDataFields}/>;
 
-        var journalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Journal By Date"
+        var journalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.journalbydate}
                     renderFieldRow={this.state.journalDataByDateFields}/>;
 
-        var ledger = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Ledger Book"
+        var ledger = <LedgerBook state={this.state} data={commonData} methods={methods} heading={pageHeading.ledger}
                     renderFieldRow={this.state.ledgerDataFields}/>;
 
-        var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods} heading="Current Balance"
+        var currentbal = <LedgerBook state={this.state} data={commonData} methods={methods} heading={pageHeading.currentbal}
                     renderFieldRow={this.state.currentBalanceFields}/>;
-        var currentbalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Current Balance By Date"
+        var currentbalbydate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.currentbalbydate}
                     renderFieldRow={this.state.currentBalanceByDateFields}/>;
 
-        var summary = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Account Summary"
+        var summary = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.summary}
                     renderFieldRow={this.state.accountSummaryFields}/>;
 
-        var summaryByDate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Account Summary By Date"
+        var summaryByDate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.accountsummarybydate}
                     renderFieldRow={this.state.accountSummaryByDateFields}/>;
 
         return (<BrowserRouter><Switch>
