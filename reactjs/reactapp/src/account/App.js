@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import Home from "./components/Home";
 import Journal from "./components/Journal";
 import JournalByDate from "./components/JournalByDate";
@@ -107,6 +107,16 @@ class App extends React.Component {
         super(props);
         this.state = {
             isLoaded: false,
+            homeFields: [
+                {"toUrl": pages.journalbydate, "toText": "Journal By Date"},
+                {"toUrl": pages.currentbalbydate, "toText": "Current Balance By Date"},
+                {"toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
+                {"toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
+                {"toUrl": pages.trail, "toText": "Trial Balance"},
+                {"toUrl": pages.journal, "toText": "Journal"},
+                {"toUrl": pages.ledger, "toText": "Ledger"},
+                {"toUrl": pages.currentbal, "toText": "Current Balance"}
+            ],
             journalDataFields: [],
             journalDataByDateFields: [],
             ledgerDataFields: [],
@@ -505,7 +515,7 @@ class App extends React.Component {
         currentbalvalByDate["dateSelection"] = this.dateSelection;
         currentbalvalByDate["dateSelectionType"] = this.dateSelectionType;
 
-        var home = <Home state={this.state} data={commonData} methods={methods}/>;
+        var home = <Home state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>;
 
         var trial = <TrialBalance state={this.state} data={commonData} methods={methods} heading="Trial Balance"/>;
 
@@ -557,9 +567,7 @@ class App extends React.Component {
                   <Route path={pages.trial}>
                     {trial}
                   </Route>
-                  <Route>
-                    {home}
-                  </Route>
+                  <Redirect to={pages.home} />
             </Switch></BrowserRouter>);
     }
 }
