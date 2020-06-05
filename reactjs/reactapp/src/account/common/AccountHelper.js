@@ -959,7 +959,7 @@ Account.extend({
             templateData.journalEntryTable = templateData.journalEntryTable.concat(journalEntry);
             journalDataByDateData.push(templateData);
         }
-        for(i=0; i<journalDataByDateData.length; i++) {
+        for(i=journalDataByDateData.length-1; i>=0; i--) {
             template = Data.getTemplate("journalByDate", null);
             templateData = {};
             templateData["date"] = journalDataByDateData[i].dateHeading;
