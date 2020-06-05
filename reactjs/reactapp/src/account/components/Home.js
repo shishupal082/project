@@ -43,6 +43,9 @@ class Home extends React.Component {
                                 <Link to={this.props.data.pages.summary}>
                                     <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Account Summary</button>
                                 </Link>
+                                <Link to={this.props.data.pages.accountsummarybydate}>
+                                    <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Account Summary By Date</button>
+                                </Link>
                             </div>
                         </div>
                     </div>

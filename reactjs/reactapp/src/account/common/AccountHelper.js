@@ -304,7 +304,89 @@ Account.extend({
         return finalJournalData;
     }
 });
-
+Account.extend({
+    _getAccountSummaryByDateData: function(Data, accountData, dateSelection, dataByCompany) {
+        var fieldData = [];
+        // var r = {
+        //             "dateHeading": "2020-06-04",
+        //             "accountSummaryByDateRow": [
+        //                 {"accountDisplayName": "123", "dr": "12", "cr": "12", "currentBal": "LL"}
+        //             ]
+        //         };
+        var i, j, k, template1Data, template2Data, dr, cr;
+        var companyData, startDate, endDate, currentDate;
+        var totalDr = 0, totalCr = 0;
+        for (i = 0; i < dateSelection.length; i++) {
+            totalDr = 0;
+            totalCr = 0;
+            if ($S.isArray(dateSelection[i]["dateRange"]) && dateSelection[i]["dateRange"].length >= 2) {
+                startDate = dateSelection[i]["dateRange"][0];
+                endDate = dateSelection[i]["dateRange"][1];
+            } else {
+                continue;
+            }
+            if (Account._isValidDateStr(startDate) && Account._isValidDateStr(endDate)) {
+                startDate = DT.getDateObj(startDate);
+                endDate = DT.getDateObj(endDate);
+            } else {
+                continue;
+            }
+            template1Data = {"dateHeading": dateSelection[i].dateHeading};
+            template1Data["accountSummaryByDateRow"] = [];
+            for (j=0; j<accountData.length; j++) {
+                template2Data = {};
+                if ($S.isDefined(dataByCompany[accountData[j]["accountName"]])) {
+                    companyData = dataByCompany[accountData[j]["accountName"]];
+                    dr = 0;
+                    cr = 0;
+                    template2Data["accountDisplayName"] = Account._getAccountDisplayName(accountData[j]);
+                    if ($S.isObject(companyData["ledgerRowData"])) {
+                        if ($S.isArray(companyData["ledgerRowData"]["dr"])) {
+                            for (k=0; k<companyData["ledgerRowData"]["dr"].length; k++) {
+                                if ($S.isNumeric(companyData["ledgerRowData"]["dr"][k]["dr"])) {
+                                    currentDate = companyData["ledgerRowData"]["dr"][k]["date"];
+                                    if (Account._isValidDateStr(currentDate)) {
+                                        currentDate = DT.getDateObj(currentDate);
+                                        if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
+                                            dr += companyData["ledgerRowData"]["dr"][k]["dr"]*1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if ($S.isArray(companyData["ledgerRowData"]["cr"])) {
+                            for (k=0; k<companyData["ledgerRowData"]["cr"].length; k++) {
+                                if ($S.isNumeric(companyData["ledgerRowData"]["cr"][k]["cr"])) {
+                                    currentDate = companyData["ledgerRowData"]["cr"][k]["date"];
+                                    if (Account._isValidDateStr(currentDate)) {
+                                        currentDate = DT.getDateObj(currentDate);
+                                        if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
+                                            cr += companyData["ledgerRowData"]["cr"][k]["cr"]*1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (dr !== 0 || cr !== 0) {
+                        template2Data["dr"] = dr;
+                        template2Data["cr"] = cr;
+                        template2Data["currentBal"] = dr - cr;
+                        template1Data["accountSummaryByDateRow"].push(template2Data);
+                        totalDr += dr;
+                        totalCr += cr;
+                    }
+                }
+            }
+            template2Data = {"accountDisplayName": {"tag":"div.b", "className": "text-right text-danger", "text":"Total"}};
+            template2Data["dr"] = {"tag":"div.b", "className": "text-danger2", "text": totalDr};
+            template2Data["cr"] = {"tag":"div.b", "className": "text-danger2", "text": totalCr};
+            template1Data["accountSummaryByDateRow"].push(template2Data);
+            fieldData.push(template1Data);
+        }
+        return fieldData;
+    }
+})
 //getLedgerBookFields
 Account.extend({
     getLedgerBookFields: function(self, accountData, dataByCompany) {
@@ -689,7 +771,7 @@ Account.extend({
             templateData = {};
             templateData["accountDisplayName"] = currentBalanceFieldsData[i].accountDisplayName;
             templateData["currentBalByDateRow"] = [];
-            for(j=0; j<currentBalanceFieldsData[i].currentBalByDateRow.length; j++) {
+            for(j=currentBalanceFieldsData[i].currentBalByDateRow.length-1; j>=0; j--) {
                 template2 = Data.getTemplate("currentBalByDateRow", null);
                 template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
                 template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
@@ -721,7 +803,7 @@ Account.extend({
                 template2 = Data.getTemplate("accountSummary1stRow", null);
                 templateData["accountSummaryRow"].push(template2);
                 count = 1;
-                for (j=0; j<currentBalByDateRow.length; j++) {
+                for (j=currentBalByDateRow.length-1; j>=0; j--) {
                     template2 = Data.getTemplate("accountSummaryRow", null);
                     template2Data = {};
                     totalRow = TemplateHelper(currentBalByDateRow[j]).searchFieldV2("totalRow");
@@ -970,6 +1052,36 @@ Account.extend({
             }
         }
         return response;
+    }
+});
+// getAccountSummaryByDateFields
+Account.extend({
+    getAccountSummaryByDateFields: function(Data, accountData, dateSelection, dataByCompany) {
+        var accountSummaryByDateFields = [], fieldsData;
+        fieldsData = AccountHelper._getAccountSummaryByDateData(Data, accountData, dateSelection, dataByCompany);
+        var i, j, count = 1;
+        var template1, template1Data, template2, template2Data;
+        for (i = fieldsData.length-1; i >= 0; i--) {
+            template1 = Data.getTemplate("accountSummaryByDate", []);
+            template1Data = {"dateHeading": fieldsData[i]["dateHeading"]};
+            template1Data["accountSummaryByDateRow"] = [];
+            if ($S.isArray(fieldsData[i]["accountSummaryByDateRow"])) {
+                template2 = Data.getTemplate("accountSummaryByDate1stRow", []);
+                template1Data["accountSummaryByDateRow"].push(template2);
+                count = 1;
+                for (j = 0; j < fieldsData[i]["accountSummaryByDateRow"].length; j++) {
+                    template2Data = fieldsData[i]["accountSummaryByDateRow"][j];
+                    template2Data["s.no"] = count++;
+                    template2 = Data.getTemplate("accountSummaryByDateRow", {});
+                    AccountHelper.correctSign(template2Data);
+                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    template1Data["accountSummaryByDateRow"].push(template2);
+                }
+            }
+            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            accountSummaryByDateFields.push(template1);
+        }
+        return accountSummaryByDateFields;
     }
 });
 AccountHelper = Account;

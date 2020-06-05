@@ -31,7 +31,7 @@ var accountDataApi = [];
 var pages = {home: basepathname+"/", journal: basepathname+"/journal", journalbydate: basepathname+"/journalbydate",
             ledger: basepathname+"/ledger", trail: basepathname+"/trail",
             currentbal: basepathname+"/currentbal", currentbalbydate: basepathname+"/currentbalbydate",
-            summary: basepathname+"/summary"};
+            summary: basepathname+"/summary", accountsummarybydate: basepathname+"/summarybydate"};
 
 function setDataApi(userData) {
     accountTemplateApi = [];
@@ -62,7 +62,7 @@ function setDataApi(userData) {
 
 var Data = $S.getDataObj();
 
-var keys = ["userControlData", "apiJournalData", "apiJournalDataCSV",
+var keys = ["userControlData", "apiJournalData",
             "finalJournalData", "apiJournalDataByDate"];
 keys.push("accountTemplate");
 keys.push("accountData");
@@ -113,7 +113,8 @@ class App extends React.Component {
             trialBalanceFields: [],
             currentBalanceFields: [],
             currentBalanceByDateFields: [],
-            accountSummaryFields: []
+            accountSummaryFields: [],
+            accountSummaryByDateFields: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -253,6 +254,14 @@ class App extends React.Component {
         accountSummaryFields = AccountHelper.getAccountSummaryFields(Data, dataByCompany, accountData, dateSelection);
         return accountSummaryFields;
     }
+    getAccountSummaryByDateFields() {
+        var accountData, dataByCompany, dateSelection, accountSummaryByDateFields;
+        accountData = Data.getData("accountData", []);
+        dateSelection = Data.getData("dateSelectionParameter", []);
+        dataByCompany = Data.getData("dataByCompany", {});
+        accountSummaryByDateFields = AccountHelper.getAccountSummaryByDateFields(Data, accountData, dateSelection, dataByCompany);
+        return accountSummaryByDateFields;
+    }
     getTrialBalanceRowData() {
         var accountData, dataByCompany, trialBalanceFields;
         accountData = Data.getData("accountData", []);
@@ -277,12 +286,14 @@ class App extends React.Component {
         var currentBalanceByDateFields = this.getCurrentBalByDateRowData();
 
         var accountSummaryFields = this.getAccountSummaryFields();
+        var accountSummaryByDateFields = this.getAccountSummaryByDateFields();
 
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
                 journalDataByDateFields: journalDataByDateFields,
                 currentBalanceByDateFields: currentBalanceByDateFields,
-                accountSummaryFields: accountSummaryFields}, function() {
+                accountSummaryFields: accountSummaryFields,
+                accountSummaryByDateFields: accountSummaryByDateFields}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -407,9 +418,13 @@ class App extends React.Component {
         this.setState({
             isLoaded: false,
             journalDataFields: [],
+            journalDataByDateFields: [],
             ledgerDataFields: [],
             trialBalanceFields: [],
-            currentBalanceFields: []
+            currentBalanceFields: [],
+            currentBalanceByDateFields: [],
+            accountSummaryFields: [],
+            accountSummaryByDateFields: []
         }, function() {
             Data.clearError();
             var userDataNotFound = true;
@@ -511,6 +526,9 @@ class App extends React.Component {
         var summary = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Account Summary"
                     renderFieldRow={this.state.accountSummaryFields}/>;
 
+        var summaryByDate = <JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading="Account Summary By Date"
+                    renderFieldRow={this.state.accountSummaryByDateFields}/>;
+
         return (<BrowserRouter><Switch>
                   <Route exact path={pages.home}>
                     {home}
@@ -532,6 +550,9 @@ class App extends React.Component {
                   </Route>
                   <Route path={pages.summary}>
                     {summary}
+                  </Route>
+                  <Route path={pages.accountsummarybydate}>
+                    {summaryByDate}
                   </Route>
                   <Route path={pages.trial}>
                     {trial}
