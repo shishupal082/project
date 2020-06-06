@@ -17,7 +17,7 @@ class JournalByDate extends React.Component {
     render() {
         var self = this;
         var journalByDate = this.props.renderFieldRow.map(function(el, i, arr) {
-            return Api.generateFields(self.props, el);
+            return Api.generateFields(self.props, el, i);
         });
         return (<div className="container">
                     <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>

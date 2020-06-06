@@ -187,6 +187,14 @@
             }
         ]
     },
+    "trialBalance": [
+        {
+            "tag": "table.tbody",
+            "className": "table table-bordered table-striped",
+            "name": "trialBalanceRows",
+            "text": []
+        }
+    ],
     "trialBalance1stRow": {
         "tag": "tr",
         "text": [

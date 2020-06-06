@@ -506,7 +506,10 @@ Account.extend({
         }
         TemplateHelper.setTemplateTextByFormValues(template, temp);
         trialBalanceFields.push(template);
-        return trialBalanceFields;
+        template = Data.getTemplate("trialBalance");
+        temp = {"trialBalanceRows": trialBalanceFields};
+        TemplateHelper.setTemplateTextByFormValues(template, temp);
+        return template;
     }
 });
 //partial
