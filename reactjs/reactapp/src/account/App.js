@@ -500,7 +500,7 @@ class App extends React.Component {
 
         const home = () => (<Home state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>);
 
-        const trial = () => (<JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.trialbalance}
+        const trial = () => (<JournalByDate state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
                             renderFieldRow={this.state.trialBalanceFields}/>);
 
         const journal = () => (<Journal state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
