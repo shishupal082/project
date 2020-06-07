@@ -11,6 +11,7 @@ import Config from "./common/Config";
 import $S from "../interface/stack.js";
 import Api from "../common/Api";
 
+
 var RequestId = $S.getRequestId();
 var DT = $S.getDT();
 
@@ -78,7 +79,7 @@ Data.getTemplate = function(key, defaultTemplate) {
 
 Data.initData = function() {
     for (var i = 0; i < keys.length; i++) {
-        if (keys[i] === "userControlData") {
+        if (["userControlData", "accountTemplate"].indexOf(keys[i]) >= 0) {
             continue;
         }
         Data.setData(keys[i], []);
@@ -95,6 +96,7 @@ Data.clearError = function() {
 
 Data.setKeys(keys);
 Data.initData();
+Data.setData("accountTemplate", Config.Template);
 
 
 class App extends React.Component {
@@ -348,7 +350,7 @@ class App extends React.Component {
             self.accountDataLoaded = true;
         }
         if ($S.isArray(accountTemplateApi) && accountTemplateApi.length) {
-            var accountTemplate = {};
+            var accountTemplate = Data.getData("accountTemplate", {});
             $S.loadJsonData(null, accountTemplateApi, function(response, apiName, ajaxDetails) {
                 if ($S.isObject(response)) {
                     Object.assign(accountTemplate, response);

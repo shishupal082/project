@@ -1,10 +1,11 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
+import Template from "./Template.js";
 
 var basepathname = $$$.basepathname;
 
 var Config = {};
-
+Config.Template = Template;
 Config.baseapi = $$$.baseapi;
 Config.backIconUrl = $$$.backIconUrl;
 Config.userControlDataApi = $$$.userControlDataApi;
