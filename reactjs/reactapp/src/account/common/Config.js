@@ -73,7 +73,7 @@ Config.noMatchFields = [{
 
 /*Update from global variable */
 
-var i, key;
+var key;
 var globalPageHeading = {};
 var globalLinkHeading = {};
 var globalRemoveHomeLink = {};
