@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>Accounting Application</title>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css">
     <link rel="stylesheet" type="text/css" href="/app/account/static/css/account.css">
-  </head>
-  <body>
+</head>
+<body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 <script type="text/javascript">
@@ -18,6 +18,19 @@ var GLOBAL = {
 
 GLOBAL.userControlDataApi = ["/pvt/app-data/account/userControl.json"];
 
+/**
+GLOBAL.pageHeading = {};
+GLOBAL.linkHeading = {};
+GLOBAL.removeHomeLink = {};
+
+GLOBAL.pageHeading["accountsummarybydate"] = "Account Summary By Date";
+
+GLOBAL.linkHeading["accountsummarybydate"] = "Account Summary By Date";
+
+GLOBAL.removeHomeLink["journal"] = true;
+GLOBAL.removeHomeLink["ledger"] = true;
+GLOBAL.removeHomeLink["currentbal"] = true;
+*/
 window.GLOBAL = GLOBAL;
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-account-app/script1.js"></script>
