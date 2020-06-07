@@ -76,6 +76,7 @@ Config.noMatchFields = [{
 var i, key;
 var globalPageHeading = {};
 var globalLinkHeading = {};
+var globalRemoveHomeLink = {};
 
 if ($S.isObject($$$.linkHeading)) {
     for(key in $$$.linkHeading) {
@@ -93,16 +94,28 @@ if ($S.isObject($$$.pageHeading)) {
     }
 }
 
+if ($S.isObject($$$.removeHomeLink)) {
+    for(key in $$$.removeHomeLink) {
+        if ($S.isBooleanTrue($$$.removeHomeLink[key])) {
+            globalRemoveHomeLink[key] = true;
+        }
+    }
+}
+
 for (key in Config.pageHeading) {
     if ($S.isString(globalPageHeading[key])) {
         Config.pageHeading[key] = globalPageHeading[key];
     }
 }
 
-for(i=0; i<Config.homeFields.length; i++) {
-    if ($S.isString(globalLinkHeading[Config.homeFields[i].name])) {
-        Config.homeFields[i]["toText"] = globalLinkHeading[Config.homeFields[i].name];
+Config.homeFields = Config.homeFields.filter(function(el, i, arr) {
+    if ($S.isString(globalLinkHeading[el.name])) {
+        el["toText"] = globalLinkHeading[el.name];
     }
-}
+    if ($S.isBooleanTrue(globalRemoveHomeLink[el.name])) {
+        return false;
+    }
+    return true;
+});
 
 export default Config;

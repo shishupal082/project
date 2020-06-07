@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
-echo [INFO] Copying file to desired location
+key=$(($RANDOM%99999+10000))
+logFile=/var/log/project/shell_log/cmdlog.log
+
+addLog() {
+  now=$(date +"%Y-%m-%d %T")
+  if [ -f "$logFile" ]; then
+    echo "${now} $1"
+    echo "${now} $key $1" >> $logFile
+  else
+    # * represent log file is not found
+    echo "${now}[*] $1"
+  fi
+}
+
+addLog "Copying file to desired location"
 
 distDir=dist-index-app
 distDir=dist-yard-app
@@ -19,4 +33,4 @@ sed -i  ''  '2s/.*//' ${distDir}/script1.js
 sed -i  ''  '2s/.*//' ${distDir}/script2.js
 sed -i  ''  '3s/.*//' ${distDir}/script3.js
 
-echo [INFO] Copy file complete
+addLog "Copy file complete"
