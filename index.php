@@ -1,6 +1,15 @@
 <?php
-define('CONFIG_FILE', $_SERVER['ENVIRONMENT_FILE']);
-define('ENVIRONMENT', $_SERVER['ENVIRONMENT']);
+
+// define('CONFIG_FILE', $_SERVER['ENVIRONMENT_FILE']);
+// define('ENVIRONMENT', $_SERVER['ENVIRONMENT']);
+
+$ServerAdmin = $_SERVER['SERVER_ADMIN'];
+$arr = explode(";", $ServerAdmin);
+$configFilePath = $arr[0];
+$environment = $arr[1];
+
+define('CONFIG_FILE', $configFilePath);
+define('ENVIRONMENT', $environment);
 define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 switch (ENVIRONMENT){
 	case 'development':
