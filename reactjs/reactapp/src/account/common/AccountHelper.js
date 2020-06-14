@@ -50,12 +50,12 @@ Account.extend({
             totalAmount = creditAmount;
             if (debitAmount > creditAmount) {
                 totalAmount = debitAmount;
-                particularEntry = {"cr": debitAmount - creditAmount};
+                particularEntry = {"cr": (debitAmount - creditAmount).toFixed(2)*1};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance C/D"};
                 ledgerRowData.cr.push(particularEntry);
             } else if (debitAmount < creditAmount) {
                 totalAmount = creditAmount;
-                particularEntry = {"dr": creditAmount - debitAmount};
+                particularEntry = {"dr": (creditAmount - debitAmount).toFixed(2)*1};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance C/D"};
                 ledgerRowData.dr.push(particularEntry);
             }
@@ -69,12 +69,12 @@ Account.extend({
 
             if (debitAmount > creditAmount) {
                 totalAmount = debitAmount;
-                particularEntry = {"dr": debitAmount - creditAmount, name: "balanceBd"};
+                particularEntry = {"dr": (debitAmount - creditAmount).toFixed(2)*1, name: "balanceBd"};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance B/D"};
                 ledgerRowData.dr.push(particularEntry);
             } else if (debitAmount < creditAmount) {
                 totalAmount = creditAmount;
-                particularEntry = {"cr": creditAmount - debitAmount, name: "balanceBd"};
+                particularEntry = {"cr": (creditAmount - debitAmount).toFixed(2)*1, name: "balanceBd"};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance B/D"};
                 ledgerRowData.cr.push(particularEntry);
             }
@@ -371,7 +371,7 @@ Account.extend({
                     if (dr !== 0 || cr !== 0) {
                         template2Data["dr"] = dr;
                         template2Data["cr"] = cr;
-                        template2Data["currentBal"] = dr - cr;
+                        template2Data["currentBal"] = (dr - cr).toFixed(2)*1;
                         template1Data["accountSummaryByDateRow"].push(template2Data);
                         totalDr += dr;
                         totalCr += cr;
@@ -742,6 +742,7 @@ Account.extend({
                             } else if ($S.isNumeric(currentBalRowData[k].cr)) {
                                 currentBalAmount -= currentBalRowData[k].cr*1;
                                 creditAmount += currentBalRowData[k].cr*1;
+                                currentBalAmount = currentBalAmount.toFixed(2)*1;
                             }
                             currentBalRowData[k]["currentBal"] = currentBalAmount;
                             currentBalRowData[k]["balance"] = lastAmount + currentBalAmount;
