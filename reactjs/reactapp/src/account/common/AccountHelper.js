@@ -742,16 +742,16 @@ Account.extend({
                             } else if ($S.isNumeric(currentBalRowData[k].cr)) {
                                 currentBalAmount -= currentBalRowData[k].cr*1;
                                 creditAmount += currentBalRowData[k].cr*1;
-                                currentBalAmount = currentBalAmount.toFixed(2)*1;
                             }
+                            currentBalAmount = currentBalAmount.toFixed(2)*1;
                             currentBalRowData[k]["currentBal"] = currentBalAmount;
-                            currentBalRowData[k]["balance"] = lastAmount + currentBalAmount;
+                            currentBalRowData[k]["balance"] = (lastAmount + currentBalAmount).toFixed(2)*1;
                         }
                         temp = {"name": "totalRow", "particularText": {"tag":"div.b", "className": "text-right", "text":"Total"}};
                         temp.dr = debitAmount;
                         temp.cr = creditAmount;
                         temp.currentBal = currentBalAmount;
-                        temp.balance = lastAmount + currentBalAmount;
+                        temp.balance = (lastAmount + currentBalAmount).toFixed(2)*1;
                         currentBalRowData.push(temp);
                         lastAmount += currentBalAmount;
                     }
