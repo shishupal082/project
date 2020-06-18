@@ -500,48 +500,51 @@ class App extends React.Component {
         currentbalvalByDate["dateSelection"] = this.dateSelection;
         currentbalvalByDate["dateSelectionType"] = this.dateSelectionType;
 
-        const home = () => (<Home state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>);
+        const home = (props) => (<Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>);
 
-        const trial = () => (<JournalByDate state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
+        const trial = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
                             renderFieldRow={this.state.trialBalanceFields}/>);
 
-        const journal = () => (<Journal state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
-                    renderFieldRow={this.state.journalDataFields}/>);
-
-        const journalbydate = () => (<JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.journalbydate}
+        const journalbydate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.journalbydate}
                     renderFieldRow={this.state.journalDataByDateFields}/>);
 
-        const ledger = () => (<LedgerBook state={this.state} data={commonData} methods={methods} heading={pageHeading.ledger}
+        const ledger = (props) => (<LedgerBook {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.ledger}
                     renderFieldRow={this.state.ledgerDataFields}/>);
 
-        const currentbal = () => (<LedgerBook state={this.state} data={commonData} methods={methods} heading={pageHeading.currentbal}
+        const currentbal = (props) => (<LedgerBook {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.currentbal}
                     renderFieldRow={this.state.currentBalanceFields}/>);
 
-        const currentbalbydate = () => (<JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.currentbalbydate}
+        const currentbalbydate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.currentbalbydate}
                     renderFieldRow={this.state.currentBalanceByDateFields}/>);
 
-        const summary = () => (<JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.summary}
+        const summary = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.summary}
                     renderFieldRow={this.state.accountSummaryFields}/>);
 
-        const summaryByDate = () => (<JournalByDate state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.accountsummarybydate}
+        const summaryByDate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.accountsummarybydate}
                     renderFieldRow={this.state.accountSummaryByDateFields}/>);
 
-        const noMatch = () => (
-            <JournalByDate state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.state.noMatchFields}/>
-        );
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pages.home} component={home} />
-                <Route path={pages.journal} component={journal} />
-                <Route path={pages.journalbydate} component={journalbydate} />
-                <Route path={pages.currentbal} component={currentbal} />
-                <Route path={pages.currentbalbydate} component={currentbalbydate} />
-                <Route path={pages.ledger} component={ledger} />
-                <Route path={pages.summary} component={summary} />
-                <Route path={pages.accountsummarybydate} component={summaryByDate} />
+                <Route exact path={pages.home} component={home}/>
+                <Route
+                  path={pages.journal}
+                  render={props => (
+                    <Journal {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
+                    renderFieldRow={this.state.journalDataFields}/>
+                  )}
+                />
+                <Route path={pages.journalbydate} component={journalbydate}/>
+                <Route path={pages.currentbal} component={currentbal}/>
+                <Route path={pages.currentbalbydate} component={currentbalbydate}/>
+                <Route path={pages.ledger} component={ledger}/>
+                <Route path={pages.summary} component={summary}/>
+                <Route path={pages.accountsummarybydate} component={summaryByDate}/>
                 <Route path={pages.trialbalance} component={trial} />
-                <Route component={noMatch}/>
+                <Route render={props => (
+                    <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
+                        renderFieldRow={this.state.noMatchFields}/>
+                    )}
+                />
             </Switch>
         </BrowserRouter>);
     }
