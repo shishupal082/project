@@ -20,8 +20,8 @@ distDir=dist-index-app
 distDir=dist-yard-app
 distDir=dist-management-app
 distDir=dist-search-app
-distDir=dist-account-app
 distDir=dist-auth-app
+distDir=dist-account-app
 
 rm -rf ${distDir}/*
 
