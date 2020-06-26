@@ -1,0 +1,45 @@
+Download apache
+Put it into C drive
+Run httpd.exe using command line or from services
+After configuration it should server
+
+To configure change conf/httpd.conf
+--------------------------------------------------
+Verify php is installed or not
+php -v
+create index.php and add bellow line
+
+<? phpinfo(); ?>
+
+/*Configure php with apache */
+
+Add below line at the bottom of https.conf
+
+PHPIniDir "C:/php-5.4.5"
+AddHandler application/x-httpd-php .php
+LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
+
+-------------------------------------------------
+Restart apache
+-------------------------------------------------
+Go to
+c/Apache/bin
+httpd -k restart
+
+If not working (from command line do it from windows service app)
+	- open service app (in search)
+		- stop then start manually
+
+
+
+DocumentRoot "${SRVROOT}/htdocs"
+<Directory "${SRVROOT}/htdocs">
+
+Change to 
+
+DocumentRoot "d:/project"
+<Directory "d:/project">
+
+Inside directory tag
+=> Options Indexes FollowSymLinks Multiviews
+Here Indexes tag allow your folder to access if index.html or index.php file is missing

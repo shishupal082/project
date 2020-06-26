@@ -1,9 +1,4 @@
-Download apache
-Put it into C drive
-Run httpd.exe using command line or from services
-After configuration it should server
-
-To configure change conf/httpd.conf
+To configure change conf/httpd.conf in apache
 --------------------------------------------------
 Php setup
 Download php (preferably 5)
@@ -29,30 +24,8 @@ PHPIniDir "C:/php-5.4.5"
 AddHandler application/x-httpd-php .php
 LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
 
--------------------------------------------------
-Restart apache
--------------------------------------------------
-Go to
-c/Apache/bin
-httpd -k restart
 
-If not working (from command line do it from windows service app)
-	- open service app (in search)
-		- stop then start manually
-
-
-
-DocumentRoot "${SRVROOT}/htdocs"
-<Directory "${SRVROOT}/htdocs">
-
-Change to 
-
-DocumentRoot "d:/project"
-<Directory "d:/project">
-
-
-
-Set environment and config_file_path
--------------------------------------------------
+Set environment and config_file_path for access in php files
+-------------------------------------------------------------
 Temporarly we have set config_file_path and environment in windows
 - SERVER_ADMIN (old admin@example.com new D:/workspace/venv/env_config.ini;development)
