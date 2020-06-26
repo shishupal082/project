@@ -2,8 +2,8 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
     var i, template;
     setTimeout(function() {
         $S.loadJsonData(null, [initialPrintDataApi + "?" + $S.getRequestId()], function(response) {
-            var formRowFields = self.state.formRowFields;
             if ($S.isArray(response)) {
+                var formRowFields = self.state.formRowFields;
                 if (formRowFields.length > response.length) {
                     for(i=0; i<response.length; i++) {
                         template = self.getFormRowTemplate(response[i].templateName);
@@ -37,13 +37,13 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                         }
                     }
                 }
+                formRowFields = self.adjustFormRowFieldsRowId(formRowFields);
+                self.setState({formRowFields: formRowFields}, function() {
+                    self.handleFormSubmit("printDisplay");
+                });
             } else {
                 $S.log("Invalid response (initialPrintDataApi):" + response);
             }
-            formRowFields = self.adjustFormRowFieldsRowId(formRowFields);
-            self.setState({formRowFields: formRowFields}, function() {
-                self.handleFormSubmit("printDisplay");
-            });
         }, null, null, Api.getAjaxApiCallMethod());
     }, 1000);
 }
