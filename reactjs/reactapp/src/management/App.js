@@ -21,6 +21,9 @@ var printDataApi = baseapi + $$$.printDataApi;
 var backIconUrl = baseapi + $$$.backIconUrl;
 var formPostUrl = baseapi + $$$.formPostUrl;
 var initialPrintDataApi = null;
+if ($S.isString($$$.initialPrintDataApi)) {
+    initialPrintDataApi = baseapi + $$$.initialPrintDataApi;
+}
 var initialDataFile = $S.getLocalStorage().get("item1");
 if ($S.isString($$$.initialPrintDataApi) && initialDataFile.status) {
     // name:actualData1.json,startTime:2020-05-20T20:00,duration:10
@@ -290,7 +293,7 @@ class App extends React.Component {
         // console.log(this.formData.formValues);
     }
     render() {
-        var logoUrl = false;
+        var logoUrl = null;
         if ($S.isString(LOGO_URL) && LOGO_URL.length > 0) {
             logoUrl = baseapi + LOGO_URL;
         }
