@@ -311,7 +311,7 @@ class App extends React.Component {
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data, Data.getData("apiJournalData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
 
-        var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);
+        var finalJournalData = AccountHelper.getFinalJournalData(Data, apiJournalDataByDate);
         Data.setData("finalJournalData", finalJournalData);
         this.setDateSelectionParameter();
         var dataByCompany = AccountHelper.getDataByCompany(Data, finalJournalData, Data.getData("accountData",[]));

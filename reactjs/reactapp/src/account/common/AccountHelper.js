@@ -229,7 +229,7 @@ Account.extend({
         }
         return true;
     },
-    getFinalJournalData: function(journalData) {
+    getFinalJournalData: function(Data, journalData) {
         //journalData is apiJournalDataByDate
         var finalJournalData = [];
         var i, j, k, particularEntry, accountName, entry, temp, temp2;
@@ -268,6 +268,7 @@ Account.extend({
                             continue;
                         }
                         if (temp.debitAccounts.length > 1 && temp.creditAccounts.length > 1) {
+                            Data.addError("Invalid journal entry: (multiple debit and credit row): "+ JSON.stringify(entry));
                             console.log("Invalid journal entry: (multiple debit and credit row)");
                             console.log(entry);
                             continue;
