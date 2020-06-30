@@ -23,6 +23,8 @@ distDir=dist-search-app
 distDir=dist-auth-app
 distDir=dist-account-app
 
+addLog "Dist directory : ${distDir}"
+
 rm -rf ${distDir}/*
 
 cp build/static/js/*.js ${distDir}/
