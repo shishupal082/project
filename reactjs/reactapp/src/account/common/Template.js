@@ -505,7 +505,7 @@ var Template = {
                 "tag": "span",
                 "className": "badge badge-primary",
                 "name": "dateHeading",
-                "text": "1"
+                "text": ""
             }
         },
         {
@@ -572,7 +572,388 @@ var Template = {
                 "text": ""
             }
         ]
-    }
+    },
+    "accountSummaryByCalender": [
+        {
+            "tag": "div.h4",
+            "text": [
+                {
+                    "tag": "span",
+                    "className": "badge badge-primary",
+                    "name": "accountDisplayName",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "className": "badge badge-pill badge-success",
+                    "name": "year",
+                    "text": " "
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": {
+                "tag": "table.tbody",
+                "className": "table table-bordered table-striped",
+                "name": "accountSummaryByCalenderRow",
+                "text": []
+            }
+        }
+    ],
+    "accountSummaryByCalender1stRow": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "name": "accountDisplayName",
+                "text": ""
+            },
+            {
+                "tag": "th",
+                "name": "janValue",
+                "text": "Jan"
+            },
+            {
+                "tag": "th",
+                "name": "febValue",
+                "text": "Feb"
+            },
+            {
+                "tag": "th",
+                "name": "marValue",
+                "text": "March"
+            },
+            {
+                "tag": "th",
+                "name": "aprValue",
+                "text": "April"
+            },
+            {
+                "tag": "th",
+                "name": "mayValue",
+                "text": "May"
+            },
+            {
+                "tag": "th",
+                "name": "junValue",
+                "text": "June"
+            },
+            {
+                "tag": "th",
+                "name": "julValue",
+                "text": "July"
+            },
+            {
+                "tag": "th",
+                "name": "augValue",
+                "text": "Aug"
+            },
+            {
+                "tag": "th",
+                "name": "sepValue",
+                "text": "Sep"
+            },
+            {
+                "tag": "th",
+                "name": "octValue",
+                "text": "Oct"
+            },
+            {
+                "tag": "th",
+                "name": "novValue",
+                "text": "Nov"
+            },
+            {
+                "tag": "th",
+                "name": "decValue",
+                "text": "Dec"
+            }
+        ]
+    },
+    "accountSummaryByCalenderRow": [
+        {
+            "tag": "tr",
+            "text": [
+                {
+                    "tag": "td",
+                    "name": "",
+                    "text": "Debit"
+                },
+                {
+                    "tag": "td",
+                    "name": "janValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "febValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "marValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "aprValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "mayValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "junValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "julValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "augValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "sepValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "octValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "novValueDr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "decValueDr",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "tr",
+            "text": [
+                {
+                    "tag": "td",
+                    "name": "",
+                    "text": "Credit"
+                },
+                {
+                    "tag": "td",
+                    "name": "janValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "febValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "marValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "aprValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "mayValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "junValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "julValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "augValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "sepValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "octValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "novValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "decValueCr",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "tr",
+            "className": "bt-1p5px",
+            "text": [
+                {
+                    "tag": "td.b",
+                    "name": "",
+                    "text": "Balance"
+                },
+                {
+                    "tag": "td",
+                    "name": "janValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "febValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "marValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "aprValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "mayValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "junValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "julValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "augValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "sepValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "octValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "novValueBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "decValueBal",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "tr",
+            "text": [
+                {
+                    "tag": "td.b",
+                    "name": "",
+                    "text": "End Balance"
+                },
+                {
+                    "tag": "td",
+                    "name": "janValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "febValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "marValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "aprValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "mayValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "junValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "julValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "augValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "sepValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "octValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "novValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "decValueEndBal",
+                    "text": ""
+                }
+            ]
+        }
+    ]
 };
 
 export default Template;

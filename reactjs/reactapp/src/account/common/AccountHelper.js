@@ -387,7 +387,7 @@ Account.extend({
         }
         return fieldData;
     }
-})
+});
 //getLedgerBookFields
 Account.extend({
     getLedgerBookFields: function(self, accountData, dataByCompany) {
@@ -1087,6 +1087,137 @@ Account.extend({
             accountSummaryByDateFields.push(template1);
         }
         return accountSummaryByDateFields;
+    }
+});
+// getAccountSummaryByCalenderFields
+Account.extend({
+    _getAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection) {
+        var fieldsData = [];
+        var i, j, k, l, companyData, template1Data, template2Data, currentBalRowData;
+        var monthlyData = [];
+        var key, year;
+        monthlyData.push({"key": "janValue", "dateRange": ["-01-01", "-01-31"]});
+        monthlyData.push({"key": "febValue", "dateRange": ["-02-01", "-02-28"]});
+        monthlyData.push({"key": "marValue", "dateRange": ["-03-01", "-03-31"]});
+        monthlyData.push({"key": "aprValue", "dateRange": ["-04-01", "-04-30"]});
+        monthlyData.push({"key": "mayValue", "dateRange": ["-05-01", "-05-31"]});
+        monthlyData.push({"key": "junValue", "dateRange": ["-06-01", "-06-30"]});
+        monthlyData.push({"key": "julValue", "dateRange": ["-07-01", "-07-31"]});
+        monthlyData.push({"key": "augValue", "dateRange": ["-08-01", "-08-31"]});
+        monthlyData.push({"key": "sepValue", "dateRange": ["-09-01", "-09-30"]});
+        monthlyData.push({"key": "octValue", "dateRange": ["-10-01", "-10-31"]});
+        monthlyData.push({"key": "novValue", "dateRange": ["-11-01", "-11-30"]});
+        monthlyData.push({"key": "decValue", "dateRange": ["-12-01", "-12-31"]});
+        var startDate, endDate, currentDate, isTemplate2DataValid, template2DataFinal;
+        var endBal, sNo = 1;
+        for(i=yearlyDateSelection.length-1; i>=0; i--) {
+            for (j=0; j<accountData.length; j++) {
+                year = yearlyDateSelection[i].dateHeading;
+                template1Data = {"accountDisplayName": "", "year": year, "template2Data": []};
+                if ($S.isDefined(dataByCompany[accountData[j]["accountName"]])) {
+                    companyData = dataByCompany[accountData[j]["accountName"]];
+                    template1Data["accountDisplayName"] = sNo+" "+Account._getAccountDisplayName(accountData[j]);
+                    template2Data = {"janValue": {"Dr":0, "Cr": 0}, "febValue": {"Dr":0, "Cr": 0}, "marValue": {"Dr":0, "Cr": 0},
+                                    "aprValue": {"Dr":0, "Cr": 0}, "mayValue": {"Dr":0, "Cr": 0}, "junValue": {"Dr":0, "Cr": 0},
+                                    "julValue": {"Dr":0, "Cr": 0}, "augValue": {"Dr":0, "Cr": 0}, "sepValue": {"Dr":0, "Cr": 0},
+                                    "octValue": {"Dr":0, "Cr": 0}, "novValue": {"Dr":0, "Cr": 0}, "decValue": {"Dr":0, "Cr": 0}};
+                    currentBalRowData = companyData.currentBalRowData;
+                    isTemplate2DataValid = false;
+                    for(k=0; k<currentBalRowData.length; k++) {
+                        if (!Account._isValidDateStr(currentBalRowData[k].date)) {
+                            continue;
+                        }
+                        for(l=0; l<monthlyData.length; l++) {
+                            key = monthlyData[l].key;
+                            if (key === "febValue") {
+                                if ((year*1)%4 === 0) {
+                                    monthlyData[l]["dateRange"] = ["-02-01", "-02-29"];
+                                } else {
+                                    monthlyData[l]["dateRange"] = ["-02-01", "-02-28"]
+                                }
+                            }
+                            startDate = DT.getDateObj(year+monthlyData[l]["dateRange"][0]+" 00:00");
+                            endDate = DT.getDateObj(year+monthlyData[l]["dateRange"][1]+" 23:59");
+                            currentDate = DT.getDateObj(currentBalRowData[k].date);
+                            if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
+                                if ($S.isNumeric(currentBalRowData[k].cr)) {
+                                    isTemplate2DataValid = true;
+                                    template2Data[key]["Cr"] += currentBalRowData[k].cr*1;
+                                } else if ($S.isNumeric(currentBalRowData[k].dr)) {
+                                    isTemplate2DataValid = true;
+                                    template2Data[key]["Dr"] += currentBalRowData[k].dr*1;
+                                }
+                            }
+                        }
+                    }
+                    if(isTemplate2DataValid) {
+                        template2DataFinal = {};
+                        for(key in template2Data) {
+                            if (template2Data[key]["Dr"] > 0 && template2Data[key]["Cr"] > 0) {
+                                template2DataFinal[key + "Dr"] = template2Data[key]["Dr"];
+                                template2DataFinal[key + "Cr"] = template2Data[key]["Cr"];
+                                template2DataFinal[key + "Bal"] = (template2Data[key]["Dr"]-template2Data[key]["Cr"]).toFixed(2)*1;
+                            } else if (template2Data[key]["Dr"] > 0) {
+                                template2DataFinal[key + "Dr"] = template2Data[key]["Dr"];
+                                template2DataFinal[key + "Bal"] = template2Data[key]["Dr"]
+                            } else if (template2Data[key]["Cr"] > 0) {
+                                template2DataFinal[key + "Cr"] = template2Data[key]["Cr"];
+                                template2DataFinal[key + "Bal"] = -template2Data[key]["Cr"];
+                            }
+                        }
+                        sNo++;
+                        template1Data.template2Data.push(template2DataFinal);
+                        fieldsData.push(template1Data);
+                    }
+                }
+            }
+        }
+        for(j=0; j<fieldsData.length; j++) {
+            template2Data = fieldsData[j].template2Data;
+            endBal = 0;
+            for(i=0; i<monthlyData.length; i++) {
+                key = monthlyData[i].key;
+                for (k=0; k<template2Data.length; k++) {
+                    if ($S.isNumber(template2Data[k][key+"Bal"])) {
+                        template2Data[k][key+"EndBal"] = endBal + template2Data[k][key+"Bal"];
+                        endBal = template2Data[k][key+"EndBal"];
+                        if (endBal < 0) {
+                            template2Data[k][key+"EndBal"] = {"tag":"div.b", "className": "text-danger", "text": "("+(-1)*endBal+")"};
+                        }
+                        if (template2Data[k][key+"Bal"] < 0) {
+                            template2Data[k][key+"Bal"] = {"tag":"div.b", "className": "text-danger", "text": "("+(-1)*template2Data[k][key+"Bal"]+")"};
+                        } else {
+                            template2Data[k][key+"Bal"] = template2Data[k][key+"Bal"];
+                        }
+                    }
+                }
+            }
+        }
+        return fieldsData;
+    },
+    getAccountSummaryByCalenderFields: function(Data, accountData, dataByCompany, yearlyDateSelection) {
+        var accountSummaryByCalenderFields = [], fieldsData;
+        fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, accountData, dataByCompany, yearlyDateSelection);
+        var i, j, template1, template2, template1Data, template2Data;
+        for (i = 0; i < fieldsData.length; i++) {
+            template1 = Data.getTemplate("accountSummaryByCalender", []);
+            template1Data = {"accountDisplayName": fieldsData[i].accountDisplayName,
+                            "year": fieldsData[i].year,
+                            "accountSummaryByCalenderRow": []};
+            if (fieldsData[i].template2Data) {
+                template2 = Data.getTemplate("accountSummaryByCalender1stRow", []);
+                template1Data.accountSummaryByCalenderRow.push(template2);
+                for(j=0; j<fieldsData[i].template2Data.length; j++) {
+                    template2Data = fieldsData[i].template2Data[j];
+                    template2 = Data.getTemplate("accountSummaryByCalenderRow", []);
+                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    template1Data.accountSummaryByCalenderRow.push(template2);
+                }
+            }
+            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            accountSummaryByCalenderFields.push(template1);
+        }
+        return accountSummaryByCalenderFields;
     }
 });
 AccountHelper = Account;

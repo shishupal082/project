@@ -64,6 +64,7 @@ keys.push("accountTemplate");
 keys.push("accountData");
 keys.push("dataByCompany");
 keys.push("dateSelectionParameter");
+keys.push("combinedDateSelectionParameter");
 
 var ErrorsData = [];
 
@@ -113,6 +114,7 @@ class App extends React.Component {
             currentBalanceByDateFields: [],
             accountSummaryFields: [],
             accountSummaryByDateFields: [],
+            accountSummaryByCalenderFields: [],
             noMatchFields: Config.noMatchFields
         };
         this.accountTemplateLoaded = false;
@@ -141,6 +143,11 @@ class App extends React.Component {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
         finalJournalData = Data.getData("finalJournalData", []);
         var startDate, endDate, heading;
+
+        var dailyDateSelection = [];
+        var monthlyDateSelection = [];
+        var yearlyDateSelection = [];
+
         for (i=0; i<finalJournalData.length; i++) {
             if ($S.isArray(finalJournalData[i].entry)) {
                 for (j=0; j<finalJournalData[i].entry.length; j++) {
@@ -155,47 +162,53 @@ class App extends React.Component {
                 }
             }
         }
+        /*Daily Date Selection*/
+        for (i=0; i<allDate.length; i++) {
+            temp = allDate[i];
+            dailyDateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
+        }
+        /*Monthly Date Selection*/
+        temp = [];
+        for (i=0; i<allDate.length; i++) {
+            dObj = DT.getDateObj(allDate[i]);
+            if (dObj !== null) {
+                dObj.setDate(1);
+                heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
+                startDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", dObj);
+                dObj.setMonth(dObj.getMonth()+1);
+                dObj.setDate(0);
+                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
+            } else {
+                continue;
+            }
+            if (temp.indexOf(heading) < 0) {
+                monthlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                temp.push(heading);
+            }
+        }
+        /*Yearly Date Selection*/
+        temp = [];
+        for (i=0; i<allDate.length; i++) {
+            dObj = DT.getDateObj(allDate[i]);
+            if (dObj !== null) {
+                dObj.setDate(1);
+                heading = DT.formateDateTime("YYYY", "/", dObj);
+                startDate = heading +"-01-01 00:00";
+                endDate = heading +"-12-31 23:59";
+            } else {
+                continue;
+            }
+            if (temp.indexOf(heading) < 0) {
+                yearlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                temp.push(heading);
+            }
+        }
         if (this.dateSelectionType === "daily") {
-            for (i=0; i<allDate.length; i++) {
-                temp = allDate[i];
-                dateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
-            }
+            dateSelection = $S.clone(dailyDateSelection);
         } else if (this.dateSelectionType === "monthly") {
-            temp = [];
-            for (i=0; i<allDate.length; i++) {
-                dObj = DT.getDateObj(allDate[i]);
-                if (dObj !== null) {
-                    dObj.setDate(1);
-                    heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
-                    startDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", dObj);
-                    dObj.setMonth(dObj.getMonth()+1);
-                    dObj.setDate(0);
-                    endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
-                } else {
-                    continue;
-                }
-                if (temp.indexOf(heading) < 0) {
-                    dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
-                    temp.push(heading);
-                }
-            }
+            dateSelection = $S.clone(monthlyDateSelection);
         } else if (this.dateSelectionType === "yearly") {
-            temp = [];
-            for (i=0; i<allDate.length; i++) {
-                dObj = DT.getDateObj(allDate[i]);
-                if (dObj !== null) {
-                    dObj.setDate(1);
-                    heading = DT.formateDateTime("YYYY", "/", dObj);
-                    startDate = heading +"-01-01 00:00";
-                    endDate = heading +"-12-31 23:59";
-                } else {
-                    continue;
-                }
-                if (temp.indexOf(heading) < 0) {
-                    dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
-                    temp.push(heading);
-                }
-            }
+            dateSelection = $S.clone(yearlyDateSelection);
         } else if (this.dateSelectionType === "all") {
             heading = "All";
             if (allDate.length > 0) {
@@ -205,6 +218,13 @@ class App extends React.Component {
             dateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
         }
         Data.setData("dateSelectionParameter", dateSelection);
+        Data.setData("combinedDateSelectionParameter", {
+            dailyDateSelection: dailyDateSelection,
+            monthlyDateSelection: monthlyDateSelection,
+            yearlyDateSelection: yearlyDateSelection,
+            dateSelection: dateSelection
+        });
+
         console.log("dateSelection");
         console.log(dateSelection);
         return dateSelection;
@@ -271,6 +291,14 @@ class App extends React.Component {
         journalDataByDateFields = AccountHelper.getJournalDataByDateFields(Data, apiJournalDataByDate, dateSelection);
         return journalDataByDateFields;
     }
+    getAccountSummaryByCalenderFields() {
+        var accountData, accountSummaryByCalenderFields, dataByCompany, yearlyDateSelection;
+        accountData = Data.getData("accountData", []);
+        yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
+        dataByCompany = Data.getData("dataByCompany", {});
+        accountSummaryByCalenderFields = AccountHelper.getAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection);
+        return accountSummaryByCalenderFields;
+    }
     dataSetComplete() {
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
         var ledgerDataFields = this.getLedgerRowData();
@@ -283,12 +311,15 @@ class App extends React.Component {
         var accountSummaryFields = this.getAccountSummaryFields();
         var accountSummaryByDateFields = this.getAccountSummaryByDateFields();
 
+        var accountSummaryByCalenderFields = this.getAccountSummaryByCalenderFields();
+
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
                 journalDataByDateFields: journalDataByDateFields,
                 currentBalanceByDateFields: currentBalanceByDateFields,
                 accountSummaryFields: accountSummaryFields,
-                accountSummaryByDateFields: accountSummaryByDateFields}, function() {
+                accountSummaryByDateFields: accountSummaryByDateFields,
+                accountSummaryByCalenderFields: accountSummaryByCalenderFields}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -523,6 +554,9 @@ class App extends React.Component {
         const summaryByDate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.accountsummarybydate}
                     renderFieldRow={this.state.accountSummaryByDateFields}/>);
 
+        const accountsummarybycalander = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.accountsummarybycalander}
+                    renderFieldRow={this.state.accountSummaryByCalenderFields}/>);
+
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home} component={home}/>
@@ -540,6 +574,7 @@ class App extends React.Component {
                 <Route path={pages.summary} component={summary}/>
                 <Route path={pages.accountsummarybydate} component={summaryByDate}/>
                 <Route path={pages.trialbalance} component={trial} />
+                <Route path={pages.accountsummarybycalander} component={accountsummarybycalander} />
                 <Route render={props => (
                     <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
                         renderFieldRow={this.state.noMatchFields}/>

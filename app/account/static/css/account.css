@@ -3,9 +3,15 @@
     margin: 0px 5px 5px 0px;
 }
 .w-120px {
-	width: 120px;
+    width: 120px;
 }
 .table th,
 .table td {
-	padding: 4px;
+    padding: 4px;
+}
+.bt-2px {
+    border-top: 2px solid;
+}
+.bt-1p5px {
+    border-top: 1.5px solid;
 }

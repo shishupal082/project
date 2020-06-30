@@ -20,7 +20,8 @@ var pages = {
     "currentbal": basepathname+"/currentbal",
     "currentbalbydate": basepathname+"/currentbalbydate",
     "summary": basepathname+"/summary",
-    "accountsummarybydate": basepathname+"/summarybydate"
+    "accountsummarybydate": basepathname+"/summarybydate",
+    "accountsummarybycalander": basepathname+"/accountsummarybycalander"
 };
 
 Config.pages = pages;
@@ -30,6 +31,7 @@ Config.homeFields = [
     {"name": "currentbalbydate", "toUrl": pages.currentbalbydate, "toText": "Current Balance By Date"},
     {"name": "summary", "toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
     {"name": "accountsummarybydate", "toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
+    {"name": "accountsummarybycalander", "toUrl": pages.accountsummarybycalander, "toText": "Account Summary By Calender"},
     {"name": "trialbalance", "toUrl": pages.trialbalance, "toText": "Trial Balance"},
     {"name": "journal", "toUrl": pages.journal, "toText": "Journal"},
     {"name": "ledger", "toUrl": pages.ledger, "toText": "Ledger"},
@@ -45,6 +47,7 @@ Config.pageHeading = {
     "currentbalbydate": "Current Balance By Date",
     "summary": "Account Summary",
     "accountsummarybydate": "Account Summary By Date",
+    "accountsummarybycalander": "Account Summary By Calender",
     "pageNotFound": "Page Not Found"
 };
 

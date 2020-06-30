@@ -505,7 +505,7 @@
                 "tag": "span",
                 "className": "badge badge-primary",
                 "name": "dateHeading",
-                "text": "1"
+                "text": ""
             }
         },
         {
