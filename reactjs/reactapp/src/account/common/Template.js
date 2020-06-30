@@ -668,6 +668,11 @@ var Template = {
                 "tag": "th",
                 "name": "decValue",
                 "text": "Dec"
+            },
+            {
+                "tag": "th",
+                "name": "totalValue",
+                "text": "Total"
             }
         ]
     },
@@ -739,6 +744,11 @@ var Template = {
                     "tag": "td",
                     "name": "decValueDr",
                     "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "totalValueDr",
+                    "text": ""
                 }
             ]
         },
@@ -808,6 +818,11 @@ var Template = {
                 {
                     "tag": "td",
                     "name": "decValueCr",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "totalValueCr",
                     "text": ""
                 }
             ]
@@ -880,6 +895,11 @@ var Template = {
                     "tag": "td",
                     "name": "decValueBal",
                     "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "totalValueBal",
+                    "text": ""
                 }
             ]
         },
@@ -949,6 +969,11 @@ var Template = {
                 {
                     "tag": "td",
                     "name": "decValueEndBal",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "totalValueEndBal",
                     "text": ""
                 }
             ]

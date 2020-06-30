@@ -1175,14 +1175,26 @@ Account.extend({
         for(j=0; j<fieldsData.length; j++) {
             template2Data = fieldsData[j].template2Data;
             endBal = 0;
+            for (k=0; k<template2Data.length; k++) {
+                template2Data[k]["totalValueDr"] = 0;
+                template2Data[k]["totalValueCr"] = 0;
+            }
             for(i=0; i<monthlyData.length; i++) {
                 key = monthlyData[i].key;
                 for (k=0; k<template2Data.length; k++) {
+                    if ($S.isNumber(template2Data[k][key+"Dr"])) {
+                        template2Data[k]["totalValueDr"] += template2Data[k][key+"Dr"];
+                    }
+                    if ($S.isNumber(template2Data[k][key+"Cr"])) {
+                        template2Data[k]["totalValueCr"] += template2Data[k][key+"Cr"];
+                    }
                     if ($S.isNumber(template2Data[k][key+"Bal"])) {
                         template2Data[k][key+"EndBal"] = endBal + template2Data[k][key+"Bal"];
                         endBal = template2Data[k][key+"EndBal"];
+                        template2Data[k]["totalValueBal"] = endBal;
                         if (endBal < 0) {
                             template2Data[k][key+"EndBal"] = {"tag":"div.b", "className": "text-danger", "text": "("+(-1)*endBal+")"};
+                            template2Data[k]["totalValueBal"] = template2Data[k][key+"EndBal"];
                         }
                         if (template2Data[k][key+"Bal"] < 0) {
                             template2Data[k][key+"Bal"] = {"tag":"div.b", "className": "text-danger", "text": "("+(-1)*template2Data[k][key+"Bal"]+")"};
