@@ -483,10 +483,10 @@ Account.extend({
                 temp.debitBalance = balanceBdField.dr;
                 temp.creditBalance = balanceBdField.cr;
                 if ($S.isNumeric(temp.debitBalance)) {
-                    totalDebit += temp.debitBalance*1;
+                    totalDebit = (totalDebit*1+temp.debitBalance*1).toFixed(2);
                 }
                 if ($S.isNumeric(temp.creditBalance)) {
-                    totalCredit += temp.creditBalance*1;
+                    totalCredit = (totalCredit*1+temp.creditBalance*1).toFixed(2);
                 }
             } else {
                 temp.particular = accountDisplayName;
