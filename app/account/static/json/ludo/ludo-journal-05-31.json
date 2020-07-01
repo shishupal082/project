@@ -1,0 +1,229 @@
+{
+    "entry": [
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "To Coin a/c",
+                    "account": "coin",
+                    "dr": "1000"
+                },
+                {
+                    "particularText": "Daily voucher",
+                    "account": "bonus",
+                    "cr": "1000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "To Coin a/c",
+                    "account": "coin",
+                    "dr": "900"
+                },
+                {
+                    "particularText": "Gift a/c",
+                    "account": "gift",
+                    "cr": "600"
+                },
+                {
+                    "particularText": "Spin a/c",
+                    "account": "spin",
+                    "cr": "300"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "dr": "4500"
+                },
+                {
+                    "particularText": "To Win a/c",
+                    "account": "win",
+                    "cr": "4500"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "To Coin a/c",
+                    "account": "coin",
+                    "dr": "2000"
+                },
+                {
+                    "particularText": "To Bonus a/c (for L19 entry)",
+                    "account": "bonus",
+                    "cr": "2000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "dr": "9000"
+                },
+                {
+                    "particularText": "To Win a/c",
+                    "account": "win",
+                    "cr": "9000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "To Coin a/c",
+                    "account": "coin",
+                    "dr": "750"
+                },
+                {
+                    "particularText": "Gift a/c",
+                    "account": "gift",
+                    "cr": "600"
+                },
+                {
+                    "particularText": "Spin a/c",
+                    "account": "spin",
+                    "cr": "150"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "By Coin a/c",
+                    "account": "coin",
+                    "cr": "10000"
+                },
+                {
+                    "particularText": "To Loss a/c",
+                    "account": "loss",
+                    "dr": "10000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "dr": "9000"
+                },
+                {
+                    "particularText": "To Win a/c",
+                    "account": "win",
+                    "cr": "9000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "By Coin a/c",
+                    "account": "coin",
+                    "cr": "10000"
+                },
+                {
+                    "particularText": "To Loss a/c",
+                    "account": "loss",
+                    "dr": "10000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "cr": "14000"
+                },
+                {
+                    "particularText": "To 7UP Win a/c",
+                    "account": "7upwin",
+                    "dr": "14000"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "By Coin a/c",
+                    "account": "coin",
+                    "dr": "500"
+                },
+                {
+                    "particularText": "To Computer Win a/c",
+                    "account": "computerwin",
+                    "cr": "500"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "dr": "450"
+                },
+                {
+                    "particularText": "To Win a/c",
+                    "account": "win",
+                    "cr": "450"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "Coin a/c",
+                    "account": "coin",
+                    "dr": "500"
+                },
+                {
+                    "particularText": "To 7UP Win a/c",
+                    "account": "7upwin",
+                    "cr": "500"
+                }
+            ]
+        },
+        {
+            "date": "2020-05-31",
+            "particularEntry": [
+                {
+                    "particularText": "To Coin a/c",
+                    "account": "coin",
+                    "dr": "1100"
+                },
+                {
+                    "particularText": "Gift a/c",
+                    "account": "gift",
+                    "cr": "600"
+                },
+                {
+                    "particularText": "Spin a/c",
+                    "account": "spin",
+                    "cr": "500"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+[
+    {
+        "username": "test",
+        "companyname": "Test company",
+        "displayName": "Test",
+        "dateSelectionType": "daily",
+        "accountTemplateApi": ["/app/account/static/json/accountTemplate.json"],
+        "accountDataApi": ["/app/account/static/json/accounts.json"],
+        "journalDataApi": ["/app/account/static/json/test/testJournalData.json"]
+    },
+    {
+        "username": "accountal",
+        "companyname": "Accountal",
+        "displayName": "Accountal",
+        "dateSelectionType": "monthly",
+        "accountDataApi": ["/pvt/app-data/account/accountal/accounts.json"],
+        "journalDataApiCSV": [
+            "/pvt/app-data/account/accountal/data-2020.csv"
+        ]
+    },
+    {
+        "username": "ludo",
+        "companyname": "Ludo accounting",
+        "displayName": "Ludo King",
+        "dateSelectionType": "daily",
+        "accountDataApi": ["/app/account/static/json/ludo/accounts.json"],
+        "journalDataApi": [
+            "/app/account/static/json/ludo/ludo-journal-05-31.json",
+            "/app/account/static/json/ludo/ludo-journal-05-30.json",
+            "/pvt/app-data/account/ludo/journalData3-2.json",
+            "/pvt/app-data/account/ludo/journalData3.json"
+        ],
+        "journalDataApiCSV": [
+            "/app/account/static/json/ludo/csv/2020-06-03.csv",
+            "/pvt/app-data/account/ludo/2020-06-03.csv"
+        ]
+    },
+    {
+        "username": "basic",
+        "companyname": "M/S Startup",
+        "displayName": "Basic Accounting",
+        "dateSelectionType": "yearly",
+        "accountDataApi": ["/app/account/static/json/accounts.json"],
+        "journalDataApi": ["/pvt/app-data/account/journalData2.json"]
+    },
+    {
+        "username": "basic1",
+        "companyname": "M/S Startup",
+        "displayName": "Basic Accounting Example 1",
+        "dateSelectionType": "monthly",
+        "accountDataApi": ["/app/account/static/json/accounts.json"],
+        "journalDataApi": ["/pvt/app-data/account/journalData.json"]
+    }
+]

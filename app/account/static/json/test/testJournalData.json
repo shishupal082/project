@@ -1,0 +1,45 @@
+{
+    "entry": [
+        {
+            "date": "2020-02-31 23:50",
+            "particularEntry": [
+                {
+                    "particularText": "Cash a/c",
+                    "account": "cash",
+                    "dr": "1000"
+                },
+                {
+                    "particularText": "By Owner",
+                    "account": "owner",
+                    "cr": "500"
+                },
+                {
+                    "particularText": "By Bank",
+                    "account": "bank",
+                    "cr": "500"
+                },
+                {
+                    "particularText": "(Being bussiness started with capital, by Owner)"
+                }
+            ]
+        },
+        {
+            "date": "2020-03-01 20:00",
+            "particularEntry": [
+                {
+                    "particularText": "Bank a/c",
+                    "account": "bank",
+                    "dr": "480000"
+                },
+                {
+                    "particularText": "To Cash a/c",
+                    "account": "cash",
+                    "cr": "480000"
+                },
+                {
+                    "particularText": "(Being cash deposited to Bank)"
+                }
+            ]
+        }
+    ]
+}

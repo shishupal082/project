@@ -1,0 +1,105 @@
+[
+    {
+        "accountName": "coin"
+    },
+    {
+        "accountName": "cash"
+    },
+    {
+        "accountName": "owner"
+    },
+    {
+        "accountName": "bank"
+    },
+    {
+        "accountName": "furniture"
+    },
+    {
+        "accountName": "plant"
+    },
+    {
+        "accountName": "ramjilal"
+    },
+    {
+        "accountName": "ravi"
+    },
+    {
+        "accountName": "samson"
+    },
+    {
+        "accountName": "sunil"
+    },
+    {
+        "accountName": "thomas"
+    },
+    {
+        "accountName": "purchase"
+    },
+    {
+        "accountName": "sumittrader"
+    },
+    {
+        "accountName": "rajinienterprises"
+    },
+    {
+        "accountName": "sales"
+    },
+    {
+        "accountName": "rent"
+    },
+    {
+        "accountName": "salary"
+    },
+    {
+        "accountName": "machine"
+    },
+    {
+        "accountName": "bankloan"
+    },
+    {
+        "accountName": "capital",
+        "accountDisplayName": "Capital Account"
+    },
+    {
+        "accountName": "discountreceived"
+    },
+    {
+        "accountName": "7upwin"
+    },
+    {
+        "accountName": "computerwin"
+    },
+    {
+        "accountName": "pwin"
+    },
+    {
+        "accountName": "ploss"
+    },
+    {
+        "accountName": "win"
+    },
+    {
+        "accountName": "loss"
+    },
+    {
+        "accountName": "spin"
+    },
+    {
+        "accountName": "gift"
+    },
+    {
+        "accountName": "bonus"
+    },
+    {
+        "accountName": "sundry"
+    },
+    {
+        "accountName": "building"
+    },
+    {
+        "accountName": "repair"
+    },
+    {
+        "accountName": "unknown"
+    }
+]
