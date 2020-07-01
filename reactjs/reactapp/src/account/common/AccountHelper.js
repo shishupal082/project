@@ -14,6 +14,12 @@ Account.fn = Account.prototype = {
     init: function(arg) {
         this.arg = arg;
         return this;
+    },
+    toFixed: function(decimal) {
+        if ($S.isNumber(decimal) && $S.isNumeric(this.arg)) {
+            this.arg = this.arg.toFixed(2)*1;
+        }
+        return this.arg;
     }
 };
 $S.extendObject(Account);
@@ -50,12 +56,12 @@ Account.extend({
             totalAmount = creditAmount;
             if (debitAmount > creditAmount) {
                 totalAmount = debitAmount;
-                particularEntry = {"cr": (debitAmount - creditAmount).toFixed(2)*1};
+                particularEntry = {"cr": Account(debitAmount - creditAmount).toFixed(2)};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance C/D"};
                 ledgerRowData.cr.push(particularEntry);
             } else if (debitAmount < creditAmount) {
                 totalAmount = creditAmount;
-                particularEntry = {"dr": (creditAmount - debitAmount).toFixed(2)*1};
+                particularEntry = {"dr": Account(creditAmount - debitAmount).toFixed(2)};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance C/D"};
                 ledgerRowData.dr.push(particularEntry);
             }
@@ -69,12 +75,12 @@ Account.extend({
 
             if (debitAmount > creditAmount) {
                 totalAmount = debitAmount;
-                particularEntry = {"dr": (debitAmount - creditAmount).toFixed(2)*1, name: "balanceBd"};
+                particularEntry = {"dr": Account(debitAmount - creditAmount).toFixed(2), name: "balanceBd"};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance B/D"};
                 ledgerRowData.dr.push(particularEntry);
             } else if (debitAmount < creditAmount) {
                 totalAmount = creditAmount;
-                particularEntry = {"cr": (creditAmount - debitAmount).toFixed(2)*1, name: "balanceBd"};
+                particularEntry = {"cr": Account(creditAmount - debitAmount).toFixed(2), name: "balanceBd"};
                 particularEntry.particularText = {"tag":"b", "text":"By Balance B/D"};
                 ledgerRowData.cr.push(particularEntry);
             }
@@ -372,7 +378,7 @@ Account.extend({
                     if (dr !== 0 || cr !== 0) {
                         template2Data["dr"] = dr;
                         template2Data["cr"] = cr;
-                        template2Data["currentBal"] = (dr - cr).toFixed(2)*1;
+                        template2Data["currentBal"] = Account(dr-cr).toFixed(2);
                         template1Data["accountSummaryByDateRow"].push(template2Data);
                         totalDr += dr;
                         totalCr += cr;
@@ -483,10 +489,10 @@ Account.extend({
                 temp.debitBalance = balanceBdField.dr;
                 temp.creditBalance = balanceBdField.cr;
                 if ($S.isNumeric(temp.debitBalance)) {
-                    totalDebit = (totalDebit*1+temp.debitBalance*1).toFixed(2);
+                    totalDebit = Account(totalDebit*1+temp.debitBalance*1).toFixed(2);
                 }
                 if ($S.isNumeric(temp.creditBalance)) {
-                    totalCredit = (totalCredit*1+temp.creditBalance*1).toFixed(2);
+                    totalCredit = Account(totalCredit*1+temp.creditBalance*1).toFixed(2);
                 }
             } else {
                 temp.particular = accountDisplayName;
@@ -744,15 +750,15 @@ Account.extend({
                                 currentBalAmount -= currentBalRowData[k].cr*1;
                                 creditAmount += currentBalRowData[k].cr*1;
                             }
-                            currentBalAmount = currentBalAmount.toFixed(2)*1;
+                            currentBalAmount = Account(currentBalAmount).toFixed(2);
                             currentBalRowData[k]["currentBal"] = currentBalAmount;
-                            currentBalRowData[k]["balance"] = (lastAmount + currentBalAmount).toFixed(2)*1;
+                            currentBalRowData[k]["balance"] = Account(lastAmount + currentBalAmount).toFixed(2);
                         }
                         temp = {"name": "totalRow", "particularText": {"tag":"div.b", "className": "text-right", "text":"Total"}};
                         temp.dr = debitAmount;
                         temp.cr = creditAmount;
                         temp.currentBal = currentBalAmount;
-                        temp.balance = (lastAmount + currentBalAmount).toFixed(2)*1;
+                        temp.balance = Account(lastAmount + currentBalAmount).toFixed(2);
                         currentBalRowData.push(temp);
                         lastAmount += currentBalAmount;
                     }
@@ -1156,7 +1162,7 @@ Account.extend({
                             if (template2Data[key]["Dr"] > 0 && template2Data[key]["Cr"] > 0) {
                                 template2DataFinal[key + "Dr"] = template2Data[key]["Dr"];
                                 template2DataFinal[key + "Cr"] = template2Data[key]["Cr"];
-                                template2DataFinal[key + "Bal"] = (template2Data[key]["Dr"]-template2Data[key]["Cr"]).toFixed(2)*1;
+                                template2DataFinal[key + "Bal"] = Account(template2Data[key]["Dr"]-template2Data[key]["Cr"]).toFixed(2);
                             } else if (template2Data[key]["Dr"] > 0) {
                                 template2DataFinal[key + "Dr"] = template2Data[key]["Dr"];
                                 template2DataFinal[key + "Bal"] = template2Data[key]["Dr"]
@@ -1189,7 +1195,7 @@ Account.extend({
                         template2Data[k]["totalValueCr"] += template2Data[k][key+"Cr"];
                     }
                     if ($S.isNumber(template2Data[k][key+"Bal"])) {
-                        template2Data[k][key+"EndBal"] = endBal + template2Data[k][key+"Bal"];
+                        template2Data[k][key+"EndBal"] = Account(endBal*1 + template2Data[k][key+"Bal"]*1).toFixed(2);
                         endBal = template2Data[k][key+"EndBal"];
                         template2Data[k]["totalValueBal"] = endBal;
                         if (endBal < 0) {
