@@ -12,16 +12,18 @@ class Errors extends React.Component {
     render() {
         var errors = this.props.data.errorsData.map(function(el, i, arr) {
             var alertComponent;
+            var index = (i+1) + ")";
             if ($S.isString(el) || $S.isNumeric(el)) {
-                alertComponent = <div key={i} className="alert alert-danger" role="alert">{el}</div>
+                alertComponent = <div key={i} className="alert alert-danger" role="alert">{index} {el}</div>;
             } else if ($S.isObject(el) && $S.isString(el.href)) {
                 alertComponent = <div key={i} className="alert alert-danger" role="alert">
-                  Erorr in <a href={el.href} className="alert-link">{el.text}</a></div>
+                  {index} Erorr in <a href={el.href} className="alert-link">{el.text}</a></div>;
             } else if ($S.isObject(el) && $S.isString(el.code)) {
                 alertComponent = <div key={i} className="alert alert-danger" role="alert">
-                  <code>{el.code}</code></div>
+                                    <code>{index}{el.code}</code>
+                                </div>;
             } else {
-                alertComponent = <div key={i} className="alert alert-danger" role="alert">Unknown error</div>
+                alertComponent = <div key={i} className="alert alert-danger" role="alert">{index} Unknown error</div>;
             }
             return alertComponent;
         });

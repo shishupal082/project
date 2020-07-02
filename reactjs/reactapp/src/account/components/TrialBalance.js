@@ -4,7 +4,7 @@ import Errors from "./partial/Errors";
 
 import Api from "../../common/Api";
 
-class TrialBalance extends React.Component {
+class NotUsedTrialBalance extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,5 +23,5 @@ class TrialBalance extends React.Component {
     }
 }
 
-export default TrialBalance;
+export default NotUsedTrialBalance;
 
