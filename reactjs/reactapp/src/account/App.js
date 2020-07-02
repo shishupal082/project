@@ -534,28 +534,28 @@ class App extends React.Component {
         const home = (props) => (<Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>);
 
         const trial = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
-                            renderFieldRow={this.state.trialBalanceFields}/>);
+                            renderFieldRow={this.state.trialBalanceFields} currentPageName="trialbalance"/>);
 
         const journalbydate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.journalbydate}
-                    renderFieldRow={this.state.journalDataByDateFields}/>);
+                    renderFieldRow={this.state.journalDataByDateFields} currentPageName="journalbydate"/>);
 
         const ledger = (props) => (<LedgerBook {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.ledger}
-                    renderFieldRow={this.state.ledgerDataFields}/>);
+                    renderFieldRow={this.state.ledgerDataFields} currentPageName="ledger"/>);
 
         const currentbal = (props) => (<LedgerBook {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.currentbal}
-                    renderFieldRow={this.state.currentBalanceFields}/>);
+                    renderFieldRow={this.state.currentBalanceFields} currentPageName="currentbal"/>);
 
         const currentbalbydate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.currentbalbydate}
-                    renderFieldRow={this.state.currentBalanceByDateFields}/>);
+                    renderFieldRow={this.state.currentBalanceByDateFields} currentPageName="currentbalbydate"/>);
 
         const summary = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.summary}
-                    renderFieldRow={this.state.accountSummaryFields}/>);
+                    renderFieldRow={this.state.accountSummaryFields} currentPageName="summary"/>);
 
         const summaryByDate = (props) => (<JournalByDate {...props} state={this.state} data={currentbalvalByDate} methods={methods} heading={pageHeading.accountsummarybydate}
-                    renderFieldRow={this.state.accountSummaryByDateFields}/>);
+                    renderFieldRow={this.state.accountSummaryByDateFields} currentPageName="accountsummarybydate"/>);
 
         const accountsummarybycalander = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.accountsummarybycalander}
-                    renderFieldRow={this.state.accountSummaryByCalenderFields}/>);
+                    renderFieldRow={this.state.accountSummaryByCalenderFields} currentPageName="accountsummarybycalander"/>);
 
         return (<BrowserRouter>
             <Switch>
@@ -564,7 +564,9 @@ class App extends React.Component {
                   path={pages.journal}
                   render={props => (
                     <Journal {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
-                    renderFieldRow={this.state.journalDataFields}/>
+                        renderFieldRow={this.state.journalDataFields}
+                        currentPageName="journal"
+                    />
                   )}
                 />
                 <Route path={pages.journalbydate} component={journalbydate}/>
@@ -577,7 +579,7 @@ class App extends React.Component {
                 <Route path={pages.accountsummarybycalander} component={accountsummarybycalander} />
                 <Route render={props => (
                     <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
-                        renderFieldRow={this.state.noMatchFields}/>
+                        renderFieldRow={this.state.noMatchFields} currentPageName="noMatch"/>
                     )}
                 />
             </Switch>

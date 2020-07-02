@@ -25,7 +25,7 @@ class Header extends React.Component {
                         <div><h2>{companyName}</h2></div>
                     </div>
                     <div className="text-center"><div><h2>{this.props.heading}</h2></div></div>
-                    <SelectUser data={this.props.data} methods={this.props.methods}/>
+                    <SelectUser data={this.props.data} methods={this.props.methods} currentPageName={this.props.currentPageName} history={this.props.history}/>
             </div>);
     }
 }
