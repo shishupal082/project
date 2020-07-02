@@ -8,5 +8,7 @@ cp index.html journalbydate/
 cp index.html ledger/
 cp index.html summary/
 cp index.html summarybydate/
-cp index.html accountsummarybycalander/
+cp index.html summarybycalander/
+cp index.html customisedebit/
+cp index.html customisecredit/
 

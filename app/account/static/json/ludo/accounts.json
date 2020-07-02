@@ -101,5 +101,11 @@
     },
     {
         "accountName": "unknown"
+    },
+    {
+        "accountName": "customised",
+        "subAccount": [
+            "spin", "gift", "bonus", "win", "loss"
+        ]
     }
 ]
