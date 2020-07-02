@@ -21,7 +21,7 @@ var pages = {
     "currentbalbydate": basepathname+"/currentbalbydate",
     "summary": basepathname+"/summary",
     "accountsummarybydate": basepathname+"/summarybydate",
-    "accountsummarybycalander": basepathname+"/accountsummarybycalander"
+    "accountsummarybycalander": basepathname+"/summarybycalander"
 };
 
 Config.pages = pages;
