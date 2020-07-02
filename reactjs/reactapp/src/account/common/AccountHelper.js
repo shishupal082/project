@@ -1246,7 +1246,7 @@ Account.extend({
         return accountSummaryByCalenderFields;
     },
     _getCustomisedAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection, customiseType) {
-        customiseType = customiseType == "Cr" ? "Cr" : "Dr";
+        customiseType = customiseType === "Cr" ? "Cr" : "Dr";
         var fieldsData, response = [];
         var i, j, k, l, m;
         var tempAccountData = [];
@@ -1267,7 +1267,7 @@ Account.extend({
         fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
         var template1Data, template2Data, monthlyData, count, monthKey, year;
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
-            template1Data = {"heading": (customiseType=="Dr" ?"Debit": "Credit"), "year": "", "template2Data": []};
+            template1Data = {"heading": (customiseType==="Dr" ?"Debit": "Credit"), "year": "", "template2Data": []};
             template1Data.year = yearlyDateSelection[i].dateHeading;
             monthlyData = Account.getMonthTemplate(template1Data.year);
             for(j=0; j<tempAccountData.length; j++) {
