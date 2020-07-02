@@ -7,6 +7,7 @@ Error component
     - Flush error on user change
 
 Error available:
-    - 1: Error in api (href)
-    - 2: Invalid account name (text)
-    - 3: Debit and Credit amount mismatch if both present (code)
+    - 1) Error in api (href)
+    - 2) Invalid account name (text)
+    - 3) Debit and Credit amount mismatch if both present (code)
+    - 4) Unknown error

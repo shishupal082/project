@@ -25,6 +25,13 @@ li code{
 			<li>MD5 sum calculate</li>
 			<li><code>certutil -hashfile {filename} MD5</code></li>
 		</ul>
+		<h2>Excel</h2>
+		<ul>
+			<li>=SUM(C1:C11)</li>
+			<li>=SUM($C$1:$C$11); Fixed cell which are not changing with copy paste</li>
+			<li>=SUMIF($C$1:$C$11,G1,$D$1:$D$11); Fixed cell which are not changing with copy paste, only G1 will change</li>
+			<li>=SUMPRODUCT(C1:C11,D1:D11)</li>
+		</ul>
 		<h2>Remote login</h2>
 		<ul>
 			<li>To enable in mac => System Preferences >> Sharing >> Enable Remote Login</li>
@@ -34,7 +41,6 @@ li code{
 			<li><code>scp foobar.txt user@remotehost:/some/remote/directory</code></li>
 			<li>From remote to local</li>
 			<li><code>scp user@remotehost:foobar.txt /some/local/directory</code></li>
-
 		</ul>
 		<h2>Unix</h2>
 		<ul>
