@@ -21,7 +21,9 @@ var pages = {
     "currentbalbydate": basepathname+"/currentbalbydate",
     "summary": basepathname+"/summary",
     "accountsummarybydate": basepathname+"/summarybydate",
-    "accountsummarybycalander": basepathname+"/summarybycalander"
+    "accountsummarybycalander": basepathname+"/summarybycalander",
+    "customisedebit": basepathname+"/customisedebit",
+    "customisecredit": basepathname+"/customisecredit"
 };
 
 Config.pages = pages;
@@ -32,6 +34,8 @@ Config.homeFields = [
     {"name": "summary", "toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
     {"name": "accountsummarybydate", "toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
     {"name": "accountsummarybycalander", "toUrl": pages.accountsummarybycalander, "toText": "Account Summary By Calender"},
+    {"name": "customisedebit", "toUrl": pages.customisedebit, "toText": "Customised Debit Account Summary"},
+    {"name": "customisecredit", "toUrl": pages.customisecredit, "toText": "Customised Credit Account Summary"},
     {"name": "trialbalance", "toUrl": pages.trialbalance, "toText": "Trial Balance"},
     {"name": "journal", "toUrl": pages.journal, "toText": "Journal"},
     {"name": "ledger", "toUrl": pages.ledger, "toText": "Ledger"},
@@ -45,6 +49,8 @@ Config.pageHeading = {
     "ledger": "Ledger Book",
     "currentbal": "Current Balance",
     "currentbalbydate": "Current Balance By Date",
+    "customisedebit": "Customised Debit Account Summary",
+    "customisecredit": "Customised Credit Account Summary",
     "summary": "Account Summary",
     "accountsummarybydate": "Account Summary By Date",
     "accountsummarybycalander": "Account Summary By Calender",

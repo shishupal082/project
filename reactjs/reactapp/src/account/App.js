@@ -115,6 +115,8 @@ class App extends React.Component {
             accountSummaryFields: [],
             accountSummaryByDateFields: [],
             accountSummaryByCalenderFields: [],
+            customiseDebitAccountSummary: [],
+            customiseCreditAccountSummary: [],
             noMatchFields: Config.noMatchFields
         };
         this.accountTemplateLoaded = false;
@@ -299,6 +301,22 @@ class App extends React.Component {
         accountSummaryByCalenderFields = AccountHelper.getAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection);
         return accountSummaryByCalenderFields;
     }
+    getCustomisedDebitAccountSummaryByCalenderFields() {
+        var accountData, customiseDebitAccountSummary, dataByCompany, yearlyDateSelection;
+        accountData = Data.getData("accountData", []);
+        yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
+        dataByCompany = Data.getData("dataByCompany", {});
+        customiseDebitAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection, "Dr");
+        return customiseDebitAccountSummary;
+    }
+    getCustomisedCreditAccountSummaryByCalenderFields() {
+        var accountData, customiseCreditAccountSummary, dataByCompany, yearlyDateSelection;
+        accountData = Data.getData("accountData", []);
+        yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
+        dataByCompany = Data.getData("dataByCompany", {});
+        customiseCreditAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection, "Cr");
+        return customiseCreditAccountSummary;
+    }
     dataSetComplete() {
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
         var ledgerDataFields = this.getLedgerRowData();
@@ -312,6 +330,8 @@ class App extends React.Component {
         var accountSummaryByDateFields = this.getAccountSummaryByDateFields();
 
         var accountSummaryByCalenderFields = this.getAccountSummaryByCalenderFields();
+        var customiseDebitAccountSummary = this.getCustomisedDebitAccountSummaryByCalenderFields();
+        var customiseCreditAccountSummary = this.getCustomisedCreditAccountSummaryByCalenderFields();
 
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
@@ -319,7 +339,9 @@ class App extends React.Component {
                 currentBalanceByDateFields: currentBalanceByDateFields,
                 accountSummaryFields: accountSummaryFields,
                 accountSummaryByDateFields: accountSummaryByDateFields,
-                accountSummaryByCalenderFields: accountSummaryByCalenderFields}, function() {
+                accountSummaryByCalenderFields: accountSummaryByCalenderFields,
+                customiseDebitAccountSummary: customiseDebitAccountSummary,
+                customiseCreditAccountSummary: customiseCreditAccountSummary}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -450,7 +472,10 @@ class App extends React.Component {
             currentBalanceFields: [],
             currentBalanceByDateFields: [],
             accountSummaryFields: [],
-            accountSummaryByDateFields: []
+            accountSummaryByDateFields: [],
+            accountSummaryByCalenderFields: [],
+            customiseDebitAccountSummary: [],
+            customiseCreditAccountSummary: []
         }, function() {
             Data.clearError();
             var userDataNotFound = true;
@@ -557,6 +582,12 @@ class App extends React.Component {
         const accountsummarybycalander = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.accountsummarybycalander}
                     renderFieldRow={this.state.accountSummaryByCalenderFields} currentPageName="accountsummarybycalander"/>);
 
+        const customisedebit = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.customisedebit}
+                    renderFieldRow={this.state.customiseDebitAccountSummary} currentPageName="customisedebit"/>);
+
+        const customisecredit = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.customisecredit}
+                    renderFieldRow={this.state.customiseCreditAccountSummary} currentPageName="customisecredit"/>);
+
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home} component={home}/>
@@ -577,6 +608,8 @@ class App extends React.Component {
                 <Route path={pages.accountsummarybydate} component={summaryByDate}/>
                 <Route path={pages.trialbalance} component={trial} />
                 <Route path={pages.accountsummarybycalander} component={accountsummarybycalander} />
+                <Route path={pages.customisedebit} component={customisedebit} />
+                <Route path={pages.customisecredit} component={customisecredit} />
                 <Route render={props => (
                     <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
                         renderFieldRow={this.state.noMatchFields} currentPageName="noMatch"/>

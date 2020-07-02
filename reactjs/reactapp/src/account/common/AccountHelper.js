@@ -23,7 +23,33 @@ Account.fn = Account.prototype = {
     }
 };
 $S.extendObject(Account);
-
+Account.extend({
+    getMonthTemplate: function(year) {
+        var monthlyData = [];
+        monthlyData.push({"key": "janValue", "dateRange": ["-01-01", "-01-31"]});
+        monthlyData.push({"key": "febValue", "dateRange": ["-02-01", "-02-28"]});
+        monthlyData.push({"key": "marValue", "dateRange": ["-03-01", "-03-31"]});
+        monthlyData.push({"key": "aprValue", "dateRange": ["-04-01", "-04-30"]});
+        monthlyData.push({"key": "mayValue", "dateRange": ["-05-01", "-05-31"]});
+        monthlyData.push({"key": "junValue", "dateRange": ["-06-01", "-06-30"]});
+        monthlyData.push({"key": "julValue", "dateRange": ["-07-01", "-07-31"]});
+        monthlyData.push({"key": "augValue", "dateRange": ["-08-01", "-08-31"]});
+        monthlyData.push({"key": "sepValue", "dateRange": ["-09-01", "-09-30"]});
+        monthlyData.push({"key": "octValue", "dateRange": ["-10-01", "-10-31"]});
+        monthlyData.push({"key": "novValue", "dateRange": ["-11-01", "-11-30"]});
+        monthlyData.push({"key": "decValue", "dateRange": ["-12-01", "-12-31"]});
+        for(var l=0; l<monthlyData.length; l++) {
+            if (monthlyData[l].key === "febValue") {
+                if ($S.isNumeric(year) && (year*1)%4 === 0) {
+                    monthlyData[l]["dateRange"] = ["-02-01", "-02-29"];
+                } else {
+                    monthlyData[l]["dateRange"] = ["-02-01", "-02-28"]
+                }
+            }
+        }
+        return monthlyData;
+    }
+});
 Account.extend({
     _generateLedgerBalance: function(dataByCompany) {
         var i, key, debitAmount, creditAmount, totalAmount, ledgerRowData;
@@ -1100,28 +1126,17 @@ Account.extend({
     _getAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection) {
         var fieldsData = [];
         var i, j, k, l, companyData, template1Data, template2Data, currentBalRowData;
-        var monthlyData = [];
-        var key, year;
-        monthlyData.push({"key": "janValue", "dateRange": ["-01-01", "-01-31"]});
-        monthlyData.push({"key": "febValue", "dateRange": ["-02-01", "-02-28"]});
-        monthlyData.push({"key": "marValue", "dateRange": ["-03-01", "-03-31"]});
-        monthlyData.push({"key": "aprValue", "dateRange": ["-04-01", "-04-30"]});
-        monthlyData.push({"key": "mayValue", "dateRange": ["-05-01", "-05-31"]});
-        monthlyData.push({"key": "junValue", "dateRange": ["-06-01", "-06-30"]});
-        monthlyData.push({"key": "julValue", "dateRange": ["-07-01", "-07-31"]});
-        monthlyData.push({"key": "augValue", "dateRange": ["-08-01", "-08-31"]});
-        monthlyData.push({"key": "sepValue", "dateRange": ["-09-01", "-09-30"]});
-        monthlyData.push({"key": "octValue", "dateRange": ["-10-01", "-10-31"]});
-        monthlyData.push({"key": "novValue", "dateRange": ["-11-01", "-11-30"]});
-        monthlyData.push({"key": "decValue", "dateRange": ["-12-01", "-12-31"]});
+        var key, monthlyData, year;
         var startDate, endDate, currentDate, isTemplate2DataValid, template2DataFinal;
         var endBal, sNo = 1;
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
             for (j=0; j<accountData.length; j++) {
                 year = yearlyDateSelection[i].dateHeading;
-                template1Data = {"accountDisplayName": "", "year": year, "template2Data": []};
+                monthlyData = Account.getMonthTemplate(year);
+                template1Data = {"accountDisplayName": "", "accountName": "", "year": year, "template2Data": []};
                 if ($S.isDefined(dataByCompany[accountData[j]["accountName"]])) {
                     companyData = dataByCompany[accountData[j]["accountName"]];
+                    template1Data["accountName"] = accountData[j]["accountName"];
                     template1Data["accountDisplayName"] = sNo+" "+Account._getAccountDisplayName(accountData[j]);
                     template2Data = {"janValue": {"Dr":0, "Cr": 0}, "febValue": {"Dr":0, "Cr": 0}, "marValue": {"Dr":0, "Cr": 0},
                                     "aprValue": {"Dr":0, "Cr": 0}, "mayValue": {"Dr":0, "Cr": 0}, "junValue": {"Dr":0, "Cr": 0},
@@ -1135,13 +1150,6 @@ Account.extend({
                         }
                         for(l=0; l<monthlyData.length; l++) {
                             key = monthlyData[l].key;
-                            if (key === "febValue") {
-                                if ((year*1)%4 === 0) {
-                                    monthlyData[l]["dateRange"] = ["-02-01", "-02-29"];
-                                } else {
-                                    monthlyData[l]["dateRange"] = ["-02-01", "-02-28"]
-                                }
-                            }
                             startDate = DT.getDateObj(year+monthlyData[l]["dateRange"][0]+" 00:00");
                             endDate = DT.getDateObj(year+monthlyData[l]["dateRange"][1]+" 23:59");
                             currentDate = DT.getDateObj(currentBalRowData[k].date);
@@ -1230,6 +1238,107 @@ Account.extend({
                     template2 = Data.getTemplate("accountSummaryByCalenderRow", []);
                     TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
                     template1Data.accountSummaryByCalenderRow.push(template2);
+                }
+            }
+            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            accountSummaryByCalenderFields.push(template1);
+        }
+        return accountSummaryByCalenderFields;
+    },
+    _getCustomisedAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection, customiseType) {
+        customiseType = customiseType == "Cr" ? "Cr" : "Dr";
+        var fieldsData, response = [];
+        var i, j, k, l, m;
+        var tempAccountData = [];
+        for(i=0; i<accountData.length; i++) {
+            if (accountData[i].accountName === "customised") {
+                var subAccount = accountData[i]["subAccount"];
+                if ($S.isArray(subAccount)) {
+                    for(j=0; j<accountData.length; j++) {
+                        for(k=0; k<subAccount.length; k++) {
+                            if (accountData[j].accountName === subAccount[k]) {
+                                tempAccountData.push(accountData[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
+        var template1Data, template2Data, monthlyData, count, monthKey, year;
+        for(i=yearlyDateSelection.length-1; i>=0; i--) {
+            template1Data = {"heading": (customiseType=="Dr" ?"Debit": "Credit"), "year": "", "template2Data": []};
+            template1Data.year = yearlyDateSelection[i].dateHeading;
+            monthlyData = Account.getMonthTemplate(template1Data.year);
+            for(j=0; j<tempAccountData.length; j++) {
+                for(k=0; k<fieldsData.length; k++) {
+                    if (template1Data.year === fieldsData[k].year && tempAccountData[j].accountName === fieldsData[k].accountName) {
+                        template2Data = {"accountDisplayName": "", "s.no": ""};
+                        template2Data.accountDisplayName = Account._getAccountDisplayName(tempAccountData[j]);
+                        for(l=0; l<monthlyData.length; l++) {
+                            monthKey = monthlyData[l]["key"];
+                            for(m=0; m<fieldsData[k].template2Data.length; m++) {
+                                if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
+                                    template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
+                                }
+                                monthKey = "totalValue";
+                                if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
+                                    template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
+                                }
+                            }
+                        }
+                        template1Data.template2Data.push(template2Data);
+                    }
+                }
+            }
+            response.push(template1Data);
+        }
+        var totalRowData, key;
+        for(i=0; i<response.length; i++) {
+            count = 1;
+            year = response[i].year;
+            monthlyData = $S.clone(Account.getMonthTemplate(year));
+            monthlyData.push({"key": "totalValue"});
+            totalRowData = {};
+            for(j=0; j<response[i].template2Data.length; j++) {
+                response[i].template2Data[j]["s.no"] = count++;
+                for(k=0; k<monthlyData.length; k++) {
+                    monthKey = monthlyData[k]["key"];
+                    if (response[i].template2Data[j][monthKey]) {
+                        if (totalRowData[monthKey]) {
+                            totalRowData[monthKey] += response[i].template2Data[j][monthKey];
+                        } else {
+                            totalRowData[monthKey] = response[i].template2Data[j][monthKey];
+                        }
+                    }
+                }
+            }
+            template2Data = {"accountDisplayName": {"tag":"b","className": "text-danger", "text":"Total"}, "s.no": count};
+            for(key in totalRowData) {
+                totalRowData[key] = {"tag":"b", "text":totalRowData[key]};
+            }
+            Object.assign(template2Data, totalRowData);
+            response[i].template2Data.push(template2Data);
+        }
+        return response;
+    },
+    getCustomisedAccountSummaryByCalenderFields: function(Data, accountData, dataByCompany, yearlyDateSelection, customiseType) {
+        var accountSummaryByCalenderFields = [], fieldsData;
+        fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, accountData, dataByCompany, yearlyDateSelection, customiseType);
+        var i, j, template1, template2, template1Data, template2Data;
+        for (i = 0; i < fieldsData.length; i++) {
+            template1 = Data.getTemplate("customisedAccountSummary", []);
+            template1Data = {"heading": fieldsData[i].heading,
+                            "year": fieldsData[i].year,
+                            "customisedAccountSummaryRow": []};
+            if (fieldsData[i].template2Data) {
+                template2 = Data.getTemplate("customisedAccountSummary1stRow", []);
+                template1Data.customisedAccountSummaryRow.push(template2);
+                for(j=0; j<fieldsData[i].template2Data.length; j++) {
+                    template2Data = fieldsData[i].template2Data[j];
+                    template2 = Data.getTemplate("customisedAccountSummaryRow", []);
+                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    template1Data.customisedAccountSummaryRow.push(template2);
                 }
             }
             TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
