@@ -1,4 +1,15 @@
 var Template = {
+    "noDataFound": [
+        {
+            "tag": "center.h1",
+            "text": {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "",
+                "text": "No Data found"
+            }
+        }
+    ],
     "journalByDate": [
         {
             "tag": "div.h1",

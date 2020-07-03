@@ -1245,25 +1245,11 @@ Account.extend({
         }
         return accountSummaryByCalenderFields;
     },
-    _getCustomisedAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection, customiseType) {
+    _getCustomisedAccountSummaryByCalenderData: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
         customiseType = customiseType === "Cr" ? "Cr" : "Dr";
         var fieldsData, response = [];
         var i, j, k, l, m;
-        var tempAccountData = [];
-        for(i=0; i<accountData.length; i++) {
-            if (accountData[i].accountName === "customised") {
-                var subAccount = accountData[i]["subAccount"];
-                if ($S.isArray(subAccount)) {
-                    for(j=0; j<accountData.length; j++) {
-                        for(k=0; k<subAccount.length; k++) {
-                            if (accountData[j].accountName === subAccount[k]) {
-                                tempAccountData.push(accountData[j]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        var tempAccountData = customiseAccountData;
         fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
         var template1Data, template2Data, monthlyData, count, monthKey, year;
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
@@ -1291,7 +1277,9 @@ Account.extend({
                     }
                 }
             }
-            response.push(template1Data);
+            if (template1Data.template2Data.length) {
+                response.push(template1Data);
+            }
         }
         var totalRowData, key;
         for(i=0; i<response.length; i++) {
@@ -1313,25 +1301,27 @@ Account.extend({
                     }
                 }
             }
-            template2Data = {"accountDisplayName": {"tag":"b","className": "text-danger", "text":"Total"}, "s.no": count};
-            for(key in totalRowData) {
-                totalRowData[key] = {"tag":"b", "text":totalRowData[key]};
+            if (response[i].template2Data.length) {
+                template2Data = {"accountDisplayName": {"tag":"b","className": "text-danger", "text":"Total"}, "s.no": count};
+                for(key in totalRowData) {
+                    totalRowData[key] = {"tag":"b", "text":totalRowData[key]};
+                }
+                Object.assign(template2Data, totalRowData);
+                response[i].template2Data.push(template2Data);
             }
-            Object.assign(template2Data, totalRowData);
-            response[i].template2Data.push(template2Data);
         }
         return response;
     },
-    getCustomisedAccountSummaryByCalenderFields: function(Data, accountData, dataByCompany, yearlyDateSelection, customiseType) {
+    getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
         var accountSummaryByCalenderFields = [], fieldsData;
-        fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, accountData, dataByCompany, yearlyDateSelection, customiseType);
+        fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType);
         var i, j, template1, template2, template1Data, template2Data;
         for (i = 0; i < fieldsData.length; i++) {
             template1 = Data.getTemplate("customisedAccountSummary", []);
             template1Data = {"heading": fieldsData[i].heading,
                             "year": fieldsData[i].year,
                             "customisedAccountSummaryRow": []};
-            if (fieldsData[i].template2Data) {
+            if (fieldsData[i].template2Data.length) {
                 template2 = Data.getTemplate("customisedAccountSummary1stRow", []);
                 template1Data.customisedAccountSummaryRow.push(template2);
                 for(j=0; j<fieldsData[i].template2Data.length; j++) {
@@ -1340,9 +1330,12 @@ Account.extend({
                     TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
                     template1Data.customisedAccountSummaryRow.push(template2);
                 }
+                TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+                accountSummaryByCalenderFields.push(template1);
             }
-            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
-            accountSummaryByCalenderFields.push(template1);
+        }
+        if (fieldsData.length === 0) {
+            accountSummaryByCalenderFields.push(Data.getTemplate("noDataFound", []));
         }
         return accountSummaryByCalenderFields;
     }

@@ -33,6 +33,15 @@
         "journalDataApiCSV": [
             "/app/account/static/json/ludo/csv/2020-06-03.csv",
             "/pvt/app-data/account/ludo/2020-06-03.csv"
+        ],
+        "customiseDebitAccount": [
+            "loss", "7upwin"
+        ],
+        "customiseCreditAccount": [
+            "win", "7upwin", "gift", "spin"
+        ],
+        "customiseCalenderAccount": [
+            "coin"
         ]
     },
     {

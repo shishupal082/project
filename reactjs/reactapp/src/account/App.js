@@ -29,7 +29,21 @@ var accountDataApi = [];
 var pages = Config.pages;
 var pageHeading = Config.pageHeading;
 
-function setDataApi(userData) {
+var Data = $S.getDataObj();
+
+var keys = ["userControlData", "currentUserControlData", "apiJournalData",
+            "finalJournalData", "apiJournalDataByDate",
+            "customiseDebitAccountData", "customiseCreditAccountData",
+            "customiseCalenderAccountData"];
+
+keys.push("accountTemplate");
+keys.push("accountData");
+keys.push("dataByCompany");
+keys.push("dateSelectionParameter");
+keys.push("combinedDateSelectionParameter");
+
+function setDataApi() {
+    var userData = Data.getData("currentUserControlData", {});
     accountTemplateApi = [];
     journalDataApi = [];
     journalDataApiCSV = [];
@@ -56,16 +70,6 @@ function setDataApi(userData) {
     }
 }
 
-var Data = $S.getDataObj();
-
-var keys = ["userControlData", "apiJournalData",
-            "finalJournalData", "apiJournalDataByDate"];
-keys.push("accountTemplate");
-keys.push("accountData");
-keys.push("dataByCompany");
-keys.push("dateSelectionParameter");
-keys.push("combinedDateSelectionParameter");
-
 var ErrorsData = [];
 
 Data.getTemplate = function(key, defaultTemplate) {
@@ -79,11 +83,16 @@ Data.getTemplate = function(key, defaultTemplate) {
 };
 
 Data.initData = function() {
+    var defaultData, allData = Data.getAllData();
     for (var i = 0; i < keys.length; i++) {
         if (["userControlData", "accountTemplate"].indexOf(keys[i]) >= 0) {
             continue;
         }
-        Data.setData(keys[i], []);
+        defaultData = [];
+        if ($S.isObject(allData[keys[i]])) {
+            defaultData = {};
+        }
+        Data.setData(keys[i], defaultData);
     }
 };
 
@@ -132,6 +141,7 @@ class App extends React.Component {
 
         this.companyName = Config.defaultCompanyName;
         this.currentUserName = Config.defaultUserName;
+
 
         this.dateSelection = Config.dateSelection;
 
@@ -302,19 +312,19 @@ class App extends React.Component {
         return accountSummaryByCalenderFields;
     }
     getCustomisedDebitAccountSummaryByCalenderFields() {
-        var accountData, customiseDebitAccountSummary, dataByCompany, yearlyDateSelection;
-        accountData = Data.getData("accountData", []);
+        var customisedAccountData, customiseDebitAccountSummary, dataByCompany, yearlyDateSelection;
+        customisedAccountData = Data.getData("customiseDebitAccountData", []);
         yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
         dataByCompany = Data.getData("dataByCompany", {});
-        customiseDebitAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection, "Dr");
+        customiseDebitAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, customisedAccountData, dataByCompany, yearlyDateSelection, "Dr");
         return customiseDebitAccountSummary;
     }
     getCustomisedCreditAccountSummaryByCalenderFields() {
-        var accountData, customiseCreditAccountSummary, dataByCompany, yearlyDateSelection;
-        accountData = Data.getData("accountData", []);
+        var customiseCreditAccountData, customiseCreditAccountSummary, dataByCompany, yearlyDateSelection;
+        customiseCreditAccountData = Data.getData("customiseCreditAccountData", []);
         yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
         dataByCompany = Data.getData("dataByCompany", {});
-        customiseCreditAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, accountData, dataByCompany, yearlyDateSelection, "Cr");
+        customiseCreditAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, customiseCreditAccountData, dataByCompany, yearlyDateSelection, "Cr");
         return customiseCreditAccountSummary;
     }
     dataSetComplete() {
@@ -350,7 +360,7 @@ class App extends React.Component {
         return true;
     }
     dataLoadComplete() {
-        var dataLoadStatus = [], i;
+        var dataLoadStatus = [], i, j;
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
         dataLoadStatus.push(this.journalDataCSVLoaded);
@@ -360,6 +370,35 @@ class App extends React.Component {
                 return false;
             }
         }
+        var customiseAccountData = {};
+        var keys = ["customiseDebitAccount", "customiseCreditAccount", "customiseCalenderAccount"];
+
+        var currentUserControlData = Data.getData("currentUserControlData", {});
+        var accountData = Data.getData("accountData", []);
+        var accountDataMapping = {};
+        var accountAddCount = {};
+        for(i=0; i<accountData.length; i++) {
+            accountDataMapping[accountData[i]["accountName"]] = accountData[i];
+            accountAddCount[accountData[i]["accountName"]] = 0;
+        }
+        for(i=0; i<keys.length; i++) {
+            customiseAccountData[keys[i]] = [];
+            if ($S.isArray(currentUserControlData[keys[i]])) {
+                for (j=0; j<currentUserControlData[keys[i]].length; j++) {
+                    if (accountDataMapping[currentUserControlData[keys[i]][j]]) {
+                        if (accountAddCount[currentUserControlData[keys[i]][j]] > 1) {
+                            continue;
+                        }
+                        accountAddCount[currentUserControlData[keys[i]][j]]++;
+                        customiseAccountData[keys[i]].push(accountDataMapping[currentUserControlData[keys[i]][j]]);
+                    }
+                }
+            }
+        }
+
+        Data.setData("customiseDebitAccountData", customiseAccountData["customiseDebitAccount"]);
+        Data.setData("customiseCreditAccountData", customiseAccountData["customiseCreditAccount"]);
+        Data.setData("customiseCalenderAccountData", customiseAccountData["customiseCalenderAccount"]);
 
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data, Data.getData("apiJournalData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
@@ -430,7 +469,7 @@ class App extends React.Component {
                 }
             }, function() {
                 self.journalDataLoaded = true;
-                var apiJournalData = Data.getData("apiJournalData",[]);
+                var apiJournalData = Data.getData("apiJournalData", []);
                 apiJournalData = apiJournalData.concat(journalData);
                 Data.setData("apiJournalData", apiJournalData);
                 self.dataLoadComplete();
@@ -483,10 +522,10 @@ class App extends React.Component {
             for(var i=0; i<userControlData.length; i++) {
                 if (userControlData[i].username === this.currentUserName) {
                     this.companyName = userControlData[i]["companyname"];
-                    // this.dateSelectionType = userControlData[i]["dateSelectionType"];
-                    setDataApi(userControlData[i]);
-                    userDataNotFound = false;
+                    Data.setData("currentUserControlData", userControlData[i]);
+                    setDataApi();
                     this.fetchData();
+                    userDataNotFound = false;
                     break;
                 }
             }
