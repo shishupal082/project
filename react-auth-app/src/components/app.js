@@ -90,6 +90,17 @@ export default class App extends Component {
                 />
               )}
             />
+            <Route
+              exact
+              render={props => (
+                <Home
+                  {...props}
+                  handleLogin={this.handleLogin}
+                  handleLogout={this.handleLogout}
+                  loggedInStatus="404: Page not found"
+                />
+              )}
+            />
           </Switch>
         </BrowserRouter>
       </div>
