@@ -1248,37 +1248,44 @@ Account.extend({
     _getCustomisedAccountSummaryByCalenderData: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
         customiseType = customiseType === "Cr" ? "Cr" : "Dr";
         var fieldsData, response = [];
-        var i, j, k, l, m;
-        var tempAccountData = customiseAccountData;
-        fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
+        var i, j, k, l, m, n, heading;
+        var tempAccountData = customiseAccountData.accounts;
         var template1Data, template2Data, monthlyData, count, monthKey, year;
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
-            template1Data = {"heading": (customiseType==="Dr" ?"Debit": "Credit"), "year": "", "template2Data": []};
-            template1Data.year = yearlyDateSelection[i].dateHeading;
-            monthlyData = Account.getMonthTemplate(template1Data.year);
-            for(j=0; j<tempAccountData.length; j++) {
-                for(k=0; k<fieldsData.length; k++) {
-                    if (template1Data.year === fieldsData[k].year && tempAccountData[j].accountName === fieldsData[k].accountName) {
-                        template2Data = {"accountDisplayName": "", "s.no": ""};
-                        template2Data.accountDisplayName = Account._getAccountDisplayName(tempAccountData[j]);
-                        for(l=0; l<monthlyData.length; l++) {
-                            monthKey = monthlyData[l]["key"];
-                            for(m=0; m<fieldsData[k].template2Data.length; m++) {
-                                if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
-                                    template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
-                                }
-                                monthKey = "totalValue";
-                                if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
-                                    template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
+            for(n=0; n<customiseAccountData.length; n++) {
+                tempAccountData = customiseAccountData[n].accounts;
+                heading = customiseAccountData[n].heading;
+                fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
+                if (!$S.isString(heading)) {
+                    heading = customiseType === "Dr" ? "Debit" : "Credit";
+                }
+                template1Data = {"heading": heading, "year": "", "template2Data": []};
+                template1Data.year = yearlyDateSelection[i].dateHeading;
+                monthlyData = Account.getMonthTemplate(template1Data.year);
+                for(j=0; j<tempAccountData.length; j++) {
+                    for(k=0; k<fieldsData.length; k++) {
+                        if (template1Data.year === fieldsData[k].year && tempAccountData[j].accountName === fieldsData[k].accountName) {
+                            template2Data = {"accountDisplayName": "", "s.no": ""};
+                            template2Data.accountDisplayName = Account._getAccountDisplayName(tempAccountData[j]);
+                            for(l=0; l<monthlyData.length; l++) {
+                                monthKey = monthlyData[l]["key"];
+                                for(m=0; m<fieldsData[k].template2Data.length; m++) {
+                                    if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
+                                        template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
+                                    }
+                                    monthKey = "totalValue";
+                                    if (fieldsData[k].template2Data[m][monthKey+customiseType]) {
+                                        template2Data[monthKey] = fieldsData[k].template2Data[m][monthKey+customiseType];
+                                    }
                                 }
                             }
+                            template1Data.template2Data.push(template2Data);
                         }
-                        template1Data.template2Data.push(template2Data);
                     }
                 }
-            }
-            if (template1Data.template2Data.length) {
-                response.push(template1Data);
+                if (template1Data.template2Data.length) {
+                    response.push(template1Data);
+                }
             }
         }
         var totalRowData, key;
@@ -1313,9 +1320,10 @@ Account.extend({
         return response;
     },
     getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
-        var accountSummaryByCalenderFields = [], fieldsData;
+        var accountSummaryByCalenderFields = [], fieldsData = [], fieldData;
+        var i,j;
         fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType);
-        var i, j, template1, template2, template1Data, template2Data;
+        var template1, template2, template1Data, template2Data;
         for (i = 0; i < fieldsData.length; i++) {
             template1 = Data.getTemplate("customisedAccountSummary", []);
             template1Data = {"heading": fieldsData[i].heading,

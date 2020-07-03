@@ -35,13 +35,26 @@
             "/pvt/app-data/account/ludo/2020-06-03.csv"
         ],
         "customiseDebitAccount": [
-            "loss", "7upwin"
+            {
+                "heading": "Debit Custom",
+                "accountNames": ["loss", "7upwin"]
+            },
+            {
+                "heading": "Debit Custom",
+                "accountNames": ["7upwin"]
+            }
         ],
         "customiseCreditAccount": [
-            "win", "7upwin", "gift", "spin"
+            {
+                "heading": "Credit Custom",
+                "accountNames": ["win", "7upwin", "gift", "spin"]
+            }
         ],
         "customiseCalenderAccount": [
-            "coin"
+            {
+                "heading": "Custom Calender Data",
+                "accountNames": ["coin"]
+            }
         ]
     },
     {

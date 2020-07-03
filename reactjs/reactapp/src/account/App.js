@@ -360,7 +360,7 @@ class App extends React.Component {
         return true;
     }
     dataLoadComplete() {
-        var dataLoadStatus = [], i, j;
+        var dataLoadStatus = [], i, j, k;
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
         dataLoadStatus.push(this.journalDataCSVLoaded);
@@ -376,21 +376,33 @@ class App extends React.Component {
         var currentUserControlData = Data.getData("currentUserControlData", {});
         var accountData = Data.getData("accountData", []);
         var accountDataMapping = {};
-        var accountAddCount = {};
+        var accountAddCount = {}, tempAccountAddCount, accountName;
         for(i=0; i<accountData.length; i++) {
             accountDataMapping[accountData[i]["accountName"]] = accountData[i];
             accountAddCount[accountData[i]["accountName"]] = 0;
         }
+        var tempData, customData;
         for(i=0; i<keys.length; i++) {
             customiseAccountData[keys[i]] = [];
             if ($S.isArray(currentUserControlData[keys[i]])) {
                 for (j=0; j<currentUserControlData[keys[i]].length; j++) {
-                    if (accountDataMapping[currentUserControlData[keys[i]][j]]) {
-                        if (accountAddCount[currentUserControlData[keys[i]][j]] > 1) {
-                            continue;
+                    customData = currentUserControlData[keys[i]][j];
+                    tempData = {"heading": customData.heading, "accounts": []};
+                    if ($S.isArray(customData.accountNames)) {
+                        tempAccountAddCount = $S.clone(accountAddCount);
+                        for(k=0; k<customData.accountNames.length; k++) {
+                            accountName = customData.accountNames[k];
+                            if (accountDataMapping[accountName]) {
+                                if (tempAccountAddCount[accountName] >= 1) {
+                                    continue;
+                                }
+                                tempAccountAddCount[accountName]++;
+                                tempData.accounts.push(accountDataMapping[accountName]);
+                            }
                         }
-                        accountAddCount[currentUserControlData[keys[i]][j]]++;
-                        customiseAccountData[keys[i]].push(accountDataMapping[currentUserControlData[keys[i]][j]]);
+                    }
+                    if (tempData.accounts.length) {
+                        customiseAccountData[keys[i]].push(tempData);
                     }
                 }
             }
