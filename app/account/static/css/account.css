@@ -1,6 +1,9 @@
 body.theme-green {
-	background-color: #8ab794;
-	color: #eee;
+    background-color: #8ab794;
+    color: #eee;
+}
+body.theme-grey {
+    background-color: #eee;
 }
 .back-img{
     height: 20px;
