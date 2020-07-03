@@ -1320,7 +1320,7 @@ Account.extend({
         return response;
     },
     getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
-        var accountSummaryByCalenderFields = [], fieldsData = [], fieldData;
+        var accountSummaryByCalenderFields = [], fieldsData = [];
         var i,j;
         fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType);
         var template1, template2, template1Data, template2Data;
