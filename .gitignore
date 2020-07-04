@@ -31,6 +31,24 @@ pdf-app/
 web-app/
 
 java/step1/.idea/
+java/step1/out/
+java/step1/step1 (1).iml
+java/step1/step1 (2).iml
+
+
+java/step2/.idea/
+java/step2/step2.iml
+
+
+java/step5/.idea/
+java/step5/out/
+java/step5/step5.iml
+
+
+java/step5/.idea/
+java/step5/out/
+java/step5/step5.iml
+
 
 java/todo/.idea/
 java/todo/src/main/main.iml

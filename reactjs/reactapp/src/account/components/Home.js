@@ -11,7 +11,7 @@ class Home extends React.Component {
         };
     }
     componentDidMount() {
-        // this.fetchData();
+        this.props.methods.trackPage(this.props.currentPageName);
     }
     render() {
         var availableLinks = this.props.renderFieldRow.map(function(el, i, arr) {

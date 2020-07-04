@@ -12,11 +12,12 @@ class NotUsedTrialBalance extends React.Component {
         };
     }
     componentDidMount() {
+        this.props.methods.trackPage(this.props.currentPageName);
     }
     render() {
         var trialBalanceTr = Api.generateFields(this.props, this.props.state.trialBalanceFields);
         return (<div className="container">
-                    <Header data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
+                    <Header state={this.props.state} data={this.props.data} heading={this.props.heading} methods={this.props.methods}/>
                     <Errors data={this.props.data}/>
                     <table className="table table-bordered table-striped"><tbody>{trialBalanceTr}</tbody></table>
             </div>);

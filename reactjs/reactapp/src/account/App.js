@@ -126,7 +126,8 @@ class App extends React.Component {
             accountSummaryByCalenderFields: [],
             customiseDebitAccountSummary: [],
             customiseCreditAccountSummary: [],
-            noMatchFields: Config.noMatchFields
+            noMatchFields: Data.getTemplate("noPageFound"),
+            pageTracking: []
         };
         this.accountTemplateLoaded = false;
         this.journalDataLoaded = false;
@@ -150,6 +151,21 @@ class App extends React.Component {
         this.validDateSelectionType = this.dateSelection.map(function(el, i, isArray) {
             return el.value;
         });
+
+        this.trackPage = this.trackPage.bind(this);
+        this.trackPageInfo = {};
+    }
+    trackPage(pageName) {
+        var pageTracking = this.state.pageTracking;
+        if ($S.isNumber(this.trackPageInfo[pageName])) {
+            this.trackPageInfo[pageName]++;
+        } else {
+            this.trackPageInfo[pageName] = 1;
+        }
+        if (pageTracking.indexOf(pageName) < 0) {
+            pageTracking.push(pageName);
+            this.setState({pageTracking: pageTracking});
+        }
     }
     setDateSelectionParameter() {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
@@ -400,6 +416,13 @@ class App extends React.Component {
                                 tempData.accounts.push(accountDataMapping[accountName]);
                             }
                         }
+                    } else if ($S.isArray(customData.accountNamesExcept)) {
+                        for(k=0; k<accountData.length; k++) {
+                            accountName = accountData[k].accountName;
+                            if (customData.accountNamesExcept.indexOf(accountName) < 0) {
+                                tempData.accounts.push(accountData[k]);
+                            }
+                        }
                     }
                     if (tempData.accounts.length) {
                         customiseAccountData[keys[i]].push(tempData);
@@ -510,7 +533,7 @@ class App extends React.Component {
             self.journalDataCSVLoaded = true;
         }
     }
-    userChange(currentUserName) {
+    userChange(currentUserName, disableFlushError) {
         Data.initData();
         this.currentUserName = currentUserName;
         /*Reseting all values */
@@ -528,7 +551,9 @@ class App extends React.Component {
             customiseDebitAccountSummary: [],
             customiseCreditAccountSummary: []
         }, function() {
-            Data.clearError();
+            if (!$S.isBooleanTrue(disableFlushError)) {
+                Data.clearError();
+            }
             var userDataNotFound = true;
             var userControlData = Data.getData("userControlData", []);
             for(var i=0; i<userControlData.length; i++) {
@@ -593,21 +618,23 @@ class App extends React.Component {
                 Data.addError({"text":ajaxDetails.url, "href":ajaxDetails.url});
                 $S.log("Invalid response (userControlDataApi):" + response);
             }
-            self.userChange(self.currentUserName);
+            self.userChange(self.currentUserName, true);
         }, null, null, Api.getAjaxApiCallMethod());
     }
     render() {
-        var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange};
+        var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange,
+                        trackPage: this.trackPage};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
                         userControlData: Data.getData("userControlData", []),
                         currentUserName: this.currentUserName,
-                        dateSelection: [], dateSelectionType: "", errorsData: ErrorsData};
+                        dateSelection: [], dateSelectionType: "", errorsData: ErrorsData,
+                        trackPageInfo: this.trackPageInfo};
 
         var currentbalvalByDate = $S.clone(commonData);
         currentbalvalByDate["dateSelection"] = this.dateSelection;
         currentbalvalByDate["dateSelectionType"] = this.dateSelectionType;
 
-        const home = (props) => (<Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields}/>);
+        const home = (props) => (<Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields} currentPageName="home"/>);
 
         const trial = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
                             renderFieldRow={this.state.trialBalanceFields} currentPageName="trialbalance"/>);

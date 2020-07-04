@@ -70,16 +70,6 @@ Config.defaultDateSelectionType = "all";
 Config.defaultCompanyName = "Loading...";
 Config.defaultUserName = "";
 
-Config.noMatchFields = [{
-    "tag": "center.h1",
-    "text": {
-        "tag": "span",
-        "className": "badge badge-primary",
-        "name": "date",
-        "text": "Page not found"
-    }
-}]
-
 /*Update from global variable */
 
 var key;

@@ -1448,6 +1448,9 @@ Stack.extend({
     isBooleanTrue: function(value) {
         return isBoolean(value) && value === true;
     },
+    isBooleanFalse: function(value) {
+        return isBoolean(value) && value === false;
+    },
     addElAt: function(arr, index, el) {
         return addElAt(arr, index, el);
     },

@@ -11,13 +11,14 @@ class LedgerBook extends React.Component {
         };
     }
     componentDidMount() {
+        this.props.methods.trackPage(this.props.currentPageName);
     }
     render() {
         var LedgerBookByCompany = this.props.renderFieldRow.map(function(el, i, arr) {
             return <LedgerBookRow key={i} accountName={el.accountName} accountDisplayName={el.accountDisplayName} fields={el.fields}/>;
         });
         return (<div className="container">
-                    <Header data={this.props.data} history={this.props.history}
+                    <Header state={this.props.state} data={this.props.data} history={this.props.history}
                             heading={this.props.heading} methods={this.props.methods}
                             currentPageName={this.props.currentPageName}
                     />

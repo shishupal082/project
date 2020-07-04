@@ -1,4 +1,13 @@
 var Template = {
+    "noPageFound": [{
+        "tag": "center.h1",
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "name": "date",
+            "text": "Page not found"
+        }
+    }],
     "noDataFound": [
         {
             "tag": "center.h1",
