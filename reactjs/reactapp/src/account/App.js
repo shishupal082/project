@@ -153,6 +153,7 @@ class App extends React.Component {
         });
 
         this.trackPage = this.trackPage.bind(this);
+        this.removeTrackPage = this.removeTrackPage.bind(this);
         this.trackPageInfo = {};
     }
     trackPage(pageName) {
@@ -166,6 +167,15 @@ class App extends React.Component {
             pageTracking.push(pageName);
             this.setState({pageTracking: pageTracking});
         }
+    }
+    removeTrackPage(pageName) {
+        var pageTracking = this.state.pageTracking.filter(function(el, i, arr) {
+            if (pageName === el) {
+                return false;
+            }
+            return true;
+        });
+        this.setState({pageTracking: pageTracking});
     }
     setDateSelectionParameter() {
         var dateSelection = [], finalJournalData, i, j, allDate = [], temp, dObj;
@@ -623,12 +633,11 @@ class App extends React.Component {
     }
     render() {
         var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange,
-                        trackPage: this.trackPage};
+                        trackPage: this.trackPage, removeTrackPage: this.removeTrackPage};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
                         userControlData: Data.getData("userControlData", []),
                         currentUserName: this.currentUserName,
-                        dateSelection: [], dateSelectionType: "", errorsData: ErrorsData,
-                        trackPageInfo: this.trackPageInfo};
+                        dateSelection: [], dateSelectionType: "", errorsData: ErrorsData};
 
         var currentbalvalByDate = $S.clone(commonData);
         currentbalvalByDate["dateSelection"] = this.dateSelection;

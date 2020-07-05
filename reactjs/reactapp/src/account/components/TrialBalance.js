@@ -12,7 +12,6 @@ class NotUsedTrialBalance extends React.Component {
         };
     }
     componentDidMount() {
-        this.props.methods.trackPage(this.props.currentPageName);
     }
     render() {
         var trialBalanceTr = Api.generateFields(this.props, this.props.state.trialBalanceFields);

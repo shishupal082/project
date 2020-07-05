@@ -10,22 +10,20 @@ class SelectUser extends React.Component {
         this.state = {
             isLoaded: false
         };
-        this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
+        this.onUserChange = this.onUserChange.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
     }
     componentDidMount() {
     }
-    onChange(e) {
+    onUserChange(e) {
         this.props.methods.userChange(e.target.value);
     }
     onPageChange(e) {
         var pageName = e.target.value;
         var pages = Config.pages;
-        var pageUrl = "";
         if ($S.isString(pages[pageName])) {
-            pageUrl = pages[pageName];
-            this.props.history.push(pageUrl);
+            this.props.history.push(pages[pageName]);
         }
     }
     onClick(e) {
@@ -58,7 +56,7 @@ class SelectUser extends React.Component {
             seleUserOptionsDropDown = <td><div className="form-group row m-0">
                     <label className="col-sm-4 col-form-label">Select user</label>
                     <div className="col-sm-8">
-                        <select className="form-control" onChange={this.onChange} value={this.props.data.currentUserName}>
+                        <select className="form-control" onChange={this.onUserChange} value={this.props.data.currentUserName}>
                             {selectOptions}
                         </select>
                     </div>

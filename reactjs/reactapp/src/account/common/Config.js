@@ -43,6 +43,7 @@ Config.homeFields = [
 ];
 
 Config.pageHeading = {
+    "home": "Home",
     "trialbalance": "Trial Balance",
     "journal": "Journal",
     "journalbydate": "Journal By Date",
