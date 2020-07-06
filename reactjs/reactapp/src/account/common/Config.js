@@ -23,7 +23,8 @@ var pages = {
     "accountsummarybydate": basepathname+"/summarybydate",
     "accountsummarybycalander": basepathname+"/summarybycalander",
     "customisedebit": basepathname+"/customisedebit",
-    "customisecredit": basepathname+"/customisecredit"
+    "customisecredit": basepathname+"/customisecredit",
+    "custompage": basepathname+"/custompage"
 };
 
 Config.pages = pages;
@@ -31,9 +32,10 @@ Config.pages = pages;
 Config.homeFields = [
     {"name": "journalbydate", "toUrl": pages.journalbydate, "toText": "Journal By Date"},
     {"name": "currentbalbydate", "toUrl": pages.currentbalbydate, "toText": "Current Balance By Date"},
+    {"name": "custompage", "toUrl": pages.custompage, "toText": "Customise Account Summary"},
+    {"name": "accountsummarybycalander", "toUrl": pages.accountsummarybycalander, "toText": "Account Summary By Calender"},
     {"name": "summary", "toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
     {"name": "accountsummarybydate", "toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
-    {"name": "accountsummarybycalander", "toUrl": pages.accountsummarybycalander, "toText": "Account Summary By Calender"},
     {"name": "customisedebit", "toUrl": pages.customisedebit, "toText": "Customised Debit Account Summary"},
     {"name": "customisecredit", "toUrl": pages.customisecredit, "toText": "Customised Credit Account Summary"},
     {"name": "trialbalance", "toUrl": pages.trialbalance, "toText": "Trial Balance"},
@@ -41,6 +43,11 @@ Config.homeFields = [
     {"name": "ledger", "toUrl": pages.ledger, "toText": "Ledger"},
     {"name": "currentbal", "toUrl": pages.currentbal, "toText": "Current Balance"}
 ];
+
+Config.homeFields = Config.homeFields.map(function(el, i, arr) {
+    el["s.no"] = i;
+    return el;
+});
 
 Config.pageHeading = {
     "home": "Home",
@@ -52,6 +59,7 @@ Config.pageHeading = {
     "currentbalbydate": "Current Balance By Date",
     "customisedebit": "Customised Debit Account Summary",
     "customisecredit": "Customised Credit Account Summary",
+    "custompage": "Customised Account Summary",
     "summary": "Account Summary",
     "accountsummarybydate": "Account Summary By Date",
     "accountsummarybycalander": "Account Summary By Calender",
@@ -118,4 +126,33 @@ Config.homeFields = Config.homeFields.filter(function(el, i, arr) {
     return true;
 });
 
+Config.updateHomeFieldsSequence = function(sequence) {
+    var i, sNo, lastSNo;
+    var tempHomeFields = $S.clone(Config.homeFields);
+    var modifiedHomeFields = [];
+    if ($S.isArray(sequence)) {
+        lastSNo = sequence.length;
+        for(i=0; i<tempHomeFields.length; i++) {
+            sNo = sequence.indexOf(tempHomeFields[i]["name"]);
+            if (sNo >= 0) {
+                tempHomeFields[i]["s.no"] = sNo;
+            } else {
+                tempHomeFields[i]["s.no"] = lastSNo++;
+            }
+        }
+    }
+    var BST = $S.getBST(), node;
+    for(i=0; i<tempHomeFields.length; i++) {
+        node = BST.insertData(BST, tempHomeFields[i]["s.no"]);
+        node.item = tempHomeFields[i];
+    }
+    var inOrderResult = BST.getInOrder(BST);
+    for(i=0; i<inOrderResult.length; i++) {
+        inOrderResult[i].item["s.no"] = i;
+        modifiedHomeFields.push(inOrderResult[i].item);
+    }
+    Config.homeFields = modifiedHomeFields;
+    return modifiedHomeFields;
+};
+Config.updateHomeFieldsSequence($$$.homeFieldsSequence);
 export default Config;

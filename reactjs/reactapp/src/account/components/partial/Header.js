@@ -53,7 +53,7 @@ class Header extends React.Component {
                 closeLink = null;
                 navLinkClass += " current-page";
             }
-            return <li key={i} className="nav-item"><a className={navLinkClass}><span value={el} onClick={self.OpenTab}>{tabDisplayText}</span>{closeLink}</a></li>;
+            return <li key={i} className="nav-item"><button className={navLinkClass}><span value={el} onClick={self.OpenTab}>{tabDisplayText}</span>{closeLink}</button></li>;
         });
         if (pageTab.length) {
             pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;

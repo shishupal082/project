@@ -1,5 +1,71 @@
 [
     {
+        "username": "trading",
+        "companyname": "Accountal Trading",
+        "displayName": "Trading",
+        "dateSelectionType": "monthly",
+        "accountDataApi": ["/web-app/Account/web-app/static/json/trading/accounts.json"],
+        "journalDataApiCSV": [
+            "/web-app/Account/web-app/static/json/trading/data-2020.csv"
+        ],
+        "customiseDebitAccount": [
+            {
+                "heading": "Expense",
+                "accountNames": ["purchase", "transport", "staff-expense"]
+            },
+            {
+                "heading": "Expense",
+                "accountNames": ["misc", "staff-salary"]
+            },
+            {
+                "heading": "Debit (other)",
+                "accountNamesExcept": ["purchase", "transport", "misc", "staff-salary", "staff-expense"]
+            }
+        ],
+        "customiseCreditAccount": [
+            {
+                "heading": "Income",
+                "accountNames": ["sales"]
+            },
+            {
+                "heading": "Credit (Other)",
+                "accountNamesExcept": ["sales"]
+            }
+        ],
+        "customiseCalenderAccount": [
+            {
+                "heading": "Custom Calender Data",
+                "accountNames": ["bank", "salary"]
+            }
+        ],
+        "customeAccount": [
+            {
+                "customiseDebitAccount": [
+                    {
+                        "heading": "Purchase expense Debit",
+                        "accountNames": ["purchase", "transport", "staff-expense"]
+                    },
+                    {
+                        "heading": "Other expense Debit",
+                        "accountNames": ["misc", "staff-salary"]
+                    }
+                ],
+                "customiseCreditAccount": [
+                    {
+                        "heading": "Sales earning Credit",
+                        "accountNames": ["sales"]
+                    }
+                ],
+                "customiseCalenderAccount": [
+                    {
+                        "heading": "Calender data",
+                        "accountNames": ["bank", "cash"]
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "username": "test",
         "companyname": "Test company",
         "displayName": "Test",

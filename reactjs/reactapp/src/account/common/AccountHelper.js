@@ -1248,8 +1248,7 @@ Account.extend({
     _getCustomisedAccountSummaryByCalenderData: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
         customiseType = customiseType === "Cr" ? "Cr" : "Dr";
         var fieldsData, response = [];
-        var i, j, k, l, m, n, heading;
-        var tempAccountData = customiseAccountData.accounts;
+        var i, j, k, l, m, n, heading, tempAccountData;
         var template1Data, template2Data, monthlyData, count, monthKey, year;
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
             for(n=0; n<customiseAccountData.length; n++) {
@@ -1319,7 +1318,7 @@ Account.extend({
         }
         return response;
     },
-    getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
+    getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType, ignoreIfDataNotFound) {
         var accountSummaryByCalenderFields = [], fieldsData = [];
         var i,j;
         fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType);
@@ -1342,10 +1341,53 @@ Account.extend({
                 accountSummaryByCalenderFields.push(template1);
             }
         }
-        if (fieldsData.length === 0) {
+        if (fieldsData.length === 0 && !$S.isBooleanTrue(ignoreIfDataNotFound)) {
             accountSummaryByCalenderFields.push(Data.getTemplate("noDataFound", []));
         }
         return accountSummaryByCalenderFields;
+    }
+});
+// getCustomiseAccountSummaryFields
+Account.extend({
+    _getCustomisedAccountSummaryByCalenderFields2: function(Data, customeAccountData, dataByCompany, customYearlyDateSelection) {
+        var response = [], tempResponse;
+        for(var i=0; i<customeAccountData.length; i++) {
+            tempResponse = Account.getAccountSummaryByCalenderFields(Data, customeAccountData[i].accounts, dataByCompany, customYearlyDateSelection);
+            // tempResponse = Account.getCustomisedAccountSummaryByCalenderFields2();
+            response.push(tempResponse);
+        }
+        return response;
+    },
+    getCustomiseAccountSummaryFields: function(Data, customeAccountData, dataByCompany, yearlyDateSelection) {
+        var customiseAccountSummaryFields = [];
+        var keys = ["customiseDebitAccount", "customiseCreditAccount", "customiseCalenderAccount"];
+        var key, tempYearlyDateSelection, i, j, k, tempResponse;
+        for(k=yearlyDateSelection.length-1; k>=0; k--) {
+            tempYearlyDateSelection = [yearlyDateSelection[k]];
+            for(i=0; i<customeAccountData.length; i++) {
+                for(j=0; j<keys.length; j++) {
+                    key = keys[j];
+                    if (customeAccountData[i][key]) {
+                        if (key === "customiseDebitAccount") {
+                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection, "Dr", true);
+                            customiseAccountSummaryFields.push(tempResponse);
+                        }
+                        if (key === "customiseCreditAccount") {
+                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection, "Cr", true);
+                            customiseAccountSummaryFields.push(tempResponse);
+                        }
+                        if (key === "customiseCalenderAccount") {
+                            tempResponse = Account._getCustomisedAccountSummaryByCalenderFields2(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection);
+                            customiseAccountSummaryFields.push(tempResponse);
+                        }
+                    }
+                }
+            }
+        }
+        if (customiseAccountSummaryFields.length === 0) {
+            customiseAccountSummaryFields.push(Data.getTemplate("noDataFound", []));
+        }
+        return customiseAccountSummaryFields;
     }
 });
 AccountHelper = Account;

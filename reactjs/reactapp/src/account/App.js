@@ -6,6 +6,7 @@ import JournalByDate from "./components/JournalByDate";
 import LedgerBook from "./components/LedgerBook";
 
 import AccountHelper from "./common/AccountHelper";
+import AccountHelper2 from "./common/AccountHelper2";
 import Config from "./common/Config";
 
 import $S from "../interface/stack.js";
@@ -33,7 +34,7 @@ var Data = $S.getDataObj();
 
 var keys = ["userControlData", "currentUserControlData", "apiJournalData",
             "finalJournalData", "apiJournalDataByDate",
-            "customiseDebitAccountData", "customiseCreditAccountData",
+            "customiseDebitAccountData", "customiseCreditAccountData", "customeAccountData",
             "customiseCalenderAccountData"];
 
 keys.push("accountTemplate");
@@ -126,6 +127,7 @@ class App extends React.Component {
             accountSummaryByCalenderFields: [],
             customiseDebitAccountSummary: [],
             customiseCreditAccountSummary: [],
+            customiseAccountSummary: [],
             noMatchFields: Data.getTemplate("noPageFound"),
             pageTracking: []
         };
@@ -353,6 +355,14 @@ class App extends React.Component {
         customiseCreditAccountSummary = AccountHelper.getCustomisedAccountSummaryByCalenderFields(Data, customiseCreditAccountData, dataByCompany, yearlyDateSelection, "Cr");
         return customiseCreditAccountSummary;
     }
+    getCustomiseAccountSummaryFields() {
+        var customeAccountData, customiseAccountSummary, dataByCompany, yearlyDateSelection;
+        customeAccountData = Data.getData("customeAccountData", []);
+        yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
+        dataByCompany = Data.getData("dataByCompany", {});
+        customiseAccountSummary = AccountHelper.getCustomiseAccountSummaryFields(Data, customeAccountData, dataByCompany, yearlyDateSelection);
+        return customiseAccountSummary;
+    }
     dataSetComplete() {
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
         var ledgerDataFields = this.getLedgerRowData();
@@ -368,7 +378,7 @@ class App extends React.Component {
         var accountSummaryByCalenderFields = this.getAccountSummaryByCalenderFields();
         var customiseDebitAccountSummary = this.getCustomisedDebitAccountSummaryByCalenderFields();
         var customiseCreditAccountSummary = this.getCustomisedCreditAccountSummaryByCalenderFields();
-
+        var customiseAccountSummary = this.getCustomiseAccountSummaryFields();
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
                 journalDataByDateFields: journalDataByDateFields,
@@ -377,7 +387,8 @@ class App extends React.Component {
                 accountSummaryByDateFields: accountSummaryByDateFields,
                 accountSummaryByCalenderFields: accountSummaryByCalenderFields,
                 customiseDebitAccountSummary: customiseDebitAccountSummary,
-                customiseCreditAccountSummary: customiseCreditAccountSummary}, function() {
+                customiseCreditAccountSummary: customiseCreditAccountSummary,
+                customiseAccountSummary: customiseAccountSummary}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -386,64 +397,31 @@ class App extends React.Component {
         return true;
     }
     dataLoadComplete() {
-        var dataLoadStatus = [], i, j, k;
+        var dataLoadStatus = [];
         dataLoadStatus.push(this.accountTemplateLoaded);
         dataLoadStatus.push(this.journalDataLoaded);
         dataLoadStatus.push(this.journalDataCSVLoaded);
         dataLoadStatus.push(this.accountDataLoaded);
+        var i;
         for (i = 0; i < dataLoadStatus.length; i++) {
             if (dataLoadStatus[i] === false) {
                 return false;
             }
         }
         var customiseAccountData = {};
-        var keys = ["customiseDebitAccount", "customiseCreditAccount", "customiseCalenderAccount"];
 
         var currentUserControlData = Data.getData("currentUserControlData", {});
         var accountData = Data.getData("accountData", []);
-        var accountDataMapping = {};
-        var accountAddCount = {}, tempAccountAddCount, accountName;
-        for(i=0; i<accountData.length; i++) {
-            accountDataMapping[accountData[i]["accountName"]] = accountData[i];
-            accountAddCount[accountData[i]["accountName"]] = 0;
-        }
-        var tempData, customData;
-        for(i=0; i<keys.length; i++) {
-            customiseAccountData[keys[i]] = [];
-            if ($S.isArray(currentUserControlData[keys[i]])) {
-                for (j=0; j<currentUserControlData[keys[i]].length; j++) {
-                    customData = currentUserControlData[keys[i]][j];
-                    tempData = {"heading": customData.heading, "accounts": []};
-                    if ($S.isArray(customData.accountNames)) {
-                        tempAccountAddCount = $S.clone(accountAddCount);
-                        for(k=0; k<customData.accountNames.length; k++) {
-                            accountName = customData.accountNames[k];
-                            if (accountDataMapping[accountName]) {
-                                if (tempAccountAddCount[accountName] >= 1) {
-                                    continue;
-                                }
-                                tempAccountAddCount[accountName]++;
-                                tempData.accounts.push(accountDataMapping[accountName]);
-                            }
-                        }
-                    } else if ($S.isArray(customData.accountNamesExcept)) {
-                        for(k=0; k<accountData.length; k++) {
-                            accountName = accountData[k].accountName;
-                            if (customData.accountNamesExcept.indexOf(accountName) < 0) {
-                                tempData.accounts.push(accountData[k]);
-                            }
-                        }
-                    }
-                    if (tempData.accounts.length) {
-                        customiseAccountData[keys[i]].push(tempData);
-                    }
-                }
-            }
-        }
+
+        customiseAccountData["customiseDebitAccount"] = AccountHelper2.getCustomAccountsData(currentUserControlData, accountData, "customiseDebitAccount");
+        customiseAccountData["customiseCreditAccount"] = AccountHelper2.getCustomAccountsData(currentUserControlData, accountData, "customiseCreditAccount");
+        customiseAccountData["customiseCalenderAccount"] = AccountHelper2.getCustomAccountsData(currentUserControlData, accountData, "customiseCalenderAccount");
+        customiseAccountData["customeAccountData"] = AccountHelper2.getCustomAccountsData(currentUserControlData, accountData, "customeAccount");
 
         Data.setData("customiseDebitAccountData", customiseAccountData["customiseDebitAccount"]);
         Data.setData("customiseCreditAccountData", customiseAccountData["customiseCreditAccount"]);
         Data.setData("customiseCalenderAccountData", customiseAccountData["customiseCalenderAccount"]);
+        Data.setData("customeAccountData", customiseAccountData["customeAccountData"])
 
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(Data, Data.getData("apiJournalData",[]));
         Data.setData("apiJournalDataByDate", apiJournalDataByDate);
@@ -559,7 +537,8 @@ class App extends React.Component {
             accountSummaryByDateFields: [],
             accountSummaryByCalenderFields: [],
             customiseDebitAccountSummary: [],
-            customiseCreditAccountSummary: []
+            customiseCreditAccountSummary: [],
+            customiseAccountSummary: []
         }, function() {
             if (!$S.isBooleanTrue(disableFlushError)) {
                 Data.clearError();
@@ -675,6 +654,9 @@ class App extends React.Component {
         const customisecredit = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.customisecredit}
                     renderFieldRow={this.state.customiseCreditAccountSummary} currentPageName="customisecredit"/>);
 
+        const custompage = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.custompage}
+                    renderFieldRow={this.state.customiseAccountSummary} currentPageName="custompage"/>);
+
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home} component={home}/>
@@ -697,6 +679,7 @@ class App extends React.Component {
                 <Route path={pages.accountsummarybycalander} component={accountsummarybycalander} />
                 <Route path={pages.customisedebit} component={customisedebit} />
                 <Route path={pages.customisecredit} component={customisecredit} />
+                <Route path={pages.custompage} component={custompage} />
                 <Route render={props => (
                     <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
                         renderFieldRow={this.state.noMatchFields} currentPageName="noMatch"/>
