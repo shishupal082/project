@@ -3,65 +3,11 @@
         "accountName": "coin"
     },
     {
-        "accountName": "cash"
-    },
-    {
-        "accountName": "owner"
-    },
-    {
-        "accountName": "bank"
-    },
-    {
-        "accountName": "furniture"
-    },
-    {
-        "accountName": "plant"
-    },
-    {
-        "accountName": "ramjilal"
-    },
-    {
-        "accountName": "ravi"
-    },
-    {
-        "accountName": "samson"
-    },
-    {
-        "accountName": "sunil"
-    },
-    {
-        "accountName": "thomas"
-    },
-    {
         "accountName": "purchase"
-    },
-    {
-        "accountName": "sumittrader"
-    },
-    {
-        "accountName": "rajinienterprises"
-    },
-    {
-        "accountName": "sales"
-    },
-    {
-        "accountName": "rent"
-    },
-    {
-        "accountName": "salary"
-    },
-    {
-        "accountName": "machine"
-    },
-    {
-        "accountName": "bankloan"
     },
     {
         "accountName": "capital",
         "accountDisplayName": "Capital Account"
-    },
-    {
-        "accountName": "discountreceived"
     },
     {
         "accountName": "7upwin"
@@ -73,7 +19,7 @@
         "accountName": "pwin"
     },
     {
-        "accountName": "ploss"
+        "accountName": "ploan"
     },
     {
         "accountName": "win"
@@ -89,15 +35,6 @@
     },
     {
         "accountName": "bonus"
-    },
-    {
-        "accountName": "sundry"
-    },
-    {
-        "accountName": "building"
-    },
-    {
-        "accountName": "repair"
     },
     {
         "accountName": "unknown"

@@ -115,7 +115,6 @@
 2020-06-08,To Coin A/C,dr,1100,coin,Gift a/c(200+250+300+350),cr,1100,gift
 2020-06-08,To Coin A/C,dr,45000,coin,Win a/c,cr,45000,win
 2020-06-08,To Coin A/C,dr,45000,coin,Win a/c,cr,45000,win
-2020-06-08,To Coin A/C,cr,50000,coin,Priyanka Loss a/c,dr,50000,ploss
 2020-06-08,To Coin A/C,cr,10000,coin,Loss a/c,dr,10000,loss
 2020-06-08,To Coin A/C,cr,50000,coin,Loss a/c,dr,50000,loss
 2020-06-08,To Coin A/C,cr,50000,coin,Loss a/c,dr,50000,loss
@@ -149,7 +148,6 @@
 2020-06-06,To Coin A/C,dr,900,coin,Win a/c,cr,900,win
 2020-06-06,To Coin A/C,cr,5000,coin,Loss a/c,dr,5000,loss
 2020-06-06,To Coin A/C,dr,500,coin,Computer win,cr,500,computerwin
-2020-06-06,To Coin A/C,dr,1000,coin,Win from Priyanka a/c,cr,1000,pwin
 2020-06-06,To Coin A/C,dr,150,coin,Spin,cr,150,spin
 2020-06-06,To Coin A/C,dr,1100,coin,Gift a/c(200+250+300+350),cr,1100,gift
 2020-06-06,To Coin A/C,cr,1000,coin,Loss a/c,dr,1000,loss
@@ -187,7 +185,6 @@
 2020-06-05,To Coin A/C,dr,1100,coin,Gift a/c(200+250+300+350),cr,1100,gift
 2020-06-05,To Coin A/C,dr,900,coin,Win a/c,cr,900,win
 2020-06-05,To Coin A/C,dr,900,coin,Win a/c,cr,900,win
-2020-06-05,To Coin A/C,cr,1000,coin,Loss to Priyanka a/c,dr,1000,ploss
 2020-06-05,To Coin A/C,dr,1100,coin,Gift a/c(200+250+300+350),cr,1100,gift
 
 

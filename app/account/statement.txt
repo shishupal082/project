@@ -1,0 +1,120 @@
+1) Purchase 10T wheat of Rs 200000 from Mr-A
+2) Sold it at 250000 to MS-X
+3) Transportation cost 25k(from bank) + 2k (cash) driver cost
+4) Money paid to Mr-A from bank
+5) money received from MS-X in bank
+6) Transportation cost paid 25k from bank and 2k from cash
+7) Personal transportation cost 1k as miscllaneous cash
+
+1)
+Wheat purchase, A(+), Dr
+Mr-A(Cr) Libilities(+), Cr
+
+2)
+Wheat sales(Cr) Assets(-), MS-X(Dr) Libiliites(-)
+Sales, A(-), Cr
+MS-X, L(-), Dr
+
+3, 6)
+Transportation, N, Expense, Dr
+Bank, A(-), Cr
+Cash, A(-), Cr
+
+4) Money paid to Mr-A from bank
+Mr-A, L(-), Dr
+Bank, A(-), Cr
+
+5)
+If considering as loan
+
+Bank, A(+), Dr
+MS-X, L(+), Cr
+
+If considering as payment
+Bank, A(+), Dr
+MS-X, N, Income, Cr
+
+7)
+MISC, N, Expense, Dr
+CASH, A(-), Cr
+
+---------------------------------------------------------------
+
+1) 
+Ramesh started bussiness with cash 50k
+Cash dr, capital cr
+(Being bussiness started with cash)
+
+2)
+Purchase goods of rs 7000
+Purchase Goods Dr, Cash Cr
+
+3)
+Sold goods for rs 5000
+Cash Dr 5000, sales 5000 Cr
+
+4)
+Purchase goods from mohan 4500
+Purchase Dr 4500, Mohan Cr
+
+5)
+Sold goods for Rs 2000 to Sohan
+Assets                          Capital+L
+Sohan(+, Dr)Sales(-, Cr)
+
+6)
+Paid wages 4000
+Capital   +  L   = Assets
+(-)4000 Dr         Cr 4000(-)
+
+7) Received interest  2000
+Capital + L    =  Assets
+(+) Cr 2000       (+) Dr 2000
+
+8)
+Salary paid 2500
+
+Capital + L   = Assets
+(-) Dr salary = Cr Cash
+
+
+9) Sohan return goods 1500
+
+C + L    = A(+), Sohan(-)
+           Sales ruturn Dr(1500), Sohan Cr(1500)
+
+10) Return goods to Mohan 1000
+
+C+L           = A
+Mohan(-) Dr   =  Goods (-) Cr
+Mohan Dr 1500
+To purchase return Ac Cr 1500
+
+
+11) Cash received fro Sohan 1200
+C + L = A                      Sohan
+        (+) 1200, Dr Cash      (-) Cr Sohan
+Cash A/C Dr 1200
+To Sohan Cr 1200
+
+If it is loan
+Libilities (+) Sohan Cr     = Assets (+) Cash Dr
+
+12)
+Purchase furniture from deepak for Rs 5000 on credit
+
+C + L = A
+        Fuurniture (+) Dr
+Deepak (Cr)
+
+13) Paid salary rs 24000 by cash
+
+salary, N, Expense, Dr
+cash, R, Cr
+
+14) Paid electricity bill by bank
+
+Electricity bill, N, Expense, Dr
+Bank, P, Giver, Dr
+
+
