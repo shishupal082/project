@@ -30,7 +30,7 @@ public class ConfigService {
         }
         String setPublicDir = "";
         for (int i=0; i<systemDirArr.length; i++) {
-            if (!systemDirArr[i].equals("") || i==0) {
+            if (!systemDirArr[i].equals("")) {
                 setPublicDir += systemDirArr[i] + "/";
             }
         }

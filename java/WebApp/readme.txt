@@ -9,7 +9,7 @@ allowedOrigin:
 indexPageReRoute: /app
 icoFilePath: meta-data/favicon.ico
 publicDir: ../
-publicPostDir: static/
+publicPostDir: /static/
 directoryConfig:
   mimeType:
     png: image/png
@@ -32,5 +32,21 @@ directoryConfig:
 *****************************************
 env_config parameters end
 
-allowedOrigin confif parameter added
+allowedOrigin config parameter added
 If not found, all origin will be allowed
+
+publicDir
+---------
+publicDir will be split on "/" then it will count number of ".."
+    then systemDir will be split on "/" and those many counts of systemDir will be replace by "" from end
+    then it will be join with "/", if first item of systemDir will be "" then it will be replace by "/"
+    finally last "/" will be replace with ""
+    Note: Here, there is no chance of "//" at anywhere during above operation
+
+publicPostDir
+-------------
+It will be simply add to publicDir generated above
+Therefore, As publicDir does not have "/" in the end,
+    So publicPostDir should start from "/" for pointing inside working directory
+    and ".." for pointing outside working directory
+
