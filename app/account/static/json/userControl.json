@@ -63,7 +63,29 @@
                     }
                 ]
             }
-        ]
+        ],
+        "financialStatementConfig": {
+            "incomeHeading": "Income",
+            "grossMarginHeading": "Gross Margin",
+            "totalProfitHeading": " Total profit (loss)",
+            "categories": {
+                "revenue": {
+                    "heading": "Revenue",
+                    "totalRowHeading": "Total sales",
+                    "accounts": ["sales"]
+                },
+                "cogs": {
+                    "heading": "Cost of Goods Sold",
+                    "totalRowHeading": "Total cost of sales",
+                    "accounts": ["purchase", "staff-expense", "transport"]
+                },
+                "expense": {
+                    "heading": "Expense",
+                    "totalRowHeading": "Total cost of sales",
+                    "accounts": ["staff-salary", "misc"]
+                }
+            }
+        }
     },
     {
         "username": "test",

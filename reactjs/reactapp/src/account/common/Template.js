@@ -1189,4 +1189,188 @@ var Template = {
     }
 };
 
+Template["profitandloss"] = [
+    {
+        "tag": "div",
+        "text": {
+            "tag": "table.tbody",
+            "className": "table table-bordered table-striped",
+            "name": "profitandlossRow",
+            "text": []
+        }
+    }
+];
+Template["profitandloss1stRow"] = {
+    "tag": "tr",
+    "text": [
+        {
+            "tag": "th",
+            "text": {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "heading1"
+            }
+        },
+        {
+            "tag": "th",
+            "name": "heading2",
+            "text": ""
+        },
+        {
+            "tag": "th",
+            "name": "heading3",
+            "text": ""
+        },
+        {
+            "tag": "th",
+            "name": "janValue",
+            "text": "Jan"
+        },
+        {
+            "tag": "th",
+            "name": "febValue",
+            "text": "Feb"
+        },
+        {
+            "tag": "th",
+            "name": "marValue",
+            "text": "March"
+        },
+        {
+            "tag": "th",
+            "name": "aprValue",
+            "text": "April"
+        },
+        {
+            "tag": "th",
+            "name": "mayValue",
+            "text": "May"
+        },
+        {
+            "tag": "th",
+            "name": "junValue",
+            "text": "June"
+        },
+        {
+            "tag": "th",
+            "name": "julValue",
+            "text": "July"
+        },
+        {
+            "tag": "th",
+            "name": "augValue",
+            "text": "Aug"
+        },
+        {
+            "tag": "th",
+            "name": "sepValue",
+            "text": "Sep"
+        },
+        {
+            "tag": "th",
+            "name": "octValue",
+            "text": "Oct"
+        },
+        {
+            "tag": "th",
+            "name": "novValue",
+            "text": "Nov"
+        },
+        {
+            "tag": "th",
+            "name": "decValue",
+            "text": "Dec"
+        },
+        {
+            "tag": "th",
+            "name": "totalValue",
+            "text": "Total"
+        }
+    ]
+};
+Template["profitandlossRow"] = {
+    "tag": "tr",
+    "text": [
+        {
+            "tag": "td.b",
+            "name": "heading1",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "heading2",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "heading3",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "janValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "febValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "marValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "aprValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "mayValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "junValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "julValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "augValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "sepValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "octValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "novValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "decValue",
+            "text": ""
+        },
+        {
+            "tag": "td",
+            "name": "totalValue",
+            "text": ""
+        }
+    ]
+};
 export default Template;

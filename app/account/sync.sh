@@ -11,4 +11,5 @@ cp index.html summarybydate/
 cp index.html summarybycalander/
 cp index.html customisedebit/
 cp index.html customisecredit/
+cp index.html profitandloss/
 

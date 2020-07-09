@@ -24,28 +24,31 @@ var pages = {
     "accountsummarybycalander": basepathname+"/summarybycalander",
     "customisedebit": basepathname+"/customisedebit",
     "customisecredit": basepathname+"/customisecredit",
-    "custompage": basepathname+"/custompage"
+    "custompage": basepathname+"/custompage",
+    "profitandloss": basepathname+"/profitandloss"
 };
 
 Config.pages = pages;
 
 Config.homeFields = [
-    {"name": "journalbydate", "toUrl": pages.journalbydate, "toText": "Journal By Date"},
-    {"name": "currentbalbydate", "toUrl": pages.currentbalbydate, "toText": "Current Balance By Date"},
-    {"name": "custompage", "toUrl": pages.custompage, "toText": "Customise Account Summary"},
-    {"name": "accountsummarybycalander", "toUrl": pages.accountsummarybycalander, "toText": "Account Summary By Calender"},
-    {"name": "summary", "toUrl": pages.summary, "toText": "Account Summary By A/C Name"},
-    {"name": "accountsummarybydate", "toUrl": pages.accountsummarybydate, "toText": "Account Summary By Date"},
-    {"name": "customisedebit", "toUrl": pages.customisedebit, "toText": "Customised Debit Account Summary"},
-    {"name": "customisecredit", "toUrl": pages.customisecredit, "toText": "Customised Credit Account Summary"},
-    {"name": "trialbalance", "toUrl": pages.trialbalance, "toText": "Trial Balance"},
-    {"name": "journal", "toUrl": pages.journal, "toText": "Journal"},
-    {"name": "ledger", "toUrl": pages.ledger, "toText": "Ledger"},
-    {"name": "currentbal", "toUrl": pages.currentbal, "toText": "Current Balance"}
+    {"name": "profitandloss", "toText": "Profit and Loss"},
+    {"name": "journalbydate", "toText": "Journal By Date"},
+    {"name": "currentbalbydate", "toText": "Current Balance By Date"},
+    {"name": "custompage", "toText": "Customise Account Summary"},
+    {"name": "accountsummarybycalander", "toText": "Account Summary By Calender"},
+    {"name": "summary", "toText": "Account Summary By A/C Name"},
+    {"name": "accountsummarybydate", "toText": "Account Summary By Date"},
+    {"name": "customisedebit", "toText": "Customised Debit Account Summary"},
+    {"name": "customisecredit", "toText": "Customised Credit Account Summary"},
+    {"name": "trialbalance", "toText": "Trial Balance"},
+    {"name": "journal", "toText": "Journal"},
+    {"name": "ledger", "toText": "Ledger"},
+    {"name": "currentbal", "toText": "Current Balance"}
 ];
 
 Config.homeFields = Config.homeFields.map(function(el, i, arr) {
     el["s.no"] = i;
+    el["toUrl"] = pages[el.name];
     return el;
 });
 
@@ -63,6 +66,7 @@ Config.pageHeading = {
     "summary": "Account Summary",
     "accountsummarybydate": "Account Summary By Date",
     "accountsummarybycalander": "Account Summary By Calender",
+    "profitandloss": "Profit and Loss",
     "pageNotFound": "Page Not Found"
 };
 

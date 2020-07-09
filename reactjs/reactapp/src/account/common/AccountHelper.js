@@ -47,7 +47,29 @@ Account.extend({
                 }
             }
         }
-        return monthlyData;
+        return $S.clone(monthlyData);
+    },
+    getMonthTemplateV2: function(year) {
+        var monthlyData = Account.getMonthTemplate(year);
+        monthlyData = monthlyData.map(function(el, i, arr) {
+            el["dateRange"] = [year+el["dateRange"][0]+ " 00:00", year+el["dateRange"][1]+ " 23:59"];
+            return el;
+        });
+        return $S.clone(monthlyData);
+    },
+    makeTextBold: function(row, className) {
+        row = $S.clone(row);
+        if ($S.isObject(row)) {
+            for(var key in row) {
+                if ($S.isString(row[key]) || $S.isNumeric(row[key])) {
+                    row[key] = {"tag": "b", "text": row[key]};
+                    if ($S.isString(className)) {
+                        row[key]["className"] = className;
+                    }
+                }
+            }
+        }
+        return row;
     }
 });
 Account.extend({
@@ -260,6 +282,23 @@ Account.extend({
             }
         }
         return true;
+    },
+    correctSignV2: function(fieldData, keys) {
+        var signCorrection = $S.isArray(keys) ? keys : [];
+        var amount;
+        if ($S.isObject(fieldData)) {
+            for (var i=0; i<signCorrection.length; i++) {
+                amount = fieldData[signCorrection[i]];
+                if ($S.isNumeric(amount)) {
+                    amount = amount*1;
+                    if (amount < 0) {
+                        amount = "("+(-1)*amount+")";
+                        fieldData[signCorrection[i]] = amount;
+                    }
+                }
+            }
+        }
+        return fieldData;
     },
     getFinalJournalData: function(Data, journalData) {
         //journalData is apiJournalDataByDate

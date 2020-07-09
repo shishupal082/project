@@ -128,6 +128,7 @@ class App extends React.Component {
             customiseDebitAccountSummary: [],
             customiseCreditAccountSummary: [],
             customiseAccountSummary: [],
+            profitAndLossFields: [],
             noMatchFields: Data.getTemplate("noPageFound"),
             pageTracking: []
         };
@@ -363,6 +364,14 @@ class App extends React.Component {
         customiseAccountSummary = AccountHelper.getCustomiseAccountSummaryFields(Data, customeAccountData, dataByCompany, yearlyDateSelection);
         return customiseAccountSummary;
     }
+    getProfitAndLossFields() {
+        var profitAndLossFields, dataByCompany, yearlyDateSelection, financialStatementConfig;
+        dataByCompany = Data.getData("dataByCompany", {});
+        yearlyDateSelection = Data.getData("combinedDateSelectionParameter", {}).yearlyDateSelection;
+        financialStatementConfig = Data.getData("currentUserControlData", {}).financialStatementConfig;
+        profitAndLossFields = AccountHelper2.getProfitAndLossFields(Data, dataByCompany, yearlyDateSelection, financialStatementConfig);
+        return profitAndLossFields;
+    }
     dataSetComplete() {
         var journalDataFields = AccountHelper.getJournalFields(Data, Data.getData("apiJournalData",[]));
         var ledgerDataFields = this.getLedgerRowData();
@@ -379,6 +388,8 @@ class App extends React.Component {
         var customiseDebitAccountSummary = this.getCustomisedDebitAccountSummaryByCalenderFields();
         var customiseCreditAccountSummary = this.getCustomisedCreditAccountSummaryByCalenderFields();
         var customiseAccountSummary = this.getCustomiseAccountSummaryFields();
+        var profitAndLossFields = this.getProfitAndLossFields();
+
         this.setState({journalDataFields: journalDataFields, ledgerDataFields: ledgerDataFields,
                 trialBalanceFields: trialBalanceFields, currentBalanceFields: currentBalanceFields,
                 journalDataByDateFields: journalDataByDateFields,
@@ -388,7 +399,8 @@ class App extends React.Component {
                 accountSummaryByCalenderFields: accountSummaryByCalenderFields,
                 customiseDebitAccountSummary: customiseDebitAccountSummary,
                 customiseCreditAccountSummary: customiseCreditAccountSummary,
-                customiseAccountSummary: customiseAccountSummary}, function() {
+                customiseAccountSummary: customiseAccountSummary,
+                profitAndLossFields: profitAndLossFields}, function() {
                     $S.log("Data.getAllData()");
                     console.log(Data.getAllData());
                     $S.log("this.state");
@@ -538,7 +550,8 @@ class App extends React.Component {
             accountSummaryByCalenderFields: [],
             customiseDebitAccountSummary: [],
             customiseCreditAccountSummary: [],
-            customiseAccountSummary: []
+            customiseAccountSummary: [],
+            profitAndLossFields: []
         }, function() {
             if (!$S.isBooleanTrue(disableFlushError)) {
                 Data.clearError();
@@ -656,7 +669,8 @@ class App extends React.Component {
 
         const custompage = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.custompage}
                     renderFieldRow={this.state.customiseAccountSummary} currentPageName="custompage"/>);
-
+        const profitandloss = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.profitandloss}
+                    renderFieldRow={this.state.profitAndLossFields} currentPageName="profitandloss"/>);
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home} component={home}/>
@@ -680,6 +694,7 @@ class App extends React.Component {
                 <Route path={pages.customisedebit} component={customisedebit} />
                 <Route path={pages.customisecredit} component={customisecredit} />
                 <Route path={pages.custompage} component={custompage} />
+                <Route path={pages.profitandloss} component={profitandloss} />
                 <Route render={props => (
                     <JournalByDate {...props} state={this.state} data={commonData} methods={methods}
                         renderFieldRow={this.state.noMatchFields} currentPageName="noMatch"/>

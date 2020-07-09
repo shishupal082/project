@@ -11,6 +11,7 @@ copy index.html summarybydate
 copy index.html summarybycalander
 copy index.html customisedebit
 copy index.html customisecredit
+copy index.html profitandloss
 
 echo "Copy file completed."
 
