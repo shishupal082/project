@@ -159,4 +159,23 @@ Config.updateHomeFieldsSequence = function(sequence) {
     return modifiedHomeFields;
 };
 Config.updateHomeFieldsSequence($$$.homeFieldsSequence);
+
+Config.isValidCurrentPage = function(currentPage) {
+    var result = false;
+    var defaultValidPage = ["home", "noMatch"];
+    if (!$S.isString(currentPage)) {
+        return true;
+    }
+    if (defaultValidPage.indexOf(currentPage) >= 0) {
+        return true;
+    }
+    for (var i=0; i<Config.homeFields.length; i++) {
+        if (currentPage === Config.homeFields[i].name) {
+            result = true;
+            break;
+        }
+    }
+    return result;
+};
+
 export default Config;

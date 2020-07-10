@@ -27,6 +27,8 @@ class Header extends React.Component {
         if (pageName !== this.props.currentPageName) {
             if ($S.isString(pages[pageName])) {
                 this.props.history.push(pages[pageName]);
+            } else {
+                alert("Page '" + pageName + "' not found");
             }
         }
     }

@@ -625,7 +625,8 @@ class App extends React.Component {
     }
     render() {
         var methods = {userChange: this.userChange, onDateSelectionTypeChange: this.onDateSelectionTypeChange,
-                        trackPage: this.trackPage, removeTrackPage: this.removeTrackPage};
+                        trackPage: this.trackPage, removeTrackPage: this.removeTrackPage,
+                        getTemplate: Data.getTemplate, isValidCurrentPage: Config.isValidCurrentPage};
         var commonData = {pages: pages, backIconUrl: backIconUrl, companyName: this.companyName,
                         userControlData: Data.getData("userControlData", []),
                         currentUserName: this.currentUserName,
@@ -635,7 +636,8 @@ class App extends React.Component {
         currentbalvalByDate["dateSelection"] = this.dateSelection;
         currentbalvalByDate["dateSelectionType"] = this.dateSelectionType;
 
-        const home = (props) => (<Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields} currentPageName="home"/>);
+        const journal = (props) => (<Journal {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
+                        renderFieldRow={this.state.journalDataFields} currentPageName="journal"/>);
 
         const trial = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.trialbalance}
                             renderFieldRow={this.state.trialBalanceFields} currentPageName="trialbalance"/>);
@@ -669,20 +671,18 @@ class App extends React.Component {
 
         const custompage = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.custompage}
                     renderFieldRow={this.state.customiseAccountSummary} currentPageName="custompage"/>);
+
         const profitandloss = (props) => (<JournalByDate {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.profitandloss}
                     renderFieldRow={this.state.profitAndLossFields} currentPageName="profitandloss"/>);
+
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pages.home} component={home}/>
-                <Route
-                  path={pages.journal}
-                  render={props => (
-                    <Journal {...props} state={this.state} data={commonData} methods={methods} heading={pageHeading.journal}
-                        renderFieldRow={this.state.journalDataFields}
-                        currentPageName="journal"
-                    />
-                  )}
+                <Route exact path={pages.home}
+                    render={props => (
+                        <Home {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.state.homeFields} currentPageName="home"/>
+                    )}
                 />
+                <Route path={pages.journal} component={journal}/>
                 <Route path={pages.journalbydate} component={journalbydate}/>
                 <Route path={pages.currentbal} component={currentbal}/>
                 <Route path={pages.currentbalbydate} component={currentbalbydate}/>

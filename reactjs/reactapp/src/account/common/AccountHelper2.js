@@ -22,14 +22,7 @@ $S.extendObject(Account);
 
 Account.extend({
     getCustomAccountsData: function(currentUserControlData, accountData, key, response) {
-        var i,j,k;
-        var accountDataMapping = {};
-        var accountAddCount = {}, tempAccountAddCount, accountName;
-
-        for(i=0; i<accountData.length; i++) {
-            accountDataMapping[accountData[i]["accountName"]] = accountData[i];
-            accountAddCount[accountData[i]["accountName"]] = 0;
-        }
+        var i,j;
         var tempData, customData;
         if (!$S.isArray(response)) {
             response = [];
@@ -58,27 +51,49 @@ Account.extend({
                     customData = currentUserControlData[key][j];
                     tempData = {"heading": customData.heading, "name": key, "accounts": []};
                     if ($S.isArray(customData.accountNames)) {
-                        tempAccountAddCount = $S.clone(accountAddCount);
-                        for(k=0; k<customData.accountNames.length; k++) {
-                            accountName = customData.accountNames[k];
-                            if (accountDataMapping[accountName]) {
-                                if (tempAccountAddCount[accountName] >= 1) {
-                                    continue;
-                                }
-                                tempAccountAddCount[accountName]++;
-                                tempData.accounts.push(accountDataMapping[accountName]);
-                            }
-                        }
+                        tempData.accounts = Account.getCustomAccountsDataV2(customData.accountNames, null, accountData);
                     } else if ($S.isArray(customData.accountNamesExcept)) {
-                        for(k=0; k<accountData.length; k++) {
-                            accountName = accountData[k].accountName;
-                            if (customData.accountNamesExcept.indexOf(accountName) < 0) {
-                                tempData.accounts.push(accountData[k]);
-                            }
-                        }
+                        tempData.accounts = Account.getCustomAccountsDataV2(null, customData.accountNamesExcept, accountData);
                     }
                     if (tempData.accounts.length) {
                         response.push(tempData);
+                    }
+                }
+            }
+        }
+        return response;
+    },
+    getCustomAccountsDataV2: function(accounts, accountsExcept, accountData) {
+        var i,k;
+        var accountDataMapping = {}, accountAddCount = {};;
+        var response = [], accountName;
+        for(i=0; i<accountData.length; i++) {
+            accountName = accountData[i]["accountName"];
+            accountDataMapping[accountName] = accountData[i];
+            accountAddCount[accountName] = 0;
+        }
+        if ($S.isArray(accounts)) {
+            for(i=0; i<accounts.length; i++) {
+                accountName = accounts[i];
+                if (!$S.isString(accountName)) {
+                    continue;
+                }
+                if ($S.isNumber(accountAddCount[accountName]) && accountAddCount[accountName] < 1) {
+                    response.push(accountDataMapping[accountName]);
+                    accountAddCount[accountName]++;
+                }
+            }
+        }
+        if ($S.isArray(accountsExcept)) {
+            for(k=0; k<accountData.length; k++) {
+                accountName = accountData[k].accountName;
+                if (!$S.isString(accountName)) {
+                    continue;
+                }
+                if (accountsExcept.indexOf(accountName) < 0) {
+                    if ($S.isNumber(accountAddCount[accountName]) && accountAddCount[accountName] < 1) {
+                        response.push(accountDataMapping[accountName]);
+                        accountAddCount[accountName]++;
                     }
                 }
             }
@@ -125,10 +140,13 @@ Account.extend({
     _getProfitAndLossData: function(Data, year, dataByCompany, revenueConfig, cogsConfig, expenseConfig) {
         var response = {"revenue": [], "costOfSales": [], "expense": [], "grossMargin": {}, "totalProfit": {}};
         var revenueAccounts = [], cogsAccounts = [], expenseAccounts = [];
-        var revenueConfigAccount = $S.isArray(revenueConfig.accounts) ? revenueConfig.accounts : [];
-        var cogsConfigAccount = $S.isArray(cogsConfig.accounts) ? cogsConfig.accounts : [];
-        var expenseConfigAccount = $S.isArray(expenseConfig.accounts) ? expenseConfig.accounts : [];
-        var accountsData = Data.getData("accountData", []);
+        var revenueConfigAccount = $S.isArray(revenueConfig.accounts) ? revenueConfig.accounts : null;
+        var revenueConfigAccountExcept = $S.isArray(revenueConfig.accountsExcept) ? revenueConfig.accountsExcept : null;
+        var cogsConfigAccount = $S.isArray(cogsConfig.accounts) ? cogsConfig.accounts : null;
+        var cogsConfigAccountExcept = $S.isArray(cogsConfig.accountsExcept) ? cogsConfig.accountsExcept : null;
+        var expenseConfigAccount = $S.isArray(expenseConfig.accounts) ? expenseConfig.accounts : null;
+        var expenseConfigAccountExcept = $S.isArray(expenseConfig.accountsExcept) ? expenseConfig.accountsExcept : null;
+        var accountData = Data.getData("accountData", []);
         var revenueTotalRowHeading = "Total sales";
         if ($S.isString(revenueConfig.totalRowHeading)) {
             revenueTotalRowHeading = revenueConfig.totalRowHeading;
@@ -142,28 +160,9 @@ Account.extend({
             expenseTotalRowHeading = expenseConfig.totalRowHeading;
         }
         var i, j;
-        var accountsDataMapping = {};
-        for (i=0; i<accountsData.length; i++) {
-            if (!$S.isString(accountsData[i].accountName)) {
-                continue;
-            }
-            accountsDataMapping[accountsData[i].accountName] = accountsData[i];
-        }
-        for(i=0; i<revenueConfigAccount.length; i++) {
-            if ($S.isObject(accountsDataMapping[revenueConfigAccount[i]])) {
-                revenueAccounts.push(accountsDataMapping[revenueConfigAccount[i]]);
-            }
-        }
-        for(i=0; i<cogsConfigAccount.length; i++) {
-            if ($S.isObject(accountsDataMapping[cogsConfigAccount[i]])) {
-                cogsAccounts.push(accountsDataMapping[cogsConfigAccount[i]]);
-            }
-        }
-        for(i=0; i<expenseConfigAccount.length; i++) {
-            if ($S.isObject(accountsDataMapping[expenseConfigAccount[i]])) {
-                expenseAccounts.push(accountsDataMapping[expenseConfigAccount[i]]);
-            }
-        }
+        revenueAccounts = Account.getCustomAccountsDataV2(revenueConfigAccount, revenueConfigAccountExcept, accountData);
+        cogsAccounts = Account.getCustomAccountsDataV2(cogsConfigAccount, cogsConfigAccountExcept, accountData);
+        expenseAccounts = Account.getCustomAccountsDataV2(expenseConfigAccount, expenseConfigAccountExcept, accountData);
         var tempData, key;
         var monthTemplate = AccountHelper.getMonthTemplate(year);
         var tempMonthTemplate = $S.clone(monthTemplate);
