@@ -31,9 +31,9 @@ var pages = {
 Config.pages = pages;
 
 Config.homeFields = [
-    {"name": "profitandloss", "toText": "Profit and Loss"},
     {"name": "journalbydate", "toText": "Journal By Date"},
     {"name": "currentbalbydate", "toText": "Current Balance By Date"},
+    {"name": "profitandloss", "toText": "Profit and Loss"},
     {"name": "custompage", "toText": "Customise Account Summary"},
     {"name": "accountsummarybycalander", "toText": "Account Summary By Calender"},
     {"name": "summary", "toText": "Account Summary By A/C Name"},
