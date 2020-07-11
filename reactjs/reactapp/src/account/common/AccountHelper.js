@@ -87,6 +87,7 @@ Account.extend({
                 for (i = 0; i < ledgerRowData.dr.length; i++) {
                     if ($S.isNumeric(ledgerRowData.dr[i].dr)) {
                         debitAmount += ledgerRowData.dr[i].dr *1;
+                        debitAmount = Account(debitAmount).toFixed(2);
                     }
                 }
             } else {
@@ -96,6 +97,7 @@ Account.extend({
                 for (i = 0; i < ledgerRowData.cr.length; i++) {
                     if ($S.isNumeric(ledgerRowData.cr[i].cr)) {
                         creditAmount += ledgerRowData.cr[i].cr *1;
+                        creditAmount = Account(creditAmount).toFixed(2);
                     }
                 }
             } else {
@@ -421,6 +423,7 @@ Account.extend({
                                         currentDate = DT.getDateObj(currentDate);
                                         if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
                                             dr += companyData["ledgerRowData"]["dr"][k]["dr"]*1;
+                                            dr = Account(dr).toFixed(2);
                                         }
                                     }
                                 }
@@ -434,6 +437,7 @@ Account.extend({
                                         currentDate = DT.getDateObj(currentDate);
                                         if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
                                             cr += companyData["ledgerRowData"]["cr"][k]["cr"]*1;
+                                            cr = Account(cr).toFixed(2);
                                         }
                                     }
                                 }
@@ -445,8 +449,8 @@ Account.extend({
                         template2Data["cr"] = cr;
                         template2Data["currentBal"] = Account(dr-cr).toFixed(2);
                         template1Data["accountSummaryByDateRow"].push(template2Data);
-                        totalDr += dr;
-                        totalCr += cr;
+                        totalDr = Account(totalDr+dr).toFixed(2);
+                        totalCr = Account(totalCr+cr).toFixed(2);
                     }
                 }
             }
@@ -664,10 +668,12 @@ Account.extend({
                     if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].dr)) {
                         currentAmount = dataByCompany[key].currentBalRowData[j].dr * 1;
                         debitAmount += currentAmount;
+                        debitAmount = Account(debitAmount).toFixed(2);
                     }
                     if ($S.isNumeric(dataByCompany[key].currentBalRowData[j].cr)) {
                         currentAmount = (-1)* dataByCompany[key].currentBalRowData[j].cr * 1;
                         creditAmount += (-1)* currentAmount;
+                        creditAmount = Account(creditAmount).toFixed(2);
                     }
                     dataByCompany[key].currentBalRowData[j].balance = lastAmount + currentAmount;
                     if (j === dataByCompany[key].currentBalRowData.length-1) {
@@ -684,11 +690,13 @@ Account.extend({
                     if (lastAmount > 0) {
                         temp.cr = lastAmount;
                         creditAmount += lastAmount;
+                        creditAmount = Account(creditAmount).toFixed(2);
                         temp.particularText = {"tag":"b", "text":"By Balance C/D"};
                         dataByCompany[key].currentBalRowData.push(temp);
                     } else if (lastAmount < 0) {
                         temp.dr = (-1)*lastAmount;
                         debitAmount += temp.dr;
+                        debitAmount = Account(debitAmount).toFixed(2);
                         temp.particularText = {"tag":"b", "text":"By Balance C/D"};
                         dataByCompany[key].currentBalRowData.push(temp);
                     }
@@ -705,6 +713,7 @@ Account.extend({
                     } else if (lastAmount < 0) {
                         temp.cr = (-1)*lastAmount;
                         debitAmount += temp.cr;
+                        debitAmount = Account(debitAmount).toFixed(2);
                         dataByCompany[key].currentBalRowData.push(temp);
                     }
                 }
@@ -811,9 +820,11 @@ Account.extend({
                             if ($S.isNumeric(currentBalRowData[k].dr)) {
                                 currentBalAmount += currentBalRowData[k].dr*1;
                                 debitAmount += currentBalRowData[k].dr*1;
+                                debitAmount = Account(debitAmount).toFixed(2);
                             } else if ($S.isNumeric(currentBalRowData[k].cr)) {
                                 currentBalAmount -= currentBalRowData[k].cr*1;
                                 creditAmount += currentBalRowData[k].cr*1;
+                                creditAmount = Account(creditAmount).toFixed(2);
                             }
                             currentBalAmount = Account(currentBalAmount).toFixed(2);
                             currentBalRowData[k]["currentBal"] = currentBalAmount;
@@ -826,6 +837,7 @@ Account.extend({
                         temp.balance = Account(lastAmount + currentBalAmount).toFixed(2);
                         currentBalRowData.push(temp);
                         lastAmount += currentBalAmount;
+                        lastAmount = Account(lastAmount).toFixed(2);
                     }
                 }
             }
@@ -954,9 +966,11 @@ Account.extend({
                         for (k=0; k<particularEntry.length; k++) {
                             if ($S.isNumeric(particularEntry[k].cr)) {
                                 creditAmount += particularEntry[k].cr*1;
+                                creditAmount = Account(creditAmount).toFixed(2);
                             }
                             if ($S.isNumeric(particularEntry[k].dr)) {
                                 debitAmount += particularEntry[k].dr*1;
+                                debitAmount = Account(debitAmount).toFixed(2);
                             }
                         }
                         if (debitAmount !== creditAmount && debitAmount > 0 && creditAmount > 0) {
@@ -1196,9 +1210,11 @@ Account.extend({
                                 if ($S.isNumeric(currentBalRowData[k].cr)) {
                                     isTemplate2DataValid = true;
                                     template2Data[key]["Cr"] += currentBalRowData[k].cr*1;
+                                    template2Data[key]["Cr"] = Account(template2Data[key]["Cr"]).toFixed(2);
                                 } else if ($S.isNumeric(currentBalRowData[k].dr)) {
                                     isTemplate2DataValid = true;
                                     template2Data[key]["Dr"] += currentBalRowData[k].dr*1;
+                                    template2Data[key]["Dr"] = Account(template2Data[key]["Dr"]).toFixed(2);
                                 }
                             }
                         }
@@ -1237,9 +1253,11 @@ Account.extend({
                 for (k=0; k<template2Data.length; k++) {
                     if ($S.isNumber(template2Data[k][key+"Dr"])) {
                         template2Data[k]["totalValueDr"] += template2Data[k][key+"Dr"];
+                        template2Data[k]["totalValueDr"] = Account(template2Data[k]["totalValueDr"]).toFixed(2);
                     }
                     if ($S.isNumber(template2Data[k][key+"Cr"])) {
                         template2Data[k]["totalValueCr"] += template2Data[k][key+"Cr"];
+                        template2Data[k]["totalValueCr"] = Account(template2Data[k]["totalValueCr"]).toFixed(2);
                     }
                     if ($S.isNumber(template2Data[k][key+"Bal"])) {
                         template2Data[k][key+"EndBal"] = Account(endBal*1 + template2Data[k][key+"Bal"]*1).toFixed(2);
@@ -1340,6 +1358,7 @@ Account.extend({
                     if (response[i].template2Data[j][monthKey]) {
                         if (totalRowData[monthKey]) {
                             totalRowData[monthKey] += response[i].template2Data[j][monthKey];
+                            totalRowData[monthKey] = Account(totalRowData[monthKey]).toFixed(2);
                         } else {
                             totalRowData[monthKey] = response[i].template2Data[j][monthKey];
                         }
