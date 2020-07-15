@@ -22,6 +22,22 @@ Dropowizard fully functioning
 Customised exception handller
 Customised logger pattern
 
+Java installation in windows 10
+First check pre install java
+- where java
+Add JAVA_HOME and in Path same as maven below
+
+Maven installation in windows 10
+https://mkyong.com/maven/how-to-install-maven-in-windows/
+
+Download maven from http://maven.apache.org/download.cgi (zip file)
+Extract and put in c drive
+Add MAVEN_HOME in system variable (C:\opt\apache-maven-3.6.3)
+Add path variable in system variable (%MAVEN_HOME%\bin)
+
+Now open new cmd window and try mvn -version (It should work)
+
+
 Angularjs
 ----------------
 stateprovider

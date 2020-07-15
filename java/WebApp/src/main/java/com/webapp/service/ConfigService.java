@@ -3,16 +3,24 @@ package com.webapp.service;
 import com.webapp.common.StrUtils;
 import com.webapp.common.SysUtils;
 import com.webapp.config.WebAppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigService {
-    private WebAppConfig webAppConfig;
-    private SysUtils sysUtils = new SysUtils();
+    final static Logger logger = LoggerFactory.getLogger(ConfigService.class);
+    final WebAppConfig webAppConfig;
+    final SysUtils sysUtils = new SysUtils();
     public ConfigService(final WebAppConfig webAppConfig) {
         this.webAppConfig = webAppConfig;
     }
     private void setPublicDir() {
         String publicDir = webAppConfig.getWebAppConfiguration().getPublicDir();
         String systemDir = sysUtils.getProjectWorkingDir();
+        String publicPostDir = webAppConfig.getWebAppConfiguration().getPublicPostDir();
+
+        logger.info("systemDir: {}", systemDir);
+        logger.info("configPublicDir: {}", publicDir);
+        logger.info("configPublicPostDir: {}", publicPostDir);
         if (publicDir == null) {
             publicDir = "";
         }
@@ -20,7 +28,13 @@ public class ConfigService {
             systemDir = "";
         }
         String[] publicDirArr = publicDir.split("/");
-        String[] systemDirArr = systemDir.split("/");
+        String[] systemDirArr = null;
+        if (systemDir.contains("/")) {
+            systemDirArr = systemDir.split("/");
+        } else {
+            // Fix for windows system
+            systemDirArr = systemDir.split("\\\\");
+        }
         int j = systemDirArr.length-1;
         for (int i=publicDirArr.length-1; i>=0; i--) {
             if (j>=0 && publicDirArr[i].equals("..")) {
@@ -34,11 +48,11 @@ public class ConfigService {
                 setPublicDir += systemDirArr[i] + "/";
             }
         }
-        String publicPostDir = webAppConfig.getWebAppConfiguration().getPublicPostDir();
         if (publicPostDir != null) {
             setPublicDir += publicPostDir;
         }
         setPublicDir = StrUtils.replaceLast("/", "", setPublicDir);
+        logger.info("Calculated PublicDir: {}", setPublicDir);
         webAppConfig.getAppConfig().setPublicDir(setPublicDir);
     }
     public static void init(final WebAppConfig webAppConfig) {

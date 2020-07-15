@@ -2,8 +2,7 @@
 
 echo [INFO] Copying file to desired location
 
-rm -rf ../../web-app/*
-mkdir ../../web-app/meta-data
+rm -rf ../../web-app/meta-data/*
 
 cp readme.txt ../../web-app/
 cp run_app.bat ../../web-app/

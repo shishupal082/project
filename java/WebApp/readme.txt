@@ -38,7 +38,7 @@ If not found, all origin will be allowed
 publicDir
 ---------
 publicDir will be split on "/" then it will count number of ".."
-    then systemDir will be split on "/" and those many counts of systemDir will be replace by "" from end
+    then systemDir will be split on "/" or "\" and those many counts of systemDir will be replace by "" from end
     then it will be join with "/", if first item of systemDir will be "" then it will be replace by "/"
     finally last "/" will be replace with ""
     Note: Here, there is no chance of "//" at anywhere during above operation

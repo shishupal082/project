@@ -32,8 +32,21 @@ function formateData(response) {
     }
     return res;
 }
+function isValidUrl(configReRoutePath) {
+    if (typeof configReRoutePath === "string") {
+        configReRoutePath = configReRoutePath.trim();
+        if (configReRoutePath === "/") {
+            return false;
+        }
+        if (configReRoutePath.length > 0 && configReRoutePath.match("//") === null) {
+            return true;
+        }
+    }
+    return false;
+}
+
 var indexPageReRoute = $("input[name=index-page-re-route]").val();
-if (indexPageReRoute && indexPageReRoute.trim().length > 0) {
+if (isValidUrl(indexPageReRoute)) {
     window.location.href = indexPageReRoute.trim();
 } else {
     $("title").html("WebApp Dashboard");
