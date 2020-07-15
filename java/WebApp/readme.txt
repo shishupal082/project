@@ -8,6 +8,9 @@ To run application
 
 Then open browser (Preferably Chrome)
 Type in url
-    - 127.0.0.1:8080
+- http://127.0.0.1:8080
 
-It should work
+
+Pre requisite
+------------------
+System should have installed java version-1.7 or above
