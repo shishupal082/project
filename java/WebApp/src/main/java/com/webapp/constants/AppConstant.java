@@ -17,7 +17,7 @@ public class AppConstant {
     public static final String ALLOWED_ACCESS= "Access-Control-Allow-Origin";
     public static final String FILE = "FILE";
     public static final String FOLDER = "FOLDER";
-    public static final String AppVersion = "1.0.1";
+    public static final String AppVersion = "1.0.2";
     public static final String server = "server";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
     public static final String UTF8 = "UTF-8";

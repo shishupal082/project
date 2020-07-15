@@ -35,7 +35,7 @@ public class WebApplication  extends Application<WebAppConfiguration> {
         WebAppConfig webAppConfig = new WebAppConfig(webAppConfiguration);
         webAppConfig.setAppConfig(new AppConfig());
         ConfigService.init(webAppConfig);
-        LOGGER.info("WebAppConfig: {}", webAppConfig);
+        LOGGER.info("WebAppConfig: {}, version: {}", webAppConfig, AppConstant.AppVersion);
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new LogFilter());

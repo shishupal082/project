@@ -35,5 +35,5 @@ directoryConfig:
 
 indexPageReRoute: /app
 icoFilePath: meta-data/favicon.ico
-publicDir: ../
+publicDir: ../../
 publicPostDir:
