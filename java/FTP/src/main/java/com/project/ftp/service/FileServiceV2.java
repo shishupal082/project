@@ -33,22 +33,33 @@ public class FileServiceV2 {
         this.appConfig = appConfig;
         this.fileService = new FileService();
     }
+    private String parseUserFileName(String fileName) {
+        String userFilename = null;
+        if (fileName == null) {
+            return null;
+        }
+        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+        String[] fileNameArr = fileName.split(dir);
+        if(fileNameArr.length == 2) {
+            if (fileNameArr[1].split("/").length == 2) {
+                userFilename = fileNameArr[1];
+            }
+        }
+        return userFilename;
+    }
     private void generateApiResponse(ArrayList<ScanResult> scanResults, ArrayList<String> response) {
         if (scanResults == null) {
             return;
         }
         String fileName;
         String[] fileNameArr;
-        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+
         for (ScanResult scanResult: scanResults) {
             if (scanResult != null) {
                 if (PathType.FILE.equals(scanResult.getPathType())) {
-                    fileName = scanResult.getPathName();
-                    fileNameArr = fileName.split(dir);
-                    if(fileNameArr.length == 2) {
-                        if (fileNameArr[1].split("/").length == 2) {
-                            response.add(fileNameArr[1]);
-                        }
+                    fileName = parseUserFileName(scanResult.getPathName());
+                    if (fileName != null) {
+                        response.add(fileName);
                     }
                 } else if (PathType.FOLDER.equals(scanResult.getPathType())) {
                     generateApiResponse(scanResult.getScanResults(), response);
@@ -159,6 +170,8 @@ public class FileServiceV2 {
         } else {
             logger.info("uploaded file pathInfo: {}", pathInfo);
             apiResponse = new ApiResponse(AppConstant.SUCCESS);
+            pathInfo.setPath(parseUserFileName(pathInfo.getPath()));
+            pathInfo.setParentFolder(null);
             apiResponse.setData(pathInfo);
         }
         return apiResponse;
