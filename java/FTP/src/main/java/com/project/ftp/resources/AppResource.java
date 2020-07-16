@@ -70,7 +70,7 @@ public class AppResource {
         ScanResult scanResult = fileServiceV2.searchRequestedFile(userService, filename);
         PathInfo pathInfo = null;
         if (scanResult != null && PathType.FILE.equals(scanResult.getPathType())) {
-            pathInfo = fileService.getFileResponse(scanResult.getPathName());
+            pathInfo = fileService.getFileResponse(scanResult.getPathName(), true);
         }
         Response.ResponseBuilder r;
         if (pathInfo != null) {
@@ -97,7 +97,7 @@ public class AppResource {
     public Object defaultMethod(@Context HttpServletRequest request) throws URISyntaxException {
         logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());
         String requestedPath = FileService.getPathUrl(request);
-        PathInfo pathInfo = fileService.getFileResponse(requestedPath);
+        PathInfo pathInfo = fileService.getFileResponse(requestedPath, false);
         Response.ResponseBuilder r;
         if (AppConstant.FILE.equals(pathInfo.getType())) {
             File file = new File(pathInfo.getPath());

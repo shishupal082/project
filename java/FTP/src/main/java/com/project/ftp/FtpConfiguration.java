@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.dropwizard.Configuration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
@@ -17,6 +18,8 @@ public class FtpConfiguration extends Configuration {
     private String fileSaveDir;
     private ArrayList<String> adminUsersName;
     private ArrayList<String> supportedFileType;
+
+    private HashMap<String, String> tempConfig;
 
     public String getIndexPageReRoute() {
         return indexPageReRoute;
@@ -82,6 +85,14 @@ public class FtpConfiguration extends Configuration {
         this.supportedFileType = supportedFileType;
     }
 
+    public HashMap<String, String> getTempConfig() {
+        return tempConfig;
+    }
+
+    public void setTempConfig(HashMap<String, String> tempConfig) {
+        this.tempConfig = tempConfig;
+    }
+
     @Override
     public String toString() {
         return "FtpConfiguration{" +
@@ -93,6 +104,7 @@ public class FtpConfiguration extends Configuration {
                 ", fileSaveDir='" + fileSaveDir + '\'' +
                 ", adminUsersName=" + adminUsersName +
                 ", supportedFileType=" + supportedFileType +
+                ", tempConfig=" + tempConfig +
                 '}';
     }
 }

@@ -7,6 +7,7 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/libs/",
             "../java/pdf/src/main/resources/assets/static/libs/",
+            "../java/FTP/src/main/resources/assets/static/libs/",
             "../java/WebApp/src/main/resources/assets/static/libs/"
         ]
     },
@@ -15,6 +16,7 @@ var syncData = {
             "../static/libs/bootstrap-v4.4.1.css"
         ],
         "destinationDir": [
+            "../java/FTP/src/main/resources/assets/static/libs/"
         ]
     },
     "react": {
@@ -34,6 +36,7 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/js/",
             "../java/pdf/src/main/resources/assets/static/js/",
+            "../java/FTP/src/main/resources/assets/static/libs/",
             "../java/WebApp/src/main/resources/assets/static/js/",
             "../reactjs/reactapp/src/libs/"
         ]

@@ -48,7 +48,10 @@ public class FileService {
             }
         }
     }
-    public PathInfo getFileResponse(final String filePath) {
+    public PathInfo getFileResponse(String filePath, Boolean isAbsolute) {
+        if (!isAbsolute) {
+            filePath = appConfig.getPublicDir() + filePath;
+        }
         PathInfo pathInfo = getPathInfo(filePath);
         if (AppConstant.FOLDER.equals(pathInfo.getType())) {
             searchIndexHtmlInFolder(pathInfo);

@@ -34,3 +34,6 @@ icoFilePath: meta-data/favicon.ico
 publicDir:
 publicPostDir:
 maxFileSize: 2048
+tempConfig:
+  isLogin: true
+  userName: U1

@@ -27,9 +27,15 @@ server:
 
 adminUsersName:
   - Admin
+supportedFileType:
+  - pdf
+
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
 publicDir:
 publicPostDir:
 indexPageReRoute:
 maxFileSize: 2048
+tempConfig:
+  isLogin: true
+  userName: U1

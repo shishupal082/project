@@ -1,6 +1,7 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
+import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.service.FileService;
@@ -9,6 +10,7 @@ import com.project.ftp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -40,11 +42,24 @@ public class ApiResource {
         logger.info("getAllV3Data : Out: {}", response);
         return response;
     }
-//    @GET
-//    @Path("upload_files")
-//
-//    @GET
-//    @Path("load_pdf")
+    @GET
+    @Path("get_app_config")
+    public ApiResponse getAppConfig() throws AppException {
+        logger.info("getAppConfig : In");
+        ApiResponse response = new ApiResponse(AppConstant.SUCCESS);
+        response.setData(appConfig);
+        logger.info("getAppConfig : Out: {}", response);
+        return response;
+    }
+    @GET
+    @Path("get_session_config")
+    public ApiResponse getSessionConfig() throws AppException {
+        logger.info("getSessionConfig : In");
+        ApiResponse response = new ApiResponse(AppConstant.SUCCESS);
+        response.setData(appConfig.getSessionData());
+        logger.info("getSessionConfig : Out: {}", response);
+        return response;
+    }
 
 //    @GET
 //    @Path("is_login")

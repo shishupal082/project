@@ -8,6 +8,7 @@ import com.project.ftp.filters.ResponseFilter;
 import com.project.ftp.resources.ApiResource;
 import com.project.ftp.resources.AppResource;
 import com.project.ftp.resources.FaviconResource;
+import com.project.ftp.resources.FileUploadResource;
 import com.project.ftp.service.ConfigService;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -44,6 +45,7 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new FaviconResource(appConfig));
         environment.jersey().register(new ApiResource(appConfig));
+//        environment.jersey().register(new FileUploadResource(appConfig));
         environment.jersey().register(new AppResource(appConfig));
 //        environment.jersey().register(new ViewResource(yardConfiguration));
     }

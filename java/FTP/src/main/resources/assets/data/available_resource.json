@@ -14,5 +14,17 @@
   [
     "/view/file?name=filename",
     "view/file?name=U1/filename"
+  ],
+  [
+    "/api/get_files_info",
+    "Scan directory based on user login"
+  ],
+  [
+    "/api/get_app_config",
+    "App config data"
+  ],
+  [
+    "/api/get_session_config",
+    "Session config data"
   ]
 ]
