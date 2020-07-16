@@ -1,7 +1,10 @@
 package com.project.ftp.service;
 
 import com.project.ftp.config.AppConfig;
+import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
+import com.project.ftp.exceptions.ErrorCodes;
+import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.obj.ScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,26 +59,54 @@ public class FileServiceV2 {
         logger.info("Scan folder result for folder : {}, {}", folderPath, finalFileScanResult);
         return finalFileScanResult;
     }
-
-    public ArrayList<ScanResult> scanAllDirectory(final UserService userService) {
-        ArrayList<ScanResult> result = new ArrayList<>();
-        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
-        Boolean isLoginUserAdmin = userService.isLoginUserAdmin();
-        String userName = userService.getLoginUserName();
-        if (isLoginUserAdmin) {
-            result.add(scanDirectory(dir, dir, true));
-        } else {
-            dir += userName;
-            result.add(scanDirectory(dir, dir, false));
+    private void generateApiResponse(ArrayList<ScanResult> scanResults, ArrayList<String> response) {
+        if (scanResults == null) {
+            return;
         }
-        return result;
+        String fileName;
+        String[] fileNameArr;
+        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+        for (ScanResult scanResult: scanResults) {
+            if (scanResult != null) {
+                if (PathType.FILE.equals(scanResult.getPathType())) {
+                    fileName = scanResult.getPathName();
+                    fileNameArr = fileName.split(dir);
+                    if(fileNameArr.length == 2) {
+                        if (fileNameArr[1].split("/").length == 2) {
+                            response.add(fileNameArr[1]);
+                        }
+                    }
+                } else if (PathType.FOLDER.equals(scanResult.getPathType())) {
+                    generateApiResponse(scanResult.getScanResults(), response);
+                }
+            }
+        }
+    }
+    public ApiResponse scanUserDirectory(final UserService userService) {
+        ApiResponse apiResponse = new ApiResponse(AppConstant.SUCCESS);
+        ArrayList<ScanResult> scanResults = new ArrayList<>();
+        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+        String loginUserName = userService.getLoginUserName();
+        if (userService.isLogin() && !loginUserName.isEmpty()) {
+            if (userService.isLoginUserAdmin()) {
+                scanResults.add(scanDirectory(dir, dir, true));
+            } else {
+                dir += loginUserName + "/";
+                scanResults.add(scanDirectory(dir, dir, false));
+            }
+            ArrayList<String> response = new ArrayList<>();
+            generateApiResponse(scanResults, response);
+            apiResponse.setData(response);
+        } else {
+            apiResponse = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
+        }
+        return apiResponse;
     }
     public ScanResult searchRequestedFile(final UserService userService, String filename) {
         if (filename == null) {
             filename = "";
         }
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
-        Boolean isLoginUserAdmin = userService.isLoginUserAdmin();
         String loginUserName = userService.getLoginUserName();
         String[] filenameArr = filename.split("/");
         String filePath = dir;
@@ -85,13 +116,19 @@ public class FileServiceV2 {
                 logger.info("Invalid loginUserName: {}", loginUserName);
                 return null;
             }
-            if (isLoginUserAdmin) {
+            if (userService.isLoginUserAdmin()) {
                 filePath += filename;
-            } else {
+            } else if (loginUserName.equals(filenameArr[0])) {
                 filePath += loginUserName + "/" + filenameArr[1];
+            } else {
+                logger.info("Unauthorised access loginUserName: {}, filename: {}",
+                        loginUserName, filename);
+                filePath = null;
             }
-            scanResult = scanDirectory(filePath, filePath, false);
-            logger.info("Scan result: {}", scanResult);
+            if (filePath != null) {
+                scanResult = scanDirectory(filePath, filePath, false);
+                logger.info("Scan result: {}", scanResult);
+            }
         } else {
             logger.info("Invalid filename:{}", filename);
         }

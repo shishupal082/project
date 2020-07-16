@@ -22,8 +22,8 @@ public class UserService {
     }
     public Boolean isLoginUserAdmin() {
         String loginUserName = sessionService.getLoginUserName();
-        ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUserNames();
-        if (adminUserNames != null) {
+        ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUsersName();
+        if (!loginUserName.isEmpty() && adminUserNames != null) {
             return adminUserNames.contains(loginUserName);
         }
         return false;

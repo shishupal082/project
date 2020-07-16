@@ -11,11 +11,14 @@ public class SessionService {
         this.appConfig = appConfig;
     }
     public Boolean isLogin() {
-        Boolean isLogin = true;
+        Boolean isLogin = false;
         return isLogin;
     }
     public String getLoginUserName() {
-        String userName = "U1";
+        String userName = "";
+        if (isLogin()) {
+            userName = "Admin";
+        }
         return userName;
     }
 }

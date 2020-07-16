@@ -1,16 +1,11 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
-import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
-import com.project.ftp.obj.PathInfo;
-import com.project.ftp.obj.ScanResult;
+import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.service.FileService;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
-import com.project.ftp.view.CommonView;
-import com.project.ftp.view.IndexView;
-import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,16 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 @Path("/api/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -48,12 +34,11 @@ public class ApiResource {
     }
     @GET
     @Path("get_files_info")
-    public ArrayList<ScanResult> getAllV3Data() throws AppException {
+    public ApiResponse getAllV3Data() throws AppException {
         logger.info("getAllV3Data : In");
-        ArrayList<ScanResult> scanResultAllDirecotry =
-                fileServiceV2.scanAllDirectory(userService);
-        logger.info("getAllV3Data : Out");
-        return scanResultAllDirecotry;
+        ApiResponse response = fileServiceV2.scanUserDirectory(userService);
+        logger.info("getAllV3Data : Out: {}", response);
+        return response;
     }
 //    @GET
 //    @Path("upload_files")

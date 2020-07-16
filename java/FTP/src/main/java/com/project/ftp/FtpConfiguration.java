@@ -2,7 +2,6 @@ package com.project.ftp;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.project.ftp.session.SessionData;
 import io.dropwizard.Configuration;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class FtpConfiguration extends Configuration {
     private String publicPostDir;
     private Integer maxFileSize;
     private String fileSaveDir;
-    private ArrayList<String> adminUserNames;
+    private ArrayList<String> adminUsersName;
     private ArrayList<String> supportedFileType;
 
     public String getIndexPageReRoute() {
@@ -67,12 +66,12 @@ public class FtpConfiguration extends Configuration {
         this.fileSaveDir = fileSaveDir;
     }
 
-    public ArrayList<String> getAdminUserNames() {
-        return adminUserNames;
+    public ArrayList<String> getAdminUsersName() {
+        return adminUsersName;
     }
 
-    public void setAdminUserNames(ArrayList<String> adminUserNames) {
-        this.adminUserNames = adminUserNames;
+    public void setAdminUsersName(ArrayList<String> adminUsersName) {
+        this.adminUsersName = adminUsersName;
     }
 
     public ArrayList<String> getSupportedFileType() {
@@ -92,7 +91,7 @@ public class FtpConfiguration extends Configuration {
                 ", publicPostDir='" + publicPostDir + '\'' +
                 ", maxFileSize=" + maxFileSize +
                 ", fileSaveDir='" + fileSaveDir + '\'' +
-                ", adminUserNames=" + adminUserNames +
+                ", adminUsersName=" + adminUsersName +
                 ", supportedFileType=" + supportedFileType +
                 '}';
     }
