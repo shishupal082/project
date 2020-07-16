@@ -1,24 +1,20 @@
 package com.project.ftp.service;
 
-import com.project.ftp.config.AppConfig;
+import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConstant;
+import com.project.ftp.config.PathType;
 import com.project.ftp.obj.PathInfo;
-import org.eclipse.jetty.server.Request;
-import org.glassfish.jersey.server.ContainerRequest;
+import com.project.ftp.obj.ScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.container.ContainerRequestContext;
-import java.io.File;
+import java.io.*;
+import java.util.ArrayList;
 
 public class FileService {
     final static Logger logger = LoggerFactory.getLogger(FileService.class);
-    final AppConfig appConfig;
-    public FileService(final AppConfig appConfig) {
-        this.appConfig = appConfig;
-    }
-    private PathInfo getPathInfo(String requestedPath) {
+    public FileService() {}
+    public PathInfo getPathInfo(String requestedPath) {
         PathInfo pathInfo = new PathInfo(requestedPath);
         File file = new File(requestedPath);
         if (file.isDirectory()) {
@@ -26,10 +22,109 @@ public class FileService {
         } else if(file.isFile()) {
             pathInfo.setType(AppConstant.FILE);
             pathInfo.setFileName(file.getName());
+            String parentFolder = file.getParent().replaceAll("\\\\","/");
+            pathInfo.setParentFolder(parentFolder);
+            pathInfo.findExtension();
+            pathInfo.findMimeType();
         }
         return pathInfo;
     }
-    private void searchIndexHtmlInFolder(PathInfo pathInfo) {
+    public PathInfo getPathInfoFromFileName(String fileName) {
+        PathInfo pathInfo = new PathInfo();
+        pathInfo.setType(AppConstant.FILE);
+        pathInfo.setFileName(fileName);
+        pathInfo.findExtension();
+        pathInfo.findMimeType();
+        return pathInfo;
+    }
+    public static PathInfo getPathDetails(String requestedPath) {
+        FileService fileService = new FileService();
+        return fileService.getPathInfo(requestedPath);
+    }
+    public boolean createFolder(String existingFolder, String currentFolderName) {
+        File file = new File(existingFolder);
+        boolean dirCreateStatus = false;
+        if (file.isDirectory()) {
+            file = new File((existingFolder + "/" + currentFolderName));
+            if (file.mkdir()) {
+                dirCreateStatus = true;
+                logger.info("Directory '{}' created.", file.getPath());
+            } else {
+                logger.info("Error in creating directory '{}'.", file.getPath());
+            }
+        } else {
+            logger.info("Existing path '{}' is not directory.", existingFolder);
+        }
+        return dirCreateStatus;
+    }
+    public ScanResult scanDirectory(String folderPath, String staticFolderPath, boolean isRecursive) {
+        ScanResult finalFileScanResult = new ScanResult(staticFolderPath, folderPath);
+        ScanResult fileScanResult = null;
+        try {
+            File folder = new File(folderPath);
+            if (folder.isFile()) {
+                finalFileScanResult = new ScanResult(staticFolderPath, folderPath, PathType.FILE);
+                logger.info("Given folder path is a file returning : {}", finalFileScanResult);
+                return finalFileScanResult;
+            }
+            finalFileScanResult = new ScanResult(staticFolderPath, folderPath);
+            File[] listOfFiles = folder.listFiles();
+            if (listOfFiles != null) {
+                logger.info("Files in folder : {}, {}", folderPath, listOfFiles);
+                finalFileScanResult.setPathType(PathType.FOLDER);
+                finalFileScanResult.setScanResults(new ArrayList<ScanResult>());
+                for (File file : listOfFiles) {
+                    if (file.isFile()) {
+                        fileScanResult = scanDirectory(folderPath + file.getName(), staticFolderPath, false);
+                    } else if (file.isDirectory()){
+                        if (isRecursive) {
+                            fileScanResult = scanDirectory(folderPath + file.getName() + "/", staticFolderPath, true);
+                        } else {
+                            fileScanResult = new ScanResult(staticFolderPath,
+                                    folderPath + file.getName() + "/", PathType.FOLDER);
+                        }
+                    } else {
+                        logger.info("Unknown file type present : {}", file.getName());
+                        continue;
+                    }
+                    finalFileScanResult.getScanResults().add(fileScanResult);
+                }
+            } else {
+                logger.info("No files found in folder : {}, listOfFiles=null", folderPath);
+            }
+        } catch (Exception e) {
+            logger.info("Error fetching folder from : {}, {}", folderPath, e);
+        }
+        logger.info("Scan folder result for folder : {}, {}", folderPath, finalFileScanResult);
+        return finalFileScanResult;
+    }
+    public void renameExistingFile(String dir, String fileName, String ext) {
+        logger.info("Rename request: dir={}, fileName={}", dir, fileName +"."+ ext);
+        SysUtils sysUtils = new SysUtils();
+        if (dir == null) {
+            return;
+        }
+        if (ext == null) {
+            ext = "txt";
+        }
+        String timeInMs = sysUtils.getDateTime(AppConstant.DateTimeFormat);
+        if (timeInMs == null) {
+            timeInMs = sysUtils.getTimeInMs();
+        }
+        String renameFilePath = dir + fileName + "-" + timeInMs + "." + ext;
+        try {
+            File file = new File(dir + fileName + "." + ext);
+            File newFile = new File(renameFilePath);
+            if (file.renameTo(newFile)) {
+                String logStr = "fileName '{}' is already exist, renaming existing file with '{}'";
+                logger.info(logStr, fileName + "." + ext, fileName + "-" + timeInMs + "." + ext);
+            }
+        } catch (Exception e) {
+            logger.info("Error in renaming file '{}', {}", fileName + "." + ext, e);
+        }
+        return;
+    }
+    public PathInfo searchIndexHtmlInFolder(PathInfo pathInfo) {
         if (AppConstant.FOLDER.equals(pathInfo.getType())) {
             File file1 = new File(pathInfo.getPath() + "index.html");
             File file2 = new File(pathInfo.getPath() + "/index.html");
@@ -41,40 +136,29 @@ public class FileService {
             }
             if (file != null) {
                 String pre = pathInfo.toString();
-                pathInfo.setPath(file.getPath());
-                pathInfo.setType(AppConstant.FILE);
-                pathInfo.setFileName(file.getName());
+                pathInfo = getPathInfo(file.getPath());
                 logger.info("PathInfo changes from folder to file: {} to {}", pre, pathInfo.toString());
             }
         }
-    }
-    public PathInfo getFileResponse(String filePath, Boolean isAbsolute) {
-        if (!isAbsolute) {
-            filePath = appConfig.getPublicDir() + filePath;
-        }
-        PathInfo pathInfo = getPathInfo(filePath);
-        if (AppConstant.FOLDER.equals(pathInfo.getType())) {
-            searchIndexHtmlInFolder(pathInfo);
-        }
-        pathInfo.findExtension();
-        pathInfo.findMimeType(appConfig);
-        logger.info("PathDetails: {}", pathInfo.toString());
         return pathInfo;
     }
-    public static String getPathUrl(final HttpServletRequest request) {
-        String path = ((Request) request).getUri().toString();
-        String[] pathArr = path.split("\\?");
-        if (pathArr.length > 0) {
-            path = pathArr[0];
+    public PathInfo uploadFile(InputStream uploadedInputStream, String filePath) {
+        logger.info("uploadFile request: {}", filePath);
+        try {
+            int read;
+            final int BUFFER_LENGTH = 1024;
+            final byte[] buffer = new byte[BUFFER_LENGTH];
+            OutputStream out = new FileOutputStream(new File(filePath));
+            while ((read = uploadedInputStream.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e1) {
+            logger.info("FileNotFoundException in saving file: {}", e1.getMessage());
+        } catch (IOException e2) {
+            logger.info("IOException in saving file: {}", e2.getMessage());
         }
-        return path;
-    }
-    public static String getPathUrlV2(final ContainerRequestContext requestContext) {
-        String path = ((ContainerRequest) requestContext).getPath(true);
-        String[] pathArr = path.split("\\?");
-        if (pathArr.length > 0) {
-            path = pathArr[0];
-        }
-        return path;
+        return getPathInfo(filePath);
     }
 }

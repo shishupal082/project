@@ -4,7 +4,7 @@ import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
-import com.project.ftp.service.FileService;
+import com.project.ftp.service.FileServiceV2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +23,15 @@ import java.util.UUID;
  */
 @Priority(501)
 public class RequestFilter implements ContainerRequestFilter {
-    private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
+    final static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
     @Context
     private HttpServletRequest httpServletRequest;
-    private AppConfig appConfig;
+    final AppConfig appConfig;
     public RequestFilter(final AppConfig appConfig) {
         this.appConfig = appConfig;
     }
-    private String getCookieData(String cookieName) {
+    private String getCookieData() {
+        String cookieName = AppConstant.COOKIE_NAME;
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies == null){
             logger.info("Unable to get cookieData for cookieName : {}", cookieName);
@@ -46,7 +47,7 @@ public class RequestFilter implements ContainerRequestFilter {
         return cookieData;
     }
     public void filter(final ContainerRequestContext requestContext) throws AppException {
-        String cookieData = getCookieData(AppConstant.COOKIE_NAME);
+        String cookieData = getCookieData();
         String newCookieData = null;
         HttpSession httpSession = httpServletRequest.getSession();
         String origin = requestContext.getHeaderString(AppConstant.ORIGIN);
@@ -66,7 +67,7 @@ public class RequestFilter implements ContainerRequestFilter {
         }
         LogFilter.addSessionIdInLog(cookieData);
         httpSession.setAttribute(AppConstant.SESSION_COOKIE_DATA, cookieData);
-        String requestedPath = FileService.getPathUrlV2(requestContext);
+        String requestedPath = FileServiceV2.getPathUrlV2(requestContext);
         if (!AppConstant.FAVICON_ICO_PATH.equals(requestedPath)) {
             logger.info("RequestFilter executed, cookieData : {}", cookieData);
         }

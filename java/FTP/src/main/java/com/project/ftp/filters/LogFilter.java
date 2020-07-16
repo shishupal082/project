@@ -5,7 +5,7 @@ package com.project.ftp.filters;
  */
 
 import com.project.ftp.config.AppConstant;
-import com.project.ftp.service.FileService;
+import com.project.ftp.service.FileServiceV2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -23,13 +23,13 @@ import java.util.UUID;
 @Priority(500) // Highest priority filter
 @Provider
 public class LogFilter implements ContainerRequestFilter {
-    private static Logger LOGGER = LoggerFactory.getLogger(LogFilter.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(LogFilter.class);
     @Context
     private HttpServletRequest httpServletReq;
 
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String requestId = String.valueOf(UUID.randomUUID());
-        String requestedPath = FileService.getPathUrlV2(requestContext);
+        String requestedPath = FileServiceV2.getPathUrlV2(requestContext);
         if (!AppConstant.FAVICON_ICO_PATH.equals(requestedPath)) {
             LOGGER.info("Logger requestId generated : {}", requestId);
         }

@@ -2,14 +2,17 @@ package com.project.ftp;
 
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
+import com.project.ftp.exceptions.AppException;
+import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.filters.LogFilter;
 import com.project.ftp.filters.RequestFilter;
 import com.project.ftp.filters.ResponseFilter;
+import com.project.ftp.obj.PathInfo;
 import com.project.ftp.resources.ApiResource;
 import com.project.ftp.resources.AppResource;
 import com.project.ftp.resources.FaviconResource;
-import com.project.ftp.resources.FileUploadResource;
 import com.project.ftp.service.ConfigService;
+import com.project.ftp.service.FileService;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -38,6 +41,12 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         appConfig.setFtpConfiguration(ftpConfiguration);
         ConfigService.init(appConfig);
         LOGGER.info("appConfig: {}", appConfig);
+        String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
+        PathInfo pathInfo = FileService.getPathDetails(fileSaveDir);
+        if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
+            LOGGER.info("File save directory is not a folder: {}", fileSaveDir);
+            throw new AppException(ErrorCodes.CONFIG_ERROR);
+        }
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new LogFilter());
@@ -45,9 +54,7 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         environment.jersey().register(new ResponseFilter());
         environment.jersey().register(new FaviconResource(appConfig));
         environment.jersey().register(new ApiResource(appConfig));
-//        environment.jersey().register(new FileUploadResource(appConfig));
         environment.jersey().register(new AppResource(appConfig));
-//        environment.jersey().register(new ViewResource(yardConfiguration));
     }
     public static void main(String[] args) throws Exception {
         arguments.addAll(Arrays.asList(args));

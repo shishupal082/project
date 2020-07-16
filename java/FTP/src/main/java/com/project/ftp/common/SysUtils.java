@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 public class SysUtils {
-    private static Logger LOGGER = LoggerFactory.getLogger(SysUtils.class);
+    final static Logger LOGGER = LoggerFactory.getLogger(SysUtils.class);
     public String getDateTime(String pattern) {
         String response = null;
         Date currentDate = new Date();

@@ -1,16 +1,13 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
-import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
 import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
-import com.project.ftp.service.FileService;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import com.project.ftp.view.CommonView;
 import com.project.ftp.view.IndexView;
-import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,15 +27,13 @@ import java.net.URISyntaxException;
 @Produces(MediaType.TEXT_HTML)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AppResource {
-    private static Logger logger = LoggerFactory.getLogger(AppResource.class);
+    final static Logger logger = LoggerFactory.getLogger(AppResource.class);
     private HttpServletRequest httpServletRequest;
     final AppConfig appConfig;
-    final FileService fileService;
     final FileServiceV2 fileServiceV2;
     final UserService userService;
     public AppResource(final AppConfig appConfig) {
         this.appConfig = appConfig;
-        fileService = new FileService(appConfig);
         fileServiceV2 = new FileServiceV2(appConfig);
         userService = new UserService(appConfig);
     }
@@ -52,7 +47,7 @@ public class AppResource {
         return new IndexView(httpServletRequest, reRoutePath);
     }
     @GET
-    @Path("index")
+    @Path("/index")
     public Response getIndex() throws URISyntaxException {
         logger.info("getIndex : redirect from /index to /");
         return Response.seeOther(new URI("/")).build();
@@ -70,7 +65,7 @@ public class AppResource {
         ScanResult scanResult = fileServiceV2.searchRequestedFile(userService, filename);
         PathInfo pathInfo = null;
         if (scanResult != null && PathType.FILE.equals(scanResult.getPathType())) {
-            pathInfo = fileService.getFileResponse(scanResult.getPathName(), true);
+            pathInfo = fileServiceV2.getFileResponse(scanResult.getPathName(), true);
         }
         Response.ResponseBuilder r;
         if (pathInfo != null) {
@@ -94,28 +89,9 @@ public class AppResource {
     }
     @Path("{default: .*}")
     @GET
-    public Object defaultMethod(@Context HttpServletRequest request) throws URISyntaxException {
-        logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());
-        String requestedPath = FileService.getPathUrl(request);
-        PathInfo pathInfo = fileService.getFileResponse(requestedPath, false);
-        Response.ResponseBuilder r;
-        if (AppConstant.FILE.equals(pathInfo.getType())) {
-            File file = new File(pathInfo.getPath());
-            try {
-                InputStream inputStream = new FileInputStream(file);
-                r = Response.ok(inputStream);
-                if (pathInfo.getMediaType() == null) {
-                    logger.info("MediaType is not found (download now): {}", pathInfo);
-                    String responseHeader = "attachment; filename=" + pathInfo.getFileName();
-                    r.header(HttpHeaders.CONTENT_DISPOSITION, responseHeader);
-                } else {
-                    r.header(HttpHeaders.CONTENT_TYPE, pathInfo.getMediaType());
-                }
-                return r.build();
-            } catch (Exception e) {
-                logger.info("Error in loading file: {}", pathInfo);
-            }
-        }
-        return new CommonView(request, "page_not_found_404.ftl");
+    @Produces(MediaType.TEXT_HTML)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Object defaultMethod(@Context HttpServletRequest request) {
+        return fileServiceV2.handleDefaultUrl(request);
     }
 }

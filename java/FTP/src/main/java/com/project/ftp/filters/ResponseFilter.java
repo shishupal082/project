@@ -1,7 +1,7 @@
 package com.project.ftp.filters;
 
 import com.project.ftp.config.AppConstant;
-import com.project.ftp.service.FileService;
+import com.project.ftp.service.FileServiceV2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class ResponseFilter implements ContainerResponseFilter {
         if (origin != null) {
             responseContext.getHeaders().add(AppConstant.ALLOWED_ACCESS, origin);
         }
-        String requestedPath = FileService.getPathUrlV2(requestContext);
+        String requestedPath = FileServiceV2.getPathUrlV2(requestContext);
         if (!AppConstant.FAVICON_ICO_PATH.equals(requestedPath)) {
             logger.info("ResponseFilter executed sessionCookie : {}",
                     sessionCookie.getValue());

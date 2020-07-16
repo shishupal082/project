@@ -1,6 +1,5 @@
 package com.project.ftp.obj;
 
-import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.FileMimeType;
 import org.slf4j.Logger;
@@ -10,10 +9,12 @@ public class PathInfo {
     final static Logger logger = LoggerFactory.getLogger(PathInfo.class);
     private String path;
     private String type;
+    private String parentFolder; // In case of file only
     private String fileName;
+    private String filenameWithoutExt;
     private String extension;
     private String mediaType;
-
+    public PathInfo() {}
     public PathInfo(final String path) {
         this.path = path;
     }
@@ -33,12 +34,28 @@ public class PathInfo {
         this.type = type;
     }
 
+    public String getParentFolder() {
+        return parentFolder;
+    }
+
+    public void setParentFolder(String parentFolder) {
+        this.parentFolder = parentFolder;
+    }
+
     public String getFileName() {
         return fileName;
     }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getFilenameWithoutExt() {
+        return filenameWithoutExt;
+    }
+
+    public void setFilenameWithoutExt(String filenameWithoutExt) {
+        this.filenameWithoutExt = filenameWithoutExt;
     }
 
     public String getExtension() {
@@ -59,12 +76,24 @@ public class PathInfo {
     public void findExtension() {
         if (AppConstant.FILE.equals(this.type) && fileName != null) {
             String[] fileNameArr = fileName.split("\\.");
+            String filenameWithoutExt = "";
             if (fileNameArr.length > 0) {
                 extension = fileNameArr[fileNameArr.length-1];
             }
+            for (int i=0; i<fileNameArr.length-1; i++) {
+                if (i==0) {
+                    filenameWithoutExt = fileNameArr[i];
+                } else {
+                    filenameWithoutExt += "." + fileNameArr[i];
+                }
+            }
+            if (filenameWithoutExt.isEmpty()) {
+                filenameWithoutExt = fileName;
+            }
+            this.filenameWithoutExt = filenameWithoutExt;
         }
     }
-    public void findMimeType(final AppConfig appConfig) {
+    public void findMimeType() {
         if (extension == null) {
             return;
         }
@@ -81,7 +110,9 @@ public class PathInfo {
         return "PathInfo{" +
                 "path='" + path + '\'' +
                 ", type='" + type + '\'' +
+                ", parentFolder='" + parentFolder + '\'' +
                 ", fileName='" + fileName + '\'' +
+                ", filenameWithoutExt='" + filenameWithoutExt + '\'' +
                 ", extension='" + extension + '\'' +
                 ", mediaType='" + mediaType + '\'' +
                 '}';
