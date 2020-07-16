@@ -1,0 +1,35 @@
+logging:
+  level: INFO
+  loggers:
+    com.todo: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      threshold: ALL
+      timeZone: UTC
+    - type: file
+      threshold: ALL
+      timeZone: UTC
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      currentLogFilename: /var/log/project/java_log/application.log
+      archivedLogFilenamePattern: /var/log/java_log/application-%d{yyyy-MM-dd}-%i.log.gz
+      archivedFileCount: 5
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8080
+    type: http
+  rootPath: /*
+
+
+adminUsersName:
+  - Admin
+fileSaveDir: D:/workspace/project/ftp-app/saved-files/
+icoFilePath: meta-data/favicon.ico
+publicDir:
+publicPostDir:
+indexPageReRoute:
+maxFileSize: 2048

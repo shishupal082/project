@@ -1,0 +1,18 @@
+[
+  [
+    "/",
+    "IndexView"
+  ],
+  [
+    "/index",
+    "IndexView"
+  ],
+  [
+    "/view/resource",
+    "View Resource"
+  ],
+  [
+    "/view/file?name=filename",
+    "view/file?name=U1/filename"
+  ]
+]
