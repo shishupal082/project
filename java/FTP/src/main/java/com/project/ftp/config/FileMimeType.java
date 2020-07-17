@@ -23,7 +23,7 @@ public enum FileMimeType {
 
     /*Not supported by browser
         - doc, docx, xls, xlsx, ppt, pptx
-        - zar
+        - zar, exe, mp3, mp4, mov
     */
 
     final static Logger logger = LoggerFactory.getLogger(FileMimeType.class);
@@ -47,7 +47,7 @@ public enum FileMimeType {
             fileMimeType = FileMimeType.valueOf(name);
             response = fileMimeType.getFileMimeType();
         } catch (Exception e) {
-            logger.info("Error in parsing enum ({}): {}", name, e.getMessage());
+//            logger.info("Error in parsing enum ({}): {}", name, e.getMessage());
         }
         return response;
     }

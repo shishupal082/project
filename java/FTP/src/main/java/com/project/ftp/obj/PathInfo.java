@@ -102,10 +102,10 @@ public class PathInfo {
             return;
         }
         String mimeType = FileMimeType.getValue(extension);
-        if (mimeType == null) {
+//        if (mimeType == null) {
             // Can be search in ftpConfiguration, but as of now not required
-            logger.info("directoryConfig:mimeType not configured in env_config");
-        }
+//            logger.info("directoryConfig:mimeType not configured in env_config");
+//        }
         this.mediaType = mimeType;
     }
 

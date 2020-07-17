@@ -184,6 +184,10 @@ public class FileServiceV2 {
             logger.info("UnAuthorised user trying to upload file: {}", fileName);
             throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
         }
+        if (loginUserName.contains("/") || loginUserName.contains("\\")) {
+            logger.info("Invalid username: {}", loginUserName);
+            throw new AppException(ErrorCodes.INVALID_USER_NAME);
+        }
         PathInfo pathInfo = fileService.getPathInfoFromFileName(fileName);
         logger.info("PathInfo generated from request filename: {}, {}", fileName, pathInfo);
         String ext = pathInfo.getExtension();
@@ -197,7 +201,7 @@ public class FileServiceV2 {
             throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }
         SysUtils sysUtils = new SysUtils();
-        String timeInMs = sysUtils.getDateTime(AppConstant.FileFormate) +
+        String uploadingFileName = sysUtils.getDateTime(AppConstant.FileFormate) +
                 "." + pathInfo.getExtension();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
         PathInfo pathInfo1 = fileService.getPathInfo(dir + "/" + loginUserName);
@@ -207,11 +211,11 @@ public class FileServiceV2 {
         }
         ApiResponse apiResponse;
         if (dirStatus) {
-            fileName = loginUserName + "/" + timeInMs;
+            fileName = loginUserName + "/" + uploadingFileName;
             apiResponse = doUpload(uploadedInputStream, dir + fileName);
         } else {
             logger.info("Error in creating directory for username: {}", loginUserName);
-            throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
+            throw new AppException(ErrorCodes.INVALID_USER_NAME);
         }
         return apiResponse;
     }
