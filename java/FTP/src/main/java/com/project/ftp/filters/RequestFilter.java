@@ -52,12 +52,15 @@ public class RequestFilter implements ContainerRequestFilter {
         HttpSession httpSession = httpServletRequest.getSession();
         String origin = requestContext.getHeaderString(AppConstant.ORIGIN);
         if (origin != null) {
-            ArrayList<String> allowedOrigin = null;//appConfig.getWebAppConfiguration().getAllowedOrigin();
+            ArrayList<String> allowedOrigin = appConfig.getFtpConfiguration().getAllowedOrigin();
             if (allowedOrigin != null) {
                 if (!allowedOrigin.contains(origin)) {
                     logger.info("UnAuthorized Origin: {}, AllowedOrigin: {}", origin, allowedOrigin);
                     throw new AppException(ErrorCodes.UNAUTHORIZED_ORIGIN);
                 }
+            } else {
+                logger.info("allowedOrigin not defined in FtpConfiguration: {}", origin);
+                throw new AppException(ErrorCodes.CONFIG_ERROR);
             }
         }
         if (cookieData == null || cookieData.equals("")) {

@@ -24,11 +24,17 @@ server:
     type: http
   rootPath: /*
 
-
-adminUsersName:
-  - Admin
+allowedOrigin:
+  - http://localhost
 supportedFileType:
   - pdf
+  - txt
+  - docx
+  - doc
+  - xlsx
+  - xls
+  - pptx
+  - ppt
 
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
@@ -36,6 +42,11 @@ publicDir:
 publicPostDir:
 indexPageReRoute:
 maxFileSize: 2048
+
+adminUsersName:
+  - Admin
+devUsersName:
+  - U1
 tempConfig:
   isLogin: true
   userName: U1

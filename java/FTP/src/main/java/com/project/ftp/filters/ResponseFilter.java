@@ -22,7 +22,7 @@ import java.io.IOException;
 @Priority(1001)
 public class ResponseFilter implements ContainerResponseFilter {
 
-    private static Logger logger = LoggerFactory.getLogger(ResponseFilter.class);
+    final static Logger logger = LoggerFactory.getLogger(ResponseFilter.class);
     @Context
     private HttpServletRequest httpServletRequest;
     @Context

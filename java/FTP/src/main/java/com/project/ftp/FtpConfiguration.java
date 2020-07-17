@@ -16,7 +16,9 @@ public class FtpConfiguration extends Configuration {
     private String publicPostDir;
     private Integer maxFileSize;
     private String fileSaveDir;
+    private ArrayList<String> allowedOrigin;
     private ArrayList<String> adminUsersName;
+    private ArrayList<String> devUsersName;
     private ArrayList<String> supportedFileType;
 
     private HashMap<String, String> tempConfig;
@@ -69,12 +71,28 @@ public class FtpConfiguration extends Configuration {
         this.fileSaveDir = fileSaveDir;
     }
 
+    public ArrayList<String> getAllowedOrigin() {
+        return allowedOrigin;
+    }
+
+    public void setAllowedOrigin(ArrayList<String> allowedOrigin) {
+        this.allowedOrigin = allowedOrigin;
+    }
+
     public ArrayList<String> getAdminUsersName() {
         return adminUsersName;
     }
 
     public void setAdminUsersName(ArrayList<String> adminUsersName) {
         this.adminUsersName = adminUsersName;
+    }
+
+    public ArrayList<String> getDevUsersName() {
+        return devUsersName;
+    }
+
+    public void setDevUsersName(ArrayList<String> devUsersName) {
+        this.devUsersName = devUsersName;
     }
 
     public ArrayList<String> getSupportedFileType() {
@@ -102,7 +120,9 @@ public class FtpConfiguration extends Configuration {
                 ", publicPostDir='" + publicPostDir + '\'' +
                 ", maxFileSize=" + maxFileSize +
                 ", fileSaveDir='" + fileSaveDir + '\'' +
+                ", allowedOrigin=" + allowedOrigin +
                 ", adminUsersName=" + adminUsersName +
+                ", devUsersName=" + devUsersName +
                 ", supportedFileType=" + supportedFileType +
                 ", tempConfig=" + tempConfig +
                 '}';

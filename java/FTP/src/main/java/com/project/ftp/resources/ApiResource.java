@@ -3,6 +3,7 @@ package com.project.ftp.resources;
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
+import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
@@ -42,6 +43,7 @@ public class ApiResource {
     @Path("/get_files_info")
     public ApiResponse getAllV3Data() throws AppException {
         logger.info("getAllV3Data : In");
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
         ApiResponse response = fileServiceV2.scanUserDirectory(userService);
         logger.info("getAllV3Data : Out: {}", response);
         return response;
@@ -50,8 +52,15 @@ public class ApiResource {
     @Path("/get_app_config")
     public ApiResponse getAppConfig() throws AppException {
         logger.info("getAppConfig : In");
-        ApiResponse response = new ApiResponse(AppConstant.SUCCESS);
-        response.setData(appConfig);
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        ApiResponse response;
+        if (userService.isLoginUserDev()) {
+            response = new ApiResponse(AppConstant.SUCCESS);
+            response.setData(appConfig);
+        } else {
+            logger.info("Unauthorised username: {}, trying to access app config.", userService.getLoginUserName());
+            response = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
+        }
         logger.info("getAppConfig : Out: {}", response);
         return response;
     }
@@ -59,8 +68,15 @@ public class ApiResource {
     @Path("/get_session_config")
     public ApiResponse getSessionConfig() throws AppException {
         logger.info("getSessionConfig : In");
-        ApiResponse response = new ApiResponse(AppConstant.SUCCESS);
-        response.setData(appConfig.getSessionData());
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        ApiResponse response;
+        if (userService.isLoginUserDev()) {
+            response = new ApiResponse(AppConstant.SUCCESS);
+            response.setData(appConfig.getSessionData());
+        } else {
+            logger.info("Unauthorised username: {}, trying to access session config.", userService.getLoginUserName());
+            response = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
+        }
         logger.info("getSessionConfig : Out: {}", response);
         return response;
     }    @POST
@@ -69,9 +85,11 @@ public class ApiResource {
     @Path("/upload_file")
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail) {
-        logger.info("Requested upload fileDetails: {}", fileDetail);
-        ApiResponse output = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
-        return Response.ok(output).build();
+        logger.info("uploadFile: In, upload fileDetails: {}", fileDetail);
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        ApiResponse response = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
+        logger.info("uploadFile : Out");
+        return Response.ok(response).build();
     }
 //    @GET
 //    @Path("is_login")

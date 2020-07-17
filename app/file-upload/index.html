@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File Upload</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+.hide {
+    display: none;
+}
+.embed-style {
+    width:calc(100% - 30px);
+    padding: 15px;
+    height: 400px;
+}
+.error-message span {
+    font-size: 1.5rem;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    border: 1px solid;
+    border-radius: .25rem;
+}
+</style>
+</head>
+<body><center>
+<form method="POST" id="uploadForm" action="/api/upload_file" onsubmit="return false" enctype="multipart/form-data" >
+    <table>
+        <tbody>
+            <tr>
+                <td><span>File:</span></td>
+                <td><input type="file" name="file" id="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><div><input type="submit" value="Upload" name="upload" id="upload" /></div></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="progress"><div class="percent"></div></div>
+    <div>
+        <object data="" id="uploaded_object" type="" class="hide">
+            <embed src="" id="uploaded_embed" type="" class="embed-style hide" />
+        </object>
+        <img src="" id="uploaded_img" class="hide"/>
+        <div id="error-message" class="error-message"><span class="hide"></span></div>
+    </div>
+    
+</center></form>
+<script src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+$(document).ready(function(formData) {
+var uploadedFileUrl;
+var progress = [];
+var baseUrl = "http://localhost:8080";
+var fileUrl = "/view/file?name=";
+var uploadObj = $("#uploaded_object");
+var uploadEmb = $("#uploaded_embed");
+var uploadImg = $("#uploaded_img");
+var errorMessage = $("#error-message span");
+function clearObj() {
+    progress = [];
+    uploadEmb.addClass("hide");
+    uploadObj.addClass("hide");
+    uploadImg.addClass("hide");
+    errorMessage.addClass("hide");
+    uploadImg.attr("src", "");
+    uploadEmb.attr({"src": "", "type": ""});
+    uploadObj.attr({"data": "", "type": ""});
+    errorMessage.html("");
+}
+function setObject(response) {
+    uploadedFileUrl = baseUrl + fileUrl + response.path
+    switch(response.extension) {
+        case "pdf":
+            if (uploadObj.hasClass("hide")) {
+                uploadObj.removeClass("hide");
+            }
+            if (uploadEmb.hasClass("hide")) {
+                uploadEmb.removeClass("hide");
+            }
+            var fileType = "application/pdf";
+            if (response.mediaType) {
+                fileType = response.mediaType;
+            }
+            uploadEmb.attr({"src": uploadedFileUrl, "type": fileType});
+            uploadObj.attr({"data": uploadedFileUrl, "type": fileType});
+        break;
+        case "jpeg":
+            uploadImg.removeClass("hide");
+            uploadImg.attr("src", uploadedFileUrl);
+        break;
+        case "error":
+            errorMessage.removeClass("hide");
+            errorMessage.html(response.message);
+        break;
+        default:
+            errorMessage.removeClass("hide");
+            errorMessage.html("Unsupported file extension (for display): " + response.extension);
+        break;
+    }
+}
+
+function fileUpload() {
+    clearObj();
+    var formData = new FormData();
+    var files = $('#file')[0].files[0];
+    formData.append('file',files);
+    $.ajax({
+        url : baseUrl + '/api/upload_file',
+        type : 'POST',
+        data : formData,
+        processData: false,  // tell jQuery not to process the data
+        contentType: false,  // tell jQuery not to set contentType
+        success : function(res) {
+           console.log(res);
+            if (res.status === "SUCCESS") {
+                setObject(res.data);
+            } else {
+                alert(res.reason);
+            }
+        },
+        error: function(jqXHR, textStatus) {
+            console.log(jqXHR);
+            console.log(textStatus);
+            setObject({"extension": "error", "message": "Error in file upload."});
+        },
+        xhr: function() {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    percentComplete = parseInt(percentComplete * 100);
+                    progress.push(percentComplete);
+                    console.log("Completed percent: "+percentComplete);
+                    $(".progress .percent").html(progress.join("-->"));
+                    if (percentComplete === 100) {
+                        $(".progress .percent").html(progress.join("-->") + "-->Completed");
+                    }
+                }
+            }, false);
+            return xhr;
+        },
+    });
+}
+$("#upload").on("click", function(e) {
+fileUpload();
+});
+
+});
+
+</script>
+</body>
+</html>
+</html>
