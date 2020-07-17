@@ -87,16 +87,15 @@ public class FileServiceV2 {
         }
         return apiResponse;
     }
-    public ScanResult searchRequestedFile(final UserService userService, String filename) throws AppException {
+    public PathInfo searchRequestedFile(final UserService userService, String filename) throws AppException {
         if (filename == null) {
             logger.info("filename can not be null");
             throw new AppException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
-        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
         String loginUserName = userService.getLoginUserName();
         String[] filenameArr = filename.split("/");
-        String filePath = dir;
-        ScanResult scanResult = null;
+        String filePath = appConfig.getFtpConfiguration().getFileSaveDir();
+        PathInfo pathInfo = null;
         if (filenameArr.length == 2) {
             if (loginUserName.isEmpty()) {
                 logger.info("Invalid loginUserName: {}", loginUserName);
@@ -111,13 +110,16 @@ public class FileServiceV2 {
                         loginUserName, filename);
                 throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
             }
-            scanResult = fileService.scanDirectory(filePath, filePath, false);
-            logger.info("Scan result: {}", scanResult);
+            pathInfo = fileService.getPathInfo(filePath);
+            logger.info("Search result: {}", pathInfo);
+            if (!AppConstant.FILE.equals(pathInfo.getType())) {
+                throw new AppException(ErrorCodes.FILE_NOT_FOUND);
+            }
         } else {
             logger.info("Invalid filename:{}", filename);
             throw new AppException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
-        return scanResult;
+        return pathInfo;
     }
     public Object handleDefaultUrl(@Context HttpServletRequest request) {
         logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());

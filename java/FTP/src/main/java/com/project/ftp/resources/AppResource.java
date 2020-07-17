@@ -63,17 +63,13 @@ public class AppResource {
     @Path("/view/file")
     public Object viewFile(@Context HttpServletRequest request, @QueryParam("name") String filename) {
         logger.info("Loading viewFile: {}", filename);
-        ScanResult scanResult = null;
+        PathInfo pathInfo = null;
+        Response.ResponseBuilder r;
         try {
-            scanResult = fileServiceV2.searchRequestedFile(userService, filename);
+            pathInfo = fileServiceV2.searchRequestedFile(userService, filename);
         } catch (AppException ae) {
             logger.info("Error in searching requested file: {}", ae.getErrorCode().getErrorCode());
         }
-        PathInfo pathInfo = null;
-        if (scanResult != null && PathType.FILE.equals(scanResult.getPathType())) {
-            pathInfo = fileServiceV2.getFileResponse(scanResult.getPathName(), true);
-        }
-        Response.ResponseBuilder r;
         if (pathInfo != null) {
             File file = new File(pathInfo.getPath());
             try {
@@ -86,6 +82,31 @@ public class AppResource {
                 } else {
                     r.header(HttpHeaders.CONTENT_TYPE, pathInfo.getMediaType());
                 }
+                return r.build();
+            } catch (Exception e) {
+                logger.info("Error in loading file: {}", pathInfo);
+            }
+        }
+        return new CommonView(request, "page_not_found_404.ftl");
+    }
+    @GET
+    @Path("/download/file")
+    public Object downloadFile(@Context HttpServletRequest request, @QueryParam("name") String filename) {
+        logger.info("Loading viewFile: {}", filename);
+        PathInfo pathInfo = null;
+        Response.ResponseBuilder r;
+        try {
+            pathInfo = fileServiceV2.searchRequestedFile(userService, filename);
+        } catch (AppException ae) {
+            logger.info("Error in searching requested file: {}", ae.getErrorCode().getErrorCode());
+        }
+        if (pathInfo != null) {
+            File file = new File(pathInfo.getPath());
+            try {
+                InputStream inputStream = new FileInputStream(file);
+                r = Response.ok(inputStream);
+                String responseHeader = "attachment; filename=" + pathInfo.getFileName();
+                r.header(HttpHeaders.CONTENT_DISPOSITION, responseHeader);
                 return r.build();
             } catch (Exception e) {
                 logger.info("Error in loading file: {}", pathInfo);

@@ -16,6 +16,10 @@
     "view/file?name=U1/filename"
   ],
   [
+    "/download/file?name=filename",
+    "download/file?name=U1/filename"
+  ],
+  [
     "/api/get_files_info",
     "Scan directory based on user login"
   ],
