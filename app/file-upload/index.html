@@ -69,7 +69,7 @@ function clearObj() {
     errorMessage.html("");
 }
 function setObject(response) {
-    uploadedFileUrl = baseUrl + fileUrl + response.path
+    uploadedFileUrl = baseUrl + fileUrl + response.path;
     switch(response.extension) {
         case "pdf":
             if (uploadObj.hasClass("hide")) {

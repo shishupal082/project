@@ -171,7 +171,12 @@ public class FileServiceV2 {
         } else {
             logger.info("uploaded file pathInfo: {}", pathInfo);
             apiResponse = new ApiResponse(AppConstant.SUCCESS);
-            pathInfo.setPath(parseUserFileName(pathInfo.getPath()));
+            String filePath = parseUserFileName(pathInfo.getPath());
+            if (filePath == null) {
+                logger.info("File uploaded in wrong directory: {}", pathInfo);
+                throw new AppException(ErrorCodes.FILE_NOT_FOUND);
+            }
+            pathInfo.setPath(filePath);
             pathInfo.setParentFolder(null);
             apiResponse.setData(pathInfo);
         }
@@ -183,10 +188,6 @@ public class FileServiceV2 {
         if (!userService.isLogin() || loginUserName.isEmpty()) {
             logger.info("UnAuthorised user trying to upload file: {}", fileName);
             throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
-        }
-        if (loginUserName.contains("/") || loginUserName.contains("\\")) {
-            logger.info("Invalid username: {}", loginUserName);
-            throw new AppException(ErrorCodes.INVALID_USER_NAME);
         }
         PathInfo pathInfo = fileService.getPathInfoFromFileName(fileName);
         logger.info("PathInfo generated from request filename: {}, {}", fileName, pathInfo);
@@ -201,21 +202,23 @@ public class FileServiceV2 {
             throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }
         SysUtils sysUtils = new SysUtils();
-        String uploadingFileName = sysUtils.getDateTime(AppConstant.FileFormate) +
-                "." + pathInfo.getExtension();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
-        PathInfo pathInfo1 = fileService.getPathInfo(dir + "/" + loginUserName);
+        String uploadingFileName = dir + loginUserName + "/" + sysUtils.getDateTime(AppConstant.FileFormate) +
+                "." + pathInfo.getExtension();
+        if (parseUserFileName(uploadingFileName) == null) {
+            logger.info("Invalid upload filepath: {}", uploadingFileName);
+            throw new AppException(ErrorCodes.INVALID_FILE_SAVE_PATH);
+        }
         boolean dirStatus = true;
-        if (!AppConstant.FOLDER.equals(pathInfo1.getType())) {
+        if (!fileService.isDirectory(dir+loginUserName)) {
             dirStatus = fileService.createFolder(dir, loginUserName);
         }
         ApiResponse apiResponse;
         if (dirStatus) {
-            fileName = loginUserName + "/" + uploadingFileName;
-            apiResponse = doUpload(uploadedInputStream, dir + fileName);
+            apiResponse = doUpload(uploadedInputStream, uploadingFileName);
         } else {
             logger.info("Error in creating directory for username: {}", loginUserName);
-            throw new AppException(ErrorCodes.INVALID_USER_NAME);
+            throw new AppException(ErrorCodes.INVALID_FILE_SAVE_PATH);
         }
         return apiResponse;
     }

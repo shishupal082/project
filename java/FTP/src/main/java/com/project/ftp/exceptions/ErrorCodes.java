@@ -13,6 +13,7 @@ public enum ErrorCodes {
     FILE_NOT_FOUND("FILE_NOT_FOUND", "File not found", 402),
     INVALID_QUERY_PARAMS("Invalid query params", "Invalid query params", 403),
     INVALID_USER_NAME("INVALID_USER_NAME", "Invalid user name", 403),
+    INVALID_FILE_SAVE_PATH("INVALID_FILE_SAVE_PATH", "Invalid final save file path", 403),
     INVALID_SERVICE_NAME_EMPTY("Invalid service name Empty", "Invalid service name Empty", 403),
     INVALID_SERVICE_NAME("Invalid service name", "Invalid service name", 403),
     TASK_COMPONENT_NOT_FOUND("Component not found", "Component not found", 403),

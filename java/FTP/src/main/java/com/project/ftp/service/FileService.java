@@ -31,6 +31,13 @@ public class FileService {
         }
         return pathInfo;
     }
+    public Boolean isDirectory(String path) {
+        if (path == null) {
+            return false;
+        }
+        File file = new File(path);
+        return  file.isDirectory();
+    }
     public PathInfo getPathInfoFromFileName(String fileName) {
         PathInfo pathInfo = new PathInfo();
         pathInfo.setType(AppConstant.FILE);
@@ -38,10 +45,6 @@ public class FileService {
         pathInfo.findExtension();
         pathInfo.findMimeType();
         return pathInfo;
-    }
-    public static PathInfo getPathDetails(String requestedPath) {
-        FileService fileService = new FileService();
-        return fileService.getPathInfo(requestedPath);
     }
     public boolean createFolder(String existingFolder, String currentFolderName) {
         File file = new File(existingFolder);

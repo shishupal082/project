@@ -11,8 +11,7 @@ import com.project.ftp.obj.PathInfo;
 import com.project.ftp.resources.ApiResource;
 import com.project.ftp.resources.AppResource;
 import com.project.ftp.resources.FaviconResource;
-import com.project.ftp.service.ConfigService;
-import com.project.ftp.service.FileService;
+import com.project.ftp.service.StaticService;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -39,10 +38,10 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         LOGGER.info("commandLineArguments: " + arguments.toString());
         AppConfig appConfig = new AppConfig();
         appConfig.setFtpConfiguration(ftpConfiguration);
-        ConfigService.init(appConfig);
+        StaticService.initApplication(appConfig);
         LOGGER.info("appConfig: {}", appConfig);
         String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
-        PathInfo pathInfo = FileService.getPathDetails(fileSaveDir);
+        PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
         if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
             LOGGER.info("File save directory is not a folder: {}", fileSaveDir);
             throw new AppException(ErrorCodes.CONFIG_ERROR);

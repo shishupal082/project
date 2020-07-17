@@ -13,7 +13,7 @@ public class ConfigService {
     public ConfigService(final AppConfig appConfig) {
         this.appConfig = appConfig;
     }
-    private void setPublicDir() {
+    public void setPublicDir() {
         String systemDir = sysUtils.getProjectWorkingDir();
         String publicDir = appConfig.getFtpConfiguration().getPublicDir();
         String publicPostDir = appConfig.getFtpConfiguration().getPublicPostDir();
@@ -54,9 +54,5 @@ public class ConfigService {
         setPublicDir = StrUtils.replaceLast("/", "", setPublicDir);
         logger.info("Calculated PublicDir: {}", setPublicDir);
         appConfig.setPublicDir(setPublicDir);
-    }
-    public static void init(final AppConfig appConfig) {
-        ConfigService configService = new ConfigService(appConfig);
-        configService.setPublicDir();
     }
 }
