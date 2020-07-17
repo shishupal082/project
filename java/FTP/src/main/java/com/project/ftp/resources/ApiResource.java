@@ -87,7 +87,14 @@ public class ApiResource {
                                @FormDataParam("file") FormDataContentDisposition fileDetail) {
         logger.info("uploadFile: In, upload fileDetails: {}", fileDetail);
         logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
-        ApiResponse response = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
+        ApiResponse response;
+        try {
+            response = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
+        } catch (AppException ae) {
+            logger.info("Error in uploading file: {}", ae.getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
+        }
+
         logger.info("uploadFile : Out");
         return Response.ok(response).build();
     }

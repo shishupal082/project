@@ -2,6 +2,7 @@ package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.PathType;
+import com.project.ftp.exceptions.AppException;
 import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
 import com.project.ftp.service.FileServiceV2;
@@ -62,7 +63,12 @@ public class AppResource {
     @Path("/view/file")
     public Object viewFile(@Context HttpServletRequest request, @QueryParam("name") String filename) {
         logger.info("Loading viewFile: {}", filename);
-        ScanResult scanResult = fileServiceV2.searchRequestedFile(userService, filename);
+        ScanResult scanResult = null;
+        try {
+            scanResult = fileServiceV2.searchRequestedFile(userService, filename);
+        } catch (AppException ae) {
+            logger.info("Error in searching requested file: {}", ae.getErrorCode().getErrorCode());
+        }
         PathInfo pathInfo = null;
         if (scanResult != null && PathType.FILE.equals(scanResult.getPathType())) {
             pathInfo = fileServiceV2.getFileResponse(scanResult.getPathName(), true);

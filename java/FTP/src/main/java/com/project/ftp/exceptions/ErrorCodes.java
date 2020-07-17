@@ -7,7 +7,7 @@ package com.project.ftp.exceptions;
 public enum ErrorCodes {
     REDIRECTION_ERROR("Routing error", "Routing error", 300),
     UNABLE_TO_PARSE_JSON("Unable to parse Json", "Unable to parse Json", 400),
-    BAD_REQUEST_ERROR("Bad request error", "Bad request error", 401),
+    BAD_REQUEST_ERROR("BAD_REQUEST_ERROR", "Bad request error", 401),
     UNAUTHORIZED_ORIGIN("UnAuthorized Origin", "UnAuthorized Origin", 401),
     UNAUTHORIZED_USER("UNAUTHORIZED_USER", "UnAuthorized Access", 401),
     FILE_NOT_FOUND("FILE_NOT_FOUND", "File not found", 402),
@@ -23,14 +23,15 @@ public enum ErrorCodes {
     CONFIG_ERROR_INVALID_PATH("Invalid path", "Invalid path", 403),
     CONFIG_ERROR_INVALID_STORAGE_TYPE("Invalid storage type", "Invalid storage type", 403),
     DUPLICATE_ENTRY("Duplicate entry", "Duplicate entry", 405),
-    SERVER_ERROR("Server error", "Server error", 500),
+    SERVER_ERROR("SERVER_ERROR", "Server error", 500),
     CONFIG_ERROR("CONFIG_ERROR", "Configuration error", 500),
     UNSUPPORTED_FILE_TYPE("UNSUPPORTED_FILE_TYPE", "Unsupported file type", 500),
-    RUNTIME_ERROR("Run time error", "Run time error", 599);
+    FILE_SIZE_EXCEEDED("FILE_SIZE_EXCEEDED", "File size exceeded", 500),
+    RUNTIME_ERROR("RUN_TIME_ERROR", "Run time error", 599);
 
-    private String errorCode;
-    private String errorString;
-    private Integer statusCode;
+    final String errorCode;
+    final String errorString;
+    final Integer statusCode;
 
     ErrorCodes(String errorCode, String errorString, Integer statusCode) {
         this.errorCode = errorCode;

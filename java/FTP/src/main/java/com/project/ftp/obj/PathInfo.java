@@ -78,7 +78,11 @@ public class PathInfo {
             String[] fileNameArr = fileName.split("\\.");
             String filenameWithoutExt = "";
             if (fileNameArr.length > 0) {
-                extension = fileNameArr[fileNameArr.length-1];
+                if (fileNameArr.length == 1) {
+                    extension = "";
+                } else {
+                    extension = fileNameArr[fileNameArr.length-1];
+                }
             }
             for (int i=0; i<fileNameArr.length-1; i++) {
                 if (i==0) {

@@ -41,7 +41,7 @@ icoFilePath: meta-data/favicon.ico
 publicDir:
 publicPostDir:
 indexPageReRoute:
-maxFileSize: 2048
+maxFileSize: 2048001 #i.e. 2048000 = 2048 kB or 2MB
 
 adminUsersName:
   - Admin

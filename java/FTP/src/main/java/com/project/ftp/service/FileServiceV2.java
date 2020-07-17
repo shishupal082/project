@@ -4,6 +4,7 @@ import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
+import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.obj.PathInfo;
@@ -23,7 +24,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FileServiceV2 {
     final static Logger logger = LoggerFactory.getLogger(FileServiceV2.class);
@@ -87,9 +87,10 @@ public class FileServiceV2 {
         }
         return apiResponse;
     }
-    public ScanResult searchRequestedFile(final UserService userService, String filename) {
+    public ScanResult searchRequestedFile(final UserService userService, String filename) throws AppException {
         if (filename == null) {
-            filename = "";
+            logger.info("filename can not be null");
+            throw new AppException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
         String loginUserName = userService.getLoginUserName();
@@ -99,7 +100,7 @@ public class FileServiceV2 {
         if (filenameArr.length == 2) {
             if (loginUserName.isEmpty()) {
                 logger.info("Invalid loginUserName: {}", loginUserName);
-                return null;
+                throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
             }
             if (userService.isLoginUserAdmin()) {
                 filePath += filename;
@@ -108,14 +109,13 @@ public class FileServiceV2 {
             } else {
                 logger.info("Unauthorised access loginUserName: {}, filename: {}",
                         loginUserName, filename);
-                filePath = null;
+                throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
             }
-            if (filePath != null) {
-                scanResult = fileService.scanDirectory(filePath, filePath, false);
-                logger.info("Scan result: {}", scanResult);
-            }
+            scanResult = fileService.scanDirectory(filePath, filePath, false);
+            logger.info("Scan result: {}", scanResult);
         } else {
             logger.info("Invalid filename:{}", filename);
+            throw new AppException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
         return scanResult;
     }
@@ -154,7 +154,7 @@ public class FileServiceV2 {
         logger.info("PathDetails: {}", pathInfo.toString());
         return pathInfo;
     }
-    public ApiResponse doUpload(InputStream uploadedInputStream, String fileName) {
+    public ApiResponse doUpload(InputStream uploadedInputStream, String fileName) throws AppException {
         PathInfo pathInfo = fileService.getPathInfo(fileName);
         if (AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Filename: {}, already exist, re-naming it. {}", fileName, pathInfo);
@@ -162,11 +162,12 @@ public class FileServiceV2 {
             String parentFolder = pathInfo.getParentFolder() + "/";;
             fileService.renameExistingFile(parentFolder, pathInfo.getFilenameWithoutExt(), ext);
         }
-        pathInfo = fileService.uploadFile(uploadedInputStream, fileName);
+        Integer maxFileSize = appConfig.getFtpConfiguration().getMaxFileSize();
         ApiResponse apiResponse;
+        pathInfo = fileService.uploadFile(uploadedInputStream, fileName, maxFileSize);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Error in uploading file pathInfo: {}", pathInfo);
-            apiResponse = new ApiResponse(ErrorCodes.INVALID_USER_NAME);
+            throw new AppException(ErrorCodes.INVALID_USER_NAME);
         } else {
             logger.info("uploaded file pathInfo: {}", pathInfo);
             apiResponse = new ApiResponse(AppConstant.SUCCESS);
@@ -177,12 +178,11 @@ public class FileServiceV2 {
         return apiResponse;
     }
     public ApiResponse uploadFile(UserService userService,
-                                  InputStream uploadedInputStream, String fileName) {
-        ApiResponse apiResponse = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
+                                  InputStream uploadedInputStream, String fileName) throws AppException {
         String loginUserName = userService.getLoginUserName();
         if (!userService.isLogin() || loginUserName.isEmpty()) {
             logger.info("UnAuthorised user trying to upload file: {}", fileName);
-            return apiResponse;
+            throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
         }
         PathInfo pathInfo = fileService.getPathInfoFromFileName(fileName);
         logger.info("PathInfo generated from request filename: {}, {}", fileName, pathInfo);
@@ -190,13 +190,11 @@ public class FileServiceV2 {
         ArrayList<String> supportedFileType = appConfig.getFtpConfiguration().getSupportedFileType();
         if (supportedFileType == null) {
             logger.info("Config error, supportedFileType is Null.");
-            apiResponse = new ApiResponse(ErrorCodes.CONFIG_ERROR);
-            return apiResponse;
+            throw new AppException(ErrorCodes.CONFIG_ERROR);
         }
         if (!supportedFileType.contains(ext)) {
             logger.info("File extension '{}', is not supported", ext);
-            apiResponse = new ApiResponse(ErrorCodes.UNSUPPORTED_FILE_TYPE);
-            return apiResponse;
+            throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }
         SysUtils sysUtils = new SysUtils();
         String timeInMs = sysUtils.getDateTime(AppConstant.FileFormate) +
@@ -207,12 +205,13 @@ public class FileServiceV2 {
         if (!AppConstant.FOLDER.equals(pathInfo1.getType())) {
             dirStatus = fileService.createFolder(dir, loginUserName);
         }
+        ApiResponse apiResponse;
         if (dirStatus) {
             fileName = loginUserName + "/" + timeInMs;
             apiResponse = doUpload(uploadedInputStream, dir + fileName);
         } else {
             logger.info("Error in creating directory for username: {}", loginUserName);
-            apiResponse = new ApiResponse(ErrorCodes.INVALID_USER_NAME);
+            throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }
         return apiResponse;
     }

@@ -3,6 +3,8 @@ package com.project.ftp.service;
 import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
+import com.project.ftp.exceptions.AppException;
+import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
 import org.slf4j.Logger;
@@ -99,30 +101,31 @@ public class FileService {
         return finalFileScanResult;
     }
     public void renameExistingFile(String dir, String fileName, String ext) {
+        //ext = ""; is also working
         logger.info("Rename request: dir={}, fileName={}", dir, fileName +"."+ ext);
-        SysUtils sysUtils = new SysUtils();
-        if (dir == null) {
+        if (dir == null || fileName == null || ext == null) {
+            String logStr = "Invalid rename request: dir="+dir;
+            logger.info(logStr + ", fileName={}, ext={}", fileName, ext);
             return;
         }
-        if (ext == null) {
-            ext = "txt";
-        }
+        SysUtils sysUtils = new SysUtils();
         String timeInMs = sysUtils.getDateTime(AppConstant.DateTimeFormat);
         if (timeInMs == null) {
             timeInMs = sysUtils.getTimeInMs();
         }
-        String renameFilePath = dir + fileName + "-" + timeInMs + "." + ext;
+        String renameFilePath = dir + "/" + fileName + "-" + timeInMs + "." + ext;
         try {
-            File file = new File(dir + fileName + "." + ext);
+            File file = new File(dir + "/" + fileName + "." + ext);
             File newFile = new File(renameFilePath);
             if (file.renameTo(newFile)) {
                 String logStr = "fileName '{}' is already exist, renaming existing file with '{}'";
                 logger.info(logStr, fileName + "." + ext, fileName + "-" + timeInMs + "." + ext);
+            } else {
+                logger.info("Rename fail: from {}, to {}", file.getPath(), newFile.getPath());
             }
         } catch (Exception e) {
             logger.info("Error in renaming file '{}', {}", fileName + "." + ext, e);
         }
-        return;
     }
     public PathInfo searchIndexHtmlInFolder(PathInfo pathInfo) {
         if (AppConstant.FOLDER.equals(pathInfo.getType())) {
@@ -142,22 +145,51 @@ public class FileService {
         }
         return pathInfo;
     }
-    public PathInfo uploadFile(InputStream uploadedInputStream, String filePath) {
+    private void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.isFile()) {
+            if (file.delete()) {
+                logger.info("File deleted: {}", filePath);
+            } else {
+                logger.info("Error in file delete: {}", filePath);
+                PathInfo pathInfo = getPathInfo(filePath);
+                renameExistingFile(pathInfo.getParentFolder(),
+                        pathInfo.getFilenameWithoutExt(), pathInfo.getExtension());
+            }
+        }
+    }
+    public PathInfo uploadFile(InputStream uploadedInputStream, String filePath, Integer maxFileSize) throws AppException {
         logger.info("uploadFile request: {}", filePath);
+        if (maxFileSize == null || maxFileSize < 1) {
+            logger.info("Invalid maxFileSize in ftp env configuration: {}", maxFileSize);
+            throw new AppException(ErrorCodes.CONFIG_ERROR);
+        }
         try {
             int read;
+            int fileSize = 0;
             final int BUFFER_LENGTH = 1024;
             final byte[] buffer = new byte[BUFFER_LENGTH];
             OutputStream out = new FileOutputStream(new File(filePath));
             while ((read = uploadedInputStream.read(buffer)) != -1) {
                 out.write(buffer, 0, read);
+                fileSize += read;
+                if (fileSize >= maxFileSize) {
+                    logger.info("fileSize = {} exceed than maxFileSize = {}", fileSize, maxFileSize);
+                    out.flush();
+                    out.close();
+                    deleteFile(filePath);
+                    throw new AppException(ErrorCodes.FILE_SIZE_EXCEEDED);
+                }
             }
             out.flush();
             out.close();
+            logger.info("fileSize = {}, uploaded file: {}", fileSize, filePath);
         } catch (FileNotFoundException e1) {
             logger.info("FileNotFoundException in saving file: {}", e1.getMessage());
+            throw new AppException(ErrorCodes.RUNTIME_ERROR);
         } catch (IOException e2) {
             logger.info("IOException in saving file: {}", e2.getMessage());
+            throw new AppException(ErrorCodes.RUNTIME_ERROR);
         }
         return getPathInfo(filePath);
     }
