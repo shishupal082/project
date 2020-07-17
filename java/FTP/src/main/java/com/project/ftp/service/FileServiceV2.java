@@ -71,14 +71,16 @@ public class FileServiceV2 {
         ApiResponse apiResponse = new ApiResponse(AppConstant.SUCCESS);
         ArrayList<ScanResult> scanResults = new ArrayList<>();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+        String publicDir = dir+"public/";
         String loginUserName = userService.getLoginUserName();
         if (userService.isLogin() && !loginUserName.isEmpty()) {
             if (userService.isLoginUserAdmin()) {
                 scanResults.add(fileService.scanDirectory(dir, dir, true));
             } else {
-                dir += loginUserName + "/";
+                dir = dir + loginUserName + "/";
                 scanResults.add(fileService.scanDirectory(dir, dir, false));
             }
+            scanResults.add(fileService.scanDirectory(publicDir, publicDir, false));
             ArrayList<String> response = new ArrayList<>();
             generateApiResponse(scanResults, response);
             logger.info("scanUserDirectory result size: {}", response.size());

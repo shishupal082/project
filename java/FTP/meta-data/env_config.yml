@@ -38,7 +38,7 @@ supportedFileType:
 
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
-publicDir:
+publicDir: ".."
 publicPostDir:
 indexPageReRoute:
 maxFileSize: 2048001 #i.e. 2048000 = 2048 kB or 2MB
