@@ -81,6 +81,7 @@ public class FileServiceV2 {
             }
             ArrayList<String> response = new ArrayList<>();
             generateApiResponse(scanResults, response);
+            logger.info("scanUserDirectory result size: {}", response.size());
             apiResponse.setData(response);
         } else {
             apiResponse = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);

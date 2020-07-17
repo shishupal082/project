@@ -45,7 +45,8 @@ public class ApiResource {
         logger.info("getAllV3Data : In");
         logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
         ApiResponse response = fileServiceV2.scanUserDirectory(userService);
-        logger.info("getAllV3Data : Out: {}", response);
+        // Not putting response in log as it may be very large
+        logger.info("getAllV3Data : Out");
         return response;
     }
     @GET
@@ -91,7 +92,7 @@ public class ApiResource {
         try {
             response = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
         } catch (AppException ae) {
-            logger.info("Error in uploading file: {}", ae.getErrorCode());
+            logger.info("Error in uploading file: {}", ae.getErrorCode().getErrorCode());
             response = new ApiResponse(ae.getErrorCode());
         }
 

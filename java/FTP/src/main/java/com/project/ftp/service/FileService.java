@@ -69,13 +69,13 @@ public class FileService {
             File folder = new File(folderPath);
             if (folder.isFile()) {
                 finalFileScanResult = new ScanResult(staticFolderPath, folderPath, PathType.FILE);
-                logger.info("Given folder path is a file returning : {}", finalFileScanResult);
+//                logger.info("Given folder path is a file returning : {}", finalFileScanResult);
                 return finalFileScanResult;
             }
             finalFileScanResult = new ScanResult(staticFolderPath, folderPath);
             File[] listOfFiles = folder.listFiles();
             if (listOfFiles != null) {
-                logger.info("Files in folder : {}, {}", folderPath, listOfFiles);
+//                logger.info("Files in folder : {}, {}", folderPath, listOfFiles);
                 finalFileScanResult.setPathType(PathType.FOLDER);
                 finalFileScanResult.setScanResults(new ArrayList<ScanResult>());
                 for (File file : listOfFiles) {
