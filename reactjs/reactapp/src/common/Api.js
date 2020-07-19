@@ -124,7 +124,11 @@ Api.extend({
 
 childGenerator = {
     "a": function(props, data, reactChildText, key) {
-        return <a key={key} className={data.className} href={data.href}>{reactChildText}</a>;
+        var target = "";
+        if ($S.isBooleanTrue(data.isTargetBlank)) {
+            target = "_blank";
+        }
+        return <a key={key} className={data.className} href={data.href} target={target}>{reactChildText}</a>;
     },
     "b": function(props, data, reactChildText, key) {
         return <b key={key} className={data.className}>{reactChildText}</b>;
@@ -173,6 +177,12 @@ childGenerator = {
     },
     "ol": function(props, data, reactChildText, key) {
         return <ol key={key} type={data.type} className={data.className}>{reactChildText}</ol>;
+    },
+    "object": function(props, data, reactChildText, key) {
+        return <object key={key} type={data.type} className={data.className} id={data.id} data={data.data}>{reactChildText}</object>;
+    },
+    "embed": function(props, data, reactChildText, key) {
+        return <embed key={key} type={data.type} className={data.className} id={data.id} src={data.src}/>;
     },
     "li": function(props, data, reactChildText, key) {
         return <li key={key} className={data.className}>{reactChildText}</li>;

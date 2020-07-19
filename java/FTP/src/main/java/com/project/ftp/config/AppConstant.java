@@ -22,4 +22,5 @@ public class AppConstant {
     public static final String UTF8 = "UTF-8";
     public static final String FAVICON_ICO_PATH = "favicon.ico";
     public static final String ORIGIN = "origin";
+    public static final String PUBLIC = "public";
 }

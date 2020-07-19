@@ -55,6 +55,7 @@ Config.getPageData = function(key, defaultValue) {
 var RequestId = $S.getRequestId();
 Config.apiMapping = {};
 Config.apiMapping["upload_file"] = baseapi + "/api/upload_file?" + RequestId;
+Config.apiMapping["get_files"] = baseapi + "/api/get_files_info?" + RequestId;
 
 Config.getAleartMessage = function(messageCode) {
     var messageMap = {};

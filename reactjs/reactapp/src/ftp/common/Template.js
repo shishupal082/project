@@ -285,14 +285,137 @@ Template["change_password"] = [
 ];
 Template["dashboard"] = [
     {
-        "tag": "div.div",
+        "tag": "div",
         "className": "dashboard",
         "text": [
-
+            {
+                "tag": "div",
+                "className": "container",
+                "text": {
+                    "tag": "table.tbody.tr",
+                    "className": "table",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "text": {
+                                "tag": "table.tbody",
+                                "className": "table table-striped",
+                                "name": "dashboardRow",
+                                "text": []
+                            }
+                        },
+                        {
+                            "tag": "td",
+                            "className": "pdf-embed-td",
+                            "text": {
+                                "tag": "div",
+                                "className": "pdf-view",
+                                "text": {
+                                    "tag": "object",
+                                    "name": "pdfViewObject",
+                                    "type": "application/pdf",
+                                    "className": "pdf-embed",
+                                    "data": "",
+                                    "text": {
+                                        "tag": "embed",
+                                        "name": "pdfViewEmbed",
+                                        "type": "application/pdf",
+                                        "src": ""
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
         ]
     }
 ];
-
+Template["dashboardRowHeading"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "colSpan": 2,
+                "className": "p-0",
+                "text": {
+                    "tag": "span",
+                    "name": "rowHeading",
+                    "className": "badge badge-primary",
+                    "text": ""
+                }
+            }
+        ]
+    }
+];
+Template["dashboard1stRow"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "text": "Fileinfo"
+            }
+        ]
+    }
+];
+Template["dashboardRowData"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "s.no",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "fileinfo",
+                "text": ""
+            }
+        ]
+    }
+];
+Template["dashboard.fileinfo"] = [
+    {
+        "tag": "div",
+        "name": "dashboard.fileinfo.filename",
+        "text": "Filename"
+    },
+    {
+        "tag": "div",
+        "text": [
+            {
+                "tag": "button",
+                "name": "dashboard.fileinfo.view",
+                "className": "btn btn-link pdf-view-link",
+                "text": "View"
+            },
+            {
+                "tag": "a",
+                "href": "open file path",
+                "name": "dashboard.fileinfo.open-in-new-tab",
+                "isTargetBlank": true,
+                "text": "Open in new tab"
+            },
+            {
+                "tag": "span",
+                "className": "p-10px"
+            },
+            {
+                "tag": "a",
+                "href": "download-link",
+                "name": "dashboard.fileinfo.download",
+                "text": "Download"
+            }
+        ]
+    }
+];
 Template["noPageFound"] = [{
     "tag": "center.h1",
     "text": {
@@ -301,6 +424,10 @@ Template["noPageFound"] = [{
         "name": "date",
         "text": "Page not found"
     }
+}];
+Template["noDataFound"] = [{
+    "tag": "center.h1",
+    "text": "No data found"
 }];
 Template["loading"] = [
     {

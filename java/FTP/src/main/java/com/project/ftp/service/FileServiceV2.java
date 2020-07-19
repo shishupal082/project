@@ -71,7 +71,7 @@ public class FileServiceV2 {
         ApiResponse apiResponse = new ApiResponse(AppConstant.SUCCESS);
         ArrayList<ScanResult> scanResults = new ArrayList<>();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
-        String publicDir = dir+"public/";
+        String publicDir = dir+AppConstant.PUBLIC+"/";
         String loginUserName = userService.getLoginUserName();
         if (userService.isLogin() && !loginUserName.isEmpty()) {
             if (userService.isLoginUserAdmin()) {
@@ -104,7 +104,7 @@ public class FileServiceV2 {
                 logger.info("Invalid loginUserName: {}", loginUserName);
                 throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
             }
-            if (userService.isLoginUserAdmin()) {
+            if (userService.isLoginUserAdmin() || AppConstant.PUBLIC.equals(filenameArr[0])) {
                 filePath += filename;
             } else if (loginUserName.equals(filenameArr[0])) {
                 filePath += loginUserName + "/" + filenameArr[1];

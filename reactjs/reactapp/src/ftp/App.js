@@ -15,7 +15,7 @@ import RenderComponent from "./component/RenderComponent";
 // var baseapi = Config.baseapi;
 var Data = $S.getDataObj();
 
-var keys = ["FTPTemplate", "userData", "linkTemplate", "uploadFileTemplate"];
+var keys = ["FTPTemplate", "userData", "linkTemplate", "uploadFileTemplate", "dashboardField"];
 
 Data.getTemplate = function(key, defaultTemplate) {
     var allTemplate = Data.getData("FTPTemplate", {});
@@ -27,16 +27,10 @@ Data.getTemplate = function(key, defaultTemplate) {
     return defaultTemplate;
 };
 Data.initData = function() {
-    // var defaultData;
-    // var allData = Data.getAllData();
     for (var i = 0; i < keys.length; i++) {
         if (["FTPTemplate", "userData"].indexOf(keys[i]) >= 0) {
             continue;
         }
-        // defaultData = [];
-        // if ($S.isObject(allData[keys[i]])) {
-        //     defaultData = {};
-        // }
         Data.setData(keys[i], null);
     }
 };
@@ -64,8 +58,6 @@ var currentPageName = Config.getPageData("page", "");
 
 Data.setUserData("is_login", isLogin);
 Data.setUserData("username", userName);
-Data.setUserData("page", currentPageName);
-PageData.setData("page", currentPageName);
 
 class App extends React.Component {
     constructor(props) {
@@ -73,6 +65,7 @@ class App extends React.Component {
         this.state = {
             renderField: []
         };
+        this.onClick = this.onClick.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
     }
     onFormSubmit(e) {
@@ -85,42 +78,44 @@ class App extends React.Component {
     }
     onClick(e) {
         //On button click
+        var self = this;
+        PageData.handleButtonClick(e, Data, function(setRenderField) {
+            if ($S.isBooleanTrue(setRenderField)) {
+                self.setRenderField();
+            }
+        });
     }
     onChange(e) {
         // var terget = e.currentTarget;
         PageData.handleInputChange(e);
     }
-    setRenderField() {
+    setRenderField(isLoading) {
         var renderField = [];
         renderField.push(Data.getTemplate("heading", {}));
         var isLogin = Data.getUserData("is_login", false);
         if (isLogin) {
             FTPHelper.setLinkTemplate(Data);
             renderField.push(Data.getData("linkTemplate", {}));
-            renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
+            if ($S.isBooleanTrue(isLoading)) {
+                renderField.push(Data.getTemplate("loading", {}));
+            } else {
+                renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
+            }
         } else {
             renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
         }
         this.setState({renderField: renderField});
     }
     componentDidMount() {
-        var redirectStatus = FTPHelper.checkForRedirect(Data, Config);
+        var redirectStatus = FTPHelper.checkForRedirect(Data);
         if (redirectStatus) {
             return;
         }
-        this.setRenderField();
-        // var renderField = [];
-        // for(var key in Template) {
-        //     renderField.push(Template[key]);
-        // }
-        // renderField.push(Template.heading);
-        // renderField.push(Template.link);
-        // renderField.push(Template.login);
-        // renderField.push(Template.forgot_password);
-        // renderField.push(Template.upload_file);
-        // renderField.push(Template.change_password);
-        // renderField.push(Template.loading);
-        // this.setState({renderField: renderField});
+        var self = this;
+        this.setRenderField(true);
+        FTPHelper.loadPageData(Data, function() {
+            self.setRenderField();
+        });
     }
     render() {
         var renderFieldRow = this.state.renderField;

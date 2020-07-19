@@ -1,3 +1,6 @@
+.p-0 {
+    padding: 0;
+}
 .p-10px {
     padding: 10px;
 }
@@ -9,6 +12,9 @@
 }
 .pl-10px {
     padding-left: 10px;
+}
+.table th, .table td {
+    padding: 0.2rem;
 }
 .theme-grey{
     background-color: #eee;
@@ -29,4 +35,18 @@
     padding: 10px;
     border: 2px solid #ddd;
     border-radius: 5px;
+}
+.pdf-view-link {
+    padding-top: 0;
+    padding-left: 0;
+}
+.pdf-embed-td {
+    width: 60%;
+}
+.pdf-embed {
+    width: 100%;
+    height: 400px;
+}
+.pdf-view-link.disabled:hover {
+    text-decoration: none;
 }
