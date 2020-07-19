@@ -3,6 +3,8 @@ package com.project.ftp.service;
 import com.project.ftp.common.StrUtils;
 import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConfig;
+import com.project.ftp.config.AppConstant;
+import com.project.ftp.obj.PathInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,5 +56,11 @@ public class ConfigService {
         setPublicDir = StrUtils.replaceLast("/", "", setPublicDir);
         logger.info("Calculated PublicDir: {}", setPublicDir);
         appConfig.setPublicDir(setPublicDir);
+        String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
+        PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
+        if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
+            logger.info("File save directory is not a folder: {}, setting same as publicDir.", fileSaveDir);
+            appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir);
+        }
     }
 }

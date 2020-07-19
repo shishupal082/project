@@ -1735,7 +1735,7 @@ Stack.extend({
 Stack.extend({
     _fireCallBack: function(callBack, ajax, status, response) {
         if (Stack.isFunction(callBack)) {
-            callBack(ajax, "SUCCESS", response);
+            callBack(ajax, status, response);
         }
     },
     _send: function(JQ, options, callBack) {

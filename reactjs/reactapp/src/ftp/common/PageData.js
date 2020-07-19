@@ -10,6 +10,11 @@ var keys = ["upload_file.file"];
 keys.push("dashboard.apiResponse");
 keys.push("dashboard.apiData");
 keys.push("dashboard.currentPdfLink");
+keys.push("login.username");
+keys.push("login.password");
+keys.push("change_password.old_password");
+keys.push("change_password.new_password");
+keys.push("change_password.confirm_password");
 CurrentFormData.setKeys(keys);
 
 PageData = function(arg) {
@@ -59,6 +64,8 @@ PageData.extend({
         if (fieldName === "upload_file.file") {
             var file = currentTarget.files[0];
             CurrentFormData.setData(fieldName, file, true);
+        } else {
+            CurrentFormData.setData(fieldName, currentTarget.value);
         }
     },
     handleButtonClick: function(e, Data, callBack) {
@@ -74,6 +81,7 @@ PageData.extend({
     handleFormSubmit: function(e, Data, callBack) {
         var pageName = Config.getPageData("page", "");
         var url = Config.apiMapping[pageName];
+        var postData = {};
         if ($S.isString(url)) {
             if (pageName === "upload_file") {
                 var formData = new FormData();
@@ -81,7 +89,30 @@ PageData.extend({
                 $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
                     console.log(response);
                     if (status === "FAILURE") {
-                        alert("Error in uploading file, Try again.");
+                        alert("Error in uploading file, Please Try again.");
+                    } else {
+                        PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+                    }
+                });
+            } else if (pageName === "login") {
+                postData["username"] = CurrentFormData.getData("login.username", "");
+                postData["password"] = CurrentFormData.getData("login.password", "");
+                $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+                    console.log(response);
+                    if (status === "FAILURE") {
+                        alert("Error in login, Please Try again.");
+                    } else {
+                        PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+                    }
+                });
+            } else if (pageName === "change_password") {
+                postData["old_password"] = CurrentFormData.getData("change_password.old_password", "");
+                postData["new_password"] = CurrentFormData.getData("change_password.new_password", "");
+                postData["confirm_password"] = CurrentFormData.getData("change_password.confirm_password", "");
+                $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+                    console.log(response);
+                    if (status === "FAILURE") {
+                        alert("Error in change password, Please Try again.");
                     } else {
                         PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
                     }
@@ -98,6 +129,18 @@ PageData.extend({
                 alert(Config.getAleartMessage(response.failureCode));
             } else {
                 alert("File saved as: " + response.data.fileName);
+                Config.location.href = "/dashboard";
+            }
+        } else if (pageName === "login") {
+            if (response.status === "FAILURE") {
+                alert(Config.getAleartMessage(response.failureCode));
+            } else {
+                Config.location.href = "/dashboard";
+            }
+        } else if (pageName === "change_password") {
+            if (response.status === "FAILURE") {
+                alert(Config.getAleartMessage(response.failureCode));
+            } else {
                 Config.location.href = "/dashboard";
             }
         }

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -42,25 +43,26 @@ public class ApiResource {
     }
     @GET
     @Path("/get_files_info")
-    public ApiResponse getAllV3Data() throws AppException {
+    public ApiResponse getAllV3Data(@Context HttpServletRequest request) throws AppException {
         logger.info("getAllV3Data : In");
-        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
-        ApiResponse response = fileServiceV2.scanUserDirectory(userService);
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
+        ApiResponse response = fileServiceV2.scanUserDirectory(request, userService);
         // Not putting response in log as it may be very large
         logger.info("getAllV3Data : Out");
         return response;
     }
     @GET
     @Path("/get_app_config")
-    public ApiResponse getAppConfig() throws AppException {
+    public ApiResponse getAppConfig(@Context HttpServletRequest request) {
         logger.info("getAppConfig : In");
-        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response;
-        if (userService.isLoginUserDev()) {
+        if (userService.isLoginUserDev(request)) {
             response = new ApiResponse(AppConstant.SUCCESS);
             response.setData(appConfig);
         } else {
-            logger.info("Unauthorised username: {}, trying to access app config.", userService.getLoginUserName());
+            logger.info("Unauthorised username: {}, trying to access app config.",
+                    userService.getLoginUserName(request));
             response = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
         }
         logger.info("getAppConfig : Out: {}", response);
@@ -68,15 +70,16 @@ public class ApiResource {
     }
     @GET
     @Path("/get_session_config")
-    public ApiResponse getSessionConfig() throws AppException {
+    public ApiResponse getSessionConfig(@Context HttpServletRequest request) throws AppException {
         logger.info("getSessionConfig : In");
-        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response;
-        if (userService.isLoginUserDev()) {
+        if (userService.isLoginUserDev(request)) {
             response = new ApiResponse(AppConstant.SUCCESS);
             response.setData(appConfig.getSessionData());
         } else {
-            logger.info("Unauthorised username: {}, trying to access session config.", userService.getLoginUserName());
+            logger.info("Unauthorised username: {}, trying to access session config.",
+                    userService.getLoginUserName(request));
             response = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
         }
         logger.info("getSessionConfig : Out: {}", response);
@@ -85,13 +88,14 @@ public class ApiResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/upload_file")
-    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
+    public Response uploadFile(@Context HttpServletRequest request,
+                                @FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail) {
         logger.info("uploadFile: In, upload fileDetails: {}", fileDetail);
-        logger.info("loginUserDetails: {}", userService.getUserDataForLogging());
+        logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response;
         try {
-            response = fileServiceV2.uploadFile(userService, uploadedInputStream, fileDetail.getFileName());
+            response = fileServiceV2.uploadFile(request, userService, uploadedInputStream, fileDetail.getFileName());
         } catch (AppException ae) {
             logger.info("Error in uploading file: {}", ae.getErrorCode().getErrorCode());
             response = new ApiResponse(ae.getErrorCode());
@@ -102,14 +106,19 @@ public class ApiResource {
     }
     @POST
     @Path("/login_user")
-    public ApiResponse loginUser(RequestDataUserLogin request) throws AppException {
+    public ApiResponse loginUser(@Context HttpServletRequest httpServletRequest,
+                                 RequestDataUserLogin request) {
         logger.info("loginUser : In: {}", request);
-        HashMap<String, String> loginUserDetails = userService.getUserDataForLoggingV2();
-        if (request != null) {
-            loginUserDetails.put("request.username", request.getUsername());
-            loginUserDetails.put("request.password", request.getPassword());
+        HttpSession httpSession = httpServletRequest.getSession();
+        ApiResponse response;
+        try {
+            userService.loginUser(httpServletRequest, request.getUsername(), request.getPassword());
+            HashMap<String, String> loginUserDetails = userService.getLoginUserResponse(httpServletRequest);
+            response = new ApiResponse(AppConstant.SUCCESS, loginUserDetails);
+        } catch (AppException ae) {
+            logger.info("Error in login user: {}", ae.getErrorCode().getErrorCode());
+            response = new ApiResponse(AppConstant.SUCCESS, ae.getErrorCode());
         }
-        ApiResponse response = new ApiResponse(AppConstant.SUCCESS, loginUserDetails);
         logger.info("loginUser : Out: {}", response);
         return response;
     }

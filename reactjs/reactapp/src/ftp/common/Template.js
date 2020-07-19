@@ -95,6 +95,7 @@ Template["login"] = [
                         {
                             "tag": "input",
                             "className": "form-control",
+                            "name": "login.username",
                             "text": ""
                         }
                     ]
@@ -110,6 +111,7 @@ Template["login"] = [
                         {
                             "tag": "input",
                             "className": "form-control",
+                            "name": "login.password",
                             "type": "password",
                             "text": ""
                         }
@@ -237,6 +239,7 @@ Template["change_password"] = [
                         {
                             "tag": "input",
                             "className": "form-control",
+                            "name": "change_password.old_password",
                             "type": "password",
                             "text": ""
                         }
@@ -253,6 +256,7 @@ Template["change_password"] = [
                         {
                             "tag": "input",
                             "className": "form-control",
+                            "name": "change_password.new_password",
                             "type": "password",
                             "text": ""
                         }
@@ -269,6 +273,7 @@ Template["change_password"] = [
                         {
                             "tag": "input",
                             "className": "form-control",
+                            "name": "change_password.confirm_password",
                             "type": "password",
                             "text": ""
                         }

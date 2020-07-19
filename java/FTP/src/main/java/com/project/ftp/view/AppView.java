@@ -1,6 +1,7 @@
 package com.project.ftp.view;
 
 import com.project.ftp.config.AppConstant;
+import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.service.UserService;
 import io.dropwizard.views.View;
 import org.slf4j.Logger;
@@ -18,13 +19,14 @@ public class AppView extends View {
     final String isLogin;
     final String userName;
     final String isLoginUserAdmin;
-    public AppView(String pageName, final UserService userService) {
+    public AppView(HttpServletRequest request, LoginUserDetails loginUserDetails,
+                   String pageName, final UserService userService) {
         super("app_view.ftl");
         this.pageName = pageName;
-        this.isLogin = userService.isLogin().toString();
-        this.userName = userService.getLoginUserName();
+        this.isLogin = loginUserDetails.getLogin().toString();
+        this.userName = loginUserDetails.getUsername();
         this.appVersion = AppConstant.AppVersion;
-        this.isLoginUserAdmin = userService.isLoginUserAdmin().toString();
+        this.isLoginUserAdmin = loginUserDetails.getLoginUserAdmin().toString();
         logger.info("Loading AppView: page={}", pageName);
     }
 

@@ -23,6 +23,9 @@ public class SysUtils {
         }
         return response;
     }
+    public Long getTimeInMsLong() {
+        return System.currentTimeMillis();
+    }
     public String getTimeInMs() {
         Long currentTimeInMs = System.currentTimeMillis();
         return currentTimeInMs.toString();

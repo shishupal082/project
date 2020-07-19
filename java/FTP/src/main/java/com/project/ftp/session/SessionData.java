@@ -1,47 +1,43 @@
 package com.project.ftp.session;
 
-import java.util.HashMap;
-
 public class SessionData {
-    private HashMap<String, SessionUserInfo> sessionMapping;
-
-    public HashMap<String, SessionUserInfo> getSessionMapping() {
-        return sessionMapping;
+    private String sessionId;
+    private Long updatedTime;
+    private String username;
+    public SessionData(String sessionId, Long updatedTime) {
+        this.sessionId = sessionId;
+        this.updatedTime = updatedTime;
+    }
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setSessionMapping(HashMap<String, SessionUserInfo> sessionMapping) {
-        this.sessionMapping = sessionMapping;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
-    public void destroySession(String sessionId) {
-        if (sessionId != null) {
-            if (sessionMapping.containsKey(sessionId)) {
-                sessionMapping.remove(sessionId);
-            }
-        }
+
+    public Long getUpdatedTime() {
+        return updatedTime;
     }
-    public void updateSession(String sessionId, SessionUserInfo sessionUserInfo) {
-        if (sessionId != null) {
-            if (sessionMapping.containsKey(sessionId)) {
-                sessionMapping.put(sessionId, sessionUserInfo);
-            } else {
-                sessionMapping.put(sessionId, sessionUserInfo);
-            }
-        }
+
+    public void setUpdatedTime(Long updatedTime) {
+        this.updatedTime = updatedTime;
     }
-    public void updateUserName(String sessionId, String userName) {
-        if (sessionId != null) {
-            SessionUserInfo sessionUserInfo = sessionMapping.get(sessionId);
-            if (sessionUserInfo == null) {
-                sessionUserInfo = new SessionUserInfo();
-            }
-            sessionUserInfo.setUserName(userName);
-            sessionMapping.put(sessionId, sessionUserInfo);
-        }
+
+    public String getUsername() {
+        return username;
     }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "SessionData{" +
-                "sessionMapping=" + sessionMapping +
+                "sessionId='" + sessionId + '\'' +
+                ", updatedTime='" + updatedTime + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

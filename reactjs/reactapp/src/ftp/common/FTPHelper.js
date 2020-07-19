@@ -32,8 +32,8 @@ FTP.extend({
         // field = TemplateHelper(linkTemplate).searchField("link.logout");
         // field.className = TextFilter(field.className).addClass("d-none").className;
 
-        field = TemplateHelper(linkTemplate).searchField("link.change_password");
-        field.className = TextFilter(field.className).addClass("d-none").className;
+        // field = TemplateHelper(linkTemplate).searchField("link.change_password");
+        // field.className = TextFilter(field.className).addClass("d-none").className;
 
         field = TemplateHelper(linkTemplate).searchField("link.forgot_password");
         field.className = TextFilter(field.className).addClass("d-none").className;
@@ -49,10 +49,7 @@ FTP.extend({
         var pageName = Config.getPageData("page", "");
         var isLogin = Data.getUserData("is_login", false);
         var redirectStatus = false;
-        if (["logout"].indexOf(pageName) >= 0) {
-            Config.location.href = Config.basepathname + "/dashboard";
-            redirectStatus = true;
-        } else if (["dashboard", "upload_file", "change_password"].indexOf(pageName) >= 0) {
+        if (["dashboard", "upload_file", "change_password", "logout"].indexOf(pageName) >= 0) {
             if (!isLogin) {
                 Config.location.href = Config.basepathname + "/login";
                 redirectStatus = true;

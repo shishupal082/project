@@ -1,10 +1,9 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
-import com.project.ftp.config.PathType;
 import com.project.ftp.exceptions.AppException;
+import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.PathInfo;
-import com.project.ftp.obj.ScanResult;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import com.project.ftp.view.AppView;
@@ -67,7 +66,7 @@ public class AppResource {
         PathInfo pathInfo = null;
         Response.ResponseBuilder r;
         try {
-            pathInfo = fileServiceV2.searchRequestedFile(userService, filename);
+            pathInfo = fileServiceV2.searchRequestedFile(request, userService, filename);
         } catch (AppException ae) {
             logger.info("Error in searching requested file: {}", ae.getErrorCode().getErrorCode());
         }
@@ -97,7 +96,7 @@ public class AppResource {
         PathInfo pathInfo = null;
         Response.ResponseBuilder r;
         try {
-            pathInfo = fileServiceV2.searchRequestedFile(userService, filename);
+            pathInfo = fileServiceV2.searchRequestedFile(request, userService, filename);
         } catch (AppException ae) {
             logger.info("Error in searching requested file: {}", ae.getErrorCode().getErrorCode());
         }
@@ -119,32 +118,40 @@ public class AppResource {
     @GET
     @Path("/dashboard")
     public AppView dashboard(@Context HttpServletRequest request) {
-        return new AppView("dashboard", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        return new AppView(request, loginUserDetails, "dashboard", userService);
     }
     @GET
     @Path("/login")
     public AppView login(@Context HttpServletRequest request) {
-        return new AppView("login", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        return new AppView(request, loginUserDetails, "login", userService);
     }
     @GET
     @Path("/logout")
     public AppView logout(@Context HttpServletRequest request) {
-        return new AppView("logout", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        logger.info("logout user: {}", loginUserDetails);
+        userService.logoutUser(request);
+        return new AppView(request, loginUserDetails, "logout", userService);
     }
     @GET
     @Path("/upload_file")
     public AppView uploadFile(@Context HttpServletRequest request) {
-        return new AppView("upload_file", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        return new AppView(request, loginUserDetails, "upload_file", userService);
     }
     @GET
     @Path("/change_password")
     public AppView changePassword(@Context HttpServletRequest request) {
-        return new AppView("change_password", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        return new AppView(request, loginUserDetails, "change_password", userService);
     }
     @GET
     @Path("/forgot_password")
     public AppView forgotPassword(@Context HttpServletRequest request) {
-        return new AppView("forgot_password", userService);
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        return new AppView(request, loginUserDetails, "forgot_password", userService);
     }
     @Path("{default: .*}")
     @GET

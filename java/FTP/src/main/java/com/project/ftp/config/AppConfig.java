@@ -8,10 +8,12 @@ package com.project.ftp.config;
 import com.project.ftp.FtpConfiguration;
 import com.project.ftp.session.SessionData;
 
+import java.util.HashMap;
+
 public class AppConfig {
     private String publicDir;
     final String appVersion = AppConstant.AppVersion;
-    private SessionData sessionData;
+    private HashMap<String, SessionData> sessionData;
     private FtpConfiguration ftpConfiguration;
 
     public String getPublicDir() {
@@ -22,11 +24,11 @@ public class AppConfig {
         this.publicDir = publicDir;
     }
 
-    public SessionData getSessionData() {
+    public HashMap<String, SessionData> getSessionData() {
         return sessionData;
     }
 
-    public void setSessionData(SessionData sessionData) {
+    public void setSessionData(HashMap<String, SessionData> sessionData) {
         this.sessionData = sessionData;
     }
 

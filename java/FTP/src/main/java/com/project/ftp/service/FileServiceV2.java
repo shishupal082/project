@@ -7,6 +7,7 @@ import com.project.ftp.config.PathType;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.ApiResponse;
+import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
 import com.project.ftp.view.CommonView;
@@ -67,14 +68,15 @@ public class FileServiceV2 {
             }
         }
     }
-    public ApiResponse scanUserDirectory(final UserService userService) {
+    public ApiResponse scanUserDirectory(HttpServletRequest request, final UserService userService2) {
         ApiResponse apiResponse = new ApiResponse(AppConstant.SUCCESS);
+        LoginUserDetails loginUserDetails = userService2.getLoginUserDetails(request);
         ArrayList<ScanResult> scanResults = new ArrayList<>();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
         String publicDir = dir+AppConstant.PUBLIC+"/";
-        String loginUserName = userService.getLoginUserName();
-        if (userService.isLogin() && !loginUserName.isEmpty()) {
-            if (userService.isLoginUserAdmin()) {
+        String loginUserName = loginUserDetails.getUsername();
+        if (loginUserDetails.getLogin()) {
+            if (loginUserDetails.getLoginUserAdmin()) {
                 scanResults.add(fileService.scanDirectory(dir, dir, true));
             } else {
                 dir = dir + loginUserName + "/";
@@ -90,12 +92,14 @@ public class FileServiceV2 {
         }
         return apiResponse;
     }
-    public PathInfo searchRequestedFile(final UserService userService, String filename) throws AppException {
+    public PathInfo searchRequestedFile(HttpServletRequest request, final UserService userService,
+                                        String filename) throws AppException {
         if (filename == null) {
             logger.info("filename can not be null");
             throw new AppException(ErrorCodes.INVALID_QUERY_PARAMS);
         }
-        String loginUserName = userService.getLoginUserName();
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        String loginUserName = loginUserDetails.getUsername();
         String[] filenameArr = filename.split("/");
         String filePath = appConfig.getFtpConfiguration().getFileSaveDir();
         PathInfo pathInfo = null;
@@ -104,7 +108,7 @@ public class FileServiceV2 {
                 logger.info("Invalid loginUserName: {}", loginUserName);
                 throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
             }
-            if (userService.isLoginUserAdmin() || AppConstant.PUBLIC.equals(filenameArr[0])) {
+            if (loginUserDetails.getLoginUserAdmin() || AppConstant.PUBLIC.equals(filenameArr[0])) {
                 filePath += filename;
             } else if (loginUserName.equals(filenameArr[0])) {
                 filePath += loginUserName + "/" + filenameArr[1];
@@ -187,13 +191,14 @@ public class FileServiceV2 {
         }
         return apiResponse;
     }
-    public ApiResponse uploadFile(UserService userService,
+    public ApiResponse uploadFile(HttpServletRequest request, UserService userService,
                                   InputStream uploadedInputStream, String fileName) throws AppException {
-        String loginUserName = userService.getLoginUserName();
-        if (!userService.isLogin() || loginUserName.isEmpty()) {
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        if (!loginUserDetails.getLogin()) {
             logger.info("UnAuthorised user trying to upload file: {}", fileName);
             throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
         }
+        String loginUserName = loginUserDetails.getUsername();
         PathInfo pathInfo = fileService.getPathInfoFromFileName(fileName);
         logger.info("PathInfo generated from request filename: {}, {}", fileName, pathInfo);
         String ext = pathInfo.getExtension();
