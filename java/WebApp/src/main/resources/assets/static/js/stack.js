@@ -202,57 +202,74 @@ function getRandomNumber(minVal, maxVal) {
     return random;
 }
 var Data = (function() {
-    var keys = [];
-    var localData = {};
-    function isValidKey(key) {
+    // var keys = [];
+    // var localData = {};
+    function isValidKey(keys, key) {
         if (keys.indexOf(key) >= 0) {
             return true;
         }
         return false;
     }
-    function Data() {}
+    function Data() {
+        this.keys = [];
+        this.localData = {};
+    }
     Data.prototype.setKeys = function(keysArray) {
+        var keys = this.keys;
         if (Stack.isArray(keysArray)) {
             for (var i = 0; i < keysArray.length; i++) {
                 if (Stack.isString(keysArray[i])) {
                     keys.push(keysArray[i]);
-                    localData[keys[i]] = null;
+                    this.localData[keys[i]] = null;
                 }
             }
         }
         return 1;
     };
     Data.prototype.resetKeys = function(keysArray) {
-        keys = [];
+        this.keys = [];
         return 0;
     };
     Data.prototype.getKeys = function() {
-        return Stack.clone(keys);
+        return Stack.clone(this.keys);
     };
     Data.prototype.resetData = function() {
+        var keys = this.keys;
         for (var i = 0; i < keys.length; i++) {
-            localData[keys[i]] = null;
+            this.localData[keys[i]] = null;
         }
         return 0;
     };
-    Data.prototype.setData = function(key, value) {
-        if (isValidKey(key)) {
-            localData[key] = Stack.clone(value);
+    Data.prototype.setData = function(key, value, isDirect) {
+        if (isValidKey(this.keys, key)) {
+            if (Stack.isBooleanTrue(isDirect)) {
+                this.localData[key] = value;
+            } else {
+                this.localData[key] = Stack.clone(value);
+            }
         } else {
             console.log("Invalid key: "+key);
         }
-        return this.getData(key, null);
+        return this.getData(key, null, isDirect);
     };
-    Data.prototype.getData = function(key, defaultData) {
-        if (isValidKey(key)) {
-            return localData[key] === null ? defaultData : Stack.clone(localData[key]);
+    Data.prototype.getData = function(key, defaultData, isDirect) {
+        if (isValidKey(this.keys, key)) {
+            if (this.localData[key] === null) {
+                return defaultData;
+            }
+            // Fix for storing file upload data
+            if (Stack.isBooleanTrue(isDirect)) {
+                return this.localData[key];
+            } else {
+                return Stack.clone(this.localData[key]);
+            }
         } else {
             console.log("Invalid key: "+key);
         }
         return defaultData;
     };
     Data.prototype.getAllData = function() {
-        return Stack.clone(localData);
+        return Stack.clone(this.localData);
     };
     return Data;
 })();
@@ -1714,6 +1731,43 @@ Stack.extend({
         }
         return response;
     },
+});
+Stack.extend({
+    _fireCallBack: function(callBack, ajax, status, response) {
+        if (Stack.isFunction(callBack)) {
+            callBack(ajax, "SUCCESS", response);
+        }
+    },
+    _send: function(JQ, options, callBack) {
+        options["success"] = function(res, textStatus) {
+            Stack._fireCallBack(callBack, options, "SUCCESS", res);
+        };
+        options["error"] = function(xhr, textStatus, errorThrown) {
+            Stack._fireCallBack(callBack, options, "FAILURE", null);
+        };
+        JQ.ajax(options);
+    },
+    sendPostRequest: function(JQ, url, data, callBack) {
+        var reqOption = {};
+        reqOption["url"] = url;
+        reqOption["type"] = "POST";
+        reqOption["data"] = JSON.stringify(data);
+        reqOption["dataType"] = "json";
+        reqOption["headers"] = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+        Stack._send(JQ, reqOption, callBack);
+    },
+    uploadFile: function(JQ, url, formData, callBack) {
+        var reqOption = {};
+        reqOption["url"] = url;
+        reqOption["type"] = "POST";
+        reqOption["data"] = formData;
+        reqOption["processData"] = false;
+        reqOption["contentType"] = false;
+        Stack._send(JQ, reqOption, callBack);
+    }
 });
 Stack.extend({
     callMethod: function(method) {

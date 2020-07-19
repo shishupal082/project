@@ -1,7 +1,17 @@
 var syncData = {
-    "libs": {
+    "jquery-2.1.3": {
         "src": [
-            "../static/libs/jquery-2.1.3.js",
+            "../static/libs/jquery-2.1.3.js"
+        ],
+        "destinationDir": [
+            "../java/yard/src/main/resources/assets/static/libs/",
+            "../java/pdf/src/main/resources/assets/static/libs/",
+            "../java/FTP/src/main/resources/assets/static/libs/",
+            "../java/WebApp/src/main/resources/assets/static/libs/"
+        ]
+    },
+    "bootstrap-v3.1.1": {
+        "src": [
             "../static/libs/bootstrap-v3.1.1.css"
         ],
         "destinationDir": [

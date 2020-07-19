@@ -74,6 +74,7 @@ var ajaxApiCall = function(ajax, callBack) {
                 }
             );
 };
+// For loading text file like, csv
 var ajaxApiCallV2 = function(ajax, callBack) {
         fetch(ajax.url)
             .then(res => res.text())
@@ -122,6 +123,9 @@ Api.extend({
 });
 
 childGenerator = {
+    "a": function(props, data, reactChildText, key) {
+        return <a key={key} className={data.className} href={data.href}>{reactChildText}</a>;
+    },
     "b": function(props, data, reactChildText, key) {
         return <b key={key} className={data.className}>{reactChildText}</b>;
     },
@@ -178,6 +182,9 @@ childGenerator = {
     },
     "label": function(props, data, reactChildText, key) {
         return <label htmlFor={data.htmlFor} key={key} className={data.className}>{reactChildText}</label>;
+    },
+    "form": function(props, data, reactChildText, key) {
+        return <form key={key} method={data.method} action={data.action} onSubmit={props.onFormSubmit} id={data.id} encType={data.enctype}>{reactChildText}</form>;
     },
     "button": function(props, data, reactChildText, key) {
         var btnClassName = data.className;

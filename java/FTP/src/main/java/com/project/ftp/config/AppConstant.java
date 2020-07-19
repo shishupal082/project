@@ -12,6 +12,7 @@ public class AppConstant {
     public static final String RESPONSE = "RESPONSE";
     public static final String ContentType = "Content-Type";
     public static final String ALLOWED_ACCESS= "Access-Control-Allow-Origin";
+    public static final String ALLOWED_HEADERS= "Access-Control-Allow-Headers";
     public static final String FILE = "FILE";
     public static final String FOLDER = "FOLDER";
     public static final String AppVersion = "1.0.0";

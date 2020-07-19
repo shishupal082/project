@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/assets/static/libs/bootstrap-v3.1.1.css">
-    <title>WebApp</title>
+    <title>FTP App</title>
 </head>
 <body>
     <div class="container">
@@ -49,8 +49,8 @@ var indexPageReRoute = $("input[name=index-page-re-route]").val();
 if (isValidUrl(indexPageReRoute)) {
     window.location.href = indexPageReRoute.trim();
 } else {
-    $("title").html("WebApp Dashboard");
-    $("#pageTitle").html("WebApp Dashboard");
+    $("title").html("FTP App Dashboard");
+    $("#pageTitle").html("FTP App Dashboard");
     var dataUrl = "/assets/data/available_resource.json?"+$S.getRequestId();
     $S.loadJsonData($, [dataUrl], function(response) {
         var tableHtml = "";

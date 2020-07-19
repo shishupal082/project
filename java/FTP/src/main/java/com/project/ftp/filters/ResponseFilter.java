@@ -37,6 +37,10 @@ public class ResponseFilter implements ContainerResponseFilter {
         String origin = requestContext.getHeaderString(AppConstant.ORIGIN);
         if (origin != null) {
             responseContext.getHeaders().add(AppConstant.ALLOWED_ACCESS, origin);
+            //Required for json in and out post request (only for cross origin)
+            responseContext.getHeaders().add(AppConstant.ALLOWED_HEADERS, "Content-Type, Accept");
+//            responseContext.getHeaders().add("Access-Control-Allow-Credentials", true);
+//            responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         }
         String requestedPath = FileServiceV2.getPathUrlV2(requestContext);
         if (!AppConstant.FAVICON_ICO_PATH.equals(requestedPath)) {

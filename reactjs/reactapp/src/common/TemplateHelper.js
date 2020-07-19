@@ -12,6 +12,7 @@ Template.fn = Template.prototype = {
         return this;
     },
     searchField: function (fieldName) {
+        // It will search in not only in text
         if (!$S.isString(fieldName)) {
             return {};
         }
@@ -32,6 +33,7 @@ Template.fn = Template.prototype = {
         return {};
     },
     searchFieldV2: function(fieldName) {
+        // It will search in not only in text but in every variable
         if (!$S.isString(fieldName)) {
             return {};
         }

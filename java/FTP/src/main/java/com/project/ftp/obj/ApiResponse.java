@@ -11,6 +11,10 @@ public class ApiResponse {
     public ApiResponse(String status) {
         this.status = status;
     }
+    public ApiResponse(String status, Object data) {
+        this.status = status;
+        this.data = data;
+    }
     public ApiResponse(ErrorCodes errorCodes) {
         this.status = AppConstant.FAILURE;
         this.failureCode = errorCodes.getErrorCode();

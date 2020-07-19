@@ -34,6 +34,10 @@
                 <td></td>
                 <td><div><input type="submit" value="Upload" name="upload" id="upload" /></div></td>
             </tr>
+            <tr>
+                <td></td>
+                <td><div><input type="submit" value="User Login" name="upload" id="login_user" /></div></td>
+            </tr>
         </tbody>
     </table>
     <div class="progress"><div class="percent"></div></div>
@@ -100,6 +104,27 @@ function setObject(response) {
     }
 }
 
+function sendData() {
+    var url = baseUrl + '/api/login_user';
+    var data = {"username": "username", "password": "password"};
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: JSON.stringify(data),
+        dataType: "json",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        success: function(res, textStatus) {
+            console.log(res);
+        },
+        error: function(jqXHR, error) {
+            console.log(error);
+        }
+    });
+}
+
 function fileUpload() {
     clearObj();
     var formData = new FormData();
@@ -144,7 +169,14 @@ function fileUpload() {
 }
 $("#upload").on("click", function(e) {
 fileUpload();
+// sendData();
 });
+
+$("#login_user").on("click", function(e) {
+// fileUpload();
+sendData();
+});
+
 
 });
 

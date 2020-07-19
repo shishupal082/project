@@ -22,6 +22,7 @@ distDir=dist-management-app
 distDir=dist-search-app
 distDir=dist-auth-app
 distDir=dist-account-app
+distDir=dist-ftp-app
 
 addLog "Dist directory : ${distDir}"
 

@@ -26,6 +26,8 @@ server:
 
 allowedOrigin:
   - http://localhost
+  - http://localhost:9000
+  - http://localhost:8080
 supportedFileType:
   - pdf
   - txt
@@ -40,7 +42,7 @@ fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
 publicDir: ".."
 publicPostDir:
-indexPageReRoute:
+indexPageReRoute: /dashboard
 maxFileSize: 2048001 #i.e. 2048000 = 2048 kB or 2MB
 
 adminUsersName:

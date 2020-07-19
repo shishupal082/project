@@ -7,6 +7,7 @@ import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
+import com.project.ftp.view.AppView;
 import com.project.ftp.view.CommonView;
 import com.project.ftp.view.IndexView;
 import org.slf4j.Logger;
@@ -113,6 +114,37 @@ public class AppResource {
             }
         }
         return new CommonView(request, "page_not_found_404.ftl");
+    }
+
+    @GET
+    @Path("/dashboard")
+    public AppView dashboard(@Context HttpServletRequest request) {
+        return new AppView("dashboard", userService);
+    }
+    @GET
+    @Path("/login")
+    public AppView login(@Context HttpServletRequest request) {
+        return new AppView("login", userService);
+    }
+    @GET
+    @Path("/logout")
+    public AppView logout(@Context HttpServletRequest request) {
+        return new AppView("logout", userService);
+    }
+    @GET
+    @Path("/upload_file")
+    public AppView uploadFile(@Context HttpServletRequest request) {
+        return new AppView("upload_file", userService);
+    }
+    @GET
+    @Path("/change_password")
+    public AppView changePassword(@Context HttpServletRequest request) {
+        return new AppView("change_password", userService);
+    }
+    @GET
+    @Path("/forgot_password")
+    public AppView forgotPassword(@Context HttpServletRequest request) {
+        return new AppView("forgot_password", userService);
     }
     @Path("{default: .*}")
     @GET

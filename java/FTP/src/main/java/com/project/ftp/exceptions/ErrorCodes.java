@@ -5,10 +5,10 @@ package com.project.ftp.exceptions;
  */
 
 public enum ErrorCodes {
-    REDIRECTION_ERROR("Routing error", "Routing error", 300),
+    REDIRECTION_ERROR("REDIRECTION_ERROR", "Routing error", 300),
     UNABLE_TO_PARSE_JSON("Unable to parse Json", "Unable to parse Json", 400),
     BAD_REQUEST_ERROR("BAD_REQUEST_ERROR", "Bad request error", 401),
-    UNAUTHORIZED_ORIGIN("UnAuthorized Origin", "UnAuthorized Origin", 401),
+    UNAUTHORIZED_ORIGIN("UNAUTHORIZED_ORIGIN", "UnAuthorized Origin", 401),
     UNAUTHORIZED_USER("UNAUTHORIZED_USER", "UnAuthorized Access", 401),
     FILE_NOT_FOUND("FILE_NOT_FOUND", "File not found", 402),
     INVALID_QUERY_PARAMS("Invalid query params", "Invalid query params", 403),

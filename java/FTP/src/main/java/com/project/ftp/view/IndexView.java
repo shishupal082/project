@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletRequest;
  * Created by shishupalkumar on 11/02/17.
  */
 public class IndexView extends View {
-    private static Logger logger = LoggerFactory.getLogger(IndexView.class);
+    final static Logger logger = LoggerFactory.getLogger(IndexView.class);
     private String indexPageReRoute;
-    private String appVersion;
+    final String appVersion;
     public IndexView(HttpServletRequest httpServletRequest, String indexPageReRoute) {
         super("index.ftl");
         this.indexPageReRoute = indexPageReRoute;

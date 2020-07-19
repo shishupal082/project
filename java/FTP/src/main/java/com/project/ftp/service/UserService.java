@@ -21,11 +21,14 @@ public class UserService {
     public String getLoginUserName() {
         return  sessionService.getLoginUserName();
     }
-    public Object getUserDataForLogging() {
+    public HashMap<String, String> getUserDataForLoggingV2() {
         HashMap<String, String> result = new HashMap<>();
         result.put("loginUserName", getLoginUserName());
         result.put("isLogin", isLogin().toString());
         return result;
+    }
+    public Object getUserDataForLogging() {
+        return getUserDataForLoggingV2();
     }
     public Boolean isLoginUserAdmin() {
         String loginUserName = getLoginUserName();

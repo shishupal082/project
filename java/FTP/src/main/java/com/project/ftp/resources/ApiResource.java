@@ -5,6 +5,7 @@ import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.ApiResponse;
+import com.project.ftp.obj.RequestDataUserLogin;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
+import java.util.HashMap;
 
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,7 +37,6 @@ public class ApiResource {
     }
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Object defaultMethodApi(@Context HttpServletRequest request) {
         return fileServiceV2.handleDefaultUrl(request);
     }
@@ -80,9 +81,9 @@ public class ApiResource {
         }
         logger.info("getSessionConfig : Out: {}", response);
         return response;
-    }    @POST
+    }
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/upload_file")
     public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail) {
@@ -99,8 +100,19 @@ public class ApiResource {
         logger.info("uploadFile : Out");
         return Response.ok(response).build();
     }
-//    @GET
-//    @Path("is_login")
+    @POST
+    @Path("/login_user")
+    public ApiResponse loginUser(RequestDataUserLogin request) throws AppException {
+        logger.info("loginUser : In: {}", request);
+        HashMap<String, String> loginUserDetails = userService.getUserDataForLoggingV2();
+        if (request != null) {
+            loginUserDetails.put("request.username", request.getUsername());
+            loginUserDetails.put("request.password", request.getPassword());
+        }
+        ApiResponse response = new ApiResponse(AppConstant.SUCCESS, loginUserDetails);
+        logger.info("loginUser : Out: {}", response);
+        return response;
+    }
 //
 //    @GET
 //    @Path("login_user")
@@ -110,7 +122,6 @@ public class ApiResource {
     @Path("{default: .*}")
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Object defaultMethod(@Context HttpServletRequest request) {
         return fileServiceV2.handleDefaultUrl(request);
     }
