@@ -5,6 +5,7 @@ public class AppConstant {
     public static final String X_REQUEST_ID = "X-Request-Id";
     public static final String COOKIE_NAME = "ftp-cookie";
     public static final String SESSION_COOKIE_DATA = "SESSION_COOKIE_DATA";
+    public static final Long SESSION_TTL = (long) (10*60*1000); // 10min = 10*60*1000 ms
     public static final String STATUS = "STATUS";
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";

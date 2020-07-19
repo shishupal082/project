@@ -61,7 +61,7 @@ public class RequestFilter implements ContainerRequestFilter {
                 }
             } else {
                 logger.info("allowedOrigin not defined in FtpConfiguration: {}", origin);
-                throw new AppException(ErrorCodes.CONFIG_ERROR);
+//                throw new AppException(ErrorCodes.CONFIG_ERROR);
             }
         }
         if (cookieData == null || cookieData.equals("")) {

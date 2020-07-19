@@ -24,10 +24,6 @@ server:
     type: http
   rootPath: /*
 
-allowedOrigin:
-  - http://localhost
-  - http://localhost:9000
-  - http://localhost:8080
 supportedFileType:
   - pdf
   - txt
@@ -49,6 +45,3 @@ adminUsersName:
   - Admin
 devUsersName:
   - U1
-tempConfig:
-  isLogin: true
-  userName: U1

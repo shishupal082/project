@@ -18,11 +18,11 @@ public class UserService {
         this.sessionService = new SessionService(appConfig);
     }
     public String getLoginUserName(HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         return loginUserDetails.getUsername();
     }
     public HashMap<String, String> getLoginUserResponse(HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         HashMap<String, String> result = new HashMap<>();
         result.put("isLogin", loginUserDetails.getLogin().toString());
         result.put("loginUserName", loginUserDetails.getUsername());
@@ -31,19 +31,31 @@ public class UserService {
     }
     public Object getUserDataForLogging(HttpServletRequest request) {
         HashMap<String, String> result = new HashMap<>();
-        LoginUserDetails loginUserDetails = sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         result.put("loginUserName", loginUserDetails.getUsername());
         return result;
     }
     public Boolean isLoginUserAdmin(HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         return loginUserDetails.getLoginUserAdmin();
     }
     public Boolean isLoginUserDev(HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         return loginUserDetails.getLoginUserDev();
     }
     public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
+        HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
+        if (tempConfig != null) {
+            LoginUserDetails loginUserDetails = new LoginUserDetails();
+            String loginUserName = tempConfig.get("userName");
+            if (loginUserName != null) {
+                loginUserDetails.setUsername(loginUserName);
+                loginUserDetails.setLogin(sessionService.isUserLogin(loginUserName));
+                loginUserDetails.setLoginUserDev(sessionService.isDevUser(loginUserName));
+                loginUserDetails.setLoginUserAdmin(sessionService.isAdminUser(loginUserName));
+                return loginUserDetails;
+            }
+        }
         return sessionService.getLoginUserDetails(request);
     }
     public void loginUser(HttpServletRequest request, String username, String password) throws AppException {

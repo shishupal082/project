@@ -20,7 +20,7 @@ import java.util.UUID;
 public class SessionService {
     final static Logger logger = LoggerFactory.getLogger(SessionService.class);
     final AppConfig appConfig;
-    final static Long sessionTime = (long) (60 * 1000);//10 min = 10*60*1000
+    final static Long sessionTime = AppConstant.SESSION_TTL;
     public SessionService(final AppConfig appConfig) {
         this.appConfig = appConfig;
     }
@@ -71,7 +71,7 @@ public class SessionService {
         }
         String newSessionId = UUID.randomUUID().toString();
         for (String str: deletedSessionIds) {
-            logger.info("Deleted session data, at: {}, is: {}", currentTime, sessionDataHashMap.get(str));
+            logger.info("Deleted expired session data, at: {}, is: {}", currentTime, sessionDataHashMap.get(str));
             sessionDataHashMap.remove(str);
             if (str.equals(currentSessionId)) {
                 logger.info("currentSessionId: {}, is expired, created new: {}", currentSessionId, newSessionId);
@@ -97,24 +97,26 @@ public class SessionService {
             sessionData.remove(sessionId);
         }
     }
-//    public Boolean isLogin(HttpServletRequest request) {
-//        String loginUserName = getLoginUserName(request);
-//        return loginUserName != null && !loginUserName.isEmpty();
-//    }
-//    public String getLoginUserName(HttpServletRequest request) {
-//        SessionData sessionData = null;
-//        String username;
-//        try {
-//            sessionData = SessionService.getCurrentSessionData(appConfig, request);
-//            username = sessionData.getUsername();
-//        } catch (AppException ae) {
-//            username = "";
-//        }
-//        if (username == null) {
-//            username = "";
-//        }
-//        return username;
-//    }
+    public Boolean isAdminUser(String loginUserName) {
+        ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUsersName();
+        if (adminUserNames != null && loginUserName != null && !loginUserName.isEmpty()) {
+            return adminUserNames.contains(loginUserName);
+        }
+        return  false;
+    }
+    public Boolean isDevUser(String loginUserName) {
+        ArrayList<String> devUsersName = appConfig.getFtpConfiguration().getDevUsersName();
+        if (devUsersName != null && loginUserName != null && !loginUserName.isEmpty()) {
+            return devUsersName.contains(loginUserName);
+        }
+        return  false;
+    }
+    public Boolean isUserLogin(String loginUserName) {
+        if (loginUserName != null && !loginUserName.isEmpty()) {
+            return true;
+        }
+        return  false;
+    }
     public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
         LoginUserDetails loginUserDetails = new LoginUserDetails();
         try {
@@ -124,17 +126,9 @@ public class SessionService {
                 loginUserName = "";
             }
             loginUserDetails.setUsername(loginUserName);
-            loginUserDetails.setLogin(!loginUserName.isEmpty());
-
-            ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUsersName();
-            if (adminUserNames != null && !loginUserName.isEmpty()) {
-                loginUserDetails.setLoginUserAdmin(adminUserNames.contains(loginUserName));
-            }
-
-            ArrayList<String> devUserNames = appConfig.getFtpConfiguration().getDevUsersName();
-            if (devUserNames != null && !loginUserName.isEmpty()) {
-                loginUserDetails.setLoginUserDev(devUserNames.contains(loginUserName));
-            }
+            loginUserDetails.setLogin(this.isUserLogin(loginUserName));
+            loginUserDetails.setLoginUserAdmin(this.isAdminUser(loginUserName));
+            loginUserDetails.setLoginUserDev(this.isDevUser(loginUserName));
         } catch (Exception e) {
             logger.info("Error in getting loginUserDetails: {}", e.getMessage());
         }
