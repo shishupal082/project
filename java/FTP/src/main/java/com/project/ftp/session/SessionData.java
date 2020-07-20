@@ -1,12 +1,17 @@
 package com.project.ftp.session;
 
+import com.project.ftp.common.DateUtils;
+import com.project.ftp.config.AppConstant;
+
 public class SessionData {
     private String sessionId;
     private Long updatedTime;
     private String username;
+    private String visibleDate;
     public SessionData(String sessionId, Long updatedTime) {
         this.sessionId = sessionId;
         this.updatedTime = updatedTime;
+        visibleDate = DateUtils.getDateFromInMs(AppConstant.DateTimeFormat2, updatedTime);
     }
     public String getSessionId() {
         return sessionId;
@@ -22,6 +27,7 @@ public class SessionData {
 
     public void setUpdatedTime(Long updatedTime) {
         this.updatedTime = updatedTime;
+        visibleDate = DateUtils.getDateFromInMs(AppConstant.DateTimeFormat2, updatedTime);
     }
 
     public String getUsername() {
@@ -32,12 +38,21 @@ public class SessionData {
         this.username = username;
     }
 
+    public String getUpdatedDateObj() {
+        return visibleDate;
+    }
+
+    public void setUpdatedDateObj(String updatedDateObj) {
+        this.visibleDate = updatedDateObj;
+    }
+
     @Override
     public String toString() {
         return "SessionData{" +
                 "sessionId='" + sessionId + '\'' +
-                ", updatedTime='" + updatedTime + '\'' +
+                ", updatedTime=" + updatedTime +
                 ", username='" + username + '\'' +
+                ", visibleDate=" + visibleDate +
                 '}';
     }
 }

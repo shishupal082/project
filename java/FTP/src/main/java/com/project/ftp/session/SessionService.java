@@ -1,4 +1,4 @@
-package com.project.ftp.service;
+package com.project.ftp.session;
 
 import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConfig;
@@ -8,7 +8,6 @@ import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.RequestChangePassword;
 import com.project.ftp.obj.RequestUserLogin;
-import com.project.ftp.session.SessionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +46,11 @@ public class SessionService {
         return new SessionData(sessionId, currentTime);
     }
     public static String updateSessionId(AppConfig appConfig1, String currentSessionId) {
+        String newSessionId = UUID.randomUUID().toString();
+        if (currentSessionId.length() > 40 || currentSessionId.length() < 30) {
+            logger.info("Invalid currentSessionId length(30 to 40): {}, created new: {}", currentSessionId, newSessionId);
+            currentSessionId = newSessionId;
+        }
         SysUtils sysUtils = new SysUtils();
         HashMap<String, SessionData> sessionDataHashMap = appConfig1.getSessionData();
         String sessionId;
@@ -68,15 +72,15 @@ public class SessionService {
                 sessionDataHashMap.put(currentSessionId, getNewSession(currentSessionId));
             }
         } else {
+            logger.info("sessionDataHashMap is null, create new.");
             sessionDataHashMap = new HashMap<>();
             sessionDataHashMap.put(currentSessionId, getNewSession(currentSessionId));
         }
-        String newSessionId = UUID.randomUUID().toString();
         for (String str: deletedSessionIds) {
             logger.info("Deleted expired session data, at: {}, is: {}", currentTime, sessionDataHashMap.get(str));
             sessionDataHashMap.remove(str);
             if (str.equals(currentSessionId)) {
-                logger.info("currentSessionId: {}, is expired, created new: {}", currentSessionId, newSessionId);
+                logger.info("currentSessionId: {}, is expired, create new: {}", currentSessionId, newSessionId);
                 sessionDataHashMap.put(newSessionId, getNewSession(newSessionId));
                 currentSessionId = newSessionId;
             }

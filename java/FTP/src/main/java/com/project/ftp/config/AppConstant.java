@@ -19,6 +19,7 @@ public class AppConstant {
     public static final String AppVersion = "1.0.0";
     public static final String server = "server";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
+    public static final String DateTimeFormat2 = "YYYY-MM-dd'-'HH-mm-ss-SSS";
     public static final String FileFormate = "YYYY-MM-dd'-'HH-mm-ss-SSS";
     public static final String UTF8 = "UTF-8";
     public static final String FAVICON_ICO_PATH = "favicon.ico";

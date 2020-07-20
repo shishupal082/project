@@ -2,7 +2,6 @@ package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.exceptions.AppException;
-import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.PathInfo;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;

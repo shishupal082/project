@@ -27,7 +27,7 @@ import java.util.HashMap;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ApiResource {
-    final static Logger logger = LoggerFactory.getLogger(AppResource.class);
+    final static Logger logger = LoggerFactory.getLogger(ApiResponse.class);
     private HttpServletRequest httpServletRequest;
     final AppConfig appConfig;
     final FileServiceV2 fileServiceV2;
@@ -138,7 +138,7 @@ public class ApiResource {
     @Path("/change_password")
     public ApiResponse changePassword(@Context HttpServletRequest httpServletRequest,
                                  RequestChangePassword request) {
-        logger.info("changePassword : In {}");
+        logger.info("changePassword : In");
         ApiResponse response;
         try {
             userService.changePassword(httpServletRequest, request);
