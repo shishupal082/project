@@ -112,40 +112,6 @@ public class SessionService {
             throw new AppException(ErrorCodes.INVALID_SESSION);
         }
     }
-    public void changePassword(HttpServletRequest request, RequestChangePassword changePassword) throws AppException {
-        HashMap<String, SessionData> sessionData = appConfig.getSessionData();
-        String sessionId = this.getSessionId(request);
-        SessionData currentSessionData = sessionData.get(sessionId);
-        if (currentSessionData != null) {
-            if (changePassword == null) {
-                logger.info("changePassword request is null.");
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            String oldPassword = changePassword.getOld_password();
-            String newPassword = changePassword.getNew_password();
-            String confirmPassword = changePassword.getConfirm_password();
-            if (oldPassword == null || oldPassword.isEmpty()) {
-                logger.info("changePassword request old_password is incorrect: {}", oldPassword);
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            if (newPassword == null || newPassword.isEmpty()) {
-                logger.info("changePassword request new_password is incorrect: {}", newPassword);
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            if (confirmPassword == null || confirmPassword.isEmpty()) {
-                logger.info("changePassword request confirm_password is incorrect: {}", confirmPassword);
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            if (!newPassword.equals(confirmPassword)) {
-                logger.info("changePassword request mismatch, new_password: {}, confirm_password{}",
-                        newPassword, confirmPassword);
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-        } else {
-            logger.info("Current session not found, sessionId: {}", sessionId);
-            throw new AppException(ErrorCodes.INVALID_SESSION);
-        }
-    }
     public void logoutUser(HttpServletRequest request) {
         HashMap<String, SessionData> sessionData = appConfig.getSessionData();
         String sessionId = this.getSessionId(request);

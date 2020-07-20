@@ -60,6 +60,14 @@
     "Login User Details Data"
   ],
   [
+    "/api/get_users",
+    "Get all users Data"
+  ],
+  [
+    "/api/get_static_file",
+    "Get app static file Data"
+  ],
+  [
     "/api/login_user",
     "Login User [POST]"
   ],

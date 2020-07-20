@@ -8,6 +8,7 @@ import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.RequestChangePassword;
 import com.project.ftp.obj.RequestUserLogin;
 import com.project.ftp.parser.JsonFileParser;
+import com.project.ftp.parser.TextFileParser;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -47,10 +48,31 @@ public class ApiResource {
     @Path("/get_static_file")
     public ApiResponse getJsonData(@Context HttpServletRequest request) {
         logger.info("getJsonData : In");
-        JsonFileParser jsonFileParser = new JsonFileParser(appConfig);
-        ApiResponse response = jsonFileParser.getAppStaticData();
+        ApiResponse response;
+        try {
+            JsonFileParser jsonFileParser = new JsonFileParser(appConfig);
+            response = new ApiResponse(jsonFileParser.getJsonObject());
+        } catch (AppException ae) {
+            logger.info("Error in reading app static file: {}", ae.getErrorCode().getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
+        }
         // Not putting response in log as it may be very large
-        logger.info("getAllV3Data : Out");
+        logger.info("getJsonData : Out");
+        return response;
+    }
+    @GET
+    @Path("/get_users")
+    public ApiResponse getTextFileData(@Context HttpServletRequest request) {
+        logger.info("getTextFileData : In");
+        ApiResponse response;
+        try {
+            userService.isLoginUserAdmin(request);
+            response = new ApiResponse(userService.getAllUser());
+        } catch (AppException ae) {
+            logger.info("Error in reading app static file: {}", ae.getErrorCode().getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
+        }
+        logger.info("getTextFileData : Out");
         return response;
     }
     @GET
