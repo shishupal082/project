@@ -22,7 +22,7 @@ public class UserService {
         this.appConfig = appConfig;
         this.sessionService = new SessionService(appConfig);
     }
-    public Users getAllUser() {
+    public Users getAllUser() throws AppException {
         Users users = null;
         TextFileParser textFileParser = new TextFileParser(appConfig);
         ArrayList<ArrayList<String>> fileData;
@@ -32,6 +32,7 @@ public class UserService {
             logger.info("AllUser data: {}", users);
         } catch (AppException ae) {
             logger.info("Error in getting all usersData");
+            throw new AppException(ErrorCodes.RUNTIME_ERROR);
         }
         return users;
     }

@@ -59,7 +59,7 @@ public class ConfigService {
         PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
         if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
             logger.info("File save directory is not a folder: {}, setting same as publicDir.", fileSaveDir);
-            appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir);
+            appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir + "/");
         }
     }
 }

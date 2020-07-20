@@ -3,10 +3,7 @@ package com.project.ftp.resources;
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
-import com.project.ftp.obj.ApiResponse;
-import com.project.ftp.obj.LoginUserDetails;
-import com.project.ftp.obj.RequestChangePassword;
-import com.project.ftp.obj.RequestUserLogin;
+import com.project.ftp.obj.*;
 import com.project.ftp.parser.JsonFileParser;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
@@ -66,7 +63,9 @@ public class ApiResource {
         ApiResponse response;
         try {
             userService.isLoginUserAdmin(request);
-            response = new ApiResponse(userService.getAllUser());
+            Users u = userService.getAllUser();
+            u.maskPassword();
+            response = new ApiResponse(u);
         } catch (AppException ae) {
             logger.info("Error in reading app static file: {}", ae.getErrorCode().getErrorCode());
             response = new ApiResponse(ae.getErrorCode());

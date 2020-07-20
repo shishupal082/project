@@ -2,6 +2,7 @@ package com.project.ftp.obj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Users {
     private HashMap<String, User> userHashMap;
@@ -37,6 +38,15 @@ public class Users {
             return userHashMap.get(username);
         }
         return null;
+    }
+    public void maskPassword() {
+        if (userHashMap != null) {
+            String userId;
+            User user;
+            for(Map.Entry<String, User> data: userHashMap.entrySet()) {
+                data.getValue().setPassword("*****");
+            }
+        }
     }
     @Override
     public String toString() {

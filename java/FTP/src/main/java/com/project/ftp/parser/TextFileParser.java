@@ -38,7 +38,6 @@ public class TextFileParser {
             ArrayList<String> temp;
             while ((str = in.readLine()) != null) {
                 temp = new ArrayList<>();
-                logger.info(str);
                 tempArr = str.split(",");
                 for(String tempStr : tempArr) {
                     temp.add(tempStr);
@@ -84,10 +83,10 @@ public class TextFileParser {
             writer.append("\n");
             writer.append(text);
             writer.close();
-            logger.info("Text {} added in : {}", text, filepath);
+            logger.info("Text added in : {}", filepath);
             textAddStatus = true;
         } catch (Exception e) {
-            logger.info("Error in adding text: {}, in filename: {}", text, filepath);
+            logger.info("Error in adding text in filename: {}", filepath);
         }
         return textAddStatus;
     }
