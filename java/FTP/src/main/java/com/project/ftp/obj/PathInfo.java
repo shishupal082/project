@@ -1,7 +1,7 @@
 package com.project.ftp.obj;
 
 import com.project.ftp.config.AppConstant;
-import com.project.ftp.config.FileMimeType;
+import com.project.ftp.service.StaticService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,7 +101,7 @@ public class PathInfo {
         if (extension == null) {
             return;
         }
-        String mimeType = FileMimeType.getValue(extension);
+        String mimeType = StaticService.getFileMimeTypeValue(extension);
 //        if (mimeType == null) {
             // Can be search in ftpConfiguration, but as of now not required
 //            logger.info("directoryConfig:mimeType not configured in env_config");

@@ -7,6 +7,7 @@ import com.project.ftp.obj.ApiResponse;
 import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.RequestChangePassword;
 import com.project.ftp.obj.RequestUserLogin;
+import com.project.ftp.parser.JsonFileParser;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -43,8 +44,18 @@ public class ApiResource {
         return fileServiceV2.handleDefaultUrl(request);
     }
     @GET
+    @Path("/get_static_file")
+    public ApiResponse getJsonData(@Context HttpServletRequest request) {
+        logger.info("getJsonData : In");
+        JsonFileParser jsonFileParser = new JsonFileParser(appConfig);
+        ApiResponse response = jsonFileParser.getAppStaticData();
+        // Not putting response in log as it may be very large
+        logger.info("getAllV3Data : Out");
+        return response;
+    }
+    @GET
     @Path("/get_files_info")
-    public ApiResponse getAllV3Data(@Context HttpServletRequest request) throws AppException {
+    public ApiResponse getAllV3Data(@Context HttpServletRequest request) {
         logger.info("getAllV3Data : In");
         logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response = fileServiceV2.scanUserDirectory(request, userService);

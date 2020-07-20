@@ -40,15 +40,4 @@ public enum FileMimeType {
     public void setFileMimeType(String fileMimeType) {
         this.fileMimeType = fileMimeType;
     }
-    public static String getValue(String name) {
-        String response = null;
-        FileMimeType fileMimeType;
-        try {
-            fileMimeType = FileMimeType.valueOf(name);
-            response = fileMimeType.getFileMimeType();
-        } catch (Exception e) {
-//            logger.info("Error in parsing enum ({}): {}", name, e.getMessage());
-        }
-        return response;
-    }
 }

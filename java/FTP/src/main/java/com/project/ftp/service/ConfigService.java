@@ -1,6 +1,5 @@
 package com.project.ftp.service;
 
-import com.project.ftp.common.StrUtils;
 import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
@@ -53,7 +52,7 @@ public class ConfigService {
         if (publicPostDir != null) {
             setPublicDir += publicPostDir;
         }
-        setPublicDir = StrUtils.replaceLast("/", "", setPublicDir);
+        setPublicDir = StaticService.replaceLast("/", "", setPublicDir);
         logger.info("Calculated PublicDir: {}", setPublicDir);
         appConfig.setPublicDir(setPublicDir);
         String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();

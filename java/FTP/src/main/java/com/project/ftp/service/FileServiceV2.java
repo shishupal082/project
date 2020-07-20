@@ -12,12 +12,10 @@ import com.project.ftp.obj.PathInfo;
 import com.project.ftp.obj.ScanResult;
 import com.project.ftp.view.CommonView;
 import org.eclipse.jetty.server.Request;
-import org.glassfish.jersey.server.ContainerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -130,7 +128,7 @@ public class FileServiceV2 {
     }
     public Object handleDefaultUrl(@Context HttpServletRequest request) {
         logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());
-        String requestedPath = getPathUrl(request);
+        String requestedPath = StaticService.getPathUrl(request);
         PathInfo pathInfo = getFileResponse(requestedPath, false);
         Response.ResponseBuilder r;
         if (AppConstant.FILE.equals(pathInfo.getType())) {
@@ -230,21 +228,5 @@ public class FileServiceV2 {
             throw new AppException(ErrorCodes.INVALID_FILE_SAVE_PATH);
         }
         return apiResponse;
-    }
-    public static String getPathUrl(final HttpServletRequest request) {
-        String path = ((Request) request).getUri().toString();
-        String[] pathArr = path.split("\\?");
-        if (pathArr.length > 0) {
-            path = pathArr[0];
-        }
-        return path;
-    }
-    public static String getPathUrlV2(final ContainerRequestContext requestContext) {
-        String path = ((ContainerRequest) requestContext).getPath(true);
-        String[] pathArr = path.split("\\?");
-        if (pathArr.length > 0) {
-            path = pathArr[0];
-        }
-        return path;
     }
 }
