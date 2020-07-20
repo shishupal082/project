@@ -8,7 +8,6 @@ import com.project.ftp.obj.LoginUserDetails;
 import com.project.ftp.obj.RequestChangePassword;
 import com.project.ftp.obj.RequestUserLogin;
 import com.project.ftp.parser.JsonFileParser;
-import com.project.ftp.parser.TextFileParser;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;

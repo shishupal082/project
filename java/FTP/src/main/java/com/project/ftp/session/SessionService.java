@@ -6,7 +6,6 @@ import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.LoginUserDetails;
-import com.project.ftp.obj.RequestChangePassword;
 import com.project.ftp.obj.RequestUserLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
