@@ -12,6 +12,7 @@ public enum ErrorCodes {
     UNAUTHORIZED_USER("UNAUTHORIZED_USER", "UnAuthorized Access", 401),
     FILE_NOT_FOUND("FILE_NOT_FOUND", "File not found", 402),
     INVALID_QUERY_PARAMS("Invalid query params", "Invalid query params", 403),
+    INVALID_SESSION("INVALID_SESSION", "Invalid session", 403),
     INVALID_USER_NAME("INVALID_USER_NAME", "Invalid user name", 403),
     INVALID_FILE_SAVE_PATH("INVALID_FILE_SAVE_PATH", "Invalid final save file path", 403),
     INVALID_SERVICE_NAME_EMPTY("Invalid service name Empty", "Invalid service name Empty", 403),

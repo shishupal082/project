@@ -118,40 +118,33 @@ public class AppResource {
     @GET
     @Path("/dashboard")
     public AppView dashboard(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        return new AppView(request, loginUserDetails, "dashboard", userService);
+        return new AppView(request, "dashboard", userService);
     }
     @GET
     @Path("/login")
     public AppView login(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        return new AppView(request, loginUserDetails, "login", userService);
+        return new AppView(request, "login", userService);
     }
     @GET
     @Path("/logout")
     public AppView logout(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        logger.info("logout user: {}", loginUserDetails);
         userService.logoutUser(request);
-        return new AppView(request, loginUserDetails, "logout", userService);
+        return new AppView(request, "logout", userService);
     }
     @GET
     @Path("/upload_file")
     public AppView uploadFile(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        return new AppView(request, loginUserDetails, "upload_file", userService);
+        return new AppView(request, "upload_file", userService);
     }
     @GET
     @Path("/change_password")
     public AppView changePassword(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        return new AppView(request, loginUserDetails, "change_password", userService);
+        return new AppView(request, "change_password", userService);
     }
     @GET
     @Path("/forgot_password")
     public AppView forgotPassword(@Context HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
-        return new AppView(request, loginUserDetails, "forgot_password", userService);
+        return new AppView(request, "forgot_password", userService);
     }
     @Path("{default: .*}")
     @GET

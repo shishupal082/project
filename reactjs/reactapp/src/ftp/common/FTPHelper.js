@@ -88,15 +88,14 @@ FTP.extend({
         field.href = PageData.getPdfDownloadLink(fullFilename);
         return template;
     },
-    setDashboardField: function(Data, pageName) {
+    getDashboardField: function(Data, pageName) {
         var apiData = PageData.getData("dashboard.apiData", {});
         var i, j, temp;
         var displayUserSequense = ["public"];
 
         temp = Object.keys(apiData);
         if (temp.length < 1) {
-            Data.setData("dashboardField", Data.getTemplate("noDataFound", {}));
-            return;
+            return Data.getTemplate("noDataFound", {});
         }
         temp = temp.sort();
         for(i=0; i<temp.length; i++) {
@@ -139,23 +138,18 @@ FTP.extend({
             }
         }
         TemplateHelper.setTemplateTextByFormValues(dashboardTemplate, dashboardTemplateData);
-        Data.setData("dashboardField", dashboardTemplate);
+        // Data.setData("dashboardField", dashboardTemplate);
+        return dashboardTemplate;
     }
 });
 //getFieldTemplateByPageName
 FTP.extend({
     getFieldTemplateByPageName: function(Data, pageName) {
-        var pageTemplate = [], temp;
+        var pageTemplate = [];
         if (pageName === "upload_file") {
-            temp = Data.getData("uploadFileTemplate", null);
-            if (temp !== null) {
-                pageTemplate.push(temp);
-            } else {
-                pageTemplate.push(Data.getTemplate(pageName, {}));
-            }
+            pageTemplate.push(Data.getTemplate(pageName, {}));
         } else if (pageName === "dashboard") {
-            FTP.setDashboardField(Data, pageName);
-            var dashboardField = Data.getData("dashboardField", {});
+            var dashboardField = FTP.getDashboardField(Data, pageName);;
             var pdfLink = PageData.getCurrentPdfLink(Data);
             var field = TemplateHelper(dashboardField).searchFieldV2("pdfViewObject");
             field.data = pdfLink;
@@ -175,9 +169,9 @@ FTP.extend({
         if (pageName === "dashboard") {
             var url = Config.apiMapping["get_files"];
             $S.loadJsonData(null, [url], function(response, apiName, ajaxDetails) {
-                PageData.setData("dashboard.apiResponse", response.data);
                 var apiDataByUser = {};
-                if ($S.isArray(response.data)) {
+                if ($S.isObject(response) && $S.isArray(response.data)) {
+                    PageData.setData("dashboard.apiResponse", response.data);
                     PageData.setData("dashboard.currentPdfLink", response.data[0]);
                     var apiData = response.data;
                     var i, temp;

@@ -1,11 +1,12 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
-import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.ApiResponse;
-import com.project.ftp.obj.RequestDataUserLogin;
+import com.project.ftp.obj.LoginUserDetails;
+import com.project.ftp.obj.RequestChangePassword;
+import com.project.ftp.obj.RequestUserLogin;
 import com.project.ftp.service.FileServiceV2;
 import com.project.ftp.service.UserService;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -58,8 +59,7 @@ public class ApiResource {
         logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response;
         if (userService.isLoginUserDev(request)) {
-            response = new ApiResponse(AppConstant.SUCCESS);
-            response.setData(appConfig);
+            response = new ApiResponse(appConfig);
         } else {
             logger.info("Unauthorised username: {}, trying to access app config.",
                     userService.getLoginUserName(request));
@@ -75,8 +75,7 @@ public class ApiResource {
         logger.info("loginUserDetails: {}", userService.getUserDataForLogging(request));
         ApiResponse response;
         if (userService.isLoginUserDev(request)) {
-            response = new ApiResponse(AppConstant.SUCCESS);
-            response.setData(appConfig.getSessionData());
+            response = new ApiResponse(appConfig.getSessionData());
         } else {
             logger.info("Unauthorised username: {}, trying to access session config.",
                     userService.getLoginUserName(request));
@@ -107,27 +106,50 @@ public class ApiResource {
     @POST
     @Path("/login_user")
     public ApiResponse loginUser(@Context HttpServletRequest httpServletRequest,
-                                 RequestDataUserLogin request) {
-        logger.info("loginUser : In: {}", request);
+                                 RequestUserLogin userLogin) {
+        logger.info("loginUser : In, {}", userLogin);
         HttpSession httpSession = httpServletRequest.getSession();
         ApiResponse response;
         try {
-            userService.loginUser(httpServletRequest, request.getUsername(), request.getPassword());
-            HashMap<String, String> loginUserDetails = userService.getLoginUserResponse(httpServletRequest);
-            response = new ApiResponse(AppConstant.SUCCESS, loginUserDetails);
+            HashMap<String, String> loginUserDetails = userService.loginUser(httpServletRequest, userLogin);
+            response = new ApiResponse(loginUserDetails);
         } catch (AppException ae) {
             logger.info("Error in login user: {}", ae.getErrorCode().getErrorCode());
-            response = new ApiResponse(AppConstant.SUCCESS, ae.getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
         }
         logger.info("loginUser : Out: {}", response);
         return response;
     }
-//
-//    @GET
-//    @Path("login_user")
-//
-//    @GET
-//    @Path("change_password")
+    @GET
+    @Path("/get_login_user_details")
+    public ApiResponse getLoginUserDetails(@Context HttpServletRequest request) {
+        logger.info("getLoginUserDetails : In");
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        ApiResponse response;
+        if (loginUserDetails.getLogin()) {
+            response = new ApiResponse(loginUserDetails);
+        } else {
+            response = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
+        }
+        logger.info("getLoginUserDetails : Out, response: {}", response);
+        return response;
+    }
+    @POST
+    @Path("/change_password")
+    public ApiResponse changePassword(@Context HttpServletRequest httpServletRequest,
+                                 RequestChangePassword request) {
+        logger.info("changePassword : In {}");
+        ApiResponse response;
+        try {
+            userService.changePassword(httpServletRequest, request);
+            response = new ApiResponse();
+        } catch (AppException ae) {
+            logger.info("Error in change password: {}", ae.getErrorCode().getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
+        }
+        logger.info("changePassword : Out: {}", response);
+        return response;
+    }
     @Path("{default: .*}")
     @GET
     @Produces(MediaType.TEXT_HTML)

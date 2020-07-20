@@ -8,11 +8,11 @@ public class ApiResponse {
     private String failureCode;
     private String reason;
     private Object data;
-    public ApiResponse(String status) {
-        this.status = status;
+    public ApiResponse() {
+        this.status = AppConstant.SUCCESS;
     }
-    public ApiResponse(String status, Object data) {
-        this.status = status;
+    public ApiResponse(Object data) {
+        this.status = AppConstant.SUCCESS;
         this.data = data;
     }
     public ApiResponse(ErrorCodes errorCodes) {

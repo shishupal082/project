@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-//    curl -v  -XPOST "localhost:8080/api/login_user" -H "Content-Type: application/json" -d '{"username":"world","password":"password"}'
-public class RequestDataUserLogin {
+//  curl -v  -XPOST "localhost:8080/api/login_user" -H "Content-Type: application/json" -d '{"username":"world","password":"password"}'
+public class RequestUserLogin {
     @JsonProperty("username")
     private String username;
     @JsonProperty("password")
@@ -30,9 +30,9 @@ public class RequestDataUserLogin {
 
     @Override
     public String toString() {
-        return "RequestDataUserLogin{" +
+        return "RequestUserLogin{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + "*****" + '\'' +
                 '}';
     }
 }

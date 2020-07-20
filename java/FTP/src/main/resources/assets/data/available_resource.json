@@ -56,6 +56,10 @@
     "Session config data"
   ],
   [
+    "/api/get_login_user_details",
+    "Login User Details Data"
+  ],
+  [
     "/api/login_user",
     "Login User [POST]"
   ],

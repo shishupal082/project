@@ -69,7 +69,7 @@ public class FileServiceV2 {
         }
     }
     public ApiResponse scanUserDirectory(HttpServletRequest request, final UserService userService2) {
-        ApiResponse apiResponse = new ApiResponse(AppConstant.SUCCESS);
+        ApiResponse apiResponse;
         LoginUserDetails loginUserDetails = userService2.getLoginUserDetails(request);
         ArrayList<ScanResult> scanResults = new ArrayList<>();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
@@ -86,7 +86,7 @@ public class FileServiceV2 {
             ArrayList<String> response = new ArrayList<>();
             generateApiResponse(scanResults, response);
             logger.info("scanUserDirectory result size: {}", response.size());
-            apiResponse.setData(response);
+            apiResponse = new ApiResponse(response);
         } else {
             apiResponse = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
         }
@@ -179,7 +179,6 @@ public class FileServiceV2 {
             throw new AppException(ErrorCodes.INVALID_USER_NAME);
         } else {
             logger.info("uploaded file pathInfo: {}", pathInfo);
-            apiResponse = new ApiResponse(AppConstant.SUCCESS);
             String filePath = parseUserFileName(pathInfo.getPath());
             if (filePath == null) {
                 logger.info("File uploaded in wrong directory: {}", pathInfo);
@@ -187,7 +186,7 @@ public class FileServiceV2 {
             }
             pathInfo.setPath(filePath);
             pathInfo.setParentFolder(null);
-            apiResponse.setData(pathInfo);
+            apiResponse = new ApiResponse(pathInfo);
         }
         return apiResponse;
     }

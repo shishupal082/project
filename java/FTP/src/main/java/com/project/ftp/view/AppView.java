@@ -19,15 +19,15 @@ public class AppView extends View {
     final String isLogin;
     final String userName;
     final String isLoginUserAdmin;
-    public AppView(HttpServletRequest request, LoginUserDetails loginUserDetails,
-                   String pageName, final UserService userService) {
+    public AppView(HttpServletRequest request, String pageName, final UserService userService) {
         super("app_view.ftl");
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
         this.pageName = pageName;
         this.isLogin = loginUserDetails.getLogin().toString();
         this.userName = loginUserDetails.getUsername();
         this.appVersion = AppConstant.AppVersion;
         this.isLoginUserAdmin = loginUserDetails.getLoginUserAdmin().toString();
-        logger.info("Loading AppView: page={}", pageName);
+        logger.info("Loading AppView, page: {}, userDetails: {}", pageName, loginUserDetails);
     }
 
     public String getAppVersion() {

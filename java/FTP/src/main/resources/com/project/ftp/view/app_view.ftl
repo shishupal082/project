@@ -11,7 +11,7 @@
 <body class="theme-grey">
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <input type="hidden" style="display: none;" name="pageData" id="pageData"
-       value="page=${pageName},,appVersion=${appVersion},is_login=${isLogin},username=${userName},is_login_user_admin=${isLoginUserAdmin}"/>
+       value="page=${pageName},app_version=${appVersion},is_login=${isLogin},username=${userName},is_login_user_admin=${isLoginUserAdmin}"/>
 <div id="root"></div>
 <script type="text/javascript" src="/assets/static/libs/jquery-2.1.3.js"></script>
 <script type="text/javascript">

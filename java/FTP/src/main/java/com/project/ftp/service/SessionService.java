@@ -6,6 +6,8 @@ import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.obj.LoginUserDetails;
+import com.project.ftp.obj.RequestChangePassword;
+import com.project.ftp.obj.RequestUserLogin;
 import com.project.ftp.session.SessionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,7 @@ public class SessionService {
         SessionData currentSessionData = sessionData.get(sessionId);
         if (currentSessionData == null) {
             logger.info("CurrentSessionId: {}, not found in: {}", sessionId, appConfig.getSessionData());
-            throw new AppException(ErrorCodes.RUNTIME_ERROR);
+            throw new AppException(ErrorCodes.INVALID_SESSION);
         }
         return currentSessionData;
     }
@@ -82,11 +84,63 @@ public class SessionService {
         appConfig1.setSessionData(sessionDataHashMap);
         return currentSessionId;
     }
-    public void loginUser(HttpServletRequest request, String username) throws AppException {
+    public void loginUser(HttpServletRequest request, RequestUserLogin userLogin) throws AppException {
         HashMap<String, SessionData> sessionData = appConfig.getSessionData();
-        SessionData currentSessionData = sessionData.get(this.getSessionId(request));
+        String sessionId = this.getSessionId(request);
+        SessionData currentSessionData = sessionData.get(sessionId);
         if (currentSessionData != null) {
-            currentSessionData.setUsername(username);
+            if (userLogin == null) {
+                logger.info("userLogin request is null.");
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            String username = userLogin.getUsername();
+            String password = userLogin.getPassword();
+            if (username == null || username.isEmpty()) {
+                logger.info("userLogin request username is incorrect: {}", username);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            if (password == null || password.isEmpty()) {
+                logger.info("userLogin request password is incorrect: {}", password);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            currentSessionData.setUsername(userLogin.getUsername());
+        } else {
+            logger.info("Current session not found, sessionId: {}", sessionId);
+            throw new AppException(ErrorCodes.INVALID_SESSION);
+        }
+    }
+    public void changePassword(HttpServletRequest request, RequestChangePassword changePassword) throws AppException {
+        HashMap<String, SessionData> sessionData = appConfig.getSessionData();
+        String sessionId = this.getSessionId(request);
+        SessionData currentSessionData = sessionData.get(sessionId);
+        if (currentSessionData != null) {
+            if (changePassword == null) {
+                logger.info("changePassword request is null.");
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            String oldPassword = changePassword.getOld_password();
+            String newPassword = changePassword.getNew_password();
+            String confirmPassword = changePassword.getConfirm_password();
+            if (oldPassword == null || oldPassword.isEmpty()) {
+                logger.info("changePassword request old_password is incorrect: {}", oldPassword);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            if (newPassword == null || newPassword.isEmpty()) {
+                logger.info("changePassword request new_password is incorrect: {}", newPassword);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            if (confirmPassword == null || confirmPassword.isEmpty()) {
+                logger.info("changePassword request confirm_password is incorrect: {}", confirmPassword);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+            if (!newPassword.equals(confirmPassword)) {
+                logger.info("changePassword request mismatch, new_password: {}, confirm_password{}",
+                        newPassword, confirmPassword);
+                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+            }
+        } else {
+            logger.info("Current session not found, sessionId: {}", sessionId);
+            throw new AppException(ErrorCodes.INVALID_SESSION);
         }
     }
     public void logoutUser(HttpServletRequest request) {
@@ -120,7 +174,7 @@ public class SessionService {
     public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
         LoginUserDetails loginUserDetails = new LoginUserDetails();
         try {
-            SessionData sessionData = getCurrentSessionData(appConfig, request);
+            SessionData sessionData = this.getCurrentSessionData(appConfig, request);
             String loginUserName = sessionData.getUsername();
             if (loginUserName == null) {
                 loginUserName = "";

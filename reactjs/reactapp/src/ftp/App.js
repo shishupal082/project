@@ -15,7 +15,7 @@ import RenderComponent from "./component/RenderComponent";
 // var baseapi = Config.baseapi;
 var Data = $S.getDataObj();
 
-var keys = ["FTPTemplate", "userData", "linkTemplate", "uploadFileTemplate", "dashboardField"];
+var keys = ["FTPTemplate", "userData", "linkTemplate"];
 
 Data.getTemplate = function(key, defaultTemplate) {
     var allTemplate = Data.getData("FTPTemplate", {});
