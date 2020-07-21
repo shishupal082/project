@@ -40,6 +40,10 @@
     padding-top: 0;
     padding-left: 0;
 }
+.pdf-delete-link {
+    padding-top: 0;
+    padding-bottom: 5px;
+}
 .pdf-embed-td {
     width: 60%;
 }

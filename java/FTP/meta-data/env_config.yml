@@ -29,8 +29,7 @@ supportedFileType:
 adminUsersName:
   - Admin
 
-filenameFormat: "YYYY-MM-dd'-username'"
-fileSaveDir: D:/workspace/project/ftp-app/saved-files/
+filenameFormat: "YYYY-MM-dd-HH-mm'-filename'"
 icoFilePath: meta-data/favicon.ico
 maxFileSize: 2048001 #i.e. 2048000 = 2048 kB = 2MB
 

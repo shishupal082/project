@@ -37,7 +37,7 @@ supportedFileType:
   - mp4
   - exe
 
-filenameFormat: "YYYY-MM-dd'-username'"
+filenameFormat: "YYYY-MM-dd'-filename'"
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
 maxFileSize: 2048001 #i.e. 2048 kB or 2MB
@@ -46,6 +46,7 @@ adminUsersName:
   - Admin
 
 # Only for development purpose
+permanentlyDeleteFile: false
 createReadmePdf: true
 indexPageReRoute: /dashboard
 appViewFtlFileName: app_view.ftl

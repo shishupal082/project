@@ -67,6 +67,7 @@ public class StaticService {
         if (createReadmePdf != null && createReadmePdf) {
             textToPdfService.convertReadmeTextToPdf();
         }
+        ftpConfiguration.setPermanentlyDeleteFile(true);
     }
     public static String getDateFromInMs(String format, Long timeInMs) {
         DateUtilities dateUtilities = new DateUtilities();

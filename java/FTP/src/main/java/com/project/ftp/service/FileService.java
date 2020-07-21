@@ -28,11 +28,70 @@ public class FileService {
             pathInfo.setType(AppConstant.FILE);
             pathInfo.setFileName(file.getName());
             String parentFolder = file.getParent().replaceAll("\\\\","/");
-            pathInfo.setParentFolder(parentFolder);
+            pathInfo.setParentFolder(parentFolder); // It does not contain "/" in the end
             pathInfo.findExtension();
             pathInfo.findMimeType();
         }
         return pathInfo;
+    }
+    private Boolean copyFile(File src, File dest) {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(src);
+            os = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buf)) > 0) {
+                os.write(buf, 0, bytesRead);
+            }
+            is.close();
+            os.close();
+            logger.info("File copy success.");
+            return true;
+        } catch (Exception e) {
+            logger.info("Error in copy file.");
+        }
+        return false;
+    }
+    public Boolean moveFile(String source, String destination, String filename, String ext) {
+        // Here source and destination both does not contain / in the end
+        if (source == null || destination == null || filename == null || ext == null) {
+            logger.info("Invalid request to moveFile: {}", source + "--" + destination + "--"
+                            + filename + "--" + ext);
+            return false;
+        }
+        String sourceFilePath = source + "/" + filename + ".ext";
+        String destinationFilePath = destination + "/" + filename + "." + ext;
+        if (this.isFile(destinationFilePath)) {
+            logger.info("filename: {}, exist in the folder, renaming it.", destinationFilePath);
+            this.renameExistingFile(destination, filename, ext);
+        }
+        File src = new File(sourceFilePath);
+        File dest = new File(destinationFilePath);
+        Boolean r = copyFile(src, dest);
+        this.deleteFileV2(sourceFilePath);
+        return r;
+    }
+    public String createDir(ArrayList<String> dirs) {
+        if (dirs == null || dirs.isEmpty()) {
+            return null;
+        }
+        // First element must contain / (slash) in the path
+        String dirStr = dirs.get(0);
+        if (!this.isDirectory(dirStr)) {
+            return null;
+        }
+        for (int i=1; i<dirs.size(); i++) {
+            if (!this.isDirectory(dirStr + dirs.get(i) + "/")) {
+                if (!this.createFolder(dirStr, dirs.get(i))) {
+                    return null;
+                }
+            }
+            dirStr += dirs.get(i) + "/";
+        }
+        dirStr = StaticService.replaceLast("/", "", dirStr);
+        return dirStr;
     }
     public Boolean isDirectory(String path) {
         if (path == null) {
@@ -40,6 +99,13 @@ public class FileService {
         }
         File file = new File(path);
         return  file.isDirectory();
+    }
+    public Boolean isFile(String path) {
+        if (path == null) {
+            return false;
+        }
+        File file = new File(path);
+        return file.isFile();
     }
     public PathInfo getPathInfoFromFileName(String fileName) {
         PathInfo pathInfo = new PathInfo();
@@ -50,6 +116,9 @@ public class FileService {
         return pathInfo;
     }
     public boolean createFolder(String existingFolder, String currentFolderName) {
+        if (existingFolder == null) {
+            return false;
+        }
         File file = new File(existingFolder);
         boolean dirCreateStatus = false;
         if (file.isDirectory()) {
@@ -114,6 +183,11 @@ public class FileService {
             logger.info(logStr + ", fileName={}, ext={}", fileName, ext);
             return;
         }
+        File file = new File(dir + "/" + fileName + "." + ext);
+        if (!file.isFile()) {
+            logger.info("Request rename file does not exist.");
+            return;
+        }
         SysUtils sysUtils = new SysUtils();
         String timeInMs = sysUtils.getDateTime(AppConstant.DateTimeFormat);
         if (timeInMs == null) {
@@ -121,7 +195,6 @@ public class FileService {
         }
         String renameFilePath = dir + "/" + fileName + "-" + timeInMs + "." + ext;
         try {
-            File file = new File(dir + "/" + fileName + "." + ext);
             File newFile = new File(renameFilePath);
             if (file.renameTo(newFile)) {
                 String logStr = "fileName '{}' is already exist, renaming existing file with '{}'";
@@ -151,7 +224,22 @@ public class FileService {
         }
         return pathInfo;
     }
+    public Boolean deleteFileV2(String filePath) {
+        if (filePath == null) {
+            return false;
+        }
+        File file = new File(filePath);
+        if (file.isFile()) {
+            return file.delete();
+        } else {
+            logger.info("{}, is not a file.", filePath);
+        }
+        return false;
+    }
     private void deleteFile(String filePath) {
+        if (filePath == null) {
+            return;
+        }
         File file = new File(filePath);
         if (file.isFile()) {
             if (file.delete()) {

@@ -23,6 +23,7 @@ public class FtpConfiguration extends Configuration {
     private String fileSaveDir;
     private String filenameFormat;
     private String appViewFtlFileName;
+    private Boolean permanentlyDeleteFile;
 
     private HashMap<String, String> tempConfig;
 
@@ -138,6 +139,14 @@ public class FtpConfiguration extends Configuration {
         this.appViewFtlFileName = appViewFtlFileName;
     }
 
+    public Boolean getPermanentlyDeleteFile() {
+        return permanentlyDeleteFile;
+    }
+
+    public void setPermanentlyDeleteFile(Boolean permanentlyDeleteFile) {
+        this.permanentlyDeleteFile = permanentlyDeleteFile;
+    }
+
     @Override
     public String toString() {
         return "FtpConfiguration{" +
@@ -154,6 +163,7 @@ public class FtpConfiguration extends Configuration {
                 ", fileSaveDir='" + fileSaveDir + '\'' +
                 ", filenameFormat='" + filenameFormat + '\'' +
                 ", appViewFtlFileName='" + appViewFtlFileName + '\'' +
+                ", permanentlyDeleteFile=" + permanentlyDeleteFile +
                 ", tempConfig=" + tempConfig +
                 '}';
     }

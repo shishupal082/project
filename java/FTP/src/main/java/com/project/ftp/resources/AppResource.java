@@ -115,7 +115,6 @@ public class AppResource {
         }
         return new CommonView(request, "page_not_found_404.ftl");
     }
-
     @GET
     @Path("/dashboard")
     public AppView dashboard(@Context HttpServletRequest request) {

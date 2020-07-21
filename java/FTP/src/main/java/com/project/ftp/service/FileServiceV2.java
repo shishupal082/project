@@ -5,17 +5,13 @@ import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
-import com.project.ftp.obj.ApiResponse;
-import com.project.ftp.obj.LoginUserDetails;
-import com.project.ftp.obj.PathInfo;
-import com.project.ftp.obj.ScanResult;
+import com.project.ftp.obj.*;
 import com.project.ftp.view.CommonView;
 import org.eclipse.jetty.server.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -79,8 +75,8 @@ public class FileServiceV2 {
             } else {
                 dir = dir + loginUserName + "/";
                 scanResults.add(fileService.scanDirectory(dir, dir, false));
+                scanResults.add(fileService.scanDirectory(publicDir, publicDir, false));
             }
-            scanResults.add(fileService.scanDirectory(publicDir, publicDir, false));
             ArrayList<String> response = new ArrayList<>();
             generateApiResponse(scanResults, response);
             logger.info("scanUserDirectory result size: {}", response.size());
@@ -89,6 +85,29 @@ public class FileServiceV2 {
             apiResponse = new ApiResponse(ErrorCodes.UNAUTHORIZED_USER);
         }
         return apiResponse;
+    }
+    private HashMap<String, String> parseRequestedFileStr(String filename) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put(AppConstant.STATUS, AppConstant.FAILURE);
+        if (filename == null) {
+            logger.info("filename can not be null");
+            return response;
+        }
+        String[] filenameArr = filename.split("/");
+        if (filenameArr.length == 2) {
+            if (filenameArr[0].isEmpty()) {
+                logger.info("filename does not contain username: {}", filename);
+                return response;
+            }
+            if (filenameArr[1].isEmpty()) {
+                logger.info("filename is empty in request: {}", filename);
+                return response;
+            }
+            response.put(AppConstant.STATUS, AppConstant.SUCCESS);
+            response.put("fileUserName", filenameArr[0]);
+            response.put("fileNameStr", filenameArr[1]);
+        }
+        return response;
     }
     public PathInfo searchRequestedFile(HttpServletRequest request, final UserService userService,
                                         String filename) throws AppException {
@@ -126,7 +145,65 @@ public class FileServiceV2 {
         }
         return pathInfo;
     }
-    public Object handleDefaultUrl(@Context HttpServletRequest request) {
+    public void deleteRequestFile(HttpServletRequest request,
+                                         UserService userService,
+                                         RequestDeleteFile deleteFile) throws AppException {
+        LoginUserDetails loginUserDetails = userService.getLoginUserDetails(request);
+        if (!loginUserDetails.getLogin()) {
+            logger.info("Login required to deleteFile: {}", deleteFile);
+            throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
+        }
+        if (deleteFile == null) {
+            logger.info("deleteFile request is null.");
+            throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String deleteFileReq = deleteFile.getFilename();
+        HashMap<String, String> parsedFileStr = this.parseRequestedFileStr(deleteFileReq);
+        if (AppConstant.FAILURE.equals(parsedFileStr.get(AppConstant.STATUS))) {
+            throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
+        }
+        String fileUserName = parsedFileStr.get("fileUserName");
+        String userName = loginUserDetails.getUsername();
+        if (!fileUserName.equals(userName)) {
+            logger.info("UnAuthorised user trying to deleteFile: {}", loginUserDetails);
+            throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
+        }
+        String dir = appConfig.getFtpConfiguration().getFileSaveDir();
+        PathInfo pathInfo = fileService.getPathInfo(dir + deleteFileReq);
+        Boolean permanentlyDeleteFile = appConfig.getFtpConfiguration().getPermanentlyDeleteFile();
+        Boolean fileDeleteStatus = false;
+        if (AppConstant.FILE.equals(pathInfo.getType())) {
+            if (permanentlyDeleteFile != null && permanentlyDeleteFile) {
+                logger.info("Permanently deleting file: {}", deleteFile);
+                fileDeleteStatus = fileService.deleteFileV2(dir+deleteFileReq);
+            } else {
+                ArrayList<String> requiredDirs = new ArrayList<>();
+                requiredDirs.add(dir);
+                requiredDirs.add("trash");
+                requiredDirs.add(userName);
+                String trashFolder = fileService.createDir(requiredDirs);
+                if (trashFolder == null) {
+                    logger.info("Error in creating trash folder for user: {}", loginUserDetails);
+                    throw new AppException(ErrorCodes.RUNTIME_ERROR);
+                }
+                String currentFolder = pathInfo.getParentFolder();
+                fileDeleteStatus = fileService.moveFile(currentFolder, trashFolder,
+                        pathInfo.getFilenameWithoutExt(), pathInfo.getExtension());
+            }
+            if (!fileDeleteStatus) {
+                logger.info("Error in deleting requested file: {}, currentUser: {}",
+                        deleteFileReq, loginUserDetails);
+                throw new AppException(ErrorCodes.RUNTIME_ERROR);
+            } else {
+                logger.info("Requested file deleted: {}.", deleteFileReq);
+
+            }
+        } else {
+            logger.info("Requested deleteFile: {}, does not exist.", deleteFileReq);
+            throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
+        }
+    }
+    public Object handleDefaultUrl(HttpServletRequest request) {
         logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());
         String requestedPath = StaticService.getPathUrl(request);
         PathInfo pathInfo = this.getFileResponse(requestedPath);

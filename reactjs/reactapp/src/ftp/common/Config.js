@@ -54,11 +54,14 @@ Config.getPageData = function(key, defaultValue) {
 
 var RequestId = $S.getRequestId();
 Config.apiMapping = {};
+Config.apiMapping["static_file"] = baseapi + "/api/get_static_file?" + RequestId;
+
 Config.apiMapping["login"] = baseapi + "/api/login_user";
 Config.apiMapping["change_password"] = baseapi + "/api/change_password";
 Config.apiMapping["upload_file"] = baseapi + "/api/upload_file";
+
+Config.apiMapping["delete_file"] = baseapi + "/api/delete_file";
 Config.apiMapping["get_files"] = baseapi + "/api/get_files_info?" + RequestId;
-Config.apiMapping["static_file"] = baseapi + "/api/get_static_file?" + RequestId;
 
 Config.getAleartMessage = function(messageCode) {
     var messageMap = {};

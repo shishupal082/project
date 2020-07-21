@@ -74,5 +74,9 @@
   [
     "/api/upload_file",
     "Upload File [POST]"
+  ],
+  [
+    "/api/delete_file",
+    "Delete File [POST]"
   ]
 ]

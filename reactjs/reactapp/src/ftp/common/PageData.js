@@ -70,14 +70,33 @@ PageData.extend({
     },
     handleButtonClick: function(e, Data, callBack) {
         var currentTarget = e.currentTarget;
-        if (e.currentTarget.name === "dashboard.fileinfo.view") {
+        if (currentTarget.name === "dashboard.fileinfo.view") {
             CurrentFormData.setData("dashboard.currentPdfLink", currentTarget.value);
             window.scrollTo(0, 0);
             callBack(true);
+        } else if (currentTarget.name === "dashboard.fileinfo.delete") {
+            var deleting = window.confirm("Are you sure? You want to delete file: " + currentTarget.value);
+            if (deleting) {
+               PageData.deleteFile(Data, callBack, currentTarget.value); 
+           }
         }
     }
 });
 PageData.extend({
+    deleteFile: function(Data, callBack, filename) {
+        var pageName = Config.getPageData("page", "");
+        var url = Config.apiMapping["delete_file"];
+        var postData = {};
+        postData["filename"] = filename;
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            console.log(response);
+            if (status === "FAILURE") {
+                alert("Error in delete file, Please Try again.");
+            } else {
+                PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+            }
+        });
+    },
     handleFormSubmit: function(e, Data, callBack) {
         var pageName = Config.getPageData("page", "");
         var url = Config.apiMapping[pageName];
@@ -141,6 +160,13 @@ PageData.extend({
             if (response.status === "FAILURE") {
                 alert(Config.getAleartMessage(response.failureCode));
             } else {
+                Config.location.href = "/dashboard";
+            }
+        } else if (pageName === "dashboard") {
+            if (response.status === "FAILURE") {
+                alert(Config.getAleartMessage(response.failureCode));
+            } else {
+                alert("File deleted");
                 Config.location.href = "/dashboard";
             }
         }

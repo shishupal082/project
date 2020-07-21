@@ -312,23 +312,25 @@ Template["dashboard"] = [
                         {
                             "tag": "td",
                             "className": "pdf-embed-td",
-                            "text": {
-                                "tag": "div",
-                                "className": "pdf-view",
-                                "text": {
-                                    "tag": "object",
-                                    "name": "pdfViewObject",
-                                    "type": "application/pdf",
-                                    "className": "pdf-embed",
-                                    "data": "",
+                            "text": [
+                                {
+                                    "tag": "div",
+                                    "className": "pdf-view",
                                     "text": {
-                                        "tag": "embed",
-                                        "name": "pdfViewEmbed",
+                                        "tag": "object",
+                                        "name": "pdfViewObject",
                                         "type": "application/pdf",
-                                        "src": ""
+                                        "className": "pdf-embed",
+                                        "data": "",
+                                        "text": {
+                                            "tag": "embed",
+                                            "name": "pdfViewEmbed",
+                                            "type": "application/pdf",
+                                            "src": ""
+                                        }
                                     }
                                 }
-                            }
+                            ]
                         }
                     ]
                 }
@@ -417,6 +419,12 @@ Template["dashboard.fileinfo"] = [
                 "href": "download-link",
                 "name": "dashboard.fileinfo.download",
                 "text": "Download"
+            },
+            {
+                "tag": "button",
+                "name": "dashboard.fileinfo.delete",
+                "className": "btn btn-link pdf-delete-link text-danger",
+                "text": "Delete"
             }
         ]
     }

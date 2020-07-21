@@ -64,7 +64,7 @@ FTP.extend({
     }
 });
 FTP.extend({
-    _generateFileinfoField: function(Data, username, filename, currentPdfLink) {
+    _generateFileinfoField: function(Data, currentUserName, username, filename, currentPdfLink) {
         var template = Data.getTemplate("dashboard.fileinfo", {});
         var field, fullFilename;
         fullFilename = username + "/" + filename;
@@ -86,10 +86,19 @@ FTP.extend({
 
         field = TemplateHelper(template).searchFieldV2("dashboard.fileinfo.download");
         field.href = PageData.getPdfDownloadLink(fullFilename);
+
+        field = TemplateHelper(template).searchFieldV2("dashboard.fileinfo.delete");
+        field.value = fullFilename;
+        if (currentUserName !== username) {
+            field.className = TextFilter(field.className).removeClass("text-danger").addClass("disabled").className;
+        }
+
+
         return template;
     },
     getDashboardField: function(Data, pageName) {
         var apiData = PageData.getData("dashboard.apiData", {});
+        var currentUserName = Data.getData("userName", "");
         var i, j, temp;
         var displayUserSequense = ["public"];
 
@@ -132,7 +141,7 @@ FTP.extend({
                 filename = dashboardData.dashboardRow[i].dashboardRowData[j];
                 template2 = Data.getTemplate("dashboardRowData", {});
                 template2Data = {"s.no": count++};
-                template2Data["fileinfo"] = FTP._generateFileinfoField(Data, username, filename, currentPdfLink);
+                template2Data["fileinfo"] = FTP._generateFileinfoField(Data, currentUserName, username, filename, currentPdfLink);
                 TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
                 dashboardTemplateData.dashboardRow.push(template2);
             }

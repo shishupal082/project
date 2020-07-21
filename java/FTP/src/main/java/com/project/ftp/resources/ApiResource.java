@@ -73,6 +73,21 @@ public class ApiResource {
         logger.info("getTextFileData : Out");
         return response;
     }
+    @POST
+    @Path("/delete_file")
+    public ApiResponse deleteFile(@Context HttpServletRequest request, RequestDeleteFile deleteFile) {
+        logger.info("deleteFile In: {}", deleteFile);
+        ApiResponse apiResponse;
+        try {
+            fileServiceV2.deleteRequestFile(request, userService, deleteFile);
+            apiResponse = new ApiResponse();
+        } catch (AppException ae) {
+            logger.info("Error {}, in deleting requested file.", ae.getErrorCode().getErrorCode());
+            apiResponse = new ApiResponse(ae.getErrorCode());
+        }
+        return apiResponse;
+    }
+
     @GET
     @Path("/get_files_info")
     public ApiResponse getAllV3Data(@Context HttpServletRequest request) {
