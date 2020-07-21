@@ -38,6 +38,13 @@ sed -i "2s/.*//" ${distDir}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
 sed -i "3s/.*//" ${distDir}/script3.js
 
+if [[ $distDir == "dist-ftp-app" ]]; then
+	cp ${distDir}/script1.js ../../java/FTP/src/main/resources/assets/static/dist-ftp-app/
+	cp ${distDir}/script2.js ../../java/FTP/src/main/resources/assets/static/dist-ftp-app/
+	cp ${distDir}/script3.js ../../java/FTP/src/main/resources/assets/static/dist-ftp-app/
+	cp ../../app/ftp/css/style.css ../../java/FTP/src/main/resources/assets/static/dist-ftp-app/
+fi
+
 # sed -i  ''  '2s/.*//' ${distDir}/script1.js
 # sed -i  ''  '2s/.*//' ${distDir}/script2.js
 # sed -i  ''  '3s/.*//' ${distDir}/script3.js

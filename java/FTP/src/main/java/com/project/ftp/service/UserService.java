@@ -29,12 +29,24 @@ public class UserService {
         try {
             fileData = textFileParser.getTextData();
             users = new Users(fileData);
-            logger.info("AllUser data: {}", users);
+            logger.info("Available user count: {}", users.getUserCount());
         } catch (AppException ae) {
             logger.info("Error in getting all usersData");
             throw new AppException(ErrorCodes.RUNTIME_ERROR);
         }
         return users;
+    }
+    public String getUserDisplayName(final String username) {
+        String userDisplayName = "";
+        try {
+            Users users = this.getAllUser();
+            User user = users.searchUserByName(username);
+            userDisplayName = user.getDisplayName();
+        } catch (Exception e) {
+            // It can throw NullPointerException or AppException
+            logger.info("userDisplayName not found for username: {}", username);
+        }
+        return userDisplayName;
     }
     public String getLoginUserName(HttpServletRequest request) {
         LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
@@ -66,7 +78,7 @@ public class UserService {
         HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
         if (tempConfig != null) {
             LoginUserDetails loginUserDetails = new LoginUserDetails();
-            String loginUserName = tempConfig.get("userName");
+            String loginUserName = tempConfig.get("username");
             if (loginUserName != null) {
                 loginUserDetails.setUsername(loginUserName);
                 loginUserDetails.setLogin(sessionService.isUserLogin(loginUserName));

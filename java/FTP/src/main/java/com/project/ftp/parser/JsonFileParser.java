@@ -21,7 +21,7 @@ public class JsonFileParser {
     public Object getJsonObject() throws AppException {
         Object object = null;
         String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
-        filepath += "app_static_data.json";
+        filepath += AppConstant.APP_STATIC_DATA_FILENAME;
         PathInfo pathInfo = StaticService.getPathDetails(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Requested file is not found: {}", filepath);

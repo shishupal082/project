@@ -2,13 +2,20 @@
 
 echo [INFO] Copying file to desired location
 
-rm -rf ../../ftp-app/meta-data/*
+rm meta-data/FTP-*.jar
+cp target/FTP-*.jar meta-data/
+#rm -rf target
 
-cp readme.txt ../../ftp-app/
-cp run.bat ../../ftp-app/
+# copying to app folder
 
-cp meta-data/favicon.ico ../../ftp-app/meta-data/
-cp meta-data/env_config.yml ../../ftp-app/meta-data/
-cp meta-data/FTP-*.jar ../../ftp-app/meta-data/
+cp readme.pdf ../../ftp-app/ftp-app-1.0.0/
+cp run.bat ../../ftp-app/ftp-app-1.0.0/
+
+rm -rf ../../ftp-app/ftp-app-1.0.0/meta-data/*
+
+
+cp meta-data/favicon.ico ../../ftp-app/ftp-app-1.0.0/meta-data/
+cp meta-data/env_config.yml ../../ftp-app/ftp-app-1.0.0/meta-data/
+cp meta-data/FTP-*.jar ../../ftp-app/ftp-app-1.0.0/meta-data/
 
 echo [INFO] Copy file complete

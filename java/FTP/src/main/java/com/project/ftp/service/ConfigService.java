@@ -16,9 +16,9 @@ public class ConfigService {
     }
     public void setPublicDir() {
         String systemDir = sysUtils.getProjectWorkingDir();
-        String publicDir = appConfig.getFtpConfiguration().getPublicDir();
+        String orgPublicDir = appConfig.getFtpConfiguration().getPublicDir();
         String publicPostDir = appConfig.getFtpConfiguration().getPublicPostDir();
-
+        String publicDir = orgPublicDir;
         logger.info("systemDir: {}", systemDir);
         logger.info("configPublicDir: {}", publicDir);
         logger.info("configPublicPostDir: {}", publicPostDir);
@@ -54,12 +54,16 @@ public class ConfigService {
         }
         setPublicDir = StaticService.replaceLast("/", "", setPublicDir);
         logger.info("Calculated PublicDir: {}", setPublicDir);
-        appConfig.setPublicDir(setPublicDir);
+        if (orgPublicDir != null) {
+            appConfig.setPublicDir(setPublicDir);
+        } else {
+            logger.info("appConfig publicDir set skip.");
+        }
         String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
         PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
         if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
             logger.info("File save directory is not a folder: {}, setting same as publicDir.", fileSaveDir);
-            appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir + "/");
+            appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir + "/saved-files/");
         }
     }
 }

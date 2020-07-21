@@ -27,7 +27,7 @@ FTP.extend({
     setLinkTemplate: function(Data) {
         var linkTemplate = Data.getTemplate("link", {});
         var field = TemplateHelper(linkTemplate).searchField("link.loginAs");
-        field.text = Data.getUserData("username", "");
+        field.text = Data.getData("userName", "");
 
         // field = TemplateHelper(linkTemplate).searchField("link.logout");
         // field.className = TextFilter(field.className).addClass("d-none").className;
@@ -47,7 +47,7 @@ FTP.extend({
 FTP.extend({
     checkForRedirect: function(Data) {
         var pageName = Config.getPageData("page", "");
-        var isLogin = Data.getUserData("is_login", false);
+        var isLogin = Data.getData("isLogin", false);
         var redirectStatus = false;
         if (["dashboard", "upload_file", "change_password", "logout"].indexOf(pageName) >= 0) {
             if (!isLogin) {
@@ -162,8 +162,22 @@ FTP.extend({
         return pageTemplate;
     }
 });
-//loadPageData
+//loadPageData, loadStaticData
 FTP.extend({
+    loadStaticData: function(Data, callBack) {
+        var url = Config.apiMapping["static_file"];
+        $S.loadJsonData(null, [url], function(response, apiName, ajaxDetails) {
+            if ($S.isObject(response) && $S.isObject(response.data)) {
+                if ($S.isObject(response.data.template)) {
+                    var oldTemplate = Data.getData("FTPTemplate", {});
+                    Object.assign(oldTemplate, response.data.template);
+                    Data.setData("FTPTemplate", oldTemplate);
+                }
+            }
+        }, function() {
+            $S.callMethod(callBack);
+        }, null, Api.getAjaxApiCallMethod());
+    },
     loadPageData: function(Data, callBack) {
         var pageName = Config.getPageData("page", "");
         if (pageName === "dashboard") {

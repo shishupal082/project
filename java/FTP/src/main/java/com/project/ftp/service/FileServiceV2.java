@@ -1,6 +1,5 @@
 package com.project.ftp.service;
 
-import com.project.ftp.common.SysUtils;
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.PathType;
@@ -23,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FileServiceV2 {
     final static Logger logger = LoggerFactory.getLogger(FileServiceV2.class);
@@ -129,9 +129,9 @@ public class FileServiceV2 {
     public Object handleDefaultUrl(@Context HttpServletRequest request) {
         logger.info("Loading defaultMethod: {}", ((Request) request).getUri().toString());
         String requestedPath = StaticService.getPathUrl(request);
-        PathInfo pathInfo = getFileResponse(requestedPath, false);
+        PathInfo pathInfo = this.getFileResponse(requestedPath);
         Response.ResponseBuilder r;
-        if (AppConstant.FILE.equals(pathInfo.getType())) {
+        if (pathInfo!= null && AppConstant.FILE.equals(pathInfo.getType())) {
             File file = new File(pathInfo.getPath());
             try {
                 InputStream inputStream = new FileInputStream(file);
@@ -150,15 +150,17 @@ public class FileServiceV2 {
         }
         return new CommonView(request, "page_not_found_404.ftl");
     }
-    public PathInfo getFileResponse(String filePath, Boolean isAbsolute) {
-        if (!isAbsolute) {
-            filePath = appConfig.getPublicDir() + filePath;
+    private PathInfo getFileResponse(String filePath) {
+        String publicDir = appConfig.getPublicDir();
+        if (publicDir == null) {
+            return null;
         }
+        filePath = publicDir + filePath;
         PathInfo pathInfo = fileService.getPathInfo(filePath);
         if (AppConstant.FOLDER.equals(pathInfo.getType())) {
             pathInfo = fileService.searchIndexHtmlInFolder(pathInfo);
         }
-        logger.info("PathDetails: {}", pathInfo.toString());
+        logger.info("PathDetails: {}", pathInfo);
         return pathInfo;
     }
     public ApiResponse doUpload(InputStream uploadedInputStream, String fileName) throws AppException {
@@ -208,10 +210,12 @@ public class FileServiceV2 {
             logger.info("File extension '{}', is not supported", ext);
             throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }
-        SysUtils sysUtils = new SysUtils();
         String dir = appConfig.getFtpConfiguration().getFileSaveDir();
-        String uploadingFileName = dir + loginUserName + "/" + sysUtils.getDateTime(AppConstant.FileFormate) +
-                "." + pathInfo.getExtension();
+        HashMap<String, String> values = new HashMap<>();
+        values.put("username", loginUserName);
+        values.put("filename", pathInfo.getFilenameWithoutExt());
+        String uploadingFileName = dir + loginUserName + "/" +
+                StaticService.generateStringFromFormat(appConfig, values) + "." + pathInfo.getExtension();
         if (parseUserFileName(uploadingFileName) == null) {
             logger.info("Invalid upload filepath: {}", uploadingFileName);
             throw new AppException(ErrorCodes.INVALID_FILE_SAVE_PATH);

@@ -13,9 +13,12 @@ import RenderComponent from "./component/RenderComponent";
 // var RequestId = $S.getRequestId();
 // var DT = $S.getDT();
 // var baseapi = Config.baseapi;
+var currentPageName = Config.getPageData("page", "");
 var Data = $S.getDataObj();
 
 var keys = ["FTPTemplate", "userData", "linkTemplate"];
+var userDataKeys = ["isLogin", "userName", "isUserAdmin", "userDisplayName"];
+keys = keys.concat(userDataKeys);
 
 Data.getTemplate = function(key, defaultTemplate) {
     var allTemplate = Data.getData("FTPTemplate", {});
@@ -26,38 +29,27 @@ Data.getTemplate = function(key, defaultTemplate) {
     }
     return defaultTemplate;
 };
-Data.initData = function() {
-    for (var i = 0; i < keys.length; i++) {
-        if (["FTPTemplate", "userData"].indexOf(keys[i]) >= 0) {
-            continue;
-        }
-        Data.setData(keys[i], null);
-    }
-};
-
-Data.getUserData = function(key, defaultValue) {
-    var userData = Data.getData("userData", {});
-    if ($S.isDefined(userData[key])) {
-        return userData[key];
-    }
-    return defaultValue;
-};
-
-Data.setUserData = function(key, value) {
-    var userData = Data.getData("userData", {});
-    userData[key] = value;
-    Data.setData("userData", userData);
-};
+// Data.initData = function() {
+//     for (var i = 0; i < keys.length; i++) {
+//         if (["FTPTemplate", "userData"].indexOf(keys[i]) >= 0) {
+//             continue;
+//         }
+//         Data.setData(keys[i], null);
+//     }
+// };
 
 Data.setKeys(keys);
-Data.initData();
+// Data.initData();
 Data.setData("FTPTemplate", Template);
 var isLogin = Config.getPageData("is_login") === "true" ? true : false;
+var isUserAdmin = Config.getPageData("is_login_user_admin") === "true" ? true : false;
 var userName = Config.getPageData("username", "");
-var currentPageName = Config.getPageData("page", "");
+var userDisplayName = Config.getPageData("user_display_name", "");
 
-Data.setUserData("is_login", isLogin);
-Data.setUserData("username", userName);
+Data.setData("isLogin", isLogin);
+Data.setData("userName", userName);
+Data.setData("isUserAdmin", isUserAdmin);
+Data.setData("userDisplayName", userDisplayName);
 
 class App extends React.Component {
     constructor(props) {
@@ -92,15 +84,16 @@ class App extends React.Component {
     setRenderField(isLoading) {
         var renderField = [];
         renderField.push(Data.getTemplate("heading", {}));
-        var isLogin = Data.getUserData("is_login", false);
+        if (isLoading) {
+            renderField.push(Data.getTemplate("loading", {}));
+            this.setState({renderField: renderField});
+            return;
+        }
+        var isLogin = Data.getData("isLogin", false);
         if (isLogin) {
             FTPHelper.setLinkTemplate(Data);
             renderField.push(Data.getData("linkTemplate", {}));
-            if ($S.isBooleanTrue(isLoading)) {
-                renderField.push(Data.getTemplate("loading", {}));
-            } else {
-                renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
-            }
+            renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
         } else {
             renderField.push(FTPHelper.getFieldTemplateByPageName(Data, currentPageName));
         }
@@ -112,9 +105,11 @@ class App extends React.Component {
             return;
         }
         var self = this;
-        this.setRenderField(true);
-        FTPHelper.loadPageData(Data, function() {
-            self.setRenderField();
+        FTPHelper.loadStaticData(Data, function() {
+            self.setRenderField(true);
+             FTPHelper.loadPageData(Data, function() {
+                self.setRenderField();
+            });
         });
     }
     render() {

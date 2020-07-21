@@ -15,11 +15,14 @@ public class FtpConfiguration extends Configuration {
     private String publicDir;
     private String publicPostDir;
     private Integer maxFileSize;
-    private String fileSaveDir;
     private ArrayList<String> allowedOrigin;
     private ArrayList<String> adminUsersName;
     private ArrayList<String> devUsersName;
     private ArrayList<String> supportedFileType;
+    private Boolean createReadmePdf;
+    private String fileSaveDir;
+    private String filenameFormat;
+    private String appViewFtlFileName;
 
     private HashMap<String, String> tempConfig;
 
@@ -29,6 +32,14 @@ public class FtpConfiguration extends Configuration {
 
     public void setIndexPageReRoute(String indexPageReRoute) {
         this.indexPageReRoute = indexPageReRoute;
+    }
+
+    public Boolean getCreateReadmePdf() {
+        return createReadmePdf;
+    }
+
+    public void setCreateReadmePdf(Boolean createReadmePdf) {
+        this.createReadmePdf = createReadmePdf;
     }
 
     public String getIcoFilePath() {
@@ -111,6 +122,22 @@ public class FtpConfiguration extends Configuration {
         this.tempConfig = tempConfig;
     }
 
+    public String getFilenameFormat() {
+        return filenameFormat;
+    }
+
+    public void setFilenameFormat(String filenameFormat) {
+        this.filenameFormat = filenameFormat;
+    }
+
+    public String getAppViewFtlFileName() {
+        return appViewFtlFileName;
+    }
+
+    public void setAppViewFtlFileName(String appViewFtlFileName) {
+        this.appViewFtlFileName = appViewFtlFileName;
+    }
+
     @Override
     public String toString() {
         return "FtpConfiguration{" +
@@ -119,11 +146,14 @@ public class FtpConfiguration extends Configuration {
                 ", publicDir='" + publicDir + '\'' +
                 ", publicPostDir='" + publicPostDir + '\'' +
                 ", maxFileSize=" + maxFileSize +
-                ", fileSaveDir='" + fileSaveDir + '\'' +
                 ", allowedOrigin=" + allowedOrigin +
                 ", adminUsersName=" + adminUsersName +
                 ", devUsersName=" + devUsersName +
                 ", supportedFileType=" + supportedFileType +
+                ", createReadmePdf=" + createReadmePdf +
+                ", fileSaveDir='" + fileSaveDir + '\'' +
+                ", filenameFormat='" + filenameFormat + '\'' +
+                ", appViewFtlFileName='" + appViewFtlFileName + '\'' +
                 ", tempConfig=" + tempConfig +
                 '}';
     }

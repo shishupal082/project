@@ -32,10 +32,12 @@ public class AppResource {
     final AppConfig appConfig;
     final FileServiceV2 fileServiceV2;
     final UserService userService;
+    final String appViewFtlFileName;
     public AppResource(final AppConfig appConfig) {
         this.appConfig = appConfig;
         fileServiceV2 = new FileServiceV2(appConfig);
         userService = new UserService(appConfig);
+        appViewFtlFileName = appConfig.getFtpConfiguration().getAppViewFtlFileName();
     }
     @GET
     public IndexView indexPage() {
@@ -117,33 +119,33 @@ public class AppResource {
     @GET
     @Path("/dashboard")
     public AppView dashboard(@Context HttpServletRequest request) {
-        return new AppView(request, "dashboard", userService);
+        return new AppView(request, appViewFtlFileName,"dashboard", userService);
     }
     @GET
     @Path("/login")
     public AppView login(@Context HttpServletRequest request) {
-        return new AppView(request, "login", userService);
+        return new AppView(request, appViewFtlFileName, "login", userService);
     }
     @GET
     @Path("/logout")
     public AppView logout(@Context HttpServletRequest request) {
         userService.logoutUser(request);
-        return new AppView(request, "logout", userService);
+        return new AppView(request, appViewFtlFileName, "logout", userService);
     }
     @GET
     @Path("/upload_file")
     public AppView uploadFile(@Context HttpServletRequest request) {
-        return new AppView(request, "upload_file", userService);
+        return new AppView(request, appViewFtlFileName, "upload_file", userService);
     }
     @GET
     @Path("/change_password")
     public AppView changePassword(@Context HttpServletRequest request) {
-        return new AppView(request, "change_password", userService);
+        return new AppView(request, appViewFtlFileName, "change_password", userService);
     }
     @GET
     @Path("/forgot_password")
     public AppView forgotPassword(@Context HttpServletRequest request) {
-        return new AppView(request, "forgot_password", userService);
+        return new AppView(request, appViewFtlFileName, "forgot_password", userService);
     }
     @Path("{default: .*}")
     @GET

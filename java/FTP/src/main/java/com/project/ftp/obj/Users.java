@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Users {
     private HashMap<String, User> userHashMap;
+    private Integer userCount = 0;
     public Users(ArrayList<ArrayList<String>> filedata) {
         if (filedata != null) {
             userHashMap = new HashMap<>();
@@ -16,6 +17,7 @@ public class Users {
                     updatedUser = userHashMap.get(user.getUsername());
                     if (updatedUser == null) {
                         userHashMap.put(user.getUsername(), user);
+                        userCount++;
                     } else {
                         userHashMap.put(user.getUsername(), updatedUser.incrementEntryCount());
                     }
@@ -30,6 +32,15 @@ public class Users {
     public void setUserHashMap(HashMap<String, User> userHashMap) {
         this.userHashMap = userHashMap;
     }
+
+    public Integer getUserCount() {
+        return userCount;
+    }
+
+    public void setUserCount(Integer userCount) {
+        this.userCount = userCount;
+    }
+
     public User searchUserByName(String username) {
         if (username == null) {
             return null;
@@ -48,10 +59,12 @@ public class Users {
             }
         }
     }
+
     @Override
     public String toString() {
         return "Users{" +
                 "userHashMap=" + userHashMap +
+                ", userCount=" + userCount +
                 '}';
     }
 }

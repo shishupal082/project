@@ -38,12 +38,12 @@ public class SessionData {
         this.username = username;
     }
 
-    public String getUpdatedDateObj() {
+    public String getVisibleDate() {
         return visibleDate;
     }
 
-    public void setUpdatedDateObj(String updatedDateObj) {
-        this.visibleDate = updatedDateObj;
+    public void setVisibleDate(String visibleDate) {
+        this.visibleDate = visibleDate;
     }
 
     @Override

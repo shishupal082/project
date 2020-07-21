@@ -17,6 +17,9 @@ public class FileService {
     final static Logger logger = LoggerFactory.getLogger(FileService.class);
     public FileService() {}
     public PathInfo getPathInfo(String requestedPath) {
+        if (requestedPath == null) {
+            requestedPath = "";
+        }
         PathInfo pathInfo = new PathInfo(requestedPath);
         File file = new File(requestedPath);
         if (file.isDirectory()) {

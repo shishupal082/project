@@ -26,22 +26,11 @@ server:
 
 supportedFileType:
   - pdf
-  - txt
-  - docx
-  - doc
-  - xlsx
-  - xls
-  - pptx
-  - ppt
-
-fileSaveDir: D:/workspace/project/ftp-app/saved-files/
-icoFilePath: meta-data/favicon.ico
-publicDir: ".."
-publicPostDir:
-indexPageReRoute: /dashboard
-maxFileSize: 2048001 #i.e. 2048000 = 2048 kB or 2MB
-
 adminUsersName:
   - Admin
-devUsersName:
-  - U1
+
+filenameFormat: "YYYY-MM-dd'-username'"
+fileSaveDir: D:/workspace/project/ftp-app/saved-files/
+icoFilePath: meta-data/favicon.ico
+maxFileSize: 2048001 #i.e. 2048000 = 2048 kB = 2MB
+

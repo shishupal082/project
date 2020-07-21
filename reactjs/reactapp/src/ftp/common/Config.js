@@ -58,6 +58,7 @@ Config.apiMapping["login"] = baseapi + "/api/login_user";
 Config.apiMapping["change_password"] = baseapi + "/api/change_password";
 Config.apiMapping["upload_file"] = baseapi + "/api/upload_file";
 Config.apiMapping["get_files"] = baseapi + "/api/get_files_info?" + RequestId;
+Config.apiMapping["static_file"] = baseapi + "/api/get_static_file?" + RequestId;
 
 Config.getAleartMessage = function(messageCode) {
     var messageMap = {};

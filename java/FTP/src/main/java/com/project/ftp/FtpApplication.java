@@ -2,12 +2,9 @@ package com.project.ftp;
 
 import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
-import com.project.ftp.exceptions.AppException;
-import com.project.ftp.exceptions.ErrorCodes;
 import com.project.ftp.filters.LogFilter;
 import com.project.ftp.filters.RequestFilter;
 import com.project.ftp.filters.ResponseFilter;
-import com.project.ftp.obj.PathInfo;
 import com.project.ftp.resources.ApiResource;
 import com.project.ftp.resources.AppResource;
 import com.project.ftp.resources.FaviconResource;
@@ -40,12 +37,6 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         appConfig.setFtpConfiguration(ftpConfiguration);
         StaticService.initApplication(appConfig);
         LOGGER.info("appConfig: {}", appConfig);
-        String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
-        PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
-        if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
-            LOGGER.info("File save directory is not a folder: {}", fileSaveDir);
-            throw new AppException(ErrorCodes.CONFIG_ERROR);
-        }
         environment.servlets().setSessionHandler(new SessionHandler());
         environment.jersey().register(MultiPartFeature.class);
         environment.jersey().register(new LogFilter());
