@@ -1,5 +1,4 @@
 import $S from "../../interface/stack.js";
-// import Api from "../../common/Api";
 import Config from "./Config";
 
 var PageData;
@@ -8,7 +7,7 @@ var PageData;
 var CurrentFormData = $S.getDataObj();
 var keys = ["upload_file.file"];
 keys.push("dashboard.apiResponse");
-keys.push("dashboard.apiData");
+keys.push("dashboard.apiResponseByUser");
 keys.push("dashboard.currentPdfLink");
 keys.push("login.username");
 keys.push("login.password");
@@ -50,10 +49,6 @@ PageData.extend({
         if (pdfLink !== null) {
             return PageData.getPdfViewLink(pdfLink);
         }
-        var apiResponse = CurrentFormData.getData("dashboard.apiResponse", null);
-        if (apiResponse !== null && apiResponse.length >= 1) {
-            pdfLink = PageData.getPdfViewLink(apiResponse[0]);//Config.baseapi + "/view/file?name=" + apiResponse[0];
-        }
         return pdfLink;
     }
 });
@@ -84,7 +79,6 @@ PageData.extend({
 });
 PageData.extend({
     deleteFile: function(Data, callBack, filename) {
-        var pageName = Config.getPageData("page", "");
         var url = Config.apiMapping["delete_file"];
         var postData = {};
         postData["filename"] = filename;
@@ -93,7 +87,7 @@ PageData.extend({
             if (status === "FAILURE") {
                 alert("Error in delete file, Please Try again.");
             } else {
-                PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+                PageData.handleApiResponse(Data, callBack, "delete_file", ajax, response);
             }
         });
     },
@@ -141,28 +135,28 @@ PageData.extend({
     }
 });
 PageData.extend({
-    handleApiResponse: function(Data, callBack, pageName, ajax, response) {
+    handleApiResponse: function(Data, callBack, apiName, ajax, response) {
         // var template;
-        if (pageName === "upload_file") {
+        if (apiName === "upload_file") {
             if (response.status === "FAILURE") {
                 alert(Config.getAleartMessage(response.failureCode));
             } else {
                 alert("File saved as: " + response.data.fileName);
                 Config.location.href = "/dashboard";
             }
-        } else if (pageName === "login") {
+        } else if (apiName === "login") {
             if (response.status === "FAILURE") {
                 alert(Config.getAleartMessage(response.failureCode));
             } else {
                 Config.location.href = "/dashboard";
             }
-        } else if (pageName === "change_password") {
+        } else if (apiName === "change_password") {
             if (response.status === "FAILURE") {
                 alert(Config.getAleartMessage(response.failureCode));
             } else {
                 Config.location.href = "/dashboard";
             }
-        } else if (pageName === "dashboard") {
+        } else if (apiName === "delete_file") {
             if (response.status === "FAILURE") {
                 alert(Config.getAleartMessage(response.failureCode));
             } else {

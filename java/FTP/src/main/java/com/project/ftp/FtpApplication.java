@@ -47,6 +47,7 @@ public class FtpApplication  extends Application<FtpConfiguration> {
         environment.jersey().register(new AppResource(appConfig));
     }
     public static void main(String[] args) throws Exception {
+        StaticService.renameOldLogFile(args[0]);
         arguments.addAll(Arrays.asList(args));
         new FtpApplication().run(AppConstant.server, args[0]);
     }

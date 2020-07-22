@@ -22,7 +22,7 @@ public class TextFileParser {
         ArrayList<ArrayList<String>> result = new ArrayList<>();
         String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
         filepath += AppConstant.USER_DATA_FILENAME;
-        PathInfo pathInfo = StaticService.getPathDetails(filepath);
+        PathInfo pathInfo = StaticService.getPathInfo(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Requested file is not found: {}", filepath);
             throw new AppException(ErrorCodes.FILE_NOT_FOUND);
@@ -44,21 +44,6 @@ public class TextFileParser {
                 result.add(temp);
             }
             in.close();
-//            FileReader fr = new FileReader(file);
-//            BufferedReader br = new BufferedReader(fr);
-//            String line = "";
-//            String[] tempArr;
-//            ArrayList<String> temp;
-//            while((line = br.readLine()) != null) {
-//                temp = new ArrayList<>();
-//                tempArr = line.split(",");
-//                for(String tempStr : tempArr) {
-//                    temp.add(tempStr);
-//                }
-//                result.add(temp);
-//            }
-//            br.close();
-//            fr.close();
             logger.info("Text file read success: {}", filepath);
         } catch (Exception e) {
             logger.info("Error in reading text file: {}", e.getMessage());
@@ -70,7 +55,7 @@ public class TextFileParser {
         boolean textAddStatus = false;
         String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
         filepath += AppConstant.USER_DATA_FILENAME;
-        PathInfo pathInfo = StaticService.getPathDetails(filepath);
+        PathInfo pathInfo = StaticService.getPathInfo(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Requested file is not found: {}", filepath);
             return false;

@@ -24,6 +24,8 @@ server:
     type: http
   rootPath: /*
 
+logFilePath: "D:/workspace/project/ftp-app/log/application.log"
+
 supportedFileType:
   - pdf
 adminUsersName:

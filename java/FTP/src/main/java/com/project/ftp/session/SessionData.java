@@ -11,7 +11,7 @@ public class SessionData {
     public SessionData(String sessionId, Long updatedTime) {
         this.sessionId = sessionId;
         this.updatedTime = updatedTime;
-        visibleDate = StaticService.getDateFromInMs(AppConstant.DateTimeFormat2, updatedTime);
+        visibleDate = StaticService.getDateStrFromTimeMs(AppConstant.DateTimeFormat2, updatedTime);
     }
     public String getSessionId() {
         return sessionId;
@@ -27,7 +27,7 @@ public class SessionData {
 
     public void setUpdatedTime(Long updatedTime) {
         this.updatedTime = updatedTime;
-        visibleDate = StaticService.getDateFromInMs(AppConstant.DateTimeFormat2, updatedTime);
+        visibleDate = StaticService.getDateStrFromTimeMs(AppConstant.DateTimeFormat2, updatedTime);
     }
 
     public String getUsername() {

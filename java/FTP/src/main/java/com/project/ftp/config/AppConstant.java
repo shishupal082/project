@@ -20,9 +20,9 @@ public class AppConstant {
     public static final String AppVersion = "1.0.1";
     public static final String server = "server";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";
-    public static final String DateTimeFormat2 = "YYYY-MM-dd'-'HH-mm-ss-SSS";
-    public static final String DateTimeFormat3 = " YYYY-MM-dd' 'HH:mm";
-    public static final String FileFormate = "YYYY-MM-dd'-'HH-mm-ss-SSS";
+    public static final String DateTimeFormat2 = "YYYY-MM-dd-HH-mm-ss-SSS";
+    public static final String DateTimeFormat3 = "YYYY-MM-dd' 'HH:mm"; // used for putting date time stamp in readme
+    public static final String DateTimeFormat4 = "YYYY-MM-dd-HH-mm-ss"; // used for log file copy
     public static final String UTF8 = "UTF-8";
     public static final String FAVICON_ICO_PATH = "favicon.ico";
     public static final String APP_STATIC_DATA_FILENAME = "app_static_data.json";
@@ -31,7 +31,7 @@ public class AppConstant {
     public static final String INDEX_PAGE_RE_ROUTE = "/dashboard";
     public static final String ORIGIN = "origin";
     public static final String PUBLIC = "public";
-    public static final String PdfAuther = "Project Author";
-    public static final String PdfCreator = "Project Creator";
+    public static final String PDF_AUTHOR = "Project Author";
+    public static final String PDF_CREATOR = "Project Creator";
     public static final String EmptyParagraph = " ";
 }

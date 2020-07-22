@@ -20,6 +20,7 @@ import java.util.UUID;
 public class SessionService {
     final static Logger logger = LoggerFactory.getLogger(SessionService.class);
     final AppConfig appConfig;
+    final SysUtils sysUtils = new SysUtils();
     public SessionService(final AppConfig appConfig) {
         this.appConfig = appConfig;
     }
@@ -39,7 +40,6 @@ public class SessionService {
         return (String) httpSession.getAttribute(AppConstant.SESSION_COOKIE_DATA);
     }
     private SessionData getNewSession(String sessionId) {
-        SysUtils sysUtils = new SysUtils();
         Long currentTime = sysUtils.getTimeInMsLong();
         return new SessionData(sessionId, currentTime);
     }
@@ -49,7 +49,6 @@ public class SessionService {
             logger.info("Invalid currentSessionId length(30 to 40): {}, created new: {}", currentSessionId, newSessionId);
             currentSessionId = newSessionId;
         }
-        SysUtils sysUtils = new SysUtils();
         HashMap<String, SessionData> sessionDataHashMap = appConfig.getSessionData();
         String sessionId;
         SessionData sessionData;

@@ -57,8 +57,8 @@ public class TextToPdfService {
                 document.add(new Paragraph(AppConstant.EmptyParagraph));
             }
             document.addCreationDate();
-            document.addAuthor(AppConstant.PdfAuther);
-            document.addCreator(AppConstant.PdfCreator);
+            document.addAuthor(AppConstant.PDF_AUTHOR);
+            document.addCreator(AppConstant.PDF_CREATOR);
             if (pdfTitle != null) {
                 document.addTitle(pdfTitle);
             }
@@ -83,7 +83,7 @@ public class TextToPdfService {
         ArrayList<String> fileData = textToPdfService.readTextFile(textFileName);
         fileData.add("");
         fileData.add("AppVersion: " + AppConstant.AppVersion +
-                ", Dated:" + StaticService.getDateStrFromPattern(AppConstant.DateTimeFormat3));
+                ", Dated: " + StaticService.getDateStrFromPattern(AppConstant.DateTimeFormat3));
         textToPdfService.convertTextToPdf(pdfFileName, fileData);
         logger.info("convertReadmeTextToPdf, request completed. '{}' to '{}'", textFileName, pdfFileName);
     }

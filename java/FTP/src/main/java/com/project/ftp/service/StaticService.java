@@ -8,6 +8,7 @@ import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.config.FileMimeType;
 import com.project.ftp.obj.PathInfo;
+import com.project.ftp.parser.YamlFileParser;
 import com.project.ftp.pdf.TextToPdfService;
 import com.project.ftp.session.SessionService;
 import org.eclipse.jetty.server.Request;
@@ -22,22 +23,24 @@ import java.util.Map;
 
 public class StaticService {
     final static Logger logger = LoggerFactory.getLogger(StaticService.class);
-    public static PathInfo getPathDetails(String requestedPath) {
-        FileService fileService = new FileService();
+    final static SysUtils sysUtils = new SysUtils();
+    final static StrUtils strUtils = new StrUtils();
+    final static DateUtilities dateUtilities = new DateUtilities();
+    final static FileService fileService = new FileService();
+    public static PathInfo getPathInfo(String requestedPath) {
         return fileService.getPathInfo(requestedPath);
     }
     public static String getDateStrFromPattern(String pattern) {
-        DateUtilities dateUtilities = new DateUtilities();
         return dateUtilities.getDateStrFromPattern(pattern);
     }
     public static String generateStringFromFormat(AppConfig appConfig, HashMap<String, String> values) {
         SysUtils sysUtils = new SysUtils();
-        String format = AppConstant.FileFormate;
+        String format = AppConstant.DateTimeFormat2;
         String configFileFormat = appConfig.getFtpConfiguration().getFilenameFormat();
         if (configFileFormat != null) {
             format = configFileFormat;
         }
-        String result = sysUtils.getDateTime(format);
+        String result = dateUtilities.getDateStrFromPattern(format);
         String key, value;
         for (Map.Entry<String, String> entry: values.entrySet()) {
             key = entry.getKey();
@@ -47,6 +50,29 @@ public class StaticService {
             }
         }
         return result;
+    }
+    public static void renameOldLogFile(final String relativeConfigFilePath) {
+        if (relativeConfigFilePath == null) {
+            return;
+        }
+        String configFilePath = sysUtils.getProjectWorkingDir() + "/" + relativeConfigFilePath;
+        configFilePath = strUtils.replaceBackSlashToSlash(configFilePath);
+        YamlFileParser ymlFileParser = new YamlFileParser();
+        String logFilePath = ymlFileParser.getLogFilePath(configFilePath);
+        PathInfo pathInfo = fileService.getPathInfo(logFilePath);
+        if (AppConstant.FILE.equals(pathInfo.getType())) {
+            String newLogFilePath = pathInfo.getParentFolder() + "/" + pathInfo.getFilenameWithoutExt() +
+                    "-" + dateUtilities.getDateStrFromPattern(AppConstant.DateTimeFormat4) + "." + pathInfo.getExtension();
+            Boolean copyStatus = fileService.copyFileV2(logFilePath, newLogFilePath);
+            if (copyStatus) {
+                Boolean deleteStatus = fileService.deleteFileV2(logFilePath);
+                if (!deleteStatus) {
+                    sysUtils.printLog("Error in deleting old log file: " + logFilePath);
+                }
+            } else {
+                sysUtils.printLog("Error in copying log file: " + logFilePath);
+            }
+        }
     }
     public static void initApplication(final AppConfig appConfig) {
         FtpConfiguration ftpConfiguration = appConfig.getFtpConfiguration();
@@ -67,19 +93,23 @@ public class StaticService {
         if (createReadmePdf != null && createReadmePdf) {
             textToPdfService.convertReadmeTextToPdf();
         }
-        ftpConfiguration.setPermanentlyDeleteFile(true);
     }
-    public static String getDateFromInMs(String format, Long timeInMs) {
+    public static String getDateStrFromTimeMs(String format, Long timeInMs) {
         DateUtilities dateUtilities = new DateUtilities();
-        return dateUtilities.getDateFromInMs(format, timeInMs);
+        return dateUtilities.getDateStrFromTimeMs(format, timeInMs);
     }
     public static String updateSessionId(AppConfig appConfig, String cookieData) {
         SessionService sessionService = new SessionService(appConfig);
         return sessionService.updateSessionId(cookieData);
     }
     public static String replaceLast(String find, String replace, String str) {
-        StrUtils strUtils = new StrUtils();
         return strUtils.replaceLast(find, replace, str);
+    }
+    public static void printLog(Object logStr) {
+        sysUtils.printLog(logStr);
+    }
+    public static String replaceBackSlashToSlash(String str) {
+        return strUtils.replaceBackSlashToSlash(str);
     }
     public static String getPathUrl(final HttpServletRequest request) {
         String path = ((Request) request).getUri().toString();

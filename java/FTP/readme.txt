@@ -1,5 +1,7 @@
+Readme file for ftp-application
+-----------------------------------------
 To run application
----------------------------
+--------------------------
 1) On Windows
     - Double click on run.bat
 2) On Linux
@@ -35,18 +37,19 @@ It will give reason for not running application
 ******************************
 Change config if required
 ------------------------------------
-- supportedFileType (pdf)
-- maxFileSize (2MB)
-- fileSaveDir
+- logFilePath (string) (D:/workspace/project/ftp-app/log/application.log)
+    - used for copy and delete old file
+- supportedFileType (arrayList) (pdf)
+- maxFileSize(Integer) (2MB)
+- fileSaveDir (string)
     - Example:
         fileSaveDir: D:/workspace/project/ftp-app/saved-files/
     - Default file save directory will be running directory + "/saved-files/"
-- adminUsersName (Admin)
-- filenameFormat
+- adminUsersName (arrayList) (Admin)
+- filenameFormat (string)
     - username, filename, YYYY-MM-dd, HH-mm-ss-SSS
     for example
         - "YYYY-MM-dd'-username'"
         - "YYYY-MM-dd'-filename'"
         - "YYYY-MM-dd'-username-filename'"
         - "YYYY-MM-dd-HH-mm-ss-SSS"
-

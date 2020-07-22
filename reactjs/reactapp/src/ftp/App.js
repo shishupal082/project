@@ -104,6 +104,9 @@ class App extends React.Component {
         if (redirectStatus) {
             return;
         }
+        // var renderField = [];
+        // renderField.push(Data.getTemplate("loading", {}));
+        // this.setState({renderField: renderField});
         var self = this;
         FTPHelper.loadStaticData(Data, function() {
             self.setRenderField(true);

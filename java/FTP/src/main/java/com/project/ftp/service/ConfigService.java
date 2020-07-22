@@ -19,6 +19,7 @@ public class ConfigService {
         String orgPublicDir = appConfig.getFtpConfiguration().getPublicDir();
         String publicPostDir = appConfig.getFtpConfiguration().getPublicPostDir();
         String publicDir = orgPublicDir;
+        systemDir = StaticService.replaceBackSlashToSlash(systemDir);
         logger.info("systemDir: {}", systemDir);
         logger.info("configPublicDir: {}", publicDir);
         logger.info("configPublicPostDir: {}", publicPostDir);
@@ -60,7 +61,7 @@ public class ConfigService {
             logger.info("appConfig publicDir set skip.");
         }
         String fileSaveDir = appConfig.getFtpConfiguration().getFileSaveDir();
-        PathInfo pathInfo = StaticService.getPathDetails(fileSaveDir);
+        PathInfo pathInfo = StaticService.getPathInfo(fileSaveDir);
         if (!AppConstant.FOLDER.equals(pathInfo.getType())) {
             logger.info("File save directory is not a folder: {}, setting as publicDir + /saved-files/", fileSaveDir);
             appConfig.getFtpConfiguration().setFileSaveDir(setPublicDir + "/saved-files/");

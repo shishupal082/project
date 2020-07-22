@@ -245,8 +245,15 @@ public class FileServiceV2 {
         if (AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Filename: {}, already exist, re-naming it. {}", fileName, pathInfo);
             String ext = pathInfo.getExtension();
-            String parentFolder = pathInfo.getParentFolder() + "/";;
-            fileService.renameExistingFile(parentFolder, pathInfo.getFilenameWithoutExt(), ext);
+            String parentFolder = pathInfo.getParentFolder();;
+            String currentFileName = pathInfo.getFileName();
+            String newFileName = pathInfo.getFilenameWithoutExt() + "-Copy." + ext;
+            Boolean renameStatus = fileService.renameExistingFile(parentFolder, currentFileName, newFileName);
+            if (!renameStatus) {
+                String timeInMs = StaticService.getDateStrFromPattern(AppConstant.DateTimeFormat);
+                newFileName = pathInfo.getFilenameWithoutExt() + "-" + timeInMs + "." + ext;
+                fileService.renameExistingFile(parentFolder, currentFileName, newFileName);
+            }
         }
         Integer maxFileSize = appConfig.getFtpConfiguration().getMaxFileSize();
         ApiResponse apiResponse;
