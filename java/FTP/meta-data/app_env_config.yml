@@ -24,8 +24,6 @@ server:
     type: http
   rootPath: /*
 
-logFilePath: "D:/workspace/project/ftp-app/log/application.log"
-
 supportedFileType:
   - pdf
   - txt
@@ -36,21 +34,29 @@ supportedFileType:
   - pptx
   - ppt
   - mp3
+  - 3gp
   - mp4
   - exe
+  - jpeg
+  - jpg
+  - png
 
 filenameFormat: "YYYY-MM-dd'-filename'"
-fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 icoFilePath: meta-data/favicon.ico
-maxFileSize: 2048001 #i.e. 2048 kB or 2MB
+maxFileSize: 10240001 #i.e. #i.e. 2048000 = 2048 kB = 2MB, 10240001 = 10MB
 
 adminUsersName:
   - Admin
 
-# Only for development purpose
-permanentlyDeleteFile: false
-createReadmePdf: true
+
+# Optional parameter
 indexPageReRoute: /dashboard
+permanentlyDeleteFile2: true
+logFilePath: "D:/workspace/project/ftp-app/log/application.log"
+fileSaveDir: D:/workspace/project/ftp-app/saved-files/
+
+# Only for development purpose
+createReadmePdf: true
 appViewFtlFileName: app_view.ftl
 publicDir: "../.."
 publicPostDir:

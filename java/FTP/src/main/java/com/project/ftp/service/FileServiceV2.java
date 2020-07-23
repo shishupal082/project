@@ -173,7 +173,7 @@ public class FileServiceV2 {
         Boolean permanentlyDeleteFile = appConfig.getFtpConfiguration().getPermanentlyDeleteFile();
         Boolean fileDeleteStatus = false;
         if (AppConstant.FILE.equals(pathInfo.getType())) {
-            if (permanentlyDeleteFile != null && permanentlyDeleteFile) {
+            if (permanentlyDeleteFile == null || permanentlyDeleteFile) {
                 logger.info("Permanently deleting file: {}", deleteFile);
                 fileDeleteStatus = fileService.deleteFileV2(dir+deleteFileReq);
             } else {
@@ -290,7 +290,7 @@ public class FileServiceV2 {
             logger.info("Config error, supportedFileType is Null.");
             throw new AppException(ErrorCodes.CONFIG_ERROR);
         }
-        if (!supportedFileType.contains(ext)) {
+        if (ext == null || !supportedFileType.contains(ext.toLowerCase())) {
             logger.info("File extension '{}', is not supported", ext);
             throw new AppException(ErrorCodes.UNSUPPORTED_FILE_TYPE);
         }

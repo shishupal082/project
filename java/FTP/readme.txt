@@ -39,8 +39,8 @@ Change config if required
 ------------------------------------
 - logFilePath (string) (D:/workspace/project/ftp-app/log/application.log)
     - used for copy and delete old file
-- supportedFileType (arrayList) (pdf)
-- maxFileSize(Integer) (2MB)
+- supportedFileType (arrayList) (pdf,jpeg,jpg,png)
+- maxFileSize(Integer) (10MB)
 - fileSaveDir (string)
     - Example:
         fileSaveDir: D:/workspace/project/ftp-app/saved-files/

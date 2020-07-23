@@ -6,9 +6,10 @@ var PageData;
 (function($S){
 var CurrentFormData = $S.getDataObj();
 var keys = ["upload_file.file"];
-keys.push("dashboard.apiResponse");
-keys.push("dashboard.apiResponseByUser");
+keys.push("dashboard.apiResponse"); // []
+keys.push("dashboard.apiResponseByUser");// {}
 keys.push("dashboard.currentPdfLink");
+keys.push("dashboard.orderBy"); // date or users
 keys.push("login.username");
 keys.push("login.password");
 keys.push("change_password.old_password");
@@ -75,6 +76,10 @@ PageData.extend({
                PageData.deleteFile(Data, callBack, currentTarget.value); 
            }
         }
+    },
+    handleDropDownChange: function(e, Data, callBack) {
+        PageData.setData("dashboard.orderBy", e.currentTarget.value);
+        callBack(true);
     }
 });
 PageData.extend({

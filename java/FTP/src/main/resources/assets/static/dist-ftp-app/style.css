@@ -28,6 +28,31 @@
 .loading {
     font-size: 3rem;
 }
+.dashboardRowDataByDate-username,
+.dashboard-orderbydate-username {
+    max-width: 120px;
+    overflow: hidden;
+}
+.dashboardRowDataByDate-username:hover {
+    overflow: visible;
+    font-weight: 800;
+}
+.dashboard1stRow-fileinfo,
+.dashboard1stRowByDate-fileinfo {
+    min-width: 350px;
+    width: 350px;
+}
+.dashboard .dashboard-s-no {
+    width: 50px;
+    padding: 2px;
+    text-align: center;
+}
+.dashboard .pdf-embed-td,
+.dashboard .pdf-embed-td .pdf-view,
+.dashboard .pdf-embed-td .pdf-view .pdf-embed,
+.dashboard .pdf-embed-td .display-img {
+    max-width: 780px;
+}
 .form-div > div {
     max-width: 450px;
     margin-left: auto;

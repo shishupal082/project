@@ -191,6 +191,12 @@ Template["upload_file"] = [
                             "type": "file",
                             "name": "upload_file.file",
                             "id": "file"
+                        },
+                        {
+                            "tag": "div.span",
+                            "name": "upload_file.message",
+                            "className": "small",
+                            "text": ""
                         }
                     ]
                 },
@@ -251,7 +257,21 @@ Template["change_password"] = [
                     "text": [
                         {
                             "tag": "label",
-                            "text": "New Password"
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "New Password"
+                                },
+                                {
+                                    "tag": "span",
+                                    "className": "pl-10px"
+                                },
+                                {
+                                    "tag": "span",
+                                    "className": "small",
+                                    "text": "(Do not use gmail password here)"
+                                }
+                            ]
                         },
                         {
                             "tag": "input",
@@ -316,6 +336,7 @@ Template["dashboard"] = [
                                 {
                                     "tag": "div",
                                     "className": "pdf-view",
+                                    "name": "dashboard.display.object.div",
                                     "text": {
                                         "tag": "object",
                                         "name": "pdfViewObject",
@@ -329,10 +350,55 @@ Template["dashboard"] = [
                                             "src": ""
                                         }
                                     }
+                                },
+                                {
+                                    "tag": "div",
+                                    "className": "img-view",
+                                    "name": "dashboard.display.img.div",
+                                    "text": {
+                                        "tag": "img",
+                                        "name": "dashboard.display.img",
+                                        "src": "",
+                                        "alt": "",
+                                        "className": "display-img"
+                                    }
                                 }
                             ]
                         }
                     ]
+                }
+            }
+        ]
+    }
+];
+Template["dashboardOrderByOption"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "colSpan": 2,
+                "name": "dashboard.orderbydropdown.td",
+                "text": {
+                    "tag": "div",
+                    "text": {
+                        "tag": "select",
+                        "name": "dashboard.orderbydropdown",
+                        "className": "custom-select",
+                        "value": "orderByFilename",
+                        "text": [
+                            {
+                                "tag": "option",
+                                "value": "orderByFilename",
+                                "text": "Order By Filename"
+                            },
+                            {
+                                "tag": "option",
+                                "value": "orderByUsername",
+                                "text": "Order By Username"
+                            }
+                        ]
+                    }
                 }
             }
         ]
@@ -362,10 +428,34 @@ Template["dashboard1stRow"] = [
         "text": [
             {
                 "tag": "th",
+                "className": "dashboard-s-no",
                 "text": "S.No."
             },
             {
                 "tag": "th",
+                "className": "dashboard1stRow-fileinfo",
+                "text": "Fileinfo"
+            }
+        ]
+    }
+];
+Template["dashboard1stRowByDate"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "className": "dashboard-s-no",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "className": "dashboard-orderbydate-username",
+                "text": "Username"
+            },
+            {
+                "tag": "th",
+                "className": "dashboard1stRowByDate-fileinfo",
                 "text": "Fileinfo"
             }
         ]
@@ -378,11 +468,36 @@ Template["dashboardRowData"] = [
             {
                 "tag": "td",
                 "name": "s.no",
+                "className": "dashboard-s-no",
                 "text": ""
             },
             {
                 "tag": "td",
                 "name": "fileinfo",
+                "text": ""
+            }
+        ]
+    }
+];
+Template["dashboardRowDataByDate"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "dashboardRowDataByDate.s.no",
+                "className": "dashboard-s-no",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "dashboardRowDataByDate.username",
+                "className": "dashboardRowDataByDate-username",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "dashboardRowDataByDate.fileinfo",
                 "text": ""
             }
         ]

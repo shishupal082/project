@@ -35,5 +35,21 @@ Why app_static_data.json is in file-saved directory ?
 ----------------------
 - Added post method deleteFile
 - Fix for duplicate entry of public folder in adminUser account
+- UI display sorted result for dashboard
+- Delete link render and integerated
+- Optional parameter can be given in env_config for permanentlyDeleteFile: true (Boolean)
+    - If parameter not found, it will consider as soft delete
 
-
+1.0.2
+--------
+- change permanentlyDeleteFile default value as true (i.e. checking null or true)
+    - permanentlyDeleteFile: defaultValue = true (if not found i.e. checking null or true)
+- Render image file in UI display
+    - i.e. support for jpeg, jpg and png
+- Added dropdown for
+    - display by filename
+    - display by username
+- Added uploadFileInstruction in app_static_data
+    - To display on upload file page
+- Added message on change password page
+    - (Do not use gmail password here)

@@ -24,14 +24,15 @@ server:
     type: http
   rootPath: /*
 
-logFilePath: "D:/workspace/project/ftp-app/log/application.log"
-
 supportedFileType:
   - pdf
+  - jpeg
+  - png
+  - jpg
 adminUsersName:
   - Admin
 
 filenameFormat: "YYYY-MM-dd-HH-mm'-filename'"
 icoFilePath: meta-data/favicon.ico
-maxFileSize: 2048001 #i.e. 2048000 = 2048 kB = 2MB
+maxFileSize: 10240001 #i.e. 2048000 = 2048 kB = 2MB, 10240001 = 10MB
 

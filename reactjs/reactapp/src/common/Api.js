@@ -213,6 +213,13 @@ childGenerator = {
                     value={data.value} required/>;
         }
         return inputField;
+    },
+    // Whenever field changes, we have to update template, to reflect on the screen
+    "select": function(props, data, reactChildText, key) {
+        return <select key={key} name={data.name} className={data.className} value={data.value} onChange={props.dropDownChange}>{reactChildText}</select>
+    },
+    "option": function(props, data, reactChildText, key) {
+        return <option key={key} value={data.value}>{reactChildText}</option>
     }
 };
 

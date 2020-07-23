@@ -1,11 +1,24 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
-var Config = {"name": "Config"};
+var Config = {"name": "Config", "imgExt": ["jpg", "jpeg", "png"]};
 var PageData = {};
 var baseapi = $$$.baseapi;
 var basepathname = $$$.basepathname;
 
+
+var ApiConfig = {};
+Config.setApiConfig = function(apiConfig) {
+    if ($S.isObject(apiConfig)) {
+        ApiConfig = apiConfig;
+    }
+}
+Config.getApiConfig = function(key, defaultValue) {
+    if ($S.isDefined(ApiConfig[key])) {
+        return ApiConfig[key];
+    }
+    return defaultValue;
+}
 
 Config.JQ = $$$.JQ;
 Config.location = $$$.location;
@@ -66,12 +79,10 @@ Config.apiMapping["get_files"] = baseapi + "/api/get_files_info?" + RequestId;
 Config.getAleartMessage = function(messageCode) {
     var messageMap = {};
     messageMap["UNSUPPORTED_FILE_TYPE"] = "Uploaded file type not supported.";
-    messageMap["FILE_SIZE_EXCEEDED"] = "Uploaded file size exceed 2MB.";
     if ($S.isString(messageMap[messageCode])) {
         return messageMap[messageCode];
     }
     return messageCode;
 };
-
 
 export default Config;

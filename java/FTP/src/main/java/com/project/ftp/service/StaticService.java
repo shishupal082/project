@@ -128,6 +128,10 @@ public class StaticService {
         return path;
     }
     public static String getFileMimeTypeValue(String name) {
+        if (name == null) {
+            return null;
+        }
+        name = name.toLowerCase();
         String response = null;
         FileMimeType fileMimeType;
         try {

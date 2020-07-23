@@ -51,12 +51,19 @@ Data.setData("userName", userName);
 Data.setData("isUserAdmin", isUserAdmin);
 Data.setData("userDisplayName", userDisplayName);
 
+if (!isUserAdmin) {
+    PageData.setData("dashboard.orderBy", "orderByUsername");
+} else {
+    PageData.setData("dashboard.orderBy", "orderByFilename");
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             renderField: []
         };
+        this.dropDownChange = this.dropDownChange.bind(this);
         this.onClick = this.onClick.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
     }
@@ -80,6 +87,15 @@ class App extends React.Component {
     onChange(e) {
         // var terget = e.currentTarget;
         PageData.handleInputChange(e);
+    }
+    dropDownChange(e) {
+        // alert(e.currentTarget.value);
+        var self = this;
+        PageData.handleDropDownChange(e, Data, function(setRenderField) {
+            if ($S.isBooleanTrue(setRenderField)) {
+                self.setRenderField();
+            }
+        });
     }
     setRenderField(isLoading) {
         var renderField = [];
@@ -122,6 +138,7 @@ class App extends React.Component {
                 onFormSubmit={this.onFormSubmit}
                 onClick={this.onClick}
                 onChange={this.onChange}
+                dropDownChange={this.dropDownChange}
             />
         );
     }

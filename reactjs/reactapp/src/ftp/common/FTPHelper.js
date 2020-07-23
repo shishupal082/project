@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 import Api from "../../common/Api";
 import TemplateHelper from "../../common/TemplateHelper";
+import TemplateHelperV2 from "../../common/TemplateHelperV2";
 import Config from "./Config";
 import PageData from "./PageData";
 
@@ -28,7 +29,6 @@ FTP.extend({
         var linkTemplate = Data.getTemplate("link", {});
         var field = TemplateHelper(linkTemplate).searchField("link.loginAs");
         field.text = Data.getData("userName", "");
-
         // field = TemplateHelper(linkTemplate).searchField("link.logout");
         // field.className = TextFilter(field.className).addClass("d-none").className;
 
@@ -96,8 +96,6 @@ FTP.extend({
         if (currentUserName !== fileResponse.username) {
             field.className = TextFilter(field.className).removeClass("text-danger").addClass("disabled").className;
         }
-
-
         return template;
     },
     _getDashboardData: function(Data) {
@@ -123,15 +121,55 @@ FTP.extend({
         }
         return dashboardData;
     },
+    getDashboardFieldOrderByDate: function(Data) {
+        var apiData = PageData.getData("dashboard.apiResponse", []);
+        if (apiData.length < 1) {
+            return Data.getTemplate("noDataFound", {});
+        }
+
+        var dashboardTemplate = Data.getTemplate("dashboard", {});
+        var dashboardTemplateData = {"dashboardRow": []};
+        var template2, template2Data;
+        template2 = Data.getTemplate("dashboardOrderByOption", {});
+        TemplateHelperV2.setTemplateAttr(template2, "dashboard.orderbydropdown.td", "colSpan", 3);
+        dashboardTemplateData.dashboardRow.push(template2);
+        var i, count=1;
+        template2 = Data.getTemplate("dashboard1stRowByDate", {});
+        dashboardTemplateData.dashboardRow.push(template2);
+        var parentTemplateName = "dashboardRowDataByDate";
+        var currentPdfLink = PageData.getData("dashboard.currentPdfLink", "");
+        var currentUserName = Data.getData("userName", "");
+        for(i=0; i<apiData.length; i++) {
+            template2 = Data.getTemplate(parentTemplateName, {});
+            template2Data = {};
+            template2Data[parentTemplateName+".s.no"] = count++;
+            template2Data[parentTemplateName+".username"] = apiData[i]["username"];
+
+            template2Data[parentTemplateName+".fileinfo"] = FTP._generateFileinfoField(Data, currentUserName, apiData[i], currentPdfLink);
+            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            dashboardTemplateData.dashboardRow.push(template2);
+        }
+        TemplateHelper.setTemplateTextByFormValues(dashboardTemplate, dashboardTemplateData);
+        return dashboardTemplate;
+    },
     getDashboardField: function(Data, pageName) {
-        var dashboardData = FTPHelper._getDashboardData(Data);
+        var orderBy = PageData.getData("dashboard.orderBy", null);
+        if (orderBy === "orderByFilename") {
+            return FTP.getDashboardFieldOrderByDate(Data);
+        }
+        var dashboardData = FTP._getDashboardData(Data);
         if (dashboardData.dashboardRow.length < 1) {
             return Data.getTemplate("noDataFound", {});
         }
+
         var currentUserName = Data.getData("userName", "");
         var dashboardTemplate = Data.getTemplate(pageName, {});
         var dashboardTemplateData = {"dashboardRow": []};
+
         var template2, template2Data;
+        template2 = Data.getTemplate("dashboardOrderByOption", {});
+        dashboardTemplateData.dashboardRow.push(template2);
+
         var i, j, count;
         var currentPdfLink = PageData.getData("dashboard.currentPdfLink", "");
         for(i=0; i<dashboardData.dashboardRow.length; i++) {
@@ -158,17 +196,47 @@ FTP.extend({
 });
 //getFieldTemplateByPageName
 FTP.extend({
+    displayVisibleItem: function(dashboardField) {
+        var displayFileName = PageData.getData("dashboard.currentPdfLink");
+        var fileinfo = FTP.generateFileInfo(displayFileName);
+        var field, ext, displayLink;
+        // var dcurrentDropDownValue = TemplateHelperV2.getTemplateAttr(Template, "dashboard.orderbydropdown", "value", null);
+
+        var dashboardOrderBy = PageData.getData("dashboard.orderBy", null);
+        TemplateHelperV2.setTemplateAttr(dashboardField, "dashboard.orderbydropdown", "value", dashboardOrderBy);
+        if (fileinfo && $S.isString(fileinfo.ext)) {
+            ext = fileinfo.ext.toLowerCase();
+            displayLink = PageData.getCurrentPdfLink();
+            if (Config.imgExt.indexOf(ext) >= 0) {
+                field = TemplateHelper(dashboardField).searchFieldV2("dashboard.display.object.div");
+                field.className = TextFilter(field.className).addClass("d-none").className;
+
+                field = TemplateHelper(dashboardField).searchFieldV2("dashboard.display.img");
+                field.src = displayLink;
+                field.alt = fileinfo.filename;
+            } else {
+                field = TemplateHelper(dashboardField).searchFieldV2("dashboard.display.img.div");
+                field.className = TextFilter(field.className).addClass("d-none").className;
+                field = TemplateHelper(dashboardField).searchFieldV2("pdfViewObject");
+                field.data = displayLink;
+                // field.type = "application/" + ext;
+                field = TemplateHelper(dashboardField).searchFieldV2("pdfViewEmbed");
+                field.src = displayLink;
+                // field.type = "application/" + ext;
+            }
+        }
+    },
     getFieldTemplateByPageName: function(Data, pageName) {
         var pageTemplate = [];
+        var template = {};
         if (pageName === "upload_file") {
-            pageTemplate.push(Data.getTemplate(pageName, {}));
+            template = Data.getTemplate(pageName, {});
+            var message = Config.getApiConfig("uploadFileInstruction", "");
+            TemplateHelperV2.setTemplateAttr(template, "upload_file.message", "text", message);
+            pageTemplate.push(template);
         } else if (pageName === "dashboard") {
             var dashboardField = FTP.getDashboardField(Data, pageName);
-            var pdfLink = PageData.getCurrentPdfLink();
-            var field = TemplateHelper(dashboardField).searchFieldV2("pdfViewObject");
-            field.data = pdfLink;
-            field = TemplateHelper(dashboardField).searchFieldV2("pdfViewEmbed");
-            field.src = pdfLink;
+            FTP.displayVisibleItem(dashboardField);
             pageTemplate.push(dashboardField);
         } else {
             pageTemplate.push(Data.getTemplate(pageName, {}));
@@ -186,6 +254,9 @@ FTP.extend({
                     var oldTemplate = Data.getData("FTPTemplate", {});
                     Object.assign(oldTemplate, response.data.template);
                     Data.setData("FTPTemplate", oldTemplate);
+                }
+                if ($S.isObject(response.data.config)) {
+                    Config.setApiConfig(response.data.config);
                 }
             }
         }, function() {
@@ -208,6 +279,22 @@ FTP.extend({
         }
         return responseByUser;
     },
+    generateFileInfo: function (str) {
+        if (!$S.isString(str)) {
+            return null;
+        }
+        var strArr = str.split("/");
+        var r = {}, temp;
+        if (strArr.length === 2) {
+            r = {"actualFilename": str, "filename": strArr[1], "username": strArr[0], "ext": ""};
+            temp = r.filename.split(".");
+            if (temp.length > 1) {
+                r["ext"] = temp[temp.length-1];
+            }
+            return r;
+        }
+        return null;
+    },
     _generateDashboardResponse: function(response) {
         var tempResult = [];
         var finalResult = [];
@@ -219,22 +306,6 @@ FTP.extend({
             var strArr = str.split("/");
             if (strArr.length === 2) {
                 return strArr[1] + "/" + strArr[0];
-            }
-            return null;
-        }
-        function generateFileInfo(str) {
-            if (!$S.isString(str)) {
-                return null;
-            }
-            var strArr = str.split("/");
-            var r = {}, temp;
-            if (strArr.length === 2) {
-                r = {"actualFilename": str, "filename": strArr[1], "username": strArr[0], "ext": ""};
-                temp = r.filename.split(".");
-                if (temp.length > 1) {
-                    r["ext"] = temp[temp.length-1];
-                }
-                return r;
             }
             return null;
         }
@@ -254,7 +325,7 @@ FTP.extend({
                 }
             }
             for(i=finalResult.length-1; i>=0; i--) {
-                fileResponse = generateFileInfo(finalResult[i]);
+                fileResponse = FTP.generateFileInfo(finalResult[i]);
                 if (fileResponse !== null) {
                     dashboardResult.push(fileResponse);
                 }
@@ -268,7 +339,7 @@ FTP.extend({
             var url = Config.apiMapping["get_files"];
             $S.loadJsonData(null, [url], function(response, apiName, ajaxDetails) {
                 if ($S.isObject(response) && $S.isArray(response.data)) {
-                    var dashboardApiResponse = FTPHelper._generateDashboardResponse(response.data);
+                    var dashboardApiResponse = FTP._generateDashboardResponse(response.data);
                     if (dashboardApiResponse && dashboardApiResponse.length > 0) {
                         var pdfLinkNotFound = true;
                         for (var i = 0; i < dashboardApiResponse.length; i++) {
@@ -283,7 +354,7 @@ FTP.extend({
                         }
                     }
                     PageData.setData("dashboard.apiResponse", dashboardApiResponse);
-                    PageData.setData("dashboard.apiResponseByUser", FTPHelper._generateDashboardResponseByUser(dashboardApiResponse));
+                    PageData.setData("dashboard.apiResponseByUser", FTP._generateDashboardResponseByUser(dashboardApiResponse));
                 }
             }, function() {
                 $S.callMethod(callBack);
