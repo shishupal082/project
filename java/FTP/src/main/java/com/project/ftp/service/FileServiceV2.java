@@ -75,7 +75,9 @@ public class FileServiceV2 {
             } else {
                 dir = dir + loginUserName + "/";
                 scanResults.add(fileService.scanDirectory(dir, dir, false));
-                scanResults.add(fileService.scanDirectory(publicDir, publicDir, false));
+                if (!AppConstant.PUBLIC.equals(loginUserName.toLowerCase())) {
+                    scanResults.add(fileService.scanDirectory(publicDir, publicDir, false));
+                }
             }
             ArrayList<String> response = new ArrayList<>();
             generateApiResponse(scanResults, response);
@@ -196,11 +198,10 @@ public class FileServiceV2 {
                 throw new AppException(ErrorCodes.RUNTIME_ERROR);
             } else {
                 logger.info("Requested file deleted: {}.", deleteFileReq);
-
             }
         } else {
             logger.info("Requested deleteFile: {}, does not exist.", deleteFileReq);
-            throw new AppException(ErrorCodes.UNAUTHORIZED_USER);
+            throw new AppException(ErrorCodes.FILE_NOT_FOUND);
         }
     }
     public Object handleDefaultUrl(HttpServletRequest request) {

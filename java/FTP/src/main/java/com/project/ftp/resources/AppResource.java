@@ -132,6 +132,11 @@ public class AppResource {
         return new AppView(request, appViewFtlFileName, "logout", userService);
     }
     @GET
+    @Path("/register")
+    public AppView register(@Context HttpServletRequest request) {
+        return new AppView(request, appViewFtlFileName, "register", userService);
+    }
+    @GET
     @Path("/upload_file")
     public AppView uploadFile(@Context HttpServletRequest request) {
         return new AppView(request, appViewFtlFileName, "upload_file", userService);

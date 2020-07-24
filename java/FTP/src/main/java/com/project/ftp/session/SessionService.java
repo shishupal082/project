@@ -85,26 +85,16 @@ public class SessionService {
         appConfig.setSessionData(sessionDataHashMap);
         return currentSessionId;
     }
-    public void loginUser(HttpServletRequest request, RequestUserLogin userLogin) throws AppException {
+    public void loginUser(HttpServletRequest request, String username) throws AppException {
         HashMap<String, SessionData> sessionData = appConfig.getSessionData();
         String sessionId = this.getSessionId(request);
         SessionData currentSessionData = sessionData.get(sessionId);
         if (currentSessionData != null) {
-            if (userLogin == null) {
-                logger.info("userLogin request is null.");
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            String username = userLogin.getUsername();
-            String password = userLogin.getPassword();
             if (username == null || username.isEmpty()) {
                 logger.info("userLogin request username is incorrect: {}", username);
                 throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
             }
-            if (password == null || password.isEmpty()) {
-                logger.info("userLogin request password is incorrect: {}", password);
-                throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
-            }
-            currentSessionData.setUsername(userLogin.getUsername());
+            currentSessionData.setUsername(username);
         } else {
             logger.info("Current session not found, sessionId: {}", sessionId);
             throw new AppException(ErrorCodes.INVALID_SESSION);

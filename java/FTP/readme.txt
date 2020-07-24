@@ -12,10 +12,21 @@ Then open below url in browser (Preferably Chrome)
 
 If ask login (Available users are as below)
 
-U1,U1,U1 User (Username: U1, Password U1)
-U2,U1,U2 User (Username: U2, Password U1)
-U3,U1,U3 User (Username: U3, Password U1)
-Admin,Admin,Admin User (Username: Admin, Password Admin)
+U1,U1,U1 User (Username: U1, Password: U1)
+U2,U1,U2 User (Username: U2, Password: U1)
+U3,U1,U3 User (Username: U3, Password: U1)
+public,public,Public User (Username: public, Password: public)
+Admin,Admin,Admin User (Username: Admin, Password: Admin)
+
+----------------------------------------------------------
+For user registration (passcode will be required)
+Below format can be added in user_data.csv file
+
+U1,,U1 User,1234 (passcode=1234 can be used only once)
+    - 1) username = U1
+    - 2) password = "" (it will be set after registration)
+    - 3) user display name = U1 User
+    - 4) passcode = 1234
 
 ****************
 Pre requisite
@@ -37,6 +48,9 @@ It will give reason for not running application
 ******************************
 Change config if required
 ------------------------------------
+- permanentlyDeleteFile: false (Boolean)
+    - If true, file will be permanently deleted
+    - If false, file will be move to trash folder
 - logFilePath (string) (D:/workspace/project/ftp-app/log/application.log)
     - used for copy and delete old file
 - supportedFileType (arrayList) (pdf,jpeg,jpg,png)
@@ -53,3 +67,8 @@ Change config if required
         - "YYYY-MM-dd'-filename'"
         - "YYYY-MM-dd'-username-filename'"
         - "YYYY-MM-dd-HH-mm-ss-SSS"
+
+Fixed configurations
+---------------------
+SESSION_TTL = 10min
+MAX_ENTRY_ALLOWED_IN_USER_DATA_FILE = 8

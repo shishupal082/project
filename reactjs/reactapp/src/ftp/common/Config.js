@@ -43,6 +43,7 @@ if ($S.isBooleanTrue($$$.isReactEnv)) {
     hrefPathMapping[basepathname + "/dashboard"] = "dashboard";
     hrefPathMapping[basepathname + "/login"] = "login";
     hrefPathMapping[basepathname + "/logout"] = "logout";
+    hrefPathMapping[basepathname + "/register"] = "register";
     hrefPathMapping[basepathname + "/forgot_password"] = "forgot_password";
     hrefPathMapping[basepathname + "/upload_file"] = "upload_file";
     hrefPathMapping[basepathname + "/change_password"] = "change_password";
@@ -70,19 +71,24 @@ Config.apiMapping = {};
 Config.apiMapping["static_file"] = baseapi + "/api/get_static_file?" + RequestId;
 
 Config.apiMapping["login"] = baseapi + "/api/login_user";
+Config.apiMapping["register"] = baseapi + "/api/register_user";
 Config.apiMapping["change_password"] = baseapi + "/api/change_password";
 Config.apiMapping["upload_file"] = baseapi + "/api/upload_file";
 
 Config.apiMapping["delete_file"] = baseapi + "/api/delete_file";
 Config.apiMapping["get_files"] = baseapi + "/api/get_files_info?" + RequestId;
 
-Config.getAleartMessage = function(messageCode) {
+Config.getAleartMessage = function(errorCode) {
     var messageMap = {};
-    messageMap["UNSUPPORTED_FILE_TYPE"] = "Uploaded file type not supported.";
+    if (!$S.isObject(errorCode)) {
+        return errorCode;
+    }
+    var messageCode = errorCode.failureCode;
+    var reason = errorCode.reason;
     if ($S.isString(messageMap[messageCode])) {
         return messageMap[messageCode];
     }
-    return messageCode;
+    return reason;
 };
 
 export default Config;

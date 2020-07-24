@@ -154,7 +154,6 @@ public class ApiResource {
     public ApiResponse loginUser(@Context HttpServletRequest httpServletRequest,
                                  RequestUserLogin userLogin) {
         logger.info("loginUser : In, {}", userLogin);
-        HttpSession httpSession = httpServletRequest.getSession();
         ApiResponse response;
         try {
             HashMap<String, String> loginUserDetails = userService.loginUser(httpServletRequest, userLogin);
@@ -164,6 +163,22 @@ public class ApiResource {
             response = new ApiResponse(ae.getErrorCode());
         }
         logger.info("loginUser : Out: {}", response);
+        return response;
+    }
+    @POST
+    @Path("/register_user")
+    public ApiResponse registerUser(@Context HttpServletRequest httpServletRequest,
+                                 RequestUserRegister userRegister) {
+        logger.info("registerUser : In, {}", userRegister);
+        ApiResponse response;
+        try {
+            userService.userRegister(httpServletRequest, userRegister);
+            response = new ApiResponse();
+        } catch (AppException ae) {
+            logger.info("Error in register user: {}", ae.getErrorCode().getErrorCode());
+            response = new ApiResponse(ae.getErrorCode());
+        }
+        logger.info("registerUser : Out: {}", response);
         return response;
     }
     @GET

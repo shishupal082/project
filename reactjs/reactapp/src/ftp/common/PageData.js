@@ -15,6 +15,10 @@ keys.push("login.password");
 keys.push("change_password.old_password");
 keys.push("change_password.new_password");
 keys.push("change_password.confirm_password");
+keys.push("register.username");
+keys.push("register.passcode");
+keys.push("register.password");
+keys.push("register.displayName");
 CurrentFormData.setKeys(keys);
 
 PageData = function(arg) {
@@ -135,6 +139,19 @@ PageData.extend({
                         PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
                     }
                 });
+            } else if (pageName === "register") {
+                postData["username"] = CurrentFormData.getData("register.username", "");
+                postData["passcode"] = CurrentFormData.getData("register.passcode", "");
+                postData["password"] = CurrentFormData.getData("register.password", "");
+                postData["display_name"] = CurrentFormData.getData("register.displayName", "");
+                $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+                    console.log(response);
+                    if (status === "FAILURE") {
+                        alert("Error in register user, Please Try again.");
+                    } else {
+                        PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+                    }
+                });
             }
         }
     }
@@ -144,26 +161,32 @@ PageData.extend({
         // var template;
         if (apiName === "upload_file") {
             if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response.failureCode));
+                alert(Config.getAleartMessage(response));
             } else {
                 alert("File saved as: " + response.data.fileName);
                 Config.location.href = "/dashboard";
             }
         } else if (apiName === "login") {
             if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response.failureCode));
+                alert(Config.getAleartMessage(response));
+            } else {
+                Config.location.href = "/dashboard";
+            }
+        } else if (apiName === "register") {
+            if (response.status === "FAILURE") {
+                alert(Config.getAleartMessage(response));
             } else {
                 Config.location.href = "/dashboard";
             }
         } else if (apiName === "change_password") {
             if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response.failureCode));
+                alert(Config.getAleartMessage(response));
             } else {
                 Config.location.href = "/dashboard";
             }
         } else if (apiName === "delete_file") {
             if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response.failureCode));
+                alert(Config.getAleartMessage(response));
             } else {
                 alert("File deleted");
                 Config.location.href = "/dashboard";

@@ -13,3 +13,4 @@ cp index.html customisedebit/
 cp index.html customisecredit/
 cp index.html profitandloss/
 
+read -p "Press enter to exit"

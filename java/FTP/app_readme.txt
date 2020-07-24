@@ -1,3 +1,5 @@
+1.0.0 (2020-07-20)
+---------------------
 /view/file?name=filename
 
 filename shall always be /username/filename.pdf (i.e. length = 2)
@@ -6,7 +8,7 @@ filename saving pattern added in env config (can be added username or filename)
 filenameFormat: "YYYY-MM-dd'-username-filename'"
 
 configFile change (made optional)
-----------------------------------
+-----------------------------------
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 permanentlyDeleteFile: false
 createReadmePdf: true
@@ -40,8 +42,9 @@ Why app_static_data.json is in file-saved directory ?
 - Optional parameter can be given in env_config for permanentlyDeleteFile: true (Boolean)
     - If parameter not found, it will consider as soft delete
 
-1.0.2
---------
+1.0.2 (2020-07-23)
+--------------------
+- use lowercase for assessing file mime type to support (JPG, JPEG, ...)
 - change permanentlyDeleteFile default value as true (i.e. checking null or true)
     - permanentlyDeleteFile: defaultValue = true (if not found i.e. checking null or true)
 - Render image file in UI display
@@ -53,3 +56,29 @@ Why app_static_data.json is in file-saved directory ?
     - To display on upload file page
 - Added message on change password page
     - (Do not use gmail password here)
+
+1.0.3 (2020-07-24)
+---------------------
+Added register_user feature using passcode
+
+Added Password policy
+------------------------
+Length between 8 to 14
+
+
+
+
+Future releases
+-------------------
+add password encryption env config
+by default it will be false
+
+encryption only in java script for password
+
+
+
+
+
+Forgot password
+-----------------
+

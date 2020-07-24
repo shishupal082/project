@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.project.ftp</groupId>
     <artifactId>FTP</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-stable-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

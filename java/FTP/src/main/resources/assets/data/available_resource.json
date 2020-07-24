@@ -24,6 +24,10 @@
     "Logout View"
   ],
   [
+    "/register",
+    "Register View"
+  ],
+  [
     "/change_password",
     "Change Password View"
   ],
@@ -66,6 +70,10 @@
   [
     "/api/get_static_file",
     "Get app static file Data"
+  ],
+  [
+    "/api/register_user",
+    "Register User [POST]"
   ],
   [
     "/api/login_user",

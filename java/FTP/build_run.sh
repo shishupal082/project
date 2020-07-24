@@ -9,4 +9,4 @@ echo *****Build complete*****
 sh copy_build.sh
 sh app_run.bat
 
-cp readme.pdf ../../ftp-app/ftp-app-1.0.2/
+cp readme.pdf ../../ftp-app/ftp-app-1.0.3/

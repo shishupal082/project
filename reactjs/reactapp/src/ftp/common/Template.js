@@ -127,6 +127,12 @@ Template["login"] = [
                     "href": "/forgot_password",
                     "className": "p-10px",
                     "text": "Forgot Password"
+                },
+                {
+                    "tag": "a",
+                    "href": "/register",
+                    "className": "p-10px",
+                    "text": "Register"
                 }
             ]
         }
@@ -156,14 +162,133 @@ Template["forgot_password"] = [
                         },
                         {
                             "tag": "div",
-                            "text": {
-                                "tag": "a",
-                                "href": "/login",
-                                "className": "p-10px",
-                                "text": "Login"
-                            }
+                            "text": [
+                                {
+                                    "tag": "a",
+                                    "href": "/login",
+                                    "className": "p-10px",
+                                    "text": "Login"
+                                },
+                                {
+                                    "tag": "a",
+                                    "href": "/register",
+                                    "className": "p-10px",
+                                    "text": "Register"
+                                }
+                            ]
                         }
                     ]
+                }
+            ]
+        }
+    }
+];
+Template["register"] = [
+    {
+        "tag": "div.div",
+        "className": "form-div pt-40px",
+        "text": {
+            "tag": "form",
+            "id": "register_form",
+            "text": [
+                {
+                    "tag": "div.h1",
+                    "className": "p-10px",
+                    "text": "Register"
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "label",
+                            "text": "Username"
+                        },
+                        {
+                            "tag": "input",
+                            "type": "text",
+                            "className": "form-control",
+                            "name": "register.username"
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "label",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "Passcode"
+                                },
+                                {
+                                    "tag": "span",
+                                    "className": "small pl-5px",
+                                    "text": "(Receive from admin)"
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "input",
+                            "className": "form-control",
+                            "name": "register.passcode",
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "label",
+                            "text": "New Password"
+                        },
+                        {
+                            "tag": "input",
+                            "className": "form-control",
+                            "name": "register.password",
+                            "type": "password",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "label",
+                            "text": "Name"
+                        },
+                        {
+                            "tag": "input",
+                            "className": "form-control",
+                            "name": "register.displayName",
+                            "type": "text",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "button",
+                    "className": "btn btn-primary",
+                    "text": "Submit"
+                },
+                {
+                    "tag": "a",
+                    "href": "/login",
+                    "className": "p-10px",
+                    "text": "Login"
+                },
+                {
+                    "tag": "a",
+                    "href": "/forgot_password",
+                    "className": "p-10px",
+                    "text": "Forgot Password"
                 }
             ]
         }
@@ -264,11 +389,7 @@ Template["change_password"] = [
                                 },
                                 {
                                     "tag": "span",
-                                    "className": "pl-10px"
-                                },
-                                {
-                                    "tag": "span",
-                                    "className": "small",
+                                    "className": "small pl-5px",
                                     "text": "(Do not use gmail password here)"
                                 }
                             ]

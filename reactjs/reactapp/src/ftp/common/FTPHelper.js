@@ -54,7 +54,7 @@ FTP.extend({
                 Config.location.href = Config.basepathname + "/login";
                 redirectStatus = true;
             }
-        } else if (["forgot_password", "login"].indexOf(pageName) >= 0) {
+        } else if (["forgot_password", "login", "register"].indexOf(pageName) >= 0) {
             if (isLogin) {
                 Config.location.href = Config.basepathname + "/dashboard";
                 redirectStatus = true;
@@ -341,17 +341,7 @@ FTP.extend({
                 if ($S.isObject(response) && $S.isArray(response.data)) {
                     var dashboardApiResponse = FTP._generateDashboardResponse(response.data);
                     if (dashboardApiResponse && dashboardApiResponse.length > 0) {
-                        var pdfLinkNotFound = true;
-                        for (var i = 0; i < dashboardApiResponse.length; i++) {
-                            if (dashboardApiResponse[i].ext === "pdf") {
-                                pdfLinkNotFound = false;
-                                PageData.setData("dashboard.currentPdfLink", dashboardApiResponse[i].actualFilename);
-                                break;
-                            }
-                        }
-                        if (pdfLinkNotFound) {
-                            PageData.setData("dashboard.currentPdfLink", dashboardApiResponse[0].actualFilename);
-                        }
+                        PageData.setData("dashboard.currentPdfLink", dashboardApiResponse[0].actualFilename);
                     }
                     PageData.setData("dashboard.apiResponse", dashboardApiResponse);
                     PageData.setData("dashboard.apiResponseByUser", FTP._generateDashboardResponseByUser(dashboardApiResponse));
