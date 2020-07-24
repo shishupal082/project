@@ -65,7 +65,8 @@ Added Password policy
 ------------------------
 Length between 8 to 14
 
-
+stable build created as 1.0.3-stable
+  - stable means: remove tempConfig code in sessionService (dataMocking from env_config removed)
 
 
 Future releases

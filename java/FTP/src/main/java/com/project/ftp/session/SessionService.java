@@ -5,8 +5,6 @@ import com.project.ftp.config.AppConfig;
 import com.project.ftp.config.AppConstant;
 import com.project.ftp.exceptions.AppException;
 import com.project.ftp.exceptions.ErrorCodes;
-import com.project.ftp.obj.LoginUserDetails;
-import com.project.ftp.obj.RequestUserLogin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,42 +106,24 @@ public class SessionService {
             sessionData.remove(sessionId);
         }
     }
-    public Boolean isAdminUser(String loginUserName) {
-        ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUsersName();
-        if (adminUserNames != null && loginUserName != null && !loginUserName.isEmpty()) {
-            return adminUserNames.contains(loginUserName);
-        }
-        return  false;
-    }
-    public Boolean isDevUser(String loginUserName) {
-        ArrayList<String> devUsersName = appConfig.getFtpConfiguration().getDevUsersName();
-        if (devUsersName != null && loginUserName != null && !loginUserName.isEmpty()) {
-            return devUsersName.contains(loginUserName);
-        }
-        return  false;
-    }
-    public Boolean isUserLogin(String loginUserName) {
-        if (loginUserName != null && !loginUserName.isEmpty()) {
-            return true;
-        }
-        return  false;
-    }
-    public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
-        LoginUserDetails loginUserDetails = new LoginUserDetails();
+    public String getLoginUserName(HttpServletRequest request) {
+        String loginUserName = null;
+//        HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
+//        if (tempConfig != null) {
+//            loginUserName = tempConfig.get("username");
+//            if (loginUserName != null && !loginUserName.isEmpty()) {
+//                return loginUserName;
+//            }
+//        }
         try {
             SessionData sessionData = this.getCurrentSessionData(appConfig, request);
-            String loginUserName = sessionData.getUsername();
-            if (loginUserName == null) {
-                loginUserName = "";
+            loginUserName = sessionData.getUsername();
+            if (loginUserName == null || loginUserName.isEmpty()) {
+                loginUserName = null;
             }
-            loginUserDetails.setUsername(loginUserName);
-            loginUserDetails.setLogin(this.isUserLogin(loginUserName));
-            loginUserDetails.setLoginUserAdmin(this.isAdminUser(loginUserName));
-            loginUserDetails.setLoginUserDev(this.isDevUser(loginUserName));
         } catch (Exception e) {
             logger.info("Error in getting loginUserDetails: {}", e.getMessage());
         }
-        return loginUserDetails;
+        return loginUserName;
     }
-
 }

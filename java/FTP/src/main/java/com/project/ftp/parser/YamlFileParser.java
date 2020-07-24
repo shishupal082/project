@@ -2,7 +2,6 @@ package com.project.ftp.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.project.ftp.common.SysUtils;
 import com.project.ftp.obj.LogFilePath;
 import com.project.ftp.service.StaticService;
 import org.slf4j.Logger;

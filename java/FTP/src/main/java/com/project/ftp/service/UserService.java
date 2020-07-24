@@ -70,20 +70,36 @@ public class UserService {
         LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
         return loginUserDetails.getLoginUserDev();
     }
+    private Boolean isAdminUser(String loginUserName) {
+        ArrayList<String> adminUserNames = appConfig.getFtpConfiguration().getAdminUsersName();
+        if (adminUserNames != null && loginUserName != null && !loginUserName.isEmpty()) {
+            return adminUserNames.contains(loginUserName);
+        }
+        return  false;
+    }
+    private Boolean isDevUser(String loginUserName) {
+        ArrayList<String> devUsersName = appConfig.getFtpConfiguration().getDevUsersName();
+        if (devUsersName != null && loginUserName != null && !loginUserName.isEmpty()) {
+            return devUsersName.contains(loginUserName);
+        }
+        return  false;
+    }
+    private Boolean isUserLogin(String loginUserName) {
+        if (loginUserName != null && !loginUserName.isEmpty()) {
+            return true;
+        }
+        return  false;
+    }
     public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
-//        HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
-//        if (tempConfig != null) {
-//            LoginUserDetails loginUserDetails = new LoginUserDetails();
-//            String loginUserName = tempConfig.get("username");
-//            if (loginUserName != null) {
-//                loginUserDetails.setUsername(loginUserName);
-//                loginUserDetails.setLogin(sessionService.isUserLogin(loginUserName));
-//                loginUserDetails.setLoginUserDev(sessionService.isDevUser(loginUserName));
-//                loginUserDetails.setLoginUserAdmin(sessionService.isAdminUser(loginUserName));
-//                return loginUserDetails;
-//            }
-//        }
-        return sessionService.getLoginUserDetails(request);
+        LoginUserDetails loginUserDetails = new LoginUserDetails();
+        String loginUserName = sessionService.getLoginUserName(request);
+        if (loginUserName != null) {
+            loginUserDetails.setUsername(loginUserName);
+            loginUserDetails.setLogin(this.isUserLogin(loginUserName));
+            loginUserDetails.setLoginUserDev(this.isDevUser(loginUserName));
+            loginUserDetails.setLoginUserAdmin(this.isAdminUser(loginUserName));
+        }
+        return loginUserDetails;
     }
     // Login, Change password
     private void isUserPasswordMatch(String username, String password, Boolean checkLimitExceed,
