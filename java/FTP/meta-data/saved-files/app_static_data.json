@@ -1,0 +1,23 @@
+{
+    "template":{
+        "heading":[
+            {
+                "tag": "div.center",
+                "className": "heading",
+                "text": [
+                    {
+                        "tag": "div",
+                        "text": "Heading Line 1"
+                    },
+                    {
+                        "tag": "div",
+                        "text": "Larger Heading Line 2 Row"
+                    }
+                ]
+            }
+        ]
+    },
+    "config": {
+        "uploadFileInstruction": "(Supported type: pdf,jpeg,jpg and png, max size < 10MB)"
+    }
+}

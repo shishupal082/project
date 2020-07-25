@@ -29,6 +29,14 @@ FTP.extend({
         var linkTemplate = Data.getTemplate("link", {});
         var field = TemplateHelper(linkTemplate).searchField("link.loginAs");
         field.text = Data.getData("userName", "");
+
+        var isAdmin = Data.getData("isUserAdmin", false);
+        field = TemplateHelper(linkTemplate).searchField("link.is-admin");
+        if ($S.isBooleanTrue(isAdmin)) {
+            field.className = TextFilter(field.className).removeClass("d-none").className;
+        } else {
+            field.className = TextFilter(field.className).addClass("d-none").className;
+        }
         // field = TemplateHelper(linkTemplate).searchField("link.logout");
         // field.className = TextFilter(field.className).addClass("d-none").className;
 

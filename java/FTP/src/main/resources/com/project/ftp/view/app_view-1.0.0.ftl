@@ -6,7 +6,7 @@
     <meta name="description" content="Web site created using create-react-app"/>
     <title>FTP Application</title>
     <link rel="stylesheet" type="text/css" href="/assets/static/libs/bootstrap-v4.4.1.css">
-    <link rel="stylesheet" type="text/css" href="/assets/static/dist-ftp-app/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/static/dist-ftp-app/style.css?v=${appVersion}">
 </head>
 <body class="theme-grey">
 <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -25,8 +25,8 @@ GLOBAL.currentPageData = document.getElementById("pageData").value;
 window.GLOBAL = GLOBAL;
 </script>
 
-<script type="text/javascript" src="/assets/static/dist-ftp-app/script1.js"></script>
-<script type="text/javascript" src="/assets/static/dist-ftp-app/script2.js"></script>
-<script type="text/javascript" src="/assets/static/dist-ftp-app/script3.js"></script>
+<script type="text/javascript" src="/assets/static/dist-ftp-app/script1.js?v=${appVersion}"></script>
+<script type="text/javascript" src="/assets/static/dist-ftp-app/script2.js?v=${appVersion}"></script>
+<script type="text/javascript" src="/assets/static/dist-ftp-app/script3.js?v=${appVersion}"></script>
 </body>
 </html>

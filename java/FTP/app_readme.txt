@@ -65,8 +65,34 @@ Added Password policy
 ------------------------
 Length between 8 to 14
 
-stable build created as 1.0.3-stable
-  - stable means: remove tempConfig code in sessionService (dataMocking from env_config removed)
+1.0.4 (2020-07-25)
+----------------------
+Fix null pointer exception for rendering ftl view if displayName not found
+Added (Admin) text at loginAs in UI, to identify admin user
+Added user_guide.txt to user_guide.pdf creation
+Added provision of adding only username in user_data.csv
+    - i.e. it will give error, password is not matching
+    - other wise it will give username is not found
+
+Application can start on port 80 also
+
+Added ?v=appVersion in loading css and js files in app_view-1.0.0.ftl
+
+.rar file convention
+    - ftp-x.y.x-stable
+        - It will contains
+            - run.bat
+            - readme.pdf
+            - user_guide.pdf
+            - meta-data
+                - env_config.yml
+                - favicon.ico
+                - jar file
+    - ftp-x.y.x-closed
+        - It will also contains (along with above)
+            - saved-files
+                - user_data.csv
+                - app_static_data.json
 
 
 Future releases

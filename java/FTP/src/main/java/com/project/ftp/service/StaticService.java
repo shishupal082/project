@@ -92,6 +92,7 @@ public class StaticService {
         Boolean createReadmePdf = ftpConfiguration.getCreateReadmePdf();
         if (createReadmePdf != null && createReadmePdf) {
             textToPdfService.convertReadmeTextToPdf();
+            textToPdfService.convertUserGuideTextToPdf();
         }
     }
     public static String getDateStrFromTimeMs(String format, Long timeInMs) {

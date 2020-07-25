@@ -11,9 +11,11 @@ logging:
       threshold: ALL
       timeZone: UTC
       logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      currentLogFilename: D:/workspace/project/ftp-app/log/application.log
-      archivedLogFilenamePattern: D:/workspace/project/ftp-app/log/application-%d{yyyy-MM-dd}-%i.log.gz
+      currentLogFilename: F:/ftp-app/log/application.log
+      archivedLogFilenamePattern: F:/ftp-app/log/application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 5
+
+logFilePath: "F:/ftp-app/log/application.log"
 
 server:
   type: simple
@@ -52,7 +54,6 @@ adminUsersName:
 # Optional parameter
 indexPageReRoute: /dashboard
 permanentlyDeleteFile2: true
-logFilePath: "D:/workspace/project/ftp-app/log/application.log"
 fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 
 # Only for development purpose

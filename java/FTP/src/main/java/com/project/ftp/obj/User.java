@@ -10,9 +10,11 @@ public class User {
     private Integer userEntryCount;
     public User(ArrayList<String> arrayList) {
         if (arrayList != null) {
-            if (arrayList.size() >= 2) {
+            if (arrayList.size() >= 1) {
                 userEntryCount = 1;
                 username = arrayList.get(0);
+            }
+            if (arrayList.size() >= 2) {
                 password = arrayList.get(1);
             }
             if (arrayList.size() >= 3) {
@@ -62,6 +64,9 @@ public class User {
     }
 
     public String getDisplayName() {
+        if (displayName != null && displayName.isEmpty()) {
+            return null;
+        }
         return displayName;
     }
 

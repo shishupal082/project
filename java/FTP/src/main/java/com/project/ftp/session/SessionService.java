@@ -108,13 +108,6 @@ public class SessionService {
     }
     public String getLoginUserName(HttpServletRequest request) {
         String loginUserName = null;
-//        HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
-//        if (tempConfig != null) {
-//            loginUserName = tempConfig.get("username");
-//            if (loginUserName != null && !loginUserName.isEmpty()) {
-//                return loginUserName;
-//            }
-//        }
         try {
             SessionData sessionData = this.getCurrentSessionData(appConfig, request);
             loginUserName = sessionData.getUsername();
@@ -124,6 +117,18 @@ public class SessionService {
         } catch (Exception e) {
             logger.info("Error in getting loginUserDetails: {}", e.getMessage());
         }
+        // Data mocking from tempConfig
+        /*
+        if (loginUserName == null) {
+            HashMap<String, String> tempConfig = appConfig.getFtpConfiguration().getTempConfig();
+            if (tempConfig != null) {
+                loginUserName = tempConfig.get("username");
+                if (loginUserName == null || loginUserName.isEmpty()) {
+                    loginUserName = null;
+                }
+            }
+        }
+         */
         return loginUserName;
     }
 }

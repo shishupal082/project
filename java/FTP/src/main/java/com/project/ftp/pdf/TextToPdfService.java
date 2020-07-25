@@ -87,4 +87,17 @@ public class TextToPdfService {
         textToPdfService.convertTextToPdf(pdfFileName, fileData);
         logger.info("convertReadmeTextToPdf, request completed. '{}' to '{}'", textFileName, pdfFileName);
     }
+    public void convertUserGuideTextToPdf() {
+        String textFileName = "user_guide.txt";
+        String pdfFileName = "user_guide.pdf";
+        String pdfTitle = "User Guide PDF";
+        String pdfSubject = "Help to use application.";
+        TextToPdfService textToPdfService = new TextToPdfService(pdfTitle, pdfSubject);
+        ArrayList<String> fileData = textToPdfService.readTextFile(textFileName);
+        fileData.add("");
+        fileData.add("AppVersion: " + AppConstant.AppVersion +
+                ", Dated: " + StaticService.getDateStrFromPattern(AppConstant.DateTimeFormat3));
+        textToPdfService.convertTextToPdf(pdfFileName, fileData);
+        logger.info("convertUserGuideTextToPdf, request completed. '{}' to '{}'", textFileName, pdfFileName);
+    }
 }

@@ -61,7 +61,18 @@ Template["link"] = [
         "text": [
             {
                 "tag": "span",
-                "text": "Login as: "
+                "text": "Login as"
+            },
+            {
+                "tag": "span",
+                "className": "small",
+                "name": "link.is-admin",
+                "text": " (Admin)"
+            },
+            {
+                "tag": "span",
+                "className": "",
+                "text": ": "
             },
             {
                 "tag": "b",
@@ -245,7 +256,17 @@ Template["register"] = [
                     "text": [
                         {
                             "tag": "label",
-                            "text": "New Password"
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "New Password"
+                                },
+                                {
+                                    "tag": "span",
+                                    "className": "small pl-5px",
+                                    "text": "(Do not use gmail password here)"
+                                }
+                            ]
                         },
                         {
                             "tag": "input",

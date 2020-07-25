@@ -37,7 +37,7 @@ public class UserService {
         return users;
     }
     public String getUserDisplayName(final String username) {
-        String userDisplayName = "";
+        String userDisplayName = null;
         try {
             Users users = this.getAllUser();
             User user = users.searchUserByName(username);
