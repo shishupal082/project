@@ -5,7 +5,7 @@ Open below url in browser (Preferably Chrome)
 
 If ask login
     - Enter valid username and password
-Or, If you have passcode
+Or, If you have passcode (Passcode can be used only once)
     - Then go to register page and enter relevant details
 
 User can upload file (Supported format: pdf, jpeg, jpg and png)
