@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content="Web site created using create-react-app"/>
+    <meta name="description" content="FTP Application description"/>
+    <meta name="keywords" content="FTP Application, File upload, PDF, JPEG, JPG, PNG">
+    <meta name="author" content="FTP Application Author">
     <title>FTP Application</title>
     <link rel="stylesheet" type="text/css" href="/assets/static/libs/bootstrap-v4.4.1.css">
     <link rel="stylesheet" type="text/css" href="/app/ftp/css/style.css">

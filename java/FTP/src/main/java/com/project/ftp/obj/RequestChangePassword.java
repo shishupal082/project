@@ -36,4 +36,13 @@ public class RequestChangePassword {
     public void setConfirm_password(String confirm_password) {
         this.confirm_password = confirm_password;
     }
+
+    @Override
+    public String toString() {
+        return "RequestChangePassword{" +
+                "old_password='" + "*****" + '\'' +
+                ", new_password='" + "*****" + '\'' +
+                ", confirm_password='" + "*****" + '\'' +
+                '}';
+    }
 }

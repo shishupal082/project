@@ -2,6 +2,7 @@ package com.project.ftp.obj;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.ftp.service.StaticService;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 
@@ -40,6 +41,7 @@ public class RequestUserRegister {
     }
 
     public String getDisplay_name() {
+        display_name = StaticService.replaceChar(display_name, ",", "..");
         return display_name;
     }
 

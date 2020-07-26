@@ -28,7 +28,6 @@ import java.net.URISyntaxException;
 @Consumes(MediaType.APPLICATION_JSON)
 public class AppResource {
     final static Logger logger = LoggerFactory.getLogger(AppResource.class);
-    private HttpServletRequest httpServletRequest;
     final AppConfig appConfig;
     final FileServiceV2 fileServiceV2;
     final UserService userService;
@@ -40,13 +39,13 @@ public class AppResource {
         appViewFtlFileName = appConfig.getFtpConfiguration().getAppViewFtlFileName();
     }
     @GET
-    public IndexView indexPage() {
+    public IndexView indexPage(@Context HttpServletRequest request) {
         logger.info("Loading indexPage");
         /*
          * It will load resource path from app Config
          * */
         String reRoutePath = appConfig.getFtpConfiguration().getIndexPageReRoute();
-        return new IndexView(httpServletRequest, reRoutePath);
+        return new IndexView(request, reRoutePath);
     }
     @GET
     @Path("/index")
@@ -56,13 +55,16 @@ public class AppResource {
     }
     @GET
     @Path("/view/resource")
-    public IndexView getViewResource() {
+    public IndexView getViewResource(@Context HttpServletRequest request) {
         logger.info("Loading indexPage");
-        return new IndexView(httpServletRequest, null);
+        return new IndexView(request, null);
     }
     @GET
-    @Path("/view/file")
-    public Object viewFile(@Context HttpServletRequest request, @QueryParam("name") String filename) {
+    @Path("/view/file/{username}/{filename2}")
+    public Object viewFile(@Context HttpServletRequest request,
+                           @PathParam("username") String username,
+                           @PathParam("filename2") String filename2,
+                           @QueryParam("name") String filename) {
         logger.info("Loading viewFile: {}", filename);
         PathInfo pathInfo = null;
         Response.ResponseBuilder r;
@@ -91,8 +93,11 @@ public class AppResource {
         return new CommonView(request, "page_not_found_404.ftl");
     }
     @GET
-    @Path("/download/file")
-    public Object downloadFile(@Context HttpServletRequest request, @QueryParam("name") String filename) {
+    @Path("/download/file/{username}/{filename2}")
+    public Object downloadFile(@Context HttpServletRequest request,
+                               @PathParam("username") String username,
+                               @PathParam("filename2") String filename2,
+                               @QueryParam("name") String filename) {
         logger.info("Loading viewFile: {}", filename);
         PathInfo pathInfo = null;
         Response.ResponseBuilder r;

@@ -1,5 +1,8 @@
 package com.project.ftp.obj;
 
+import com.project.ftp.config.AppConstant;
+import com.project.ftp.service.StaticService;
+
 import java.util.ArrayList;
 
 public class User {
@@ -7,7 +10,40 @@ public class User {
     private String password;
     private String displayName;
     private String passcode;
+    private String timeStamp;
+    private String method; // register, change_password
     private Integer userEntryCount;
+    public User(String username, String password, String displayName) {
+        this.username = username;
+        this.password = password;
+        this.displayName = displayName;
+    }
+    public String getAddTextResponse() {
+        String text = "";
+        if (username != null) {
+            text += username + ",";
+        } else {
+            text += ",";
+        }
+        if (password != null) {
+            text += StaticService.EncryptPassword(password) +",";
+        } else {
+            text += ",";
+        }
+        if (displayName != null) {
+            text += displayName +",";
+        } else {
+            text += ",";
+        }
+        text += ","; // for passcode
+        if (method != null) {
+            text += method +",";
+        } else {
+            text += ",";
+        }
+        text += StaticService.getDateStrFromPattern(AppConstant.DateTimeFormat) + ",";
+        return text;
+    }
     public User(ArrayList<String> arrayList) {
         if (arrayList != null) {
             if (arrayList.size() >= 1) {
@@ -22,6 +58,12 @@ public class User {
             }
             if (arrayList.size() >= 4) {
                 passcode = arrayList.get(3);
+            }
+            if (arrayList.size() >= 5) {
+                method = arrayList.get(4);
+            }
+            if (arrayList.size() >= 6) {
+                timeStamp = arrayList.get(5);
             }
         }
     }
@@ -85,6 +127,22 @@ public class User {
         this.passcode = passcode;
     }
 
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -92,6 +150,8 @@ public class User {
                 ", password='" + "*****" + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", passcode='" + passcode + '\'' +
+                ", timeStamp='" + timeStamp + '\'' +
+                ", method='" + method + '\'' +
                 ", userEntryCount=" + userEntryCount +
                 '}';
     }

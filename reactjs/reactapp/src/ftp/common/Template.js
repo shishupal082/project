@@ -1,16 +1,30 @@
 var Template = {};
 Template["heading"] = [
     {
-        "tag": "div.center",
+        "tag": "div.center.table.tbody.tr",
         "className": "heading",
         "text": [
             {
-                "tag": "div",
-                "text": "Heading Line 1"
+                "tag": "td",
+                "text": {
+                    "tag": "img",
+                    "className": "logo",
+                    "src": "/assets/static/img/railwayslogo-128.png"
+                }
             },
             {
-                "tag": "div",
-                "text": "Larger Heading Line 2 Row"
+                "tag": "td",
+                "className": "text-center pl-10px",
+                "text": [
+                    {
+                        "tag": "div",
+                        "text": "Heading Line 1"
+                    },
+                    {
+                        "tag": "div",
+                        "text": "Larger Heading Line 2 Row"
+                    }
+                ]
             }
         ]
     }
@@ -85,7 +99,7 @@ Template["link"] = [
 Template["login"] = [
     {
         "tag": "div.div",
-        "className": "form-div pt-40px",
+        "className": "form-div pt-25px",
         "text": {
             "tag": "form",
             "id": "login_form",
@@ -152,7 +166,7 @@ Template["login"] = [
 Template["forgot_password"] = [
     {
         "tag": "div.div",
-        "className": "form-div pt-40px",
+        "className": "form-div pt-25px",
         "text": {
             "tag": "form",
             "id": "forgot_password",
@@ -197,7 +211,7 @@ Template["forgot_password"] = [
 Template["register"] = [
     {
         "tag": "div.div",
-        "className": "form-div pt-40px",
+        "className": "form-div pt-25px",
         "text": {
             "tag": "form",
             "id": "register_form",

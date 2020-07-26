@@ -109,6 +109,13 @@ var syncData = {
     "yard1_json": {
         "src": "../app/yard1/static/json/yard.json",
         "destinationDir": "../java/yard/src/main/resources/assets/yard1/json/"
+    },
+    "railwayslogo-128.png": {
+        "src": "../static/img/icons/railwayslogo-128.png",
+        "destinationDir": [
+            "../reactjs/reactapp/public/assets/static/img/",
+            "../java/FTP/src/main/resources/assets/static/img/"
+        ]
     }
 };
 module.exports = syncData;

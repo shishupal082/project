@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-java -jar meta-data/FTP-1.0.4-SNAPSHOT.jar meta-data/env_config.yml
+java -jar FTP-1.0.5-SNAPSHOT.jar ../config-files/env_config.yml

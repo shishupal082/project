@@ -20,7 +20,7 @@ public class JsonFileParser {
     }
     public Object getJsonObject() throws AppException {
         Object object = null;
-        String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
+        String filepath = appConfig.getFtpConfiguration().getConfigDataFilePath();
         filepath += AppConstant.APP_STATIC_DATA_FILENAME;
         PathInfo pathInfo = StaticService.getPathInfo(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {

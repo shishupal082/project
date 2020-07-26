@@ -15,13 +15,13 @@ import java.util.ArrayList;
 public class TextFileParser {
     final static Logger logger = LoggerFactory.getLogger(TextFileParser.class);
     final AppConfig appConfig;
+    final String filepath;
     public TextFileParser(final AppConfig appConfig) {
         this.appConfig = appConfig;
+        filepath = appConfig.getFtpConfiguration().getConfigDataFilePath() + AppConstant.USER_DATA_FILENAME;
     }
     public ArrayList<ArrayList<String>> getTextData() throws AppException {
         ArrayList<ArrayList<String>> result = new ArrayList<>();
-        String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
-        filepath += AppConstant.USER_DATA_FILENAME;
         PathInfo pathInfo = StaticService.getPathInfo(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Requested file is not found: {}", filepath);
@@ -52,9 +52,10 @@ public class TextFileParser {
         return result;
     }
     public Boolean addText(String text) {
+        if (text == null) {
+            text = "";
+        }
         boolean textAddStatus = false;
-        String filepath = appConfig.getFtpConfiguration().getFileSaveDir();
-        filepath += AppConstant.USER_DATA_FILENAME;
         PathInfo pathInfo = StaticService.getPathInfo(filepath);
         if (!AppConstant.FILE.equals(pathInfo.getType())) {
             logger.info("Requested file is not found: {}", filepath);

@@ -1,6 +1,7 @@
 package com.project.ftp.resources;
 
 import com.project.ftp.config.AppConfig;
+import com.project.ftp.config.AppConstant;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,9 +19,9 @@ import java.net.URISyntaxException;
 public class FaviconResource {
     private String icoFilePath;
     public FaviconResource(final AppConfig appConfig){
-        icoFilePath = appConfig.getFtpConfiguration().getIcoFilePath();
-        if (icoFilePath == null) {
-            icoFilePath = "src/main/resources/assets/favicon.ico";
+        icoFilePath = appConfig.getFtpConfiguration().getConfigDataFilePath();
+        if (icoFilePath != null) {
+            icoFilePath += AppConstant.FAVICON_ICO_PATH;
         }
     }
     @GET

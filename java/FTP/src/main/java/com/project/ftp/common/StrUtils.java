@@ -1,6 +1,10 @@
 package com.project.ftp.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StrUtils {
+    final static Logger logger = LoggerFactory.getLogger(StrUtils.class);
     public StrUtils() {}
     public String replaceLast(String find, String replace, String string) {
         int lastIndex = string.lastIndexOf(find);
@@ -15,7 +19,7 @@ public class StrUtils {
         return this.replaceChar(str, "\\\\", "/");
     }
     public String replaceChar(String str, String find, String replace) {
-        if (str == null || find == null || replace == null || replace.length() != 1) {
+        if (str == null || find == null || replace == null) {
             return null;
         }
         String result = "";

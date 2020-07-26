@@ -95,15 +95,45 @@ Added ?v=appVersion in loading css and js files in app_view-1.0.0.ftl
                 - app_static_data.json
 
 
+1.0.5 (2020-07-25)
+----------------------
+Added logo in heading
+Add env_config path common for all build (i.e. put relative config path)
+Add time stamp in password_change, register (Along with method)
+Add meta tag description, keywords and author
+Api change from /view/file?name=filename to /view/file/{username}/filename
+Api change from /download/file?name=filename to /download/file/{username}/filename
+    - Did changes respectively in UI code
+Read user_data.csv only once for change_password
+
+Bug fixes:
+Replace , with .. in displayName field in RequestUserRegister
+
+Password simple encryption added
+    - Replace , with .. in EncryptedPassword
+    - i.e. set password '1234,1234' can be open with '1234,1234' and '1234..1234'
+
+Now files required from saved-files folder
+    - env_config.yml
+    - user_data.csv
+    - favicon.ico
+    - app_static.json
+Files required from respective version
+    - FTP-*-SNAPSHOT.jar
+    - run.bat
+    - readme.pdf
+    - user_guide.pdf
+
+
 Future releases
 -------------------
 add password encryption env config
-by default it will be false
+    - by default it will be false
+    - encryption only in java script for password
 
-encryption only in java script for password
-
-
-
+Add user agent detection support for /download/file/username/filename
+Add GA for UI tracking
+Display date heading on UI for orderByFilename
 
 
 Forgot password

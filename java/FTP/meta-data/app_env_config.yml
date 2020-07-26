@@ -16,6 +16,8 @@ logging:
       archivedFileCount: 5
 
 logFilePath: "F:/ftp-app/log/application.log"
+fileSaveDir: "D:/workspace/project/ftp-app/saved-files/"
+configDataFilePath: "D:/workspace/project/ftp-app/config-files/"
 
 server:
   type: simple
@@ -44,7 +46,6 @@ supportedFileType:
   - png
 
 filenameFormat: "YYYY-MM-dd'-filename'"
-icoFilePath: meta-data/favicon.ico
 maxFileSize: 10240001 #i.e. #i.e. 2048000 = 2048 kB = 2MB, 10240001 = 10MB
 
 adminUsersName:
@@ -54,7 +55,6 @@ adminUsersName:
 # Optional parameter
 indexPageReRoute: /dashboard
 permanentlyDeleteFile2: true
-fileSaveDir: D:/workspace/project/ftp-app/saved-files/
 
 # Only for development purpose
 createReadmePdf: true

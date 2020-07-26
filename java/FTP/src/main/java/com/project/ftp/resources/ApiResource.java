@@ -144,7 +144,6 @@ public class ApiResource {
             logger.info("Error in uploading file: {}", ae.getErrorCode().getErrorCode());
             response = new ApiResponse(ae.getErrorCode());
         }
-
         logger.info("uploadFile : Out");
         return Response.ok(response).build();
     }

@@ -106,6 +106,12 @@ public class StaticService {
     public static String replaceLast(String find, String replace, String str) {
         return strUtils.replaceLast(find, replace, str);
     }
+    public static String replaceChar(String str, String find, String replace) {
+        return strUtils.replaceChar(str, find, replace);
+    }
+    public static String EncryptPassword(String password) {
+        return strUtils.replaceChar(password,",", "..");
+    }
     public static void printLog(Object logStr) {
         sysUtils.printLog(logStr);
     }

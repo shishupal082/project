@@ -11,7 +11,8 @@ import java.util.HashMap;
 
 public class FtpConfiguration extends Configuration {
     private String indexPageReRoute;
-    private String icoFilePath;
+    private String configDataFilePath;
+    private String fileSaveDir;
     private String publicDir;
     private String publicPostDir;
     private Integer maxFileSize;
@@ -20,7 +21,6 @@ public class FtpConfiguration extends Configuration {
     private ArrayList<String> devUsersName;
     private ArrayList<String> supportedFileType;
     private Boolean createReadmePdf;
-    private String fileSaveDir;
     private String filenameFormat;
     private String appViewFtlFileName;
     private Boolean permanentlyDeleteFile;
@@ -43,12 +43,12 @@ public class FtpConfiguration extends Configuration {
         this.createReadmePdf = createReadmePdf;
     }
 
-    public String getIcoFilePath() {
-        return icoFilePath;
+    public String getConfigDataFilePath() {
+        return configDataFilePath;
     }
 
-    public void setIcoFilePath(String icoFilePath) {
-        this.icoFilePath = icoFilePath;
+    public void setConfigDataFilePath(String configDataFilePath) {
+        this.configDataFilePath = configDataFilePath;
     }
 
     public String getPublicDir() {
@@ -151,7 +151,7 @@ public class FtpConfiguration extends Configuration {
     public String toString() {
         return "FtpConfiguration{" +
                 "indexPageReRoute='" + indexPageReRoute + '\'' +
-                ", icoFilePath='" + icoFilePath + '\'' +
+                ", configDataFilePath='" + configDataFilePath + '\'' +
                 ", publicDir='" + publicDir + '\'' +
                 ", publicPostDir='" + publicPostDir + '\'' +
                 ", maxFileSize=" + maxFileSize +

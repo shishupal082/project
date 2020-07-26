@@ -36,15 +36,25 @@ public class UserService {
         }
         return users;
     }
-    public String getUserDisplayName(final String username) {
-        String userDisplayName = null;
+    private User getUserDataByUserName(String username) {
+        if (username == null) {
+            return null;
+        }
+        User user = null;
         try {
             Users users = this.getAllUser();
-            User user = users.searchUserByName(username);
+            user = users.searchUserByName(username);
+            logger.info("User data for username: {}, is: {}", username, user);
+        } catch (AppException ae) {
+            logger.info("Error in getting all userDataByUserName: {}", username);
+        }
+        return user;
+    }
+    public String getUserDisplayName(final String username) {
+        String userDisplayName = null;
+        User user = this.getUserDataByUserName(username);
+        if (user != null) {
             userDisplayName = user.getDisplayName();
-        } catch (Exception e) {
-            // It can throw NullPointerException or AppException
-            logger.info("userDisplayName not found for username: {}", username);
         }
         return userDisplayName;
     }
@@ -75,7 +85,7 @@ public class UserService {
         if (adminUserNames != null && loginUserName != null && !loginUserName.isEmpty()) {
             return adminUserNames.contains(loginUserName);
         }
-        return  false;
+        return false;
     }
     private Boolean isDevUser(String loginUserName) {
         ArrayList<String> devUsersName = appConfig.getFtpConfiguration().getDevUsersName();
@@ -88,7 +98,7 @@ public class UserService {
         if (loginUserName != null && !loginUserName.isEmpty()) {
             return true;
         }
-        return  false;
+        return false;
     }
     public LoginUserDetails getLoginUserDetails(HttpServletRequest request) {
         LoginUserDetails loginUserDetails = new LoginUserDetails();
@@ -102,15 +112,14 @@ public class UserService {
         return loginUserDetails;
     }
     // Login, Change password
-    private void isUserPasswordMatch(String username, String password, Boolean checkLimitExceed,
+    private User isUserPasswordMatch(String username, String password,
                                      ErrorCodes emptyPasswordErrorCode,
                                      ErrorCodes passwordMisMatchErrorCode) throws AppException {
         if (username == null || username.isEmpty()) {
             logger.info("username required: {}.", username);
             throw new AppException(ErrorCodes.USER_NAME_REQUIRED);
         }
-        Users users = this.getAllUser();
-        User user = users.searchUserByName(username);
+        User user = this.getUserDataByUserName(username);
         if (user == null) {
             logger.info("username: {}, is not found.", username);
             throw new AppException(ErrorCodes.USER_NOT_FOUND);
@@ -119,17 +128,12 @@ public class UserService {
             logger.info("password mismatch for username: {}", username);
             throw new AppException(emptyPasswordErrorCode);
         }
+        password = StaticService.EncryptPassword(password);
         if (!password.equals(user.getPassword())) {
             logger.info("password mismatch for username: {}", username);
             throw new AppException(passwordMisMatchErrorCode);
         }
-        if (user.getUserEntryCount() != null && checkLimitExceed) {
-            int limit = AppConstant.MAX_ENTRY_ALLOWED_IN_USER_DATA_FILE;
-            if (user.getUserEntryCount() >= limit) {
-                logger.info("Password change count limit: {}, exceed: {}", limit, user);
-                throw new AppException(ErrorCodes.PASSWORD_CHANGE_COUNT_EXCEED);
-            }
-        }
+        return user;
     }
     // register, change password
     private void isValidNewPassword(String password) throws AppException {
@@ -154,8 +158,7 @@ public class UserService {
             logger.info("username required: {}.", username);
             throw new AppException(ErrorCodes.REGISTER_PASSCODE_REQUIRED);
         }
-        Users users = this.getAllUser();
-        User user = users.searchUserByName(username); // It will check for null
+        User user = this.getUserDataByUserName(username); // It will check for null
         if (user == null) {
             logger.info("username: {}, is not found.", username);
             throw new AppException(ErrorCodes.USER_NOT_FOUND);
@@ -172,7 +175,7 @@ public class UserService {
             throw new AppException(ErrorCodes.BAD_REQUEST_ERROR);
         }
         this.isUserPasswordMatch(userLogin.getUsername(), userLogin.getPassword(),
-                false, ErrorCodes.PASSWORD_REQUIRED, ErrorCodes.PASSWORD_NOT_MATCHING);
+                ErrorCodes.PASSWORD_REQUIRED, ErrorCodes.PASSWORD_NOT_MATCHING);
         sessionService.loginUser(request, userLogin.getUsername());
         HashMap<String, String> loginUserDetails = this.getLoginUserResponse(request);
         logger.info("loginUser success: {}", loginUserDetails);
@@ -189,21 +192,22 @@ public class UserService {
         this.isValidNewPassword(password);
         String displayName = userRegister.getDisplay_name();
         if (displayName == null || displayName.isEmpty()) {
-            logger.info("Name is empty: {}", userRegister);
+            logger.info("displayName is empty: {}", userRegister);
             throw new AppException(ErrorCodes.REGISTER_NAME_REQUIRED);
         }
         logger.info("User register parameter are ok: {}", userRegister);
         TextFileParser textFileParser = new TextFileParser(appConfig);
-        String text = username+","+password+",";
-        text += displayName+",";
-        logger.info("{}", text);
+        User user = new User(username, password, displayName);
+        user.setMethod("register");
+        String text = user.getAddTextResponse();
+
         Boolean createUserStatus = textFileParser.addText(text);
         if (!createUserStatus) {
             logger.info("Create user failed: {}", userRegister);
             throw new AppException(ErrorCodes.RUNTIME_ERROR);
         }
         sessionService.loginUser(request, username);
-        logger.info("userRegister success: {}", userRegister);
+        logger.info("userRegister success: {}", user);
     }
     public void changePassword(HttpServletRequest request, RequestChangePassword changePassword) throws AppException {
         LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);
@@ -224,20 +228,27 @@ public class UserService {
             throw new AppException(ErrorCodes.PASSWORD_CHANGE_NOT_MATCHING);
         }
         String oldPassword = changePassword.getOld_password();
-        this.isUserPasswordMatch(loginUserDetails.getUsername(), oldPassword,
-                true, ErrorCodes.PASSWORD_CHANGE_OLD_REQUIRED,
+        User user = this.isUserPasswordMatch(loginUserDetails.getUsername(), oldPassword,
+                ErrorCodes.PASSWORD_CHANGE_OLD_REQUIRED,
                 ErrorCodes.PASSWORD_CHANGE_OLD_NOT_MATCHING);
-        logger.info("change password success.");
-        Users users = this.getAllUser();
-        User user = users.searchUserByName(loginUserDetails.getUsername());
-        String text = user.getUsername() + "," + newPassword + ",";
-        text += user.getDisplayName();
+
+        if (user.getUserEntryCount() != null) {
+            int limit = AppConstant.MAX_ENTRY_ALLOWED_IN_USER_DATA_FILE;
+            if (user.getUserEntryCount() >= limit) {
+                logger.info("Password change count limit: {}, exceed: {}", limit, user);
+                throw new AppException(ErrorCodes.PASSWORD_CHANGE_COUNT_EXCEED);
+            }
+        }
+        user.setPassword(newPassword);
+        user.setMethod("change_password");
+        String text = user.getAddTextResponse();
         TextFileParser textFileParser = new TextFileParser(appConfig);
         Boolean changePasswordStatus = textFileParser.addText(text);
         if (!changePasswordStatus) {
             logger.info("Error in updating password.");
             throw new AppException(ErrorCodes.RUNTIME_ERROR);
         }
+        logger.info("change password success: {}", user);
     }
     public void logoutUser(HttpServletRequest request) {
         LoginUserDetails loginUserDetails = this.getLoginUserDetails(request);

@@ -7,6 +7,9 @@
 .pt-10px {
     padding-top: 10px;
 }
+.pt-25px {
+    padding-top: 25px;
+}
 .pt-40px {
     padding-top: 40px;
 }
@@ -25,8 +28,11 @@
 .heading {
     border-bottom: 1.5px solid #ddd;
     padding-bottom: 5px;
-    font-weight: 500;
-    font-size: 1.2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.heading .logo {
+    width: 55px;
 }
 .loading {
     font-size: 3rem;

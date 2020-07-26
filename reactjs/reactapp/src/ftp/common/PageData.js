@@ -44,10 +44,10 @@ PageData.extend({
 });
 PageData.extend({
     getPdfDownloadLink: function(filename) {
-        return Config.baseapi + "/download/file?name=" + filename;
+        return Config.baseapi + "/download/file/" + filename + "?name="+filename;
     },
     getPdfViewLink: function(filename) {
-        return Config.baseapi + "/view/file?name=" + filename;
+        return Config.baseapi + "/view/file/" + filename + "?name="+filename;
     },
     getCurrentPdfLink: function(Data) {
         var pdfLink = CurrentFormData.getData("dashboard.currentPdfLink", null);
