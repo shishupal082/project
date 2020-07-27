@@ -1,3 +1,8 @@
+To install dependencies from package.json
+------------------------------------------
+npm i
+
+------------------------------------------
 Before development
 sync required js files to make updated dependent js files
 >> sh sync.sh

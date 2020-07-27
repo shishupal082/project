@@ -6,8 +6,9 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/libs/",
             "../java/pdf/src/main/resources/assets/static/libs/",
-            "../java/FTP/src/main/resources/assets/static/libs/",
-            "../java/WebApp/src/main/resources/assets/static/libs/"
+            "../java/WebApp/src/main/resources/assets/static/libs/",
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
+            "../../ftp-application/reactjs/reactapp/public/assets/static/libs/"
         ]
     },
     "bootstrap-v3.1.1": {
@@ -17,7 +18,7 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/libs/",
             "../java/pdf/src/main/resources/assets/static/libs/",
-            "../java/FTP/src/main/resources/assets/static/libs/",
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
             "../java/WebApp/src/main/resources/assets/static/libs/"
         ]
     },
@@ -26,7 +27,8 @@ var syncData = {
             "../static/libs/bootstrap-v4.4.1.css"
         ],
         "destinationDir": [
-            "../java/FTP/src/main/resources/assets/static/libs/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
+            "../../ftp-application/reactjs/reactapp/public/assets/static/libs/"
         ]
     },
     "react": {
@@ -46,9 +48,10 @@ var syncData = {
         "destinationDir": [
             "../java/yard/src/main/resources/assets/static/js/",
             "../java/pdf/src/main/resources/assets/static/js/",
-            "../java/FTP/src/main/resources/assets/static/libs/",
             "../java/WebApp/src/main/resources/assets/static/js/",
-            "../reactjs/reactapp/src/libs/"
+            "../reactjs/reactapp/src/libs/",
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
+            "../../ftp-application/reactjs/reactapp/src/libs/"
         ]
     },
     "model": {
@@ -113,8 +116,17 @@ var syncData = {
     "railwayslogo-128.png": {
         "src": "../static/img/icons/railwayslogo-128.png",
         "destinationDir": [
-            "../reactjs/reactapp/public/assets/static/img/",
-            "../java/FTP/src/main/resources/assets/static/img/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/img/",
+            "../../ftp-application/reactjs/reactapp/public/assets/static/img/"
+        ]
+    },
+    "reactapp-sync": {
+        "src": [
+            "../reactjs/reactapp/src/common/Api.js",
+            "../reactjs/reactapp/src/common/TemplateHelper.js",
+        ],
+        "destinationDir": [
+            "../../ftp-application/reactjs/reactapp/src/common/"
         ]
     }
 };

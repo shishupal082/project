@@ -290,36 +290,36 @@ Account.extend({
 
             template2 = Data.getTemplate("profitandloss1stRow", []);
             template2Data = {"heading1": year};
-            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             template2 = Data.getTemplate("profitandlossRow", []);
             template2Data = {"heading1": incomeHeading};
-            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             template2 = Data.getTemplate("profitandlossRow", []);
             template2Data = {"heading2": revenueConfigHeading};
-            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.revenue)) {
                 for (j=0; j<fieldsData.revenue.length; j++) {
                     template2 = Data.getTemplate("profitandlossRow", []);
-                    TemplateHelper.setTemplateTextByFormValues(template2, fieldsData.revenue[j]);
+                    TemplateHelper.updateTemplateText(template2, fieldsData.revenue[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
             }
 
             template2 = Data.getTemplate("profitandlossRow", []);
             template2Data = {"heading2": cogsConfigHeading};
-            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.costOfSales)) {
                 for (j=0; j<fieldsData.costOfSales.length; j++) {
                     template2 = Data.getTemplate("profitandlossRow", []);
-                    TemplateHelper.setTemplateTextByFormValues(template2, fieldsData.costOfSales[j]);
+                    TemplateHelper.updateTemplateText(template2, fieldsData.costOfSales[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
             }
@@ -328,19 +328,19 @@ Account.extend({
                 fieldsData.grossMargin["heading2"] = grossMarginHeading;
                 template2 = Data.getTemplate("profitandlossRow", []);
                 fieldsData.grossMargin = AccountHelper.correctSignV2(fieldsData.grossMargin, signCorrectionKeys);
-                TemplateHelper.setTemplateTextByFormValues(template2, AccountHelper.makeTextBold(fieldsData.grossMargin, "text-danger"));
+                TemplateHelper.updateTemplateText(template2, AccountHelper.makeTextBold(fieldsData.grossMargin, "text-danger"));
                 template1Data.profitandlossRow.push(template2);
             }
 
             template2 = Data.getTemplate("profitandlossRow", []);
             template2Data = {"heading1": expenseConfigHeading};
-            TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+            TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.expense)) {
                 for (j=0; j<fieldsData.expense.length; j++) {
                     template2 = Data.getTemplate("profitandlossRow", []);
-                    TemplateHelper.setTemplateTextByFormValues(template2, fieldsData.expense[j]);
+                    TemplateHelper.updateTemplateText(template2, fieldsData.expense[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
             }
@@ -348,10 +348,10 @@ Account.extend({
                 fieldsData.totalProfit["heading2"] = totalProfitHeading;
                 template2 = Data.getTemplate("profitandlossRow", []);
                 fieldsData.totalProfit = AccountHelper.correctSignV2(fieldsData.totalProfit, signCorrectionKeys);
-                TemplateHelper.setTemplateTextByFormValues(template2, AccountHelper.makeTextBold(fieldsData.totalProfit, "text-danger"));
+                TemplateHelper.updateTemplateText(template2, AccountHelper.makeTextBold(fieldsData.totalProfit, "text-danger"));
                 template1Data.profitandlossRow.push(template2);
             }
-            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            TemplateHelper.updateTemplateText(template1, template1Data);
             profitAndLossFields.push(template1);
         }
         if (profitAndLossFields.length === 0) {

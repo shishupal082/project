@@ -501,7 +501,7 @@ Account.extend({
                             temp.creditParticularLadger = companyData.ledgerRowData.cr[j].ledgerText;
                         }
                         ledgerRowTemplate = self.getTemplate("ledgerRow");
-                        TemplateHelper.setTemplateTextByFormValues(ledgerRowTemplate, temp);
+                        TemplateHelper.updateTemplateText(ledgerRowTemplate, temp);
                         ledgerRowFields.fields.push(ledgerRowTemplate);
                     }
                     temp = {};
@@ -522,7 +522,7 @@ Account.extend({
                             }
                         }
                         ledgerRowTemplate = self.getTemplate("ledgerRow");
-                        TemplateHelper.setTemplateTextByFormValues(ledgerRowTemplate, temp);
+                        TemplateHelper.updateTemplateText(ledgerRowTemplate, temp);
                         ledgerRowFields.fields.push(ledgerRowTemplate);
                     }
                 }
@@ -569,7 +569,7 @@ Account.extend({
                 continue;
             }
             template = Data.getTemplate("trialBalanceRow");
-            TemplateHelper.setTemplateTextByFormValues(template, temp);
+            TemplateHelper.updateTemplateText(template, temp);
             trialBalanceFields.push(template);
         }
         temp = {};
@@ -580,11 +580,11 @@ Account.extend({
         if (totalDebit !== totalCredit) {
             Data.addError("Trial balance mismatch: "+totalDebit +" !== "+ totalCredit);
         }
-        TemplateHelper.setTemplateTextByFormValues(template, temp);
+        TemplateHelper.updateTemplateText(template, temp);
         trialBalanceFields.push(template);
         template = Data.getTemplate("trialBalance");
         temp = {"trialBalanceRows": trialBalanceFields};
-        TemplateHelper.setTemplateTextByFormValues(template, temp);
+        TemplateHelper.updateTemplateText(template, temp);
         return template;
     }
 });
@@ -640,7 +640,7 @@ Account.extend({
                     }
                 }
             }
-            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            TemplateHelper.updateTemplateText(template, templateData);
             trs.push(template);
         }
         return trs;
@@ -738,7 +738,7 @@ Account.extend({
                     }
                     fieldTemplate = self.getTemplate("currentBalRow");
                     rowData["s.no"] = count++;
-                    TemplateHelper.setTemplateTextByFormValues(fieldTemplate, rowData);
+                    TemplateHelper.updateTemplateText(fieldTemplate, rowData);
                     currentBalanceFields[i].fields.push(fieldTemplate);
                 }
             }
@@ -863,10 +863,10 @@ Account.extend({
                 template2 = Data.getTemplate("currentBalByDateRow", null);
                 template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
                 template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
-                TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                TemplateHelper.updateTemplateText(template2, template2Data);
                 templateData["currentBalByDateRow"].push(template2);
             }
-            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            TemplateHelper.updateTemplateText(template, templateData);
             currentBalanceFields.push(template);
         }
         return currentBalanceFields;
@@ -900,12 +900,12 @@ Account.extend({
                     template2Data["s.no"] = count++;
                     if (template2Data.name === "totalRow") {
                         AccountHelper.correctSign(template2Data);
-                        TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                        TemplateHelper.updateTemplateText(template2, template2Data);
                         templateData["accountSummaryRow"].push(template2);
                     }
                 }
             }
-            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            TemplateHelper.updateTemplateText(template, templateData);
             currentBalanceFields.push(template);
         }
         return currentBalanceFields;
@@ -930,11 +930,11 @@ Account.extend({
                     if (temp.name === "particular") {
                         temp.text = [];
                     }
-                    TemplateHelper.setTemplateTextByFormValues(template, entry);
+                    TemplateHelper.updateTemplateText(template, entry);
                     if ($S.isArray(entry.particularEntry)) {
                         for (k = 0; k < entry.particularEntry.length; k++) {
                             particularFieldTemplate = Data.getTemplate("journalEntryParticular", null);
-                            TemplateHelper.setTemplateTextByFormValues(particularFieldTemplate, entry.particularEntry[k]);
+                            TemplateHelper.updateTemplateText(particularFieldTemplate, entry.particularEntry[k]);
                             temp.text.push(particularFieldTemplate);
                         }
                     }
@@ -1054,7 +1054,7 @@ Account.extend({
             templateData = {};
             templateData["date"] = journalDataByDateData[i].dateHeading;
             templateData["journalEntryTable"] = AccountHelper.getJournalFields(Data,journalDataByDateData[i].journalEntryTable);
-            TemplateHelper.setTemplateTextByFormValues(template, templateData);
+            TemplateHelper.updateTemplateText(template, templateData);
             journalDataByDateFields.push(template);
         }
         return journalDataByDateFields;
@@ -1164,11 +1164,11 @@ Account.extend({
                     template2Data["s.no"] = count++;
                     template2 = Data.getTemplate("accountSummaryByDateRow", {});
                     AccountHelper.correctSign(template2Data);
-                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data["accountSummaryByDateRow"].push(template2);
                 }
             }
-            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            TemplateHelper.updateTemplateText(template1, template1Data);
             accountSummaryByDateFields.push(template1);
         }
         return accountSummaryByDateFields;
@@ -1293,11 +1293,11 @@ Account.extend({
                 for(j=0; j<fieldsData[i].template2Data.length; j++) {
                     template2Data = fieldsData[i].template2Data[j];
                     template2 = Data.getTemplate("accountSummaryByCalenderRow", []);
-                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data.accountSummaryByCalenderRow.push(template2);
                 }
             }
-            TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+            TemplateHelper.updateTemplateText(template1, template1Data);
             accountSummaryByCalenderFields.push(template1);
         }
         return accountSummaryByCalenderFields;
@@ -1392,10 +1392,10 @@ Account.extend({
                 for(j=0; j<fieldsData[i].template2Data.length; j++) {
                     template2Data = fieldsData[i].template2Data[j];
                     template2 = Data.getTemplate("customisedAccountSummaryRow", []);
-                    TemplateHelper.setTemplateTextByFormValues(template2, template2Data);
+                    TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data.customisedAccountSummaryRow.push(template2);
                 }
-                TemplateHelper.setTemplateTextByFormValues(template1, template1Data);
+                TemplateHelper.updateTemplateText(template1, template1Data);
                 accountSummaryByCalenderFields.push(template1);
             }
         }
