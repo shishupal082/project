@@ -998,7 +998,9 @@ Filter.fn = Filter.prototype = {
         if (!isString(className)) {
             className = "";
         }
-        this.className += " " + className;
+        if (!this.hasClass(className)) {
+            this.className += " " + className;
+        }
         return this;
     },
     removeClass: function(className) {
@@ -1759,13 +1761,26 @@ Stack.extend({
         };
         Stack._send(JQ, reqOption, callBack);
     },
-    uploadFile: function(JQ, url, formData, callBack) {
+    uploadFile: function(JQ, url, formData, callBack, percentageCompleteCallBack) {
         var reqOption = {};
         reqOption["url"] = url;
         reqOption["type"] = "POST";
         reqOption["data"] = formData;
         reqOption["processData"] = false;
         reqOption["contentType"] = false;
+        if (Stack.isFunction(percentageCompleteCallBack)) {
+            reqOption["xhr"] = function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+                        percentageCompleteCallBack(percentComplete);
+                    }
+                }, false);
+                return xhr;
+            }
+        }
         Stack._send(JQ, reqOption, callBack);
     }
 });

@@ -1,6 +1,7 @@
 import $S from '../interface/stack.js';
 var TemplateHelper;
 (function($S) {
+var TextFilter = $S.getTextFilter();
 var Template = function(template) {
     return new Template.fn.init(template);
 };
@@ -63,6 +64,12 @@ function updateField(field, attr) {
     if ($S.isObject(field) && $S.isObject(attr)) {
         for (var key in attr) {
             switch(key) {
+                case "addClass":
+                    field.className = TextFilter(field.className).addClass(attr[key]).getClassName();
+                break;
+                case "removeClass":
+                    field.className = TextFilter(field.className).removeClass(attr[key]).getClassName();
+                break;
                 case "setValue":
                     field.value = attr[key];
                 break;
@@ -89,6 +96,26 @@ Template.extend({
                 if (field.name === fieldName) {
                     updateField(field, {"setText": formValues[fieldName]});
                 }
+            }
+        }
+        return template;
+    },
+    addClassTemplate: function(template, fieldName, className) {
+        var field = {};
+        if ($S.isString(fieldName)) {
+            field = Template(template).searchField(fieldName);
+            if (field.name === fieldName) {
+                updateField(field, {"addClass": className});
+            }
+        }
+        return template;
+    },
+    removeClassTemplate: function(template, fieldName, className) {
+        var field = {};
+        if ($S.isString(fieldName)) {
+            field = Template(template).searchField(fieldName);
+            if (field.name === fieldName) {
+                updateField(field, {"removeClass": className});
             }
         }
         return template;
