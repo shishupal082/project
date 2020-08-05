@@ -30,19 +30,23 @@ yard-app-zip/
 pdf-app/
 web-app/
 
+
 java/step1/.idea/
 java/step1/out/
+java/step1/target/
+java/step1/step1.iml
 java/step1/step1 (1).iml
 java/step1/step1 (2).iml
 
 
 java/step2/.idea/
+java/step2/target/
 java/step2/step2.iml
 
 
-java/step5/.idea/
-java/step5/out/
-java/step5/step5.iml
+
+ftp-app/
+
 
 
 java/step5/.idea/
@@ -83,6 +87,11 @@ java/mavenProject/.idea/
 java/mavenProject/mavenProject.iml
 java/mavenProject/target/
 java/mavenProject/meta-data/
+
+
+java/Jdbc/.idea/
+java/Jdbc/Jdbc.iml
+java/Jdbc/target/
 
 
 java/example/.idea/
