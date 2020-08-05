@@ -115,12 +115,15 @@ li code{
 		</ul>
 		<h2>Mysql</h2>
 		<ul>
-			<li><code tabindex="1">show databases;</code></li>
-			<li><code tabindex="1">show tables;</code></li>
 			<li><code tabindex="1">mysql -hlocalhost -uroot -proot</code></li>
-			<li><code tabindex="1">mysql -hlocalhost -uroot -proot -A tests</code></li>
+			<li><code tabindex="1">mysql -hlocalhost -uroot -proot -A tests (tests is a database)</code></li>
+			<li><code tabindex="1">show databases;</code></li>
+			<li><code tabindex="1">create database db1;</code></li>
+			<li><code tabindex="1">use db1;</code></li>
 			<li><code tabindex="1">show tables;</code></li>
 			<li><code tabindex="1">desc [table_name];</code></li>
+			<li><code tabindex="1">drop database db1;</code></li>
+			<li><code tabindex="1">drop table users;</code></li>
 			<li><code tabindex="1">select * from city limit 10;</code></li>
 			<li><code tabindex="1">select * from city limit 2, 10; (10 result starting from 3)</code></li>
 			<li><code tabindex="1">select * from [table_name];</code></li>
@@ -128,8 +131,10 @@ li code{
 			<li><code tabindex="1"> INSERT INTO book (id, name, email) values(1,"name","name@domain.com");</code></li>
 			<li><code tabindex="1">UPDATE book SET id=2 where id=0;</code></li>
 			<li><code tabindex="1">DELETE FROM book where id=0;</code></li>
-			<li><code tabindex="1">ALTER TABLE book MODIFY  id INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD INDEX (id);</code></li>
+			<li><code tabindex="1">ALTER TABLE book MODIFY id INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD INDEX (id);</code></li>
 			<li><code tabindex="1">ALTER TABLE book ADD item_id INT;</code></li>
+			<li><code tabindex="1">ALTER TABLE users RENAME COLUMN e_mail TO email;</code></li>
+			<li><code tabindex="1">ALTER TABLE users change mobile mobile varchar(15);</code></li>
 			<li><code tabindex="1">ALTER TABLE [table_name] ADD [new_column] varchar(100) DEFAULT NULL AFTER [old_column];</code></li>
 			<li><code tabindex="1">ALTER TABLE book ALTER COLUMN item_id SET DEFAULT 0;</code></li>
 		</ul>

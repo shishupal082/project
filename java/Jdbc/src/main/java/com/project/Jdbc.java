@@ -1,5 +1,7 @@
 package com.project;
 
+import com.project.sql.MysqlExecutor;
+
 import java.util.Scanner;
 
 public class Jdbc {
@@ -11,26 +13,27 @@ public class Jdbc {
     public static void main(String[] args) {
         StaticService.printLog(args);
         if (args.length < 3) {
-            StaticService.printLog("Min 3 database parameters required (url, username, password)");
+            StaticService.printLog("Min 3 database parameters required (baseurl, username, password)");
             StaticService.printLog(args.length);
             Jdbc.exitApplication();
             return;
         }
-        String url = args[0];
+        String baseurl = args[0];
         String username = args[1];
         String password = args[2];
+        MysqlExecutor mysqlExecutor = new MysqlExecutor(baseurl, username, password);
         StaticService.printLog("Hello Jdbc");
-        MysqlConnection mysqlConnection = new MysqlConnection(url, username, password);
-        mysqlConnection.Connect();
         String query;
         if (args.length >= 4) {
-            query = args[3];
+            for(int i=3; i< args.length; i++) {
+                query = args[i];
+                mysqlExecutor.executeQuery(query);
+            }
         } else {
-            StaticService.printLogSameLine("Entry sql query: ");
+            StaticService.printLogSameLine("Entry sql query (city table): ");
             query = sc.nextLine();
+            mysqlExecutor.executeQuery(query);
         }
-        mysqlConnection.query(query);
-        mysqlConnection.close();
         Jdbc.exitApplication();
     }
 }

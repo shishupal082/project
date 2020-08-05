@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-java -jar meta-data/mavenProject-*.jar -a arg1 arg2
+java -jar target/mavenProject-*.jar -a arg1 arg2

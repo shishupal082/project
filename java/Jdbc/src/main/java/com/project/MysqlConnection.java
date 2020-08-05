@@ -1,6 +1,7 @@
 package com.project;
 
 import com.project.tables.City;
+import com.project.tables.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -63,6 +64,23 @@ public class MysqlConnection {
         }
         for (City city: cities) {
             StaticService.printLog(city.toString());
+        }
+    }
+    public void queryV2(String query) {
+        String str = "Requested query: " + query;
+        StaticService.printLog(str);
+        ArrayList<User> users = new ArrayList<>();
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                users.add(new User(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (User user: users) {
+            StaticService.printLog(user.toString());
         }
     }
 }
