@@ -1,10 +1,10 @@
 package com.project;
 
-import com.project.controller.EmployeeRESTController;
-import com.project.controller.UserRESTController;
 import com.project.dao.DbDAO;
-import com.project.representations.Employee;
-import com.project.representations.MysqlUser;
+import com.project.obj.Employee;
+import com.project.obj.MysqlUser;
+import com.project.resource.EmployeeResource;
+import com.project.resource.UserResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -36,10 +36,9 @@ public class App extends Application<AppConfiguration> {
     @Override
     public void run(AppConfiguration appConfiguration, Environment environment) throws Exception {
         logger.info("Registering REST resources");
-
         final DbDAO dbDAO = new DbDAO(hibernateBundle.getSessionFactory());
-        environment.jersey().register(new EmployeeRESTController(dbDAO));
-        environment.jersey().register(new UserRESTController(dbDAO));
+        environment.jersey().register(new EmployeeResource(dbDAO));
+        environment.jersey().register(new UserResource(dbDAO));
     }
 
     public static void main(String[] args) throws Exception {

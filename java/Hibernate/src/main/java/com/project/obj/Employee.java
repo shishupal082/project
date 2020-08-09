@@ -1,4 +1,4 @@
-package com.project.representations;
+package com.project.obj;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -38,12 +38,12 @@ public class Employee implements Serializable {
     public Employee(){
     }
 
-//    public Employee(Integer id, String firstName, String lastName, String email) {
-//        this.id = id;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//    }
+    public Employee(Integer id, String firstName, String lastName, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
 
     public Integer getId() {
         return id;
@@ -77,16 +77,16 @@ public class Employee implements Serializable {
         this.email = email;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Employee that = (Employee) o;
-//        return Objects.equals(id, that.id) &&
-//                Objects.equals(firstName, that.firstName) &&
-//                Objects.equals(lastName, that.lastName) &&
-//                Objects.equals(email, that.email);
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee that = (Employee) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(email, that.email);
+    }
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, email);

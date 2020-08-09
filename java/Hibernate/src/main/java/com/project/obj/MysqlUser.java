@@ -1,6 +1,4 @@
-package com.project.representations;
-
-
+package com.project.obj;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +12,7 @@ import java.util.Objects;
                 query = "select e from MysqlUser e"),
         @NamedQuery(name = "MysqlUser.findByUsername",
                 query = "select e from MysqlUser e "
-                        + "where e.username = :name")
+                        + "where e.username like :name")
 })
 
 
@@ -56,7 +54,9 @@ public class MysqlUser implements Serializable {
     private boolean deleted;
 
     public MysqlUser() {}
-
+    public MysqlUser(String username) {
+        this.username = username;
+    }
     public long getId() {
         return id;
     }

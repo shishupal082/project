@@ -86,7 +86,12 @@ java/WebApp/meta-data/WebApp-*.jar
 java/mavenProject/.idea/
 java/mavenProject/mavenProject.iml
 java/mavenProject/target/
-java/mavenProject/meta-data/
+
+
+java/Hibernate/.idea/
+java/Hibernate/target/
+java/Hibernate/Hibernate.iml
+java/Hibernate/dependency-reduced-pom.xml
 
 
 java/Jdbc/.idea/

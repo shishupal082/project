@@ -1,7 +1,8 @@
 package com.project.dao;
 
-import com.project.representations.Employee;
-import com.project.representations.MysqlUser;
+import com.project.config.AppConstant;
+import com.project.obj.Employee;
+import com.project.obj.MysqlUser;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ public class DbDAO extends AbstractDAO<Employee> {
     }
     public List<Employee> findAllEmployee() {
         List<Employee> list = new ArrayList<>();
-        String queryName = AppConstants.FindAllEmployee;
+        String queryName = AppConstant.FindAllEmployee;
         try {
             list = (List<Employee>) namedQuery(queryName).getResultList();
             logger.info("result count: {}", list.size());
@@ -28,8 +29,8 @@ public class DbDAO extends AbstractDAO<Employee> {
         return list;
     }
     public List<MysqlUser> findAllUser() {
-        List<MysqlUser> list = new ArrayList<>();
-        String queryName = AppConstants.FindAllUser;
+        List<MysqlUser> list = null;
+        String queryName = AppConstant.FindAllUser;
         try {
             list = (List<MysqlUser>) namedQuery(queryName).getResultList();
             logger.info("result count: {}", list.size());
@@ -43,9 +44,8 @@ public class DbDAO extends AbstractDAO<Employee> {
         StringBuilder builder = new StringBuilder("%");
         builder.append(name).append("%");
         List<Employee> list = new ArrayList<>();
-        String queryName = AppConstants.FindEmployeeByName;
+        String queryName = AppConstant.FindEmployeeByName;
         try {
-//            "com.javaeeeee.dwstart.core.Employee.findByName"
             list = (List<Employee>) namedQuery(queryName)
                     .setParameter("name", builder.toString()).getResultList();
             logger.info("result count: {}", list.size());
@@ -59,9 +59,8 @@ public class DbDAO extends AbstractDAO<Employee> {
         StringBuilder builder = new StringBuilder("%");
         builder.append(name).append("%");
         List<MysqlUser> list = new ArrayList<>();
-        String queryName = AppConstants.FindUserByName;
+        String queryName = AppConstant.FindUserByName;
         try {
-//            "com.javaeeeee.dwstart.core.Employee.findByName"
             list = (List<MysqlUser>) namedQuery(queryName).setParameter("name", builder.toString()).getResultList();
             logger.info("result count: {}", list.size());
         } catch (Exception e) {

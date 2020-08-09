@@ -1,4 +1,4 @@
-package com.project.controller;
+package com.project.resource;
 
 import com.project.dao.DbDAO;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -12,11 +12,11 @@ import javax.ws.rs.core.Response;
 
 @Path("/employees")
 @Produces(MediaType.APPLICATION_JSON)
-public class EmployeeRESTController {
+public class EmployeeResource {
 
     private final DbDAO dbDAO;
 
-    public EmployeeRESTController(DbDAO dbDAO) {
+    public EmployeeResource(final DbDAO dbDAO) {
         this.dbDAO = dbDAO;
     }
 
