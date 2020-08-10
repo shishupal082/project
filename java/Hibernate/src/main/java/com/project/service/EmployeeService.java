@@ -1,31 +1,57 @@
 package com.project.service;
 
 import com.project.config.AppConstant;
-import com.project.dao.DbDAO;
-import com.project.jdbc.MysqlConnection;
+import com.project.dao.EmployeeDAO;
 import com.project.obj.ApiResponse;
-import com.project.resource.EmployeeResource;
-import io.dropwizard.db.DataSourceFactory;
+import com.project.obj.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class EmployeeService {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeService.class);
-    final DbDAO dbDAO;
-    final DataSourceFactory dataSourceFactory;
-    final MysqlConnection mysqlConnection;
-    public EmployeeService(final DbDAO dbDAO, final DataSourceFactory dataSourceFactory) {
-        this.dbDAO = dbDAO;
-        this.dataSourceFactory = dataSourceFactory;
-        this.mysqlConnection = new MysqlConnection(dataSourceFactory);
+    final EmployeeDAO employeeDAO;
+    public EmployeeService(final EmployeeDAO employeeDAO) {
+        this.employeeDAO = employeeDAO;
     }
-    public void updateEmployeeEmail(String name) {
-        dbDAO.updateEmployeeEmail(1,name+"@email");
+    private void updateEmployeeEmailById(Integer id, Employee employee) {
+        employeeDAO.updateEmployeeEmail(id, employee.getEmail());
+    }
+    private void updateEmployeeEmailByIdV2(Integer id, String email) {
+        employeeDAO.updateEmployeeEmail(id, email);
+    }
+    public ApiResponse findAllEmployee() {
+        List<Employee> employees = employeeDAO.findAllEmployee();
+        ApiResponse apiResponse = new ApiResponse(employees);
+        return apiResponse;
+    }
+    public ApiResponse updateEmployeeEmail(String firstName) {
+        ApiResponse apiResponse = new ApiResponse();
+        if (firstName == null) {
+            apiResponse.setStatus(AppConstant.FAILURE);
+            logger.info("updateEmployeeEmail fail response: {}, firstName is null", apiResponse);
+            return apiResponse;
+        }
+        List<Employee> list = null;
+        employeeDAO.findEmployeeByNameV2(firstName);
+        logger.info("{}", list);
+        if (list != null) {
+            for(Employee employee: list) {
+                String email = employee.getFirstName() + "." + employee.getLastName() + ".update2@email";
+//                employee.setEmail(email);
+                this.updateEmployeeEmailByIdV2(employee.getId(), email);
+//                employee.setEmail(email);
+            }
+            apiResponse.setStatus(AppConstant.SUCCESS);
+            apiResponse.setData(list);
+        }
+        return apiResponse;
     }
     public ApiResponse createEmployee(String firstName) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setStatus(AppConstant.SUCCESS);
-        dbDAO.insertEmployee(firstName, firstName);
+        employeeDAO.insertEmployee(firstName, firstName);
         return apiResponse;
     }
 }

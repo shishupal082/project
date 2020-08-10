@@ -1,13 +1,11 @@
 package com.project.obj;
 
-import com.project.config.AppConstant;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -35,7 +33,8 @@ public class Employee implements Serializable {
     private String firstName;
     @Length(min=2, max=255)
     private String lastName;
-    @Pattern(regexp=".+@.+\\.[a-z]+")
+//    @Pattern(regexp=".+@.+\\.[a-z]+")
+    @Length(min=2, max=255)
     private String email;
 
     public Employee(){

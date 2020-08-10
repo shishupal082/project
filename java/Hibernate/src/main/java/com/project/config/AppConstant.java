@@ -7,6 +7,7 @@ public class AppConstant {
     public static String FindAllUser = "MysqlUser.findAll";
     public static String UpdateUserPassword = "MysqlUser.UpdatePassword";
     public static String FindEmployeeByName = "Employee.findByName";
+    public static String FindEmployeeByNameV2 = "Employee.findByNameV2";
     public static String FindUserByName = "MysqlUser.findByUsername";
     public static String SUCCESS = "SUCCESS";
     public static String FAILURE = "FAILURE";

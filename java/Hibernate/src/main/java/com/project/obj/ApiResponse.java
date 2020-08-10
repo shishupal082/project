@@ -50,7 +50,7 @@ public class ApiResponse {
 
     @Override
     public String toString() {
-        return "DaoApiResponse{" +
+        return "ApiResponse{" +
                 "status='" + status + '\'' +
                 ", failureCode='" + failureCode + '\'' +
                 ", reason='" + reason + '\'' +

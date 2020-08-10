@@ -1,6 +1,7 @@
 package com.project;
 
 import com.project.dao.DbDAO;
+import com.project.dao.EmployeeDAO;
 import com.project.obj.Employee;
 import com.project.obj.MysqlUser;
 import com.project.resource.EmployeeResource;
@@ -38,9 +39,10 @@ public class App extends Application<AppConfiguration> {
     public void run(AppConfiguration appConfiguration, Environment environment) throws Exception {
         logger.info("Registering REST resources");
         final DbDAO dbDAO = new DbDAO(hibernateBundle.getSessionFactory());
-        final EmployeeService employeeService = new EmployeeService(dbDAO,
+        final EmployeeDAO employeeDAO = new EmployeeDAO(hibernateBundle.getSessionFactory(),
                 appConfiguration.getDataSourceFactory());
-        environment.jersey().register(new EmployeeResource(dbDAO, employeeService));
+        final EmployeeService employeeService = new EmployeeService(employeeDAO);
+        environment.jersey().register(new EmployeeResource(employeeService));
         environment.jersey().register(new UserResource(dbDAO));
     }
 
