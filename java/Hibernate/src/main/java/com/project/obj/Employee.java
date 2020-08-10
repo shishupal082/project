@@ -1,5 +1,6 @@
 package com.project.obj;
 
+import com.project.config.AppConstant;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +17,8 @@ import java.util.Objects;
 @NamedQueries({
         @NamedQuery(name = "Employee.findAll",
                 query = "select e from Employee e"),
+        @NamedQuery(name = "Employee.updateEmail",
+                query = "UPDATE Employee e SET e.email = :email where e.id = :id"),
         @NamedQuery(name = "Employee.findByName",
                 query = "select e from Employee e "
                         + "where e.firstName like :name "
@@ -40,6 +43,11 @@ public class Employee implements Serializable {
 
     public Employee(Integer id, String firstName, String lastName, String email) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+    }
+    public Employee(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -91,9 +99,14 @@ public class Employee implements Serializable {
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, email);
     }
+
     @Override
     public String toString() {
-        return "Emplyee [id=" + id + ", firstName=" + firstName + ", lastName="
-                + lastName + ", email=" + email + "]";
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

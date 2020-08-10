@@ -5,6 +5,7 @@ import com.project.obj.Employee;
 import com.project.obj.MysqlUser;
 import com.project.resource.EmployeeResource;
 import com.project.resource.UserResource;
+import com.project.service.EmployeeService;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -37,7 +38,9 @@ public class App extends Application<AppConfiguration> {
     public void run(AppConfiguration appConfiguration, Environment environment) throws Exception {
         logger.info("Registering REST resources");
         final DbDAO dbDAO = new DbDAO(hibernateBundle.getSessionFactory());
-        environment.jersey().register(new EmployeeResource(dbDAO));
+        final EmployeeService employeeService = new EmployeeService(dbDAO,
+                appConfiguration.getDataSourceFactory());
+        environment.jersey().register(new EmployeeResource(dbDAO, employeeService));
         environment.jersey().register(new UserResource(dbDAO));
     }
 

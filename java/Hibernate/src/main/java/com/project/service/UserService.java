@@ -41,18 +41,11 @@ public class UserService {
         return new ApiResponse(result);
     }
     public ApiResponse createUser(String username) {
-        MysqlUser mysqlUser = this.getMysqlUser(username);
         ApiResponse apiResponse = new ApiResponse();
-        if (mysqlUser != null) {
-            apiResponse.setData(mysqlUser);
-            apiResponse.setReason("user already exist");
-            apiResponse.setStatus(AppConstant.FAILURE);
-        } else {
-            mysqlUser = new MysqlUser(username);
-            apiResponse.setReason("user create failed");
-            apiResponse.setStatus(AppConstant.FAILURE);
-            apiResponse.setData(mysqlUser);
-        }
+        MysqlUser mysqlUser = new MysqlUser(username);
+        apiResponse.setReason("user create not implemented");
+        apiResponse.setStatus(AppConstant.FAILURE);
+        apiResponse.setData(mysqlUser);
         return apiResponse;
     }
 }
