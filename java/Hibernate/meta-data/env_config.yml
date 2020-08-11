@@ -5,7 +5,7 @@ logging:
   appenders:
     - type: console
 #      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
-      logFormat: "%d{yyyy-MM-dd} [%thread] %-5level - %c{15} - %msg%n%rEx"
+      logFormat: "%d{yyyy-MM-dd} %-5level - %c{15} - %msg%n%rEx"
       threshold: ALL
       timeZone: UTC
 

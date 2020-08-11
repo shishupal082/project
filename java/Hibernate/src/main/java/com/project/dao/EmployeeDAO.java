@@ -51,26 +51,26 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
         }
         return list;
     }
-    public List<Employee> findEmployeeByNameV2(String firstName) {
-        List<Employee> list2 = new ArrayList<>();
-        List<ResultSet> list;
-        String queryName = AppConstant.FindEmployeeByNameV2;
-        String query = "SELECT * FROM employee WHERE firstName = :name";
-        try {
-            list2 = sessionFactory.getCurrentSession()
-                    .createSQLQuery(query)
-                    .setParameter("name", firstName)
-                    .getResultList();
-            logger.info("result count: {}, {}", list2.size(), list2);
-            for(Object obj: list2) {
-                logger.info("result: {}, {}", obj, obj.toString());
-            }
-        } catch (Exception e) {
-            logger.info("error in query: {}, {}", queryName, e.getMessage());
-            e.printStackTrace();
-        }
-        return list2;
-    }
+//    public List<Employee> findEmployeeByNameV2(String firstName) {
+//        List<Employee> list2 = new ArrayList<>();
+//        List<ResultSet> list;
+//        String queryName = AppConstant.FindEmployeeByNameV2;
+//        String query = "SELECT * FROM employee WHERE firstName = :name";
+//        try {
+//            list2 = List<Employee> sessionFactory.getCurrentSession()
+//                    .createSQLQuery(query)
+//                    .setParameter("name", firstName)
+//                    .getResultList();
+//            logger.info("result count: {}, {}", list2.size(), list2);
+//            for(Object obj: list2) {
+//                logger.info("result: {}, {}", obj, obj.toString());
+//            }
+//        } catch (Exception e) {
+//            logger.info("error in query: {}, {}", queryName, e.getMessage());
+//            e.printStackTrace();
+//        }
+//        return list2;
+//    }
     public void updateEmployeeEmail(Integer id, String email) {
         String queryName = AppConstant.EmployeeUpdateEmail;
         try {

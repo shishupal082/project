@@ -31,12 +31,30 @@ public class EmployeeResource {
         ApiResponse apiResponse = employeeService.findAllEmployee();
         return Response.ok(apiResponse).build();
     }
-
     @GET
     @UnitOfWork
     @Path("/get/{name}")
-    public ApiResponse getEmployees(@PathParam("name") String firstName) {
-        logger.info("getEmployees in");
+    public ApiResponse getUserByFirstNameOrLastName(@PathParam("name") String name) {
+        logger.info("getUserByFirstNameOrLastName in: {}", name);
+        ApiResponse apiResponse;
+        try {
+            apiResponse = employeeService.getEmployeeByFirstNameOrLastName(name);
+        } catch (Exception e) {
+            logger.info("Error in getUserByFirstName: {}", e.getMessage());
+            apiResponse = new ApiResponse();
+            apiResponse.setStatus(AppConstant.FAILURE);
+            apiResponse.setReason(e.getMessage());
+            e.printStackTrace();
+        }
+        logger.info("getUserByFirstNameOrLastName out: {}", apiResponse);
+        return apiResponse;
+    }
+
+    @GET
+    @UnitOfWork
+    @Path("/update_email/{firstName}")
+    public ApiResponse updateEmail(@PathParam("firstName") String firstName) {
+        logger.info("updateEmail in");
         ApiResponse apiResponse;
         try {
             apiResponse = employeeService.updateEmployeeEmail(firstName);
@@ -47,7 +65,7 @@ public class EmployeeResource {
             apiResponse.setReason(e.getMessage());
             e.printStackTrace();
         }
-        logger.info("getEmployees out: {}", apiResponse);
+        logger.info("updateEmail out: {}", apiResponse);
         return apiResponse;
     }
 

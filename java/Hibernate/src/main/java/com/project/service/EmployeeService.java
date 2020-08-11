@@ -26,6 +26,18 @@ public class EmployeeService {
         ApiResponse apiResponse = new ApiResponse(employees);
         return apiResponse;
     }
+    public ApiResponse getEmployeeByFirstNameOrLastName(String name) {
+        ApiResponse apiResponse = new ApiResponse();
+        if (name == null) {
+            apiResponse.setStatus(AppConstant.FAILURE);
+            apiResponse.setReason("name is null.");
+            logger.info("updateEmployeeEmail fail response: {}, name is null", apiResponse);
+            return apiResponse;
+        }
+        List<Employee> list = employeeDAO.findEmployeeByName(name);
+        apiResponse = new ApiResponse(list);
+        return apiResponse;
+    }
     public ApiResponse updateEmployeeEmail(String firstName) {
         ApiResponse apiResponse = new ApiResponse();
         if (firstName == null) {
@@ -33,15 +45,15 @@ public class EmployeeService {
             logger.info("updateEmployeeEmail fail response: {}, firstName is null", apiResponse);
             return apiResponse;
         }
-        List<Employee> list = null;
-        employeeDAO.findEmployeeByNameV2(firstName);
-        logger.info("{}", list);
+        List<Employee> list = employeeDAO.findEmployeeByName(firstName);
+        logger.info("Employee list by name: {}", list);
         if (list != null) {
+            String currentDateTime = StaticService.getDateStrFromPattern(AppConstant.DATE_TIME_FORMATE);
             for(Employee employee: list) {
-                String email = employee.getFirstName() + "." + employee.getLastName() + ".update2@email";
-//                employee.setEmail(email);
-                this.updateEmployeeEmailByIdV2(employee.getId(), email);
-//                employee.setEmail(email);
+                String email = employee.getFirstName() + "." + employee.getLastName()
+                        + "." + currentDateTime + "@email";
+                logger.info("Email generated: {}, for firstName: {}", email, employee.getFirstName());
+                employee.setEmail(email);
             }
             apiResponse.setStatus(AppConstant.SUCCESS);
             apiResponse.setData(list);
