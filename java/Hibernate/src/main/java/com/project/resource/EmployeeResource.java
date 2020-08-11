@@ -28,13 +28,26 @@ public class EmployeeResource {
     @GET
     @UnitOfWork
     public Response getEmployees() {
-        ApiResponse apiResponse = employeeService.findAllEmployee();
+        logger.info("getEmployees: In");
+        ApiResponse apiResponse = employeeService.getAllEmployees();
+        logger.info("getEmployees: Out, {}", apiResponse);
         return Response.ok(apiResponse).build();
     }
+
+    @GET
+    @Path("/update_email")
+    @UnitOfWork
+    public ApiResponse updateEmployeeEmail() {
+        logger.info("updateEmployeeEmail : In");
+        ApiResponse response = employeeService.updateAllEmployeeEmail();
+        logger.info("updateEmployeeEmail : Out, {}", response);
+        return response;
+    }
+
     @GET
     @UnitOfWork
     @Path("/get/{name}")
-    public ApiResponse getUserByFirstNameOrLastName(@PathParam("name") String name) {
+    public ApiResponse getEmployeeByFirstNameOrLastName(@PathParam("name") String name) {
         logger.info("getUserByFirstNameOrLastName in: {}", name);
         ApiResponse apiResponse;
         try {
@@ -51,29 +64,22 @@ public class EmployeeResource {
     }
 
     @GET
+    @Path("/update_employee_email/{name}")
     @UnitOfWork
-    @Path("/update_email/{firstName}")
-    public ApiResponse updateEmail(@PathParam("firstName") String firstName) {
-        logger.info("updateEmail in");
-        ApiResponse apiResponse;
-        try {
-            apiResponse = employeeService.updateEmployeeEmail(firstName);
-        } catch (Exception e) {
-            logger.info("Error in updating email: {}", e.getMessage());
-            apiResponse = new ApiResponse();
-            apiResponse.setStatus(AppConstant.FAILURE);
-            apiResponse.setReason(e.getMessage());
-            e.printStackTrace();
-        }
-        logger.info("updateEmail out: {}", apiResponse);
-        return apiResponse;
+    public ApiResponse updateEmployeeEmail(@PathParam("name") String name) {
+        logger.info("updateEmployeeEmail : In, name={}", name);
+        ApiResponse response = employeeService.updateEmployeeEmail(name);
+        logger.info("updateEmployeeEmail : Out, {}", response);
+        return response;
     }
 
     @GET
     @UnitOfWork
     @Path("/create/{name}")
-    public Response insertEmployee(@PathParam("name") String name) {
+    public Response createEmployee(@PathParam("name") String name) {
+        logger.info("createEmployee : In, name={}", name);
         ApiResponse apiResponse = employeeService.createEmployee(name);
+        logger.info("createEmployee : Out, {}", apiResponse);
         return Response.ok(apiResponse).build();
     }
 }

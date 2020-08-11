@@ -16,12 +16,14 @@ public class MysqlConnection {
     private final String username;
     private final String password;
     private Connection con;
+
     public MysqlConnection(DataSourceFactory dataSourceFactory) {
         driver = dataSourceFactory.getDriverClass();
         url = dataSourceFactory.getUrl();
         username = dataSourceFactory.getUser();
         password = dataSourceFactory.getPassword();
     }
+
     public void close() {
         if (con == null) {
             logger.info("MySQL connection not found");
@@ -35,6 +37,7 @@ public class MysqlConnection {
             e.printStackTrace();
         }
     }
+
     public void Connect() {
         try {
             Class.forName(driver);
@@ -45,6 +48,7 @@ public class MysqlConnection {
             e.printStackTrace();
         }
     }
+
     public void query(String query) {
         try {
             Statement stmt = con.createStatement();
@@ -55,6 +59,7 @@ public class MysqlConnection {
             e.printStackTrace();
         }
     }
+
     public boolean updateQuery(String query) {
         boolean status = false;
         this.Connect();

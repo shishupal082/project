@@ -7,7 +7,15 @@ public class ApiResponse {
     private String failureCode;
     private String reason;
     private Object data;
-    public ApiResponse() {}
+
+    public ApiResponse() {
+    }
+
+    public ApiResponse(String reason) {
+        this.status = AppConstant.FAILURE;
+        this.reason = reason;
+    }
+
     public ApiResponse(Object data) {
         if (data != null) {
             this.status = AppConstant.SUCCESS;
@@ -16,6 +24,7 @@ public class ApiResponse {
         }
         this.data = data;
     }
+
     public String getStatus() {
         return status;
     }

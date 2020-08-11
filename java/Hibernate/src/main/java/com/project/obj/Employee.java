@@ -29,15 +29,15 @@ public class Employee implements Serializable {
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Length(min=2, max=255)
+    @Length(min = 2, max = 255)
     private String firstName;
-    @Length(min=2, max=255)
+    @Length(min = 2, max = 255)
     private String lastName;
-//    @Pattern(regexp=".+@.+\\.[a-z]+")
-    @Length(min=2, max=255)
+    //    @Pattern(regexp=".+@.+\\.[a-z]+")
+    @Length(min = 2, max = 255)
     private String email;
 
-    public Employee(){
+    public Employee() {
     }
 
     public Employee(Integer id, String firstName, String lastName, String email) {
@@ -46,6 +46,7 @@ public class Employee implements Serializable {
         this.lastName = lastName;
         this.email = email;
     }
+
     public Employee(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -94,6 +95,7 @@ public class Employee implements Serializable {
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(email, that.email);
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, email);

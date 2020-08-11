@@ -10,7 +10,6 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +17,14 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
     private static final Logger logger = LoggerFactory.getLogger(EmployeeDAO.class);
     final SessionFactory sessionFactory;
     final MysqlConnection mysqlConnection;
+
     public EmployeeDAO(final SessionFactory sessionFactory,
                        final DataSourceFactory dataSourceFactory) {
         super(sessionFactory);
         this.sessionFactory = sessionFactory;
         this.mysqlConnection = new MysqlConnection(dataSourceFactory);
     }
+
     public List<Employee> findAllEmployee() {
         List<Employee> list = new ArrayList<>();
         String queryName = AppConstant.FindAllEmployee;
@@ -36,6 +37,7 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
         }
         return list;
     }
+
     public List<Employee> findEmployeeByName(String name) {
         StringBuilder builder = new StringBuilder("%");
         builder.append(name).append("%");
@@ -51,7 +53,8 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
         }
         return list;
     }
-//    public List<Employee> findEmployeeByNameV2(String firstName) {
+
+    //    public List<Employee> findEmployeeByNameV2(String firstName) {
 //        List<Employee> list2 = new ArrayList<>();
 //        List<ResultSet> list;
 //        String queryName = AppConstant.FindEmployeeByNameV2;
@@ -85,6 +88,7 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
             e.printStackTrace();
         }
     }
+
     public void insertEmployee(String firstName, String lastName) {
         String queryName = AppConstant.EmployeeInsert;
         String query = "INSERT INTO employee (firstName, lastName) VALUES(:first,:last)";
@@ -99,6 +103,7 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
             e.printStackTrace();
         }
     }
+
     public List<MysqlUser> findAllUser() {
         List<MysqlUser> list = null;
         String queryName = AppConstant.FindAllUser;
@@ -111,6 +116,7 @@ public class EmployeeDAO extends AbstractDAO<Employee> {
         }
         return list;
     }
+
     public List<MysqlUser> findUserByName(String name) {
         StringBuilder builder = new StringBuilder("%");
         builder.append(name).append("%");

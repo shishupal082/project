@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity // Pojo is mapped to table
-@Table(name="users")
+@Table(name = "users")
 @NamedQueries({
         @NamedQuery(name = "MysqlUser.findAll",
                 query = "select e from MysqlUser e"),
@@ -14,7 +14,6 @@ import java.util.Objects;
                 query = "select e from MysqlUser e "
                         + "where e.username like :name")
 })
-
 
 
 public class MysqlUser implements Serializable {
@@ -53,10 +52,13 @@ public class MysqlUser implements Serializable {
     @Column(name = "deleted")
     private boolean deleted;
 
-    public MysqlUser() {}
+    public MysqlUser() {
+    }
+
     public MysqlUser(String username) {
         this.username = username;
     }
+
     public long getId() {
         return id;
     }
@@ -141,6 +143,7 @@ public class MysqlUser implements Serializable {
     public int hashCode() {
         return Objects.hash(id, username, password, mobile, email, name, passcode, method, timestamp, deleted);
     }
+
     @Override
     public String toString() {
         return "MysqlUser{" +
