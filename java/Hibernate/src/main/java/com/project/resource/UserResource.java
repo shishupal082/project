@@ -1,5 +1,6 @@
 package com.project.resource;
 
+import com.project.annotation.Authorized;
 import com.project.config.AppConstant;
 import com.project.dao.DbDAO;
 import com.project.obj.ApiResponse;
@@ -10,6 +11,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,7 +41,8 @@ public class UserResource {
     @GET
     @UnitOfWork
     @Path("/get/{username}")
-    public Response getEmployees(@PathParam("username") String username) {
+    @Authorized
+    public Response getEmployees(final HttpServletRequest request, @PathParam("username") String username) {
         ApiResponse apiResponse = userService.getUserByName(username);
         return Response.ok(apiResponse).build();
     }
