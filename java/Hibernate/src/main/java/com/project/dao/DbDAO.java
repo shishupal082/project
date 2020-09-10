@@ -45,4 +45,17 @@ public class DbDAO extends AbstractDAO<Employee> {
         }
         return list;
     }
+//    public void createUser(String username) {
+//        String queryName = AppConstant.EmployeeUpdateEmail;
+//        try {
+//            sessionFactory.getCurrentSession()
+//                    .createSQLQuery(query)
+//                    .setParameter("username", username)
+//                    .executeUpdate();
+//            logger.info("Employee email: {}, is updated for id: {}", email, id);
+//        } catch (Exception e) {
+//            logger.info("error in query: {}, {}", queryName, e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
 }

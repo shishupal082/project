@@ -87,6 +87,10 @@ java/mavenProject/.idea/
 java/mavenProject/mavenProject.iml
 java/mavenProject/target/
 
+java/mavenProjectAnnotation/.idea/
+java/mavenProjectAnnotation/mavenProjectAnnotation.iml
+java/mavenProjectAnnotation/target/
+
 
 java/Hibernate/.idea/
 java/Hibernate/target/
@@ -109,3 +113,9 @@ java/*/*/*.class
 java/*/*/*/*.class
 java/*/*/*/*/*.class
 java/*/*/*/*/*/*.class
+
+
+python/*/*/*/*/__pycache__/
+python/*/*/*/*/__pycache__/
+python/*/*/*/*/__pycache__/
+

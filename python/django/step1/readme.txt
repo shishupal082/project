@@ -13,7 +13,7 @@ PIP=/Users/<user>/Library/Python/2.7/bin
 PATH=$PATH:$PIP
 
 Step-2]
-Install pip
+Install pip (Generally it will install along with python)
 
 sudo easy_install pip
 
@@ -25,14 +25,22 @@ Step-3]
 Setup virtual environment
 https://packaging.python.org/installing/#creating-and-using-virtual-environments
 
-pip install virtualenv
-virtualenv venv
-source venv/bin/activate
+-- pip install virtualenv
+-- python -m venv "/d/workspace/project/python/" (venv directory)
+-- virtualenv "/d/workspace/project/python/venv" (or, vertual virtualenv envoronment created, either of them needs to run but not both)
+
+- source venv/bin/activate
+-- \venv\Scripts\activate.bat (Windows)
+
 
 Step-4]
 Install dependencies
 
 pip install -r requirement.txt
+
+oldervserion json
+simplejson==2.6.2
+simplejson==3.17.0
 
 Step-5]
 
