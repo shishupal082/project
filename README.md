@@ -18,9 +18,14 @@ JAVA
 ----------------
 PDF to Text converter
 Text to PDF converter
-Dropowizard fully functioning
+Send email using gmail smtp
 Customised exception handller
 Customised logger pattern
+Dropowizard fully functioning
+Hibernet integration for mysql
+Mysql connection using Jdbc
+MD5 encryption with and without hash
+AES encryption
 
 Java installation in windows 10
 First check pre install java
@@ -118,6 +123,7 @@ var LocalStorage = (function(){
     return LocalStorage;
 })();
 
+Google Analytics API
 Youtube api
 Google map api
 Recaptcha

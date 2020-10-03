@@ -6,9 +6,7 @@
 	<meta name="environment" content="<?php echo ENVIRONMENT; ?>">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>404 Page not found</title>
-<script>
 <?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
-</script>
 <style type="text/css">
 * {
 	font-family: sans-serif;

@@ -1987,6 +1987,32 @@ Stack.extend({
         return words.reverse().join(' ');
     }
 });
+//GATracking push event
+Stack.extend({
+    pushGAEvent: function(Gtag, action, category, label) {
+        if (!Stack.isString(action)) {
+            action = "not-string";
+        } else if (action.length === 0) {
+            action = "empty-string";
+        }
+        if (!Stack.isString(category)) {
+            category = "not-string";
+        } else if (category.length === 0) {
+            category = "empty-string";
+        }
+        if (!Stack.isString(label)) {
+            label = "not-string";
+        } else if (label.length === 0) {
+            label = "empty-string";
+        }
+        if (Stack.isDefined(Gtag) && Gtag !== null) {
+            Gtag('event', action, {
+              'event_category' : category,
+              'event_label' : label
+            });
+        }
+    }
+});
 /*End of direct access of methods*/
 if (Platform === "Window") {
     window.$S = Stack;
