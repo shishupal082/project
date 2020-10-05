@@ -2010,6 +2010,8 @@ Stack.extend({
               'event_category' : category,
               'event_label' : label
             });
+        } else {
+            Stack.log("Gtag is Invalid");
         }
     }
 });

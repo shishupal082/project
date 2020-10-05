@@ -100,6 +100,15 @@ Template.extend({
         }
         return template;
     },
+    addItemInTextArray: function(template, fieldName, subTemplate) {
+        var field = Template(template).searchField(fieldName);
+        if ($S.isObject(field)) {
+            if ($S.isArray(field.text)) {
+                field.text.push(subTemplate);
+            }
+        }
+        return template;
+    },
     addClassTemplate: function(template, fieldName, className) {
         var field = {};
         if ($S.isString(fieldName)) {

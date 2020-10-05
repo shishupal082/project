@@ -136,17 +136,26 @@ childGenerator = {
     "h1": function(props, data, reactChildText, key) {
         return <h1 key={key} className={data.className}>{reactChildText}</h1>;
     },
+    "h2": function(props, data, reactChildText, key) {
+        return <h2 key={key} className={data.className}>{reactChildText}</h2>;
+    },
+    "h3": function(props, data, reactChildText, key) {
+        return <h3 key={key} className={data.className}>{reactChildText}</h3>;
+    },
     "h4": function(props, data, reactChildText, key) {
         return <h4 key={key} className={data.className}>{reactChildText}</h4>;
+    },
+    "h5": function(props, data, reactChildText, key) {
+        return <h5 key={key} className={data.className}>{reactChildText}</h5>;
+    },
+    "h6": function(props, data, reactChildText, key) {
+        return <h6 key={key} className={data.className}>{reactChildText}</h6>;
     },
     "p": function(props, data, reactChildText, key) {
         return <p key={key} className={data.className}>{reactChildText}</p>;
     },
     "center": function(props, data, reactChildText, key) {
         return <center key={key} className={data.className}>{reactChildText}</center>;
-    },
-    "h6": function(props, data, reactChildText, key) {
-        return <h6 key={key} className={data.className}>{reactChildText}</h6>;
     },
     "div": function(props, data, reactChildText, key) {
         return <div key={key} className={data.className}>{reactChildText}</div>;
@@ -156,6 +165,9 @@ childGenerator = {
     },
     "tbody": function(props, data, reactChildText, key) {
         return <tbody key={key}>{reactChildText}</tbody>;
+    },
+    "thead": function(props, data, reactChildText, key) {
+        return <thead key={key}>{reactChildText}</thead>;
     },
     "tr": function(props, data, reactChildText, key) {
         return <tr key={key} id={data.id} className={data.className}>{reactChildText}</tr>;
