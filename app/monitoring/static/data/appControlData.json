@@ -3,7 +3,7 @@
         {
             "id": "section-1",
             "text": "Section 1 Name",
-            "defaultDateSelectionType": "all",
+            "defaultDateSelectionType": "monthly",
             "dataApi": [
                 "/app/monitoring/static/data/list-1.csv",
                 "/app/monitoring/static/data/list-2.csv"

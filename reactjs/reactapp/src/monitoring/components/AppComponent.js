@@ -1,11 +1,11 @@
 import React from 'react';
-// import {Link} from 'react-router-dom';
 import $S from "../../interface/stack.js";
+import Api from "../../common/Api";
+
+import DataHandler from "../common/DataHandler";
+
 import Heading from "./partial/Heading";
 import Errors from "./partial/Errors";
-import PageComponent from "./partial/PageComponent";
-
-// import DataHandler from "../common/DataHandler";
 
 class AppComponent extends React.Component {
     constructor(props) {
@@ -16,17 +16,18 @@ class AppComponent extends React.Component {
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");
-        // DataHandler.setData("currentPageHeading", DataHandler.getPageHeadingV2(this.props.currentPageName));
-        // this.props.methods.trackPage(this.props.currentPageName);
+        this.props.methods.addTab(this.props.currentPageName);
+        DataHandler.setData("currentPageName", this.props.currentPageName);
+        var appStateCallback = this.props.methods.appStateCallback;
+        var appDataCallback = this.props.methods.appDataCallback;
+        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
     }
     render() {
+        var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
         return (<div>
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
-                    <PageComponent state={this.props.state} data={this.props.data}
-                        methods={this.props.methods} currentPageName={this.props.currentPageName}
-                        renderFieldRow={this.props.renderFieldRow}
-                    />
+                    <div className="page-component">{pageData}</div>
                 </div>);
     }
 }

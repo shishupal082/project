@@ -1,9 +1,15 @@
+import Config from "./Config";
+
 var Template = {};
 Template["noMatch"] = [{
     "tag": "center.h5",
     "text": {
         "tag": "span",
-        "text": "Please Go Back"
+        "text": {
+            "tag": "a",
+            "href": Config.pages.home,
+            "text": "Goto Home Page"
+        }
     }
 }];
 Template["noDataFound"] = [{
@@ -32,33 +38,9 @@ Template["entry"] = [{
             "className": "table-bordered table-striped",
             "text": [
                 {
-                    "tag": "thead.tr",
-                    "text": [
-                        {
-                            "tag": "th",
-                            "text": "S.No."
-                        },
-                        {
-                            "tag": "th",
-                            "text": "Date"
-                        },
-                        {
-                            "tag": "th",
-                            "text": "Station"
-                        },
-                        {
-                            "tag": "th",
-                            "text": "Description"
-                        },
-                        {
-                            "tag": "th",
-                            "text": "Type"
-                        },
-                        {
-                            "tag": "th",
-                            "text": "Device"
-                        }
-                    ]
+                    "tag": "thead",
+                    "name": "entry.data.firstRow",
+                    "text": []
                 },
                 {
                     "tag": "tbody",
@@ -70,6 +52,71 @@ Template["entry"] = [{
     ]
 }];
 
+Template["entrybydate"] = [
+    {
+        "tag": "div.h1",
+        "className": "container",
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "name": "date",
+            "text": ""
+        }
+    },
+    {
+        "tag": "div",
+        "className": "container",
+        "text": [
+            {
+                "tag": "table",
+                "className": "table-bordered table-striped",
+                "text": [
+                    {
+                        "tag": "thead",
+                        "name": "entrybydate.data.firstRow",
+                        "text": []
+                    },
+                    {
+                        "tag": "tbody",
+                        "name": "entrybydate.data",
+                        "text": []
+                    }
+                ]
+            }
+        ]
+    }
+];
+Template["entry.data.firstRow"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "text": "Date"
+            },
+            {
+                "tag": "th",
+                "text": "Station"
+            },
+            {
+                "tag": "th",
+                "text": "Description"
+            },
+            {
+                "tag": "th",
+                "text": "Type"
+            },
+            {
+                "tag": "th",
+                "text": "Device"
+            }
+        ]
+    }
+];
 Template["entry.data"] = [
     {
         "tag": "tr",
@@ -86,7 +133,7 @@ Template["entry.data"] = [
             },
             {
                 "tag": "td",
-                "name": "station",
+                "name": "displayStation",
                 "text": "Station"
             },
             {
@@ -96,22 +143,52 @@ Template["entry.data"] = [
             },
             {
                 "tag": "td",
-                "name": "type",
+                "name": "displayType",
                 "text": "Type"
             },
             {
                 "tag": "td",
-                "name": "device",
+                "name": "displayDevice",
                 "text": "Device"
             }
         ]
     }
 ];
 
-Template["entrybydate"] = ["Entry by Date"];
-Template["entrybytype"] = ["Entry by Type"];
-Template["entrybystation"] = ["Entry by Station"];
-Template["entrybydevice"] = ["Entry by Device"];
-Template["summary"] = ["Summary"];
+Template["entrybytype"] = [{"tag": "center", "text": "Entry by Type"}];
+Template["entrybystation"] = [{"tag": "center", "text": "Entry by Station"}];
+Template["entrybydevice"] = [{"tag": "center", "text": "Entry by Device"}];
+Template["summary"] = [
+    {
+        "tag": "div.table",
+        "className": "container",
+        "text": [
+            {
+                "tag": "thead",
+                "text": [
+                    {
+                        "tag": "tr",
+                        "text": [
+                            {
+                                "tag": "th",
+                                "text": "S.No."
+                            },
+                            {
+                                "tag": "th",
+                                "name": "summary.variable",
+                                "text": "Variable"
+                            },
+                            {
+                                "tag": "th",
+                                "name": "summary.count",
+                                "text": "Count"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+];
 
 export default Template;

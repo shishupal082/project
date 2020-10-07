@@ -1,6 +1,6 @@
 import $S from "../../interface/stack.js";
 // import Config from "./Config";
-// import DataHandler from "./DataHandler";
+import DataHandler from "./DataHandler";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
@@ -31,21 +31,69 @@ TemplateHandler.extend({
 });
 
 TemplateHandler.extend({
-    "entry": function(template, data, pageName) {
-        if (!$S.isArray(data)) {
+    getPageRenderField: function(pageName) {
+        return TemplateHandler.getTemplate(pageName);
+    },
+    "entry": function(pageName) {
+        var data = DataHandler.getData("csvData", []);
+        if (!$S.isArray(data) || data.length < 1) {
             return TemplateHandler.getTemplate("noDataFound");
         }
-        var renderField = template;
+        var renderField = TemplateHandler.getTemplate(pageName);
+        var firstRow = TemplateHandler.getTemplate("entry.data.firstRow");
+        TemplateHelper.addItemInTextArray(renderField, "entry.data.firstRow", firstRow);
         for(var i=0; i<data.length; i++) {
             data[i]["s.no."] = i+1;
             var rowTemplate = TemplateHandler.getTemplate("entry.data");
             TemplateHelper.updateTemplateText(rowTemplate, data[i]);
-            TemplateHelper.addItemInTextArray(template, "entry.data", rowTemplate);
+            TemplateHelper.addItemInTextArray(renderField, "entry.data", rowTemplate);
         }
         return renderField;
     },
-    "home": function() {
-        return TemplateHandler.getTemplate("noDataFound");
+    "entrybydate": function(pageName) {
+        var data = DataHandler.getData("renderData", []);
+        if (!$S.isArray(data) || data.length < 1) {
+            return TemplateHandler.getTemplate("noDataFound");
+        }
+        var renderField = [];
+        for (var i = 0; i < data.length; i++) {
+            var template = TemplateHandler.getTemplate(pageName);
+            TemplateHelper.setTemplateAttr(template, "date", "text", data[i].dateHeading);
+            if (data[i].items) {
+                var rowTemplate = TemplateHandler.getTemplate("entry.data.firstRow");
+                TemplateHelper.addItemInTextArray(template, "entrybydate.data", rowTemplate);
+                for (var j = 0; j < data[i]["items"].length; j++) {
+                    data[i]["items"][j]["s.no."] = j+1;
+                    rowTemplate = TemplateHandler.getTemplate("entry.data");
+                    TemplateHelper.updateTemplateText(rowTemplate, data[i]["items"][j]);
+                    TemplateHelper.addItemInTextArray(template, "entrybydate.data", rowTemplate);
+                }
+            }
+            renderField.push(template);
+        }
+
+
+        // for(var i=0; i<data.length; i++) {
+        //     data[i]["s.no."] = i+1;
+        //     var rowTemplate = TemplateHandler.getTemplate("entry.data");
+        //     TemplateHelper.updateTemplateText(rowTemplate, data[i]);
+        //     TemplateHelper.addItemInTextArray(renderField, "entry.data", rowTemplate);
+        // }
+        return renderField;
+    },
+    "summary": function(pageName) {
+        var data = DataHandler.getData("csvData", []);
+        if (!$S.isArray(data)) {
+            return TemplateHandler.getTemplate("noDataFound");
+        }
+        var renderField = TemplateHandler.getTemplate(pageName);
+        // for(var i=0; i<data.length; i++) {
+        //     data[i]["s.no."] = i+1;
+        //     var rowTemplate = TemplateHandler.getTemplate("entry.data");
+        //     TemplateHelper.updateTemplateText(rowTemplate, data[i]);
+        //     TemplateHelper.addItemInTextArray(renderField, "entry.data", rowTemplate);
+        // }
+        return renderField;
     }
 });
 

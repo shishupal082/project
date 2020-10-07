@@ -11,6 +11,7 @@ class SelectUser extends React.Component {
             isLoaded: false
         };
         this.onClick = this.onClick.bind(this);
+        this.onReloadClick = this.onReloadClick.bind(this);
         this.onUserChange = this.onUserChange.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
     }
@@ -28,6 +29,9 @@ class SelectUser extends React.Component {
     }
     onClick(e) {
         this.props.methods.onDateSelectionTypeChange(e.target.value);
+    }
+    onReloadClick(e) {
+        this.props.methods.userChange(this.props.data.currentUserName);
     }
     render() {
         var self = this;
@@ -82,6 +86,7 @@ class SelectUser extends React.Component {
                         <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
                         </div></td>
+                        <td><button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button></td>
                     </tr></tbody></table></div>
             </div>;
         return (seleUserOptions);

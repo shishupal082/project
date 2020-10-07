@@ -15,6 +15,7 @@ class Home extends React.Component {
     }
     componentDidMount() {
         $S.log("Home:componentDidMount");
+        this.props.methods.addTab(this.props.currentPageName);
         DataHandler.setData("currentPageName", this.props.currentPageName);
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
@@ -29,7 +30,7 @@ class Home extends React.Component {
         return (<div>
                 <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                 <Errors data={this.props.data}/>
-                <div className="container">
+                <div className="container pt-10px">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="list-group">

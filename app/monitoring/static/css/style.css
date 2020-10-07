@@ -1,6 +1,17 @@
 .heading {
     border-bottom: 1.5px solid #ddd;
     padding-bottom: 5px;
-    font-weight: 600;
     font-size: 1.2rem;
+}
+.nav-tabs .nav-link.current-page {
+	color: #007bff;
+    cursor: auto;
+}
+.nav-tabs .close-tab {
+	border: 1px solid;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+.nav-tabs .close-tab:hover {
+	opacity: 1;
 }

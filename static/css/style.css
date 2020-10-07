@@ -5,3 +5,33 @@ body.theme-green {
 body.theme-grey {
     background-color: #eee;
 }
+.p-0 {
+    padding: 0;
+}
+.p-5px {
+    padding: 5px;
+}
+.p-10px {
+    padding: 10px;
+}
+.pt-10px {
+    padding-top: 10px;
+}
+.pt-25px {
+    padding-top: 25px;
+}
+.pt-40px {
+    padding-top: 40px;
+}
+.pr-5px {
+    padding-right: 5px;
+}
+.pl-5px {
+    padding-left: 5px;
+}
+.pl-10px {
+    padding-left: 10px;
+}
+.w-75px {
+    width: 75px;
+}
