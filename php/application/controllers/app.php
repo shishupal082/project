@@ -39,6 +39,9 @@ class App extends CI_Controller {
 	public function accounts() {
 		$this->load->view("app/account.php");
 	}
+	public function accountsv2() {
+		$this->load->view("app/accountv2.php");
+	}
 	public function monitor() {
 		$this->load->view("app/monitor.php");
 	}

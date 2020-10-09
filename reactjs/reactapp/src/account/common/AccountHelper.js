@@ -1,6 +1,11 @@
 import $S from '../../interface/stack.js';
 import TemplateHelper from '../../common/TemplateHelper';
 
+
+import DataHandler from './DataHandler';
+import AccountHelper2 from './AccountHelper2';
+
+
 var AccountHelper;
 
 (function($S){
@@ -140,9 +145,10 @@ Account.extend({
 });
 //getDataByCompany
 Account.extend({
-    getDataByCompany: function(Data, finalJournalData, accountData) {
+    getDataByCompany: function(finalJournalData) {
         var i, j, k, particularEntry, accountName, entry, temp;
         var dataByCompany = {};
+        var accountData = DataHandler.getData("accounts", []);
         if (!$S.isArray(finalJournalData) && !$S.isArray(accountData)) {
             return dataByCompany;
         }
@@ -172,7 +178,7 @@ Account.extend({
                             accountName = entry.particularEntry[k].account;
                             if (validAccountName.indexOf(accountName) < 0) {
                                 if ($S.isDefined(accountName)) {
-                                    Data.addError("Invalid accountName: " + accountName);
+                                    DataHandler.addDataInArray("errorsData", "Invalid accountName: " + accountName);
                                     console.log("Invalid accountName: " + accountName);
                                 }
                                 continue;
@@ -302,7 +308,7 @@ Account.extend({
         }
         return fieldData;
     },
-    getFinalJournalData: function(Data, journalData) {
+    getFinalJournalData: function(journalData) {
         //journalData is apiJournalDataByDate
         var finalJournalData = [];
         var i, j, k, particularEntry, accountName, entry, temp, temp2;
@@ -341,7 +347,7 @@ Account.extend({
                             continue;
                         }
                         if (temp.debitAccounts.length > 1 && temp.creditAccounts.length > 1) {
-                            Data.addError("Invalid journal entry: (multiple debit and credit row): "+ JSON.stringify(entry));
+                            DataHandler.addDataInArray("errorsData", "Invalid journal entry: (multiple debit and credit row): "+ JSON.stringify(entry));
                             console.log("Invalid journal entry: (multiple debit and credit row)");
                             console.log(entry);
                             continue;
@@ -379,7 +385,7 @@ Account.extend({
     }
 });
 Account.extend({
-    _getAccountSummaryByDateData: function(Data, accountData, dateSelection, dataByCompany) {
+    _getAccountSummaryByDateData: function(accountData, dateSelection, dataByCompany) {
         var fieldData = [];
         // var r = {
         //             "dateHeading": "2020-06-04",
@@ -465,8 +471,10 @@ Account.extend({
 });
 //getLedgerBookFields
 Account.extend({
-    getLedgerBookFields: function(self, accountData, dataByCompany) {
+    getLedgerBookFields: function() {
         var ledgerData = [];
+        var accountData = DataHandler.getData("accounts", []);
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
         if (!$S.isArray(accountData) || !$S.isObject(dataByCompany)) {
             return ledgerData;
         }
@@ -478,7 +486,7 @@ Account.extend({
                 companyData = dataByCompany[accountData[i].accountName];
                 ledgerRowFields = {accountDisplayName: "", fields: []};
                 ledgerRowFields.accountDisplayName = Account._getAccountDisplayName(accountData[i]);
-                ledgerRowFields.fields.push(self.getTemplate("ledgerHeading"));
+                ledgerRowFields.fields.push(DataHandler.getTemplate("ledgerHeading"));
                 if ($S.isArray(companyData.ledgerRowData.dr) && $S.isArray(companyData.ledgerRowData.cr)) {
                     maxLength = companyData.ledgerRowData.dr.length;
                     minLength = companyData.ledgerRowData.cr.length;
@@ -500,7 +508,7 @@ Account.extend({
                         if (companyData.ledgerRowData.cr[j].ledgerText) {
                             temp.creditParticularLadger = companyData.ledgerRowData.cr[j].ledgerText;
                         }
-                        ledgerRowTemplate = self.getTemplate("ledgerRow");
+                        ledgerRowTemplate = DataHandler.getTemplate("ledgerRow");
                         TemplateHelper.updateTemplateText(ledgerRowTemplate, temp);
                         ledgerRowFields.fields.push(ledgerRowTemplate);
                     }
@@ -521,7 +529,7 @@ Account.extend({
                                 temp.debitParticularLadger = companyData.ledgerRowData.dr[j].ledgerText;
                             }
                         }
-                        ledgerRowTemplate = self.getTemplate("ledgerRow");
+                        ledgerRowTemplate = DataHandler.getTemplate("ledgerRow");
                         TemplateHelper.updateTemplateText(ledgerRowTemplate, temp);
                         ledgerRowFields.fields.push(ledgerRowTemplate);
                     }
@@ -534,7 +542,9 @@ Account.extend({
 });
 //getTrialBalanceFields
 Account.extend({
-    getTrialBalanceFields: function(Data, dataByCompany, accountData) {
+    getTrialBalanceFields: function() {
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var accountData = DataHandler.getData("accounts", []);
         var trialBalanceFields = [];
         if (!$S.isObject(dataByCompany) || !$S.isArray(accountData)) {
             return trialBalanceFields;
@@ -543,7 +553,7 @@ Account.extend({
         var key, temp, template, count = 1, balanceBdField;
         var totalDebit = 0, totalCredit = 0, i;
         var accountDisplayName;
-        trialBalanceFields.push(Data.getTemplate("trialBalance1stRow"));
+        trialBalanceFields.push(DataHandler.getTemplate("trialBalance1stRow"));
         for (i = 0; i < accountData.length; i++) {
             key = accountData[i].accountName;
             accountDisplayName = Account._getAccountDisplayName(accountData[i]);
@@ -568,21 +578,21 @@ Account.extend({
                 count--;
                 continue;
             }
-            template = Data.getTemplate("trialBalanceRow");
+            template = DataHandler.getTemplate("trialBalanceRow");
             TemplateHelper.updateTemplateText(template, temp);
             trialBalanceFields.push(template);
         }
         temp = {};
-        template = Data.getTemplate("trialBalanceRow");
+        template = DataHandler.getTemplate("trialBalanceRow");
         temp.particular = {"tag":"div.b", "className": "text-right", "text":"Total"};
         temp.debitBalance = totalDebit;
         temp.creditBalance = totalCredit;
         if (totalDebit !== totalCredit) {
-            Data.addError("Trial balance mismatch: "+totalDebit +" !== "+ totalCredit);
+            DataHandler.addDataInArray("errorsData", "Trial balance mismatch: "+totalDebit +" !== "+ totalCredit);
         }
         TemplateHelper.updateTemplateText(template, temp);
         trialBalanceFields.push(template);
-        template = Data.getTemplate("trialBalance");
+        template = DataHandler.getTemplate("trialBalance");
         temp = {"trialBalanceRows": trialBalanceFields};
         TemplateHelper.updateTemplateText(template, temp);
         return template;
@@ -590,7 +600,7 @@ Account.extend({
 });
 //partial
 Account.extend({
-    generateCurrentBalanaceTrs: function(Data, currentBalRowData) {
+    generateCurrentBalanaceTrs: function(currentBalRowData) {
         var trs = [];
         if (!$S.isArray(currentBalRowData)) {
             return trs;
@@ -598,14 +608,14 @@ Account.extend({
         var i, j, count = 1, prev = {}, current = {}, isTotalRow = false;
         var num, signCorrection = ["dr", "cr", "currentBal", "balance"], attr;
         var template, templateData;
-        template = Data.getTemplate("currentBal1stRowByDate", null);
+        template = DataHandler.getTemplate("currentBal1stRowByDate", null);
         trs.push(template);
         for (j=0; j<signCorrection.length; j++) {
             prev[signCorrection[j]] = null;
             current[signCorrection[j]] = null;
         }
         for (i = 0; i < currentBalRowData.length; i++) {
-            template = Data.getTemplate("currentBalRowByDate", null);
+            template = DataHandler.getTemplate("currentBalRowByDate", null);
             templateData = currentBalRowData[i];
             if ($S.isObject(templateData)) {
                 templateData["s.no"] = count++;
@@ -648,7 +658,9 @@ Account.extend({
 });
 //getCurrentBalanceFields
 Account.extend({
-    getCurrentBalanceFields: function(self, dataByCompany, accountData) {
+    getCurrentBalanceFields: function() {
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var accountData = DataHandler.getData("accounts", []);
         var currentBalanceFields = [], currentBalanceData = [];
         var i, j, key, lastAmount, temp, count;
         var debitAmount, creditAmount, currentAmount = 0;
@@ -675,7 +687,7 @@ Account.extend({
                         creditAmount += (-1)* currentAmount;
                         creditAmount = Account(creditAmount).toFixed(2);
                     }
-                    dataByCompany[key].currentBalRowData[j].balance = lastAmount + currentAmount;
+                    dataByCompany[key].currentBalRowData[j].balance = Account(lastAmount + currentAmount).toFixed(2);
                     if (j === dataByCompany[key].currentBalRowData.length-1) {
                         temp = lastAmount + currentAmount;
                         if (lastAmount + currentAmount < 0) {
@@ -721,7 +733,7 @@ Account.extend({
             currentBalanceData.push(dataByCompany[key]);
         }
         var template = {accountDisplayName:"", fields: []}, fieldTemplate, rowData;
-        var fieldHeaderTemplate = self.getTemplate("currentBal1stRow");
+        var fieldHeaderTemplate = DataHandler.getTemplate("currentBal1stRow");
         for (i = 0; i < currentBalanceData.length; i++) {
             currentBalanceFields.push($S.clone(template));
             currentBalanceFields[i].accountDisplayName = currentBalanceData[i].accountDisplayName;
@@ -736,7 +748,7 @@ Account.extend({
                     if (rowData.balanceText) {
                         rowData.balance = rowData.balanceText;
                     }
-                    fieldTemplate = self.getTemplate("currentBalRow");
+                    fieldTemplate = DataHandler.getTemplate("currentBalRow");
                     rowData["s.no"] = count++;
                     TemplateHelper.updateTemplateText(fieldTemplate, rowData);
                     currentBalanceFields[i].fields.push(fieldTemplate);
@@ -748,7 +760,7 @@ Account.extend({
 });
 //_getCurrentBalanceDataByDate
 Account.extend({
-    _getCurrentBalanceDataByDate: function(Data, dataByCompany, accountData, dateSelection) {
+    _getCurrentBalanceDataByDate: function(dataByCompany, accountData, dateSelection) {
         var currentBalanceFieldsData = [];
         var i, j, k, accountName, accountDisplayName;
         var templateData, template2Data;
@@ -847,22 +859,25 @@ Account.extend({
 });
 //getCurrentBalByDateRowData
 Account.extend({
-    getCurrentBalByDateRowData: function(Data, dataByCompany, accountData, dateSelection) {
+    getCurrentBalByDateRowData: function() {
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var accountData = DataHandler.getData("accounts", []);
+        var dateSelection = DataHandler.getData("dateSelectionParameter", []);
         var currentBalanceFields = [], currentBalanceFieldsData = [];
         var i, j;
         // var debitAmount, creditAmount, currentAmount = 0;
         var template, templateData, template2, template2Data;
-        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(Data, dataByCompany, accountData, dateSelection);
+        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(dataByCompany, accountData, dateSelection);
         // Generating template data
         for (i = 0; i < currentBalanceFieldsData.length; i++) {
-            template = Data.getTemplate("currentBalByDate", null);
+            template = DataHandler.getTemplate("currentBalByDate", null);
             templateData = {};
             templateData["accountDisplayName"] = currentBalanceFieldsData[i].accountDisplayName;
             templateData["currentBalByDateRow"] = [];
             for(j=currentBalanceFieldsData[i].currentBalByDateRow.length-1; j>=0; j--) {
-                template2 = Data.getTemplate("currentBalByDateRow", null);
+                template2 = DataHandler.getTemplate("currentBalByDateRow", null);
                 template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
-                template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(Data, currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
+                template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
                 TemplateHelper.updateTemplateText(template2, template2Data);
                 templateData["currentBalByDateRow"].push(template2);
             }
@@ -874,25 +889,25 @@ Account.extend({
 });
 //getAccountSummaryFields
 Account.extend({
-    getAccountSummaryFields: function(Data, dataByCompany, accountData, dateSelection) {
+    getAccountSummaryFields: function(dataByCompany, accountData, dateSelection) {
         var currentBalanceFields = [], currentBalanceFieldsData = [];
         var i, j, count = 1, totalRow;
         var template, templateData, template2, template2Data, currentBalByDateRow = [];
-        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(Data, dataByCompany, accountData, dateSelection);
+        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(dataByCompany, accountData, dateSelection);
         // Generating template data
         for (i = 0; i < currentBalanceFieldsData.length; i++) {
-            template = Data.getTemplate("accountSummary", null);
+            template = DataHandler.getTemplate("accountSummary", null);
             templateData = {};
             templateData["accountDisplayName"] = currentBalanceFieldsData[i].accountDisplayName;
             templateData["accountSummaryRow"] = [];
 
             currentBalByDateRow = currentBalanceFieldsData[i].currentBalByDateRow;
             if ($S.isArray(currentBalByDateRow) && currentBalByDateRow.length) {
-                template2 = Data.getTemplate("accountSummary1stRow", null);
+                template2 = DataHandler.getTemplate("accountSummary1stRow", null);
                 templateData["accountSummaryRow"].push(template2);
                 count = 1;
                 for (j=currentBalByDateRow.length-1; j>=0; j--) {
-                    template2 = Data.getTemplate("accountSummaryRow", null);
+                    template2 = DataHandler.getTemplate("accountSummaryRow", null);
                     template2Data = {};
                     totalRow = TemplateHelper(currentBalByDateRow[j]).searchFieldV2("totalRow");
                     template2Data = $S.clone(totalRow);
@@ -913,9 +928,9 @@ Account.extend({
 });
 //getJournalFields
 Account.extend({
-    getJournalFields: function(Data, journalData) {
-        var journalRowData = [], i, j, k, count = 1;
-        var template = Data.getTemplate("journalEntry1stRow", null);
+    getJournalFields: function(journalData) {
+        var journalRowData = [], i, j, k, count = 1, templateData;
+        var template = DataHandler.getTemplate("journalEntry1stRow", null);
         if (template) {
             journalRowData.push(template);
         }
@@ -925,7 +940,7 @@ Account.extend({
                 for (j = 0; j < journalData[i].entry.length; j++) {
                     entry = journalData[i].entry[j];
                     entry["s.no"] = count++;
-                    template = Data.getTemplate("journalEntry", null);
+                    template = DataHandler.getTemplate("journalEntry", null);
                     temp = TemplateHelper(template).searchField("particular");
                     if (temp.name === "particular") {
                         temp.text = [];
@@ -933,7 +948,7 @@ Account.extend({
                     TemplateHelper.updateTemplateText(template, entry);
                     if ($S.isArray(entry.particularEntry)) {
                         for (k = 0; k < entry.particularEntry.length; k++) {
-                            particularFieldTemplate = Data.getTemplate("journalEntryParticular", null);
+                            particularFieldTemplate = DataHandler.getTemplate("journalEntryParticular", null);
                             TemplateHelper.updateTemplateText(particularFieldTemplate, entry.particularEntry[k]);
                             temp.text.push(particularFieldTemplate);
                         }
@@ -942,12 +957,15 @@ Account.extend({
                 }
             }
         }
-        return journalRowData;
+        template = DataHandler.getTemplate("journal", null);
+        templateData = {"journalEntryTr": journalRowData};
+        TemplateHelper.updateTemplateText(template, templateData);
+        return template;
     }
 });
 //getApiJournalDataByDate
 Account.extend({
-    getApiJournalDataByDate: function(Data, apiJournalData) {
+    getApiJournalDataByDate: function(apiJournalData) {
         var dataByDate = {}, apiJournalDataByDate = [];
         var i, j, k, entry;
         if (!$S.isArray(apiJournalData)) {
@@ -974,7 +992,7 @@ Account.extend({
                             }
                         }
                         if (debitAmount !== creditAmount && debitAmount > 0 && creditAmount > 0) {
-                            Data.addError({"code": "Total amount mismatch: " + JSON.stringify(entry)});
+                            DataHandler.addDataInArray("errorsData", {"code": "Total amount mismatch: " + JSON.stringify(entry)});
                             continue;
                         }
                     }
@@ -983,7 +1001,7 @@ Account.extend({
                             dataByDate[entry.date] = [];
                         }
                     } else {
-                        Data.addError({"code": "Invalid date: " + JSON.stringify(entry)});
+                        DataHandler.addDataInArray("errorsData", {"code": "Invalid date: " + JSON.stringify(entry)});
                         continue;
                     }
                     dataByDate[entry.date].push(entry);
@@ -1008,11 +1026,12 @@ Account.extend({
 });
 //getJournalDataByDateFields
 Account.extend({
-    getJournalDataByDateFields: function(Data, apiJournalDataByDate, dateSelection) {
+    getJournalDataByDateFields: function(apiJournalDataByDate) {
         var journalDataByDateFields = [], template, templateData;
         var i, j, journalEntry;
         var startDate, endDate, currentDate;
         var journalDataByDateData = [];
+        var dateSelection = DataHandler.getData("dateSelectionParameter", []);
         if (!$S.isArray(apiJournalDataByDate) || !$S.isArray(dateSelection)) {
             return journalDataByDateFields;
         }
@@ -1050,10 +1069,10 @@ Account.extend({
             journalDataByDateData.push(templateData);
         }
         for(i=journalDataByDateData.length-1; i>=0; i--) {
-            template = Data.getTemplate("journalByDate", null);
+            template = DataHandler.getTemplate("journalByDate", null);
             templateData = {};
             templateData["date"] = journalDataByDateData[i].dateHeading;
-            templateData["journalEntryTable"] = AccountHelper.getJournalFields(Data,journalDataByDateData[i].journalEntryTable);
+            templateData["journalEntryTable"] = AccountHelper.getJournalFields(journalDataByDateData[i].journalEntryTable);
             TemplateHelper.updateTemplateText(template, templateData);
             journalDataByDateFields.push(template);
         }
@@ -1062,7 +1081,7 @@ Account.extend({
 });
 // convertCSVToJsonJournalData
 Account.extend({
-    convertCSVToJsonJournalData: function(Data, csvData) {
+    convertCSVToJsonJournalData: function(csvData) {
         var response = [];
         /**
         2020-06-03,To Coin A/C,dr,2000,coin,Daily voucher,cr,2000,bonus
@@ -1107,13 +1126,13 @@ Account.extend({
                         continue;
                     }
                     if (textLineArr.length < 2) {
-                        Data.addError({"code": "Invalid csv text: " + csvFileTextArr[j]});
+                        DataHandler.addDataInArray("errorsData", {"code": "Invalid csv text: " + csvFileTextArr[j]});
                         continue;
                     }
                     if (AccountHelper._isValidDateStr(textLineArr[0])) {
                         entry.date = textLineArr[0];
                     } else {
-                        Data.addError({"code": "Invalid date in csv text: " + csvFileTextArr[j]});
+                        DataHandler.addDataInArray("errorsData", {"code": "Invalid date in csv text: " + csvFileTextArr[j]});
                         continue;
                     }
                     for(k=1; k<textLineArr.length; k++) {
@@ -1125,7 +1144,7 @@ Account.extend({
                                 if ($S.isNumeric(textLineArr[k])) {
                                     particularEntry[textLineArr[k-1]] = textLineArr[k];
                                 } else {
-                                    Data.addError({"code": "Invalid amount '"+textLineArr[k]+"' in csv text: " + textLineArr.join(",")});
+                                    DataHandler.addDataInArray("errorsData", {"code": "Invalid amount '"+textLineArr[k]+"' in csv text: " + textLineArr.join(",")});
                                 }
                                 k++;
                                 if (k < textLineArr.length) {
@@ -1146,23 +1165,26 @@ Account.extend({
 });
 // getAccountSummaryByDateFields
 Account.extend({
-    getAccountSummaryByDateFields: function(Data, accountData, dateSelection, dataByCompany) {
+    getAccountSummaryByDateFields: function() {
+        var accountData = DataHandler.getData("accounts", []);
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var dateSelection = DataHandler.getData("dateSelectionParameter", []);
         var accountSummaryByDateFields = [], fieldsData;
-        fieldsData = AccountHelper._getAccountSummaryByDateData(Data, accountData, dateSelection, dataByCompany);
+        fieldsData = AccountHelper._getAccountSummaryByDateData(accountData, dateSelection, dataByCompany);
         var i, j, count = 1;
         var template1, template1Data, template2, template2Data;
         for (i = fieldsData.length-1; i >= 0; i--) {
-            template1 = Data.getTemplate("accountSummaryByDate", []);
+            template1 = DataHandler.getTemplate("accountSummaryByDate", []);
             template1Data = {"dateHeading": fieldsData[i]["dateHeading"]};
             template1Data["accountSummaryByDateRow"] = [];
             if ($S.isArray(fieldsData[i]["accountSummaryByDateRow"])) {
-                template2 = Data.getTemplate("accountSummaryByDate1stRow", []);
+                template2 = DataHandler.getTemplate("accountSummaryByDate1stRow", []);
                 template1Data["accountSummaryByDateRow"].push(template2);
                 count = 1;
                 for (j = 0; j < fieldsData[i]["accountSummaryByDateRow"].length; j++) {
                     template2Data = fieldsData[i]["accountSummaryByDateRow"][j];
                     template2Data["s.no"] = count++;
-                    template2 = Data.getTemplate("accountSummaryByDateRow", {});
+                    template2 = DataHandler.getTemplate("accountSummaryByDateRow", {});
                     AccountHelper.correctSign(template2Data);
                     TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data["accountSummaryByDateRow"].push(template2);
@@ -1176,12 +1198,16 @@ Account.extend({
 });
 // getAccountSummaryByCalenderFields
 Account.extend({
-    _getAccountSummaryByCalenderData: function(Data, accountData, dataByCompany, yearlyDateSelection) {
+    _getAccountSummaryByCalenderData: function(accountData, yearlyDateSelection) {
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
         var fieldsData = [];
         var i, j, k, l, companyData, template1Data, template2Data, currentBalRowData;
         var key, monthlyData, year;
         var startDate, endDate, currentDate, isTemplate2DataValid, template2DataFinal;
         var endBal, sNo = 1;
+        if (!$S.isArray(yearlyDateSelection)) {
+            yearlyDateSelection = [];
+        }
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
             for (j=0; j<accountData.length; j++) {
                 year = yearlyDateSelection[i].dateHeading;
@@ -1278,21 +1304,24 @@ Account.extend({
         }
         return fieldsData;
     },
-    getAccountSummaryByCalenderFields: function(Data, accountData, dataByCompany, yearlyDateSelection) {
+    getAccountSummaryByCalenderFields: function(accountData, yearlyDateSelection) {
+        if (!$S.isArray(yearlyDateSelection)) {
+            yearlyDateSelection = [];
+        }
         var accountSummaryByCalenderFields = [], fieldsData;
-        fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, accountData, dataByCompany, yearlyDateSelection);
+        fieldsData = AccountHelper._getAccountSummaryByCalenderData(accountData, yearlyDateSelection);
         var i, j, template1, template2, template1Data, template2Data;
         for (i = 0; i < fieldsData.length; i++) {
-            template1 = Data.getTemplate("accountSummaryByCalender", []);
+            template1 = DataHandler.getTemplate("accountSummaryByCalender", []);
             template1Data = {"accountDisplayName": fieldsData[i].accountDisplayName,
                             "year": fieldsData[i].year,
                             "accountSummaryByCalenderRow": []};
             if (fieldsData[i].template2Data) {
-                template2 = Data.getTemplate("accountSummaryByCalender1stRow", []);
+                template2 = DataHandler.getTemplate("accountSummaryByCalender1stRow", []);
                 template1Data.accountSummaryByCalenderRow.push(template2);
                 for(j=0; j<fieldsData[i].template2Data.length; j++) {
                     template2Data = fieldsData[i].template2Data[j];
-                    template2 = Data.getTemplate("accountSummaryByCalenderRow", []);
+                    template2 = DataHandler.getTemplate("accountSummaryByCalenderRow", []);
                     TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data.accountSummaryByCalenderRow.push(template2);
                 }
@@ -1302,16 +1331,19 @@ Account.extend({
         }
         return accountSummaryByCalenderFields;
     },
-    _getCustomisedAccountSummaryByCalenderData: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType) {
+    _getCustomisedAccountSummaryByCalenderData: function(customiseAccountData, yearlyDateSelection, customiseType) {
         customiseType = customiseType === "Cr" ? "Cr" : "Dr";
         var fieldsData, response = [];
         var i, j, k, l, m, n, heading, tempAccountData;
         var template1Data, template2Data, monthlyData, count, monthKey, year;
+        if (!$S.isArray(yearlyDateSelection)) {
+            yearlyDateSelection = [];
+        }
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
             for(n=0; n<customiseAccountData.length; n++) {
                 tempAccountData = customiseAccountData[n].accounts;
                 heading = customiseAccountData[n].heading;
-                fieldsData = AccountHelper._getAccountSummaryByCalenderData(Data, tempAccountData, dataByCompany, yearlyDateSelection);
+                fieldsData = AccountHelper._getAccountSummaryByCalenderData(tempAccountData, yearlyDateSelection);
                 if (!$S.isString(heading)) {
                     heading = customiseType === "Dr" ? "Debit" : "Credit";
                 }
@@ -1376,22 +1408,22 @@ Account.extend({
         }
         return response;
     },
-    getCustomisedAccountSummaryByCalenderFields: function(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType, ignoreIfDataNotFound) {
+    getCustomisedAccountSummaryByCalenderFields: function(customiseAccountData, yearlyDateSelection, customiseType, ignoreIfDataNotFound) {
         var accountSummaryByCalenderFields = [], fieldsData = [];
         var i,j;
-        fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(Data, customiseAccountData, dataByCompany, yearlyDateSelection, customiseType);
+        fieldsData = AccountHelper._getCustomisedAccountSummaryByCalenderData(customiseAccountData, yearlyDateSelection, customiseType);
         var template1, template2, template1Data, template2Data;
         for (i = 0; i < fieldsData.length; i++) {
-            template1 = Data.getTemplate("customisedAccountSummary", []);
+            template1 = DataHandler.getTemplate("customisedAccountSummary", []);
             template1Data = {"heading": fieldsData[i].heading,
                             "year": fieldsData[i].year,
                             "customisedAccountSummaryRow": []};
             if (fieldsData[i].template2Data.length) {
-                template2 = Data.getTemplate("customisedAccountSummary1stRow", []);
+                template2 = DataHandler.getTemplate("customisedAccountSummary1stRow", []);
                 template1Data.customisedAccountSummaryRow.push(template2);
                 for(j=0; j<fieldsData[i].template2Data.length; j++) {
                     template2Data = fieldsData[i].template2Data[j];
-                    template2 = Data.getTemplate("customisedAccountSummaryRow", []);
+                    template2 = DataHandler.getTemplate("customisedAccountSummaryRow", []);
                     TemplateHelper.updateTemplateText(template2, template2Data);
                     template1Data.customisedAccountSummaryRow.push(template2);
                 }
@@ -1400,26 +1432,31 @@ Account.extend({
             }
         }
         if (fieldsData.length === 0 && !$S.isBooleanTrue(ignoreIfDataNotFound)) {
-            accountSummaryByCalenderFields.push(Data.getTemplate("noDataFound", []));
+            accountSummaryByCalenderFields.push(DataHandler.getTemplate("noDataFound", []));
         }
         return accountSummaryByCalenderFields;
     }
 });
 // getCustomiseAccountSummaryFields
 Account.extend({
-    _getCustomisedAccountSummaryByCalenderFields2: function(Data, customeAccountData, dataByCompany, customYearlyDateSelection) {
+    _getCustomisedAccountSummaryByCalenderFields2: function(customeAccountData, customYearlyDateSelection) {
         var response = [], tempResponse;
         for(var i=0; i<customeAccountData.length; i++) {
-            tempResponse = Account.getAccountSummaryByCalenderFields(Data, customeAccountData[i].accounts, dataByCompany, customYearlyDateSelection);
+            tempResponse = Account.getAccountSummaryByCalenderFields(customeAccountData[i].accounts, customYearlyDateSelection);
             // tempResponse = Account.getCustomisedAccountSummaryByCalenderFields2();
             response.push(tempResponse);
         }
         return response;
     },
-    getCustomiseAccountSummaryFields: function(Data, customeAccountData, dataByCompany, yearlyDateSelection) {
+    getCustomiseAccountSummaryFields: function() {
         var customiseAccountSummaryFields = [];
         var keys = ["customiseDebitAccount", "customiseCreditAccount", "customiseCalenderAccount"];
         var key, tempYearlyDateSelection, i, j, k, tempResponse;
+        var customeAccountData = DataHandler.getData("customeAccountData", []);
+        var yearlyDateSelection = DataHandler.getData("combinedDateSelectionParameter", {})["yearly"];
+        if (!$S.isArray(yearlyDateSelection)) {
+            yearlyDateSelection = [];
+        }
         for(k=yearlyDateSelection.length-1; k>=0; k--) {
             tempYearlyDateSelection = [yearlyDateSelection[k]];
             for(i=0; i<customeAccountData.length; i++) {
@@ -1427,15 +1464,15 @@ Account.extend({
                     key = keys[j];
                     if (customeAccountData[i][key]) {
                         if (key === "customiseDebitAccount") {
-                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection, "Dr", true);
+                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(customeAccountData[i][key], tempYearlyDateSelection, "Dr", true);
                             customiseAccountSummaryFields.push(tempResponse);
                         }
                         if (key === "customiseCreditAccount") {
-                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection, "Cr", true);
+                            tempResponse = Account.getCustomisedAccountSummaryByCalenderFields(customeAccountData[i][key], tempYearlyDateSelection, "Cr", true);
                             customiseAccountSummaryFields.push(tempResponse);
                         }
                         if (key === "customiseCalenderAccount") {
-                            tempResponse = Account._getCustomisedAccountSummaryByCalenderFields2(Data, customeAccountData[i][key], dataByCompany, tempYearlyDateSelection);
+                            tempResponse = Account._getCustomisedAccountSummaryByCalenderFields2(customeAccountData[i][key], tempYearlyDateSelection);
                             customiseAccountSummaryFields.push(tempResponse);
                         }
                     }
@@ -1443,9 +1480,73 @@ Account.extend({
             }
         }
         if (customiseAccountSummaryFields.length === 0) {
-            customiseAccountSummaryFields.push(Data.getTemplate("noDataFound", []));
+            customiseAccountSummaryFields.push(DataHandler.getTemplate("noDataFound", []));
         }
         return customiseAccountSummaryFields;
+    }
+});
+Account.extend({
+    "journal": function(pageName) {
+        return Account.getJournalFields(DataHandler.getData("apiJournalData", []));
+    },
+    "journalbydate": function(pageName) {
+        return Account.getJournalDataByDateFields(DataHandler.getData("apiJournalDataByDate", []));
+    },
+    "ledger": function(pageName) {
+        return Account.getLedgerBookFields();
+    },
+    "currentbal": function(pageName) {
+        return Account.getCurrentBalanceFields();
+    },
+    "trialbalance": function(pageName) {
+        return Account.getTrialBalanceFields();
+    },
+    "currentbalbydate": function(pageName) {
+        return Account.getCurrentBalByDateRowData();
+    },
+    "profitandloss": function(pageName) {
+        return AccountHelper2.getProfitAndLossFields();
+    },
+    "custompage": function(pageName) {
+        return Account.getCustomiseAccountSummaryFields();
+    },
+    "accountsummarybycalander": function(pageName) {
+        var accountData = DataHandler.getData("accounts", []);
+        var yearlyDateSelection = DataHandler.getData("combinedDateSelectionParameter", {})["yearly"];
+        return Account.getAccountSummaryByCalenderFields(accountData, yearlyDateSelection);
+    },
+    "customisedebit": function(pageName) {
+        var customiseDebitAccountData = DataHandler.getData("customiseDebitAccountData", {});
+        var yearlyDateSelection = DataHandler.getData("combinedDateSelectionParameter", {})["yearly"];
+        return Account.getCustomisedAccountSummaryByCalenderFields(customiseDebitAccountData, yearlyDateSelection, "Dr");
+    },
+    "customisecredit": function(pageName) {
+        var customiseCreditAccountData = DataHandler.getData("customiseCreditAccountData", {});
+        var yearlyDateSelection = DataHandler.getData("combinedDateSelectionParameter", {})["yearly"];
+        return Account.getCustomisedAccountSummaryByCalenderFields(customiseCreditAccountData, yearlyDateSelection, "Cr");
+    },
+    "summary": function(pageName) {
+        var accountData, dataByCompany, dateSelectionFields;
+        accountData = DataHandler.getData("accounts", []);
+        dataByCompany = DataHandler.getData("dataByCompany", {});
+        dateSelectionFields = DataHandler.getData("dateSelectionParameter", []);
+        return Account.getAccountSummaryFields(dataByCompany, accountData, dateSelectionFields);
+    },
+    "accountsummarybydate": function(pageName) {
+        return Account.getAccountSummaryByDateFields();
+    }
+});
+Account.extend({
+    getRenderTemplate: function() {
+        var currentPageName = DataHandler.getData("currentPageName", "");
+        var dataLoadStatus = DataHandler.getDataLoadStatus();
+        if (dataLoadStatus !== "completed") {
+            return DataHandler.getTemplate("loading", []);
+        }
+        if (Account[currentPageName] && !DataHandler.isDisabledPage(currentPageName)) {
+            return Account[currentPageName](currentPageName);
+        }
+        return DataHandler.getTemplate("noDataFound");
     }
 });
 AccountHelper = Account;

@@ -3,6 +3,7 @@ import React from 'react';
 import $S from "../../../interface/stack";
 
 import Config from "../../common/Config";
+import DataHandler from "../../common/DataHandler";
 
 class SelectUser extends React.Component {
     constructor(props) {
@@ -10,7 +11,7 @@ class SelectUser extends React.Component {
         this.state = {
             isLoaded: false
         };
-        this.onClick = this.onClick.bind(this);
+        this.onDateOptionClick = this.onDateOptionClick.bind(this);
         this.onReloadClick = this.onReloadClick.bind(this);
         this.onUserChange = this.onUserChange.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
@@ -18,42 +19,51 @@ class SelectUser extends React.Component {
     componentDidMount() {
     }
     onUserChange(e) {
-        this.props.methods.userChange(e.target.value);
+        DataHandler.UserChange(this.props.methods.appStateCallback,
+                this.props.methods.appDataCallback, e.currentTarget.value);
     }
     onPageChange(e) {
+        // This can be put under PageComponentDidMount but render fire first then componentDidMount fire on page change
+        this.props.methods.appDataCallback("renderFieldRow", []);
+
         var pageName = e.target.value;
         var pages = Config.pages;
         if ($S.isString(pages[pageName])) {
             this.props.history.push(pages[pageName]);
         }
     }
-    onClick(e) {
-        this.props.methods.onDateSelectionTypeChange(e.target.value);
+    onDateOptionClick(e) {
+        // this.props.methods.onDateSelectionTypeChange(e.target.value);
+        var value = e.currentTarget.value;
+        if (this.props.data.selectedDateType !== value) {
+            DataHandler.DateSelectionChange(this.props.methods.appStateCallback,
+                this.props.methods.appDataCallback, value);
+        }
     }
     onReloadClick(e) {
-        this.props.methods.userChange(this.props.data.currentUserName);
+        DataHandler.UserChange(this.props.methods.appStateCallback,
+                this.props.methods.appDataCallback, this.props.data.currentUserName);
     }
     render() {
         var self = this;
-        var homeFields = $S.clone(Config.homeFields);
         var isCurrentPageNotFound = true;
         var selectOptions = this.props.data.userControlData.map(function(el, i, arr) {
             return <option key={i} value={el.username}>{el.displayName}</option>
         });
-        var pageOptions = homeFields.map(function(el, i, arr) {
+        var pageOptions = this.props.data.dropdownFields.map(function(el, i, arr) {
             if (el.name === self.props.currentPageName) {
                 isCurrentPageNotFound = false;
             }
             return <option key={i} value={el.name}>{el.toText}</option>
         });
-        var dateSelection = this.props.data.dateSelection.map(function(el, i, arr) {
+        var dateSelection = this.props.data.dateSelectionFields.map(function(el, i, arr) {
             var className = "btn ";
-            if (el.value === self.props.data.dateSelectionType) {
+            if (el.value === self.props.data.selectedDateType) {
                 className += "btn-secondary";
             } else {
                 className += "btn-primary";
             }
-            return <button key={i} type="button" className={className} onClick={self.onClick} value={el.value}>{el.name}</button>;
+            return <button key={i+1} type="button" className={className} onClick={self.onDateOptionClick} value={el.value}>{el.name}</button>;
         });
         var seleUserOptionsDropDown = null;
         if (this.props.data.userControlData.length > 1) {
@@ -79,6 +89,15 @@ class SelectUser extends React.Component {
                     </div>
                 </div></td>;
         }
+        var reloadTextClass = "btn btn-primary";
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+            seleUserOptionsDropDown = null;
+            reloadTextClass += " d-none";
+        }
+        var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];
+        if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0 && dateSelectionRequired.length > 0) {
+            dateSelection = null;
+        }
         var seleUserOptions = <div className="row">
                     <div className="col"><table><tbody><tr>
                         {seleUserOptionsDropDown}
@@ -86,7 +105,7 @@ class SelectUser extends React.Component {
                         <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
                         </div></td>
-                        <td><button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button></td>
+                        <td><button className={reloadTextClass} onClick={this.onReloadClick}>Reload</button></td>
                     </tr></tbody></table></div>
             </div>;
         return (seleUserOptions);

@@ -1,6 +1,7 @@
 import $S from '../../interface/stack.js';
 import TemplateHelper from '../../common/TemplateHelper';
 import AccountHelper from './AccountHelper';
+import DataHandler from './DataHandler';
 
 var AccountHelper2;
 
@@ -21,7 +22,8 @@ Account.fn = Account.prototype = {
 $S.extendObject(Account);
 
 Account.extend({
-    getCustomAccountsData: function(currentUserControlData, accountData, key, response) {
+    getCustomAccountsData: function(currentUserControlData, key, response) {
+        var accountData = DataHandler.getMetaDataAccounts();
         var i,j;
         var tempData, customData;
         if (!$S.isArray(response)) {
@@ -38,7 +40,7 @@ Account.extend({
                     temp = {};
                     if ($S.isObject(currentUserControlData[key][i])) {
                         for(var key2 in currentUserControlData[key][i]) {
-                            temp[key2] = Account.getCustomAccountsData(currentUserControlData[key][i], accountData, key2, []);
+                            temp[key2] = Account.getCustomAccountsData(currentUserControlData[key][i], key2, []);
                         }
                     }
                     finalResponse.push(temp);
@@ -137,7 +139,7 @@ Account.extend({
         }
         return response;
     },
-    _getProfitAndLossData: function(Data, year, dataByCompany, revenueConfig, cogsConfig, expenseConfig) {
+    _getProfitAndLossData: function(year, dataByCompany, revenueConfig, cogsConfig, expenseConfig) {
         var response = {"revenue": [], "costOfSales": [], "expense": [], "grossMargin": {}, "totalProfit": {}};
         var revenueAccounts = [], cogsAccounts = [], expenseAccounts = [];
         var revenueConfigAccount = $S.isArray(revenueConfig.accounts) ? revenueConfig.accounts : null;
@@ -146,7 +148,7 @@ Account.extend({
         var cogsConfigAccountExcept = $S.isArray(cogsConfig.accountsExcept) ? cogsConfig.accountsExcept : null;
         var expenseConfigAccount = $S.isArray(expenseConfig.accounts) ? expenseConfig.accounts : null;
         var expenseConfigAccountExcept = $S.isArray(expenseConfig.accountsExcept) ? expenseConfig.accountsExcept : null;
-        var accountData = Data.getData("accountData", []);
+        var accountData = DataHandler.getMetaDataAccounts();;
         var revenueTotalRowHeading = "Total sales";
         if ($S.isString(revenueConfig.totalRowHeading)) {
             revenueTotalRowHeading = revenueConfig.totalRowHeading;
@@ -236,12 +238,18 @@ Account.extend({
         }
         return response;
     },
-    getProfitAndLossFields: function(Data, dataByCompany, yearlyDateSelection, financialStatementConfig) {
+    getProfitAndLossFields: function() {
         var profitAndLossFields = [], fieldsData, year;
         var revenueConfig = {}, cogsConfig = {}, expenseConfig = {};
         var incomeHeading = "Income", grossMarginHeading = "Gross Margin", totalProfitHeading = "Total profit (loss)";
         var expenseConfigHeading = "Expenses", cogsConfigHeading = "Cost of Goods Sold";
         var revenueConfigHeading = "Revenue";
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var yearlyDateSelection = DataHandler.getData("combinedDateSelectionParameter", {})["yearly"];
+        if (!$S.isArray(yearlyDateSelection)) {
+            yearlyDateSelection = [];
+        }
+        var financialStatementConfig = DataHandler.getFinancialStatementConfigFromUserData();
         if ($S.isObject(financialStatementConfig)) {
             if ($S.isString(financialStatementConfig.incomeHeading)) {
                 incomeHeading = financialStatementConfig.incomeHeading;
@@ -283,42 +291,42 @@ Account.extend({
         });
         for(i=yearlyDateSelection.length-1; i>=0; i--) {
             year = yearlyDateSelection[i].dateHeading;
-            fieldsData = Account._getProfitAndLossData(Data, year, dataByCompany, revenueConfig, cogsConfig, expenseConfig);
+            fieldsData = Account._getProfitAndLossData(year, dataByCompany, revenueConfig, cogsConfig, expenseConfig);
 
-            template1 = Data.getTemplate("profitandloss", []);
+            template1 = DataHandler.getTemplate("profitandloss", []);
             template1Data = {"profitandlossRow": []};
 
-            template2 = Data.getTemplate("profitandloss1stRow", []);
+            template2 = DataHandler.getTemplate("profitandloss1stRow", []);
             template2Data = {"heading1": year};
             TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
-            template2 = Data.getTemplate("profitandlossRow", []);
+            template2 = DataHandler.getTemplate("profitandlossRow", []);
             template2Data = {"heading1": incomeHeading};
             TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
-            template2 = Data.getTemplate("profitandlossRow", []);
+            template2 = DataHandler.getTemplate("profitandlossRow", []);
             template2Data = {"heading2": revenueConfigHeading};
             TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.revenue)) {
                 for (j=0; j<fieldsData.revenue.length; j++) {
-                    template2 = Data.getTemplate("profitandlossRow", []);
+                    template2 = DataHandler.getTemplate("profitandlossRow", []);
                     TemplateHelper.updateTemplateText(template2, fieldsData.revenue[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
             }
 
-            template2 = Data.getTemplate("profitandlossRow", []);
+            template2 = DataHandler.getTemplate("profitandlossRow", []);
             template2Data = {"heading2": cogsConfigHeading};
             TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.costOfSales)) {
                 for (j=0; j<fieldsData.costOfSales.length; j++) {
-                    template2 = Data.getTemplate("profitandlossRow", []);
+                    template2 = DataHandler.getTemplate("profitandlossRow", []);
                     TemplateHelper.updateTemplateText(template2, fieldsData.costOfSales[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
@@ -326,27 +334,27 @@ Account.extend({
 
             if ($S.isObject(fieldsData.grossMargin)) {
                 fieldsData.grossMargin["heading2"] = grossMarginHeading;
-                template2 = Data.getTemplate("profitandlossRow", []);
+                template2 = DataHandler.getTemplate("profitandlossRow", []);
                 fieldsData.grossMargin = AccountHelper.correctSignV2(fieldsData.grossMargin, signCorrectionKeys);
                 TemplateHelper.updateTemplateText(template2, AccountHelper.makeTextBold(fieldsData.grossMargin, "text-danger"));
                 template1Data.profitandlossRow.push(template2);
             }
 
-            template2 = Data.getTemplate("profitandlossRow", []);
+            template2 = DataHandler.getTemplate("profitandlossRow", []);
             template2Data = {"heading1": expenseConfigHeading};
             TemplateHelper.updateTemplateText(template2, template2Data);
             template1Data.profitandlossRow.push(template2);
 
             if ($S.isArray(fieldsData.expense)) {
                 for (j=0; j<fieldsData.expense.length; j++) {
-                    template2 = Data.getTemplate("profitandlossRow", []);
+                    template2 = DataHandler.getTemplate("profitandlossRow", []);
                     TemplateHelper.updateTemplateText(template2, fieldsData.expense[j]);
                     template1Data.profitandlossRow.push(template2);
                 }
             }
             if ($S.isObject(fieldsData.totalProfit)) {
                 fieldsData.totalProfit["heading2"] = totalProfitHeading;
-                template2 = Data.getTemplate("profitandlossRow", []);
+                template2 = DataHandler.getTemplate("profitandlossRow", []);
                 fieldsData.totalProfit = AccountHelper.correctSignV2(fieldsData.totalProfit, signCorrectionKeys);
                 TemplateHelper.updateTemplateText(template2, AccountHelper.makeTextBold(fieldsData.totalProfit, "text-danger"));
                 template1Data.profitandlossRow.push(template2);
@@ -355,7 +363,7 @@ Account.extend({
             profitAndLossFields.push(template1);
         }
         if (profitAndLossFields.length === 0) {
-            profitAndLossFields.push(Data.getTemplate("noDataFound", {}));
+            profitAndLossFields.push(DataHandler.getTemplate("noDataFound", {}));
         }
         return profitAndLossFields;
     }

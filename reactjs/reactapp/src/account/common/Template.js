@@ -4,8 +4,14 @@ var Template = {
         "text": {
             "tag": "span",
             "className": "badge badge-primary",
-            "name": "date",
             "text": "Page not found"
+        }
+    }],
+    "loading": [{
+        "tag": "center.h1",
+        "text": {
+            "tag": "span",
+            "text": "Loading..."
         }
     }],
     "noDataFound": [
@@ -31,12 +37,15 @@ var Template = {
         },
         {
             "tag": "div",
-            "text": {
-                "tag": "table.tbody",
-                "name": "journalEntryTable",
-                "className": "table-bordered table-striped",
-                "text": []
-            }
+            "name": "journalEntryTable"
+        }
+    ],
+    "journal": [
+        {
+            "tag": "table.tbody",
+            "className": "table-bordered table-striped",
+            "name": "journalEntryTr",
+            "text": []
         }
     ],
     "journalEntry1stRow": [
