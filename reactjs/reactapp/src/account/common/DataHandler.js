@@ -208,6 +208,9 @@ DataHandler.extend({
         if (this.isDisabledPage(pageName)) {
             return pageHeading;
         }
+        if ($S.isString(Config.pages[pageName]) && Config.pages[pageName].length > 0) {
+            pageHeading = $S.capitalize(pageName.trim());
+        }
         var dropdownFields = DataHandler.getData("dropdownFields", []);
         for (var i = 0; i < dropdownFields.length; i++) {
             if (dropdownFields[i].name === pageName) {
