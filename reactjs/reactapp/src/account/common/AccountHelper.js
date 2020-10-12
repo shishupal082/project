@@ -930,14 +930,15 @@ Account.extend({
 Account.extend({
     getJournalFields: function(journalData) {
         var journalRowData = [], i, j, k, count = 1, templateData;
-        var template = DataHandler.getTemplate("journalEntry1stRow", null);
-        if (template) {
-            journalRowData.push(template);
-        }
+        var firstRowTemplate = DataHandler.getTemplate("journalEntry1stRow", null);;
+        var template;
         var entry = [], particularFieldTemplate = {}, temp;
         for (i = 0; i < journalData.length; i++) {
             if ($S.isArray(journalData[i].entry)) {
                 for (j = 0; j < journalData[i].entry.length; j++) {
+                    if (i===0 && j===0 && firstRowTemplate !== null) {
+                        journalRowData.push(firstRowTemplate);
+                    }
                     entry = journalData[i].entry[j];
                     entry["s.no"] = count++;
                     template = DataHandler.getTemplate("journalEntry", null);

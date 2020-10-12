@@ -92,6 +92,7 @@ class SelectUser extends React.Component {
         var reloadTextClass = "btn btn-primary";
         if (this.props.data.firstTimeDataLoadStatus !== "completed") {
             seleUserOptionsDropDown = null;
+            dateSelection = null;
             reloadTextClass += " d-none";
         }
         var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];

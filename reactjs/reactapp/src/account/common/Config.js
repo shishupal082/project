@@ -53,6 +53,13 @@ Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = ["journalbydate", "currentbalbydate", "summary", "accountsummarybydate"];
 Config.pages = pages;
+Config.defaultPageFields = [];
+
+for(var key in pages) {
+    if (key !== "home") {
+        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
+    }
+}
 
 // Config.homeFields = [
 //     {"name": "journalbydate", "toText": "Journal By Date"},
@@ -95,12 +102,12 @@ Config.pages = pages;
 // };
 
 
-// Config.dateSelection = [
-//     {"name": "Daily", "value": "daily"},
-//     {"name": "Monthly", "value": "monthly"},
-//     {"name": "Yearly", "value": "yearly"},
-//     {"name": "All", "value": "all"}
-// ];
+Config.dateSelection = [
+    {"name": "Daily", "value": "daily"},
+    {"name": "Monthly", "value": "monthly"},
+    {"name": "Yearly", "value": "yearly"},
+    {"name": "All", "value": "all"}
+];
 
 // Config.defaultDateSelectionType = "all";
 

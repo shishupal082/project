@@ -136,6 +136,10 @@ class App extends React.Component {
         //     noMatchFields: Data.getTemplate("noPageFound"),
         //     pageTracking: []
         // };
+        var dateSelection = Config.dateSelection;
+        if (!$S.isArray(dateSelection)) {
+            dateSelection = [];
+        }
         this.appData = {
             "firstTimeDataLoadStatus": "",
             "dataLoadStatus": "",
@@ -156,7 +160,7 @@ class App extends React.Component {
             "errorsData": [],
 
             "selectedDateType": "",
-            "dateSelectionFields": []
+            "dateSelectionFields": dateSelection
         };
 
         this.appStateCallback = this.appStateCallback.bind(this);

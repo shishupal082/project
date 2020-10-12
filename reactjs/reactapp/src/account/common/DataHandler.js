@@ -28,7 +28,6 @@ keys.push("dataByCompany");
 keys.push("dateSelectionParameter");
 keys.push("combinedDateSelectionParameter");
 keys.push("selectedDateType");
-keys.push("dateSelectionFields");
 keys.push("dropdownFields");
 keys.push("accounts");
 
@@ -104,11 +103,11 @@ DataHandler.extend({
     initData: function() {
         var defaultData, allData = CurrentData.getAllData();
         for (var i = 0; i < keys.length; i++) {
-            if (["userControlData", "accountTemplate",
+            if (["userControlData", "accountTemplate", "errorsData",
                 "currentUserName", "currentPageName", "selectedDateType",
                 "firstTimeDataLoadStatus", "appControlDataLoadStatus", "metaDataLoadStatus",
                 "journalDataCsvLoadStatus", "journalDataJsonLoadStatus", "templateDataLoadStatus",
-                "dropdownFields","dateSelectionFields"].indexOf(keys[i]) >= 0) {
+                "dropdownFields"].indexOf(keys[i]) >= 0) {
                 continue;
             }
             defaultData = [];
@@ -170,13 +169,6 @@ DataHandler.extend({
         }
         return [];
     },
-    getMetaDataDateSelection: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        if ($S.isObject(metaData) && $S.isArray(metaData.dateSelection)) {
-            return metaData.dateSelection;
-        }
-        return [];
-    },
     getMetaDataDropdownFields: function() {
         var metaData = DataHandler.getData("metaData", {});
         var dropdownFields = [];
@@ -187,6 +179,9 @@ DataHandler.extend({
                     dropdownFields.push(metaData.dropdownFields[i]);
                 }
             }
+        }
+        if (dropdownFields.length < 1) {
+            dropdownFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
         }
         return dropdownFields;
     },
@@ -200,6 +195,9 @@ DataHandler.extend({
                     homeFields.push(metaData.homeFields[i]);
                 }
             }
+        }
+        if (homeFields.length < 1) {
+            homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
         }
         return homeFields;
     },
@@ -251,13 +249,16 @@ DataHandler.extend({
                         DataHandler.setData("selectedDateType", response[0].dateSelectionType);
                     }
                 } else {
-                    DataHandler.addDataInArray({"text":ajax.url, "href":ajax.url});
+                    DataHandler.addDataInArray("errorsData", {"text":ajax.url, "href":ajax.url});
                     $S.log("Invalid response (userControlDataApi):" + response);
                 }
+            } else {
+                DataHandler.addDataInArray("errorsData", {"text":ajax.url, "href":ajax.url});
+                $S.log("Invalid response (userControlDataApi):" + response);
             }
         }, function() {
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.OnUserChange(appStateCallback, appDataCallback, true);
+            DataHandler.OnUserChange(appStateCallback, appDataCallback, false);
         }, null, Api.getAjaxApiCallMethod());
     },
     PageComponentMount: function(appStateCallback, appDataCallback, pageName) {
@@ -273,7 +274,7 @@ DataHandler.extend({
     },
     UserChange: function(appStateCallback, appDataCallback, username) {
         DataHandler.setData("currentUserName", username);
-        DataHandler.OnUserChange(appStateCallback, appDataCallback, false);
+        DataHandler.OnUserChange(appStateCallback, appDataCallback, true);
     },
     FireRender: function(appStateCallback, appDataCallback) {
         var currentUserName = DataHandler.getData("currentUserName", "");
@@ -283,7 +284,6 @@ DataHandler.extend({
         appDataCallback("userControlData", DataHandler.getData("userControlData", []));
         appDataCallback("companyName", companyName);
         appDataCallback("pageHeading", DataHandler.getMetaDataPageHeading(currentPageName));
-        appDataCallback("dateSelectionFields", DataHandler.getData("dateSelectionFields", []));
         appDataCallback("homeFields", DataHandler.getMetaDataHomeFields());
         appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
         appDataCallback("currentUserName", currentUserName);
@@ -304,7 +304,7 @@ DataHandler.extend({
 
 DataHandler.extend({
     OnUserChange: function(appStateCallback, appDataCallback, flushError) {
-        if (!$S.isBooleanTrue(false)) {
+        if ($S.isBooleanTrue(flushError)) {
             DataHandler.setData("errorsData", []);
         }
         // clear all data in appData
@@ -314,10 +314,10 @@ DataHandler.extend({
         for(var i=0; i<userControlData.length; i++) {
             if (userControlData[i].username === currentUserName) {
                 DataHandler.setData("currentUserControlData", userControlData[i]);
-                DataHandler.loadCurrentUserData(appStateCallback, appDataCallback);
                 break;
             }
         }
+        DataHandler.loadCurrentUserData(appStateCallback, appDataCallback);
         DataHandler.FireRender(appStateCallback, appDataCallback);
     }
 });
@@ -514,7 +514,6 @@ DataHandler.extend({
         DataHandler.setData("finalJournalData", finalJournalData);
 
         DataHandler.setData("availableDataPageName", "");
-        DataHandler.setData("dateSelectionFields", DataHandler.getMetaDataDateSelection());
         DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
         DataHandler.setData("accounts", DataHandler.getMetaDataAccounts());
 

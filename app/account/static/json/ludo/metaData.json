@@ -1,0 +1,44 @@
+{
+    "accounts": [
+        {
+            "accountName": "coin"
+        },
+        {
+            "accountName": "purchase"
+        },
+        {
+            "accountName": "capital",
+            "accountDisplayName": "Capital Account"
+        },
+        {
+            "accountName": "7upwin"
+        },
+        {
+            "accountName": "computerwin"
+        },
+        {
+            "accountName": "pwin"
+        },
+        {
+            "accountName": "ploan"
+        },
+        {
+            "accountName": "win"
+        },
+        {
+            "accountName": "loss"
+        },
+        {
+            "accountName": "spin"
+        },
+        {
+            "accountName": "gift"
+        },
+        {
+            "accountName": "bonus"
+        },
+        {
+            "accountName": "unknown"
+        }
+    ]
+}

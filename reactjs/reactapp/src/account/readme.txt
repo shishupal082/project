@@ -4,7 +4,7 @@ dateSelection list recreate on
         - All date range calculated from finalJournalData
 
 Error component
-    - Flush error on user change
+    - Flush error on user change frop dropdown
 
 Error available:
     - 1) Error in api (href)

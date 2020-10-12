@@ -1,0 +1,164 @@
+[
+    {
+        "username": "test",
+        "companyname": "Test company",
+        "displayName": "Test",
+        "dateSelectionType": "daily",
+        "accountTemplateApi": ["/app/account/static/json/accountTemplate.json"],
+        "metaDataApi": ["/app/account/static/json/metaData.json"],
+        "journalDataApi": ["/app/account/static/json/test/testJournalData.json"]
+    },
+    {
+        "username": "trading",
+        "companyname": "Accountal Trading",
+        "displayName": "Trading",
+        "dateSelectionType": "monthly",
+        "metaDataApi": ["/web-app/Account/web-app/static/json/trading/metaData.json"],
+        "journalDataApiCSV": [
+            "/web-app/Account/web-app/static/json/trading/data-2020.csv"
+        ],
+        "customiseDebitAccount": [
+            {
+                "heading": "Expense",
+                "accountNames": ["purchase", "transport", "staff-expense"]
+            },
+            {
+                "heading": "Expense",
+                "accountNames": ["misc", "staff-salary"]
+            },
+            {
+                "heading": "Debit (other)",
+                "accountNamesExcept": ["purchase", "transport", "misc", "staff-salary", "staff-expense"]
+            }
+        ],
+        "customiseCreditAccount": [
+            {
+                "heading": "Income",
+                "accountNames": ["sales"]
+            },
+            {
+                "heading": "Credit (Other)",
+                "accountNamesExcept": ["sales"]
+            }
+        ],
+        "customiseCalenderAccount": [
+            {
+                "heading": "Custom Calender Data",
+                "accountNames": ["bank", "salary"]
+            }
+        ],
+        "customeAccount": [
+            {
+                "customiseDebitAccount": [
+                    {
+                        "heading": "Purchase expense Debit",
+                        "accountNames": ["purchase", "transport", "staff-expense"]
+                    },
+                    {
+                        "heading": "Other expense Debit",
+                        "accountNames": ["misc", "staff-salary"]
+                    }
+                ],
+                "customiseCreditAccount": [
+                    {
+                        "heading": "Sales earning Credit",
+                        "accountNames": ["sales"]
+                    }
+                ],
+                "customiseCalenderAccount": [
+                    {
+                        "heading": "Calender data",
+                        "accountNames": ["bank", "cash"]
+                    }
+                ]
+            }
+        ],
+        "financialStatementConfig": {
+            "incomeHeading": "Income",
+            "grossMarginHeading": "Gross Margin",
+            "totalProfitHeading": " Total profit (loss)",
+            "categories": {
+                "revenue": {
+                    "heading": "Revenue",
+                    "totalRowHeading": "Total sales",
+                    "accounts": ["sales"]
+                },
+                "cogs": {
+                    "heading": "Cost of Goods Sold",
+                    "totalRowHeading": "Total cost of sales",
+                    "accounts": ["purchase", "staff-expense", "transport"]
+                },
+                "expense": {
+                    "heading": "Expense",
+                    "totalRowHeading": "Total cost of sales",
+                    "accounts": ["staff-salary", "misc"]
+                }
+            }
+        }
+    },
+    {
+        "username": "accountal",
+        "companyname": "Accountal",
+        "displayName": "Accountal",
+        "dateSelectionType": "monthly",
+        "metaDataApi": ["/pvt/app-data/account/accountal/metaData.json"],
+        "journalDataApiCSV": [
+            "/pvt/app-data/account/accountal/data-2020.csv"
+        ]
+    },
+    {
+        "username": "ludo",
+        "companyname": "Ludo accounting",
+        "displayName": "Ludo King",
+        "dateSelectionType": "daily",
+        "metaDataApi": ["/app/account/static/json/ludo/metaData.json"],
+        "journalDataApi": [
+            "/app/account/static/json/ludo/ludo-journal-05-31.json",
+            "/app/account/static/json/ludo/ludo-journal-05-30.json",
+            "/pvt/app-data/account/ludo/journalData3-2.json",
+            "/pvt/app-data/account/ludo/journalData3.json"
+        ],
+        "journalDataApiCSV": [
+            "/app/account/static/json/ludo/csv/2020-06-03.csv",
+            "/pvt/app-data/account/ludo/2020-06-03.csv"
+        ],
+        "customiseDebitAccount": [
+            {
+                "heading": "Debit Custom",
+                "accountNames": ["loss", "7upwin"]
+            },
+            {
+                "heading": "Debit Custom",
+                "accountNames": ["7upwin"]
+            }
+        ],
+        "customiseCreditAccount": [
+            {
+                "heading": "Credit Custom",
+                "accountNames": ["win", "7upwin", "gift", "spin"]
+            }
+        ],
+        "customiseCalenderAccount": [
+            {
+                "heading": "Custom Calender Data",
+                "accountNames": ["coin"]
+            }
+        ]
+    },
+    {
+        "username": "basic",
+        "companyname": "M/S Startup",
+        "displayName": "Basic Accounting",
+        "dateSelectionType": "yearly",
+        "metaDataApi": ["/app/account/static/json/metaData.json"],
+        "journalDataApi": ["/pvt/app-data/account/journalData2.json"]
+    },
+    {
+        "username": "basic1",
+        "companyname": "M/S Startup",
+        "displayName": "Basic Accounting Example 1",
+        "dateSelectionType": "monthly",
+        "metaDataApi": ["/app/account/static/json/metaData.json"],
+        "journalDataApi": ["/pvt/app-data/account/journalData.json"]
+    }
+]
