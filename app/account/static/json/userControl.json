@@ -92,7 +92,6 @@
         "companyname": "Test company",
         "displayName": "Test",
         "dateSelectionType": "daily",
-        "accountTemplateApi": ["/app/account/static/json/accountTemplate.json"],
         "accountDataApi": ["/app/account/static/json/accounts.json"],
         "journalDataApi": ["/app/account/static/json/test/testJournalData.json"]
     },

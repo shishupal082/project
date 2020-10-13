@@ -21,7 +21,6 @@ var keys = ["userControlData", "apiJournalData",
             "customiseDebitAccountData", "customiseCreditAccountData", "customeAccountData",
             "customiseCalenderAccountData"];
 
-keys.push("accountTemplate");
 keys.push("metaData");
 keys.push("dataByCompany");
 
@@ -34,7 +33,6 @@ keys.push("accounts");
 
 keys.push("firstTimeDataLoadStatus");
 keys.push("appControlDataLoadStatus");
-keys.push("templateDataLoadStatus");
 keys.push("metaDataLoadStatus");
 keys.push("journalDataCsvLoadStatus");
 keys.push("journalDataJsonLoadStatus");
@@ -48,7 +46,6 @@ keys.push("availableDataPageName");
 
 CurrentData.setKeys(keys);
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
-CurrentData.setData("journalDataCsvLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 
 
@@ -103,10 +100,10 @@ DataHandler.extend({
     initData: function() {
         var defaultData, allData = CurrentData.getAllData();
         for (var i = 0; i < keys.length; i++) {
-            if (["userControlData", "accountTemplate", "errorsData",
+            if (["userControlData", "errorsData",
                 "currentUserName", "currentPageName", "selectedDateType",
                 "firstTimeDataLoadStatus", "appControlDataLoadStatus", "metaDataLoadStatus",
-                "journalDataCsvLoadStatus", "journalDataJsonLoadStatus", "templateDataLoadStatus",
+                "journalDataCsvLoadStatus", "journalDataJsonLoadStatus",
                 "dropdownFields"].indexOf(keys[i]) >= 0) {
                 continue;
             }
@@ -126,7 +123,6 @@ DataHandler.extend({
         dataLoadStatus.push(DataHandler.getData("metaDataLoadStatus", ""));
         dataLoadStatus.push(DataHandler.getData("journalDataCsvLoadStatus", ""));
         dataLoadStatus.push(DataHandler.getData("journalDataJsonLoadStatus", ""));
-        dataLoadStatus.push(DataHandler.getData("templateDataLoadStatus", ""));
         for (var i = 0; i < dataLoadStatus.length; i++) {
             if (dataLoadStatus[i] !== "completed") {
                 return "";
@@ -293,11 +289,6 @@ DataHandler.extend({
         appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
         appDataCallback("dataLoadStatus", dataLoadStatus);
         appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
-        var reloadText = "Reload";
-        if (dataLoadStatus !== "completed") {
-            reloadText = "Loading...";
-        }
-        appDataCallback("reloadText", reloadText);
         appStateCallback();
     }
 });
@@ -345,31 +336,12 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadCurrentUserData: function(appStateCallback, appDataCallback) {
-        DataHandler.setData("templateDataLoadStatus", "in-progress");
         DataHandler.setData("metaDataLoadStatus", "in-progress");
         DataHandler.setData("journalDataCsvLoadStatus", "in-progress");
         DataHandler.setData("journalDataJsonLoadStatus", "in-progress");
-        var templateDataApi = DataHandler.getApisFromUserData("accountTemplateApi");
         var metaDataApi = DataHandler.getApisFromUserData("metaDataApi");
         var journalDataCsvApi = DataHandler.getApisFromUserData("journalDataApiCSV");
         var journalDataJsonApi = DataHandler.getApisFromUserData("journalDataApi");
-        if (templateDataApi.length > 0) {
-            var accountTemplate = {};
-            $S.loadJsonData(null, templateDataApi, function(response, apiName, ajaxDetails) {
-                if ($S.isObject(response)) {
-                    Object.assign(accountTemplate, response);
-                } else {
-                    DataHandler.addDataInArray("errorsData", {"text":ajaxDetails.url, "href":ajaxDetails.url});
-                    $S.log("Invalid response (accountTemplate):" + response);
-                }
-            }, function() {
-                DataHandler.setData("templateDataLoadStatus", "completed");
-                DataHandler.setData("accountTemplate", accountTemplate);
-                DataHandler.dataLoadComplete(appStateCallback, appDataCallback);
-            }, null, Api.getAjaxApiCallMethod());
-        } else {
-            DataHandler.setData("templateDataLoadStatus", "completed");
-        }
         if (metaDataApi.length > 0) {
             $S.loadJsonData(null, metaDataApi, function(response, apiName, ajaxDetails) {
                 if ($S.isObject(response)) {

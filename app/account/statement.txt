@@ -1,3 +1,9 @@
+Accounting equation
+
+C+L = A
+(Capital + Liabilities = Assets)
+
+
 1) Purchase 10T wheat of Rs 200000 from Mr-A
 2) Sold it at 250000 to MS-X
 3) Transportation cost 25k(from bank) + 2k (cash) driver cost
@@ -103,8 +109,8 @@ Libilities (+) Sohan Cr     = Assets (+) Cash Dr
 12)
 Purchase furniture from deepak for Rs 5000 on credit
 
-C + L = A
-        Fuurniture (+) Dr
+C        +       L = A
+                     Fuurniture (+) Dr
 Deepak (Cr)
 
 13) Paid salary rs 24000 by cash

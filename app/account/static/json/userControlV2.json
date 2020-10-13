@@ -4,7 +4,6 @@
         "companyname": "Test company",
         "displayName": "Test",
         "dateSelectionType": "daily",
-        "accountTemplateApi": ["/app/account/static/json/accountTemplate.json"],
         "metaDataApi": ["/app/account/static/json/metaData.json"],
         "journalDataApi": ["/app/account/static/json/test/testJournalData.json"]
     },

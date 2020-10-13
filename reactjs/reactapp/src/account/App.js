@@ -145,7 +145,6 @@ class App extends React.Component {
             "dataLoadStatus": "",
             "backIconUrl": Config.backIconUrl,
             "pages": pages,
-            "reloadText": "Reload",
 
             "userControlData": [],
             "currentUserName": "",
