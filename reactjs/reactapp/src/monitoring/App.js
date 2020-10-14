@@ -19,11 +19,16 @@ class App extends React.Component {
         this.state = {
             isLoaded: false
         };
+        var dateSelection = Config.dateSelection;
+        if (!$S.isArray(dateSelection)) {
+            dateSelection = [];
+        }
         this.appData = {
+            "firstTimeDataLoadStatus": "",
             "homeUrl": pages.home,
-            "section": "",
+            "sectionsData": [],
+            "currentSectionId": "",
             "sectionName": "Loading...",
-            "availableSection": [],
 
             "pageName": "",
             "pageHeading": "",
@@ -35,14 +40,16 @@ class App extends React.Component {
             "errorsData": [],
 
             "selectedDateType": "",
-            "dateSelection": []
+            "dateSelection": dateSelection
         };
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.addTab = this.addTab.bind(this);
         this.removeTab = this.removeTab.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
-    appStateCallback(stateData) {
+    appStateCallback() {
+        $S.log("App:appStateCallback");
         this.setState({isLoaded: true});
     }
     appDataCallback(name, data) {
@@ -68,6 +75,12 @@ class App extends React.Component {
         }
         this.appData.pageTab.push(pageName);
     }
+    onClick(e) {
+        if (e.currentTarget.value === "reload") {
+            DataHandler.OnSectionChange(this.appStateCallback,
+                this.appDataCallback, this.appData.currentSectionId);
+        }
+    }
     render() {
         var methods = {appDataCallback: this.appDataCallback,
                         appStateCallback: this.appStateCallback,
@@ -75,41 +88,27 @@ class App extends React.Component {
                         removeTab: this.removeTab,
                     };
         
-        var commonData = {};
-        commonData["homeUrl"] = this.appData["homeUrl"];
-        commonData["pageName"] = this.appData["pageName"];
-        commonData["pageHeading"] = this.appData["pageHeading"];
-        commonData["pageTab"] = this.appData["pageTab"];
+        var commonData = this.appData;
 
-        commonData["section"] = this.appData["section"];
-        commonData["sectionName"] = this.appData["sectionName"];
-        commonData["availableSection"] = this.appData["availableSection"];
+        const entry = (props) => (<AppComponent {...props} onClick={this.onClick} state={this.state} data={commonData} methods={methods}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entry}/>);
 
-        commonData["dropdownFields"] = this.appData["dropdownFields"];
-        commonData["errorsData"] = this.appData["errorsData"];
-
-        commonData["selectedDateType"] = this.appData["selectedDateType"];
-        commonData["dateSelection"] = this.appData["dateSelection"];
-
-        const entry = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="entry"/>);
-
-        const entrybydate = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="entrybydate"/>);
+        const entrybydate = (props) => (<AppComponent {...props} onClick={this.onClick} state={this.state} data={commonData} methods={methods}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydate}/>);
         
         const entrybytype = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="entrybytype"/>);
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybytype}/>);
         
         const entrybystation = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="entrybystation"/>);
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybystation}/>);
         
         const entrybydevice = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="entrybydevice"/>);
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydevice}/>);
         
         const summary = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="summary"/>);
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.summary}/>);
         const noMatch = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName="noMatch"/>);
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
 
         return (<BrowserRouter>
             <Switch>

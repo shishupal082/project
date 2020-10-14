@@ -55,15 +55,16 @@ TemplateHandler.extend({
         if (!$S.isArray(data) || data.length < 1) {
             return TemplateHandler.getTemplate("noDataFound");
         }
-        var renderField = [];
-        for (var i = 0; i < data.length; i++) {
+        var renderField = [], sNo=0;
+        for (var i = data.length-1; i >=0 ; i--) {
             var template = TemplateHandler.getTemplate(pageName);
             TemplateHelper.setTemplateAttr(template, "date", "text", data[i].dateHeading);
             if (data[i].items) {
                 var rowTemplate = TemplateHandler.getTemplate("entry.data.firstRow");
                 TemplateHelper.addItemInTextArray(template, "entrybydate.data", rowTemplate);
-                for (var j = 0; j < data[i]["items"].length; j++) {
-                    data[i]["items"][j]["s.no."] = j+1;
+                sNo = 1;
+                for (var j = data[i]["items"].length-1; j >= 0; j--) {
+                    data[i]["items"][j]["s.no."] = sNo++;
                     rowTemplate = TemplateHandler.getTemplate("entry.data");
                     TemplateHelper.updateTemplateText(rowTemplate, data[i]["items"][j]);
                     TemplateHelper.addItemInTextArray(template, "entrybydate.data", rowTemplate);

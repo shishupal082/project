@@ -21,12 +21,15 @@ class Heading extends React.Component {
             goBackLink = <a href={this.props.data.homeUrl} onClick={this.goBack}><h6>Go Back</h6></a>;
             selectFilter = <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>;
         }
-        return (<div className="heading">
-                <div className="container">
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+            goBackLink = null;
+        }
+        return (<div className="heading-section">
+                <div className="container section">
                     <div className="position-absolute">{goBackLink}</div>
                     <center><h1>{this.props.data.sectionName}</h1></center>
                 </div>
-                <div><center><h3>{pageHeading}</h3></center></div>
+                <div className="page"><center><h3>{pageHeading}</h3></center></div>
                 {selectFilter}
             </div>);
     }

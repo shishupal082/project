@@ -2,75 +2,22 @@
     "sections": [
         {
             "id": "section-1",
-            "text": "Section 1 Name",
+            "name": "Section 1 Name",
             "defaultDateSelectionType": "monthly",
-            "dataApi": [
+            "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
+            "csvDataApis": [
                 "/app/monitoring/static/data/list-1.csv",
                 "/app/monitoring/static/data/list-2.csv"
             ]
         },
         {
             "id": "section-2",
-            "text": "Section 2 Name",
+            "name": "Section 2 Name",
             "defaultDateSelectionType": "all",
-            "dataApi": [
+            "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
+            "csvDataApis": [
                 "/app/monitoring/static/data/list-1.csv"
             ]
         }
-    ],
-    "monitoring-types": [
-        {
-            "id": "failure",
-            "name": "FAILURE"
-        },
-        {
-            "id": "maintanance",
-            "name": "MAINTANANCE"
-        }
-    ],
-    "stations": [
-        {
-            "id": "stn-1",
-            "name": "Station 1"
-        }
-    ],
-    "devices": [
-        {
-            "id": "device-1",
-            "name": "Device 1"
-        }
-    ],
-    "dateSelection": [
-        {"name": "Daily", "value": "daily"},
-        {"name": "Monthly", "value": "monthly"},
-        {"name": "Yearly", "value": "yearly"},
-        {"name": "All", "value": "all"}
-    ],
-    "pageHeading": {
-        "home": "",
-        "entry": "Entry",
-        "entrybydate": "Entry by Date",
-        "entrybytype": "Entry by Type",
-        "entrybystation": "Entry by Station",
-        "entrybydevice": "Entry by Device",
-        "summary": "Account Summary",
-        "noMatch": "Page Not Found"
-    },
-    "homeFields": [
-        {"name": "entry", "linkText": "Entry"},
-        {"name": "entrybydate", "linkText": "Entry by Date"},
-        {"name": "entrybytype", "linkText": "Entry by Type"},
-        {"name": "entrybystation", "linkText": "Entry by Station"},
-        {"name": "entrybydevice", "linkText": "Entry by Device"},
-        {"name": "summary", "linkText": "Summary"}
-    ],
-    "dropdownFields": [
-        {"name": "home", "linkText": "Home"},
-        {"name": "entry", "linkText": "Entry"},
-        {"name": "entrybydate", "linkText": "Entry by Date"},
-        {"name": "entrybytype", "linkText": "Entry by Type"},
-        {"name": "entrybystation", "linkText": "Entry by Station"},
-        {"name": "entrybydevice", "linkText": "Entry by Device"},
-        {"name": "summary", "linkText": "Summary"}
     ]
 }

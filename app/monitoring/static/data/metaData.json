@@ -1,0 +1,40 @@
+{
+    "monitoring-types": [
+        {
+            "id": "failure",
+            "name": "FAILURE"
+        },
+        {
+            "id": "maintanance",
+            "name": "MAINTANANCE"
+        }
+    ],
+    "stations": [
+        {
+            "id": "stn-1",
+            "name": "Station 1"
+        }
+    ],
+    "devices": [
+        {
+            "id": "device-1",
+            "name": "Device 1"
+        }
+    ],
+    "homeFields": [
+        {"name": "entry", "toText": "Entry"},
+        {"name": "entrybydate", "toText": "Entry by Date"},
+        {"name": "entrybytype", "toText": "Entry by Type"},
+        {"name": "entrybystation", "toText": "Entry by Station"},
+        {"name": "entrybydevice", "toText": "Entry by Device"},
+        {"name": "summary", "toText": "Summary"}
+    ],
+    "dropdownFields": [
+        {"name": "entry", "toText": "Entry"},
+        {"name": "entrybydate", "toText": "Entry by Date"},
+        {"name": "entrybytype", "toText": "Entry by Type"},
+        {"name": "entrybystation", "toText": "Entry by Station"},
+        {"name": "entrybydevice", "toText": "Entry by Device"},
+        {"name": "summary", "toText": "Summary"}
+    ]
+}

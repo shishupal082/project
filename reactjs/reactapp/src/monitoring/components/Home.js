@@ -15,16 +15,16 @@ class Home extends React.Component {
     }
     componentDidMount() {
         $S.log("Home:componentDidMount");
-        this.props.methods.addTab(this.props.currentPageName);
         DataHandler.setData("currentPageName", this.props.currentPageName);
+        this.props.methods.addTab(this.props.currentPageName);
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
         DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
     }
     render() {
         var availableLinks = this.props.homeFields.map(function(el, i, arr) {
-            return <Link key={i} to={el.url}>
-                <button className="list-group-item list-group-item-action list-group-item-primary text-center2">{el.linkText}</button>
+            return <Link key={i} to={el.toUrl}>
+                <button className="list-group-item list-group-item-action list-group-item-primary text-center2">{el.toText}</button>
             </Link>;
         });
         return (<div>

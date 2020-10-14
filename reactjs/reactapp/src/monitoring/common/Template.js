@@ -12,6 +12,14 @@ Template["noMatch"] = [{
         }
     }
 }];
+Template["noMatch"] = [{
+    "tag": "center.h1",
+    "text": {
+        "tag": "span",
+        "className": "badge badge-primary",
+        "text": "No Data Found"
+    }
+}];
 Template["noDataFound"] = [{
     "tag": "center.h1",
     "text": {
@@ -99,12 +107,27 @@ Template["entry.data.firstRow"] = [
                 "text": "Date"
             },
             {
-                "tag": "th",
+                "tag": "th.span",
                 "text": "Station"
             },
             {
                 "tag": "th",
-                "text": "Description"
+                "text": [
+                    {
+                        "tag": "span",
+                        "text": "Description"
+                    },
+                    {
+                        "tag": "span",
+                        "className": "pr-10px"
+                    },
+                    {
+                        "tag": "button",
+                        "className": "btn btn-primary pt-0 pb-0",
+                        "value": "reload",
+                        "text": "Reload"
+                    }
+                ]
             },
             {
                 "tag": "th",

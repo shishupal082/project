@@ -5,14 +5,17 @@ var Config = {};
 
 var basepathname = $$$.basepathname;
 
+
 Config.baseapi = $$$.baseapi;
+Config.appVersion = $$$.appVersion;
+
 var appControlApi = $$$.appControlApi;
 
 if (!$S.isArray(appControlApi)) {
     appControlApi = [];
 }
 Config.appControlApi = appControlApi.map(function(el, i, arr) {
-    return Config.baseapi + el;
+    return Config.baseapi + el + "?v="+ Config.appVersion;
 });
 
 
@@ -27,6 +30,34 @@ var pages = {
 };
 
 Config.pages = pages;
+
+
+Config.home = "home";
+Config.entry = "entry";
+Config.entrybydate = "entrybydate";
+Config.entrybytype = "entrybytype";
+Config.entrybystation = "entrybystation";
+Config.entrybydevice = "entrybydevice";
+Config.summary = "summary";
+Config.noMatch = "noMatch";
+
+
+Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice"];
+
+Config.defaultPageFields = [];
+
+for(var key in pages) {
+    if (key !== "home") {
+        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
+    }
+}
+
+Config.dateSelection = [
+    {"name": "Daily", "value": "daily"},
+    {"name": "Monthly", "value": "monthly"},
+    {"name": "Yearly", "value": "yearly"},
+    {"name": "All", "value": "all"}
+];
 
 
 export default Config;

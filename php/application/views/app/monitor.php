@@ -19,6 +19,8 @@ var GLOBAL = {
     basepathname: "/app/monitor",
     appControlApi: ["/app/monitoring/static/data/appControlData.json"]
 };
+GLOBAL.gtag = null;
+GLOBAL.appVersion = "1.0.0";
 window.GLOBAL = GLOBAL;
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script1.js"></script>

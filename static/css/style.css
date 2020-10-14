@@ -14,6 +14,9 @@ body.theme-grey {
 .p-10px {
     padding: 10px;
 }
+.pt-0 {
+    padding-top: 0px;
+}
 .pt-10px {
     padding-top: 10px;
 }
@@ -25,6 +28,12 @@ body.theme-grey {
 }
 .pr-5px {
     padding-right: 5px;
+}
+.pb-0 {
+    padding-bottom: 0px;
+}
+.pr-10px {
+    padding-right: 10px;
 }
 .pl-5px {
     padding-left: 5px;

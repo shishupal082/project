@@ -16,8 +16,8 @@ class AppComponent extends React.Component {
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");
-        this.props.methods.addTab(this.props.currentPageName);
         DataHandler.setData("currentPageName", this.props.currentPageName);
+        this.props.methods.addTab(this.props.currentPageName);
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
         DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);

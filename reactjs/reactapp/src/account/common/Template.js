@@ -89,7 +89,7 @@ var Template = {
                                     },
                                     {
                                         "tag": "button",
-                                        "className": "btn btn-primary",
+                                        "className": "btn btn-primary pt-0 pb-0",
                                         "value": "reload",
                                         "text": "Reload"
                                     }
@@ -313,7 +313,7 @@ var Template = {
                         },
                         {
                             "tag": "button",
-                            "className": "btn btn-primary",
+                            "className": "btn btn-primary pt-0 pb-0",
                             "value": "reload",
                             "text": "Reload"
                         }

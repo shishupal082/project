@@ -1,6 +1,8 @@
 import React from 'react';
 import $S from "../../../interface/stack.js";
 import DataHandler from "../../common/DataHandler";
+import Config from "../../common/Config";
+
 
 class SelectFilter extends React.Component {
     constructor(props) {
@@ -15,6 +17,12 @@ class SelectFilter extends React.Component {
         this.OpenTab = this.OpenTab.bind(this);
         this.CloseTab = this.CloseTab.bind(this);
     }
+    onReloadClick(e) {
+        var appDataCallback = this.props.methods.appDataCallback;
+        var appStateCallback = this.props.methods.appStateCallback;
+        var sectionId = DataHandler.getData("currentSectionId", "");
+        DataHandler.OnSectionChange(appStateCallback, appDataCallback, sectionId);
+    }
     onSectionSelect(e) {
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
@@ -22,15 +30,12 @@ class SelectFilter extends React.Component {
         DataHandler.OnSectionChange(appStateCallback, appDataCallback, sectionId);
     }
     gotoPage(pageName) {
-        var pageUrl = null;
-        for (var i = 0; i < this.props.data.dropdownFields.length; i++) {
-            if (this.props.data.dropdownFields[i].name === pageName) {
-                pageUrl = this.props.data.dropdownFields[i].url;
-                break;
-            }
-        }
-        if (pageUrl) {
-            this.props.history.push(pageUrl);
+        this.props.methods.appDataCallback("renderFieldRow", []);
+        var pages = Config.pages;
+        if ($S.isString(pages[pageName])) {
+            this.props.history.push(pages[pageName]);
+        } else {
+            alert("page '" + pageName + "' not found");
         }
     }
     onPageSelect(e) {
@@ -52,22 +57,20 @@ class SelectFilter extends React.Component {
         var appStateCallback = this.props.methods.appStateCallback;
         DataHandler.OnDateSelection(appStateCallback, appDataCallback, e.currentTarget.value);
     }
-    onReloadClick(e) {
-        var appDataCallback = this.props.methods.appDataCallback;
-        var appStateCallback = this.props.methods.appStateCallback;
-        DataHandler.setData("csvDataLoadStatus", "not-started");
-        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
-    }
     componentDidMount() {
         $S.log("SelectFilter:componentDidMount");
     }
     render() {
         var self = this;
+        var currentPageNotFound = true;
         var pageDropdownFields = this.props.data.dropdownFields.map(function(el, i, arr) {
-            return <option key={i} value={el.name}>{el.linkText}</option>
+            if (el.name === self.props.currentPageName) {
+                currentPageNotFound = false;
+            }
+            return <option key={i} value={el.name}>{el.toText}</option>
         });
-        var sectionFields = this.props.data.availableSection.map(function(el, i, arr) {
-            return <option key={i} value={el.id}>{el.text}</option>
+        var sectionFields = this.props.data.sectionsData.map(function(el, i, arr) {
+            return <option key={i} value={el.id}>{el.name}</option>
         });
         var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
             var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
@@ -91,17 +94,37 @@ class SelectFilter extends React.Component {
             }
             return <button key={i} type="button" className={className} onClick={self.onDateSelect} value={el.value}>{el.name}</button>;
         });
-        if (["entrybydate"].indexOf(this.props.data.pageName) < 0) {
+        var reloadButton = <button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button>;
+        var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];
+        if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0) {
             dateSelection = null;
         }
+        if (pageDropdownFields.length > 1) {
+            if (currentPageNotFound) {
+                $S.addElAt(pageDropdownFields, 0, <option key={pageDropdownFields.length}>Select page...</option>);
+            }
+            pageDropdownFields = <select className="form-control" onChange={this.onPageSelect} value={this.props.currentPageName}>{pageDropdownFields}</select>
+        }
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+            dateSelection = null;
+            reloadButton = null;
+        }
+        // Use when appControlData failed to load
+        if (sectionFields.length > 1) {
+            sectionFields = <select className="form-control" onChange={this.onSectionSelect} value={this.props.data.currentSectionId}>{sectionFields}</select>;
+        } else {
+            dateSelection = null;
+            reloadButton = null;
+        }
+
         return (<div className="container">
                 <div><table><tbody><tr>
-                    <td><select className="form-control" onChange={this.onSectionSelect} value={this.props.data.section}>{sectionFields}</select></td>
-                    <td><select className="form-control" onChange={this.onPageSelect} value={this.props.data.pageName}>{pageDropdownFields}</select></td>
+                    <td>{sectionFields}</td>
+                    <td>{pageDropdownFields}</td>
                     <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
                         </div></td>
-                    <td><button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button></td>
+                    <td>{reloadButton}</td>
                 </tr></tbody></table></div>
                 <div><ul className="nav nav-tabs">{pageTab}</ul></div>
             </div>);

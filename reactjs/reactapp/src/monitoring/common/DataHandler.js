@@ -9,33 +9,46 @@ var DataHandler;
 (function($S){
 var DT = $S.getDT();
 
-var appControlData = {};
-var appControlDataLoaded = false;
-
 var CurrentData = $S.getDataObj();
-var keys = ["currentSectionId"];
+var keys = [];
 keys.push("currentPageName");
+keys.push("availableDataPageName");
 keys.push("dropdownFields");
 
 keys.push("appControlDataLoadStatus");
+keys.push("metaDataLoadStatus");
 keys.push("csvDataLoadStatus");
+keys.push("firstTimeDataLoadStatus");
+
 keys.push("csvData");
 keys.push("csvDataByDate");
 keys.push("errorsData");
 
-
 keys.push("renderData");
-keys.push("renderFieldRowDataPageName");
+keys.push("renderFieldRow");
 
 keys.push("selectedDateType");
 keys.push("selectedDateParameter");
-keys.push("dateSelection");
 keys.push("combinedDateSelectionParameter");
 
 
+keys.push("appControlData");
+keys.push("metaData");
+keys.push("sectionsData");
+keys.push("currentSectionId");
+keys.push("sectionName");
+keys.push("currentSectionData");
+keys.push("errorsData");
+
+keys.push("homeFields");
+keys.push("dropdownFields");
+
+
+keys.push("metaDataStatus");
 
 CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
+CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("csvDataLoadStatus", "not-started");
 
 DataHandler = function(arg) {
@@ -68,30 +81,88 @@ DataHandler.fn = DataHandler.prototype = {
 $S.extendObject(DataHandler);
 
 DataHandler.extend({
+    getDataLoadStatus: function() {
+        var dataLoadStatus = [];
+        dataLoadStatus.push(DataHandler.getData("appControlDataLoadStatus", ""));
+        dataLoadStatus.push(DataHandler.getData("metaDataLoadStatus", ""));
+        dataLoadStatus.push(DataHandler.getData("csvDataLoadStatus", ""));
+        for (var i = 0; i < dataLoadStatus.length; i++) {
+            if (dataLoadStatus[i] !== "completed") {
+                return "";
+            }
+        }
+        DataHandler.setData("firstTimeDataLoadStatus", "completed");
+        return "completed";
+    }
+});
+
+DataHandler.extend({
     setData: function(key, value) {
         return CurrentData.setData(key, value);
     },
     getData: function(key, defaultValue) {
         return CurrentData.getData(key, defaultValue);
+    },
+    addDataInArray: function(key, value) {
+        var arrayData = this.getData(key, []);
+        if ($S.isArray(arrayData)) {
+            arrayData.push(value);
+            this.setData(key, arrayData);
+        }
+    },
+    initData: function() {
+        var defaultData, allData = CurrentData.getAllData();
+        for (var i = 0; i < keys.length; i++) {
+            if (["appControlData", "metaData", "sectionsData",
+                "currentSectionId", "currentPageName", "selectedDateType",
+                "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
+                "homeFields", "dropdownFields", "metaDataStatus"].indexOf(keys[i]) >= 0) {
+                continue;
+            }
+            defaultData = [];
+            if ($S.isObject(allData[keys[i]])) {
+                defaultData = {};
+            }
+            CurrentData.setData(keys[i], defaultData);
+        }
     }
 });
 
 DataHandler.extend({
-    getDefaultSectionId: function() {
-        var result = "";
+    getAvailableSection: function() {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var availableSection = [];
         if ($S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-            result = appControlData.sections[0]["id"];
+            availableSection = appControlData.sections;
         }
-        return result;
+        return availableSection;
+    },
+    isDisabledPage: function(pageName) {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var disabledPages = appControlData.disabledPages;
+        if ($S.isArray(disabledPages) && $S.isString(pageName)) {
+            return disabledPages.indexOf(pageName) >= 0;
+        }
+        return false;
+    },
+    getDefaultSectionId: function() {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var sectionId = "";
+        if ($S.isObject(appControlData) && $S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
+            if ($S.isString(appControlData.sections[0].id) && appControlData.sections[0].id.length > 0) {
+                sectionId = appControlData.sections[0].id;
+            }
+        }
+        return sectionId;
     },
     getSectionData: function(sectionId) {
+        var sectionsData = DataHandler.getData("sectionsData", []);
         var sectionData = {};
         if ($S.isString(sectionId) && sectionId.length > 0) {
-            if ($S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-                var sections = appControlData.sections;
-                for (var i = 0; i< sections.length; i++) {
-                    if (sectionId === sections[i].id) {
-                        sectionData = sections[i];
+            if ($S.isArray(sectionsData)) {
+                for (var i = 0; i< sectionsData.length; i++) {
+                    if (sectionId === sectionsData[i].id) {
+                        sectionData = sectionsData[i];
                         break;
                     }
                 }
@@ -99,101 +170,102 @@ DataHandler.extend({
         }
         return sectionData;
     },
-    getDefaultDateSelectionType: function(sectionId) {
-        var result = "";
-        var sectionData = this.getSectionData(sectionId);
-        if ($S.isString(sectionData.defaultDateSelectionType)) {
-            result = sectionData.defaultDateSelectionType;
+    getSectionName: function() {
+        var sectionId = DataHandler.getData("currentSectionId", "");
+        var section = DataHandler.getSectionData(sectionId);
+        if ($S.isObject(section) && $S.isString(section.name)) {
+            return section.name;
         }
-        return result;
+        return sectionId;
     },
-    getDateSelection: function() {
-        var dateSelection = [];
-        if ($S.isArray(appControlData.dateSelection) && appControlData.dateSelection.length > 0) {
-            dateSelection = appControlData.dateSelection;
+    getDefaultDateSelectionType: function() {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var defaultDateSelectionType = "";
+        if ($S.isObject(appControlData) && $S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
+            if ($S.isString(appControlData.sections[0].defaultDateSelectionType) && appControlData.sections[0].defaultDateSelectionType.length > 0) {
+                defaultDateSelectionType = appControlData.sections[0].defaultDateSelectionType;
+            }
         }
-        return dateSelection;
+        return defaultDateSelectionType;
     },
-    getHomeFields: function() {
-        var homeFields = [];
-        var homeFieldsArr = appControlData.homeFields;
-        var pages = Config.pages;
-        if (!$S.isArray(homeFieldsArr)) {
-            homeFieldsArr = [];
-        }
-        if (!$S.isObject(pages)) {
-            pages = {};
-        }
-        homeFields = homeFieldsArr.map(function(el, i, arr) {
-            el["s.no"] = i;
-            el["url"] = pages[el.name];
-            return el;
-        });
-        return homeFields;
-    },
-    getDropdownFields: function() {
+    getMetaDataDropdownFields: function() {
+        var metaData = DataHandler.getData("metaData", {});
         var dropdownFields = [];
-        var dropdownFieldsArr = appControlData.dropdownFields;
-        var pages = Config.pages;
-        if (!$S.isArray(dropdownFieldsArr)) {
-            dropdownFieldsArr = [];
+        if ($S.isObject(metaData) && $S.isArray(metaData.dropdownFields)) {
+            for (var i = 0; i < metaData.dropdownFields.length; i++) {
+                metaData.dropdownFields[i].toUrl = Config.pages[metaData.dropdownFields[i].name];
+                if (!this.isDisabledPage(metaData.dropdownFields[i].name)) {
+                    dropdownFields.push(metaData.dropdownFields[i]);
+                }
+            }
         }
-        if (!$S.isObject(pages)) {
-            pages = {};
+        if (dropdownFields.length < 1) {
+            dropdownFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
         }
-        dropdownFields = dropdownFieldsArr.map(function(el, i, arr) {
-            el["s.no"] = i;
-            el["url"] = pages[el.name];
-            return el;
-        });
         return dropdownFields;
     },
-    getAvailableSection: function() {
-        var availableSection = [];
-        if ($S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-            availableSection = appControlData.sections;
+    getMetaDataHomeFields: function() {
+        var metaData = DataHandler.getData("metaData", {});
+        var homeFields = [];
+        if ($S.isObject(metaData) && $S.isArray(metaData.homeFields)) {
+            for (var i = 0; i < metaData.homeFields.length; i++) {
+                metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
+                if (!this.isDisabledPage(metaData.homeFields[i].name)) {
+                    metaData.homeFields[i]["url"] = Config.pages[metaData.homeFields[i].name];
+                    homeFields.push(metaData.homeFields[i]);
+                }
+            }
         }
-        return availableSection;
+        if (homeFields.length < 1) {
+            homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
+        }
+        return homeFields;
     },
-    getSectionName: function() {
-        var sectionId = DataHandler.getData("currentSectionId", "not-found");
-        var section = DataHandler.getSectionData(sectionId);
-        if ($S.isObject(section) && $S.isString(section.text)) {
-            return section.text;
+    getMetaDataPageHeading: function(pageName) {
+        var pageHeading = "Page Not Found";
+        if (this.isDisabledPage(pageName)) {
+            return pageHeading;
         }
-        return "not-found";
-    },
-    getPageHeadingV2: function(pageName) {
-        var pageHeading = "";
-        if (appControlDataLoaded) {
-            pageHeading = "Page Not Found";
+        if ($S.isString(Config.pages[pageName]) && Config.pages[pageName].length > 0) {
+            pageHeading = $S.capitalize(pageName.trim());
         }
-        if ($S.isObject(appControlData.pageHeading)) {
-            if ($S.isString(appControlData.pageHeading[pageName])) {
-                pageHeading = appControlData.pageHeading[pageName];
+        var dropdownFields = DataHandler.getData("dropdownFields", []);
+        for (var i = 0; i < dropdownFields.length; i++) {
+            if (dropdownFields[i].name === pageName) {
+                pageHeading = dropdownFields[i].toText;
+                break;
             }
         }
         return pageHeading;
     },
-    getPageHeading: function() {
-        var pageName = DataHandler.getData("currentPageName", "");
-        return this.getPageHeadingV2(pageName);
+    getMetaDataPageHeadingV2: function() {
+        return DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
+    },
+    getmetaDataApis: function() {
+        var sectionData = DataHandler.getData("currentSectionData", "");
+        var metaDataApis = [];
+        if (sectionData && $S.isArray(sectionData["metaDataApis"])) {
+            metaDataApis = sectionData["metaDataApis"].map(function(el, i, arr) {
+                return Config.baseapi + el + "?v=" + Config.appVersion;
+            });
+        }
+        return metaDataApis;
     },
     getCsvDataApis: function() {
-        var sectionId = DataHandler.getData("currentSectionId", "not-found");
-        var section = DataHandler.getSectionData(sectionId);
+        var sectionData = DataHandler.getData("currentSectionData", "");
         var csvDataApis = [];
-        if (section && $S.isArray(section["dataApi"])) {
-            csvDataApis = section["dataApi"].map(function(el, i, arr) {
-                return Config.baseapi+el;
+        if (sectionData && $S.isArray(sectionData["csvDataApis"])) {
+            csvDataApis = sectionData["csvDataApis"].map(function(el, i, arr) {
+                return Config.baseapi + el + "?v=" + Config.appVersion;
             });
         }
         return csvDataApis;
     },
     _getValidationData: function(key) {
+        var metaData = DataHandler.getData("metaData", {});
         var validationData = [];
-        if ($S.isString(key) && $S.isArray(appControlData[key])) {
-            var tempValidationData = appControlData[key].map(function(el) {
+        if ($S.isString(key) && $S.isArray(metaData[key])) {
+            var tempValidationData = metaData[key].map(function(el) {
                 if (el && $S.isString(el.id)) {
                     return el.id;
                 }
@@ -208,11 +280,12 @@ DataHandler.extend({
         return validationData;
     },
     _getDisplayName: function(key, id) {
+        var metaData = DataHandler.getData("metaData", {});
         var displayName = id, temp;
-        if ($S.isString(key) && $S.isArray(appControlData[key])) {
-            for (var i = 0; i < appControlData[key].length; i++) {
-                if (appControlData[key][i]["id"] === id) {
-                    temp = appControlData[key][i]["name"];
+        if ($S.isString(key) && $S.isArray(metaData[key])) {
+            for (var i = 0; i < metaData[key].length; i++) {
+                if (metaData[key][i]["id"] === id) {
+                    temp = metaData[key][i]["name"];
                     if ($S.isString(temp) && temp.length) {
                         displayName = temp;
                     }
@@ -334,61 +407,42 @@ DataHandler.extend({
         DataHandler.setData("appControlDataLoadStatus", "in-progress");
         $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
             if ($S.isObject(response)) {
-                appControlData = Object.assign(appControlData, response);
+                DataHandler.setData("appControlData", response);
+            } else {
+                DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
             }
         }, function() {
+            $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            appControlDataLoaded = true;
-            var currentSectionId = DataHandler.getDefaultSectionId();
-            var selectedDateType = DataHandler.getDefaultDateSelectionType(currentSectionId);
-            var dateSelection = DataHandler.getDateSelection();
-            var dropdownFields = DataHandler.getDropdownFields();
-            DataHandler.setData("currentSectionId", currentSectionId);
-            DataHandler.setData("selectedDateType", selectedDateType);
-            DataHandler.setData("dateSelection", dateSelection);
-            DataHandler.setData("dropdownFields", dropdownFields);
-            DataHandler.appControlDataLoadCallback(appStateCallback, appDataCallback);
+            DataHandler.setData("sectionsData", DataHandler.getAvailableSection());
+            DataHandler.setData("selectedDateType", DataHandler.getDefaultDateSelectionType());
+            DataHandler.setData("currentSectionId", DataHandler.getDefaultSectionId());
+            DataHandler._fireSectionChange(appStateCallback, appDataCallback);
         }, null, Api.getAjaxApiCallMethod());
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback) {
-        var csvDataApis = DataHandler.getCsvDataApis();
-        var csvDataLoadStatus = DataHandler.getData("csvDataLoadStatus", "");
-        if (csvDataApis.length && csvDataLoadStatus === "not-started") {
-            DataHandler.setData("csvDataLoadStatus", "in-progress");
-            appStateCallback();
-            $S.loadJsonData(null, csvDataApis, function(response, apiName, ajax){
-                var csvData = DataHandler.getData("csvData", []);
-                csvData.push(response);
-                DataHandler.setData("csvData", csvData);
-            }, function() {
-                var csvData = DataHandler.getData("csvData", []);
-                csvData = DataHandler.generatePageData(csvData);
-                var requiredData = DataHandler.generateValidData(csvData);
-                DataHandler.setData("csvData", requiredData["finalData"]);
-                DataHandler.setData("csvDataByDate", requiredData["dataByDate"]);
-                DataHandler.setData("errorsData", requiredData["errorsData"]);
-                DataHandler.setData("csvDataLoadStatus", "completed");
-
-                DataHandler._setDateFilterParameters();
-                DataHandler.setData("renderFieldRowDataPageName", "")
-                DataHandler.setPageData(appStateCallback, appDataCallback);
-                $S.log("csvData load complete");
-            }, null, Api.getAjaxApiCallMethodV2());
-        }
-        if (csvDataLoadStatus === "completed") {
-            DataHandler.setPageData(appStateCallback, appDataCallback);
-        }
+        DataHandler.loadMetaData(appStateCallback, appDataCallback);
+        DataHandler.loadCsvData(appStateCallback, appDataCallback);
+        DataHandler.setPageData(appStateCallback, appDataCallback, "PageComponentDidMount");
     },
-    OnSectionChange: function(appStateCallback, appDataCallback, sectionId) {
-        DataHandler.setData("currentSectionId", sectionId);
-        appDataCallback("section", sectionId);
-        appDataCallback("sectionName", DataHandler.getSectionName());
+    _fireSectionChange: function(appStateCallback, appDataCallback) {
+        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""));
+        DataHandler.setData("currentSectionData", currentSectionData);
+        DataHandler.setData("sectionName", DataHandler.getSectionName());
+        DataHandler.loadMetaData(appStateCallback, appDataCallback);
+        DataHandler.loadCsvData(appStateCallback, appDataCallback);
+        DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
+    },
+    OnSectionChange: function(appStateCallback, appDataCallback, currentSectionId) {
+        DataHandler.initData();
+        DataHandler.setData("currentSectionId", currentSectionId);
+        DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("csvDataLoadStatus", "not-started");
-        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler._fireSectionChange(appStateCallback, appDataCallback);
     },
     OnDateSelection: function(appStateCallback, appDataCallback, selectedDateType) {
         DataHandler.setData("selectedDateType", selectedDateType);
-        appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
         var combinedDateSelectionParameter = DataHandler.getData("combinedDateSelectionParameter", {});
         if (combinedDateSelectionParameter[selectedDateType]) {
             var selectedDateParameter = combinedDateSelectionParameter[selectedDateType];
@@ -396,35 +450,74 @@ DataHandler.extend({
         } else {
             DataHandler.setData("selectedDateParameter", null);
         }
-        DataHandler.setData("renderFieldRowDataPageName", "")
-        DataHandler.setPageData(appStateCallback, appDataCallback);
-        appStateCallback();
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler.setPageData(appStateCallback, appDataCallback, "OnDateSelection");
     },
     GetTabDisplayText: function(pageName) {
-        var tabDisplayText = pageName;
-        var dropdownFields = DataHandler.getData("dropdownFields", []);
-        if ($S.isArray(dropdownFields)) {
-            for (var i = 0; i < dropdownFields.length; i++) {
-                if (dropdownFields[i].name === pageName) {
-                    tabDisplayText = dropdownFields[i].linkText;
-                }
-            }
-        }
-        return tabDisplayText;
+        return DataHandler.getMetaDataPageHeading(pageName);
     }
 });
 
 DataHandler.extend({
-    appControlDataLoadCallback: function(appStateCallback, appDataCallback) {
-        $S.log("appControlData load complete");
-        appDataCallback("section", DataHandler.getData("currentSectionId", ""));
-        appDataCallback("sectionName", DataHandler.getSectionName());
-        appDataCallback("availableSection", DataHandler.getAvailableSection());
-        appDataCallback("homeFields", DataHandler.getHomeFields());
-        appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
-        appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
-        appDataCallback("dateSelection", DataHandler.getData("dateSelection", []));
-        appStateCallback();
+    loadMetaData: function(appStateCallback, appDataCallback) {
+        var metaDataApis = DataHandler.getmetaDataApis();
+        var metaDataLoadStatus = DataHandler.getData("metaDataLoadStatus", "");
+        var appControlDataLoadStatus = DataHandler.getData("appControlDataLoadStatus", "");
+        if (metaDataApis.length) {
+            if (metaDataLoadStatus === "not-started") {
+                DataHandler.setData("metaDataLoadStatus", "in-progress");
+                $S.loadJsonData(null, metaDataApis, function(response, apiName, ajax){
+                    if ($S.isObject(response)) {
+                        DataHandler.setData("metaData", response);
+                    } else {
+                        DataHandler.setData("metaDataStatus", "invalid");
+                        DataHandler.setData("metaData", {});
+                        DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
+                    }
+                }, function() {
+                    $S.log("metaData load complete");
+                    DataHandler.setData("metaDataLoadStatus", "completed");
+                    DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
+                    DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
+                    DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData1");
+                }, null, Api.getAjaxApiCallMethod());
+            }
+        } else if(metaDataLoadStatus === "not-started" && appControlDataLoadStatus === "completed") {
+            DataHandler.setData("metaDataLoadStatus", "completed");
+            DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData2");
+        }
+    },
+    loadCsvData: function(appStateCallback, appDataCallback) {
+        var csvDataApis = DataHandler.getCsvDataApis();
+        var csvDataLoadStatus = DataHandler.getData("csvDataLoadStatus", "");
+        var appControlDataLoadStatus = DataHandler.getData("appControlDataLoadStatus", "");
+        if (csvDataApis.length) {
+            if (csvDataLoadStatus === "not-started") {
+                DataHandler.setData("csvDataLoadStatus", "in-progress");
+                var csvData = [];
+                $S.loadJsonData(null, csvDataApis, function(response, apiName, ajax){
+                    if (response) {
+                        csvData.push(response);
+                    } else {
+                        DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
+                    }
+                }, function() {
+                    $S.log("csvData load complete");
+                    DataHandler.setData("csvDataLoadStatus", "completed");
+                    csvData = DataHandler.generatePageData(csvData);
+                    var requiredData = DataHandler.generateValidData(csvData);
+                    DataHandler.setData("csvData", requiredData["finalData"]);
+                    DataHandler.setData("csvDataByDate", requiredData["dataByDate"]);
+                    DataHandler.setData("errorsData", requiredData["errorsData"]);
+                    DataHandler.setData("renderFieldRow", []);
+                    DataHandler._setDateFilterParameters();
+                    DataHandler.setPageData(appStateCallback, appDataCallback, "loadCsvData1");
+                }, null, Api.getAjaxApiCallMethodV2());
+            }
+        } else if(csvDataLoadStatus === "not-started" && appControlDataLoadStatus === "completed") {
+            DataHandler.setData("csvDataLoadStatus", "completed");
+            DataHandler.setPageData(appStateCallback, appDataCallback, "loadCsvData2");
+        }
     }
 });
 
@@ -463,19 +556,27 @@ DataHandler.extend({
         }
         return renderField;
     },
-    setPageData: function(appStateCallback, appDataCallback) {
+    setPageData: function(appStateCallback, appDataCallback, name) {
+        $S.log("setPageData:"+name);
         var currentPageName = DataHandler.getData("currentPageName", "");
-        var renderFieldRowDataPageName = DataHandler.getData("renderFieldRowDataPageName", "");
-        if (currentPageName !== renderFieldRowDataPageName) {
-            renderFieldRowDataPageName = currentPageName;
+        var availableDataPageName = DataHandler.getData("availableDataPageName", "");
+        var dataLoadStatus = DataHandler.getDataLoadStatus();
+        if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
             var renderData = DataHandler.getPageRenderData(currentPageName);
             DataHandler.setData("renderData", renderData);
             var renderFieldRow = DataHandler.getPageRenderField(currentPageName);
-            DataHandler.setData("renderFieldRowDataPageName", currentPageName);
-            appDataCallback("pageName", currentPageName);
-            appDataCallback("pageHeading", DataHandler.getPageHeadingV2(currentPageName));
+            DataHandler.setData("availableDataPageName", currentPageName);
             appDataCallback("renderFieldRow", renderFieldRow);
+            appDataCallback("currentSectionId", DataHandler.getData("currentSectionId", ""));
+            appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
+            appDataCallback("sectionsData", DataHandler.getData("sectionsData", ""));
+            appDataCallback("sectionName", DataHandler.getData("sectionName", ""));
+            appDataCallback("pageName", currentPageName);
+            appDataCallback("pageHeading", DataHandler.getMetaDataPageHeadingV2());
             appDataCallback("errorsData", DataHandler.getData("errorsData", []));
+            appDataCallback("homeFields", DataHandler.getData("homeFields", []));
+            appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
+            appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus", ""));
             appStateCallback();
         }
     }
@@ -522,7 +623,7 @@ DataHandler.extend({
         return jsonData;
     },
     generateValidData: function(jsonData) {
-        var errorsData = [];
+        var errorsData = DataHandler.getData("errorsData", []);
         var finalData = [];
         var dataByDate = {};
         var validTypes = DataHandler.getValidTypes();
