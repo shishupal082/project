@@ -1488,7 +1488,7 @@ Account.extend({
 });
 Account.extend({
     "journal": function(pageName) {
-        return Account.getJournalFields(DataHandler.getData("apiJournalData", []));
+        return Account.getJournalFields(DataHandler.getApiJournalData());
     },
     "journalbydate": function(pageName) {
         return Account.getJournalDataByDateFields(DataHandler.getData("apiJournalDataByDate", []));

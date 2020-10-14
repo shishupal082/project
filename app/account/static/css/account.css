@@ -16,6 +16,9 @@ body.theme-grey {
 .table td {
     padding: 4px;
 }
+.pr-10px {
+    padding-right: 10px;
+}
 .bt-2px {
     border-top: 2px solid;
 }

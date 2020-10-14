@@ -27,17 +27,23 @@ var Template = {
     ],
     "journalByDate": [
         {
-            "tag": "div.h1",
-            "text": {
-                "tag": "span",
-                "className": "badge badge-primary",
-                "name": "date",
-                "text": ""
-            }
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "h1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-primary",
+                        "name": "date",
+                        "text": ""
+                    }
+                }
+            ]
         },
         {
             "tag": "div",
-            "name": "journalEntryTable"
+            "name": "journalEntryTable",
+            "text": []
         }
     ],
     "journal": [
@@ -59,7 +65,12 @@ var Template = {
                 {
                     "tag": "th",
                     "className": "w-120px",
-                    "text": "Date"
+                    "text": [
+                        {
+                            "tag": "span",
+                            "text": "Date"
+                        }
+                    ]
                 },
                 {
                     "tag": "th",
@@ -70,7 +81,19 @@ var Template = {
                         "text": [
                             {
                                 "tag": "td",
-                                "text": "Particulars"
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "className": "pr-10px",
+                                        "text": "Particulars"
+                                    },
+                                    {
+                                        "tag": "button",
+                                        "className": "btn btn-primary",
+                                        "value": "reload",
+                                        "text": "Reload"
+                                    }
+                                ]
                             },
                             {
                                 "tag": "td",
@@ -272,13 +295,31 @@ var Template = {
     },
     "currentBalByDate": [
         {
-            "tag": "div.h4",
-            "text": {
-                "tag": "span",
-                "className": "badge badge-primary",
-                "name": "accountDisplayName",
-                "text": ""
-            }
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "h4",
+                    "text": [
+                        {
+                            "tag": "span",
+                            "className": "badge badge-primary",
+                            "name": "accountDisplayName",
+                            "text": ""
+                        },
+                        {
+                            "tag": "span",
+                            "className": "pr-10px",
+                            "text": ""
+                        },
+                        {
+                            "tag": "button",
+                            "className": "btn btn-primary",
+                            "value": "reload",
+                            "text": "Reload"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "tag": "div",

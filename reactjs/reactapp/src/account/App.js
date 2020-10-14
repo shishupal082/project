@@ -166,6 +166,7 @@ class App extends React.Component {
         this.appDataCallback = this.appDataCallback.bind(this);
         this.addTab = this.addTab.bind(this);
         this.removeTab = this.removeTab.bind(this);
+        this.onClick = this.onClick.bind(this);
 
         // this.accountTemplateLoaded = false;
         // this.journalDataLoaded = false;
@@ -193,6 +194,12 @@ class App extends React.Component {
         // this.trackPage = this.trackPage.bind(this);
         // this.removeTrackPage = this.removeTrackPage.bind(this);
         // this.trackPageInfo = {};
+    }
+    onClick(e) {
+        if (e.currentTarget.value === "reload") {
+            DataHandler.UserChange(this.appStateCallback,
+                this.appDataCallback, this.appData.currentUserName);
+        }
     }
     addTab(pageName) {
         if (this.appData.pageTab.indexOf(pageName) >= 0) {
@@ -679,7 +686,7 @@ class App extends React.Component {
         const trial = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
                             renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.trialbalance}/>);
 
-        const journalbydate = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const journalbydate = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.journalbydate}/>);
 
         const ledger = (props) => (<LedgerBook {...props} data={commonData} methods={methods}
@@ -688,7 +695,7 @@ class App extends React.Component {
         const currentbal = (props) => (<LedgerBook {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbal}/>);
 
-        const currentbalbydate = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const currentbalbydate = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbalbydate}/>);
 
         const summary = (props) => (<JournalByDate {...props} data={commonData} methods={methods}

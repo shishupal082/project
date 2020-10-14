@@ -16,7 +16,7 @@ var RequestId = $S.getRequestId();
 
 var CurrentData = $S.getDataObj();
 
-var keys = ["userControlData", "apiJournalData",
+var keys = ["userControlData", "apiJournalDataJson", "apiJournalDataCsv",
             "finalJournalData", "apiJournalDataByDate",
             "customiseDebitAccountData", "customiseCreditAccountData", "customeAccountData",
             "customiseCalenderAccountData"];
@@ -286,9 +286,11 @@ DataHandler.extend({
         appDataCallback("currentPageName", currentPageName);
         appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
         appDataCallback("errorsData", DataHandler.getData("errorsData", []));
-        appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
         appDataCallback("dataLoadStatus", dataLoadStatus);
         appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
+        if (dataLoadStatus === "completed") {
+            appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
+        }
         appStateCallback();
     }
 });
@@ -368,39 +370,35 @@ DataHandler.extend({
             DataHandler.setData("metaDataLoadStatus", "completed");
         }
         if (journalDataCsvApi.length > 0) {
-            var apiJournalDataCSV = [];
+            var apiJournalDataCsv = [];
             $S.loadJsonData(null, journalDataCsvApi, function(response, apiName, ajaxDetails) {
                 if ($S.isString(response)) {
-                    apiJournalDataCSV.push(response);
+                    apiJournalDataCsv.push(response);
                 } else {
                     DataHandler.addDataInArray("errorsData", {"text":ajaxDetails.url, "href":ajaxDetails.url});
-                    $S.log("Invalid response (csvJournalData):" + response);
+                    $S.log("Invalid response (apiJournalDataCsv):" + response);
                 }
             }, function() {
                 DataHandler.setData("journalDataCsvLoadStatus", "completed");
-                var csvToJSONJournalData = AccountHelper.convertCSVToJsonJournalData(apiJournalDataCSV);;
-                var apiJournalData = DataHandler.getData("apiJournalData",[]);
-                apiJournalData = apiJournalData.concat(csvToJSONJournalData);
-                DataHandler.setData("apiJournalData", apiJournalData);
+                var csvToJSONJournalData = AccountHelper.convertCSVToJsonJournalData(apiJournalDataCsv);
+                DataHandler.setData("apiJournalDataCsv", csvToJSONJournalData);
                 DataHandler.dataLoadComplete(appStateCallback, appDataCallback);
             }, null, Api.getAjaxApiCallMethodV2());
         } else {
             DataHandler.setData("journalDataCsvLoadStatus", "completed");
         }
         if (journalDataJsonApi.length > 0) {
-            var journalData = [];
+            var apiJournalDataJson = [];
             $S.loadJsonData(null, journalDataJsonApi, function(response, apiName, ajaxDetails) {
                 if ($S.isObject(response)) {
-                    journalData.push(response);
+                    apiJournalDataJson.push(response);
                 } else {
                     DataHandler.addDataInArray("errorsData", {"text":ajaxDetails.url, "href":ajaxDetails.url});
-                    $S.log("Invalid response (jsonJournalData):" + response);
+                    $S.log("Invalid response (apiJournalDataJson):" + response);
                 }
             }, function() {
                 DataHandler.setData("journalDataJsonLoadStatus", "completed");
-                var apiJournalData = DataHandler.getData("apiJournalData", []);
-                apiJournalData = apiJournalData.concat(journalData);
-                DataHandler.setData("apiJournalData", apiJournalData);
+                DataHandler.setData("apiJournalDataJson", apiJournalDataJson);
                 DataHandler.dataLoadComplete(appStateCallback, appDataCallback);
             }, null, Api.getAjaxApiCallMethod());
         } else {
@@ -473,13 +471,21 @@ DataHandler.extend({
         combinedDateSelectionParameter["all"] = allDateSelection;
         return combinedDateSelectionParameter;
     },
+    getApiJournalData: function() {
+        var apiJournalDataJson = DataHandler.getData("apiJournalDataJson", []);
+        var apiJournalDataCsv = DataHandler.getData("apiJournalDataCsv", []);
+        var apiJournalData = [];
+        apiJournalData = apiJournalData.concat(apiJournalDataJson);
+        apiJournalData = apiJournalData.concat(apiJournalDataCsv);
+        return apiJournalData;
+    },
     dataLoadComplete: function(appStateCallback, appDataCallback) {
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         if (dataLoadStatus !== "completed") {
             return false;
         }
         DataHandler.setData("firstTimeDataLoadStatus", "completed");
-        var apiJournalData = DataHandler.getData("apiJournalData", []);
+        var apiJournalData = DataHandler.getApiJournalData();
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(apiJournalData);
         var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);
         DataHandler.setData("apiJournalDataByDate", apiJournalDataByDate);
