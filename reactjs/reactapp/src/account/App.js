@@ -149,7 +149,7 @@ class App extends React.Component {
             "userControlData": [],
             "currentUserName": "",
             "currentPageName": "",
-            "companyName": "",
+            "companyName": "Loading...",
             "pageHeading": "",
             "pageTab": [],
 
@@ -713,10 +713,10 @@ class App extends React.Component {
         const customisecredit = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.customisecredit}/>);
 
-        const custompage = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const custompage = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.custompage}/>);
 
-        const profitandloss = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const profitandloss = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.profitandloss}/>);
 
         return (<BrowserRouter>

@@ -47,6 +47,7 @@ class SelectUser extends React.Component {
     render() {
         var self = this;
         var isCurrentPageNotFound = true;
+        var reload = <td><button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button></td>;
         var selectOptions = this.props.data.userControlData.map(function(el, i, arr) {
             return <option key={i} value={el.username}>{el.displayName}</option>
         });
@@ -65,16 +66,21 @@ class SelectUser extends React.Component {
             }
             return <button key={i+1} type="button" className={className} onClick={self.onDateOptionClick} value={el.value}>{el.name}</button>;
         });
+        if (dateSelection.length > 0) {
+            dateSelection = <td><div className="btn-group" role="group" aria-label="Basic example">
+                            {dateSelection}
+                        </div></td>;
+        }
         var seleUserOptionsDropDown = null;
-        if (this.props.data.userControlData.length > 1) {
-            seleUserOptionsDropDown = <td><div className="form-group row m-0">
-                    <label className="col-sm-4 col-form-label">Select user</label>
-                    <div className="col-sm-8">
+        var selectUserText = null;
+        if (this.props.data.userControlData.length >= 1) {
+            selectUserText = <td className="pr-5px">Select user</td>;
+            seleUserOptionsDropDown = <td>
                         <select className="form-control" onChange={this.onUserChange} value={this.props.data.currentUserName}>
                             {selectOptions}
-                        </select>
-                    </div>
-                </div></td>;
+                        </select></td>;
+        } else {
+            reload = null;
         }
         var pageOptionsDropDown = null;
         if (isCurrentPageNotFound) {
@@ -89,24 +95,26 @@ class SelectUser extends React.Component {
                     </div>
                 </div></td>;
         }
-        var reloadTextClass = "btn btn-primary";
         if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+            selectUserText = null;
             seleUserOptionsDropDown = null;
             dateSelection = null;
-            reloadTextClass += " d-none";
+            reload = null;
         }
         var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];
         if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0 && dateSelectionRequired.length > 0) {
             dateSelection = null;
         }
-        var seleUserOptions = <div className="row">
-                    <div className="col"><table><tbody><tr>
+        if (this.props.currentPageName === "home") {
+            reload = null;
+        }
+        var seleUserOptions = <div className="SELECT-USER">
+                    <div className=""><table><tbody><tr>
+                        {selectUserText}
                         {seleUserOptionsDropDown}
                         {pageOptionsDropDown}
-                        <td><div className="btn-group" role="group" aria-label="Basic example">
-                            {dateSelection}
-                        </div></td>
-                        <td><button className={reloadTextClass} onClick={this.onReloadClick}>Reload</button></td>
+                        {dateSelection}
+                        {reload}
                     </tr></tbody></table></div>
             </div>;
         return (seleUserOptions);

@@ -8,14 +8,16 @@ var basepathname = $$$.basepathname;
 
 Config.baseapi = $$$.baseapi;
 Config.backIconUrl = $$$.backIconUrl;
+Config.appVersion = $$$.appVersion;
 
 var appControlApi = $$$.appControlApi;
 
 if (!$S.isArray(appControlApi)) {
     appControlApi = [];
 }
+
 Config.appControlApi = appControlApi.map(function(el, i, arr) {
-    return Config.baseapi + el;
+    return Config.baseapi + el + "?v=" + Config.appVersion;
 });
 
 var pages = {

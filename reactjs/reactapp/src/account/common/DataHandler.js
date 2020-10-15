@@ -22,11 +22,13 @@ var keys = ["userControlData", "apiJournalDataJson", "apiJournalDataCsv",
             "customiseCalenderAccountData"];
 
 keys.push("metaData");
+keys.push("companyName");
 keys.push("dataByCompany");
 
 keys.push("dateSelectionParameter");
 keys.push("combinedDateSelectionParameter");
 keys.push("selectedDateType");
+keys.push("homeFields");
 keys.push("dropdownFields");
 keys.push("accounts");
 
@@ -101,10 +103,10 @@ DataHandler.extend({
         var defaultData, allData = CurrentData.getAllData();
         for (var i = 0; i < keys.length; i++) {
             if (["userControlData", "errorsData",
-                "currentUserName", "currentPageName", "selectedDateType",
+                "currentUserName", "companyName", "currentPageName", "selectedDateType",
                 "firstTimeDataLoadStatus", "appControlDataLoadStatus", "metaDataLoadStatus",
                 "journalDataCsvLoadStatus", "journalDataJsonLoadStatus",
-                "dropdownFields"].indexOf(keys[i]) >= 0) {
+                "homeFields", "dropdownFields"].indexOf(keys[i]) >= 0) {
                 continue;
             }
             defaultData = [];
@@ -128,6 +130,7 @@ DataHandler.extend({
                 return "";
             }
         }
+        DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return "completed";
     }
 });
@@ -254,7 +257,7 @@ DataHandler.extend({
             }
         }, function() {
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.OnUserChange(appStateCallback, appDataCallback, false);
+            DataHandler.onUserChange(appStateCallback, appDataCallback, false);
         }, null, Api.getAjaxApiCallMethod());
     },
     PageComponentMount: function(appStateCallback, appDataCallback, pageName) {
@@ -270,33 +273,34 @@ DataHandler.extend({
     },
     UserChange: function(appStateCallback, appDataCallback, username) {
         DataHandler.setData("currentUserName", username);
-        DataHandler.OnUserChange(appStateCallback, appDataCallback, true);
+        DataHandler.onUserChange(appStateCallback, appDataCallback, true);
     },
-    FireRender: function(appStateCallback, appDataCallback) {
-        var currentUserName = DataHandler.getData("currentUserName", "");
+    setPageData: function(appStateCallback, appDataCallback, name) {
+        $S.log("setPageData:"+name);
         var currentPageName = DataHandler.getData("currentPageName", "");
+        var availableDataPageName = DataHandler.getData("availableDataPageName", "");
         var dataLoadStatus = DataHandler.getDataLoadStatus();
-        var companyName = DataHandler.getCompanyName();
-        appDataCallback("userControlData", DataHandler.getData("userControlData", []));
-        appDataCallback("companyName", companyName);
-        appDataCallback("pageHeading", DataHandler.getMetaDataPageHeading(currentPageName));
-        appDataCallback("homeFields", DataHandler.getMetaDataHomeFields());
-        appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
-        appDataCallback("currentUserName", currentUserName);
-        appDataCallback("currentPageName", currentPageName);
-        appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
-        appDataCallback("errorsData", DataHandler.getData("errorsData", []));
-        appDataCallback("dataLoadStatus", dataLoadStatus);
-        appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
-        if (dataLoadStatus === "completed") {
+        if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
+            DataHandler.setData("availableDataPageName", currentPageName);
+            appDataCallback("userControlData", DataHandler.getData("userControlData", []));
+            appDataCallback("companyName", DataHandler.getData("companyName", ""));
+            appDataCallback("pageHeading", DataHandler.getMetaDataPageHeading(currentPageName));
+            appDataCallback("homeFields", DataHandler.getData("homeFields", []));
+            appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
+            appDataCallback("currentUserName", DataHandler.getData("currentUserName", ""));
+            appDataCallback("currentPageName", currentPageName);
+            appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
+            appDataCallback("errorsData", DataHandler.getData("errorsData", []));
+            appDataCallback("dataLoadStatus", dataLoadStatus);
+            appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
             appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
+            appStateCallback();
         }
-        appStateCallback();
     }
 });
 
 DataHandler.extend({
-    OnUserChange: function(appStateCallback, appDataCallback, flushError) {
+    onUserChange: function(appStateCallback, appDataCallback, flushError) {
         if ($S.isBooleanTrue(flushError)) {
             DataHandler.setData("errorsData", []);
         }
@@ -310,8 +314,9 @@ DataHandler.extend({
                 break;
             }
         }
+        DataHandler.setData("companyName", DataHandler.getCompanyName());
         DataHandler.loadCurrentUserData(appStateCallback, appDataCallback);
-        DataHandler.FireRender(appStateCallback, appDataCallback);
+        DataHandler.setPageData(appStateCallback, appDataCallback, "onUserChange");
     }
 });
 
@@ -322,8 +327,7 @@ DataHandler.extend({
         if (availableDataPageName === pageName) {
             return;
         }
-        DataHandler.setData("availableDataPageName", pageName);
-        DataHandler.FireRender(appStateCallback, appDataCallback);
+        DataHandler.setPageData(appStateCallback, appDataCallback, "setCurrentPageData");
     },
     getTemplate: function(key, defaultTemplate) {
         var allTemplate = Template;
@@ -363,7 +367,9 @@ DataHandler.extend({
                     $S.log("Invalid response (metaData):" + response);
                 }
             }, function() {
+                $S.log("metaData load completed");
                 DataHandler.setData("metaDataLoadStatus", "completed");
+                DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
                 DataHandler.dataLoadComplete(appStateCallback, appDataCallback);
             }, null, Api.getAjaxApiCallMethod());
         } else {
@@ -379,6 +385,7 @@ DataHandler.extend({
                     $S.log("Invalid response (apiJournalDataCsv):" + response);
                 }
             }, function() {
+                $S.log("csvData load completed");
                 DataHandler.setData("journalDataCsvLoadStatus", "completed");
                 var csvToJSONJournalData = AccountHelper.convertCSVToJsonJournalData(apiJournalDataCsv);
                 DataHandler.setData("apiJournalDataCsv", csvToJSONJournalData);
@@ -397,6 +404,7 @@ DataHandler.extend({
                     $S.log("Invalid response (apiJournalDataJson):" + response);
                 }
             }, function() {
+                $S.log("jsonData load completed");
                 DataHandler.setData("journalDataJsonLoadStatus", "completed");
                 DataHandler.setData("apiJournalDataJson", apiJournalDataJson);
                 DataHandler.dataLoadComplete(appStateCallback, appDataCallback);
@@ -484,7 +492,6 @@ DataHandler.extend({
         if (dataLoadStatus !== "completed") {
             return false;
         }
-        DataHandler.setData("firstTimeDataLoadStatus", "completed");
         var apiJournalData = DataHandler.getApiJournalData();
         var apiJournalDataByDate = AccountHelper.getApiJournalDataByDate(apiJournalData);
         var finalJournalData = AccountHelper.getFinalJournalData(apiJournalDataByDate);

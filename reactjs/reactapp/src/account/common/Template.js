@@ -1064,6 +1064,12 @@ var Template = {
                     "className": "badge badge-pill badge-success",
                     "name": "year",
                     "text": ""
+                },
+                {
+                    "tag": "button",
+                    "className": "btn btn-primary pt-0 pb-0 ml-5px",
+                    "value": "reload",
+                    "text": "Reload"
                 }
             ]
         },
@@ -1264,7 +1270,12 @@ Template["profitandloss1stRow"] = {
         {
             "tag": "th",
             "name": "heading2",
-            "text": ""
+            "text": {
+                "tag": "button",
+                "className": "btn btn-primary pt-0 pb-0",
+                "value": "reload",
+                "text": "Reload"
+            }
         },
         {
             "tag": "th",

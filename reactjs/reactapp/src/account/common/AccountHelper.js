@@ -1048,7 +1048,7 @@ Account.extend({
                 continue;
             }
             journalEntry = {"entry": []};
-            for (j = 0; j < apiJournalDataByDate.length; j++) {
+            for (j = apiJournalDataByDate.length-1; j >= 0 ; j--) {
                 if ($S.isArray(apiJournalDataByDate[j].entry) && apiJournalDataByDate[j].entry.length) {
                     currentDate = DT.getDateObj(apiJournalDataByDate[j].entry[0].date);
                     if (currentDate === null) {

@@ -61,19 +61,23 @@ class Header extends React.Component {
         if (pageTab.length) {
             pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;
         }
-        var pageHeading = this.props.data.pageHeading;
+        var selectFilter = <SelectUser data={this.props.data} methods={this.props.methods} currentPageName={this.props.currentPageName} history={this.props.history}/>;
+        if (this.props.currentPageName === "home") {
+            goBackLink = null;
+            selectFilter = null;
+            pageTab = null;
+        }
         if (this.props.data.firstTimeDataLoadStatus !== "completed") {
             goBackLink = null;
             pageTab = null;
-            pageHeading = null;
         }
-        return (<div>
-                    <div className="text-center">
+        return (<div className="HEADER">
+                    <div className="container">
                         <div className="position-absolute">{goBackLink}</div>
-                        <div><h2>{this.props.data.companyName}</h2></div>
+                        <center><h2>{this.props.data.companyName}</h2></center>
                     </div>
-                    <div className="text-center"><div><h2>{pageHeading}</h2></div></div>
-                    <SelectUser data={this.props.data} methods={this.props.methods} currentPageName={this.props.currentPageName} history={this.props.history}/>
+                    <div className="container"><center><h2>{this.props.data.pageHeading}</h2></center></div>
+                    {selectFilter}
                     <div>{pageTab}</div>
             </div>);
     }

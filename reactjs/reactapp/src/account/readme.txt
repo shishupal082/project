@@ -13,12 +13,31 @@ Error available:
     - 4) Unknown error
 
 Page rendering cases handled
-	- If page is disabled (metaData.disabledPages, Array)
-		- It will not be displayed on home fields and dropDown fields
-		- If we open disabled page
-			- Heading = Page Not Found
-			- Data = No Data Found template
-		- If we click on Page Not Found tab (It will propagate smoothly)
-	- If unknown page is open
-		- Heading and Data will be same as disabled page
-		- If we click on Page Not Found tab (It will not propagate, it will throw error Page 'noMatch' not found)
+    - If page is disabled (metaData.disabledPages, Array)
+        - It will not be displayed on home fields and dropDown fields
+        - If we open disabled page
+            - Heading = Page Not Found
+            - Data = No Data Found template
+        - If we click on Page Not Found tab (It will propagate smoothly)
+    - If unknown page is open
+        - Heading and Data will be same as disabled page
+        - If we click on Page Not Found tab (It will not propagate, it will throw error Page 'noMatch' not found)
+
+Page reload option added in
+    - Journal
+    - Journal by date
+    - Current balance by date
+    - Profit and loss
+    - Customised debit account summary
+    - Customised credit account summary
+    - Customised account summary (In debit and credit only but not in customiseCalenderAccount)
+
+Page reload option not available in
+    - Account summary by calender
+    - Account summary by account name
+    - Account summary by date
+    - Trial balance
+    - Ledger
+    - Current balance
+
+

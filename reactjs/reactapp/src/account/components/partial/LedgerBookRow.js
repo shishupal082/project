@@ -15,7 +15,7 @@ class LedgerBookRow extends React.Component {
     render() {
         var accountDisplayName = this.props.accountDisplayName;
         var LedgerTableTr = Api.generateFields(this.props, this.props.fields);
-        return (<div className="row"><div className="col">
+        return (<div className="row LEDGER-BOOK-ROW"><div className="col">
                     <p><b>{accountDisplayName}</b></p>
                     <table className="table table-bordered table-striped"><tbody>
                         {LedgerTableTr}

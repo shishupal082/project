@@ -41,6 +41,12 @@ body.theme-grey {
 .pl-10px {
     padding-left: 10px;
 }
+.ml-5px {
+    margin-left: 5px;
+}
+.ml-10px {
+    margin-left: 10px;
+}
 .w-75px {
     width: 75px;
 }
