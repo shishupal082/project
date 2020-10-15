@@ -75,6 +75,19 @@ class SelectUser extends React.Component {
             }
             return <option key={i} value={el.name}>{el.toText}</option>
         });
+        var pageOptionsDropDown = null;
+        if (pageOptions.length >= 1) {
+            if (isCurrentPageNotFound) {
+                $S.addElAt(pageOptions, 0, <option key={pageOptions.length}>Select page...</option>);
+            }
+            pageOptionsDropDown = <td><div className="form-group row m-0">
+                    <div>
+                        <select className="form-control" onChange={this.onPageChange} value={this.props.currentPageName}>
+                            {pageOptions}
+                        </select>
+                    </div>
+                </div></td>;
+        }
         var dateSelection = this.props.data.dateSelectionFields.map(function(el, i, arr) {
             var className = "btn ";
             if (el.value === self.props.data.selectedDateType) {
@@ -88,19 +101,6 @@ class SelectUser extends React.Component {
             dateSelection = <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
                         </div></td>;
-        }
-        var pageOptionsDropDown = null;
-        if (isCurrentPageNotFound) {
-            $S.addElAt(pageOptions, 0, <option key={pageOptions.length}>Select page...</option>);
-        }
-        if (pageOptions.length > 1) {
-            pageOptionsDropDown = <td><div className="form-group row m-0">
-                    <div>
-                        <select className="form-control" onChange={this.onPageChange} value={this.props.currentPageName}>
-                            {pageOptions}
-                        </select>
-                    </div>
-                </div></td>;
         }
         var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
             var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
@@ -122,9 +122,6 @@ class SelectUser extends React.Component {
         if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0 && dateSelectionRequired.length > 0) {
             dateSelection = null;
         }
-        if (this.props.currentPageName === "home") {
-            reload = null;
-        }
         var seleUserOptionsDropDown = null;
         var selectUserText = null;
         if (this.props.data.userControlData.length >= 1) {
@@ -133,12 +130,9 @@ class SelectUser extends React.Component {
                         <select className="form-control" onChange={this.onUserChange} value={this.props.data.currentUserName}>
                             {selectOptions}
                         </select></td>;
-        } else {
-            dateSelection = null;
-            reload = null;
         }
 
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+        if (this.props.data.firstTimeDataLoadStatus !== "completed" || this.props.currentPageName === "home" || this.props.data.userControlData.length < 1) {
             selectUserText = null;
             seleUserOptionsDropDown = null;
             pageOptionsDropDown = null;

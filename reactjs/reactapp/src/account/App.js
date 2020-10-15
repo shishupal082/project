@@ -707,10 +707,10 @@ class App extends React.Component {
         const accountsummarybycalander = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.accountsummarybycalander}/>);
 
-        const customisedebit = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const customisedebit = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.customisedebit}/>);
 
-        const customisecredit = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const customisecredit = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.customisecredit}/>);
 
         const custompage = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
