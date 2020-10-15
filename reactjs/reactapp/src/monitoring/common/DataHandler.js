@@ -59,22 +59,6 @@ DataHandler.fn = DataHandler.prototype = {
     init: function(arg) {
         this.arg = arg;
         return this;
-    },
-    update: function(name, data) {
-        if (!$S.isObject(this.arg)) {
-            return;
-        }
-        if (typeof this.arg[name] === typeof data) {
-            if (typeof data === "object") {
-                if ($S.isArray(data) === $S.isArray(this.arg[name])) {
-                    this.arg[name] = data;
-                } else if ($S.isObject(data) === $S.isObject(this.arg[name])) {
-                    this.arg[name] = data;
-                }
-            } else {
-                this.arg[name] = data;
-            }
-        }
     }
 };
 
@@ -402,6 +386,14 @@ DataHandler.extend({
         }
         return null;
     },
+    _fireSectionChange: function(appStateCallback, appDataCallback) {
+        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""));
+        DataHandler.setData("currentSectionData", currentSectionData);
+        DataHandler.setData("sectionName", DataHandler.getSectionName());
+        DataHandler.loadMetaData(appStateCallback, appDataCallback);
+        DataHandler.loadCsvData(appStateCallback, appDataCallback);
+        DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
+    },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.setData("appControlDataLoadStatus", "in-progress");
         $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
@@ -424,14 +416,6 @@ DataHandler.extend({
         DataHandler.loadMetaData(appStateCallback, appDataCallback);
         DataHandler.loadCsvData(appStateCallback, appDataCallback);
         DataHandler.setPageData(appStateCallback, appDataCallback, "PageComponentDidMount");
-    },
-    _fireSectionChange: function(appStateCallback, appDataCallback) {
-        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""));
-        DataHandler.setData("currentSectionData", currentSectionData);
-        DataHandler.setData("sectionName", DataHandler.getSectionName());
-        DataHandler.loadMetaData(appStateCallback, appDataCallback);
-        DataHandler.loadCsvData(appStateCallback, appDataCallback);
-        DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
     },
     OnSectionChange: function(appStateCallback, appDataCallback, currentSectionId) {
         DataHandler.initData();

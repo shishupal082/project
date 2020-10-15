@@ -40,9 +40,6 @@ class App extends React.Component {
             "dateSelectionRequiredPages": []
         };
         this.onClick = this.onClick.bind(this);
-        /* methods used in heading */
-        this.goBack = this.goBack.bind(this);
-        /* methods used in heading end */
         /* methods used in selectFilter */
         this.onList1Select = this.onList1Select.bind(this);
         this.onList2Select = this.onList2Select.bind(this);
@@ -54,19 +51,28 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.GetTabDisplayText = this.GetTabDisplayText.bind(this);
-        this.registerChildMethod = this.registerChildMethod.bind(this);
-        this.childMethods = {};
+        this.getTabDisplayText = this.getTabDisplayText.bind(this);
+        this.registerChildAttribute = this.registerChildAttribute.bind(this);
+        this.childAttribute = {};
+        this.methods = {
+            onList1Select: this.onList1Select,
+            onList2Select: this.onList2Select,
+            onDateSelect: this.onDateSelect,
+            onReloadClick: this.onReloadClick,
+            OpenTab: this.OpenTab,
+            CloseTab: this.CloseTab,
+            pageComponentDidMount: this.pageComponentDidMount,
+            getTabDisplayText: this.getTabDisplayText,
+            registerChildAttribute: this.registerChildAttribute
+        };
     }
-    registerChildMethod(name, method) {
-        if ($S.isString(name) && $S.isUndefined(this.childMethods[name])) {
-            this.childMethods[name] = method;
-        }
+    registerChildAttribute(name, method) {
+        $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
     gotoPage(pageName) {
         var pages = Config.pages;
         if ($S.isString(pages[pageName])) {
-            this.childMethods["history"].push(pages[pageName])
+            this.childAttribute["history"].push(pages[pageName])
         } else {
             alert("page '" + pageName + "' not found");
         }
@@ -76,9 +82,6 @@ class App extends React.Component {
             DataHandler.OnSectionChange(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
         }
-    }
-    goBack(e) {
-
     }
     onList1Select(e) {
         DataHandler.OnSectionChange(this.appStateCallback, this.appDataCallback, e.currentTarget.value);
@@ -108,7 +111,7 @@ class App extends React.Component {
         this.setState({isLoaded: true});
     }
     appDataCallback(name, data) {
-        DataHandler(this.appData).update(name, data);
+        $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName) {
         this.addTab(pageName);
@@ -134,24 +137,11 @@ class App extends React.Component {
         }
         this.appData.pageTab.push(pageName);
     }
-    GetTabDisplayText(tabName) {
+    getTabDisplayText(tabName) {
         return DataHandler.GetTabDisplayText(tabName);
     }
     render() {
-        var methods = {
-            goBack: this.goBack,
-            onClick: this.onClick,
-            onList1Select: this.onList1Select,
-            onList2Select: this.onList2Select,
-            onDateSelect: this.onDateSelect,
-            onReloadClick: this.onReloadClick,
-            OpenTab: this.OpenTab,
-            CloseTab: this.CloseTab,
-            pageComponentDidMount: this.pageComponentDidMount,
-            GetTabDisplayText: this.GetTabDisplayText,
-            registerChildMethod: this.registerChildMethod
-        };
-
+        var methods = this.methods;
         var commonData = this.appData;
 
         const entry = (props) => (<AppComponent {...props} onClick={this.onClick} state={this.state} data={commonData} methods={methods}
@@ -190,7 +180,7 @@ class App extends React.Component {
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
-        // If we use this then this.props.history is not assessible for go back link
+        // If we use this then this.props.history is not assessible for goBackLink
         // <Route render={props => (
         //             <AppComponent {...props} state={this.state} data={commonData} methods={methods}
         //                 renderFieldRow={this.appData.renderFieldRow} currentPageName="noMatch"/>

@@ -61,7 +61,7 @@ class SelectFilter extends React.Component {
         var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
             var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
             var navLinkClass = "nav-link active";
-            var tabDisplayText = self.props.methods.GetTabDisplayText(el);
+            var tabDisplayText = self.props.methods.getTabDisplayText(el);
             if (arr.length === 1) {
                 closeLink = null;
             }

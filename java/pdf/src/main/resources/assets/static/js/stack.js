@@ -1512,6 +1512,36 @@ Stack.extend({
             return target;
         }
         return source;
+    },
+    updateDataObj: function(dataObj, key, value, type) {
+        if (isObject(dataObj) && isString(key) && key.length > 0) {
+            if (type === "checkType") {
+                if (typeof dataObj[key] === typeof value) {
+                    if (typeof value === "object") {
+                        if (Stack.isArray(value) === Stack.isArray(dataObj[key])) {
+                            dataObj[key] = value;
+                        } else if (Stack.isObject(value) === Stack.isObject(dataObj[key])) {
+                            dataObj[key] = value;
+                        } else {
+                            Stack.log("dataObj not updated: " + type + ":" + key);
+                        }
+                    } else {
+                        dataObj[key] = value;
+                    }
+                } else {
+                    Stack.log("dataObj not updated: " + type + ":" + key);
+                }
+            } else if (type === "checkUndefined") {
+                if (isUndefined(dataObj[key])) {
+                    dataObj[key] = value;
+                }
+            } else {
+                dataObj[key] = value;
+            }
+        } else {
+            Stack.log("dataObj is invalid: " + key);
+        }
+        return dataObj;
     }
 });
 

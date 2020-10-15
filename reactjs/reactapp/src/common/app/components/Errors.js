@@ -9,6 +9,9 @@ class Errors extends React.Component {
             isLoaded: false
         };
     }
+    componentDidMount() {
+        $S.log("Errors:componentDidMount");
+    }
     render() {
         var errors = this.props.data.errorsData.map(function(el, i, arr) {
             var alertComponent;

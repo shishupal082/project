@@ -14,11 +14,13 @@ class AppComponent extends React.Component {
         };
     }
     componentDidMount() {
-        if ($S.isFunction(this.props.methods.registerChildMethod)) {
-            this.props.methods.registerChildMethod("history", this.props.history);
-        }
         $S.log("AppComponent:componentDidMount");
-        this.props.methods.pageComponentDidMount(this.props.currentPageName);
+        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
+            this.props.methods.registerChildAttribute("history", this.props.history);
+        }
+        if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
+            this.props.methods.pageComponentDidMount(this.props.currentPageName);
+        }
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);

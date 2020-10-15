@@ -1,4 +1,5 @@
 import React from 'react';
+import $S from "../../../interface/stack.js";
 import Api from "../../Api";
 import SelectFilter from './SelectFilter';
 
@@ -8,12 +9,9 @@ class Heading extends React.Component {
         this.state = {
             isLoaded: false
         };
-        this.goBack = this.goBack.bind(this);
     }
-    componentDidMount() {}
-    goBack(e) {
-        e.preventDefault();
-        this.props.methods.goBack(e);
+    componentDidMount() {
+        $S.log("Heading:componentDidMount");
     }
     render() {
         var goBackLink = null;
