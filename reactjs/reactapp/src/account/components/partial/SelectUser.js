@@ -15,8 +15,26 @@ class SelectUser extends React.Component {
         this.onReloadClick = this.onReloadClick.bind(this);
         this.onUserChange = this.onUserChange.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
+        this.CloseTab = this.CloseTab.bind(this);
+        this.OpenTab = this.OpenTab.bind(this);
     }
     componentDidMount() {
+    }
+    CloseTab(e) {
+        var value = e.target.getAttribute("value");
+        this.props.methods.removeTab(value);
+    }
+    OpenTab(e) {
+        this.props.methods.appDataCallback("renderFieldRow", []);
+        var pageName = e.target.getAttribute("value");
+        var pages = Config.pages;
+        if (pageName !== this.props.currentPageName) {
+            if ($S.isString(pages[pageName])) {
+                this.props.history.push(pages[pageName]);
+            } else {
+                alert("Page '" + pageName + "' not found");
+            }
+        }
     }
     onUserChange(e) {
         DataHandler.UserChange(this.props.methods.appStateCallback,
@@ -71,17 +89,6 @@ class SelectUser extends React.Component {
                             {dateSelection}
                         </div></td>;
         }
-        var seleUserOptionsDropDown = null;
-        var selectUserText = null;
-        if (this.props.data.userControlData.length >= 1) {
-            selectUserText = <td className="pr-5px">Select user</td>;
-            seleUserOptionsDropDown = <td>
-                        <select className="form-control" onChange={this.onUserChange} value={this.props.data.currentUserName}>
-                            {selectOptions}
-                        </select></td>;
-        } else {
-            reload = null;
-        }
         var pageOptionsDropDown = null;
         if (isCurrentPageNotFound) {
             $S.addElAt(pageOptions, 0, <option key={pageOptions.length}>Select page...</option>);
@@ -95,11 +102,21 @@ class SelectUser extends React.Component {
                     </div>
                 </div></td>;
         }
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
-            selectUserText = null;
-            seleUserOptionsDropDown = null;
-            dateSelection = null;
-            reload = null;
+        var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
+            var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
+            var navLinkClass = "nav-link active";
+            var tabDisplayText = DataHandler.getMetaDataPageHeading(el);
+            if (arr.length === 1) {
+                closeLink = null;
+            }
+            if(el === self.props.currentPageName) {
+                closeLink = null;
+                navLinkClass += " current-page";
+            }
+            return <li key={i} className="nav-item"><button className={navLinkClass}><span value={el} onClick={self.OpenTab}>{tabDisplayText}</span>{closeLink}</button></li>;
+        });
+        if (pageTab.length >= 1) {
+            pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;
         }
         var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];
         if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0 && dateSelectionRequired.length > 0) {
@@ -107,6 +124,27 @@ class SelectUser extends React.Component {
         }
         if (this.props.currentPageName === "home") {
             reload = null;
+        }
+        var seleUserOptionsDropDown = null;
+        var selectUserText = null;
+        if (this.props.data.userControlData.length >= 1) {
+            selectUserText = <td className="pr-5px">Select user</td>;
+            seleUserOptionsDropDown = <td>
+                        <select className="form-control" onChange={this.onUserChange} value={this.props.data.currentUserName}>
+                            {selectOptions}
+                        </select></td>;
+        } else {
+            dateSelection = null;
+            reload = null;
+        }
+
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+            selectUserText = null;
+            seleUserOptionsDropDown = null;
+            pageOptionsDropDown = null;
+            dateSelection = null;
+            reload = null;
+            pageTab = null;
         }
         var seleUserOptions = <div className="SELECT-USER">
                     <div className=""><table><tbody><tr>
@@ -116,6 +154,7 @@ class SelectUser extends React.Component {
                         {dateSelection}
                         {reload}
                     </tr></tbody></table></div>
+                    <div>{pageTab}</div>
             </div>;
         return (seleUserOptions);
     }

@@ -680,7 +680,7 @@ class App extends React.Component {
 
         var commonData = this.appData;
 
-        const journal = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
+        const journal = (props) => (<JournalByDate {...props} onClick={this.onClick} data={commonData} methods={methods}
                         renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.journal}/>);
 
         const trial = (props) => (<JournalByDate {...props} data={commonData} methods={methods}
