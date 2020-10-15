@@ -15,22 +15,17 @@ class Heading extends React.Component {
         this.props.history.push(this.props.data.homeUrl);
     }
     render() {
-        var pageHeading = this.props.data.pageHeading;
-        var goBackLink = null, selectFilter = null;
-        if (this.props.currentPageName !== "home") {
-            goBackLink = <a href={this.props.data.homeUrl} onClick={this.goBack}><h6>Go Back</h6></a>;
-            selectFilter = <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>;
-        }
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+        var goBackLink = <a href={this.props.data.homeUrl} onClick={this.goBack}><h6>Go Back</h6></a>;
+        if (this.props.currentPageName === "home" || this.props.data.firstTimeDataLoadStatus !== "completed") {
             goBackLink = null;
         }
-        return (<div className="heading-section">
-                <div className="container section">
+        return (<div className="heading-section HEADING">
+                <div className="container">
                     <div className="position-absolute">{goBackLink}</div>
-                    <center><h1>{this.props.data.sectionName}</h1></center>
+                    <center><h2>{this.props.data.sectionName}</h2></center>
                 </div>
-                <div className="page"><center><h3>{pageHeading}</h3></center></div>
-                {selectFilter}
+                <div className="container"><center><h2>{this.props.data.pageHeading}</h2></center></div>
+                <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
             </div>);
     }
 }

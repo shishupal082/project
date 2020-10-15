@@ -420,7 +420,8 @@ DataHandler.extend({
             DataHandler._fireSectionChange(appStateCallback, appDataCallback);
         }, null, Api.getAjaxApiCallMethod());
     },
-    PageComponentDidMount: function(appStateCallback, appDataCallback) {
+    PageComponentDidMount: function(appStateCallback, appDataCallback, currentPageName) {
+        DataHandler.setData("currentPageName", currentPageName);
         DataHandler.loadMetaData(appStateCallback, appDataCallback);
         DataHandler.loadCsvData(appStateCallback, appDataCallback);
         DataHandler.setPageData(appStateCallback, appDataCallback, "PageComponentDidMount");

@@ -16,18 +16,17 @@ class AppComponent extends React.Component {
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");
-        DataHandler.setData("currentPageName", this.props.currentPageName);
         this.props.methods.addTab(this.props.currentPageName);
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
-        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
+        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback, this.props.currentPageName);
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
-        return (<div>
+        return (<div className="APP-COMPONENT">
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
-                    <div className="page-component">{pageData}</div>
+                    <div>{pageData}</div>
                 </div>);
     }
 }

@@ -20,10 +20,7 @@ class Header extends React.Component {
     render() {
         var backIcon = <img className="back-img" src={this.props.data.backIconUrl} alt="back"/>;
         var goBackLink = <a href={this.props.data.pages.home} onClick={this.goBack}><h2>{backIcon}Back</h2></a>;
-        if (this.props.currentPageName === "home") {
-            goBackLink = null;
-        }
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
+        if (this.props.currentPageName === "home" || this.props.data.firstTimeDataLoadStatus !== "completed") {
             goBackLink = null;
         }
         return (<div className="HEADER">

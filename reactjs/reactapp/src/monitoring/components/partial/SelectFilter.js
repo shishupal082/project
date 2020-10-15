@@ -94,37 +94,43 @@ class SelectFilter extends React.Component {
             }
             return <button key={i} type="button" className={className} onClick={self.onDateSelect} value={el.value}>{el.name}</button>;
         });
-        var reloadButton = <button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button>;
+        if (dateSelection.length > 0) {
+            dateSelection = <td><div className="btn-group" role="group" aria-label="Basic example">
+                            {dateSelection}
+                        </div></td>;
+        }
         var dateSelectionRequired = $S.isArray(Config.dateSelectionRequired) ? Config.dateSelectionRequired : [];
         if (dateSelectionRequired.indexOf(this.props.currentPageName) < 0) {
             dateSelection = null;
         }
-        if (pageDropdownFields.length > 1) {
+        if (pageDropdownFields.length > 0) {
             if (currentPageNotFound) {
                 $S.addElAt(pageDropdownFields, 0, <option key={pageDropdownFields.length}>Select page...</option>);
             }
-            pageDropdownFields = <select className="form-control" onChange={this.onPageSelect} value={this.props.currentPageName}>{pageDropdownFields}</select>
-        }
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
-            dateSelection = null;
-            reloadButton = null;
+            pageDropdownFields = <td><select className="form-control" onChange={this.onPageSelect} value={this.props.currentPageName}>{pageDropdownFields}</select></td>;
         }
         // Use when appControlData failed to load
-        if (sectionFields.length > 1) {
-            sectionFields = <select className="form-control" onChange={this.onSectionSelect} value={this.props.data.currentSectionId}>{sectionFields}</select>;
-        } else {
+        var selectUserText = null;
+        if (sectionFields.length >= 1) {
+            selectUserText = <td className="pr-5px">Select user</td>;
+            sectionFields = <td><select className="form-control" onChange={this.onSectionSelect} value={this.props.data.currentSectionId}>{sectionFields}</select></td>;
+        }
+        var reloadButton = <td><button className="btn btn-primary" onClick={this.onReloadClick}>Reload</button></td>;
+        if (this.props.data.firstTimeDataLoadStatus !== "completed" || this.props.currentPageName === "home" || this.props.data.sectionsData.length < 1) {
+            selectUserText = null;
+            sectionFields = null;
+            pageDropdownFields = null;
             dateSelection = null;
             reloadButton = null;
+            pageTab = null;
         }
-
-        return (<div className="container">
+        return (<div className="container SELECT-FILTER">
                 <div><table><tbody><tr>
-                    <td>{sectionFields}</td>
-                    <td>{pageDropdownFields}</td>
-                    <td><div className="btn-group" role="group" aria-label="Basic example">
-                            {dateSelection}
-                        </div></td>
-                    <td>{reloadButton}</td>
+                    {selectUserText}
+                    {sectionFields}
+                    {pageDropdownFields}
+                    {dateSelection}
+                    {reloadButton}
                 </tr></tbody></table></div>
                 <div><ul className="nav nav-tabs">{pageTab}</ul></div>
             </div>);

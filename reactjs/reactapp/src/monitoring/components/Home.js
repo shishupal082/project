@@ -15,11 +15,10 @@ class Home extends React.Component {
     }
     componentDidMount() {
         $S.log("Home:componentDidMount");
-        DataHandler.setData("currentPageName", this.props.currentPageName);
         this.props.methods.addTab(this.props.currentPageName);
         var appStateCallback = this.props.methods.appStateCallback;
         var appDataCallback = this.props.methods.appDataCallback;
-        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback);
+        DataHandler.PageComponentDidMount(appStateCallback, appDataCallback, this.props.currentPageName);
     }
     render() {
         var availableLinks = this.props.homeFields.map(function(el, i, arr) {
@@ -27,10 +26,10 @@ class Home extends React.Component {
                 <button className="list-group-item list-group-item-action list-group-item-primary text-center2">{el.toText}</button>
             </Link>;
         });
-        return (<div>
+        return (<div className="HOME">
                 <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                 <Errors data={this.props.data}/>
-                <div className="container pt-10px">
+                <div className="container">
                     <div className="row">
                         <div className="col-md-12">
                             <div className="list-group">
