@@ -1,5 +1,7 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import $S from '../interface/stack.js';
+
 var Api
 (function($S) {
 Api = function(config) {
@@ -123,6 +125,9 @@ Api.extend({
 });
 
 childGenerator = {
+    "link": function(props, data, reactChildText, key) {
+        return <Link key={key} to={data.url}>{reactChildText}</Link>;
+    },
     "a": function(props, data, reactChildText, key) {
         var target = "";
         if ($S.isBooleanTrue(data.isTargetBlank)) {

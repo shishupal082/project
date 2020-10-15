@@ -43,8 +43,8 @@ keys.push("errorsData");
 keys.push("homeFields");
 keys.push("dropdownFields");
 
-
 keys.push("metaDataStatus");
+
 
 CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
@@ -211,7 +211,6 @@ DataHandler.extend({
             for (var i = 0; i < metaData.homeFields.length; i++) {
                 metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
                 if (!this.isDisabledPage(metaData.homeFields[i].name)) {
-                    metaData.homeFields[i]["url"] = Config.pages[metaData.homeFields[i].name];
                     homeFields.push(metaData.homeFields[i]);
                 }
             }
@@ -563,21 +562,32 @@ DataHandler.extend({
         var availableDataPageName = DataHandler.getData("availableDataPageName", "");
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
+            var goBackLinkData = Config.goBackLinkData;
+            var sectionsData = DataHandler.getData("sectionsData", []);
+            if (currentPageName === "home") {
+                goBackLinkData = [];
+                sectionsData = [];
+            }
             var renderData = DataHandler.getPageRenderData(currentPageName);
             DataHandler.setData("renderData", renderData);
             var renderFieldRow = DataHandler.getPageRenderField(currentPageName);
             DataHandler.setData("availableDataPageName", currentPageName);
-            appDataCallback("renderFieldRow", renderFieldRow);
-            appDataCallback("currentSectionId", DataHandler.getData("currentSectionId", ""));
-            appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
-            appDataCallback("sectionsData", DataHandler.getData("sectionsData", ""));
-            appDataCallback("sectionName", DataHandler.getData("sectionName", ""));
-            appDataCallback("pageName", currentPageName);
+
+            appDataCallback("list1Data", sectionsData);
+            appDataCallback("list2Data", DataHandler.getData("dropdownFields", []));
+            appDataCallback("currentList1Id", DataHandler.getData("currentSectionId", ""));
+            appDataCallback("currentList2Id", currentPageName);
+            appDataCallback("appHeading", DataHandler.getData("sectionName", ""));
             appDataCallback("pageHeading", DataHandler.getMetaDataPageHeadingV2());
+
+            appDataCallback("renderFieldRow", renderFieldRow);
+            appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
             appDataCallback("errorsData", DataHandler.getData("errorsData", []));
-            appDataCallback("homeFields", DataHandler.getData("homeFields", []));
-            appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
             appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus", ""));
+
+            appDataCallback("goBackLinkData", goBackLinkData);
+            appDataCallback("dateSelection", Config.dateSelection);
+            appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
             appStateCallback();
         }
     }

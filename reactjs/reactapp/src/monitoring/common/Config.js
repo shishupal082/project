@@ -59,5 +59,19 @@ Config.dateSelection = [
     {"name": "All", "value": "all"}
 ];
 
+Config.goBackLinkData = [
+    {
+        "tag": "div",
+        "className": "position-absolute",
+        "text": {
+            "tag": "link",
+            "url": pages.home,
+            "text": {
+                "tag": "h6",
+                "text": "Go Back"
+            }
+        }
+    }
+];
 
 export default Config;

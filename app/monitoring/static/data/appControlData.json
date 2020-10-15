@@ -16,7 +16,7 @@
             "defaultDateSelectionType": "all",
             "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
             "csvDataApis": [
-                "/app/monitoring/static/data/list-1.csv"
+                "/app/monitoring/static/data/list-2.csv"
             ]
         }
     ]

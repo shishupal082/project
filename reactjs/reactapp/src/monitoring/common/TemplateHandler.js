@@ -34,6 +34,17 @@ TemplateHandler.extend({
     getPageRenderField: function(pageName) {
         return TemplateHandler.getTemplate(pageName);
     },
+    "home": function(pageName) {
+        var homeFields = DataHandler.getData("homeFields", []);
+        var template = TemplateHandler.getTemplate(pageName);
+        for (var i = 0; i< homeFields.length; i++) {
+            var linkTemplate = TemplateHandler.getTemplate("homeLink");
+            TemplateHelper.setTemplateAttr(linkTemplate, "homeLink.toUrl", "url", homeFields[i].toUrl);
+            TemplateHelper.updateTemplateText(linkTemplate, {"homeLink.toText": homeFields[i].toText});
+            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+        }
+        return template;
+    },
     "entry": function(pageName) {
         var data = DataHandler.getData("csvData", []);
         if (!$S.isArray(data) || data.length < 1) {
