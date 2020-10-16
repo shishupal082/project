@@ -109,6 +109,36 @@ DataHandler.extend({
             }
             CurrentData.setData(keys[i], defaultData);
         }
+    },
+    getPageUrl: function(pageName) {
+        return window.location.pathname;
+    },
+    send: function(trackingAction, eventCategory, eventLabel) {
+        if (Config.gtag) {
+            $S.pushGAEvent(Config.gtag, trackingAction, eventCategory, eventLabel);
+        }
+    },
+    TrackPageView: function(pageName) {
+        if (!$S.isString(pageName) || pageName.length < 1) {
+            pageName = "empty-pageName";
+        }
+        DataHandler.send("pageView", pageName, DataHandler.getPageUrl());
+    },
+    TrackSectionView: function(trackingAction, sectionId) {
+        if (!$S.isString(sectionId) || sectionId.length < 1) {
+            sectionId = "empty-sectionId";
+        }
+        DataHandler.send("sectionView", trackingAction+":"+sectionId, DataHandler.getPageUrl());
+    },
+    TrackDateSelection: function(selectedDateType) {
+        if (!$S.isString(selectedDateType) || selectedDateType.length < 1) {
+            selectedDateType = "empty-selectedDateType";
+        }
+        var currentSectionId = DataHandler.getData("currentSectionId", "");
+        if (!$S.isString(currentSectionId) || currentSectionId.length < 1) {
+            currentSectionId = "empty-currentSectionId";
+        }
+        DataHandler.send("dateSelection", currentSectionId+":"+selectedDateType, DataHandler.getPageUrl());
     }
 });
 
@@ -408,6 +438,8 @@ DataHandler.extend({
             DataHandler.setData("sectionsData", DataHandler.getAvailableSection());
             DataHandler.setData("selectedDateType", DataHandler.getDefaultDateSelectionType());
             DataHandler.setData("currentSectionId", DataHandler.getDefaultSectionId());
+            DataHandler.TrackSectionView("loadingPage", DataHandler.getData("currentSectionId", ""));
+            DataHandler.TrackPageView(DataHandler.getData("currentPageName", ""));
             DataHandler._fireSectionChange(appStateCallback, appDataCallback);
         }, null, Api.getAjaxApiCallMethod());
     },

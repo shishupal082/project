@@ -8,6 +8,7 @@ var basepathname = $$$.basepathname;
 
 Config.baseapi = $$$.baseapi;
 Config.appVersion = $$$.appVersion;
+Config.gtag = $$$.gtag;
 
 var appControlApi = $$$.appControlApi;
 

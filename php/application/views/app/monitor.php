@@ -19,7 +19,7 @@ var GLOBAL = {
     basepathname: "/app/monitor",
     appControlApi: ["/app/monitoring/static/data/appControlData.json"]
 };
-GLOBAL.gtag = null;
+GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "1.0.0";
 window.GLOBAL = GLOBAL;
 </script>
