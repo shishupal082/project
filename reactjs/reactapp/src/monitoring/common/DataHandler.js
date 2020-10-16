@@ -255,21 +255,23 @@ DataHandler.extend({
         return DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
     },
     getmetaDataApis: function() {
+        var requestId = $S.getUniqueNumber();
         var sectionData = DataHandler.getData("currentSectionData", "");
         var metaDataApis = [];
         if (sectionData && $S.isArray(sectionData["metaDataApis"])) {
             metaDataApis = sectionData["metaDataApis"].map(function(el, i, arr) {
-                return Config.baseapi + el + "?v=" + Config.appVersion;
+                return Config.baseapi + el + "?v=" + requestId;
             });
         }
         return metaDataApis;
     },
     getCsvDataApis: function() {
+        var requestId = $S.getUniqueNumber();
         var sectionData = DataHandler.getData("currentSectionData", "");
         var csvDataApis = [];
         if (sectionData && $S.isArray(sectionData["csvDataApis"])) {
             csvDataApis = sectionData["csvDataApis"].map(function(el, i, arr) {
-                return Config.baseapi + el + "?v=" + Config.appVersion;
+                return Config.baseapi + el + "?v=" + requestId;
             });
         }
         return csvDataApis;

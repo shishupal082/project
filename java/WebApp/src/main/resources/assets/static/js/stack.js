@@ -2015,6 +2015,12 @@ Stack.extend({
             }
         }
         return words.reverse().join(' ');
+    },
+    numberToFixed: function(num, decimal) {
+        if (isNumeric(num) && isNumber(decimal)) {
+            num = num.toFixed(2)*1;
+        }
+        return num;
     }
 });
 //GATracking push event

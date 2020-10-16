@@ -21,10 +21,7 @@ Account.fn = Account.prototype = {
         return this;
     },
     toFixed: function(decimal) {
-        if ($S.isNumber(decimal) && $S.isNumeric(this.arg)) {
-            this.arg = this.arg.toFixed(2)*1;
-        }
-        return this.arg;
+        return $S.numberToFixed(this.arg, decimal);
     }
 };
 $S.extendObject(Account);

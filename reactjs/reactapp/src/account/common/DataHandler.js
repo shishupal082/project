@@ -12,7 +12,6 @@ var DataHandler;
 (function($S){
 
 var DT = $S.getDT();
-var RequestId = $S.getRequestId();
 
 var CurrentData = $S.getDataObj();
 
@@ -62,26 +61,7 @@ DataHandler.fn = DataHandler.prototype = {
         return this;
     },
     toFixed: function(decimal) {
-        if ($S.isNumber(decimal) && $S.isNumeric(this.arg)) {
-            this.arg = this.arg.toFixed(2)*1;
-        }
-        return this.arg;
-    },
-    update: function(name, data) {
-        if (!$S.isObject(this.arg)) {
-            return;
-        }
-        if (typeof this.arg[name] === typeof data) {
-            if (typeof data === "object") {
-                if ($S.isArray(data) === $S.isArray(this.arg[name])) {
-                    this.arg[name] = data;
-                } else if ($S.isObject(data) === $S.isObject(this.arg[name])) {
-                    this.arg[name] = data;
-                }
-            } else {
-                this.arg[name] = data;
-            }
-        }
+        return $S.numberToFixed(this.arg, decimal);
     }
 };
 $S.extendObject(DataHandler);
@@ -169,9 +149,10 @@ DataHandler.extend({
     getApisFromUserData: function(apiName) {
         var currentUserControlData = DataHandler.getData("currentUserControlData", {});
         var apis = [];
+        var requestId = $S.getUniqueNumber();
         if ($S.isObject(currentUserControlData) && $S.isArray(currentUserControlData[apiName])) {
             for (var i = 0; i < currentUserControlData[apiName].length; i++) {
-                apis.push(Config.baseapi + currentUserControlData[apiName][i] + "?" + RequestId);
+                apis.push(Config.baseapi + currentUserControlData[apiName][i] + "?v=" + requestId);
             }
         }
         return apis;
