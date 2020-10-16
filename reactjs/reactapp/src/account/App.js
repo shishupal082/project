@@ -77,23 +77,30 @@ class App extends React.Component {
         } else {
             alert("page '" + pageName + "' not found");
         }
+        DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
         if (e.currentTarget.value === "reload") {
+            DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
             DataHandler.UserChange(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
         }
     }
     onList1Select(e) {
-        DataHandler.UserChange(this.appStateCallback, this.appDataCallback, e.currentTarget.value);
+        var currentUserName = e.currentTarget.value;
+        DataHandler.TrackSectionView("dropdownSelect", currentUserName);
+        DataHandler.UserChange(this.appStateCallback, this.appDataCallback, currentUserName);
     }
     onList2Select(e) {
         this.gotoPage(e.currentTarget.value);
     }
     onDateSelect(e) {
-        DataHandler.DateSelectionChange(this.appStateCallback, this.appDataCallback, e.currentTarget.value);
+        var selectedDateType = e.currentTarget.value;
+        DataHandler.TrackDateSelection(selectedDateType);
+        DataHandler.DateSelectionChange(this.appStateCallback, this.appDataCallback, selectedDateType);
     }
     onReloadClick(e) {
+        DataHandler.TrackSectionView("onReloadClick", this.appData.currentList1Id);
         DataHandler.UserChange(this.appStateCallback, this.appDataCallback, this.appData.currentList1Id);
     }
     OpenTab(e) {

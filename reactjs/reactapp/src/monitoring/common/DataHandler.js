@@ -128,7 +128,7 @@ DataHandler.extend({
         if (!$S.isString(sectionId) || sectionId.length < 1) {
             sectionId = "empty-sectionId";
         }
-        DataHandler.send("sectionView", trackingAction+":"+sectionId, DataHandler.getPageUrl());
+        DataHandler.send("sectionView", sectionId+":"+trackingAction, DataHandler.getPageUrl());
     },
     TrackDateSelection: function(selectedDateType) {
         if (!$S.isString(selectedDateType) || selectedDateType.length < 1) {

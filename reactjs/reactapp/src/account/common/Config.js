@@ -9,6 +9,7 @@ var basepathname = $$$.basepathname;
 Config.baseapi = $$$.baseapi;
 Config.backIconUrl = $$$.backIconUrl;
 Config.appVersion = $$$.appVersion;
+Config.gtag = $$$.gtag;
 
 var appControlApi = $$$.appControlApi;
 

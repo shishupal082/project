@@ -115,6 +115,36 @@ DataHandler.extend({
             }
             CurrentData.setData(keys[i], defaultData);
         }
+    },
+    getPageUrl: function(pageName) {
+        return window.location.pathname;
+    },
+    send: function(trackingAction, eventCategory, eventLabel) {
+        if (Config.gtag) {
+            $S.pushGAEvent(Config.gtag, trackingAction, eventCategory, eventLabel);
+        }
+    },
+    TrackPageView: function(pageName) {
+        if (!$S.isString(pageName) || pageName.length < 1) {
+            pageName = "empty-pageName";
+        }
+        DataHandler.send("pageView", pageName, DataHandler.getPageUrl());
+    },
+    TrackSectionView: function(trackingAction, userName) {
+        if (!$S.isString(userName) || userName.length < 1) {
+            userName = "empty-userName";
+        }
+        DataHandler.send("sectionView", userName+":"+trackingAction, DataHandler.getPageUrl());
+    },
+    TrackDateSelection: function(selectedDateType) {
+        if (!$S.isString(selectedDateType) || selectedDateType.length < 1) {
+            selectedDateType = "empty-selectedDateType";
+        }
+        var currentUserName = DataHandler.getData("currentUserName", "");
+        if (!$S.isString(currentUserName) || currentUserName.length < 1) {
+            currentUserName = "empty-currentUserName";
+        }
+        DataHandler.send("dateSelection", currentUserName+":"+selectedDateType, DataHandler.getPageUrl());
     }
 });
 
@@ -257,6 +287,8 @@ DataHandler.extend({
             }
         }, function() {
             DataHandler.setData("appControlDataLoadStatus", "completed");
+            DataHandler.TrackSectionView("loadingPage", DataHandler.getData("currentUserName", ""));
+            DataHandler.TrackPageView(DataHandler.getData("currentPageName", ""));
             DataHandler.onUserChange(appStateCallback, appDataCallback, false);
         }, null, Api.getAjaxApiCallMethod());
     },

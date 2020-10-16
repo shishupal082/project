@@ -19,25 +19,8 @@ var GLOBAL = {
     basepathname: "/app/accountsv2",
     backIconUrl: "/static/img/icons/back-32.png"
 };
-
+GLOBAL.gtag = gtag;
 GLOBAL.appControlApi = ["/pvt/app-data/account/userControlV2.json"];
-
-/**
-
-GLOBAL.pageHeading = {};
-GLOBAL.pageHeading["accountsummarybydate"] = "Account Summary By Date";
-
-GLOBAL.linkHeading = {};
-GLOBAL.linkHeading["accountsummarybydate"] = "Account Summary By Date";
-
-GLOBAL.removeHomeLink = {};
-GLOBAL.removeHomeLink["journal"] = true;
-GLOBAL.removeHomeLink["ledger"] = true;
-GLOBAL.removeHomeLink["currentbal"] = true;
-
-GLOBAL.homeFieldsSequence = ["journalbydate"];
-
-*/
 window.GLOBAL = GLOBAL;
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-accountv2-app/script1.js"></script>
