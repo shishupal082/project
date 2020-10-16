@@ -39,7 +39,6 @@ Template["templateNotFound"] = [{
 
 Template["home"] = [{
     "tag": "div",
-    "className": "container",
     "text": {
         "tag": "div",
         "className": "list-group",
@@ -62,7 +61,6 @@ Template["homeLink"] = [
 ];
 Template["entry"] = [{
     "tag": "div",
-    "className": "container",
     "text": [
         {
             "tag": "table",
@@ -86,7 +84,6 @@ Template["entry"] = [{
 Template["entrybydate"] = [
     {
         "tag": "div.h1",
-        "className": "container",
         "text": {
             "tag": "span",
             "className": "badge badge-primary",
@@ -96,7 +93,6 @@ Template["entrybydate"] = [
     },
     {
         "tag": "div",
-        "className": "container",
         "text": [
             {
                 "tag": "table",
@@ -207,7 +203,6 @@ Template["entrybydevice"] = [{"tag": "center", "text": "Entry by Device"}];
 Template["summary"] = [
     {
         "tag": "div.table",
-        "className": "container",
         "text": [
             {
                 "tag": "thead",
