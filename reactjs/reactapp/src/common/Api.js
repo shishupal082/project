@@ -190,7 +190,7 @@ childGenerator = {
         return <br key={key} className={data.className}/>;
     },
     "img": function(props, data, reactChildText, key) {
-        return <img src={data.src} alt={data.alt} className={data.className}/>;
+        return <img key={key} src={data.src} alt={data.alt} className={data.className}/>;
     },
     "ol": function(props, data, reactChildText, key) {
         return <ol key={key} type={data.type} className={data.className}>{reactChildText}</ol>;

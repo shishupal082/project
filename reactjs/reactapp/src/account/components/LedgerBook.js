@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from "./partial/Header";
-import LedgerBookRow from "./partial/LedgerBookRow";
-import Errors from "./partial/Errors";
 
-import DataHandler from "../common/DataHandler";
+import Heading from "../../common/app/components/Heading";
+import Errors from "../../common/app/components/Errors";
+import LedgerBookRow from "./partial/LedgerBookRow";
+
 import $S from "../../interface/stack.js";
 // import Api from "../../common/Api";
 
@@ -17,9 +17,12 @@ class LedgerBook extends React.Component {
     }
     componentDidMount() {
         $S.log("LedgerBook:componentDidMount");
-        DataHandler.PageComponentMount(this.props.methods.appStateCallback,
-            this.props.methods.appDataCallback, this.props.currentPageName);
-        this.props.methods.addTab(this.props.currentPageName);
+        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
+            this.props.methods.registerChildAttribute("history", this.props.history);
+        }
+        if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
+            this.props.methods.pageComponentDidMount(this.props.currentPageName);
+        }
     }
     render() {
         // if (this.state.isValidPage) {
@@ -36,11 +39,9 @@ class LedgerBook extends React.Component {
             return <LedgerBookRow key={i} accountName={el.accountName} accountDisplayName={el.accountDisplayName} fields={el.fields}/>;
         });
         return (<div className="container LEDGER-BOOK">
-                    <Header data={this.props.data} methods={this.props.methods}
-                            currentPageName={this.props.currentPageName} history={this.props.history}
-                    />
+                    <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
-                    {LedgerBookByCompany}
+                    <div>{LedgerBookByCompany}</div>
             </div>);
     }
 }

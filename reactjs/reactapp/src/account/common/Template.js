@@ -1245,6 +1245,29 @@ var Template = {
     }
 };
 
+Template["home"] = [{
+    "tag": "div",
+    "text": {
+        "tag": "div",
+        "className": "list-group",
+        "name": "home.link",
+        "text": []
+    }
+}];
+Template["homeLink"] = [
+    {
+        "tag": "link",
+        "name": "homeLink.toUrl",
+        "url": "",
+        "text": {
+            "tag": "button",
+            "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+            "name": "homeLink.toText",
+            "text": ""
+        }
+    }
+];
+
 Template["profitandloss"] = [
     {
         "tag": "div",

@@ -34,7 +34,7 @@ class Errors extends React.Component {
             }
             return alertComponent;
         });
-        return (<div className="container ERRORS">{errors}</div>);
+        return (<div className="ERRORS">{errors}</div>);
     }
 }
 

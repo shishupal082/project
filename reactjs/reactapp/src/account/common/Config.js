@@ -63,46 +63,6 @@ for(var key in pages) {
     }
 }
 
-// Config.homeFields = [
-//     {"name": "journalbydate", "toText": "Journal By Date"},
-//     {"name": "currentbalbydate", "toText": "Current Balance By Date"},
-//     {"name": "profitandloss", "toText": "Profit and Loss"},
-//     {"name": "custompage", "toText": "Customise Account Summary"},
-//     {"name": "accountsummarybycalander", "toText": "Account Summary By Calender"},
-//     {"name": "summary", "toText": "Account Summary By A/C Name"},
-//     {"name": "accountsummarybydate", "toText": "Account Summary By Date"},
-//     {"name": "customisedebit", "toText": "Customised Debit Account Summary"},
-//     {"name": "customisecredit", "toText": "Customised Credit Account Summary"},
-//     {"name": "trialbalance", "toText": "Trial Balance"},
-//     {"name": "journal", "toText": "Journal"},
-//     {"name": "ledger", "toText": "Ledger"},
-//     {"name": "currentbal", "toText": "Current Balance"}
-// ];
-
-// Config.homeFields = Config.homeFields.map(function(el, i, arr) {
-//     el["s.no"] = i;
-//     el["toUrl"] = pages[el.name];
-//     return el;
-// });
-
-// Config.pageHeading = {
-//     "home": "Home",
-//     "trialbalance": "Trial Balance",
-//     "journal": "Journal",
-//     "journalbydate": "Journal By Date",
-//     "ledger": "Ledger Book",
-//     "currentbal": "Current Balance",
-//     "currentbalbydate": "Current Balance By Date",
-//     "customisedebit": "Customised Debit Account Summary",
-//     "customisecredit": "Customised Credit Account Summary",
-//     "custompage": "Customised Account Summary",
-//     "summary": "Account Summary",
-//     "accountsummarybydate": "Account Summary By Date",
-//     "accountsummarybycalander": "Account Summary By Calender",
-//     "profitandloss": "Profit and Loss",
-//     "pageNotFound": "Page Not Found"
-// };
-
 
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},
@@ -111,75 +71,29 @@ Config.dateSelection = [
     {"name": "All", "value": "all"}
 ];
 
-// Config.defaultDateSelectionType = "all";
-
-// Config.defaultCompanyName = "Loading...";
-// Config.defaultUserName = "";
-
-/*Update from global variable */
-
-// var key;
-// var globalPageHeading = {};
-// var globalLinkHeading = {};
-// var globalRemoveHomeLink = {};
-
-// if ($S.isObject($$$.linkHeading)) {
-//     for(key in $$$.linkHeading) {
-//         if ($S.isString($$$.linkHeading[key])) {
-//             globalLinkHeading[key] = $$$.linkHeading[key];
-//         }
-//     }
-// }
-
-// if ($S.isObject($$$.pageHeading)) {
-//     for(key in $$$.pageHeading) {
-//         if ($S.isString($$$.pageHeading[key])) {
-//             globalPageHeading[key] = $$$.pageHeading[key];
-//         }
-//     }
-// }
-
-// if ($S.isObject($$$.removeHomeLink)) {
-//     for(key in $$$.removeHomeLink) {
-//         if ($S.isBooleanTrue($$$.removeHomeLink[key])) {
-//             globalRemoveHomeLink[key] = true;
-//         }
-//     }
-// }
-
-// for (key in Config.pageHeading) {
-//     if ($S.isString(globalPageHeading[key])) {
-//         Config.pageHeading[key] = globalPageHeading[key];
-//     }
-// }
-
-// Config.homeFields = Config.homeFields.filter(function(el, i, arr) {
-//     if ($S.isString(globalLinkHeading[el.name])) {
-//         el["toText"] = globalLinkHeading[el.name];
-//     }
-//     if ($S.isBooleanTrue(globalRemoveHomeLink[el.name])) {
-//         return false;
-//     }
-//     return true;
-// });
-
-
-// Config.isValidCurrentPage = function(currentPage) {
-//     var result = false;
-//     var defaultValidPage = ["home", "noMatch"];
-//     if (!$S.isString(currentPage)) {
-//         return true;
-//     }
-//     if (defaultValidPage.indexOf(currentPage) >= 0) {
-//         return true;
-//     }
-//     for (var i=0; i<Config.homeFields.length; i++) {
-//         if (currentPage === Config.homeFields[i].name) {
-//             result = true;
-//             break;
-//         }
-//     }
-//     return result;
-// };
-
+Config.goBackLinkData = [
+    {
+        "tag": "div",
+        "className": "position-absolute",
+        "text": {
+            "tag": "link",
+            "url": pages.home,
+            "text": {
+                "tag": "h2",
+                "text": [
+                    {
+                        "tag": "img",
+                        "src": Config.backIconUrl,
+                        "className": "back-img",
+                        "alt": "back"
+                    },
+                    {
+                        "tag": "span",
+                        "text": "Back"
+                    }
+                ]
+            }
+        }
+    }
+];
 export default Config;

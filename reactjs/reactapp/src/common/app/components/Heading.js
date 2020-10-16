@@ -19,11 +19,11 @@ class Heading extends React.Component {
             goBackLink = Api.generateFields(this.props, this.props.data.goBackLinkData, 0);
         }
         return (<div className="HEADING">
-                <div className="container">
+                <div>
                     {goBackLink}
                     <center><h2>{this.props.data.appHeading}</h2></center>
                 </div>
-                <div className="container"><center><h2>{this.props.data.pageHeading}</h2></center></div>
+                <div><center><h2>{this.props.data.pageHeading}</h2></center></div>
                 <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
             </div>);
     }

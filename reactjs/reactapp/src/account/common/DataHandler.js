@@ -155,8 +155,8 @@ DataHandler.extend({
     },
     getCompanyName: function() {
         var currentUserControlData = DataHandler.getData("currentUserControlData", {});
-        if ($S.isString(currentUserControlData.companyname) && currentUserControlData.companyname.length > 0) {
-            return currentUserControlData.companyname;
+        if ($S.isString(currentUserControlData.name) && currentUserControlData.name.length > 0) {
+            return currentUserControlData.name;
         }
         var currentUserName = DataHandler.getData("currentUserName", "");
         return currentUserName;
@@ -200,7 +200,7 @@ DataHandler.extend({
         }
         return homeFields;
     },
-    getMetaDataPageHeading: function(pageName) {
+    GetMetaDataPageHeading: function(pageName) {
         var pageHeading = "Page Not Found";
         if (this.isDisabledPage(pageName)) {
             return pageHeading;
@@ -232,18 +232,18 @@ DataHandler.extend({
         DataHandler.setData("appControlDataLoadStatus", "in-progress");
         $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
             if ($S.isArray(response)) {
-                // checking unique username
+                // checking unique id
                 var temp = {};
                 for (var i=0; i<response.length; i++) {
-                    if (temp[response[i].username]) {
-                        alert("Duplicate entry: " + response[i].username);
+                    if (temp[response[i].id]) {
+                        alert("Duplicate entry: " + response[i].id);
                     } else {
-                        temp[response[i].username] = 1;
+                        temp[response[i].id] = 1;
                     }
                 }
                 DataHandler.setData("userControlData", response);
                 if (response.length > 0) {
-                    DataHandler.setData("currentUserName", response[0].username);
+                    DataHandler.setData("currentUserName", response[0].id);
                     if ($S.isString(response[0].dateSelectionType)) {
                         DataHandler.setData("selectedDateType", response[0].dateSelectionType);
                     }
@@ -281,17 +281,26 @@ DataHandler.extend({
         var availableDataPageName = DataHandler.getData("availableDataPageName", "");
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
+            var goBackLinkData = Config.goBackLinkData;
+            var list1Data = DataHandler.getData("userControlData", []);
+            if (currentPageName === "home") {
+                goBackLinkData = [];
+                list1Data = [];
+            }
             DataHandler.setData("availableDataPageName", currentPageName);
-            appDataCallback("userControlData", DataHandler.getData("userControlData", []));
-            appDataCallback("companyName", DataHandler.getData("companyName", ""));
-            appDataCallback("pageHeading", DataHandler.getMetaDataPageHeading(currentPageName));
-            appDataCallback("homeFields", DataHandler.getData("homeFields", []));
-            appDataCallback("dropdownFields", DataHandler.getData("dropdownFields", []));
-            appDataCallback("currentUserName", DataHandler.getData("currentUserName", ""));
-            appDataCallback("currentPageName", currentPageName);
+            appDataCallback("goBackLinkData", goBackLinkData);
+            appDataCallback("list1Data", list1Data);
+            appDataCallback("currentList1Id", DataHandler.getData("currentUserName", ""));
+            appDataCallback("list2Data", DataHandler.getData("dropdownFields", []));
+            appDataCallback("currentList2Id", currentPageName);
+            appDataCallback("appHeading", DataHandler.getData("companyName", ""));
+            appDataCallback("pageHeading", DataHandler.GetMetaDataPageHeading(currentPageName));
+            // appDataCallback("homeFields", DataHandler.getData("homeFields", []));
             appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
             appDataCallback("errorsData", DataHandler.getData("errorsData", []));
-            appDataCallback("dataLoadStatus", dataLoadStatus);
+            appDataCallback("dateSelection", Config.dateSelection);
+            appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
+            // appDataCallback("dataLoadStatus", dataLoadStatus);
             appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
             appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
             appStateCallback();
@@ -309,7 +318,7 @@ DataHandler.extend({
         var userControlData = DataHandler.getData("userControlData", []);
         var currentUserName = DataHandler.getData("currentUserName", "");
         for(var i=0; i<userControlData.length; i++) {
-            if (userControlData[i].username === currentUserName) {
+            if (userControlData[i].id === currentUserName) {
                 DataHandler.setData("currentUserControlData", userControlData[i]);
                 break;
             }

@@ -24,10 +24,10 @@ class AppComponent extends React.Component {
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
-        return (<div className="APP-COMPONENT">
+        return (<div className="container APP-COMPONENT">
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
-                    {pageData}
+                    <div className="APP-COMPONENT.PAGE-DATA">{pageData}</div>
                 </div>);
     }
 }

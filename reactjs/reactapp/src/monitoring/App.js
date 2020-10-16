@@ -144,31 +144,31 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
 
-        const entry = (props) => (<AppComponent {...props} onClick={this.onClick} state={this.state} data={commonData} methods={methods}
+        const entry = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entry}/>);
 
-        const entrybydate = (props) => (<AppComponent {...props} onClick={this.onClick} state={this.state} data={commonData} methods={methods}
+        const entrybydate = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydate}/>);
         
-        const entrybytype = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        const entrybytype = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybytype}/>);
 
-        const entrybystation = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        const entrybystation = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybystation}/>);
 
-        const entrybydevice = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        const entrybydevice = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydevice}/>);
 
-        const summary = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        const summary = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.summary}/>);
-        const noMatch = (props) => (<AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        const noMatch = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
 
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home}
                     render={props => (
-                        <AppComponent {...props} state={this.state} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
                     )}
                 />
                 <Route path={pages.entry} component={entry}/>
@@ -182,7 +182,7 @@ class App extends React.Component {
         </BrowserRouter>);
         // If we use this then this.props.history is not assessible for goBackLink
         // <Route render={props => (
-        //             <AppComponent {...props} state={this.state} data={commonData} methods={methods}
+        //             <AppComponent {...props} data={commonData} methods={methods}
         //                 renderFieldRow={this.appData.renderFieldRow} currentPageName="noMatch"/>
         //             )}
         //         />

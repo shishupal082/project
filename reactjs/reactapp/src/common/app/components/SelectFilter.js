@@ -104,7 +104,7 @@ class SelectFilter extends React.Component {
             reloadButton = null;
             pageTab = null;
         }
-        return (<div className="container SELECT-FILTER">
+        return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>
                     {list1Text}
                     {list1Dropdown}
