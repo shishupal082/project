@@ -1,0 +1,13 @@
+.theme-green div.footer-div {
+    background-color: #8ab794;
+}
+.theme-grey div.footer-div {
+    background-color: #888;
+    color: #eee;
+}
+.footer-div {
+    border-top: 1px solid #ddd;
+    position: fixed;
+    bottom: 0;
+}
+

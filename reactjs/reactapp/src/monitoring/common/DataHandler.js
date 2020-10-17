@@ -192,6 +192,14 @@ DataHandler.extend({
         }
         return sectionId;
     },
+    getDisableFooterStatus: function() {
+        var sectionId = DataHandler.getData("currentSectionId", "");
+        var section = DataHandler.getSectionData(sectionId);
+        if ($S.isObject(section) && $S.isBoolean(section.disableFooter)) {
+            return section.disableFooter;
+        }
+        return true;
+    },
     getDefaultDateSelectionType: function() {
         var appControlData = DataHandler.getData("appControlData", {});
         var defaultDateSelectionType = "";
@@ -606,6 +614,8 @@ DataHandler.extend({
             appDataCallback("goBackLinkData", goBackLinkData);
             appDataCallback("dateSelection", Config.dateSelection);
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
+            appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
+
             appStateCallback();
         }
     }

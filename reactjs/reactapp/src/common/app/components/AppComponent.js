@@ -4,7 +4,11 @@ import Api from "../../Api";
 
 
 import Heading from "./Heading";
+import SelectFilter from './SelectFilter';
 import Errors from "./Errors";
+import Footer from "./Footer";
+import PageTab from './PageTab';
+
 
 class AppComponent extends React.Component {
     constructor(props) {
@@ -15,19 +19,16 @@ class AppComponent extends React.Component {
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");
-        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
-            this.props.methods.registerChildAttribute("history", this.props.history);
-        }
-        if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
-            this.props.methods.pageComponentDidMount(this.props.currentPageName);
-        }
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
         return (<div className="container APP-COMPONENT">
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
+                    <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
+                    <PageTab data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
                     <div className="APP-COMPONENT.PAGE-DATA">{pageData}</div>
+                    <Footer data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                 </div>);
     }
 }

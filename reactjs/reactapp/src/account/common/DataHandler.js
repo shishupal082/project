@@ -172,6 +172,13 @@ DataHandler.extend({
         var currentUserName = DataHandler.getData("currentUserName", "");
         return currentUserName;
     },
+    getDisableFooterStatus: function() {
+        var currentUserControlData = DataHandler.getData("currentUserControlData", {});
+        if ($S.isBoolean(currentUserControlData.disableFooter)) {
+            return currentUserControlData.disableFooter;
+        }
+        return true;
+    },
     getMetaDataAccounts: function() {
         var metaData = DataHandler.getData("metaData", {});
         if ($S.isObject(metaData) && $S.isArray(metaData.accounts)) {
@@ -316,6 +323,7 @@ DataHandler.extend({
             // appDataCallback("dataLoadStatus", dataLoadStatus);
             appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
             appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
+            appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
             appStateCallback();
         }
     }

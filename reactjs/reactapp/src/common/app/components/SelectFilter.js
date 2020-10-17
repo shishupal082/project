@@ -12,8 +12,6 @@ class SelectFilter extends React.Component {
         this.onList2Select = this.onList2Select.bind(this);
         this.onDateSelect = this.onDateSelect.bind(this);
         this.onReloadClick = this.onReloadClick.bind(this);
-        this.OpenTab = this.OpenTab.bind(this);
-        this.CloseTab = this.CloseTab.bind(this);
     }
     onList1Select(e) {
         this.props.methods.onList1Select(e);
@@ -26,12 +24,6 @@ class SelectFilter extends React.Component {
     }
     onReloadClick(e) {
         this.props.methods.onReloadClick(e);
-    }
-    OpenTab(e) {
-        this.props.methods.OpenTab(e);
-    }
-    CloseTab(e) {
-        this.props.methods.CloseTab(e);
     }
     componentDidMount() {
         $S.log("SelectFilter:componentDidMount");
@@ -58,22 +50,6 @@ class SelectFilter extends React.Component {
             }
             return <button key={i} type="button" className={className} onClick={self.onDateSelect} value={el.value}>{el.name}</button>;
         });
-        var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
-            var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
-            var navLinkClass = "nav-link active";
-            var tabDisplayText = self.props.methods.getTabDisplayText(el);
-            if (arr.length === 1) {
-                closeLink = null;
-            }
-            if(el === self.props.currentPageName) {
-                closeLink = null;
-                navLinkClass += " current-page";
-            }
-            return <li key={i} className="nav-item"><button className={navLinkClass}><span className="pr-5px" value={el} onClick={self.OpenTab}>{tabDisplayText}</span>{closeLink}</button></li>;
-        });
-        if (pageTab.length > 0) {
-            pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;
-        }
         if (list1Dropdown.length >= 1) {
             list1Dropdown = <td><select className="form-control" onChange={this.onList1Select} value={this.props.data.currentList1Id}>{list1Dropdown}</select></td>;
         } else {
@@ -102,7 +78,6 @@ class SelectFilter extends React.Component {
             list2Dropdown = null;
             dateSelection = null;
             reloadButton = null;
-            pageTab = null;
         }
         return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>
@@ -112,7 +87,6 @@ class SelectFilter extends React.Component {
                     {dateSelection}
                     {reloadButton}
                 </tr></tbody></table></div>
-                <div>{pageTab}</div>
             </div>);
     }
 }

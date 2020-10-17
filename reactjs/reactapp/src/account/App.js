@@ -38,7 +38,8 @@ class App extends React.Component {
 
             "selectedDateType": "",
             "dateSelection": [],
-            "dateSelectionRequiredPages": []
+            "dateSelectionRequiredPages": [],
+            "disableFooter": true
         };
         this.onClick = this.onClick.bind(this);
         /* methods used in selectFilter */

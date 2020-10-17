@@ -1,7 +1,6 @@
 import React from 'react';
 import $S from "../../../interface/stack.js";
 import Api from "../../Api";
-import SelectFilter from './SelectFilter';
 
 class Heading extends React.Component {
     constructor(props) {
@@ -12,6 +11,12 @@ class Heading extends React.Component {
     }
     componentDidMount() {
         $S.log("Heading:componentDidMount");
+        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
+            this.props.methods.registerChildAttribute("history", this.props.history);
+        }
+        if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
+            this.props.methods.pageComponentDidMount(this.props.currentPageName);
+        }
     }
     render() {
         var goBackLink = null;
@@ -24,7 +29,6 @@ class Heading extends React.Component {
                     <center><h2>{this.props.data.appHeading}</h2></center>
                 </div>
                 <div><center><h2>{this.props.data.pageHeading}</h2></center></div>
-                <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
             </div>);
     }
 }

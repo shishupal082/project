@@ -4,6 +4,7 @@
             "id": "section-1",
             "name": "Section 1 Name",
             "defaultDateSelectionType": "monthly",
+            "disableFooter": false,
             "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
             "csvDataApis": [
                 "/app/monitoring/static/data/list-1.csv",
@@ -14,6 +15,7 @@
             "id": "section-2",
             "name": "Section 2 Name",
             "defaultDateSelectionType": "all",
+            "disableFooter": true,
             "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
             "csvDataApis": [
                 "/app/monitoring/static/data/list-2.csv"
