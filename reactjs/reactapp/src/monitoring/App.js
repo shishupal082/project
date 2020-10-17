@@ -158,13 +158,13 @@ class App extends React.Component {
         const entrybydate = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydate}/>);
         
-        const entrybytype = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+        const entrybytype = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybytype}/>);
 
-        const entrybystation = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+        const entrybystation = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybystation}/>);
 
-        const entrybydevice = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+        const entrybydevice = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydevice}/>);
 
         const summary = (props) => (<AppComponent {...props} data={commonData} methods={methods}

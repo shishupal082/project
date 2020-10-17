@@ -3,6 +3,7 @@ import Config from "./Config";
 import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
+import AppHandler from "../../common/app/common/AppHandler";
 
 var DataHandler;
 
@@ -151,14 +152,6 @@ DataHandler.extend({
         }
         return availableSection;
     },
-    isDisabledPage: function(pageName) {
-        var appControlData = DataHandler.getData("appControlData", {});
-        var disabledPages = appControlData.disabledPages;
-        if ($S.isArray(disabledPages) && $S.isString(pageName)) {
-            return disabledPages.indexOf(pageName) >= 0;
-        }
-        return false;
-    },
     getDefaultSectionId: function() {
         var appControlData = DataHandler.getData("appControlData", {});
         var sectionId = "";
@@ -168,6 +161,14 @@ DataHandler.extend({
             }
         }
         return sectionId;
+    },
+    isDisabledPage: function(pageName) {
+        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""), {});
+        var disabledPages = currentSectionData.disabledPages;
+        if ($S.isArray(disabledPages) && $S.isString(pageName)) {
+            return disabledPages.indexOf(pageName) >= 0;
+        }
+        return false;
     },
     getSectionData: function(sectionId) {
         var sectionsData = DataHandler.getData("sectionsData", []);
@@ -339,70 +340,6 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    _generateDateSelectionParameter: function(allDateStr) {
-        var dailyDateSelection = [];
-        var monthlyDateSelection = [];
-        var yearlyDateSelection = [];
-        var allDateSelection = [];
-        var allDate = [];
-        if ($S.isArray(allDateStr)) {
-            allDate = allDateStr;
-        }
-        var i, temp, heading, startDate, endDate;
-        /*Daily Date Selection*/
-        for (i=0; i<allDate.length; i++) {
-            temp = allDate[i];
-            dailyDateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
-        }
-        /*Monthly Date Selection*/
-        temp = [];
-        var dObj;
-        for (i=0; i<allDate.length; i++) {
-            dObj = DT.getDateObj(allDate[i]);
-            if (dObj !== null) {
-                dObj.setDate(1);
-                heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
-                startDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", dObj);
-                dObj.setMonth(dObj.getMonth()+1);
-                dObj.setDate(0);
-                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
-            } else {
-                continue;
-            }
-            if (temp.indexOf(heading) < 0) {
-                monthlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
-                temp.push(heading);
-            }
-        }
-        /*Yearly Date Selection*/
-        temp = [];
-        for (i=0; i<allDate.length; i++) {
-            dObj = DT.getDateObj(allDate[i]);
-            if (dObj !== null) {
-                dObj.setDate(1);
-                heading = DT.formateDateTime("YYYY", "/", dObj);
-                startDate = heading +"-01-01 00:00";
-                endDate = heading +"-12-31 23:59";
-            } else {
-                continue;
-            }
-            if (temp.indexOf(heading) < 0) {
-                yearlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
-                temp.push(heading);
-            }
-        }
-        /*All Date Selection*/
-        if (allDate.length > 0) {
-            allDateSelection.push({"dateRange": [allDate[0] + " 00:00", allDate[allDate.length-1] + " 23:59"], "dateHeading": "All"});
-        }
-        var combinedDateSelectionParameter = {};
-        combinedDateSelectionParameter["daily"] = dailyDateSelection;
-        combinedDateSelectionParameter["monthly"] = monthlyDateSelection;
-        combinedDateSelectionParameter["yearly"] = yearlyDateSelection;
-        combinedDateSelectionParameter["all"] = allDateSelection;
-
-        return combinedDateSelectionParameter;
-    },
     _setDateFilterParameters: function() {
         var csvDataByDate = DataHandler.getData("csvDataByDate", []);
         var allDate = [], temp;
@@ -415,7 +352,7 @@ DataHandler.extend({
                 }
             }
         }
-        var combinedDateSelectionParameter = this._generateDateSelectionParameter(allDate);
+        var combinedDateSelectionParameter = AppHandler.generateDateSelectionParameter(allDate);
         DataHandler.setData("combinedDateSelectionParameter", combinedDateSelectionParameter);
         var selectedDateType = DataHandler.getData("selectedDateType", "");
         if (combinedDateSelectionParameter[selectedDateType]) {
@@ -548,21 +485,64 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
+    generateDataBySelection: function(attr) {
+        var entryByTypeData = [];
+        var csvDataByDate = DataHandler.getData("csvDataByDate", []);
+        var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
+        var availableDataByType = [], temp, isFound, i, j, k, l, dateRange;
+        var selectionType;
+        if (!$S.isString(attr) || attr.length < 1) {
+            return entryByTypeData;
+        }
+        for (i = 0; i < csvDataByDate.length; i++) {
+            if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
+                for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                    selectionType = csvDataByDate[i].items[j][attr];
+                    if ($S.isString(selectionType) && availableDataByType.indexOf(selectionType) < 0) {
+                        availableDataByType.push(selectionType);
+                        temp = {"fieldName": selectionType, "fieldNameDisplay": csvDataByDate[i].items[j][attr+"Display"], "data": []};
+                        entryByTypeData.push(temp);
+                    } else {
+                        for(k=0; k<entryByTypeData.length; k++) {
+                            if (entryByTypeData[k].fieldName === selectionType) {
+                                temp = entryByTypeData[k];
+                                break;
+                            }
+                        }
+                    }
+                    for(k=0; k<selectedDateParameter.length; k++) {
+                        dateRange = selectedDateParameter[k].dateRange;
+                        if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], csvDataByDate[i].items[j].date)) {
+                            isFound = false;
+                            for(l=0; l<temp.data.length; l++) {
+                                if (temp.data[l].dateHeading === selectedDateParameter[k].dateHeading) {
+                                    isFound = true;
+                                    break;
+                                }
+                            }
+                            if (isFound) {
+                                temp.data[l]["items"].push(csvDataByDate[i].items[j]);
+                            } else {
+                                temp.data.push({"dateHeading": selectedDateParameter[k].dateHeading, "items": [csvDataByDate[i].items[j]]});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return entryByTypeData;
+    },
     getPageRenderData: function(pageName) {
-        var csvDataByDate, selectedDateParameter;
-        var startDate, endDate, fieldDate;
+        var csvDataByDate, dateRange;
+        var fieldDate, i, j;
+        var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
         if (["entrybydate"].indexOf(pageName) >= 0) {
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
-            selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
-            for (var i = 0; i < csvDataByDate.length; i++) {
-                fieldDate = DT.getDateObj(csvDataByDate[i].date);
-                for (var j = 0; j < selectedDateParameter.length; j++) {
-                    startDate = DT.getDateObj(selectedDateParameter[j].dateRange[0]);
-                    endDate = DT.getDateObj(selectedDateParameter[j].dateRange[1]);
-                    if (startDate === null || endDate === null || fieldDate === null) {
-                        continue;
-                    }
-                    if (startDate.getTime() <= fieldDate.getTime() && endDate.getTime() >= fieldDate.getTime()) {
+            for (i = 0; i < csvDataByDate.length; i++) {
+                fieldDate = csvDataByDate[i].date;
+                for (j = 0; j < selectedDateParameter.length; j++) {
+                    dateRange = selectedDateParameter[j].dateRange;
+                    if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], fieldDate)) {
                         if (!$S.isArray(selectedDateParameter[j].items)) {
                             selectedDateParameter[j].items = [];
                         }
@@ -571,10 +551,17 @@ DataHandler.extend({
                 }
             }
         }
+        if (["entrybytype", "entrybystation", "entrybydevice"].indexOf(pageName) >= 0) {
+            var mapping = {"entrybytype": "type", "entrybystation": "station", "entrybydevice": "device"};
+            return DataHandler.generateDataBySelection(mapping[pageName]);
+        }
         return selectedDateParameter;
     },
     getPageRenderField: function(pageName) {
         var renderField = [];
+        if (DataHandler.isDisabledPage(pageName)) {
+            return TemplateHandler.getPageRenderField("noDataFound");
+        }
         if (TemplateHandler[pageName]) {
             renderField = TemplateHandler[pageName](pageName);
         } else {
@@ -699,11 +686,11 @@ DataHandler.extend({
                                     var temp = {};
                                     temp["date"] = jsonData[i][j][0];
                                     temp["type"] = jsonData[i][j][1];
-                                    temp["displayType"] = DataHandler.getDisplayType(jsonData[i][j][1]);
+                                    temp["typeDisplay"] = DataHandler.getDisplayType(jsonData[i][j][1]);
                                     temp["station"] = jsonData[i][j][2];
-                                    temp["displayStation"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
+                                    temp["stationDisplay"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
                                     temp["device"] = jsonData[i][j][3];
-                                    temp["displayDevice"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
+                                    temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
                                     if (jsonData[i][j].length >= 5) {
                                         temp["description"] = jsonData[i][j][4];
                                     }

@@ -46,44 +46,22 @@ Template["home"] = [{
         "text": []
     }
 }];
-Template["homeLink"] = [
+Template["home.link"] = [
     {
         "tag": "link",
-        "name": "homeLink.toUrl",
+        "name": "home.link.toUrl",
         "url": "",
         "text": {
             "tag": "button",
             "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
-            "name": "homeLink.toText",
+            "name": "home.link.toText",
             "text": ""
         }
     }
 ];
-Template["entry"] = [{
-    "tag": "div",
-    "text": [
-        {
-            "tag": "table",
-            "className": "table-bordered table-striped",
-            "text": [
-                {
-                    "tag": "thead",
-                    "name": "entry.data.firstRow",
-                    "text": []
-                },
-                {
-                    "tag": "tbody",
-                    "name": "entry.data",
-                    "text": []
-                }
-            ]
-        }
-    ]
-}];
-
 Template["entrybydate"] = [
     {
-        "tag": "div.h1",
+        "tag": "div.h4",
         "text": {
             "tag": "span",
             "className": "badge badge-primary",
@@ -93,113 +71,151 @@ Template["entrybydate"] = [
     },
     {
         "tag": "div",
-        "text": [
-            {
-                "tag": "table",
-                "className": "table-bordered table-striped",
-                "text": [
-                    {
-                        "tag": "thead",
-                        "name": "entrybydate.data.firstRow",
-                        "text": []
-                    },
-                    {
-                        "tag": "tbody",
-                        "name": "entrybydate.data",
-                        "text": []
-                    }
-                ]
-            }
-        ]
+        "name": "entrybydate.entry.table",
+        "text": []
     }
 ];
-Template["entry.data.firstRow"] = [
+Template["entry.table"] = [
     {
-        "tag": "tr",
-        "text": [
-            {
-                "tag": "th",
-                "text": "S.No."
-            },
-            {
-                "tag": "th",
-                "text": "Date"
-            },
-            {
-                "tag": "th.span",
-                "text": "Station"
-            },
-            {
-                "tag": "th",
-                "text": [
-                    {
-                        "tag": "span",
-                        "text": "Description"
-                    },
-                    {
-                        "tag": "span",
-                        "className": "pr-10px"
-                    },
-                    {
-                        "tag": "button",
-                        "className": "btn btn-primary pt-0 pb-0",
-                        "value": "reload",
-                        "text": "Reload"
-                    }
-                ]
-            },
-            {
-                "tag": "th",
-                "text": "Type"
-            },
-            {
-                "tag": "th",
-                "text": "Device"
-            }
-        ]
+        "tag": "div",
+        "text": {
+            "tag": "table",
+            "className": "table-bordered table-striped",
+            "text": [
+                {
+                    "tag": "thead",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "th",
+                                    "text": "S.No."
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": "Date"
+                                },
+                                {
+                                    "tag": "th.span",
+                                    "text": "Station"
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": [
+                                        {
+                                            "tag": "span",
+                                            "text": "Description"
+                                        },
+                                        {
+                                            "tag": "span",
+                                            "className": "pr-10px"
+                                        },
+                                        {
+                                            "tag": "button",
+                                            "className": "btn btn-primary pt-0 pb-0",
+                                            "value": "reload",
+                                            "text": "Reload"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": "Type"
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": "Device"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "tbody",
+                    "name": "entry.table.tr",
+                    "text": []
+                }
+            ]
+        }
     }
 ];
-Template["entry.data"] = [
+Template["entry.table.tr"] = [
     {
         "tag": "tr",
         "text": [
             {
                 "tag": "td",
                 "name": "s.no.",
-                "text": "S.No."
+                "text": ""
             },
             {
                 "tag": "td",
                 "name": "date",
-                "text": "Date"
+                "text": ""
             },
             {
                 "tag": "td",
-                "name": "displayStation",
-                "text": "Station"
+                "name": "stationDisplay",
+                "text": ""
             },
             {
                 "tag": "td",
                 "name": "description",
-                "text": "Description"
+                "text": ""
             },
             {
                 "tag": "td",
-                "name": "displayType",
-                "text": "Type"
+                "name": "typeDisplay",
+                "text": ""
             },
             {
                 "tag": "td",
-                "name": "displayDevice",
-                "text": "Device"
+                "name": "deviceDisplay",
+                "text": ""
             }
         ]
     }
 ];
-
-Template["entrybytype"] = [{"tag": "center", "text": "Entry by Type"}];
-Template["entrybystation"] = [{"tag": "center", "text": "Entry by Station"}];
-Template["entrybydevice"] = [{"tag": "center", "text": "Entry by Device"}];
+Template["entrybyFieldName"] = [
+    {
+        "tag": "div.h4",
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "name": "entrybyFieldName.fieldName",
+            "text": ""
+        }
+    },
+    {
+        "tag": "div",
+        "name": "entrybyFieldName.items",
+        "text": []
+    }
+];
+Template["entrybyFieldName.items"] = [
+    {
+        "tag": "div",
+        "text": [
+            {
+                "tag": "div.h6",
+                "text": [
+                    {
+                        "tag": "span",
+                        "className": "badge badge-primary",
+                        "name": "entrybyFieldName.items.date",
+                        "text": ""
+                    }
+                ]
+            },
+            {
+                "tag": "div",
+                "name": "entrybyFieldName.items.entry.table",
+                "text": []
+            }
+        ]
+    }
+];
 Template["summary"] = [
     {
         "tag": "div.table",

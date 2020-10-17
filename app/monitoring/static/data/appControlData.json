@@ -16,6 +16,7 @@
             "name": "Section 2 Name",
             "defaultDateSelectionType": "all",
             "disableFooter": true,
+            "disabledPages": ["entry"],
             "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
             "csvDataApis": [
                 "/app/monitoring/static/data/list-2.csv"
