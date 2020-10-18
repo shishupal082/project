@@ -43,6 +43,50 @@ TemplateHandler.extend({
             TemplateHelper.addItemInTextArray(entryTable, "entry.table.tr", rowTemplate);
         }
         return entryTable;
+    },
+    _generateSummaryFieldTr: function(availableData, summaryFieldData, getDisplayTextMethod, ref) {
+        var trTemplate = [];
+        var tr, trData;
+        for (var i = 0; i < availableData.length; i++) {
+            if (summaryFieldData[availableData[i]]) {
+                tr = TemplateHandler.getTemplate("summary.data.table.tr");
+                trData = {"summary.data.table.tr.s.no.": (ref.sNo)++};
+                trData["summary.data.table.tr.variable"] = getDisplayTextMethod(availableData[i]);
+                trData["summary.data.table.tr.count"] = summaryFieldData[availableData[i]].length;
+                TemplateHelper.updateTemplateText(tr, trData);
+                trTemplate.push(tr);
+            }
+        }
+        return trTemplate;
+    },
+    generateSummaryTables: function(summaryData) {
+        var typeData = {}, stationData = {}, deviceData = {};
+        for (var i = 0; i < summaryData.length; i++) {
+            if (typeData[summaryData[i].type]) {
+                typeData[summaryData[i].type].push(summaryData[i]);
+            } else {
+                typeData[summaryData[i].type] = [summaryData[i]];
+            }
+            if (stationData[summaryData[i].station]) {
+                stationData[summaryData[i].station].push(summaryData[i]);
+            } else {
+                stationData[summaryData[i].station] = [summaryData[i]];
+            }
+            if (deviceData[summaryData[i].device]) {
+                deviceData[summaryData[i].device].push(summaryData[i]);
+            } else {
+                deviceData[summaryData[i].device] = [summaryData[i]];
+            }
+        }
+        var availableTypes = DataHandler.getValidTypes();
+        var availableStations = DataHandler.getValidStation();
+        var availableDevices = DataHandler.getValidDevice();
+        var ref = {"sNo": 1};
+        var summaryTable = TemplateHandler.getTemplate("summary.data.table");
+        TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableStations, stationData, DataHandler.getDisplayStation, ref));
+        TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableTypes, typeData, DataHandler.getDisplayType, ref));
+        TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableDevices, deviceData, DataHandler.getDisplayDevice, ref));
+        return summaryTable;
     }
 });
 
@@ -62,7 +106,7 @@ TemplateHandler.extend({
         return template;
     },
     "entry": function(pageName) {
-        var data = DataHandler.getData("csvData", []);
+        var data = DataHandler.getData("renderData", []);
         if (!$S.isArray(data) || data.length < 1) {
             return TemplateHandler.getTemplate("noDataFound");
         }
@@ -108,17 +152,17 @@ TemplateHandler.extend({
         return TemplateHandler["entrybytype"](pageName);
     },
     "summary": function(pageName) {
-        var data = DataHandler.getData("csvData", []);
-        if (!$S.isArray(data)) {
+        var data = DataHandler.getData("renderData", []);
+        if (!$S.isArray(data) || data.length < 1) {
             return TemplateHandler.getTemplate("noDataFound");
         }
         var renderField = TemplateHandler.getTemplate(pageName);
-        // for(var i=0; i<data.length; i++) {
-        //     data[i]["s.no."] = i+1;
-        //     var rowTemplate = TemplateHandler.getTemplate("entry.data");
-        //     TemplateHelper.updateTemplateText(rowTemplate, data[i]);
-        //     TemplateHelper.addItemInTextArray(renderField, "entry.data", rowTemplate);
-        // }
+        for(var i=data.length-1; i>=0; i--) {
+            var dataTemplate = TemplateHandler.getTemplate("summary.data");
+            TemplateHelper.updateTemplateText(dataTemplate, {"summary.data.dateHeading": data[i].dateHeading});
+            TemplateHelper.addItemInTextArray(dataTemplate, "summary.data.table", TemplateHandler.generateSummaryTables(data[i].items));
+            TemplateHelper.addItemInTextArray(renderField, "summary.data", dataTemplate);
+        }
         return renderField;
     }
 });

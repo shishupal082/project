@@ -218,34 +218,85 @@ Template["entrybyFieldName.items"] = [
 ];
 Template["summary"] = [
     {
-        "tag": "div.table",
+        "tag": "div",
+        "name": "summary.data",
+        "text": []
+    }
+];
+Template["summary.data"] = [
+    {
+        "tag": "div",
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "name": "summary.data.dateHeading",
+            "text": ""
+        }
+    },
+    {
+        "tag": "div",
+        "name": "summary.data.table",
+        "text": []
+    }
+];
+Template["summary.data.table"] = [
+    {
+        "tag": "div",
+        "text": {
+            "tag": "table",
+            "className": "table table-striped table-bordered",
+            "text": [
+                {
+                    "tag": "thead",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "th",
+                                    "text": "S.No."
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": "Description"
+                                },
+                                {
+                                    "tag": "th",
+                                    "text": "Count"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "tbody",
+                    "name": "summary.data.table.tr",
+                    "text": []
+                }
+            ]
+        }
+    }
+];
+Template["summary.data.table.tr"] = [
+    {
+        "tag": "tr",
         "text": [
             {
-                "tag": "thead",
-                "text": [
-                    {
-                        "tag": "tr",
-                        "text": [
-                            {
-                                "tag": "th",
-                                "text": "S.No."
-                            },
-                            {
-                                "tag": "th",
-                                "name": "summary.variable",
-                                "text": "Variable"
-                            },
-                            {
-                                "tag": "th",
-                                "name": "summary.count",
-                                "text": "Count"
-                            }
-                        ]
-                    }
-                ]
+                "tag": "td",
+                "name": "summary.data.table.tr.s.no.",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "summary.data.table.tr.variable",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "summary.data.table.tr.count",
+                "text": ""
             }
         ]
     }
 ];
-
 export default Template;

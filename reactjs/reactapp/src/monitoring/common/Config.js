@@ -43,7 +43,7 @@ Config.summary = "summary";
 Config.noMatch = "noMatch";
 
 
-Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice"];
+Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice", "summary"];
 
 Config.defaultPageFields = [];
 

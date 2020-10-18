@@ -24,6 +24,26 @@ AppHandler.extend({
 });
 
 AppHandler.extend({
+    isValidDateStr: function(dateStr) {
+        var p1Formate = "YYYY/-/MM/-/DD";
+        var p2Formate = "YYYY/-/MM/-/DD/ /hh/:/mm";
+        //2020-05-31
+        var p1 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9]/i;
+        //2020-05-31 00:00
+        var p2 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]/i;
+        var dateObj;
+        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10)) {
+            dateObj = DT.getDateObj(dateStr);
+            if (dateObj !== null) {
+                if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
+                    return true;
+                } else if (dateStr.search(p1) >= 0 && dateStr === DT.formateDateTime(p1Formate, "/", dateObj)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
     isDateLiesInRange: function(startDate, endDate, fieldDate) {
         startDate = DT.getDateObj(startDate);
         endDate = DT.getDateObj(endDate);

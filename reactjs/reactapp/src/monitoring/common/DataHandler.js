@@ -329,13 +329,13 @@ DataHandler.extend({
         return this._getValidationData("devices");
     },
     getDisplayType: function(id) {
-        return this._getDisplayName("monitoring-types", id);
+        return DataHandler._getDisplayName("monitoring-types", id);
     },
     getDisplayStation: function(id) {
-        return this._getDisplayName("stations", id);
+        return DataHandler._getDisplayName("stations", id);
     },
     getDisplayDevice: function(id) {
-        return this._getDisplayName("devices", id);
+        return DataHandler._getDisplayName("devices", id);
     }
 });
 
@@ -532,10 +532,47 @@ DataHandler.extend({
         }
         return entryByTypeData;
     },
+    generateSummaryData: function(pageName) {
+        var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
+        var csvDataByDate = DataHandler.getData("csvDataByDate", []);
+        var tempRenderData = [], renderData = [];
+        var temp, i, j, k, startDate, endDate, fieldDate, isFound;
+        for (i=0; i < csvDataByDate.length; i++) {
+            for (j=0; j<csvDataByDate[i].items.length; j++) {
+                fieldDate = csvDataByDate[i].date;
+                for (k=0; k<selectedDateParameter.length; k++) {
+                    startDate = selectedDateParameter[k].dateRange[0];
+                    endDate = selectedDateParameter[k].dateRange[1];
+                    if (AppHandler.isDateLiesInRange(startDate, endDate, fieldDate)) {
+                        temp = {"dateHeading": selectedDateParameter[k].dateHeading, "item": csvDataByDate[i].items[j]};
+                        tempRenderData.push(temp);
+                    }
+                }
+            }
+        }
+        for (i = 0; i < tempRenderData.length; i++) {
+            isFound = false;
+            for (j = 0; j < renderData.length; j++) {
+                if (renderData[j]["dateHeading"] === tempRenderData[i]["dateHeading"]) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (isFound) {
+                renderData[j]["items"].push(tempRenderData[i]["item"]);
+            } else {
+                renderData.push({"dateHeading":tempRenderData[i]["dateHeading"], "items": [tempRenderData[i]["item"]]});
+            }
+        }
+        return renderData;
+    },
     getPageRenderData: function(pageName) {
         var csvDataByDate, dateRange;
         var fieldDate, i, j;
         var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
+        if (["entry"].indexOf(pageName) >= 0) {
+            return DataHandler.getData("csvData", []);
+        }
         if (["entrybydate"].indexOf(pageName) >= 0) {
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
             for (i = 0; i < csvDataByDate.length; i++) {
@@ -550,12 +587,16 @@ DataHandler.extend({
                     }
                 }
             }
+            return selectedDateParameter;
         }
         if (["entrybytype", "entrybystation", "entrybydevice"].indexOf(pageName) >= 0) {
             var mapping = {"entrybytype": "type", "entrybystation": "station", "entrybydevice": "device"};
             return DataHandler.generateDataBySelection(mapping[pageName]);
         }
-        return selectedDateParameter;
+        if (["summary"].indexOf(pageName) >= 0) {
+            return DataHandler.generateSummaryData(pageName);
+        }
+        return [];
     },
     getPageRenderField: function(pageName) {
         var renderField = [];
@@ -619,26 +660,6 @@ DataHandler.extend({
         }
         return fileJsonData;
     },
-    _isValidDateStr: function(dateStr) {
-        var p1Formate = "YYYY/-/MM/-/DD";
-        var p2Formate = "YYYY/-/MM/-/DD/ /hh/:/mm";
-        //2020-05-31
-        var p1 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9]/i;
-        //2020-05-31 00:00
-        var p2 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]/i;
-        var dateObj;
-        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10)) {
-            dateObj = DT.getDateObj(dateStr);
-            if (dateObj !== null) {
-                if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
-                    return true;
-                } else if (dateStr.search(p1) >= 0 && dateStr === DT.formateDateTime(p1Formate, "/", dateObj)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    },
     generatePageData: function(csvData) {
         var jsonData = [];
         if ($S.isArray(csvData)) {
@@ -666,7 +687,7 @@ DataHandler.extend({
                             isValidStation = true;
                             isValidDevice = true;
                             if (jsonData[i][j].length >= 4) {
-                                if (!DataHandler._isValidDateStr(jsonData[i][j][0])) {
+                                if (!AppHandler.isValidDateStr(jsonData[i][j][0])) {
                                     isValidType = false;
                                     errorsData.push({"reason": "Invalid date", "data": jsonData[i][j].join()});
                                 }
