@@ -622,7 +622,13 @@ DataHandler.extend({
                 }
             }
         }
-        return selectedDateParameter;
+        var finalData = [];
+        for (i = 0; i < selectedDateParameter.length; i++) {
+            if ($S.isArray(selectedDateParameter[i].items) && selectedDateParameter[i].items.length > 0) {
+                finalData.push(selectedDateParameter[i]);
+            }
+        }
+        return finalData;
     },
     _isValidData: function(data, selectedStation, selectedType, selectedDevice) {
         if (!$S.isObject(data)) {
