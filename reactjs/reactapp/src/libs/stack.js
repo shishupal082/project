@@ -202,8 +202,6 @@ function getRandomNumber(minVal, maxVal) {
     return random;
 }
 var Data = (function() {
-    // var keys = [];
-    // var localData = {};
     function isValidKey(keys, key) {
         if (keys.indexOf(key) >= 0) {
             return true;
@@ -211,6 +209,7 @@ var Data = (function() {
         return false;
     }
     function Data() {
+        this.name = "DataObj";
         this.keys = [];
         this.localData = {};
     }
@@ -239,6 +238,29 @@ var Data = (function() {
             this.localData[keys[i]] = null;
         }
         return 0;
+    };
+    Data.prototype.initData = function(bypassKeys) {
+        if (!isArray(bypassKeys)) {
+            return;
+        }
+        var keys = this.getKeys();
+        var allData = this.getAllData();
+        var key, defaultData;
+        for (var i = 0; i < keys.length; i++) {
+            key = keys[i];
+            if (bypassKeys.indexOf(key) >= 0) {
+                continue;
+            }
+            defaultData = null;
+            if (isObject(allData[key])) {
+                defaultData = {};
+            } else if (isArray(allData[key])) {
+                defaultData = [];
+            } else if (isString(allData[key])) {
+                defaultData = "";
+            }
+            this.setData(key, defaultData);
+        }
     };
     Data.prototype.setData = function(key, value, isDirect) {
         if (isValidKey(this.keys, key)) {

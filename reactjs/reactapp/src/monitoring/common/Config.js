@@ -27,7 +27,8 @@ var pages = {
     "entrybytype": basepathname+"/entrybytype",
     "entrybystation": basepathname+"/entrybystation",
     "entrybydevice": basepathname+"/entrybydevice",
-    "summary": basepathname+"/summary"
+    "summary": basepathname+"/summary",
+    "entrybydatefilter": basepathname+"/entrybydatefilter"
 };
 
 Config.pages = pages;
@@ -40,10 +41,11 @@ Config.entrybytype = "entrybytype";
 Config.entrybystation = "entrybystation";
 Config.entrybydevice = "entrybydevice";
 Config.summary = "summary";
+Config.entrybydatefilter = "entrybydatefilter";
 Config.noMatch = "noMatch";
 
 
-Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice", "summary"];
+Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice", "summary", "entrybydatefilter"];
 
 Config.defaultPageFields = [];
 

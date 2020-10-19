@@ -75,6 +75,83 @@ Template["entrybydate"] = [
         "text": []
     }
 ];
+Template["entrybydatefilter"] = [
+    {
+        "tag": "div",
+        "name": "entrybydatefilter.filter",
+        "text": []
+    },
+    {
+        "tag": "div",
+        "name": "entrybydatefilter.entrybydate",
+        "text": []
+    }
+];
+Template["entrybydatefilter.filter"] = [
+    {
+        "tag": "table.tbody.tr",
+        "text": [
+            {
+                "tag": "td",
+                "text": {
+                    "tag": "select",
+                    "value": "",
+                    "name": "selectedStation",
+                    "className": "form-control",
+                    "text": [
+                        {
+                            "tag": "option",
+                            "value": "",
+                            "text": "All Station"
+                        }
+                    ]
+                }
+            },
+            {
+                "tag": "td",
+                "text": {
+                    "tag": "select",
+                    "value": "",
+                    "name": "selectedType",
+                    "className": "form-control",
+                    "text": [
+                        {
+                            "tag": "option",
+                            "value": "",
+                            "text": "All Type"
+                        }
+                    ]
+                }
+            },
+            {
+                "tag": "td",
+                "text": {
+                    "tag": "select",
+                    "value": "",
+                    "name": "selectedDevice",
+                    "className": "form-control",
+                    "text": [
+                        {
+                            "tag": "option",
+                            "value": "",
+                            "text": "All Device"
+                        }
+                    ]
+                }
+            },
+            {
+                "tag": "td",
+                "text": {
+                    "tag": "button",
+                    "className": "btn btn-primary",
+                    "name": "reset-filter",
+                    "value": "reset-filter",
+                    "text": "Reset"
+                }
+            }
+        ]
+    }
+];
 Template["entry.table"] = [
     {
         "tag": "div",

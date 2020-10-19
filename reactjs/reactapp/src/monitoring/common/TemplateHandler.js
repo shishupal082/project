@@ -36,8 +36,9 @@ TemplateHandler.extend({
             return [];
         }
         var entryTable = TemplateHandler.getTemplate("entry.table");
-        for(var i=0; i<entryData.length; i++) {
-            entryData[i]["s.no."] = i+1;
+        var sNo = 1;
+        for(var i=entryData.length-1; i>=0; i--) {
+            entryData[i]["s.no."] = sNo++;
             var rowTemplate = TemplateHandler.getTemplate("entry.table.tr");
             TemplateHelper.updateTemplateText(rowTemplate, entryData[i]);
             TemplateHelper.addItemInTextArray(entryTable, "entry.table.tr", rowTemplate);
@@ -87,6 +88,45 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableTypes, typeData, DataHandler.getDisplayType, ref));
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableDevices, deviceData, DataHandler.getDisplayDevice, ref));
         return summaryTable;
+    },
+    generateEntryByDateField: function(data) {
+        if (!$S.isArray(data) || data.length < 1) {
+            return [];
+        }
+        var renderField = [];
+        for (var i = data.length-1; i >=0 ; i--) {
+            var template = TemplateHandler.getTemplate("entrybydate");
+            TemplateHelper.setTemplateAttr(template, "date", "text", data[i].dateHeading);
+            TemplateHelper.addItemInTextArray(template, "entrybydate.entry.table", TemplateHandler.generateEntryTable(data[i].items));
+            renderField.push(template);
+        }
+        return renderField;
+    },
+    generateFilter: function(data) {
+        var template = TemplateHandler.getTemplate("entrybydatefilter.filter");
+        var selectedStation, selectedType, selectedDevice;
+        selectedStation = DataHandler.getData("selectedStation", "");
+        selectedType = DataHandler.getData("selectedType", "");
+        selectedDevice = DataHandler.getData("selectedDevice", "");
+        var values = {"selectedStation": selectedStation, "selectedType": selectedType, "selectedDevice": selectedDevice};
+        TemplateHelper.updateTemplateValue(template, values);
+        var availableStations, availableTypes, availableDevices, temp;
+        availableStations = DataHandler.getAvailableStation();
+        availableTypes = DataHandler.getAvailableTypes();
+        availableDevices = DataHandler.getAvailableDevice();
+        for (var i = 0; i < availableStations.length; i++) {
+            temp = {"value": availableStations[i].id, "text": availableStations[i].name, "tag": "option"};
+            TemplateHelper.addItemInTextArray(template, "selectedStation", temp);
+        }
+        for (var i = 0; i < availableTypes.length; i++) {
+            temp = {"value": availableTypes[i].id, "text": availableTypes[i].name, "tag": "option"};
+            TemplateHelper.addItemInTextArray(template, "selectedType", temp);
+        }
+        for (var i = 0; i < availableDevices.length; i++) {
+            temp = {"value": availableDevices[i].id, "text": availableDevices[i].name, "tag": "option"};
+            TemplateHelper.addItemInTextArray(template, "selectedDevice", temp);
+        }
+        return template;
     }
 });
 
@@ -117,14 +157,7 @@ TemplateHandler.extend({
         if (!$S.isArray(data) || data.length < 1) {
             return TemplateHandler.getTemplate("noDataFound");
         }
-        var renderField = [];
-        for (var i = data.length-1; i >=0 ; i--) {
-            var template = TemplateHandler.getTemplate(pageName);
-            TemplateHelper.setTemplateAttr(template, "date", "text", data[i].dateHeading);
-            TemplateHelper.addItemInTextArray(template, "entrybydate.entry.table", TemplateHandler.generateEntryTable(data[i].items));
-            renderField.push(template);
-        }
-        return renderField;
+        return TemplateHandler.generateEntryByDateField(data);
     },
     "entrybytype": function(pageName) {
         var data = DataHandler.getData("renderData", []);
@@ -164,6 +197,19 @@ TemplateHandler.extend({
             TemplateHelper.addItemInTextArray(renderField, "summary.data", dataTemplate);
         }
         return renderField;
+    },
+    "entrybydatefilter": function(pageName) {
+        var data = DataHandler.getData("renderData", []);
+        var template = TemplateHandler.getTemplate(pageName);
+        var renderField;
+        if (!$S.isArray(data) || data.length < 1) {
+            renderField = TemplateHandler.getTemplate("noDataFound");
+        } else {
+            renderField = TemplateHandler.generateEntryByDateField(data);
+        }
+        TemplateHelper.addItemInTextArray(template, "entrybydatefilter.filter", TemplateHandler.generateFilter(data));
+        TemplateHelper.addItemInTextArray(template, "entrybydatefilter.entrybydate", renderField);
+        return template;
     }
 });
 

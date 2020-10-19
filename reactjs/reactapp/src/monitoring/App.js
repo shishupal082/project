@@ -41,6 +41,7 @@ class App extends React.Component {
             "disableFooter": false
         };
         this.onClick = this.onClick.bind(this);
+        this.dropDownChange = this.dropDownChange.bind(this);
         /* methods used in selectFilter */
         this.onList1Select = this.onList1Select.bind(this);
         this.onList2Select = this.onList2Select.bind(this);
@@ -80,11 +81,21 @@ class App extends React.Component {
         DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
-        if (e.currentTarget.value === "reload") {
+        var name = e.currentTarget.name;
+        var value = e.currentTarget.value;
+        if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
             DataHandler.OnSectionChange(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
+        } else if (name === "reset-filter" && value === "reset-filter") {
+            // DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
+            DataHandler.OnResetFilter(this.appStateCallback, this.appDataCallback);
         }
+    }
+    dropDownChange(e) {
+        var name = e.currentTarget.name;
+        var value = e.currentTarget.value;
+        DataHandler.OnFilterSelect(this.appStateCallback, this.appDataCallback, name, value);
     }
     onList1Select(e) {
         var sectionId = e.currentTarget.value;
@@ -169,6 +180,10 @@ class App extends React.Component {
 
         const summary = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.summary}/>);
+
+        const entrybydatefilter = (props) => (<AppComponent {...props} onClick={this.onClick} dropDownChange={this.dropDownChange}
+                    data={commonData} methods={methods}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydatefilter}/>);
         const noMatch = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
 
@@ -185,6 +200,7 @@ class App extends React.Component {
                 <Route path={pages.entrybystation} component={entrybystation}/>
                 <Route path={pages.entrybydevice} component={entrybydevice}/>
                 <Route path={pages.summary} component={summary}/>
+                <Route path={pages.entrybydatefilter} component={entrybydatefilter}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

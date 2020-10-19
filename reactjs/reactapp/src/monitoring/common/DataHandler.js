@@ -12,41 +12,50 @@ var DT = $S.getDT();
 
 var CurrentData = $S.getDataObj();
 var keys = [];
-keys.push("currentPageName");
+// keys.push("currentPageName");
 keys.push("availableDataPageName");
-keys.push("dropdownFields");
+// keys.push("dropdownFields");
 
-keys.push("appControlDataLoadStatus");
-keys.push("metaDataLoadStatus");
-keys.push("csvDataLoadStatus");
-keys.push("firstTimeDataLoadStatus");
+// keys.push("appControlDataLoadStatus");
+// keys.push("metaDataLoadStatus");
+// keys.push("csvDataLoadStatus");
+// keys.push("firstTimeDataLoadStatus");
 
 keys.push("csvData");
 keys.push("csvDataByDate");
-keys.push("errorsData");
 
 keys.push("renderData");
 keys.push("renderFieldRow");
 
-keys.push("selectedDateType");
+// keys.push("selectedDateType");
 keys.push("selectedDateParameter");
 keys.push("combinedDateSelectionParameter");
 
 
-keys.push("appControlData");
-keys.push("metaData");
-keys.push("sectionsData");
-keys.push("currentSectionId");
+// keys.push("appControlData");
+// keys.push("metaData");
+// keys.push("sectionsData");
+// keys.push("currentSectionId");
 keys.push("sectionName");
 keys.push("currentSectionData");
 keys.push("errorsData");
 
-keys.push("homeFields");
-keys.push("dropdownFields");
+// keys.push("homeFields");
+// keys.push("dropdownFields");
 
-keys.push("metaDataStatus");
+// keys.push("metaDataStatus");
 
+keys.push("selectedStation");
+keys.push("selectedType");
+keys.push("selectedDevice");
 
+var bypassKeys = ["appControlData", "metaData", "sectionsData",
+        "currentSectionId", "currentPageName", "selectedDateType",
+        "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
+        "homeFields", "dropdownFields", "metaDataStatus",
+        "selectedStation", "selectedType", "selectedDevice"];
+
+keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
@@ -96,20 +105,7 @@ DataHandler.extend({
         }
     },
     initData: function() {
-        var defaultData, allData = CurrentData.getAllData();
-        for (var i = 0; i < keys.length; i++) {
-            if (["appControlData", "metaData", "sectionsData",
-                "currentSectionId", "currentPageName", "selectedDateType",
-                "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
-                "homeFields", "dropdownFields", "metaDataStatus"].indexOf(keys[i]) >= 0) {
-                continue;
-            }
-            defaultData = [];
-            if ($S.isObject(allData[keys[i]])) {
-                defaultData = {};
-            }
-            CurrentData.setData(keys[i], defaultData);
-        }
+        CurrentData.initData(bypassKeys);
     },
     getPageUrl: function(pageName) {
         return window.location.pathname;
@@ -285,6 +281,27 @@ DataHandler.extend({
         }
         return csvDataApis;
     },
+    _getAvailableData: function(key) {
+        var metaData = DataHandler.getData("metaData", {});
+        var availableData = [], tempAvailableData;
+        if ($S.isString(key) && $S.isArray(metaData[key])) {
+            tempAvailableData = metaData[key].map(function(el) {
+                var id = el ? el.id : null;
+                var name = el ? el.name : null;
+                if (!$S.isString(name) || name.length < 1) {
+                    name = id;
+                }
+                return {"id": id, "name": name};
+            });
+            availableData = tempAvailableData.filter(function(el, i, arr) {
+                if ($S.isObject(el) && $S.isString(el.id) && el.id.length > 0) {
+                    return true;
+                }
+                return false;
+            });
+        }
+        return availableData;
+    },
     _getValidationData: function(key) {
         var metaData = DataHandler.getData("metaData", {});
         var validationData = [];
@@ -327,6 +344,15 @@ DataHandler.extend({
     },
     getValidDevice: function() {
         return this._getValidationData("devices");
+    },
+    getAvailableTypes: function() {
+        return this._getAvailableData("monitoring-types");
+    },
+    getAvailableStation: function() {
+        return this._getAvailableData("stations");
+    },
+    getAvailableDevice: function() {
+        return this._getAvailableData("devices");
     },
     getDisplayType: function(id) {
         return DataHandler._getDisplayName("monitoring-types", id);
@@ -416,6 +442,18 @@ DataHandler.extend({
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnDateSelection");
     },
+    OnFilterSelect: function(appStateCallback, appDataCallback, name, value) {
+        DataHandler.setData(name, value);
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler.setPageData(appStateCallback, appDataCallback, "OnFilterSelect");
+    },
+    OnResetFilter: function(appStateCallback, appDataCallback) {
+        DataHandler.setData("selectedStation", "");
+        DataHandler.setData("selectedType", "");
+        DataHandler.setData("selectedDevice", "");
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler.setPageData(appStateCallback, appDataCallback, "OnResetFilter");
+    },
     GetTabDisplayText: function(pageName) {
         return DataHandler.getMetaDataPageHeading(pageName);
     }
@@ -459,7 +497,7 @@ DataHandler.extend({
                 DataHandler.setData("csvDataLoadStatus", "in-progress");
                 var csvData = [];
                 $S.loadJsonData(null, csvDataApis, function(response, apiName, ajax){
-                    if (response) {
+                    if ($S.isString(response)) {
                         csvData.push(response);
                     } else {
                         DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
@@ -566,28 +604,91 @@ DataHandler.extend({
         }
         return renderData;
     },
-    getPageRenderData: function(pageName) {
-        var csvDataByDate, dateRange;
-        var fieldDate, i, j;
+    generateEntryByDateData: function(csvDataByDate) {
+        if (!$S.isArray(csvDataByDate) || csvDataByDate.length < 1) {
+            return [];
+        }
         var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
+        var i, j, dateRange, fieldDate;
+        for (i = 0; i < selectedDateParameter.length; i++) {
+            if (!$S.isArray(selectedDateParameter[i].items)) {
+                selectedDateParameter[i].items = [];
+            }
+            dateRange = selectedDateParameter[i].dateRange;
+            for (j = 0; j < csvDataByDate.length; j++) {
+                fieldDate = csvDataByDate[j].date;
+                if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], fieldDate)) {
+                    selectedDateParameter[i].items = selectedDateParameter[i].items.concat(csvDataByDate[j].items);
+                }
+            }
+        }
+        return selectedDateParameter;
+    },
+    _isValidData: function(data, selectedStation, selectedType, selectedDevice) {
+        if (!$S.isObject(data)) {
+            return false;
+        }
+        if (!$S.isArray(selectedStation) || !$S.isArray(selectedType) || !$S.isArray(selectedDevice)) {
+            return false;
+        }
+        if (selectedStation.indexOf(data.station) < 0) {
+            return false;
+        }
+        if (selectedType.indexOf(data.type) < 0) {
+            return false;
+        }
+        if (selectedDevice.indexOf(data.device) < 0) {
+            return false;
+        }
+        return true;
+    },
+    getPageRenderData: function(pageName) {
+        var csvDataByDate, i, j;
         if (["entry"].indexOf(pageName) >= 0) {
             return DataHandler.getData("csvData", []);
         }
         if (["entrybydate"].indexOf(pageName) >= 0) {
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
+            return DataHandler.generateEntryByDateData(csvDataByDate);
+        }
+        if (["entrybydatefilter"].indexOf(pageName) >= 0) {
+            csvDataByDate = DataHandler.getData("csvDataByDate", []);
+            var selectedStation, selectedType, selectedDevice;
+            selectedStation = DataHandler.getData("selectedStation", "");
+            selectedType = DataHandler.getData("selectedType", "");
+            selectedDevice = DataHandler.getData("selectedDevice", "");
+            var validStation = DataHandler.getValidStation();
+            var validType = DataHandler.getValidTypes();
+            var validDevice = DataHandler.getValidDevice();
+            if (selectedStation === "") {
+                selectedStation = validStation;
+            } else {
+                selectedStation = [selectedStation];
+            }
+            if (selectedType === "") {
+                selectedType = validType;
+            } else {
+                selectedType = [selectedType];
+            }
+            if (selectedDevice === "") {
+                selectedDevice = validDevice;
+            } else {
+                selectedDevice = [selectedDevice];
+            }
+            var filteredData = [], temp, isValid;
             for (i = 0; i < csvDataByDate.length; i++) {
-                fieldDate = csvDataByDate[i].date;
-                for (j = 0; j < selectedDateParameter.length; j++) {
-                    dateRange = selectedDateParameter[j].dateRange;
-                    if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], fieldDate)) {
-                        if (!$S.isArray(selectedDateParameter[j].items)) {
-                            selectedDateParameter[j].items = [];
-                        }
-                        selectedDateParameter[j].items = selectedDateParameter[j].items.concat(csvDataByDate[i].items);
+                temp = {"date": csvDataByDate[i].date, "items": []};
+                for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                    isValid = DataHandler._isValidData(csvDataByDate[i].items[j], selectedStation, selectedType, selectedDevice);
+                    if (isValid) {
+                        temp["items"].push(csvDataByDate[i].items[j]);
                     }
                 }
+                if (temp.items.length > 0) {
+                    filteredData.push(temp);
+                }
             }
-            return selectedDateParameter;
+            return DataHandler.generateEntryByDateData(filteredData);
         }
         if (["entrybytype", "entrybystation", "entrybydevice"].indexOf(pageName) >= 0) {
             var mapping = {"entrybytype": "type", "entrybystation": "station", "entrybydevice": "device"};
@@ -742,7 +843,9 @@ DataHandler.extend({
         }
         temp = BST.getInOrder(BST);
         for (i=0; i<temp.length; i++) {
-            dataByDateSorted.push({date: temp[i].date, items:temp[i].item});
+            if ($S.isString(temp[i].date) && $S.isArray(temp[i].item)) {
+                dataByDateSorted.push({date: temp[i].date, items:temp[i].item});
+            }
         }
         return {errorsData: errorsData, finalData: finalData, dataByDate: dataByDateSorted};
     }

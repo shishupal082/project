@@ -27,7 +27,8 @@
         {"name": "entrybytype", "toText": "Entry by Type"},
         {"name": "entrybystation", "toText": "Entry by Station"},
         {"name": "entrybydevice", "toText": "Entry by Device"},
-        {"name": "summary", "toText": "Summary"}
+        {"name": "summary", "toText": "Summary"},
+        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"}
     ],
     "dropdownFields": [
         {"name": "entry", "toText": "Entry"},
@@ -35,6 +36,7 @@
         {"name": "entrybytype", "toText": "Entry by Type"},
         {"name": "entrybystation", "toText": "Entry by Station"},
         {"name": "entrybydevice", "toText": "Entry by Device"},
-        {"name": "summary", "toText": "Summary"}
+        {"name": "summary", "toText": "Summary"},
+        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"}
     ]
 }
