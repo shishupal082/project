@@ -110,19 +110,19 @@ TemplateHandler.extend({
         selectedDevice = DataHandler.getData("selectedDevice", "");
         var values = {"selectedStation": selectedStation, "selectedType": selectedType, "selectedDevice": selectedDevice};
         TemplateHelper.updateTemplateValue(template, values);
-        var availableStations, availableTypes, availableDevices, temp;
+        var availableStations, availableTypes, availableDevices, temp, i;
         availableStations = DataHandler.getAvailableStation();
         availableTypes = DataHandler.getAvailableTypes();
         availableDevices = DataHandler.getAvailableDevice();
-        for (var i = 0; i < availableStations.length; i++) {
+        for (i = 0; i < availableStations.length; i++) {
             temp = {"value": availableStations[i].id, "text": availableStations[i].name, "tag": "option"};
             TemplateHelper.addItemInTextArray(template, "selectedStation", temp);
         }
-        for (var i = 0; i < availableTypes.length; i++) {
+        for (i = 0; i < availableTypes.length; i++) {
             temp = {"value": availableTypes[i].id, "text": availableTypes[i].name, "tag": "option"};
             TemplateHelper.addItemInTextArray(template, "selectedType", temp);
         }
-        for (var i = 0; i < availableDevices.length; i++) {
+        for (i = 0; i < availableDevices.length; i++) {
             temp = {"value": availableDevices[i].id, "text": availableDevices[i].name, "tag": "option"};
             TemplateHelper.addItemInTextArray(template, "selectedDevice", temp);
         }
