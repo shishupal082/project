@@ -7,22 +7,18 @@ class PageTab extends React.Component {
         this.state = {
             isLoaded: false
         };
-        this.OpenTab = this.OpenTab.bind(this);
-        this.CloseTab = this.CloseTab.bind(this);
-    }
-    OpenTab(e) {
-        this.props.methods.OpenTab(e);
-    }
-    CloseTab(e) {
-        this.props.methods.CloseTab(e);
     }
     componentDidMount() {
         $S.log("PageTab:componentDidMount");
     }
     render() {
         var self = this;
-        var pageTab = this.props.data.pageTab.map(function(el, i, arr) {
-            var closeLink = <span className="close-tab" value={el} onClick={self.CloseTab}>X</span>;
+        var pageTabData = this.props.data.pageTab;
+        if (!$S.isArray(pageTabData)) {
+            pageTabData = [];
+        }
+        var pageTab = pageTabData.map(function(el, i, arr) {
+            var closeLink = <span className="close-tab" name="close-tab" value={el} onClick={self.props.methods.onClick}>X</span>;
             var navLinkClass = "nav-link active";
             var tabDisplayText = self.props.methods.getTabDisplayText(el);
             if (arr.length === 1) {
@@ -32,7 +28,7 @@ class PageTab extends React.Component {
                 closeLink = null;
                 navLinkClass += " current-page";
             }
-            return <li key={i} className="nav-item"><button className={navLinkClass}><span className="pr-5px" value={el} onClick={self.OpenTab}>{tabDisplayText}</span>{closeLink}</button></li>;
+            return <li key={i} className="nav-item"><button className={navLinkClass}><span className="pr-5px" value={el} name="open-tab" onClick={self.props.methods.onClick}>{tabDisplayText}</span>{closeLink}</button></li>;
         });
         if (pageTab.length > 0) {
             pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;

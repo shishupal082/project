@@ -22,7 +22,25 @@ AppHandler.extend({
         return window.location.pathname;
     },
 });
-
+AppHandler.extend({
+    getTagName: function(e) {
+        return e.currentTarget.tagName.toLocaleLowerCase();
+    },
+    getFieldName: function(e) {
+        var tagName = this.getTagName(e);
+        if ($S.isString(tagName) && tagName === "span") {
+            return e.currentTarget.getAttribute("name");
+        }
+        return e.currentTarget.name;
+    },
+    getFieldValue: function(e) {
+        var tagName = this.getTagName(e);
+        if ($S.isString(tagName) && tagName === "span") {
+            return e.currentTarget.getAttribute("value");
+        }
+        return e.currentTarget.value;
+    }
+});
 AppHandler.extend({
     isValidDateStr: function(dateStr) {
         var p1Formate = "YYYY/-/MM/-/DD";

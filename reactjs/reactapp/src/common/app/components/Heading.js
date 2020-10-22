@@ -20,8 +20,9 @@ class Heading extends React.Component {
     }
     render() {
         var goBackLink = null;
-        if (this.props.data.goBackLinkData.length > 0) {
-            goBackLink = Api.generateFields(this.props, this.props.data.goBackLinkData, 0);
+        var goBackLinkData = this.props.data.goBackLinkData;
+        if ($S.isArray(goBackLinkData) && goBackLinkData.length > 0) {
+            goBackLink = Api.generateFields(this.props, goBackLinkData, 0);
         }
         return (<div className="HEADING">
                 <div>

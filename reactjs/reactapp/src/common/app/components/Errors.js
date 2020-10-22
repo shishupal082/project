@@ -13,7 +13,11 @@ class Errors extends React.Component {
         $S.log("Errors:componentDidMount");
     }
     render() {
-        var errors = this.props.data.errorsData.map(function(el, i, arr) {
+        var errorsData = this.props.data.errorsData;
+        if (!$S.isArray(errorsData)) {
+            errorsData = [];
+        }
+        var errors = errorsData.map(function(el, i, arr) {
             var alertComponent;
             var index = (i+1) + ")";
             if ($S.isString(el) || $S.isNumeric(el)) {
