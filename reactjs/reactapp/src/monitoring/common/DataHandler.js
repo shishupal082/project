@@ -761,9 +761,12 @@ DataHandler.extend({
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
             var goBackLinkData = Config.goBackLinkData;
             var sectionsData = DataHandler.getData("sectionsData", []);
+            var filterOptions = [];
             if (currentPageName === "home") {
                 goBackLinkData = [];
                 sectionsData = [];
+            } else if (currentPageName === "entrybydatefilter") {
+                filterOptions = AppHandler.getFilterData(DataHandler.generateFilterData());
             }
             var renderData = DataHandler.getPageRenderData(currentPageName);
             DataHandler.setData("renderData", renderData);
@@ -787,7 +790,7 @@ DataHandler.extend({
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
             appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
 
-            appDataCallback("filterOptions", AppHandler.getFilterData(DataHandler.generateFilterData()));
+            appDataCallback("filterOptions", filterOptions);
             appStateCallback();
         }
     }
