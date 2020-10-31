@@ -648,6 +648,42 @@ DataHandler.extend({
         }
         return true;
     },
+    generateFilterData: function() {
+        var selectionOptions = [];
+        var selectedStation, selectedType, selectedDevice;
+        selectedStation = DataHandler.getData("selectedStation", "");
+        selectedType = DataHandler.getData("selectedType", "");
+        selectedDevice = DataHandler.getData("selectedDevice", "");
+        var availableStations, availableTypes, availableDevices, i;
+        availableStations = DataHandler.getAvailableStation();
+        availableTypes = DataHandler.getAvailableTypes();
+        availableDevices = DataHandler.getAvailableDevice();
+        var stationOptions = [], typeOptions = [], deviceOptions = [];
+        for (i = 0; i < availableStations.length; i++) {
+            stationOptions.push({"value": availableStations[i].id, "option": availableStations[i].name});
+        }
+        for (i = 0; i < availableTypes.length; i++) {
+            typeOptions.push({"value": availableTypes[i].id, "option": availableTypes[i].name});
+        }
+        for (i = 0; i < availableDevices.length; i++) {
+            deviceOptions.push({"value": availableDevices[i].id, "option": availableDevices[i].name});
+        }
+        if (stationOptions.length > 0) {
+            $S.addElAt(stationOptions, 0, {"value": "", "option": "All Station"});
+        }
+        if (typeOptions.length > 0) {
+            $S.addElAt(typeOptions, 0, {"value": "", "option": "All Type"});
+        }
+        if (deviceOptions.length > 0) {
+            $S.addElAt(deviceOptions, 0, {"value": "", "option": "All Device"});
+        }
+        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
+        selectionOptions.push({"type": "dropdown", "options": stationOptions, "selectName": "selectedStation", "selectedValue": selectedStation});
+        selectionOptions.push({"type": "dropdown", "options": typeOptions, "selectName": "selectedType", "selectedValue": selectedType});
+        selectionOptions.push({"type": "dropdown", "options": deviceOptions, "selectName": "selectedDevice", "selectedValue": selectedDevice});
+        selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
+        return selectionOptions;
+    },
     getPageRenderData: function(pageName) {
         var csvDataByDate, i, j;
         if (["entry"].indexOf(pageName) >= 0) {
@@ -751,6 +787,7 @@ DataHandler.extend({
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
             appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
 
+            appDataCallback("filterOptions", AppHandler.getFilterData(DataHandler.generateFilterData()));
             appStateCallback();
         }
     }

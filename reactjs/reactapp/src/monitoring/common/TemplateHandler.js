@@ -102,6 +102,7 @@ TemplateHandler.extend({
         }
         return renderField;
     },
+    /*
     generateFilter: function(data) {
         var template = TemplateHandler.getTemplate("entrybydatefilter.filter");
         var selectedStation, selectedType, selectedDevice;
@@ -128,6 +129,7 @@ TemplateHandler.extend({
         }
         return template;
     }
+    */
 });
 
 TemplateHandler.extend({
@@ -200,16 +202,19 @@ TemplateHandler.extend({
     },
     "entrybydatefilter": function(pageName) {
         var data = DataHandler.getData("renderData", []);
-        var template = TemplateHandler.getTemplate(pageName);
         var renderField;
         if (!$S.isArray(data) || data.length < 1) {
             renderField = TemplateHandler.getTemplate("noDataFound");
         } else {
             renderField = TemplateHandler.generateEntryByDateField(data);
         }
+        /*
+        var template = TemplateHandler.getTemplate(pageName);
         TemplateHelper.addItemInTextArray(template, "entrybydatefilter.filter", TemplateHandler.generateFilter(data));
         TemplateHelper.addItemInTextArray(template, "entrybydatefilter.entrybydate", renderField);
         return template;
+        */
+        return renderField;
     }
 });
 

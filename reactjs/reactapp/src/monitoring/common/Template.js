@@ -75,6 +75,7 @@ Template["entrybydate"] = [
         "text": []
     }
 ];
+/*
 Template["entrybydatefilter"] = [
     {
         "tag": "div",
@@ -152,6 +153,7 @@ Template["entrybydatefilter.filter"] = [
         ]
     }
 ];
+*/
 Template["entry.table"] = [
     {
         "tag": "div",

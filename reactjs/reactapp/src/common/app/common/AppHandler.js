@@ -136,9 +136,48 @@ AppHandler.extend({
         combinedDateSelectionParameter["yearly"] = yearlyDateSelection;
         combinedDateSelectionParameter["all"] = allDateSelection;
         return combinedDateSelectionParameter;
-    },
+    }
 });
 
+AppHandler.extend({
+    // single select filter data
+    getFilterData: function(selectionOptions) {
+        var filterData = [];
+        var i, j;
+        if ($S.isArray(selectionOptions)) {
+            for (i = 0; i < selectionOptions.length; i++) {
+                if ($S.isArray(selectionOptions[i].options)) {
+                    if ($S.isString(selectionOptions[i].selectedValue)) {
+                        for (j = 0; j < selectionOptions[i].options.length; j++) {
+                            if ($S.isObject(selectionOptions[i].options[j])) {
+                                if (selectionOptions[i].selectedValue === selectionOptions[i].options[j].value) {
+                                    selectionOptions[i].options[j]["selected"] = true;
+                                } else {
+                                    selectionOptions[i].options[j]["selected"] = false;
+                                }
+                            }
+                        }
+                    }
+                    filterData.push({"type": selectionOptions[i].type, "options": selectionOptions[i].options, "selectName": selectionOptions[i].selectName});
+                } else if ($S.isArray(selectionOptions[i].buttons)) {
+                    if ($S.isString(selectionOptions[i].selectedValue)) {
+                        for (j = 0; j < selectionOptions[i].buttons.length; j++) {
+                            if ($S.isObject(selectionOptions[i].buttons[j])) {
+                                if (selectionOptions[i].selectedValue === selectionOptions[i].buttons[j].value) {
+                                    selectionOptions[i].buttons[j]["selected"] = true;
+                                } else {
+                                    selectionOptions[i].buttons[j]["selected"] = false;
+                                }
+                            }
+                        }
+                    }
+                    filterData.push({"type": selectionOptions[i].type, "buttons": selectionOptions[i].buttons});
+                }
+            }
+        }
+        return filterData;
+    }
+});
 })($S);
 
 export default AppHandler;

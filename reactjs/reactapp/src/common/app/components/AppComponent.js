@@ -6,6 +6,7 @@ import Api from "../../Api";
 import Heading from "./Heading";
 import SelectFilter from './SelectFilter';
 import Errors from "./Errors";
+import PageFilter from './PageFilter';
 import Footer from "./Footer";
 import PageTab from './PageTab';
 
@@ -27,6 +28,7 @@ class AppComponent extends React.Component {
                     <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <PageTab data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <Errors data={this.props.data}/>
+                    <PageFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <div className="APP-COMPONENT.PAGE-DATA">{pageData}</div>
                     <Footer data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                 </div>);
