@@ -1,14 +1,7 @@
 import React from 'react';
 import $S from "../../../interface/stack.js";
-import Api from "../../Api";
 
-
-import Heading from "./Heading";
-import SelectFilter from './SelectFilter';
-import Errors from "./Errors";
-import PageFilter from './PageFilter';
-import Footer from "./Footer";
-import PageTab from './PageTab';
+import AppComponentWrapper from "./AppComponentWrapper";
 
 
 class AppComponent extends React.Component {
@@ -17,21 +10,45 @@ class AppComponent extends React.Component {
         this.state = {
             isLoaded: false
         };
+        this.onClick = this.onClick.bind(this);
+        this.dropDownChange = this.dropDownChange.bind(this);
+        this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
+        this.getTabDisplayText = this.getTabDisplayText.bind(this);
+        this.methods = {
+            onClick: this.onClick,
+            dropDownChange: this.dropDownChange,
+            pageComponentDidMount: this.pageComponentDidMount,
+            getTabDisplayText: this.getTabDisplayText
+        };
+    }
+    _callAppMethod(method, arg) {
+        if ($S.isFunction(method)) {
+            return method(arg);
+        }
+        return arg;
+    }
+    onClick(e) {
+        this._callAppMethod(this.props.methods.onClick, e);
+    }
+    dropDownChange(e) {
+        this._callAppMethod(this.props.methods.dropDownChange, e);
+    }
+    pageComponentDidMount(pageName) {
+        this._callAppMethod(this.props.methods.pageComponentDidMount, pageName);
+    }
+    getTabDisplayText(tabName) {
+        return this._callAppMethod(this.props.methods.getTabDisplayText, tabName);
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");
+        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
+            this.props.methods.registerChildAttribute("history", this.props.history);
+        }
     }
     render() {
-        var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
-        return (<div className="container APP-COMPONENT">
-                    <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
-                    <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
-                    <PageTab data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
-                    <Errors data={this.props.data}/>
-                    <PageFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
-                    <div className="APP-COMPONENT.PAGE-DATA">{pageData}</div>
-                    <Footer data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
-                </div>);
+        return (<AppComponentWrapper data={this.props.data} methods={this.methods}
+            history={this.props.history} currentPageName={this.props.currentPageName}
+            renderFieldRow={this.props.renderFieldRow}/>);
     }
 }
 

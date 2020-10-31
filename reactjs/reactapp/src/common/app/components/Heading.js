@@ -11,9 +11,6 @@ class Heading extends React.Component {
     }
     componentDidMount() {
         $S.log("Heading:componentDidMount");
-        if ($S.isFunction(this.props.methods.registerChildAttribute)) {
-            this.props.methods.registerChildAttribute("history", this.props.history);
-        }
         if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
             this.props.methods.pageComponentDidMount(this.props.currentPageName);
         }
