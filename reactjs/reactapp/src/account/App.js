@@ -2,6 +2,8 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 
+import AppHandler from "../common/app/common/AppHandler";
+
 import AppComponent from "../common/app/components/AppComponent";
 import LedgerBook from "./components/LedgerBook";
 
@@ -42,13 +44,7 @@ class App extends React.Component {
             "disableFooter": true
         };
         this.onClick = this.onClick.bind(this);
-        /* methods used in selectFilter */
-        this.onList1Select = this.onList1Select.bind(this);
-        this.onList2Select = this.onList2Select.bind(this);
-        this.onDateSelect = this.onDateSelect.bind(this);
-        this.onReloadClick = this.onReloadClick.bind(this);
-        this.OpenTab = this.OpenTab.bind(this);
-        this.CloseTab = this.CloseTab.bind(this);
+        this.dropDownChange = this.dropDownChange.bind(this);
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
@@ -57,12 +53,8 @@ class App extends React.Component {
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
-            onList1Select: this.onList1Select,
-            onList2Select: this.onList2Select,
-            onDateSelect: this.onDateSelect,
-            onReloadClick: this.onReloadClick,
-            OpenTab: this.OpenTab,
-            CloseTab: this.CloseTab,
+            onClick: this.onClick,
+            dropDownChange: this.dropDownChange,
             pageComponentDidMount: this.pageComponentDidMount,
             getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
@@ -81,39 +73,35 @@ class App extends React.Component {
         DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
-        if (e.currentTarget.value === "reload") {
+        var name = AppHandler.getFieldName(e);
+        var value = AppHandler.getFieldValue(e);
+        if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
             DataHandler.UserChange(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
+        } else if (name === "open-tab") {
+            if (value !== this.appData.currentList2Id) {
+                this.gotoPage(value);// value is page name
+            }
+        } else if (name === "close-tab") {
+            this.removeTab(value);// value is page name
+            this.appStateCallback();
+        } else if (name === "date-select") {
+            var selectedDateType = value;
+            DataHandler.TrackDateSelection(selectedDateType);
+            DataHandler.DateSelectionChange(this.appStateCallback, this.appDataCallback, selectedDateType);
         }
     }
-    onList1Select(e) {
-        var currentUserName = e.currentTarget.value;
-        DataHandler.TrackSectionView("dropdownSelect", currentUserName);
-        DataHandler.UserChange(this.appStateCallback, this.appDataCallback, currentUserName);
-    }
-    onList2Select(e) {
-        this.gotoPage(e.currentTarget.value);
-    }
-    onDateSelect(e) {
-        var selectedDateType = e.currentTarget.value;
-        DataHandler.TrackDateSelection(selectedDateType);
-        DataHandler.DateSelectionChange(this.appStateCallback, this.appDataCallback, selectedDateType);
-    }
-    onReloadClick(e) {
-        DataHandler.TrackSectionView("onReloadClick", this.appData.currentList1Id);
-        DataHandler.UserChange(this.appStateCallback, this.appDataCallback, this.appData.currentList1Id);
-    }
-    OpenTab(e) {
-        var pageName = e.currentTarget.getAttribute("value");
-        if (pageName !== this.appData.currentList2Id) {
-            this.gotoPage(pageName);
+    dropDownChange(e) {
+        var name = e.currentTarget.name;
+        var value = e.currentTarget.value;
+        if (name === "list1-select") {
+            var currentUserName = value;
+            DataHandler.TrackSectionView("dropdownSelect", currentUserName);
+            DataHandler.UserChange(this.appStateCallback, this.appDataCallback, currentUserName);
+        } else if (name === "list2-select") {
+            this.gotoPage(value);
         }
-    }
-    CloseTab(e) {
-        var pageName = e.currentTarget.getAttribute("value");
-        this.removeTab(pageName);
-        this.appStateCallback();
     }
     appStateCallback() {
         $S.log("App:appStateCallback");
