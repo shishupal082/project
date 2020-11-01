@@ -29,6 +29,7 @@ var pages = {
     "trialbalance": basepathname+"/trialbalance",
     "currentbal": basepathname+"/currentbal",
     "currentbalbydate": basepathname+"/currentbalbydate",
+    "currentbalbydatev2": basepathname+"/currentbalbydatev2",
     "summary": basepathname+"/summary",
     "accountsummarybydate": basepathname+"/summarybydate",
     "accountsummarybycalander": basepathname+"/summarybycalander",
@@ -45,6 +46,7 @@ Config.ledger = "ledger";
 Config.trialbalance = "trialbalance";
 Config.currentbal = "currentbal";
 Config.currentbalbydate = "currentbalbydate";
+Config.currentbalbydatev2 = "currentbalbydatev2";
 Config.summary = "summary";
 Config.accountsummarybydate = "accountsummarybydate";
 Config.accountsummarybycalander = "accountsummarybycalander";
@@ -54,7 +56,7 @@ Config.custompage = "custompage";
 Config.profitandloss = "profitandloss";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["journalbydate", "currentbalbydate", "summary", "accountsummarybydate"];
+Config.dateSelectionRequired = ["journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "accountsummarybydate"];
 Config.pages = pages;
 Config.defaultPageFields = [];
 

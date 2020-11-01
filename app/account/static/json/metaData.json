@@ -1,4 +1,38 @@
 {
+    "homeFields": [
+        {"name": "journal", "toText": "Journal"},
+        {"name": "journalbydate", "toText": "Journal By Date"},
+        {"name": "currentbalbydatev2", "toText": "Current Balance By Date V2"},
+        {"name": "currentbalbydate", "toText": "Current Balance By Date"},
+        {"name": "profitandloss", "toText": "Profit and Loss"},
+        {"name": "custompage", "toText": "Customise Account Summary"},
+        {"name": "accountsummarybycalander", "toText": "Account Summary By Calender"},
+        {"name": "summary", "toText": "Account Summary By A/C Name"},
+        {"name": "accountsummarybydate", "toText": "Account Summary By Date"},
+        {"name": "customisedebit", "toText": "Customised Debit Account Summary"},
+        {"name": "customisecredit", "toText": "Customised Credit Account Summary"},
+        {"name": "trialbalance", "toText": "Trial Balance"},
+        {"name": "ledger", "toText": "Ledger"},
+        {"name": "currentbal", "toText": "Current Balance"}
+    ],
+    "dropdownFields": [
+        {"name": "journal", "toText": "Journal"},
+        {"name": "journalbydate", "toText": "Journal By Date"},
+        {"name": "currentbalbydatev2", "toText": "Current Balance By Date V2"},
+        {"name": "currentbalbydate", "toText": "Current Balance By Date"},
+        {"name": "profitandloss", "toText": "Profit and Loss"},
+        {"name": "custompage", "toText": "Customise Account Summary"},
+        {"name": "accountsummarybycalander", "toText": "Account Summary By Calender"},
+        {"name": "summary", "toText": "Account Summary By A/C Name"},
+        {"name": "accountsummarybydate", "toText": "Account Summary By Date"},
+        {"name": "customisedebit", "toText": "Customised Debit Account Summary"},
+        {"name": "customisecredit", "toText": "Customised Credit Account Summary"},
+        {"name": "trialbalance", "toText": "Trial Balance"},
+        {"name": "ledger", "toText": "Ledger"},
+        {"name": "currentbal", "toText": "Current Balance"},
+        {"name": "home", "toText": "Home"}
+    ],
+    "disabledPages": [],
     "accounts": [
         {
             "accountName": "cash"

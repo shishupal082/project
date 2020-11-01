@@ -159,6 +159,9 @@ class App extends React.Component {
         const currentbalbydate = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbalbydate}/>);
 
+        const currentbalbydatev2 = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbalbydatev2}/>);
+
         const summary = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.summary}/>);
 
@@ -193,6 +196,7 @@ class App extends React.Component {
                 <Route path={pages.journalbydate} component={journalbydate}/>
                 <Route path={pages.currentbal} component={currentbal}/>
                 <Route path={pages.currentbalbydate} component={currentbalbydate}/>
+                <Route path={pages.currentbalbydatev2} component={currentbalbydatev2}/>
                 <Route path={pages.ledger} component={ledger}/>
                 <Route path={pages.summary} component={summary}/>
                 <Route path={pages.accountsummarybydate} component={summaryByDate}/>

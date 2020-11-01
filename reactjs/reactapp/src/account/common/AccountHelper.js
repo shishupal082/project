@@ -772,7 +772,7 @@ Account.extend({
             if ($S.isUndefined(dataByCompany[accountName])) {
                 continue;
             }
-            templateData = {"accountDisplayName": accountDisplayName, "currentBalByDateRow": []};
+            templateData = {"accountName": accountName, "accountDisplayName": accountDisplayName, "currentBalByDateRow": []};
             for (j = 0; j < dateSelection.length; j++) {
                 if ($S.isArray(dateSelection[j].dateRange) && dateSelection[j].dateRange.length >= 2) {
                     startDate = DT.getDateObj(dateSelection[j].dateRange[0]);
@@ -875,6 +875,57 @@ Account.extend({
                 template2 = DataHandler.getTemplate("currentBalByDateRow", null);
                 template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsData[i].currentBalByDateRow[j].dateHeading};
                 template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(currentBalanceFieldsData[i].currentBalByDateRow[j].currentBalRowData);
+                TemplateHelper.updateTemplateText(template2, template2Data);
+                templateData["currentBalByDateRow"].push(template2);
+            }
+            TemplateHelper.updateTemplateText(template, templateData);
+            currentBalanceFields.push(template);
+        }
+        return currentBalanceFields;
+    }
+});
+//getCurrentBalByDateRowDataV2
+Account.extend({
+    getCurrentBalByDateRowDataV2: function() {
+        var dataByCompany = DataHandler.getData("dataByCompany", {});
+        var accountData = DataHandler.getData("accounts", []);
+        var dateSelection = DataHandler.getData("dateSelectionParameter", []);
+        var currentBalanceFields = [], currentBalanceFieldsData = [];
+        var i, j, k;
+        // var debitAmount, creditAmount, currentAmount = 0;
+        var template, templateData, template2, template2Data;
+        currentBalanceFieldsData = AccountHelper._getCurrentBalanceDataByDate(dataByCompany, accountData, dateSelection);
+        var currentBalanceFieldsDataV2 = [];
+        var t1, t2;
+        // Interchange dateHeading with accountDisplayName
+        for (i = dateSelection.length-1; i >=0 ; i--) {
+            t1 = {"accountDisplayName": dateSelection[i].dateHeading, "currentBalByDateRow": []};
+            for (j=0; j<currentBalanceFieldsData.length; j++) {
+                t2 = null;
+                for (k=0; k<currentBalanceFieldsData[j]["currentBalByDateRow"].length; k++) {
+                    if (dateSelection[i].dateHeading === currentBalanceFieldsData[j]["currentBalByDateRow"][k].dateHeading) {
+                        t2 = {"accountName": currentBalanceFieldsData[j]["accountName"], "dateHeading": currentBalanceFieldsData[j]["accountDisplayName"], "currentBalRowData": currentBalanceFieldsData[j]["currentBalByDateRow"][k]["currentBalRowData"]};
+                        break;
+                    }
+                }
+                if ($S.isObject(t2)) {
+                    t1["currentBalByDateRow"].push(t2);
+                }
+            }
+            if (t1["currentBalByDateRow"].length > 0) {
+                currentBalanceFieldsDataV2.push(t1);
+            }
+        }
+        // Generating template data
+        for (i = 0; i < currentBalanceFieldsDataV2.length; i++) {
+            template = DataHandler.getTemplate("currentBalByDate", null);
+            templateData = {};
+            templateData["accountDisplayName"] = currentBalanceFieldsDataV2[i].accountDisplayName;
+            templateData["currentBalByDateRow"] = [];
+            for(j=0; j<currentBalanceFieldsDataV2[i].currentBalByDateRow.length; j++) {
+                template2 = DataHandler.getTemplate("currentBalByDateRow", null);
+                template2Data = {"dateHeading": "("+templateData["accountDisplayName"] + ") " + currentBalanceFieldsDataV2[i].currentBalByDateRow[j].dateHeading};
+                template2Data["currentBalRow"] = Account.generateCurrentBalanaceTrs(currentBalanceFieldsDataV2[i].currentBalByDateRow[j].currentBalRowData);
                 TemplateHelper.updateTemplateText(template2, template2Data);
                 templateData["currentBalByDateRow"].push(template2);
             }
@@ -1512,6 +1563,9 @@ Account.extend({
     },
     "currentbalbydate": function(pageName) {
         return Account.getCurrentBalByDateRowData();
+    },
+    "currentbalbydatev2": function(pageName) {
+        return Account.getCurrentBalByDateRowDataV2();
     },
     "profitandloss": function(pageName) {
         return AccountHelper2.getProfitAndLossFields();
