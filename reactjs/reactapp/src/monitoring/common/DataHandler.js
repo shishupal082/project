@@ -345,6 +345,23 @@ DataHandler.extend({
     getValidDevice: function() {
         return this._getValidationData("devices");
     },
+    getValidMetaData: function(name) {
+        var data = [];
+        switch(name) {
+            case "station":
+                data = this._getAvailableData("stations");
+            break;
+            case "device":
+                data = this._getAvailableData("devices");
+            break;
+            case "type":
+                data = this._getAvailableData("monitoring-types");
+            break;
+            default:
+            break;
+        }
+        return data;
+    },
     getAvailableTypes: function() {
         return this._getAvailableData("monitoring-types");
     },
@@ -527,47 +544,41 @@ DataHandler.extend({
         var entryByTypeData = [];
         var csvDataByDate = DataHandler.getData("csvDataByDate", []);
         var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
-        var availableDataByType = [], temp, isFound, i, j, k, l, dateRange;
-        var selectionType;
+        var temp, i, j, k, m, dateRange;
+        var availableDataByType = DataHandler.getValidMetaData(attr);
         if (!$S.isString(attr) || attr.length < 1) {
             return entryByTypeData;
         }
-        for (i = 0; i < csvDataByDate.length; i++) {
-            if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
-                for (j = 0; j < csvDataByDate[i].items.length; j++) {
-                    selectionType = csvDataByDate[i].items[j][attr];
-                    if ($S.isString(selectionType) && availableDataByType.indexOf(selectionType) < 0) {
-                        availableDataByType.push(selectionType);
-                        temp = {"fieldName": selectionType, "fieldNameDisplay": csvDataByDate[i].items[j][attr+"Display"], "data": []};
-                        entryByTypeData.push(temp);
-                    } else {
-                        for(k=0; k<entryByTypeData.length; k++) {
-                            if (entryByTypeData[k].fieldName === selectionType) {
-                                temp = entryByTypeData[k];
-                                break;
-                            }
-                        }
-                    }
-                    for(k=0; k<selectedDateParameter.length; k++) {
-                        dateRange = selectedDateParameter[k].dateRange;
-                        if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], csvDataByDate[i].items[j].date)) {
-                            isFound = false;
-                            for(l=0; l<temp.data.length; l++) {
-                                if (temp.data[l].dateHeading === selectedDateParameter[k].dateHeading) {
-                                    isFound = true;
-                                    break;
+        if ($S.isArray(availableDataByType) && availableDataByType.length < 1) {
+            return entryByTypeData;
+        }
+        for (m = 0; m < availableDataByType.length; m++) {
+            entryByTypeData.push({"fieldName": availableDataByType[m]["id"], "fieldNameDisplay": availableDataByType[m]["name"], "data": []});
+            for(k=0; k<selectedDateParameter.length; k++) {
+                dateRange = selectedDateParameter[k].dateRange;
+                temp = {"dateHeading": selectedDateParameter[k].dateHeading, "items": []};
+                for (i = 0; i < csvDataByDate.length; i++) {
+                    if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
+                        for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                            if (availableDataByType[m]["id"] === csvDataByDate[i].items[j][attr]) {
+                                if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], csvDataByDate[i].items[j].date)) {
+                                    temp.items.push(csvDataByDate[i].items[j]);
                                 }
-                            }
-                            if (isFound) {
-                                temp.data[l]["items"].push(csvDataByDate[i].items[j]);
-                            } else {
-                                temp.data.push({"dateHeading": selectedDateParameter[k].dateHeading, "items": [csvDataByDate[i].items[j]]});
                             }
                         }
                     }
                 }
+                if (temp.items.length > 0) {
+                    entryByTypeData[m].data.push(temp);
+                }
             }
         }
+        entryByTypeData = entryByTypeData.filter(function(el, i, arr) {
+            if (el.data.length > 0) {
+                return true;
+            }
+            return false;
+        });
         return entryByTypeData;
     },
     generateSummaryData: function(pageName) {
