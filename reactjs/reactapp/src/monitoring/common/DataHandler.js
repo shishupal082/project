@@ -330,7 +330,7 @@ DataHandler.extend({
     },
     _getDisplayName: function(key, id) {
         var metaData = DataHandler.getData("metaData", {});
-        var displayName = id, temp;
+        var displayName = id;
         if ($S.isString(key) && $S.isArray(metaData[key])) {
             for (var i = 0; i < metaData[key].length; i++) {
                 if (metaData[key][i]["id"] === id) {
