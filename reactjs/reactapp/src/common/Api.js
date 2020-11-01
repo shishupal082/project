@@ -223,7 +223,7 @@ childGenerator = {
                             id={data.id} onChange={props.onChange}
                             value={data.value}/>;
 
-        if (data.required) {
+        if ($S.isBooleanTrue(data.required)) {
             inputField = <input key={key} type={data.type} name={data.name}
                     placeholder={data.placeholder} className={data.className}
                     id={data.id} onChange={props.onChange}

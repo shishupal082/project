@@ -46,9 +46,9 @@ class AppComponent extends React.Component {
         }
     }
     render() {
-        return (<AppComponentWrapper data={this.props.data} methods={this.methods}
-            history={this.props.history} currentPageName={this.props.currentPageName}
-            renderFieldRow={this.props.renderFieldRow}/>);
+        return (<AppComponentWrapper data={this.props.data} history={this.props.history}
+            currentPageName={this.props.currentPageName} renderFieldRow={this.props.renderFieldRow}
+            methods={this.methods} onClick={this.onClick} dropDownChange={this.dropDownChange}/>);
     }
 }
 
