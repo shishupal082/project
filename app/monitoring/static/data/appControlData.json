@@ -1,6 +1,17 @@
 {
     "sections": [
         {
+            "id": "section-i",
+            "name": "Section i Name",
+            "defaultDateSelectionType": "monthly",
+            "disableFooter": false,
+            "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
+            "csvDataApis": [
+                "/pvt/app-data/monitor/oct-2020.csv",
+                "/pvt/app-data/monitor/nov-2020.csv"
+            ]
+        },
+        {
             "id": "section-1",
             "name": "Section 1 Name",
             "defaultDateSelectionType": "monthly",

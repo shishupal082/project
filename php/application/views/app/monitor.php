@@ -18,7 +18,7 @@
 var GLOBAL = {
     baseapi: "",
     basepathname: "/app/monitor",
-    appControlApi: ["/app/monitoring/static/data/appControlData.json"]
+    appControlApi: ["/pvt/app-data/monitor/appControlData.json"]
 };
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "1.0.0";
