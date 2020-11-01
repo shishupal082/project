@@ -281,16 +281,24 @@ DataHandler.extend({
         }
         return csvDataApis;
     },
+    _getName: function(item) {
+        if ($S.isObject(item)) {
+            if ($S.isString(item.name) && item.name.length > 0) {
+                return item.name;
+            }
+            if ($S.isString(item.id) && item.id.length > 0) {
+                return item.id;
+            }
+        }
+        return null;
+    },
     _getAvailableData: function(key) {
         var metaData = DataHandler.getData("metaData", {});
         var availableData = [], tempAvailableData;
         if ($S.isString(key) && $S.isArray(metaData[key])) {
             tempAvailableData = metaData[key].map(function(el) {
                 var id = el ? el.id : null;
-                var name = el ? el.name : null;
-                if (!$S.isString(name) || name.length < 1) {
-                    name = id;
-                }
+                var name = DataHandler._getName(el);
                 return {"id": id, "name": name};
             });
             availableData = tempAvailableData.filter(function(el, i, arr) {
@@ -326,10 +334,7 @@ DataHandler.extend({
         if ($S.isString(key) && $S.isArray(metaData[key])) {
             for (var i = 0; i < metaData[key].length; i++) {
                 if (metaData[key][i]["id"] === id) {
-                    temp = metaData[key][i]["name"];
-                    if ($S.isString(temp) && temp.length) {
-                        displayName = temp;
-                    }
+                    displayName = DataHandler._getName(metaData[key][i]);
                     break;
                 }
             }
