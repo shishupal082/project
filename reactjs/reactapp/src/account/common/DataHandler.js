@@ -251,12 +251,15 @@ DataHandler.extend({
         $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
             if ($S.isArray(response)) {
                 // checking unique id
-                var temp = {};
+                var temp = {}, temp2;
                 for (var i=0; i<response.length; i++) {
-                    if (temp[response[i].id]) {
-                        alert("Duplicate entry: " + response[i].id);
-                    } else {
-                        temp[response[i].id] = 1;
+                    temp2 = response[i].id;
+                    if ($S.isString(temp2) && temp2.length > 0) {
+                        if (temp[temp2]) {
+                            alert("Duplicate entry: " + temp2);
+                        } else {
+                            temp[temp2] = 1;
+                        }
                     }
                 }
                 DataHandler.setData("userControlData", response);
