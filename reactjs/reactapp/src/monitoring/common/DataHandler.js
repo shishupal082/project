@@ -52,8 +52,7 @@ keys.push("selectedDevice");
 var bypassKeys = ["appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
-        "homeFields", "dropdownFields", "metaDataStatus",
-        "selectedStation", "selectedType", "selectedDevice"];
+        "homeFields", "dropdownFields", "metaDataStatus"];
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -688,10 +687,10 @@ DataHandler.extend({
             $S.addElAt(stationOptions, 0, {"value": "", "option": "All Station"});
         }
         if (typeOptions.length > 0) {
-            $S.addElAt(typeOptions, 0, {"value": "", "option": "All Type"});
+            $S.addElAt(typeOptions, 0, {"value": "", "option": "All"});
         }
         if (deviceOptions.length > 0) {
-            $S.addElAt(deviceOptions, 0, {"value": "", "option": "All Device"});
+            $S.addElAt(deviceOptions, 0, {"value": "", "option": "All"});
         }
         var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
         selectionOptions.push({"type": "dropdown", "options": stationOptions, "selectName": "selectedStation", "selectedValue": selectedStation});

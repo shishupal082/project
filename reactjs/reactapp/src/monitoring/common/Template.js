@@ -204,7 +204,7 @@ Template["entry.table"] = [
                                 },
                                 {
                                     "tag": "th",
-                                    "text": "Device"
+                                    "text": ""
                                 }
                             ]
                         }
