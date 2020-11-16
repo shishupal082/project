@@ -78,7 +78,7 @@ class App extends React.Component {
         var value = AppHandler.getFieldValue(e);
         if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
-            DataHandler.OnSectionChange(this.appStateCallback,
+            DataHandler.OnReloadClick(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
         } else if (name === "reset-filter" && value === "reset-filter") {
             // DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);

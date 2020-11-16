@@ -52,7 +52,8 @@ keys.push("selectedDevice");
 var bypassKeys = ["appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
-        "homeFields", "dropdownFields", "metaDataStatus"];
+        "homeFields", "dropdownFields", "metaDataStatus",
+        "selectedStation", "selectedType", "selectedDevice"];
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -445,6 +446,15 @@ DataHandler.extend({
     },
     OnSectionChange: function(appStateCallback, appDataCallback, currentSectionId) {
         DataHandler.initData();
+        DataHandler._resetFilterData();
+        DataHandler.setData("currentSectionId", currentSectionId);
+        DataHandler.setData("metaDataLoadStatus", "not-started");
+        DataHandler.setData("csvDataLoadStatus", "not-started");
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler._fireSectionChange(appStateCallback, appDataCallback);
+    },
+    OnReloadClick: function(appStateCallback, appDataCallback, currentSectionId) {
+        DataHandler.initData();
         DataHandler.setData("currentSectionId", currentSectionId);
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("csvDataLoadStatus", "not-started");
@@ -468,10 +478,13 @@ DataHandler.extend({
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnFilterSelect");
     },
-    OnResetFilter: function(appStateCallback, appDataCallback) {
+    _resetFilterData: function() {
         DataHandler.setData("selectedStation", "");
         DataHandler.setData("selectedType", "");
         DataHandler.setData("selectedDevice", "");
+    },
+    OnResetFilter: function(appStateCallback, appDataCallback) {
+        DataHandler._resetFilterData();
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnResetFilter");
     },
