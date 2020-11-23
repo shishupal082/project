@@ -154,6 +154,52 @@ Template["entrybydatefilter.filter"] = [
     }
 ];
 */
+Template["entry.table.headingTr"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "th",
+                "text": "S.No."
+            },
+            {
+                "tag": "th",
+                "text": "Date"
+            },
+            {
+                "tag": "th.span",
+                "text": "Station"
+            },
+            {
+                "tag": "th",
+                "text": [
+                    {
+                        "tag": "span",
+                        "text": "Description"
+                    },
+                    {
+                        "tag": "span",
+                        "className": "pr-10px"
+                    },
+                    {
+                        "tag": "button",
+                        "className": "btn btn-primary pt-0 pb-0",
+                        "value": "reload",
+                        "text": "Reload"
+                    }
+                ]
+            },
+            {
+                "tag": "th",
+                "text": "Type"
+            },
+            {
+                "tag": "th",
+                "text": "Device"
+            }
+        ]
+    }
+];
 Template["entry.table"] = [
     {
         "tag": "div",
@@ -163,52 +209,8 @@ Template["entry.table"] = [
             "text": [
                 {
                     "tag": "thead",
-                    "text": [
-                        {
-                            "tag": "tr",
-                            "text": [
-                                {
-                                    "tag": "th",
-                                    "text": "S.No."
-                                },
-                                {
-                                    "tag": "th",
-                                    "text": "Date"
-                                },
-                                {
-                                    "tag": "th.span",
-                                    "text": "Station"
-                                },
-                                {
-                                    "tag": "th",
-                                    "text": [
-                                        {
-                                            "tag": "span",
-                                            "text": "Description"
-                                        },
-                                        {
-                                            "tag": "span",
-                                            "className": "pr-10px"
-                                        },
-                                        {
-                                            "tag": "button",
-                                            "className": "btn btn-primary pt-0 pb-0",
-                                            "value": "reload",
-                                            "text": "Reload"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "tag": "th",
-                                    "text": "Type"
-                                },
-                                {
-                                    "tag": "th",
-                                    "text": ""
-                                }
-                            ]
-                        }
-                    ]
+                    "name": "entry.table.headingTr",
+                    "text": ""
                 },
                 {
                     "tag": "tbody",

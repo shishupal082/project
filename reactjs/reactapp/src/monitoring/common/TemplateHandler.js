@@ -31,11 +31,25 @@ TemplateHandler.extend({
 });
 
 TemplateHandler.extend({
+    setEntryTableHeadingJson: function() {
+        var metaData = DataHandler.getData("metaData");
+        if ($S.isArray(metaData.entryTableHeadingTr)) {
+            if ($S.isArray(Template["entry.table.headingTr"])) {
+                Template["entry.table.headingTr"] = metaData.entryTableHeadingTr;
+            }
+        }
+    }
+});
+
+
+TemplateHandler.extend({
     generateEntryTable: function(entryData) {
         if (!$S.isArray(entryData) || entryData.length < 1) {
             return [];
         }
         var entryTable = TemplateHandler.getTemplate("entry.table");
+        var entryTableHeadingTr = TemplateHandler.getTemplate("entry.table.headingTr");
+        TemplateHelper.setTemplateAttr(entryTable, "entry.table.headingTr", "text", entryTableHeadingTr);
         var sNo = 1;
         for(var i=entryData.length-1; i>=0; i--) {
             entryData[i]["s.no."] = sNo++;

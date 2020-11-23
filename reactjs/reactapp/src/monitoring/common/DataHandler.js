@@ -514,6 +514,7 @@ DataHandler.extend({
                     DataHandler.setData("metaDataLoadStatus", "completed");
                     DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
                     DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
+                    TemplateHandler.setEntryTableHeadingJson();
                     DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData1");
                 }, null, Api.getAjaxApiCallMethod());
             }
