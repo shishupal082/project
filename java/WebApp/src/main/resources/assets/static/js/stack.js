@@ -946,21 +946,11 @@ var BT = (function(){
         currentTree = eTree;
         for (var i = 0; i < items.length; i++) {
             if (items[i] === "(") {
-                /*
-                    ~ should not be followed by ( "open bracket"
-                    Fix for Input = [(,~,A,)]
-                */
-                if (i < items.length-1 && items[i+1] === "~") {
-                    continue;
-                }
                 this.insertLeft(currentTree, "");
                 st.push(currentTree);
                 currentTree = this.getLeftChild(currentTree);
             } else if(items[i] === ")") {
-                // currentTree = st.pop();
-                if (st.getTop() >= 0) {
-                    currentTree = st.pop();
-                }
+                currentTree = st.pop();
             } else if(["+","-","*","/","&&","&","||","|","#"].indexOf(items[i]) >=0) {
                 // Numeric: "+","-","*","/"
                 // Boolean: and: "&&","&","*"
@@ -1000,19 +990,12 @@ var BT = (function(){
                     i++;
                     this.insertLeft(currentTree, items[i]);
                 }
-                /*
-                    Fix for Input = [(,~,A,)]
-                */
-                if (st.getTop() >= 0) {
-                    parent = st.pop();
-                    currentTree = parent;
-                }
+                parent = st.pop();
+                currentTree = parent;
             } else {
                 currentTree.data = items[i];
-                if (st.getTop() >= 0) {
-                    parent = st.pop();
-                    currentTree = parent;
-                }
+                parent = st.pop();
+                currentTree = parent;
             }
         }
         return eTree;
