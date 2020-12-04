@@ -7,13 +7,17 @@
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css">
     <link rel="stylesheet" type="text/css" href="/app/monitoring/static/css/style.css"/>
-
-<?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
-
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-75647007-1');
+</script>
 </head>
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root"><center>Loading...</center></div>
 <script type="text/javascript">
 var GLOBAL = {
     baseapi: "",

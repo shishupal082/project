@@ -1,0 +1,6 @@
+{
+    "status":"FAILURE",
+    "failureCode":"UNAUTHORIZED_USER",
+    "error":"UnAuthorized Access",
+    "data":null
+}
