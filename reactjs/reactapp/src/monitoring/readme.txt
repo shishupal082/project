@@ -54,6 +54,8 @@ Update url for appControlApi if userDepenedentAppControlExist
 If user is not login, redirect to login page
 	- configurable with forceLogin parameter
 
+Added file app/monitor/index.html
+	- it is access by localhost:8080/app/monitor
 
 Todo
 --------------
