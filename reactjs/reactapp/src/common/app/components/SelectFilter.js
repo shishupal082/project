@@ -31,7 +31,10 @@ class SelectFilter extends React.Component {
             dateSelectionRequiredPages = [];
         }
         var list2ItemNotFound = true;
-        var list1Text = <td className="pr-5px">{this.props.data.list1Text}</td>;
+        var list1Text = null;
+        if ($S.isString(this.props.data.list1Text) && this.props.data.list1Text.length > 0) {
+            list1Text = <td className="pr-5px">{this.props.data.list1Text}</td>;
+        }
         var list1Dropdown = list1Data.map(function(el, i, arr) {
             return <option key={i} value={el.id}>{el.name}</option>
         });

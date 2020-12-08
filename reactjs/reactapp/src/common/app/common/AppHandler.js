@@ -1,4 +1,6 @@
 import $S from '../../../interface/stack.js';
+import Api from '../../Api.js';
+
 
 var AppHandler;
 
@@ -21,6 +23,16 @@ AppHandler.extend({
     getPageUrl: function(pageName) {
         return window.location.pathname;
     },
+    LazyRedirect: function(url, delay) {
+        // standard value of delay = 250 (i.e. 250ms)
+        if ($S.isNumber(delay)) {
+            window.setTimeout(function() {
+                window.location.href = url;
+            }, delay);
+        } else {
+            window.location.href = url;
+        }
+    }
 });
 AppHandler.extend({
     getTagName: function(e) {
@@ -178,6 +190,38 @@ AppHandler.extend({
         return filterData;
     }
 });
+
+var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
+AppHandler.extend({
+    GetUserDetails: function() {
+        return userDetails;
+    },
+    GetUserData: function(key, defaultValue) {
+        if ($S.isString(userDetails[key]) || key === "login") {
+            return userDetails[key];
+        }
+        // valid roles key: isDevUser, isAdminUser, isLogin, isAddTextEnable, isUploadFileEnable
+        if ($S.isBooleanTrue(userDetails["roles"][key])) {
+            return userDetails["roles"][key];
+        }
+        return defaultValue;
+    },
+    LoadLoginUserDetails: function(url, callback) {
+        if (!$S.isString(url)) {
+            $S.callMethod(callback);
+        }
+        $S.loadJsonData(null, [url], function(response, apiName, ajax){
+            if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
+                userDetails = response["data"];
+            }
+        }, function() {
+            $S.log("Load loginUserDetails complete.");
+            $S.callMethod(callback);
+        }, null, Api.getAjaxApiCallMethod());
+    }
+});
+
+
 })($S);
 
 export default AppHandler;

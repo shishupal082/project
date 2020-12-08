@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import TemplateHandler from "./TemplateHandler";
+import DataHandlerV2 from "./DataHandlerV2";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -21,6 +22,7 @@ keys.push("availableDataPageName");
 // keys.push("csvDataLoadStatus");
 // keys.push("firstTimeDataLoadStatus");
 
+keys.push("csvRawData");
 keys.push("csvData");
 keys.push("csvDataByDate");
 
@@ -43,7 +45,6 @@ keys.push("errorsData");
 // keys.push("homeFields");
 // keys.push("dropdownFields");
 
-// keys.push("metaDataStatus");
 
 keys.push("selectedStation");
 keys.push("selectedType");
@@ -52,14 +53,20 @@ keys.push("selectedDevice");
 var bypassKeys = ["appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
-        "homeFields", "dropdownFields", "metaDataStatus",
-        "selectedStation", "selectedType", "selectedDevice"];
+        "homeFields", "dropdownFields",
+        "selectedStation", "selectedType", "selectedDevice",
+        "loginUserDetailsLoadStatus", "usersFilesLoadStatus", "usersFilesData", "usersCsvFilesData"];
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("csvDataLoadStatus", "not-started");
+
+CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
+CurrentData.setData("usersFilesLoadStatus", "not-started");
+CurrentData.setData("usersFilesData", []);
+CurrentData.setData("usersCsvFilesData", []);
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -76,16 +83,34 @@ $S.extendObject(DataHandler);
 
 DataHandler.extend({
     getDataLoadStatus: function() {
-        var dataLoadStatus = [];
-        dataLoadStatus.push(DataHandler.getData("appControlDataLoadStatus", ""));
-        dataLoadStatus.push(DataHandler.getData("metaDataLoadStatus", ""));
-        dataLoadStatus.push(DataHandler.getData("csvDataLoadStatus", ""));
-        for (var i = 0; i < dataLoadStatus.length; i++) {
+        var dataLoadStatusKey = [];
+        dataLoadStatusKey.push("appControlDataLoadStatus");
+        dataLoadStatusKey.push("metaDataLoadStatus");
+        dataLoadStatusKey.push("csvDataLoadStatus");
+        dataLoadStatusKey.push("loginUserDetailsLoadStatus");
+        dataLoadStatusKey.push("usersFilesLoadStatus");
+        if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
+            return "";
+        }
+        DataHandler.setData("firstTimeDataLoadStatus", "completed");
+        return "completed";
+    },
+    getDataLoadStatusByKey: function(keys) {
+        var dataLoadStatus = [], i;
+        if ($S.isArray(keys)) {
+            for (i = 0; i < keys.length; i++) {
+                if ($S.isString(keys[i])) {
+                    dataLoadStatus.push(DataHandler.getData(keys[i], ""));
+                }
+            }
+        } else {
+            return "";
+        }
+        for (i = 0; i < dataLoadStatus.length; i++) {
             if (dataLoadStatus[i] !== "completed") {
                 return "";
             }
         }
-        DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return "completed";
     }
 });
@@ -279,6 +304,11 @@ DataHandler.extend({
                 return Config.baseapi + el + "?v=" + requestId;
             });
         }
+        var usersCsvFilesData = DataHandler.getData("usersCsvFilesData", []);
+        var username = AppHandler.GetUserData("username", null);
+        for(var i=0; i<usersCsvFilesData.length; i++) {
+            csvDataApis.push(Config.createCsvApi(usersCsvFilesData[i], username, requestId));
+        }
         return csvDataApis;
     },
     _getName: function(item) {
@@ -384,6 +414,17 @@ DataHandler.extend({
     },
     getDisplayDevice: function(id) {
         return DataHandler._getDisplayName("devices", id);
+    },
+    setUserDependentCsvFilePath: function(usersFilesData) {
+        var finalData = DataHandlerV2.GenerateFilesInfoResponse(usersFilesData);
+        var finalResult = [];
+        for (var i = 0; i < finalData.length; i++) {
+            if (finalData[i].ext === "csv") {
+                finalResult.push(finalData[i].filepath);
+            }
+        }
+        DataHandler.setData("usersFilesData", finalData);
+        DataHandler.setData("usersCsvFilesData", finalResult);
     }
 });
 
@@ -419,24 +460,55 @@ DataHandler.extend({
         DataHandler.loadCsvData(appStateCallback, appDataCallback);
         DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
     },
-    AppDidMount: function(appStateCallback, appDataCallback) {
-        DataHandler.setData("appControlDataLoadStatus", "in-progress");
-        $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
-            if ($S.isObject(response)) {
-                DataHandler.setData("appControlData", response);
-            } else {
-                DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
+    loadUserRelatedData: function(callback) {
+        var loadStatusKeys = ["loginUserDetailsLoadStatus", "usersFilesLoadStatus"];
+        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null), function() {
+            var isLogin = AppHandler.GetUserData("login", false);
+            if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", ""), 250);
+                return;
+            }
+            DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+            if (DataHandler.getDataLoadStatusByKey(loadStatusKeys) === "completed") {
+                $S.callMethod(callback);
+            }
+        });
+        var getFilesInfoApi = Config.getApiUrl("getFilesInfo", null);
+        $S.loadJsonData(null, [getFilesInfoApi], function(response, apiName, ajax){
+            if ($S.isObject(response) && $S.isArray(response.data)) {
+                DataHandler.setUserDependentCsvFilePath(response.data);
             }
         }, function() {
-            $S.log("appControlData load complete");
-            DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.setData("sectionsData", DataHandler.getAvailableSection());
-            DataHandler.setData("selectedDateType", DataHandler.getDefaultDateSelectionType());
-            DataHandler.setData("currentSectionId", DataHandler.getDefaultSectionId());
-            DataHandler.TrackSectionView("loadingPage", DataHandler.getData("currentSectionId", ""));
-            DataHandler.TrackPageView(DataHandler.getData("currentPageName", ""));
-            DataHandler._fireSectionChange(appStateCallback, appDataCallback);
+            DataHandler.setData("usersFilesLoadStatus", "completed");
+            if (DataHandler.getDataLoadStatusByKey(loadStatusKeys) === "completed") {
+                $S.callMethod(callback);
+            }
         }, null, Api.getAjaxApiCallMethod());
+    },
+    AppDidMount: function(appStateCallback, appDataCallback) {
+        DataHandler.loadUserRelatedData(function() {
+            var userDepenedentAppControlExist = AppHandler.GetUserData("userDepenedentAppControlExist", false);
+            if (userDepenedentAppControlExist) {
+                Config.updateAppControlApi(AppHandler.GetUserData("username", ""));
+            }
+            DataHandler.setData("appControlDataLoadStatus", "in-progress");
+            $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
+                if ($S.isObject(response)) {
+                    DataHandler.setData("appControlData", response);
+                } else {
+                    DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
+                }
+            }, function() {
+                $S.log("appControlData load complete");
+                DataHandler.setData("appControlDataLoadStatus", "completed");
+                DataHandler.setData("sectionsData", DataHandler.getAvailableSection());
+                DataHandler.setData("selectedDateType", DataHandler.getDefaultDateSelectionType());
+                DataHandler.setData("currentSectionId", DataHandler.getDefaultSectionId());
+                DataHandler.TrackSectionView("loadingPage", DataHandler.getData("currentSectionId", ""));
+                DataHandler.TrackPageView(DataHandler.getData("currentPageName", ""));
+                DataHandler._fireSectionChange(appStateCallback, appDataCallback);
+            }, null, Api.getAjaxApiCallMethod());
+        })
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, currentPageName) {
         DataHandler.setData("currentPageName", currentPageName);
@@ -494,31 +566,46 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
+    _handleDataLoad: function(appStateCallback, appDataCallback) {
+        var loadStatus = DataHandler.getDataLoadStatusByKey(["metaDataLoadStatus", "csvDataLoadStatus"]);
+        if (loadStatus !== "completed") {
+            return;
+        }
+        var csvRawData = DataHandler.getData("csvRawData", []);
+        var csvData = DataHandler.generatePageData(csvRawData);
+        var requiredData = DataHandler.generateValidData(csvData);
+        DataHandler.setData("csvData", requiredData["finalData"]);
+        DataHandler.setData("csvDataByDate", requiredData["dataByDate"]);
+        DataHandler.setData("errorsData", requiredData["errorsData"]);
+        DataHandler.setData("renderFieldRow", []);
+        DataHandler._setDateFilterParameters();
+        DataHandler.setPageData(appStateCallback, appDataCallback, "_handleDataLoad");
+    },
     loadMetaData: function(appStateCallback, appDataCallback) {
         var metaDataApis = DataHandler.getmetaDataApis();
         var metaDataLoadStatus = DataHandler.getData("metaDataLoadStatus", "");
-        var appControlDataLoadStatus = DataHandler.getData("appControlDataLoadStatus", "");
+        var loadStatus = DataHandler.getDataLoadStatusByKey(["appControlDataLoadStatus"]);
         if (metaDataApis.length) {
             if (metaDataLoadStatus === "not-started") {
                 DataHandler.setData("metaDataLoadStatus", "in-progress");
+                var finalMetaData = {};
                 $S.loadJsonData(null, metaDataApis, function(response, apiName, ajax){
                     if ($S.isObject(response)) {
-                        DataHandler.setData("metaData", response);
+                        finalMetaData = Object.assign({}, finalMetaData, response);
                     } else {
-                        DataHandler.setData("metaDataStatus", "invalid");
-                        DataHandler.setData("metaData", {});
                         DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
                     }
                 }, function() {
                     $S.log("metaData load complete");
                     DataHandler.setData("metaDataLoadStatus", "completed");
+                    DataHandler.setData("metaData", finalMetaData);
                     DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
                     DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
                     TemplateHandler.setEntryTableHeadingJson();
-                    DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData1");
+                    DataHandler._handleDataLoad(appStateCallback, appDataCallback);
                 }, null, Api.getAjaxApiCallMethod());
             }
-        } else if(metaDataLoadStatus === "not-started" && appControlDataLoadStatus === "completed") {
+        } else if(metaDataLoadStatus === "not-started" && loadStatus === "completed") {
             DataHandler.setData("metaDataLoadStatus", "completed");
             DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData2");
         }
@@ -526,7 +613,7 @@ DataHandler.extend({
     loadCsvData: function(appStateCallback, appDataCallback) {
         var csvDataApis = DataHandler.getCsvDataApis();
         var csvDataLoadStatus = DataHandler.getData("csvDataLoadStatus", "");
-        var appControlDataLoadStatus = DataHandler.getData("appControlDataLoadStatus", "");
+        var loadStatus = DataHandler.getDataLoadStatusByKey(["appControlDataLoadStatus", "loginUserDetailsLoadStatus", "usersFilesLoadStatus"]);
         if (csvDataApis.length) {
             if (csvDataLoadStatus === "not-started") {
                 DataHandler.setData("csvDataLoadStatus", "in-progress");
@@ -540,17 +627,11 @@ DataHandler.extend({
                 }, function() {
                     $S.log("csvData load complete");
                     DataHandler.setData("csvDataLoadStatus", "completed");
-                    csvData = DataHandler.generatePageData(csvData);
-                    var requiredData = DataHandler.generateValidData(csvData);
-                    DataHandler.setData("csvData", requiredData["finalData"]);
-                    DataHandler.setData("csvDataByDate", requiredData["dataByDate"]);
-                    DataHandler.setData("errorsData", requiredData["errorsData"]);
-                    DataHandler.setData("renderFieldRow", []);
-                    DataHandler._setDateFilterParameters();
-                    DataHandler.setPageData(appStateCallback, appDataCallback, "loadCsvData1");
+                    DataHandler.setData("csvRawData", csvData);
+                    DataHandler._handleDataLoad(appStateCallback, appDataCallback);
                 }, null, Api.getAjaxApiCallMethodV2());
             }
-        } else if(csvDataLoadStatus === "not-started" && appControlDataLoadStatus === "completed") {
+        } else if(csvDataLoadStatus === "not-started" && loadStatus === "completed") {
             DataHandler.setData("csvDataLoadStatus", "completed");
             DataHandler.setPageData(appStateCallback, appDataCallback, "loadCsvData2");
         }

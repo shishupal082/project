@@ -22,7 +22,7 @@ class App extends React.Component {
             "firstTimeDataLoadStatus": "",
             "goBackLinkData": [], // Used for back url
 
-            "list1Text": "Select User",
+            "list1Text": "",
             "list1Data": [],
             "currentList1Id": "",
 

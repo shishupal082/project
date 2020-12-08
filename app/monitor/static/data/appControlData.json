@@ -1,6 +1,14 @@
 {
     "sections": [
         {
+            "id": "section-J",
+            "name": "Section J Name",
+            "defaultDateSelectionType": "monthly",
+            "disableFooter": false,
+            "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
+            "csvDataApis": []
+        },
+        {
             "id": "section-i",
             "name": "Section i Name",
             "defaultDateSelectionType": "monthly",
@@ -16,10 +24,10 @@
             "name": "Section 1 Name",
             "defaultDateSelectionType": "monthly",
             "disableFooter": false,
-            "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
+            "metaDataApis": ["/app/monitor/static/data/metaData.json"],
             "csvDataApis": [
-                "/app/monitoring/static/data/list-1.csv",
-                "/app/monitoring/static/data/list-2.csv"
+                "/app/monitor/static/data/list-1.csv",
+                "/app/monitor/static/data/list-2.csv"
             ]
         },
         {
@@ -28,9 +36,9 @@
             "defaultDateSelectionType": "all",
             "disableFooter": true,
             "disabledPages": ["entry"],
-            "metaDataApis": ["/app/monitoring/static/data/metaData.json"],
+            "metaDataApis": ["/app/monitor/static/data/metaData.json"],
             "csvDataApis": [
-                "/app/monitoring/static/data/list-2.csv"
+                "/app/monitor/static/data/list-2.csv"
             ]
         }
     ]

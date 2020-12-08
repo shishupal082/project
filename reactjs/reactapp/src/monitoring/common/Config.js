@@ -9,6 +9,7 @@ var basepathname = $$$.basepathname;
 Config.baseapi = $$$.baseapi;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
+Config.forceLogin = $$$.forceLogin;
 
 var appControlApi = $$$.appControlApi;
 
@@ -19,6 +20,14 @@ Config.appControlApi = appControlApi.map(function(el, i, arr) {
     return Config.baseapi + el + "?v="+ Config.appVersion;
 });
 
+var appControlDataPath = $$$.appControlDataPath;
+Config.updateAppControlApi = function(username) {
+    if ($S.isString(appControlDataPath) && appControlDataPath.length > 0) {
+        if ($S.isString(username) && username.length > 0) {
+            Config.appControlApi = [Config.baseapi + appControlDataPath + username + ".json?v="+ Config.appVersion];
+        }
+    }
+};
 
 var pages = {
     "home": basepathname+"/",
@@ -76,5 +85,28 @@ Config.goBackLinkData = [
         }
     }
 ];
+
+Config.goBackLinkData = [];
+
+
+var apiMapping = {};
+apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
+apiMapping["getFilesInfo"] = "/api/get_files_info";
+apiMapping["loginRedirectUrl"] = "/login";
+Config.getApiUrl = function(key, defaultValue) {
+    if ($S.isString(apiMapping[key])) {
+        return Config.baseapi + apiMapping[key];
+    }
+    return defaultValue;
+};
+
+Config.createCsvApi = function(filepath, username, requestId) {
+    var selector = "container=api&v=" + requestId;
+    if ($S.isString(username) && username.length > 0) {
+        selector += "&u=" + username;
+    }
+    return Config.baseapi + "/view/file/" + filepath + "?" + selector;
+};
+
 
 export default Config;
