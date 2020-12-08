@@ -1,14 +1,6 @@
 {
     "sections": [
         {
-            "id": "section-J",
-            "name": "Section J Name",
-            "defaultDateSelectionType": "monthly",
-            "disableFooter": false,
-            "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
-            "csvDataApis": []
-        },
-        {
             "id": "section-i",
             "name": "Section i Name",
             "defaultDateSelectionType": "monthly",
@@ -18,6 +10,14 @@
                 "/pvt/app-data/monitor/oct-2020.csv",
                 "/pvt/app-data/monitor/nov-2020.csv"
             ]
+        },
+        {
+            "id": "section-J",
+            "name": "Section J Name",
+            "defaultDateSelectionType": "monthly",
+            "disableFooter": false,
+            "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
+            "csvDataApis": []
         },
         {
             "id": "section-1",

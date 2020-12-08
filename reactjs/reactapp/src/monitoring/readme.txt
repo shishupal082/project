@@ -63,5 +63,3 @@ In the heading add login user information
 	- Login as: <username>
 Give logout link
 
-Why we are not setting in php application for monitor?
-	- is it due to ga tracking mismatch?

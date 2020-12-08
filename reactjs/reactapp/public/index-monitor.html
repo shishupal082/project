@@ -23,14 +23,14 @@
     -->
     <title>React App Monitoring</title>
     <!-- It will use nodejs to load static file -->
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/static/libs/bootstrap-v4.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/app/monitoring/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/monitor/static/css/style.css"/>
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root">Loading...</div>
+    <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -44,14 +44,16 @@
 <script type="text/javascript">
 
 var GLOBAL = {
-    baseapi: "http://localhost:3000",
-    basepathname: ""
+    baseapi: "http://localhost:8080",
+    appControlDataPath: "/app/monitor/static/data/appControlData_",
+    basepathname: "",
+    forceLogin: true
 };
 
-GLOBAL.appControlApi = ["/app/monitoring/static/data/appControlData.json"];
+GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
 
 GLOBAL.gtag = null;
-GLOBAL.appVersion = "1.0.0";
+GLOBAL.appVersion = "1.0.1";
 window.GLOBAL = GLOBAL;
 </script>
 </body>

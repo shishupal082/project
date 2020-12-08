@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Monitoring Application</title>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css">
-    <link rel="stylesheet" type="text/css" href="/app/monitoring/static/css/style.css"/>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-75647007-1');
-</script>
+    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/monitor/static/css/style.css"/>
+
+<?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
+
 </head>
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"><center>Loading...</center></div>
 <script type="text/javascript">
+
 var GLOBAL = {
     baseapi: "",
-    basepathname: "/app/monitor",
-    appControlApi: ["/pvt/app-data/monitor/appControlData.json"]
+    appControlDataPath: "/app/monitor/static/data/appControlData_",
+    basepathname: "/app/monitorv2",
+    forceLogin: false
 };
+
+GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
+
 GLOBAL.gtag = gtag;
-GLOBAL.appVersion = "1.0.0";
+GLOBAL.appVersion = "1.0.1";
 window.GLOBAL = GLOBAL;
+
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script1.js"></script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script2.js"></script>
