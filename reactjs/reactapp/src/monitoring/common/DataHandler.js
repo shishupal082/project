@@ -304,10 +304,12 @@ DataHandler.extend({
                 return Config.baseapi + el + "?v=" + requestId;
             });
         }
-        var usersCsvFilesData = DataHandler.getData("usersCsvFilesData", []);
-        var username = AppHandler.GetUserData("username", null);
-        for(var i=0; i<usersCsvFilesData.length; i++) {
-            csvDataApis.push(Config.createCsvApi(usersCsvFilesData[i], username, requestId));
+        if ($S.isObject(sectionData) && $S.isBooleanTrue(sectionData.loadUserDependentCsv)) {
+            var usersCsvFilesData = DataHandler.getData("usersCsvFilesData", []);
+            var username = AppHandler.GetUserData("username", null);
+            for(var i=0; i<usersCsvFilesData.length; i++) {
+                csvDataApis.push(Config.createCsvApi(usersCsvFilesData[i], username, requestId));
+            }
         }
         return csvDataApis;
     },

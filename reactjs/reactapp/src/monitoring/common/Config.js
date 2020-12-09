@@ -1,6 +1,8 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
+var requestId = $S.getRequestId();
+
 var Config = {};
 
 var basepathname = $$$.basepathname;
@@ -17,14 +19,14 @@ if (!$S.isArray(appControlApi)) {
     appControlApi = [];
 }
 Config.appControlApi = appControlApi.map(function(el, i, arr) {
-    return Config.baseapi + el + "?v="+ Config.appVersion;
+    return Config.baseapi + el + "?v="+ requestId;
 });
 
 var appControlDataPath = $$$.appControlDataPath;
 Config.updateAppControlApi = function(username) {
     if ($S.isString(appControlDataPath) && appControlDataPath.length > 0) {
         if ($S.isString(username) && username.length > 0) {
-            Config.appControlApi = [Config.baseapi + appControlDataPath + username + ".json?v="+ Config.appVersion];
+            Config.appControlApi = [Config.baseapi + appControlDataPath + username + ".json?v="+ requestId];
         }
     }
 };

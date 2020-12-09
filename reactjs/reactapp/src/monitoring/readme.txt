@@ -57,6 +57,11 @@ If user is not login, redirect to login page
 Added file app/monitor/index.html
 	- it is access by localhost:8080/app/monitor
 
+1.0.2
+--------------
+Added new parameter for each section data
+	- loadUserDependentCsv (Boolean, by default false)
+
 Todo
 --------------
 If more comma found then merge all data after 4th comma
