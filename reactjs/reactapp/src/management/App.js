@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 import $$$ from '../interface/global';
 import Api from "../common/Api";
-import TemplateHelper from "../common/TemplateHelper";
+import TemplateHandler from "./common/TemplateHandler";
 import PrintHelper from "./PrintHelper";
 
 import Home from "./components/Home";
@@ -119,7 +119,7 @@ class App extends React.Component {
             formValue = {};
             formValue["formRowId"] = this.state.formRowFields[i]["formRowId"];
             formValue["templateName"] = this.state.formRowFields[i]["templateName"];
-            TemplateHelper(this.state.formRowFields[i].templateData).generateFormValues(formValue);
+            TemplateHandler(this.state.formRowFields[i].templateData).generateFormValues(formValue);
             formValues.push(formValue);
         }
         // console.log(formValues);
@@ -159,7 +159,7 @@ class App extends React.Component {
     handleChange(e, fieldName, currentValue, formRowId) {
         var formRowFields = this.state.formRowFields;
         var attr = {"removeClass": "is-invalid", "setValue": currentValue};
-        TemplateHelper.updateFieldByAttr(formRowFields, formRowId, fieldName, attr);
+        TemplateHandler.updateFieldByAttr(formRowFields, formRowId, fieldName, attr);
         this.setState({formRowFields: formRowFields});
     }
     componentDidMount() {
@@ -170,7 +170,7 @@ class App extends React.Component {
         var isInitialDataLoading = false;
         if ($S.isString(initialPrintDataApi)) {
             isInitialDataLoading = true;
-            initialize(self, $S, TemplateHelper, Api, initialPrintDataApi);
+            initialize(self, $S, TemplateHandler, Api, initialPrintDataApi);
         }
         $S.loadJsonData(null, [homeDataApi + "?" + $S.getRequestId()], function(response) {
             if ($S.isObject(response)) {
@@ -225,10 +225,10 @@ class App extends React.Component {
         var formValues = this.getFormValues(), template = {};
         this.setState({formValues: formValues});
         this.formData["formValues"] = formValues;
-        var validationResult = TemplateHelper.validateData(this.formData.formValues);
+        var validationResult = TemplateHandler.validateData(this.formData.formValues);
         if (validationResult.status === "FAILURE") {
             var formRowFields = this.state.formRowFields;
-            TemplateHelper.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
+            TemplateHandler.updateFieldByAttr(formRowFields, validationResult.formRowId, validationResult.fieldName,
                         {"addClass": "is-invalid"});
             this.setState({formRowFields: formRowFields});
             if (isPrintPage || isFormPage) {
@@ -260,13 +260,13 @@ class App extends React.Component {
                 if ($S.isString(printRowData[i].name) && printRowData[i].name.length) {
                     footerName = printRowData[i].name;
                 }
-                TemplateHelper.replaceTextPattern(footerTemplate, "acceptance", footerName);
+                TemplateHandler.replaceTextPattern(footerTemplate, "acceptance", footerName);
                 this.printData["printFooter"] = footerTemplate;
             } else if (printRowData[i].templateName === "formTemplate1") {
                 template = this.getPrintDataTemplate("printTemplate1");
             } else if (printRowData[i].templateName === "totalRow") {
                 template = this.getPrintDataTemplate("totalRow");
-                TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
+                TemplateHandler.setTemplateTextByFormValues(template, printRowData[i]);
                 this.printTotalRow = template;
                 if (footerTemplate === null) {
                     footerTemplate = this.getPrintDataTemplate("printFooter");
@@ -277,14 +277,14 @@ class App extends React.Component {
                 if ($S.isString(printRowData[i].totalAmountText) && printRowData[i].totalAmountText.length) {
                     footerTotalAmountText = printRowData[i].totalAmountText;
                 }
-                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmount", footerTotalAmount);
-                TemplateHelper.replaceTextPattern(footerTemplate, "totalAmountText", footerTotalAmountText);
+                TemplateHandler.replaceTextPattern(footerTemplate, "totalAmount", footerTotalAmount);
+                TemplateHandler.replaceTextPattern(footerTemplate, "totalAmountText", footerTotalAmountText);
                 this.printData["printFooter"] = footerTemplate;
                 continue;
             } else {
                 template = this.getPrintDataTemplate("printTemplate2");
             }
-            TemplateHelper.setTemplateTextByFormValues(template, printRowData[i]);
+            TemplateHandler.setTemplateTextByFormValues(template, printRowData[i]);
             this.printData["fieldRow"].push(template);
         }
         console.log("this.printData");

@@ -1,4 +1,4 @@
-function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
+function initialize(self, $S, TemplateHandler, Api, initialPrintDataApi) {
     var i, template;
     setTimeout(function() {
         $S.loadJsonData(null, [initialPrintDataApi + "?" + $S.getRequestId()], function(response) {
@@ -9,7 +9,7 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                         template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields[i] = {
-                                templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
+                                templateData: TemplateHandler.updateTemplateValue(template, response[i].data),
                                 formRowId: "row-" + i,
                                 templateName: response[i].templateName
                             };
@@ -20,7 +20,7 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                         template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields[i] = {
-                                templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
+                                templateData: TemplateHandler.updateTemplateValue(template, response[i].data),
                                 formRowId: "row-" + i,
                                 templateName: response[i].templateName
                             };
@@ -30,7 +30,7 @@ function initialize(self, $S, TemplateHelper, Api, initialPrintDataApi) {
                         template = self.getFormRowTemplate(response[i].templateName);
                         if (template) {
                             formRowFields.push({
-                                templateData: TemplateHelper.updateTemplateValue(template, response[i].data),
+                                templateData: TemplateHandler.updateTemplateValue(template, response[i].data),
                                 formRowId: "row-" + i,
                                 templateName: response[i].templateName
                             });
