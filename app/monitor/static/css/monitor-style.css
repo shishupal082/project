@@ -1,0 +1,29 @@
+.heading {
+    border-bottom: 1.5px solid #ddd;
+    padding-bottom: 5px;
+    font-size: 1.2rem;
+}
+.nav-tabs .nav-link.current-page {
+	color: #007bff;
+    cursor: auto;
+}
+.nav-tabs .close-tab {
+	border: 1px solid;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+.nav-tabs .close-tab:hover {
+	opacity: 1;
+}
+.APP-COMPONENT.addentry .SELECT-FILTER,
+.APP-COMPONENT.uploadfile .SELECT-FILTER {
+	text-align: center;
+}
+.APP-COMPONENT.addentry .SELECT-FILTER table,
+.APP-COMPONENT.uploadfile .SELECT-FILTER table {
+	display: inline;
+}
+.APP-COMPONENT.addentry .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.uploadfile .SELECT-FILTER [name="filter-reload"] {
+	display: none;
+}

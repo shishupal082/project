@@ -14,7 +14,8 @@ class PageTab extends React.Component {
     render() {
         var self = this;
         var pageTabData = this.props.data.pageTab;
-        if (!$S.isArray(pageTabData)) {
+        var hidePageTab = $S.isBooleanTrue(this.props.data.hidePageTab);
+        if (!$S.isArray(pageTabData) || hidePageTab) {
             pageTabData = [];
         }
         var pageTab = pageTabData.map(function(el, i, arr) {
@@ -33,7 +34,7 @@ class PageTab extends React.Component {
         if (pageTab.length > 0) {
             pageTab = <ul className="nav nav-tabs">{pageTab}</ul>;
         }
-        if (this.props.data.firstTimeDataLoadStatus !== "completed" || this.props.data.list1Data.length < 1) {
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
             pageTab = null;
         }
         return (<div className="PAGE-TAB">{pageTab}</div>);

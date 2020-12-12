@@ -215,11 +215,16 @@ DataHandler.extend({
         return sectionId;
     },
     getDisableFooterStatus: function() {
+        var currentPageName = DataHandler.getData("currentPageName", "");
         var sectionId = DataHandler.getData("currentSectionId", "");
         var section = DataHandler.getSectionData(sectionId);
+        if (["addentry", "uploadfile"].indexOf(currentPageName) >= 0) {
+            return true;
+        }
         if ($S.isObject(section) && $S.isBoolean(section.disableFooter)) {
             return section.disableFooter;
         }
+
         return true;
     },
     getDefaultDateSelectionType: function() {
@@ -282,7 +287,8 @@ DataHandler.extend({
         return pageHeading;
     },
     getMetaDataPageHeadingV2: function() {
-        return DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
+        // var pageHeading = DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
+        return "";
     },
     getmetaDataApis: function() {
         var requestId = $S.getUniqueNumber();
@@ -874,9 +880,11 @@ DataHandler.extend({
             var goBackLinkData = Config.goBackLinkData;
             var sectionsData = DataHandler.getData("sectionsData", []);
             var filterOptions = [];
-            if (currentPageName === "home") {
+            var hidePageTab = false;
+            if (["home","addentry","uploadfile"].indexOf(currentPageName) >= 0) {
                 goBackLinkData = [];
                 sectionsData = [];
+                hidePageTab = true;
             } else if (currentPageName === "entrybydatefilter") {
                 filterOptions = AppHandler.getFilterData(DataHandler.generateFilterData());
             }
@@ -885,6 +893,8 @@ DataHandler.extend({
             var renderFieldRow = DataHandler.getPageRenderField(currentPageName);
             DataHandler.setData("availableDataPageName", currentPageName);
 
+            appDataCallback("hidePageTab", hidePageTab);
+            appDataCallback("selectFilterComponentClass", currentPageName);
             appDataCallback("list1Data", sectionsData);
             appDataCallback("list2Data", DataHandler.getData("dropdownFields", []));
             appDataCallback("currentList1Id", DataHandler.getData("currentSectionId", ""));

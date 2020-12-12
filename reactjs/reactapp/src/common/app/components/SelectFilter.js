@@ -18,6 +18,7 @@ class SelectFilter extends React.Component {
         var list2Data = this.props.data.list2Data;
         var dateSelection = this.props.data.dateSelection;
         var dateSelectionRequiredPages = this.props.data.dateSelectionRequiredPages;
+
         if (!$S.isArray(list1Data)) {
             list1Data = [];
         }
@@ -75,12 +76,16 @@ class SelectFilter extends React.Component {
             dateSelection = null;
         }
         var reloadButton = <td><button className="btn btn-primary" name="filter-reload" value="reload" onClick={this.props.methods.onClick}>Reload</button></td>;
-        if (this.props.data.firstTimeDataLoadStatus !== "completed" || list1Data.length < 1) {
-            list1Text = null;
-            list1Dropdown = null;
-            list2Dropdown = null;
+        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
             dateSelection = null;
             reloadButton = null;
+            if (list1Data.length < 1) {
+                list1Text = null;
+                list1Dropdown = null;
+            }
+            if (list1Data.length < 1) {
+                list2Dropdown = null;
+            }
         }
         return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>

@@ -22,6 +22,7 @@ class App extends React.Component {
             "firstTimeDataLoadStatus": "",
             "goBackLinkData": [], // Used for back url
 
+            "selectFilterComponentClass": "",
             "list1Text": "",
             "list1Data": [],
             "currentList1Id": "",
@@ -33,6 +34,7 @@ class App extends React.Component {
             "appHeading": "Loading...",
             "pageHeading": "",
             "pageTab": [],
+            "hidePageTab": false,
 
             "renderFieldRow": [],
             "errorsData": [],
@@ -168,6 +170,12 @@ class App extends React.Component {
         const entrybydatefilter = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods} dropDownChange={this.dropDownChange}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.entrybydatefilter}/>);
 
+        const addentry = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods} dropDownChange={this.dropDownChange}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.addentry}/>);
+
+        const uploadfile = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods} dropDownChange={this.dropDownChange}
+                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.uploadfile}/>);
+
         const noMatch = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
 
@@ -185,6 +193,8 @@ class App extends React.Component {
                 <Route path={pages.entrybydevice} component={entrybydevice}/>
                 <Route path={pages.summary} component={summary}/>
                 <Route path={pages.entrybydatefilter} component={entrybydatefilter}/>
+                <Route path={pages.addentry} component={addentry}/>
+                <Route path={pages.uploadfile} component={uploadfile}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

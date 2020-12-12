@@ -39,7 +39,9 @@ var pages = {
     "entrybystation": basepathname+"/entrybystation",
     "entrybydevice": basepathname+"/entrybydevice",
     "summary": basepathname+"/summary",
-    "entrybydatefilter": basepathname+"/entrybydatefilter"
+    "entrybydatefilter": basepathname+"/entrybydatefilter",
+    "addentry": basepathname+"/addentry",
+    "uploadfile": basepathname+"/uploadfile"
 };
 
 Config.pages = pages;
@@ -53,6 +55,8 @@ Config.entrybystation = "entrybystation";
 Config.entrybydevice = "entrybydevice";
 Config.summary = "summary";
 Config.entrybydatefilter = "entrybydatefilter";
+Config.addentry = "addentry";
+Config.uploadfile = "uploadfile";
 Config.noMatch = "noMatch";
 
 

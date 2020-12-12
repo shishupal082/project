@@ -28,7 +28,9 @@
         {"name": "entrybystation", "toText": "Entry by Station"},
         {"name": "entrybydevice", "toText": "Entry by Device"},
         {"name": "summary", "toText": "Summary"},
-        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"}
+        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"},
+        {"name": "addentry", "toText": "Add Entry"},
+        {"name": "uploadfile", "toText": "Upload file"}
     ],
     "dropdownFields": [
         {"name": "entry", "toText": "Entry"},
@@ -37,7 +39,9 @@
         {"name": "entrybystation", "toText": "Entry by Station"},
         {"name": "entrybydevice", "toText": "Entry by Device"},
         {"name": "summary", "toText": "Summary"},
-        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"}
+        {"name": "entrybydatefilter", "toText": "Entry By Date Filter"},
+        {"name": "addentry", "toText": "Add Entry"},
+        {"name": "uploadfile", "toText": "Upload file"}
     ],
     "entryTableHeadingTr": [
         {

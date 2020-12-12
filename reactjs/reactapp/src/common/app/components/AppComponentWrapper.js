@@ -1,6 +1,6 @@
 import React from 'react';
 import Api from "../../Api";
-
+import $S from "../../../interface/stack.js";
 
 import Heading from "./Heading";
 import SelectFilter from './SelectFilter';
@@ -19,7 +19,13 @@ class AppComponentWrapper extends React.Component {
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
-        return (<div className="container APP-COMPONENT">
+        var containerClassName = this.props.currentPageName;
+        if ($S.isString(containerClassName)) {
+            containerClassName += " container APP-COMPONENT";
+        } else {
+            containerClassName = "container APP-COMPONENT";
+        }
+        return (<div className={containerClassName}>
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <PageTab data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
