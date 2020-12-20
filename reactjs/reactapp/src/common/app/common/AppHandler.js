@@ -158,19 +158,19 @@ AppHandler.extend({
         var i, j;
         if ($S.isArray(selectionOptions)) {
             for (i = 0; i < selectionOptions.length; i++) {
-                if ($S.isArray(selectionOptions[i].options)) {
+                if ($S.isArray(selectionOptions[i].text)) {
                     if ($S.isString(selectionOptions[i].selectedValue)) {
-                        for (j = 0; j < selectionOptions[i].options.length; j++) {
-                            if ($S.isObject(selectionOptions[i].options[j])) {
-                                if (selectionOptions[i].selectedValue === selectionOptions[i].options[j].value) {
-                                    selectionOptions[i].options[j]["selected"] = true;
+                        for (j = 0; j < selectionOptions[i].text.length; j++) {
+                            if ($S.isObject(selectionOptions[i].text[j])) {
+                                if (selectionOptions[i].selectedValue === selectionOptions[i].text[j].value) {
+                                    selectionOptions[i].text[j]["selected"] = true;
                                 } else {
-                                    selectionOptions[i].options[j]["selected"] = false;
+                                    selectionOptions[i].text[j]["selected"] = false;
                                 }
                             }
                         }
                     }
-                    filterData.push({"type": selectionOptions[i].type, "options": selectionOptions[i].options, "selectName": selectionOptions[i].selectName});
+                    filterData.push({"type": selectionOptions[i].type, "text": selectionOptions[i].text, "selectName": selectionOptions[i].selectName});
                 } else if ($S.isArray(selectionOptions[i].buttons)) {
                     if ($S.isString(selectionOptions[i].selectedValue)) {
                         for (j = 0; j < selectionOptions[i].buttons.length; j++) {
