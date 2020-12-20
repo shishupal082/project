@@ -11,15 +11,18 @@ class AppComponent extends React.Component {
             isLoaded: false
         };
         this.onClick = this.onClick.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.getTabDisplayText = this.getTabDisplayText.bind(this);
-        this.methods = {
-            onClick: this.onClick,
-            dropDownChange: this.dropDownChange,
-            pageComponentDidMount: this.pageComponentDidMount,
-            getTabDisplayText: this.getTabDisplayText
-        };
+        // this.methods = {
+        //     onClick: this.onClick,
+        //     onChange: this.onChange,
+        //     dropDownChange: this.dropDownChange,
+        //     pageComponentDidMount: this.pageComponentDidMount,
+        //     getTabDisplayText: this.getTabDisplayText
+        // };
     }
     _callAppMethod(method, arg) {
         if ($S.isFunction(method)) {
@@ -30,8 +33,14 @@ class AppComponent extends React.Component {
     onClick(e) {
         this._callAppMethod(this.props.methods.onClick, e);
     }
+    onChange(e) {
+        this._callAppMethod(this.props.methods.onChange, e);
+    }
     dropDownChange(e) {
         this._callAppMethod(this.props.methods.dropDownChange, e);
+    }
+    onFormSubmit(e) {
+        this._callAppMethod(this.props.methods.onFormSubmit, e);
     }
     pageComponentDidMount(pageName) {
         this._callAppMethod(this.props.methods.pageComponentDidMount, pageName);
@@ -48,7 +57,7 @@ class AppComponent extends React.Component {
     render() {
         return (<AppComponentWrapper data={this.props.data} history={this.props.history}
             currentPageName={this.props.currentPageName} renderFieldRow={this.props.renderFieldRow}
-            methods={this.methods} onClick={this.onClick} dropDownChange={this.dropDownChange}/>);
+            methods={this.props.methods} onClick={this.onClick} onChange={this.onChange} dropDownChange={this.dropDownChange}/>);
     }
 }
 

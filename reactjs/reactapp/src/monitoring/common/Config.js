@@ -11,7 +11,12 @@ var basepathname = $$$.basepathname;
 Config.baseapi = $$$.baseapi;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
+Config.JQ = $$$.JQ;
 Config.forceLogin = $$$.forceLogin;
+
+var pageData = {};
+pageData["uploadFileInstruction"] = $$$.uploadFileInstruction;
+pageData["uploadTextInstruction"] = $$$.uploadTextInstruction;
 
 var appControlApi = $$$.appControlApi;
 
@@ -98,10 +103,18 @@ Config.goBackLinkData = [];
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
 apiMapping["getFilesInfo"] = "/api/get_files_info";
+apiMapping["addTextApi"] = "/api/add_text";
+apiMapping["uploadfileApi"] = "/api/upload_file";
 apiMapping["loginRedirectUrl"] = "/login";
-Config.getApiUrl = function(key, defaultValue) {
+apiMapping["entryByDateUrl"] = pages.entrybydate;
+Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
-        return Config.baseapi + apiMapping[key];
+        if ($S.isBooleanTrue(addBaseUrl)) {
+            return Config.baseapi + apiMapping[key];
+        } else {
+            // used for redirect on fileupload or addtext
+            return apiMapping[key];
+        }
     }
     return defaultValue;
 };
@@ -114,5 +127,11 @@ Config.createCsvApi = function(filepath, username, requestId) {
     return Config.baseapi + "/view/file/" + filepath + "?" + selector;
 };
 
+Config.getPageData = function(key, defaultValue) {
+    if ($S.isString(pageData[key])) {
+        return pageData[key];
+    }
+    return defaultValue;
+};
 
 export default Config;

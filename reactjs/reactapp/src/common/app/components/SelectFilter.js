@@ -76,16 +76,23 @@ class SelectFilter extends React.Component {
             dateSelection = null;
         }
         var reloadButton = <td><button className="btn btn-primary" name="filter-reload" value="reload" onClick={this.props.methods.onClick}>Reload</button></td>;
-        if (this.props.data.firstTimeDataLoadStatus !== "completed") {
-            dateSelection = null;
-            reloadButton = null;
+        if (this.props.data.firstTimeDataLoadStatus === "completed") {
             if (list1Data.length < 1) {
                 list1Text = null;
                 list1Dropdown = null;
             }
-            if (list1Data.length < 1) {
+            if (list2Data.length < 1) {
                 list2Dropdown = null;
             }
+            if (list1Data.length < 1 && list2Data.length < 1) {
+                reloadButton = null;
+            }
+        } else {
+            dateSelection = null;
+            list1Text = null;
+            list1Dropdown = null;
+            list2Dropdown = null;
+            reloadButton = null;
         }
         return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>

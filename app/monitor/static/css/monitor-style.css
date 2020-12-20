@@ -27,3 +27,11 @@
 .APP-COMPONENT.uploadfile .SELECT-FILTER [name="filter-reload"] {
 	display: none;
 }
+.form-div > div {
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}

@@ -57,6 +57,11 @@ var bypassKeys = ["appControlData", "metaData", "sectionsData",
         "selectedStation", "selectedType", "selectedDevice",
         "loginUserDetailsLoadStatus", "usersFilesLoadStatus", "usersFilesData", "usersCsvFilesData"];
 
+keys.push("addentry.subject");
+keys.push("addentry.heading");
+keys.push("addentry.textarea");
+keys.push("addentry.file");
+
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
@@ -116,11 +121,21 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    setData: function(key, value) {
-        return CurrentData.setData(key, value);
+    setData: function(key, value, isDirect) {
+        return CurrentData.setData(key, value, isDirect);
     },
-    getData: function(key, defaultValue) {
-        return CurrentData.getData(key, defaultValue);
+    getData: function(key, defaultValue, isDirect) {
+        return CurrentData.getData(key, defaultValue, isDirect);
+    },
+    handleInputChange: function(e) {
+        var currentTarget = e.currentTarget;
+        var fieldName = currentTarget.name;
+        if (fieldName === "addentry.file") {
+            var file = currentTarget.files[0];
+            this.setData(fieldName, file, true);
+        } else {
+            this.setData(fieldName, currentTarget.value.trim());
+        }
     },
     addDataInArray: function(key, value) {
         var arrayData = this.getData(key, []);
@@ -470,10 +485,10 @@ DataHandler.extend({
     },
     loadUserRelatedData: function(callback) {
         var loadStatusKeys = ["loginUserDetailsLoadStatus", "usersFilesLoadStatus"];
-        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null), function() {
+        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
             var isLogin = AppHandler.GetUserData("login", false);
             if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", ""), 250);
+                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
                 return;
             }
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
@@ -481,7 +496,7 @@ DataHandler.extend({
                 $S.callMethod(callback);
             }
         });
-        var getFilesInfoApi = Config.getApiUrl("getFilesInfo", null);
+        var getFilesInfoApi = Config.getApiUrl("getFilesInfo", null, true);
         $S.loadJsonData(null, [getFilesInfoApi], function(response, apiName, ajax){
             if ($S.isObject(response) && $S.isArray(response.data)) {
                 DataHandler.setUserDependentCsvFilePath(response.data);
@@ -796,9 +811,9 @@ DataHandler.extend({
             $S.addElAt(deviceOptions, 0, {"value": "", "option": "All"});
         }
         var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
-        selectionOptions.push({"type": "dropdown", "options": stationOptions, "selectName": "selectedStation", "selectedValue": selectedStation});
-        selectionOptions.push({"type": "dropdown", "options": typeOptions, "selectName": "selectedType", "selectedValue": selectedType});
-        selectionOptions.push({"type": "dropdown", "options": deviceOptions, "selectName": "selectedDevice", "selectedValue": selectedDevice});
+        selectionOptions.push({"type": "dropdown", "text": stationOptions, "selectName": "selectedStation", "selectedValue": selectedStation});
+        selectionOptions.push({"type": "dropdown", "text": typeOptions, "selectName": "selectedType", "selectedValue": selectedType});
+        selectionOptions.push({"type": "dropdown", "text": deviceOptions, "selectName": "selectedDevice", "selectedValue": selectedDevice});
         selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
         return selectionOptions;
     },
@@ -879,6 +894,7 @@ DataHandler.extend({
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
             var goBackLinkData = Config.goBackLinkData;
             var sectionsData = DataHandler.getData("sectionsData", []);
+            var pageDropdown = DataHandler.getData("dropdownFields", []);
             var filterOptions = [];
             var hidePageTab = false;
             if (["home","addentry","uploadfile"].indexOf(currentPageName) >= 0) {
@@ -888,6 +904,9 @@ DataHandler.extend({
             } else if (currentPageName === "entrybydatefilter") {
                 filterOptions = AppHandler.getFilterData(DataHandler.generateFilterData());
             }
+            if (["home"].indexOf(currentPageName) >= 0) {
+                pageDropdown = [];
+            }
             var renderData = DataHandler.getPageRenderData(currentPageName);
             DataHandler.setData("renderData", renderData);
             var renderFieldRow = DataHandler.getPageRenderField(currentPageName);
@@ -896,7 +915,7 @@ DataHandler.extend({
             appDataCallback("hidePageTab", hidePageTab);
             appDataCallback("selectFilterComponentClass", currentPageName);
             appDataCallback("list1Data", sectionsData);
-            appDataCallback("list2Data", DataHandler.getData("dropdownFields", []));
+            appDataCallback("list2Data", pageDropdown);
             appDataCallback("currentList1Id", DataHandler.getData("currentSectionId", ""));
             appDataCallback("currentList2Id", currentPageName);
             appDataCallback("appHeading", DataHandler.getData("sectionName", ""));
@@ -960,17 +979,29 @@ DataHandler.extend({
                                     isValidType = false;
                                     errorsData.push({"reason": "Invalid date", "data": jsonData[i][j].join()});
                                 }
-                                if (validTypes.indexOf(jsonData[i][j][1]) < 0) {
-                                    isValidType = false;
-                                    errorsData.push({"reason": "Invalid type", "data": jsonData[i][j].join()});
+                                if (isValidType && validTypes.indexOf(jsonData[i][j][1]) < 0) {
+                                    // isValidType = false;
+                                    if (jsonData[i][j].length >= 5) {
+                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid type";
+                                    }
+                                    jsonData[i][j][1] = "info";
+                                    // errorsData.push({"reason": "Invalid type", "data": jsonData[i][j].join()});
                                 }
-                                if (validStation.indexOf(jsonData[i][j][2]) < 0) {
-                                    isValidType = false;
-                                    errorsData.push({"reason": "Invalid station", "data": jsonData[i][j].join()});
+                                if (isValidType && validStation.indexOf(jsonData[i][j][2]) < 0) {
+                                    // isValidType = false;
+                                    // errorsData.push({"reason": "Invalid station", "data": jsonData[i][j].join()});
+                                    if (jsonData[i][j].length >= 5) {
+                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid station";
+                                    }
+                                    jsonData[i][j][2] = "info";
                                 }
-                                if (validDevice.indexOf(jsonData[i][j][3]) < 0) {
-                                    isValidType = false;
-                                    errorsData.push({"reason": "Invalid device", "data": jsonData[i][j].join()});
+                                if (isValidType && validDevice.indexOf(jsonData[i][j][3]) < 0) {
+                                    // isValidType = false;
+                                    // errorsData.push({"reason": "Invalid device", "data": jsonData[i][j].join()});
+                                    if (jsonData[i][j].length >= 5) {
+                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid device";
+                                    }
+                                    jsonData[i][j][3] = "info";
                                 }
                                 if (isValidDate && isValidType && isValidStation && isValidDevice) {
                                     var temp = {};
@@ -982,7 +1013,7 @@ DataHandler.extend({
                                     temp["device"] = jsonData[i][j][3];
                                     temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
                                     if (jsonData[i][j].length >= 5) {
-                                        temp["description"] = jsonData[i][j][4];
+                                        temp["description"] = jsonData[i][j].slice(4).join();
                                     }
                                     if (!$S.isArray(dataByDate[temp["date"]])) {
                                         dataByDate[temp["date"]] = [];

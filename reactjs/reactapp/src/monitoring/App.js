@@ -7,6 +7,7 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
+import DataHandlerV2 from "./common/DataHandlerV2";
 import Config from "./common/Config";;
 
 
@@ -47,6 +48,7 @@ class App extends React.Component {
             "filterOptions": []
         };
         this.onClick = this.onClick.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
@@ -57,6 +59,7 @@ class App extends React.Component {
         this.childAttribute = {};
         this.methods = {
             onClick: this.onClick,
+            onChange: this.onChange,
             dropDownChange: this.dropDownChange,
             pageComponentDidMount: this.pageComponentDidMount,
             getTabDisplayText: this.getTabDisplayText,
@@ -78,6 +81,10 @@ class App extends React.Component {
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
+        if (["addentry.submit"].indexOf(name) >= 0) {
+            // it is required for home link redirect click
+            e.preventDefault();
+        }
         if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
             DataHandler.OnReloadClick(this.appStateCallback,
@@ -96,7 +103,18 @@ class App extends React.Component {
             var selectedDateType = value;
             DataHandler.TrackDateSelection(selectedDateType);
             DataHandler.OnDateSelection(this.appStateCallback, this.appDataCallback, selectedDateType);
+        } else if (name === "addentry.submit") {
+            DataHandlerV2.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         }
+    }
+    // for input and textarea
+    onChange(e) {
+        DataHandler.handleInputChange(e);
+    }
+    // not working ?
+    onFormSubmit(e) {
+        alert("onFormSubmit");
+        e.preventDefault();
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;

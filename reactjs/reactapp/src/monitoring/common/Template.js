@@ -380,4 +380,149 @@ Template["summary.data.table.tr"] = [
         ]
     }
 ];
+Template["addentry"] = [
+    {
+        "tag": "div.div",
+        "className": "form-div",
+        "text": {
+            "tag": "form",
+            "id": "addentry_form",
+            "text": [
+                {
+                    "tag": "div.h1",
+                    "className": "p-10px",
+                    "name": "addentry.form-heading",
+                    "text": "Add Entry"
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "className": "",
+                            "text": [
+                                {
+                                    "tag": "label",
+                                    "name": "addentry.subject-text",
+                                    "text": "Station"
+                                },
+                                {
+                                    "tag": "dropdown",
+                                    "className": "form-control",
+                                    "name": "addentry.subject",
+                                    "text": [
+                                        {
+                                            "text": "Select station...",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "div",
+                            "className": "",
+                            "text": [
+                                {
+                                    "tag": "label",
+                                    "name": "addentry.heading-text",
+                                    "text": "Device"
+                                },
+                                {
+                                    "tag": "dropdown",
+                                    "className": "form-control",
+                                    "name": "addentry.heading",
+                                    "text": [
+                                        {
+                                            "text": "Select device...",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "name": "addentry.uploadfile-field",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "text": [
+                                {
+                                    "tag": "input",
+                                    "type": "file",
+                                    "name": "addentry.file",
+                                    "id": "file"
+                                },
+                                {
+                                    "tag": "div.span",
+                                    "name": "addentry.uploadfile.message",
+                                    "className": "small",
+                                    "text": ""
+                                }
+
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "name": "addentry.addentry-field",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "text": [
+                                {
+                                    "tag": "label",
+                                    "text": "Comment"
+                                },
+                                {
+                                    "tag": "textareaV2",
+                                    "className": "w-100",
+                                    "name": "addentry.textarea",
+                                    "id": "textarea"
+                                },
+                                {
+                                    "tag": "div.span",
+                                    "name": "addentry.textarea.message",
+                                    "className": "small",
+                                    "text": ""
+                                }
+
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "button",
+                            "className": "btn btn-primary",
+                            "name": "addentry.submit",
+                            "text": "Submit"
+                        },
+                        {
+                            "tag": "span",
+                            "className": "pl-10px text-success",
+                            "name": "addentry.complete-status",
+                            "text": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "tag": "div",
+        "name": "footer",
+        "text": ""
+    }
+];;
 export default Template;

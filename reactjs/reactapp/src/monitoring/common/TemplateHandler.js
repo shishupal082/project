@@ -1,5 +1,5 @@
 import $S from "../../interface/stack.js";
-// import Config from "./Config";
+import Config from "./Config";
 import DataHandler from "./DataHandler";
 
 import Template from "./Template";
@@ -116,6 +116,48 @@ TemplateHandler.extend({
         }
         return renderField;
     },
+    updateUploadTemplateData: function(template) {
+        if (!$S.isArray(template)) {
+            return;
+        }
+        var subject = DataHandler.getData("addentry.subject", "");
+        var heading = DataHandler.getData("addentry.heading", "");
+        var comment = DataHandler.getData("addentry.textarea", "");
+        // var filename = "";
+        // var file = DataHandler.getData("addentry.file", "", true);
+
+        // if ($S.isObject(file) && $S.isString(file.name)) {
+        //     filename = file.name;
+        // }
+        var dataSetValue = {};
+        dataSetValue["addentry.subject"] = subject;
+        dataSetValue["addentry.textarea"] = comment;
+        dataSetValue["addentry.heading"] = heading;
+        // dataSetValue["addentry.file"] = filename;
+        TemplateHelper.updateTemplateValue(template, dataSetValue);
+        var dataSetText = {};
+        var fileUploadInstruction = Config.getPageData("uploadFileInstruction", "");
+        var commentInstruction = Config.getPageData("uploadTextInstruction", "");
+        dataSetText["addentry.textarea.message"] = commentInstruction;
+        dataSetText["addentry.uploadfile.message"] = fileUploadInstruction;
+        TemplateHelper.updateTemplateText(template, dataSetText);
+
+        var availableStations = DataHandler.getAvailableStation();
+        var availableDevices = DataHandler.getAvailableDevice();
+        var i;
+        for (i = 0; i < availableStations.length; i++) {
+            TemplateHelper.addItemInTextArray(template, "addentry.subject", {
+                "text": availableStations[i].name,
+                "value": availableStations[i].id
+            });
+        }
+        for (i = 0; i < availableDevices.length; i++) {
+            TemplateHelper.addItemInTextArray(template, "addentry.heading", {
+                "text": availableDevices[i].name,
+                "value": availableDevices[i].id
+            });
+        }
+    },
     /*
     generateFilter: function(data) {
         var template = TemplateHandler.getTemplate("entrybydatefilter.filter");
@@ -229,6 +271,26 @@ TemplateHandler.extend({
         return template;
         */
         return renderField;
+    },
+    "addentry": function(pageName) {
+        var template = TemplateHandler.getTemplate("addentry");
+        var templateData = {};
+        templateData["addentry.form-heading"] = "Add Entry";
+        TemplateHelper.updateTemplateText(template, templateData);
+        TemplateHelper.addClassTemplate(template, "addentry.uploadfile-field", "d-none");
+        TemplateHelper.removeClassTemplate(template, "addentry.addentry-field", "d-none");
+        this.updateUploadTemplateData(template);
+        return template;
+    },
+    "uploadfile": function(pageName) {
+        var template = TemplateHandler.getTemplate("addentry");
+        var templateData = {};
+        templateData["addentry.form-heading"] = "Upload File";
+        TemplateHelper.updateTemplateText(template, templateData);
+        TemplateHelper.removeClassTemplate(template, "addentry.uploadfile-field", "d-none");
+        TemplateHelper.addClassTemplate(template, "addentry.addentry-field", "d-none");
+        this.updateUploadTemplateData(template);
+        return template;
     }
 });
 

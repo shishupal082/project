@@ -1,5 +1,9 @@
 import $S from "../../interface/stack.js";
-// import Config from "./Config";
+import DataHandler from "./DataHandler";
+import Config from "./Config";
+
+
+import AppHandler from "../../common/app/common/AppHandler";
 
 var DataHandlerV2;
 
@@ -96,6 +100,90 @@ DataHandlerV2.extend({
         }
         return dashboardResult;
     },
+});
+
+DataHandlerV2.extend({
+    callAddTextApi: function(station, device, text) {
+        var url = Config.getApiUrl("addTextApi", null, true);
+        if (!$S.isString(url)) {
+            return;
+        }
+        var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
+        var postData = {};
+        var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD","/");
+        var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
+        postData["text"] = [currentDateTime2+",info,"+station+","+device+","+text];
+        postData["filename"] = currentDateTime + "-report.csv";
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            console.log(response);
+            if (status === "FAILURE") {
+                // GATracking.trackResponseAfterLogin("delete_file", {"status": "FAILURE_RESPONSE"});
+                alert("Error in uploading data, Please Try again.");
+            } else {
+                AppHandler.LazyRedirect(entryByDateUrl, 250);
+                // GATracking.trackResponseAfterLogin("delete_file", response);
+                // PageData.handleApiResponse(Data, callBack, "delete_file", ajax, response);
+            }
+        });
+    },
+    callUploadFileApi: function(station, device, file) {
+        var url = Config.getApiUrl("uploadfileApi", null, true);
+        if (!$S.isString(url)) {
+            return;
+        }
+        url += "?u=" + AppHandler.GetUserData("username", "");
+        var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
+        var formData = new FormData();
+        formData.append("subject", station);
+        formData.append("heading", device);
+        formData.append("file", file);
+        $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
+            // $S.callMethod(callBack);
+            console.log(response);
+            if (status === "FAILURE") {
+                // GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
+                alert("Error in uploading file, Please Try again.");
+            } else {
+                AppHandler.LazyRedirect(entryByDateUrl, 250);
+                // GATracking.trackResponseAfterLogin("upload_file", response);
+                // PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
+            }
+        }, function(percentComplete) {
+            // PageData.setData("upload_file.percentComplete", percentComplete);
+            // $S.callMethod(callBack);
+        });
+    }
+});
+
+DataHandlerV2.extend({
+    SubmitFormClick: function(appStateCallback, appDataCallback) {
+        var currentPageName = DataHandler.getData("currentPageName", null);
+        var subject = DataHandler.getData("addentry.subject", "");
+        var heading = DataHandler.getData("addentry.heading", "");
+        var comment = DataHandler.getData("addentry.textarea", "");
+        var file = DataHandler.getData("addentry.file", null, true);
+        if (subject.length < 1) {
+            alert("Please select station");
+            return;
+        }
+        if (heading.length < 1) {
+            alert("Please select device");
+            return;
+        }
+        if (currentPageName === "addentry") {
+            if (comment.length < 1) {
+                alert("Please enter comment");
+                return;
+            }
+            this.callAddTextApi(subject, heading, comment);
+        } else if (currentPageName === "uploadfile") {
+            if (!$S.isObject(file)) {
+                alert("Please select file");
+                return;
+            }
+            this.callUploadFileApi(subject, heading, file);
+        }
+    }
 });
 
 })($S);
