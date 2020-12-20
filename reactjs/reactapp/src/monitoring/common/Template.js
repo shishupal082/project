@@ -36,7 +36,53 @@ Template["templateNotFound"] = [{
         "text": "Template not Found"
     }
 }];
-
+Template["pageHeading"] = [
+    {
+        "tag": "center.h2",
+        "name": "pageHeading.text",
+        "text": ""
+    },
+    {
+        "tag": "center",
+        "text": [
+            {
+                "tag": "span",
+                "text": "Login as: "
+            },
+            {
+                "tag": "span.b",
+                "name": "pageHeading.username",
+                "text": ""
+            },
+            {
+                "tag": "span",
+                "text": " |  "
+            },
+            {
+                "tag": "span",
+                "text": {
+                    "tag": "a",
+                    "name": "pageHeading.dashboardLink",
+                    "href": "/dashboard",
+                    "text": "Dashboard"
+                }
+            },
+            {
+                "tag": "span",
+                "text": " |  "
+            },
+            {
+                "tag": "span",
+                "text": {
+                    "tag": "a",
+                    "name": "pageHeading.logoutLink",
+                    "href": "/logout",
+                    "text": "Logout"
+                }
+            }
+        ]
+    }
+];
 Template["home"] = [{
     "tag": "div",
     "text": {

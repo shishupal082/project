@@ -4,6 +4,7 @@ import DataHandler from "./DataHandler";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
+import AppHandler from "../../common/app/common/AppHandler";
 
 var TemplateHandler;
 (function($S){
@@ -189,6 +190,16 @@ TemplateHandler.extend({
 });
 
 TemplateHandler.extend({
+    getAppHedingTemplate: function(pageName) {
+        var template = TemplateHandler.getTemplate("pageHeading");
+        var sectionName = DataHandler.getData("sectionName", "");
+        var templateData = {
+                    "pageHeading.text": sectionName,
+                    "pageHeading.username": AppHandler.GetUserData("username", "")
+        };
+        TemplateHelper.updateTemplateText(template, templateData);
+        return template;
+    },
     getPageRenderField: function(pageName) {
         return TemplateHandler.getTemplate(pageName);
     },

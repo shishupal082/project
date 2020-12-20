@@ -32,7 +32,7 @@ class App extends React.Component {
             "list2Data": [],
             "currentList2Id": "", // same as pageName
 
-            "appHeading": "Loading...",
+            "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "pageHeading": "",
             "pageTab": [],
             "hidePageTab": false,

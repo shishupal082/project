@@ -918,7 +918,7 @@ DataHandler.extend({
             appDataCallback("list2Data", pageDropdown);
             appDataCallback("currentList1Id", DataHandler.getData("currentSectionId", ""));
             appDataCallback("currentList2Id", currentPageName);
-            appDataCallback("appHeading", DataHandler.getData("sectionName", ""));
+            appDataCallback("appHeading", TemplateHandler.getAppHedingTemplate(currentPageName));
             appDataCallback("pageHeading", DataHandler.getMetaDataPageHeadingV2());
 
             appDataCallback("renderFieldRow", renderFieldRow);
