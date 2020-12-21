@@ -112,10 +112,13 @@ DataHandlerV2.extend({
         var postData = {};
         var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD","/");
         var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
-        postData["text"] = [currentDateTime2+",info,"+station+","+device+","+text];
+        var username = AppHandler.GetUserData("username", "");
+        postData["subject"] = station;
+        postData["heading"] = device;
+        postData["text"] = [currentDateTime2+",info,"+station+","+device+","+text+","+username];
         postData["filename"] = currentDateTime + "-report.csv";
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
-            console.log(response);
+            // console.log(response);
             if (status === "FAILURE") {
                 // GATracking.trackResponseAfterLogin("delete_file", {"status": "FAILURE_RESPONSE"});
                 alert("Error in uploading data, Please Try again.");
@@ -139,7 +142,7 @@ DataHandlerV2.extend({
         formData.append("file", file);
         $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
             // $S.callMethod(callBack);
-            console.log(response);
+            // console.log(response);
             if (status === "FAILURE") {
                 // GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
                 alert("Error in uploading file, Please Try again.");
