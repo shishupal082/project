@@ -124,12 +124,16 @@ TemplateHandler.extend({
         var subject = DataHandler.getData("addentry.subject", "");
         var heading = DataHandler.getData("addentry.heading", "");
         var comment = DataHandler.getData("addentry.textarea", "");
+        var percentageComplete = DataHandler.getData("addentry.fileUploadPercentage", "");
         // var filename = "";
         // var file = DataHandler.getData("addentry.file", "", true);
 
         // if ($S.isObject(file) && $S.isString(file.name)) {
         //     filename = file.name;
         // }
+        if ($S.isNumeric(percentageComplete)) {
+            percentageComplete += "% Completed";
+        }
         var dataSetValue = {};
         dataSetValue["addentry.subject"] = subject;
         dataSetValue["addentry.textarea"] = comment;
@@ -141,6 +145,7 @@ TemplateHandler.extend({
         var commentInstruction = Config.getPageData("uploadTextInstruction", "");
         dataSetText["addentry.textarea.message"] = commentInstruction;
         dataSetText["addentry.uploadfile.message"] = fileUploadInstruction;
+        dataSetText["addentry.complete-status"] = percentageComplete;
         TemplateHelper.updateTemplateText(template, dataSetText);
 
         var availableStations = DataHandler.getAvailableStation();
@@ -157,6 +162,15 @@ TemplateHandler.extend({
                 "text": availableDevices[i].name,
                 "value": availableDevices[i].id
             });
+        }
+        var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
+        var submitBtnName = "addentry.submit";
+        if (formSubmitStatus === "in_progress") {
+            TemplateHelper.removeClassTemplate(template, submitBtnName, "btn-primary");
+            TemplateHelper.addClassTemplate(template, submitBtnName, "btn-link disabled");
+        } else {
+            TemplateHelper.addClassTemplate(template, submitBtnName, "btn-primary");
+            TemplateHelper.removeClassTemplate(template, submitBtnName, "btn-link disabled");
         }
     },
     /*
@@ -194,8 +208,8 @@ TemplateHandler.extend({
         var template = TemplateHandler.getTemplate("pageHeading");
         var sectionName = DataHandler.getData("sectionName", "");
         var templateData = {
-                    "pageHeading.text": sectionName,
-                    "pageHeading.username": AppHandler.GetUserData("username", "")
+            "pageHeading.text": sectionName,
+            "pageHeading.username": AppHandler.GetUserData("username", "")
         };
         TemplateHelper.updateTemplateText(template, templateData);
         return template;

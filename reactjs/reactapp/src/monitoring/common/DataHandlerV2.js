@@ -103,10 +103,20 @@ DataHandlerV2.extend({
 });
 
 DataHandlerV2.extend({
-    callAddTextApi: function(station, device, text) {
+    callAddTextApi: function(station, device, text, callBack) {
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
+        }
+        if ($S.isString(text)) {
+            var finalText = [], temp;
+            temp = text.split("\n");
+            for (var i = 0; i < temp.length; i++) {
+                if (temp[i].trim() !== "") {
+                    finalText.push(temp[i]);
+                }
+            }
+            text = finalText.join("; ");
         }
         var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
         var postData = {};
@@ -117,7 +127,11 @@ DataHandlerV2.extend({
         postData["heading"] = device;
         postData["text"] = [currentDateTime2+",info,"+station+","+device+","+text+","+username];
         postData["filename"] = currentDateTime + "-report.csv";
+        DataHandler.setData("addentry.submitStatus", "in_progress");
+        $S.callMethod(callBack);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            DataHandler.setData("addentry.submitStatus", "completed");
+            $S.callMethod(callBack);
             // console.log(response);
             if (status === "FAILURE") {
                 // GATracking.trackResponseAfterLogin("delete_file", {"status": "FAILURE_RESPONSE"});
@@ -129,31 +143,50 @@ DataHandlerV2.extend({
             }
         });
     },
-    callUploadFileApi: function(station, device, file) {
+    callUploadFileApi: function(station, device, file, callBack) {
         var url = Config.getApiUrl("uploadfileApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
         url += "?u=" + AppHandler.GetUserData("username", "");
-        var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
+        // var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
         var formData = new FormData();
         formData.append("subject", station);
         formData.append("heading", device);
         formData.append("file", file);
+        var uploadFileMessage = "Uploaded File";
+        DataHandler.setData("addentry.submitStatus", "in_progress");
+        $S.callMethod(callBack);
         $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
             // $S.callMethod(callBack);
             // console.log(response);
             if (status === "FAILURE") {
                 // GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
+                DataHandler.setData("addentry.submitStatus", "completed");
+                $S.callMethod(callBack);
                 alert("Error in uploading file, Please Try again.");
             } else {
-                AppHandler.LazyRedirect(entryByDateUrl, 250);
+                if ($S.isObject(response)) {
+                    if (response.status === "FAILURE") {
+                        if ($S.isString(response.error)) {
+                            alert(response.error);
+                            DataHandler.setData("addentry.submitStatus", "completed");
+                            $S.callMethod(callBack);
+                        } else {
+                            if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
+                                uploadFileMessage = "Uploaded file: " + station + "," + device + "," + response.data.fileName;
+                            }
+                            DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
+                        }
+                    }
+                }
+                // AppHandler.LazyRedirect(entryByDateUrl, 250);
                 // GATracking.trackResponseAfterLogin("upload_file", response);
                 // PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
             }
         }, function(percentComplete) {
-            // PageData.setData("upload_file.percentComplete", percentComplete);
-            // $S.callMethod(callBack);
+            DataHandler.setData("addentry.fileUploadPercentage", percentComplete);
+            $S.callMethod(callBack);
         });
     }
 });
@@ -178,13 +211,17 @@ DataHandlerV2.extend({
                 alert("Please enter comment");
                 return;
             }
-            this.callAddTextApi(subject, heading, comment);
+            this.callAddTextApi(subject, heading, comment, function() {
+                DataHandler.ForceReload(appStateCallback, appDataCallback);
+            });
         } else if (currentPageName === "uploadfile") {
             if (!$S.isObject(file)) {
                 alert("Please select file");
                 return;
             }
-            this.callUploadFileApi(subject, heading, file);
+            this.callUploadFileApi(subject, heading, file, function() {
+                DataHandler.ForceReload(appStateCallback, appDataCallback);
+            });
         }
     }
 });

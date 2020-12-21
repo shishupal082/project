@@ -61,6 +61,8 @@ keys.push("addentry.subject");
 keys.push("addentry.heading");
 keys.push("addentry.textarea");
 keys.push("addentry.file");
+keys.push("addentry.fileUploadPercentage");
+keys.push("addentry.submitStatus"); //in_progress, completed
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -567,6 +569,11 @@ DataHandler.extend({
         }
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnDateSelection");
+    },
+    // used while uploading file or add entry
+    ForceReload: function(appStateCallback, appDataCallback) {
+        DataHandler.setData("availableDataPageName", "");
+        DataHandler.setPageData(appStateCallback, appDataCallback, "ForceReload");
     },
     OnFilterSelect: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
