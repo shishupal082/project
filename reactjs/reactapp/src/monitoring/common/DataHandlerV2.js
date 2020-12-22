@@ -123,9 +123,10 @@ DataHandlerV2.extend({
         var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD","/");
         var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
         var username = AppHandler.GetUserData("username", "");
+        var team = DataHandler.getData("userTeam", "info");
         postData["subject"] = station;
         postData["heading"] = device;
-        postData["text"] = [currentDateTime2+",info,"+station+","+device+","+text+","+username];
+        postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
         postData["filename"] = currentDateTime + "-report.csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);

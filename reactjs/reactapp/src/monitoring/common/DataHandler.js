@@ -50,7 +50,7 @@ keys.push("selectedStation");
 keys.push("selectedType");
 keys.push("selectedDevice");
 
-var bypassKeys = ["appControlData", "metaData", "sectionsData",
+var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
@@ -178,6 +178,28 @@ DataHandler.extend({
             currentSectionId = "empty-currentSectionId";
         }
         DataHandler.send("dateSelection", currentSectionId+":"+selectedDateType, DataHandler.getPageUrl());
+    }
+});
+
+DataHandler.extend({
+    setUserTeam: function() {
+        var signal, telecom, sAndT, amc, team;
+        signal = AppHandler.GetUserData("isSignalTeam", false);
+        telecom = AppHandler.GetUserData("isTelecomTeam", false);
+        sAndT = AppHandler.GetUserData("isSAndTTeam", false);
+        amc = AppHandler.GetUserData("isAMCTeam", false);
+        if (signal) {
+            team = "signal";
+        } else if (telecom) {
+            team = "telecom";
+        } else if (sAndT) {
+            team = "sAndT";
+        } else if (amc) {
+            team = "amc";
+        } else {
+            team = "info";
+        }
+        this.setData("userTeam", team);
     }
 });
 
@@ -497,6 +519,9 @@ DataHandler.extend({
             if (DataHandler.getDataLoadStatusByKey(loadStatusKeys) === "completed") {
                 $S.callMethod(callback);
             }
+            setTimeout(function(){
+                DataHandler.setUserTeam();
+            }, 1);
         });
         var getFilesInfoApi = Config.getApiUrl("getFilesInfo", null, true);
         $S.loadJsonData(null, [getFilesInfoApi], function(response, apiName, ajax){

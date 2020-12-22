@@ -243,10 +243,10 @@ childGenerator = {
         return <select key={key} name={data.name} className={data.className} value={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
     },
     "textarea": function(props, data, reactChildText, key) {
-        return <textarea key={key} name={data.name} className={data.className} value={data.value} onChange={props.onChange}></textarea>;
+        return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} value={data.value} onChange={props.onChange}></textarea>;
     },
     "textareaV2": function(props, data, reactChildText, key) {
-        return <textarea key={key} name={data.name} className={data.className} defaultValue={data.value} onChange={props.onChange}></textarea>;
+        return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} defaultValue={data.value} onChange={props.onChange}></textarea>;
     },
     "option": function(props, data, reactChildText, key) {
         return <option key={key} value={data.value}>{reactChildText}</option>;

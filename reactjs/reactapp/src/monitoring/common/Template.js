@@ -531,6 +531,7 @@ Template["addentry"] = [
                                     "tag": "textareaV2",
                                     "className": "w-100",
                                     "name": "addentry.textarea",
+                                    "rows": "3",
                                     "id": "textarea"
                                 },
                                 {
@@ -539,7 +540,6 @@ Template["addentry"] = [
                                     "className": "small",
                                     "text": ""
                                 }
-
                             ]
                         }
                     ]
