@@ -154,7 +154,7 @@ DataHandler.extend({
     },
     send: function(trackingAction, eventCategory, eventLabel) {
         if (Config.gtag) {
-            $S.pushGAEvent(Config.gtag, trackingAction, eventCategory, eventLabel);
+            $S.pushGAEvent(Config.gtag, eventCategory, trackingAction, eventLabel);
         }
     },
     _getTrackUsername: function() {
