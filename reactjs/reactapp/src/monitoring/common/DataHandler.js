@@ -46,9 +46,9 @@ keys.push("errorsData");
 // keys.push("dropdownFields");
 
 
-keys.push("selectedStation");
-keys.push("selectedType");
-keys.push("selectedDevice");
+// keys.push("selectedStation");
+// keys.push("selectedType");
+// keys.push("selectedDevice");
 
 var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
@@ -157,17 +157,61 @@ DataHandler.extend({
             $S.pushGAEvent(Config.gtag, trackingAction, eventCategory, eventLabel);
         }
     },
+    _getTrackUsername: function() {
+        var username = AppHandler.GetUserData("username", "");
+        if (!$S.isString(username) || username.length < 1) {
+            username = "empty-username";
+        }
+        return username;
+    },
+    TrackApiRequest: function(requestName, requestStatus) {
+        var username = this._getTrackUsername();
+        DataHandler.send(username, requestName+":"+requestStatus, DataHandler.getPageUrl());
+    },
+    TrackFilterOperation: function(eventName, value, name) {
+        if (!$S.isString(eventName) || eventName.length < 1) {
+            eventName = "empty-eventName";
+        }
+        var filterData = ":";
+        var firstValue = DataHandler.getData("selectedStation", "");
+        var secondValue = DataHandler.getData("selectedType", "");
+        var thirdValue = DataHandler.getData("selectedDevice", "");
+        if (eventName === "select") {
+            switch(name) {
+                case "selectedStation":
+                    firstValue = value;
+                break;
+                case "selectedType":
+                    secondValue = value;
+                break;
+                case "selectedDevice":
+                    thirdValue = value;
+                break;
+                default:
+                break;
+            }
+            filterData += "1-"+firstValue;
+            filterData += "-2-"+secondValue;
+            filterData += "-3-"+thirdValue;
+        } else {
+            filterData += "reset";
+        }
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "filter:"+eventName+filterData, DataHandler.getPageUrl());
+    },
     TrackPageView: function(pageName) {
         if (!$S.isString(pageName) || pageName.length < 1) {
             pageName = "empty-pageName";
         }
-        DataHandler.send("pageView", pageName, DataHandler.getPageUrl());
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "pageView:"+pageName, DataHandler.getPageUrl());
     },
     TrackSectionView: function(trackingAction, sectionId) {
         if (!$S.isString(sectionId) || sectionId.length < 1) {
             sectionId = "empty-sectionId";
         }
-        DataHandler.send("sectionView", sectionId+":"+trackingAction, DataHandler.getPageUrl());
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "sectionView:"+sectionId+":"+trackingAction, DataHandler.getPageUrl());
     },
     TrackDateSelection: function(selectedDateType) {
         if (!$S.isString(selectedDateType) || selectedDateType.length < 1) {
@@ -177,7 +221,12 @@ DataHandler.extend({
         if (!$S.isString(currentSectionId) || currentSectionId.length < 1) {
             currentSectionId = "empty-currentSectionId";
         }
-        DataHandler.send("dateSelection", currentSectionId+":"+selectedDateType, DataHandler.getPageUrl());
+        var pageName = DataHandler.getData("currentPageName", "");
+        if (!$S.isString(pageName) || pageName.length < 1) {
+            pageName = "empty-pageName";
+        }
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "dateSelection:"+currentSectionId+":"+pageName+":"+selectedDateType, DataHandler.getPageUrl());
     }
 });
 

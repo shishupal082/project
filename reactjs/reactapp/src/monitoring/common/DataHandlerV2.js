@@ -135,12 +135,11 @@ DataHandlerV2.extend({
             $S.callMethod(callBack);
             // console.log(response);
             if (status === "FAILURE") {
-                // GATracking.trackResponseAfterLogin("delete_file", {"status": "FAILURE_RESPONSE"});
+                DataHandler.TrackApiRequest("uploadText", "FAILURE");
                 alert("Error in uploading data, Please Try again.");
             } else {
+                DataHandler.TrackApiRequest("uploadText", "SUCCESS");
                 AppHandler.LazyRedirect(entryByDateUrl, 250);
-                // GATracking.trackResponseAfterLogin("delete_file", response);
-                // PageData.handleApiResponse(Data, callBack, "delete_file", ajax, response);
             }
         });
     },
@@ -150,7 +149,6 @@ DataHandlerV2.extend({
             return;
         }
         url += "?u=" + AppHandler.GetUserData("username", "");
-        // var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
         var formData = new FormData();
         formData.append("subject", station);
         formData.append("heading", device);
@@ -159,10 +157,8 @@ DataHandlerV2.extend({
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
         $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
-            // $S.callMethod(callBack);
-            // console.log(response);
             if (status === "FAILURE") {
-                // GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
+                DataHandler.TrackApiRequest("uploadFile", "Api-FAILURE");
                 DataHandler.setData("addentry.submitStatus", "completed");
                 $S.callMethod(callBack);
                 alert("Error in uploading file, Please Try again.");
@@ -171,9 +167,11 @@ DataHandlerV2.extend({
                     if (response.status === "FAILURE") {
                         if ($S.isString(response.error)) {
                             alert(response.error);
+                            DataHandler.TrackApiRequest("uploadFile", "FAILURE");
                             DataHandler.setData("addentry.submitStatus", "completed");
                             $S.callMethod(callBack);
                         } else {
+                            DataHandler.TrackApiRequest("uploadFile", "SUCCESS");
                             if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
                                 uploadFileMessage = "Uploaded file: " + station + "," + device + "," + response.data.fileName;
                             }
@@ -181,9 +179,6 @@ DataHandlerV2.extend({
                         }
                     }
                 }
-                // AppHandler.LazyRedirect(entryByDateUrl, 250);
-                // GATracking.trackResponseAfterLogin("upload_file", response);
-                // PageData.handleApiResponse(Data, callBack, pageName, ajax, response);
             }
         }, function(percentComplete) {
             DataHandler.setData("addentry.fileUploadPercentage", percentComplete);

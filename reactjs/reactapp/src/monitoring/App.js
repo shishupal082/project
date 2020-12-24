@@ -86,11 +86,11 @@ class App extends React.Component {
             e.preventDefault();
         }
         if (value === "reload") {
-            DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
+            DataHandler.TrackSectionView("reload", this.appData.currentList1Id);
             DataHandler.OnReloadClick(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
         } else if (name === "reset-filter" && value === "reset-filter") {
-            // DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
+            DataHandler.TrackFilterOperation("click", this.appData.currentList1Id);
             DataHandler.OnResetFilter(this.appStateCallback, this.appDataCallback);
         } else if (name === "open-tab") {
             if (value !== this.appData.currentList2Id) {
@@ -126,6 +126,7 @@ class App extends React.Component {
         } else if (name === "list2-select") {
             this.gotoPage(value);
         } else {
+            DataHandler.TrackFilterOperation("select", value, name);
             DataHandler.OnFilterSelect(this.appStateCallback, this.appDataCallback, name, value);
         }
     }
