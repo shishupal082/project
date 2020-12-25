@@ -120,7 +120,7 @@ DataHandlerV2.extend({
         }
         var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
         var postData = {};
-        var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD","/");
+        var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/");
         var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
         var username = AppHandler.GetUserData("username", "");
         var team = DataHandler.getData("userTeam", "info");

@@ -55,7 +55,7 @@ var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
         "selectedStation", "selectedType", "selectedDevice",
-        "loginUserDetailsLoadStatus", "usersFilesLoadStatus", "usersFilesData", "usersCsvFilesData"];
+        "loginUserDetailsLoadStatus", "usersFilesData", "usersCsvFilesData"];
 
 keys.push("addentry.subject");
 keys.push("addentry.heading");
@@ -71,7 +71,6 @@ CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("csvDataLoadStatus", "not-started");
 
 CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
-CurrentData.setData("usersFilesLoadStatus", "not-started");
 CurrentData.setData("usersFilesData", []);
 CurrentData.setData("usersCsvFilesData", []);
 
@@ -95,7 +94,6 @@ DataHandler.extend({
         dataLoadStatusKey.push("metaDataLoadStatus");
         dataLoadStatusKey.push("csvDataLoadStatus");
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
-        dataLoadStatusKey.push("usersFilesLoadStatus");
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return "";
         }
@@ -104,10 +102,12 @@ DataHandler.extend({
     },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
+        var loadStatus;
         if ($S.isArray(keys)) {
             for (i = 0; i < keys.length; i++) {
                 if ($S.isString(keys[i])) {
-                    dataLoadStatus.push(DataHandler.getData(keys[i], ""));
+                    loadStatus = DataHandler.getData(keys[i], "");
+                    dataLoadStatus.push(loadStatus);
                 }
             }
         } else {
@@ -557,7 +557,6 @@ DataHandler.extend({
         DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
     },
     loadUserRelatedData: function(callback) {
-        var loadStatusKeys = ["loginUserDetailsLoadStatus", "usersFilesLoadStatus"];
         AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
             var isLogin = AppHandler.GetUserData("login", false);
             if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
@@ -565,24 +564,11 @@ DataHandler.extend({
                 return;
             }
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-            if (DataHandler.getDataLoadStatusByKey(loadStatusKeys) === "completed") {
-                $S.callMethod(callback);
-            }
+            $S.callMethod(callback);
             setTimeout(function(){
                 DataHandler.setUserTeam();
             }, 1);
         });
-        var getFilesInfoApi = Config.getApiUrl("getFilesInfo", null, true);
-        $S.loadJsonData(null, [getFilesInfoApi], function(response, apiName, ajax){
-            if ($S.isObject(response) && $S.isArray(response.data)) {
-                DataHandler.setUserDependentCsvFilePath(response.data);
-            }
-        }, function() {
-            DataHandler.setData("usersFilesLoadStatus", "completed");
-            if (DataHandler.getDataLoadStatusByKey(loadStatusKeys) === "completed") {
-                $S.callMethod(callback);
-            }
-        }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
@@ -717,7 +703,7 @@ DataHandler.extend({
     loadCsvData: function(appStateCallback, appDataCallback) {
         var csvDataApis = DataHandler.getCsvDataApis();
         var csvDataLoadStatus = DataHandler.getData("csvDataLoadStatus", "");
-        var loadStatus = DataHandler.getDataLoadStatusByKey(["appControlDataLoadStatus", "loginUserDetailsLoadStatus", "usersFilesLoadStatus"]);
+        var loadStatus = DataHandler.getDataLoadStatusByKey(["appControlDataLoadStatus"]);
         if (csvDataApis.length) {
             if (csvDataLoadStatus === "not-started") {
                 DataHandler.setData("csvDataLoadStatus", "in-progress");
