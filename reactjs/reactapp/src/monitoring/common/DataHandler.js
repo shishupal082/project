@@ -1,7 +1,6 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import TemplateHandler from "./TemplateHandler";
-import DataHandlerV2 from "./DataHandlerV2";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -55,7 +54,7 @@ var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
         "selectedStation", "selectedType", "selectedDevice",
-        "loginUserDetailsLoadStatus", "usersFilesData", "usersCsvFilesData"];
+        "loginUserDetailsLoadStatus", "usersFilesData"];
 
 keys.push("addentry.subject");
 keys.push("addentry.heading");
@@ -72,7 +71,6 @@ CurrentData.setData("csvDataLoadStatus", "not-started");
 
 CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("usersFilesData", []);
-CurrentData.setData("usersCsvFilesData", []);
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -398,13 +396,6 @@ DataHandler.extend({
                 return Config.baseapi + el + "?v=" + requestId;
             });
         }
-        if ($S.isObject(sectionData) && $S.isBooleanTrue(sectionData.loadUserDependentCsv)) {
-            var usersCsvFilesData = DataHandler.getData("usersCsvFilesData", []);
-            var username = AppHandler.GetUserData("username", null);
-            for(var i=0; i<usersCsvFilesData.length; i++) {
-                csvDataApis.push(Config.createCsvApi(usersCsvFilesData[i], username, requestId));
-            }
-        }
         return csvDataApis;
     },
     _getName: function(item) {
@@ -510,17 +501,6 @@ DataHandler.extend({
     },
     getDisplayDevice: function(id) {
         return DataHandler._getDisplayName("devices", id);
-    },
-    setUserDependentCsvFilePath: function(usersFilesData) {
-        var finalData = DataHandlerV2.GenerateFilesInfoResponse(usersFilesData);
-        var finalResult = [];
-        for (var i = 0; i < finalData.length; i++) {
-            if (finalData[i].ext === "csv") {
-                finalResult.push(finalData[i].filepath);
-            }
-        }
-        DataHandler.setData("usersFilesData", finalData);
-        DataHandler.setData("usersCsvFilesData", finalResult);
     }
 });
 
