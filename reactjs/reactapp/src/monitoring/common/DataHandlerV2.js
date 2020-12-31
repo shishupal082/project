@@ -125,7 +125,7 @@ DataHandlerV2.extend({
         var username = AppHandler.GetUserData("username", "");
         var team = DataHandler.getData("userTeam", "info");
         postData["subject"] = station;
-        postData["heading"] = device;
+        postData["heading"] = team+","+device;
         postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
         postData["filename"] = currentDateTime + "-report.csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
@@ -149,9 +149,10 @@ DataHandlerV2.extend({
             return;
         }
         url += "?u=" + AppHandler.GetUserData("username", "");
+        var team = DataHandler.getData("userTeam", "info");
         var formData = new FormData();
         formData.append("subject", station);
-        formData.append("heading", device);
+        formData.append("heading", team+","+device);
         formData.append("file", file);
         var uploadFileMessage = "Uploaded File";
         DataHandler.setData("addentry.submitStatus", "in_progress");
@@ -167,16 +168,18 @@ DataHandlerV2.extend({
                     if (response.status === "FAILURE") {
                         if ($S.isString(response.error)) {
                             alert(response.error);
-                            DataHandler.TrackApiRequest("uploadFile", "FAILURE");
-                            DataHandler.setData("addentry.submitStatus", "completed");
-                            $S.callMethod(callBack);
                         } else {
-                            DataHandler.TrackApiRequest("uploadFile", "SUCCESS");
-                            if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
-                                uploadFileMessage = "Uploaded file: " + station + "," + device + "," + response.data.fileName;
-                            }
-                            DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
+                            alert("Error in uploading file, Please try again.");
                         }
+                        DataHandler.TrackApiRequest("uploadFile", "FAILURE");
+                        DataHandler.setData("addentry.submitStatus", "completed");
+                        $S.callMethod(callBack);
+                    } else {
+                        DataHandler.TrackApiRequest("uploadFile", "SUCCESS");
+                        if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
+                            uploadFileMessage = "Uploaded file: " + response.data.fileName + "," + station + "," + team + "," + device;
+                        }
+                        DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
                     }
                 }
             }
