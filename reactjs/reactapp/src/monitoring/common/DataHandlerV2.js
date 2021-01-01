@@ -103,6 +103,22 @@ DataHandlerV2.extend({
 });
 
 DataHandlerV2.extend({
+    _generateStringFromPattern: function(pattern, username, device, team) {
+        if (!$S.isString(pattern)) {
+            return pattern;
+        }
+        pattern = DT.getDateTime(pattern,"/");
+        if ($S.isString(username)) {
+            pattern = pattern.replaceAll("username", username);
+        }
+        if ($S.isString(device)) {
+            pattern = pattern.replaceAll("device", device);
+        }
+        if ($S.isString(team)) {
+            pattern = pattern.replaceAll("team", team);
+        }
+        return pattern;
+    },
     callAddTextApi: function(station, device, text, callBack) {
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
@@ -119,15 +135,17 @@ DataHandlerV2.extend({
             text = finalText.join("; ");
         }
         var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
-        var postData = {};
-        var currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/");
-        var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
         var username = AppHandler.GetUserData("username", "");
         var team = DataHandler.getData("userTeam", "info");
+        var postData = {};
+        var addTextFilename = this._generateStringFromPattern(Config.addTextFilenamePattern, username, device, team);
+        var heading = this._generateStringFromPattern(Config.headingPattern, username, device, team);
+        var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
+
         postData["subject"] = station;
-        postData["heading"] = team+","+device;
+        postData["heading"] = heading;
         postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
-        postData["filename"] = currentDateTime + "-report.csv";
+        postData["filename"] = addTextFilename;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
@@ -148,11 +166,13 @@ DataHandlerV2.extend({
         if (!$S.isString(url)) {
             return;
         }
-        url += "?u=" + AppHandler.GetUserData("username", "");
+        var username = AppHandler.GetUserData("username", "");
+        url += "?u=" + username;
         var team = DataHandler.getData("userTeam", "info");
+        var heading = this._generateStringFromPattern(Config.headingPattern, username, device, team);
         var formData = new FormData();
         formData.append("subject", station);
-        formData.append("heading", team+","+device);
+        formData.append("heading", heading);
         formData.append("file", file);
         var uploadFileMessage = "Uploaded File";
         DataHandler.setData("addentry.submitStatus", "in_progress");

@@ -14,6 +14,20 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.forceLogin = $$$.forceLogin;
 
+Config.addTextFilenamePattern = $$$.addTextFilenamePattern;
+
+if (!$S.isString(Config.addTextFilenamePattern)) {
+    Config.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-report.csv";
+}
+
+
+Config.headingPattern = $$$.headingPattern;
+
+if (!$S.isString(Config.headingPattern)) {
+    Config.headingPattern = "device";
+}
+
+
 var pageData = {};
 pageData["uploadFileInstruction"] = $$$.uploadFileInstruction;
 pageData["uploadTextInstruction"] = $$$.uploadTextInstruction;
@@ -27,11 +41,13 @@ Config.appControlApi = appControlApi.map(function(el, i, arr) {
     return Config.baseapi + el + "?v="+ requestId;
 });
 
+Config.validTeamAppControl = $$$.validTeamAppControl;
+
 var appControlDataPath = $$$.appControlDataPath;
-Config.updateAppControlApi = function(username) {
+Config.updateAppControlApi = function(teamAppControlData) {
     if ($S.isString(appControlDataPath) && appControlDataPath.length > 0) {
-        if ($S.isString(username) && username.length > 0) {
-            Config.appControlApi = [Config.baseapi + appControlDataPath + username + ".json?v="+ requestId];
+        if ($S.isString(teamAppControlData) && teamAppControlData.length > 0) {
+            Config.appControlApi = [Config.baseapi + appControlDataPath + teamAppControlData + ".json?v="+ requestId];
         }
     }
 };

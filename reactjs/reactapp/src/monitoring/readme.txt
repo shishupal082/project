@@ -62,6 +62,14 @@ Added file app/monitor/index.html
 Added new parameter for each section data
 	- loadUserDependentCsv (Boolean, by default false)
 
+1.0.3
+--------------
+
+Load appControlData.json based on team, this information is available in user profile data
+	- appControlDataTeam01
+
+Pattern is set for uploaded text heading and filename
+
 Todo
 --------------
 If more comma found then merge all data after 4th comma

@@ -552,9 +552,20 @@ DataHandler.extend({
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
-            var userDepenedentAppControlExist = AppHandler.GetUserData("userDepenedentAppControlExist", false);
-            if (userDepenedentAppControlExist) {
-                Config.updateAppControlApi(AppHandler.GetUserData("username", ""));
+            var team, temDepenedentAppControlExist;
+            var validTeamAppControl = Config.validTeamAppControl;
+            if ($S.isArray(validTeamAppControl)) {
+                for (var i = 0; i < validTeamAppControl.length; i++) {
+                    team = validTeamAppControl[i];
+                    if (!$S.isString(team)) {
+                        continue;
+                    }
+                    temDepenedentAppControlExist = AppHandler.GetUserData(team, false);
+                    if (temDepenedentAppControlExist) {
+                        Config.updateAppControlApi(team);
+                        break;
+                    }
+                }
             }
             DataHandler.setData("appControlDataLoadStatus", "in-progress");
             $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){

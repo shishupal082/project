@@ -61,19 +61,25 @@
 
 var GLOBAL = {
     baseapi: "http://localhost:8080",
-    appControlDataPath: "/app/monitor/static/data/appControlData_",
+    appControlDataPath: "/app/monitor/static/data/",
     basepathname: "",
     forceLogin: true
 };
 
 GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
+GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
+GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
+
+GLOBAL.validTeamAppControl = ["appControlDataTeam01",
+              "appControlDataTeam02","appControlDataTeam03",
+              "appControlDataTeam04","appControlDataTeam05"];
 
 
 GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
 GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
 
 GLOBAL.gtag = gtag;
-GLOBAL.appVersion = "1.0.2";
+GLOBAL.appVersion = "1.0.3";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>
