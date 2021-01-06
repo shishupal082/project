@@ -1,4 +1,5 @@
 import $S from "../../interface/stack.js";
+import $$$ from '../../interface/global';
 import Config from "./Config";
 import TemplateHandler from "./TemplateHandler";
 
@@ -162,6 +163,26 @@ DataHandler.extend({
         }
         return username;
     },
+    getNavigatorData: function(key) {
+        var result = key;
+        try {
+            var uiNavigator = $$$.navigator;
+            if ($S.isString(uiNavigator[key])) {
+                result = uiNavigator[key];
+            }
+        } catch(err) {
+            result = "error in " + key;
+        }
+        return result;
+    },
+    getUserAgentTrackingData: function() {
+        var trackingData = [];
+        var trackingKey = ["platform","appVersion","appCodeName","appName"];
+        for(var i=0; i<trackingKey.length; i++) {
+            trackingData.push(this.getNavigatorData(trackingKey[i]));
+        }
+        return trackingData.join(",");
+    },
     TrackApiRequest: function(requestName, requestStatus) {
         var username = this._getTrackUsername();
         DataHandler.send(username, requestName+":"+requestStatus, DataHandler.getPageUrl());
@@ -209,7 +230,7 @@ DataHandler.extend({
             content = "empty-content";
         }
         var username = this._getTrackUsername();
-        DataHandler.send(username, "Debug:"+content, DataHandler.getPageUrl());
+        DataHandler.send(username, "Debug:"+content, DataHandler.getUserAgentTrackingData());
     },
     TrackSectionView: function(trackingAction, sectionId) {
         if (!$S.isString(sectionId) || sectionId.length < 1) {

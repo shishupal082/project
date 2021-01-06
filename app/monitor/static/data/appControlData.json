@@ -1,6 +1,14 @@
 {
     "sections": [
         {
+            "id": "uploadedData",
+            "name": "Field Report",
+            "defaultDateSelectionType": "daily",
+            "disableFooter": true,
+            "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
+            "csvDataApis": ["/api/get_uploaded_csv_data"]
+        },
+        {
             "id": "section-i",
             "name": "Section i Name",
             "defaultDateSelectionType": "monthly",

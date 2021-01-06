@@ -103,19 +103,28 @@ DataHandlerV2.extend({
 });
 
 DataHandlerV2.extend({
-    _generateStringFromPattern: function(pattern, username, device, team) {
+    _generateStringFromPattern: function(name, pattern, username, device, team) {
         if (!$S.isString(pattern)) {
             return pattern;
         }
-        pattern = DT.getDateTime(pattern,"/");
-        if ($S.isString(username)) {
-            pattern = pattern.replaceAll("username", username);
-        }
-        if ($S.isString(device)) {
-            pattern = pattern.replaceAll("device", device);
-        }
-        if ($S.isString(team)) {
-            pattern = pattern.replaceAll("team", team);
+        try {
+            pattern = DT.getDateTime(pattern,"/");
+            if ($S.isString(username)) {
+                pattern = pattern.replaceAll("username", username);
+            }
+            if ($S.isString(device)) {
+                pattern = pattern.replaceAll("device", device);
+            }
+            if ($S.isString(team)) {
+                pattern = pattern.replaceAll("team", team);
+            }
+        } catch(e) {
+            DataHandler.TrackDebug("Error in generating " + name);
+            if (name === "heading") {
+                pattern = device;
+            } else if (name === "filename") {
+                pattern = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
+            }
         }
         return pattern;
     },
@@ -138,19 +147,15 @@ DataHandlerV2.extend({
         var username = AppHandler.GetUserData("username", "");
         var team = DataHandler.getData("userTeam", "info");
         var postData = {};
-        DataHandler.TrackDebug("Submit_click");
-        var addTextFilename = this._generateStringFromPattern(Config.addTextFilenamePattern, username, device, team);
-        DataHandler.TrackDebug("FilenameGenerated:"+addTextFilename);
-        var heading = this._generateStringFromPattern(Config.headingPattern, username, device, team);
-        DataHandler.TrackDebug("HeadingGenerated:"+heading);
+
+        var addTextFilename = this._generateStringFromPattern("filename", Config.addTextFilenamePattern, username, device, team);
+        var heading = this._generateStringFromPattern("heading", Config.headingPattern, username, device, team);
         var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
-        DataHandler.TrackDebug("CurrentDateTimeGenerated:"+currentDateTime2);
 
         postData["subject"] = station;
         postData["heading"] = heading;
         postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
         postData["filename"] = addTextFilename;
-        DataHandler.TrackDebug("Text:"+postData["text"][0]);
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
@@ -174,7 +179,7 @@ DataHandlerV2.extend({
         var username = AppHandler.GetUserData("username", "");
         url += "?u=" + username;
         var team = DataHandler.getData("userTeam", "info");
-        var heading = this._generateStringFromPattern(Config.headingPattern, username, device, team);
+        var heading = this._generateStringFromPattern("heading", Config.headingPattern, username, device, team);
         var formData = new FormData();
         formData.append("subject", station);
         formData.append("heading", heading);
