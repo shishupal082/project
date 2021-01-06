@@ -119,15 +119,19 @@ class App extends React.Component {
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
+        var fiterNames = ["selectedStation", "selectedType", "selectedDevice"];
+        var inputSelect = ["addentry.subject", "addentry.heading"];
         if (name === "list1-select") {
             var sectionId = value;
             DataHandler.TrackSectionView("dropdownSelect", sectionId);
             DataHandler.OnSectionChange(this.appStateCallback, this.appDataCallback, sectionId);
         } else if (name === "list2-select") {
             this.gotoPage(value);
-        } else {
+        } else if (fiterNames.indexOf(name) >= 0) {
             DataHandler.TrackFilterOperation("select", value, name);
-            DataHandler.OnFilterSelect(this.appStateCallback, this.appDataCallback, name, value);
+            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+        } else if (inputSelect.indexOf(name) >= 0) {
+            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
     }
     appStateCallback() {

@@ -204,6 +204,13 @@ DataHandler.extend({
         var username = this._getTrackUsername();
         DataHandler.send(username, "pageView:"+pageName, DataHandler.getPageUrl());
     },
+    TrackDebug: function(content) {
+        if (!$S.isString(content) || content.length < 1) {
+            content = "empty-content";
+        }
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "Debug:"+content, DataHandler.getPageUrl());
+    },
     TrackSectionView: function(trackingAction, sectionId) {
         if (!$S.isString(sectionId) || sectionId.length < 1) {
             sectionId = "empty-sectionId";
@@ -626,10 +633,10 @@ DataHandler.extend({
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "ForceReload");
     },
-    OnFilterSelect: function(appStateCallback, appDataCallback, name, value) {
+    OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
         DataHandler.setData("availableDataPageName", "");
-        DataHandler.setPageData(appStateCallback, appDataCallback, "OnFilterSelect");
+        DataHandler.setPageData(appStateCallback, appDataCallback, "OnDropdownChange");
     },
     _resetFilterData: function() {
         DataHandler.setData("selectedStation", "");

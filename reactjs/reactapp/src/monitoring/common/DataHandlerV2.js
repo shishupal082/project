@@ -138,14 +138,19 @@ DataHandlerV2.extend({
         var username = AppHandler.GetUserData("username", "");
         var team = DataHandler.getData("userTeam", "info");
         var postData = {};
+        DataHandler.TrackDebug("Submit_click");
         var addTextFilename = this._generateStringFromPattern(Config.addTextFilenamePattern, username, device, team);
+        DataHandler.TrackDebug("FilenameGenerated:"+addTextFilename);
         var heading = this._generateStringFromPattern(Config.headingPattern, username, device, team);
+        DataHandler.TrackDebug("HeadingGenerated:"+heading);
         var currentDateTime2 = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
+        DataHandler.TrackDebug("CurrentDateTimeGenerated:"+currentDateTime2);
 
         postData["subject"] = station;
         postData["heading"] = heading;
         postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
         postData["filename"] = addTextFilename;
+        DataHandler.TrackDebug("Text:"+postData["text"][0]);
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
