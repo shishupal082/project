@@ -1,0 +1,7 @@
+{
+	"Common-WR": ["~WWNR","~WWRR", "~EWNR", "~EWWNR"],
+	"WWNR": ["SMCR","WWN(N)"],
+	"WWRR": ["SMCR","WWN(R)"],
+	"EWWNR": ["SMCR","EWWN"],
+	"101-WR": ["Common-WR", "~102-WR","~108A-WR", "~108B-WR", "~109-WR", "~110-WR", "~111-WR"]
+}

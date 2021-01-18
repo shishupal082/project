@@ -1,0 +1,18 @@
+{
+	"SH6-UCR": [
+		"CH3-NR","CH5-NR","108-NWKR",
+		{
+			"op": "||",
+			"val": [
+				"(110-NWKR&&111-RWKR&&SH6A-NRR&&~SH6A-NNR)",
+				"(110-RWKR&&111-NWKR&&SH6B-NRR&&~SH6B-NNR)"
+			]
+		}
+	],
+	"S12-UCR": [
+		"CH1-NR","CH2-NR","102-RWKR","101-NWKR","S12-NRR","~S12-NNR","~SH12-UCR"
+	],
+	"SH12-UCR": [
+		"CH1-NR","CH2-NR","102-RWKR","101-NWKR","SH12-NRR","~SH12-NNR","~S12-UCR"
+	]
+}

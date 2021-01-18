@@ -1,0 +1,184 @@
+{
+	"S1A-NNR": ["~S1A-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "S1A-NNR"]
+		}
+	],
+	"S1B-NNR": ["~S1B-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "S1B-NNR"]
+		}
+	],
+	"S1E-NNR": ["~S1E-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "S1E-NNR"]
+		}
+	],
+	"C1A-NNR": ["~C1A-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "C1A-NNR"]
+		}
+	],
+	"C1B-NNR": ["~C1B-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "C1B-NNR"]
+		}
+	],
+	"C1E-NNR": ["~C1E-NRR",
+		{
+			"op": "||",
+			"val": ["S/C1-ALSR", "C1E-NNR"]
+		}
+	],
+	"S/C-1E-NNR": ["S1E-NNR", "C1E-NNR"],
+	"S/C1-A/B/E-NNR": ["S1A-NNR","S1B-NNR","S1E-NNR","C1A-NNR","C1B-NNR","C1E-NNR"],
+	"S2A-NNR": ["~S2A-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "S2A-NNR"]
+		}
+	],
+	"S2B-NNR": ["~S2B-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "S2B-NNR"]
+		}
+	],
+	"S2E-NNR": ["~S2E-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "S2E-NNR"]
+		}
+	],
+	"C2A-NNR": ["~C2A-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "C2A-NNR"]
+		}
+	],
+	"C2B-NNR": ["~C2B-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "C2B-NNR"]
+		}
+	],
+	"C2E-NNR": ["~C2E-NRR",
+		{
+			"op": "||",
+			"val": ["S/C2-ALSR", "C2E-NNR"]
+		}
+	],
+	"S/C2-A-NNR": ["S2A-NNR","C2A-NNR"],
+	"S/C-2B-NNR": ["S2B-NNR","C2B-NNR"],
+	"SH5A-NNR": ["~SH5A-NRR","(SH5-ALSR||SH5A-NNR)"],
+	"SH5B-NNR": ["~SH5B-NRR","(SH5-ALSR||SH5B-NNR)"],
+	"SH5C-NNR": ["~SH5C-NRR","(SH5-ALSR||SH5C-NNR)"],
+	"SH5-A/B/C-NNR": ["SH5A-NNR","SH5B-NNR","SH5C-NNR"],
+	"SH6A-NNR": ["~SH6A-NRR",
+		{
+			"op": "||",
+			"val": ["SH6-ALSR", "SH6A-NNR"]
+		}
+	],
+	"SH6B-NNR": ["~SH6B-NRR",
+		{
+			"op": "||",
+			"val": ["SH6-ALSR","SH6B-NNR"]
+		}
+	],
+	"SH8A-NNR": ["~SH8A-NRR",
+		{
+			"op": "||",
+			"val": ["SH8-ALSR","SH8A-NNR"]
+		}
+	],
+	"SH8B-NNR": ["~SH8B-NRR",
+		{
+			"op": "||",
+			"val": ["SH8-ALSR","SH8B-NNR"]
+		}
+	],
+	"S9-NNR": ["~S9-NRR",
+		{
+			"op": "||",
+			"val": ["S/SH-9-ALSR","S9-NNR"]
+		}
+	],
+	"SH9A-NNR": ["~SH9A-NRR",
+		{
+			"op": "||",
+			"val": ["S/SH-9-ALSR","SH9A-NNR"]
+		}
+	],
+	"SH9B-NNR": ["~SH9B-NRR",
+		{
+			"op": "||",
+			"val": ["S/SH-9-ALSR","SH9B-NNR"]
+		}
+	],
+	"S10-NNR": ["~S10-NRR","(S/SH-10-ALSR||S10-NNR)"],
+	"SH10-NNR": ["~SH10-NRR","(S/SH-10-ALSR||SH10-NNR)"],
+	"S/SH-10-NNR":["S10-NNR","SH10-NNR"],
+	"S11-NNR": ["~S11-NRR","(S/SH-11-ALSR||S11-NNR)"],
+	"SH11A-NNR": ["~SH11A-NRR","(S/SH-11-ALSR||SH11A-NNR)"],
+	"SH11B-NNR": ["~SH11B-NRR","(S/SH-11-ALSR||SH11B-NNR)"],
+	"SH11A/B-NNR": ["SH11A-NNR","SH11B-NNR"],
+	"S12-NNR": ["~S12-NRR",
+		{
+			"op": "||",
+			"val": ["S/SH-12-ALSR", "S12-NNR"]
+		}
+	],
+	"SH12-NNR": ["~SH12-NRR",
+		{
+			"op": "||",
+			"val": ["S/SH-12-ALSR", "SH12-NNR"]
+		}
+	],
+	"OV1/12-NNR": ["~OV1/12-NRR",
+		{
+			"op": "||",
+			"val": ["OV12-SR", "OV1/12-NNR"]
+		}
+	],
+	"OV2/12-NNR": ["~OV2/12-NRR",
+		{
+			"op": "||",
+			"val": ["OV12-SR", "OV2/12-NNR"]
+		}
+	],
+	"OV12-SR": [
+		{
+			"op": "||",
+			"val": ["~S2-UCR", "108-WNR", "109-WRR", "110-WRR", "111-WRR"]
+		},
+		{
+			"op": "||",
+			"val": [
+				"OV12-SR",
+				"(S/SH-12-UYR3&&S/SH-12-UYR4)",
+				"(108A/B-TRSR&&L1-TPR&&~S/SH-12-UYR1)",
+				"(OV12-JSLR&&S/SH/OV-12-JR)"
+			]
+		}
+	],
+	"S13-NNR": ["~S13-NRR","(S/SH-13-ALSR||S13-NNR)"],
+	"SH13-NNR": ["~SH13-NRR","(S/SH-13-ALSR||SH13-NNR)"],
+	"S14-NNR": ["~S14-NRR","(S/SH-14-ALSR||S14-NNR)"],
+	"SH14-NNR": ["~SH14-NRR","(S/SH-14-ALSR||SH14-NNR)"],
+	"S/SH-14-NNR": ["S14-NNR","SH14-NNR"],
+	"OV10-NNR": ["SMCR"],
+	"OV2/11-NNR": ["SMCR"],
+	"OV2/14-NNR": ["SMCR"],
+	"108-TRSR": ["SMCR"],
+	"108A/B-TRSR": ["SMCR"],
+	"108B/A-TRZR-_C-2B": ["SMCR"],
+	"108-WNR": ["SMCR"],
+	"SH5C-NNR": ["SMCR"],
+	"OV1/11-NNR": ["SMCR"]
+}

@@ -1,0 +1,173 @@
+{
+    "addDebug": [],
+    "tpr": [
+        "2A-TPR", "2A-TPR-R",
+        "2T1-TPR", "2T1-TPR-R", "2T1-TPR-Y",
+        "2T2-TPR", "2T2-TPR-R", "2T2-TPR-Y",
+        "21A-TPR", "21A-TPR-R", "21A-TPR-Y",
+        "1A-TPR", "1A-TPR-R",
+        "1T1-TPR", "1T1-TPR-R", "1T1-TPR-Y",
+        "1T2-TPR", "1T2-TPR-R", "1T2-TPR-Y",
+        "22A-TPR", "22A-TPR-R", "22A-TPR-Y",
+        "L1-TPR", "L3-TPR", "MLT1-TPR", "MLT2-TPR", "MLT3-TPR",
+        "101A-TPR", "101B-TPR", "102A-TPR", "102B-TPR", "108A-TPR", "108B-TPR",
+        "109A-TPR", "109B-TPR", "110A-TPR", "110B-TPR",
+        "6A-TPR", "6A-TPR-R",
+        "6-TPR", "6-TPR-R", "6-TPR-Y"
+    ],
+    "tpr-class": [
+        "LL-sh-left",
+        "p-4b-n", "p-4b-c", "p-4b-r", "p-4a-r", "p-4a-n", "p-4a-c",
+        "p-5b-n", "p-5b-c", "p-5b-r", "p-5a-r", "p-5a-n", "p-5a-c",
+        "p-6b-c", "p-6b-n", "p-6a-c", "p-6a-n"
+    ],
+    "tpr-class-v2-4": [
+        "p-4a-c-R", "p-4a-c-Y",
+        "p-4a-n-R", "p-4a-n-Y",
+        "p-4a-r-R", "p-4a-r-Y",
+        "p-4b-r-R", "p-4b-r-Y",
+        "p-4b-c-R", "p-4b-c-Y",
+        "p-4b-n-R", "p-4b-n-Y"
+    ],
+    "tpr-class-v2-5": [
+        "p-5a-c-R", "p-5a-c-Y",
+        "p-5a-n-R", "p-5a-n-Y",
+        "p-5a-r-R", "p-5a-r-Y",
+        "p-5b-r-R", "p-5b-r-Y",
+        "p-5b-c-R", "p-5b-c-Y",
+        "p-5b-n-R", "p-5b-n-Y"
+    ],
+    "tpr-class-v2-6": [
+        "p-6b-c-R", "p-6b-c-Y",
+        "p-6b-n-R", "p-6b-n-Y",
+        "p-6a-n-R", "p-6a-n-Y",
+        "p-6a-c-R", "p-6a-c-Y",
+        "SDG-TPR-B-R", "SDG-TPR-B-Y",
+        "SDG-TPR-R", "SDG-TPR-Y"
+    ],
+    "sg-btn": [
+        "C1-GN", "C2-GN",
+        "S1-GN", "S2-GN", "SH5-GN", "SH6-GN", "SH8-GN",
+        "S9-GN", "S10-GN", "S11-GN", "S12-GN", "S13-GN", "S14-GN",
+        "SH9-GN", "SH10-GN", "SH11-GN", "SH12-GN", "SH13-GN", "SH14-GN",
+        "CO-GGN"
+    ],
+    "GNRR": [
+        "C1-GNRR", "C2-GNRR",
+        "S1-GNRR", "S2-GNRR", "SH5-GNRR", "SH6-GNRR", "SH8-GNRR",
+        "S9-GNRR", "S10-GNRR", "S11-GNRR", "S12-GNRR", "S13-GNRR", "S14-GNRR",
+        "SH9-GNRR", "SH10-GNRR", "SH11-GNRR", "SH12-GNRR", "SH13-GNRR", "SH14-GNRR",
+        "S21-GNRR","S22-GNRR",
+        "CO-GGNRR"
+    ],
+    "ecr": ["S1-RECR","S1-HECR","S1-DECR",
+            "S1-Co-RECR","S1-Co-HECR",
+            "S2-Co-RECR","S2-Co-HECR",
+            "S2-RECR","S2-HECR","S2-DECR",
+            "S21-RECR","S21-HECR",
+            "S22-RECR","S22-HECR",
+            "S9-RECR","S9-HECR","S9-DECR",
+            "S10-RECR","S10-HECR","S10-DECR",
+            "S11-RECR","S11-HECR",
+            "S13-RECR","S13-HECR",
+            "S14-RECR","S14-HECR",
+            "SH5-RECR","SH5-HECR",
+            "S6-RECR",
+            "SH6-RECR","SH6-HECR",
+            "SH8-RECR","SH8-HECR",
+            "SH9-RECR","SH9-HECR",
+            "SH10-RECR","SH10-HECR",
+            "SH11-RECR","SH11-HECR",
+            "SH13-RECR","SH13-HECR",
+            "SH14-RECR","SH14-HECR"],
+    "rt-btn": [
+        "L2-UN", "L1/1-UN", "L1/2-UN", "L3/1-UN", "L3/2-UN", "21A-UN", "22A-UN",
+        "DN-UN", "UP-UN", "6A-UN"
+    ],
+    "rt-btn-relay": [
+        "L2-UNR", "L1/1-UNR", "L1/2-UNR", "L3/1-UNR", "L3/2-UNR", "21A-UNR", "22A-UNR",
+        "DD-UNR", "UD-UNR", "6A-UNR"
+    ],
+    "pt-btn": ["101-WN","102-WN","108-WN","109-WN","110-WN","111-WN"],
+    "pt-relay": ["4-WR","5-WR","6-WR"],
+    "timer": [
+        "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
+    ],
+    "point": ["WWN(N)","WWN(R)","WWNR", "WWRR", "EWNR", "EWWNR"],
+    "pointIndication": ["4-WLK", "5-WLK", "6-WLK"],
+    "point-4": [
+        "4-WWR",
+        "4-NWKR", "4-RWKR",
+        "4-NKR", "4-RKR",
+        "4A-ND", "4B-ND",
+        "4A-RD", "4B-RD",
+        "4A-NC", "4B-NC",
+        "4A-RC", "4B-RC"
+    ],
+    "point-101": [
+        "101-WR","101-WNR","101-WRR",
+        "101-NWKR","101-RWKR",
+        "101-NWKLR","101-RWKLR"
+    ],
+    "point-102": [
+        "102-WR","102-WNR","102-WRR",
+        "102-NWKR","102-RWKR",
+        "102-NWKLR","102-RWKLR"
+    ],
+    "point-108": [
+        "108A-WR","108B-WR",
+        "108-WR","108-WNR","108-WRR",
+        "108-NWKR","108-RWKR",
+        "108-NWKLR","108-RWKLR",
+        "108-TRSR","108A-TRSR","108A/B-TRSR","108B/A-TRZR-_C-2B",
+        "108B/A-TRZR_SH-8B",
+        "108A-JBPR",
+        "108A-UYR1","108A-UYR2",
+        "108B/A-JBPR",
+        "108B/A-UYR1","108B/A-UYR2","108B/A-UYR3"
+    ],
+    "point-109": [
+        "109-WR","109-WNR","109-WRR",
+        "109-NWKR","109-RWKR",
+        "109-NWKLR","109-RWKLR"
+    ],
+    "point-110": [
+        "110-WR","110-WNR","110-WRR",
+        "110-NWKR","110-RWKR",
+        "110-NWKLR","110-RWKLR"
+    ],
+    "point-111": [
+        "111-WR","111-WNR","111-WRR",
+        "111-NWKR","111-RWKR",
+        "111-NWKLR","111-RWKLR"
+    ],
+    "point-6": [
+        "6-WWR",
+        "6-NWKR", "6-RWKR",
+        "6-NKR", "6-RKR",
+        "6A-ND", "6B-ND",
+        "6A-RD", "6B-RD",
+        "6A-NC", "6B-NC",
+        "6A-RC", "6B-RC"
+    ],
+    "power-checking": ["RRBUNR","RRBURR", "ZNR","ZRR", "GNRR-Common-1", "GNRR-Common-2",
+                    "UNR-Common", "UNR-Common-1", "Common-WR"],
+
+    "common-btn": ["OYN", "YYN", "YRN", "CHYN", "EGGN", "SMCR"],
+    "common-r": ["OYNR", "YYNR", "YRNR", "CHYNR", "EGGNR"],
+
+    "common": ["GNCR","UNCR","WNCR","EUUYR", "EUUYNCR", "CHYRNR"],
+
+    "ch": ["CH1-NR","CH1-LR","CH2-NR","CH2-LR","CH3-NR","CH3-LR","CH5-NR","CH5-LR"],
+
+    "emergency-btn": ["EUYN", "EUUYN"],
+    "emergency-r":   ["EUYNR", "EUYR", "EUUYNR"],
+    "egnr": ["S1/C1-EGNR","S2/C2-EGNR",
+            "SH5-EGNR","SH6-EGNR","SH8-EGNR",
+            "S9/SH9-EGNR","S10/SH10-EGNR",
+            "S11/SH11-EGNR","S12/SH12-EGNR",
+            "S13/SH13-EGNR","S14/SH14-EGNR",
+            "CH1R","CH2R","CH3R","CH4R","CH5R"],
+    "timer": ["OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3", "OV2/3/10/11-AJTR"],
+    "timerDelay": ["delay-200ms"]
+}

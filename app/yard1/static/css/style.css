@@ -134,7 +134,17 @@ hr {
 .yard .btn-rotate.positive {
     transform: rotate(45deg);
 }
-
+.yard .event_btn.zero,
+.yard .event_btn.one {
+    font-weight: 900;
+    background-color: #fff;
+}
+.yard .event_btn.zero {
+    color: #f00;
+}
+.yard .event_btn.one {
+    color: #1fb71f;
+}
 /* Debugging style */
 .yard.debug .btn,
 .yard.debug td {

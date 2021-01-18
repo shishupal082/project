@@ -1,0 +1,16 @@
+{
+	"UNR-Common": ["~EUUYNR","~RRBURR",
+					"~S1/C1-EGNR","~S2/C2-EGNR",
+					"~SH5-EGNR","~SH6-EGNR","~SH8-EGNR",
+					"~S9/SH9-EGNR","~S10/SH10-EGNR",
+					"~S11/SH11-EGNR","~S12/SH12-EGNR",
+					"~S13/SH13-EGNR","~S14/SH14-EGNR"
+	],
+	"UNR-Common-1": ["~LXR","~CH1R","~CH2R","~CH3R","~CH4R","~CH5R"],
+	"UNCR": ["~L2-UNR","~L3/1-UNR","~L3/2-UNR","~L1/1-UNR","~L1/2-UNR","~6A-UNR",
+					"~21A-UNR","~22A-UNR","~UD-UNR","~DD-UNR"],
+	"L1/1-UNR": ["L1/1-UN", "UNR-Common","UNR-Common-1", "~L2-UNR","~L3/1-UNR","~L3/2-UNR","~L1/2-UNR","~6A-UNR",
+					"~21A-UNR","~22A-UNR","~UD-UNR","~DD-UNR"],
+	"22A-UNR": ["22A-UN", "UNR-Common","UNR-Common-1", "~L2-UNR","~L3/1-UNR","~L3/2-UNR","~L1/1-UNR","~L1/2-UNR","~6A-UNR",
+					"~21A-UNR","~UD-UNR","~DD-UNR"]
+}

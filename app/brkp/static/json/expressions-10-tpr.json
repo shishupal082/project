@@ -1,0 +1,12 @@
+{
+	"6A-TPR-R": ["~6A-TPR"],
+	"6-TPR-R": ["~6-TPR"],
+	"6-TPR-Y": [
+		"6-TPR","~SH6-ALSR"
+	],
+	"22A-TPR-R": ["~22A-TPR"],
+	"22A-TPR-R": ["~22A-TPR"],
+	"22A-TPR-Y": [
+		"22A-TPR","~S/SH-12-ALSR"
+	]
+}
