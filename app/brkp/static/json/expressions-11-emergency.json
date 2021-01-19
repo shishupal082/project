@@ -1,9 +1,11 @@
 {
+	"EGGNR": ["EGGN"],
 	"RRBURR": ["E-KEY-IN"],
 	"RRBUNR": ["~RRBURR"],
-	"EUUYNR": [
+	"EUUYNR": ["SMCR","EUUYN"],
+	"EUUYNPR": [
 		"SMCR",
-		"EUUYN",
+		"EUUYNR",
 		"~S1-GNRR","~C1-GNRR","~S/C-1-EGNR",
 		"~S2-GNRR","~C2-GNRR","~S/C-2-EGNR",
 		"~SH5-GNRR","~SH5-EGNR",
@@ -16,22 +18,52 @@
 		"~S13-GNRR","~SH13-GNRR","~S/SH-13-EGNR",
 		"~S14-GNRR","~SH14-GNRR","~S/SH-14-EGNR"
 	],
-	"SH6-JBPR": ["~SH6-JLSR", "~SH6-JR"],
-	"SH6-JR": ["SH6-JLSR", "~SH6-JBPR", "delay-200ms"],
+	"SH6-JBPR": ["~SH6-JSLR", "~SH6-JR"],
+	"SH6-JR": ["SH6-JSLR", "~SH6-JBPR", "TimerSH6"],
+	"SH6-JSLR": ["~SH6-HR","~SH6-HECR","~SH6-UCR",
+		{
+			"op": "||",
+			"val":["(~SH6-EGNR&&SH6-S/EGNR)",
+				{
+					"op": "&&",
+					"val": [
+						"~SH6-S/EGNR",
+						"6-TPR","110B-TPR",
+						"(108A-TPR||110-WRR)",
+						"((110A-TPR&&108B-TPR)||110-WNR)",
+						"(SH6-EGNR||SH6-JSLR)"
+					]
+				}
+			]
+		},
+		"~SH6-ALSR","(SH6-JBPR||SH6-JSLR)"
+	],
 	"SH6-EGNR": [
 		"~S1-GNRR","~C1-GNRR","~S/C-1-EGNR",
 		"~S2-GNRR","~C2-GNRR","~S/C-2-EGNR",
 		"~SH5-GNRR","~SH5-EGNR",
-		"SH6-GNRR","~SH6-ALSR","~SH6-UCR","SH6-JBPR","SH6-TSR",
+		"SH6-GNRR",
+		"~SH6-ALSR","~SH6-UCR","SH6-JBPR","SH6-TSR",
 		"~SH8-EGNR","~S/SH-9-EGNR","~S/SH-10-EGNR","~S/SH-11-EGNR","~S/SH-12-EGNR",
 		"~S/SH-13-EGNR","~S/SH-14-EGNR",
 		{
 			"op": "||",
-			"val": ["EUUYNR","S/C-1-EGNR","S/C-2-EGNR","SH5-EGNR","SH6-EGNR",
+			"val": ["EUUYNPR","S/C-1-EGNR","S/C-2-EGNR","SH5-EGNR","SH6-EGNR",
 					"SH8-EGNR","S/SH-9-EGNR","S/SH-10-EGNR","S/SH-11-EGNR","S/SH-12-EGNR",
 					"S/SH-12-EGNR","S/SH-13-EGNR","S/SH-14-EGNR"]
 		},
 		"SMCR"
 	],
-	"SH6-S/EGNR": []
+	"SH6-S/EGNR": ["~SH6-HR","~SH6-HECR","~SH6-UCR",
+		"~SH6-ALSR","~SH6-EGNR",
+		{
+			"op": "||",
+			"val": ["SH6-S/EGNR",
+				{
+					"op": "&&",
+					"val": ["SH6-GNRR","RRBURR","SH6-JBPR"]
+				}
+			]
+		}
+	]
 }

@@ -166,7 +166,7 @@
         "6A-NC", "6B-NC",
         "6A-RC", "6B-RC"
     ],
-    "power-checking": ["ZNR","ZRR", "GNRR-Common-1", "GNRR-Common-2",
+    "power-checking": ["ZNR","ZRR", "GNRR-Common", "GNRR-Common-1", "GNRR-Common-2",
                     "UNR-Common", "UNR-Common-1", "Common-WR"],
     "super-emergency": ["RRBUNR","RRBURR","E-KEY-IN"],
     "common-btn": ["OYN", "YYN", "YRN", "CHYN", "EGGN", "SMCR"],
@@ -177,12 +177,12 @@
     "ch": ["CH1-NR","CH1-LR","CH2-NR","CH2-LR","CH3-NR","CH3-LR","CH5-NR","CH5-LR"],
 
     "emergency-btn": ["EUYN", "EUUYN"],
-    "emergency-r":   ["EUYNR", "EUYR", "EUUYNR"],
+    "emergency-r":   ["EUYNR", "EUUYNR", "EUUYNPR"],
     "egnr": ["S1/C1-EGNR","S2/C2-EGNR",
             "SH5-EGNR","SH6-EGNR","SH8-EGNR",
             "S9/SH9-EGNR","S10/SH10-EGNR",
             "S11/SH11-EGNR","S12/SH12-EGNR",
             "S13/SH13-EGNR","S14/SH14-EGNR",
             "CH1R","CH2R","CH3R","CH4R","CH5R"],
-    "timerDelay": ["delay-200ms"]
+    "timerDelay": ["TimerSH6"]
 }

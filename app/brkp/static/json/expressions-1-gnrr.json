@@ -1,19 +1,18 @@
 {
+    "GNRR-Common": ["~ZNR","~ZRR","~EGGNR"],
 	"GNRR-Common-1": ["~C1-GNRR","~S1-GNRR",
 					"~SH10-GNRR","~S10-GNRR",
 					"~SH12-GNRR","~S12-GNRR",
 					"~SH14-GNRR","~S14-GNRR",
 					"~S22-GNRR",
-					"~SH5-GNRR",
-					"~ZNR","~ZRR","~EGGNR"
+					"~SH5-GNRR"
 	],
 	"GNRR-Common-2": ["~C2-GNRR","~S2-GNRR",
 					"~SH9-GNRR","~S9-GNRR",
 					"~SH11-GNRR","~S11-GNRR",
 					"~SH13-GNRR","~S13-GNRR",
-					"~S21-GNRR",
-					"~SH6-GNRR",
-					"~ZNR","~ZRR","~EGGNR"
+					"~S21-GNRR","~SH8-GNRR",
+					"~SH6-GNRR"
 	],
     "SH6-GNRR": {
         "op": "&&",

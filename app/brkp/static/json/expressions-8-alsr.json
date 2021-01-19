@@ -5,7 +5,7 @@
 			"op": "||",
 			"val": [
 				"SH6-ALSR",
-				"((((6-TPR&&110B-TPR&&(108A-TPR||110-WRR)) && ((110A-TPR&&108B-TPR)||110-WNR) && ~SH6/S/EGNR)||(SH6/S/EGNR&&RRBUNR)) && ((SH6-UYR3&&SH6-UYR4&&~SH6/S/EGNR)||(SH6-JLSR&&SH6-JR)))"
+				"((((6-TPR&&110B-TPR&&(108A-TPR||110-WRR)) && ((110A-TPR&&108B-TPR)||110-WNR) && ~SH6-S/EGNR)||(SH6-S/EGNR&&RRBUNR)) && ((SH6-UYR3&&SH6-UYR4&&~SH6-S/EGNR)||(SH6-JSLR&&SH6-JR)))"
 			]
 		}
 	],
@@ -70,7 +70,7 @@
 			"op": "||",
 			"val": [
 				"S/SH-12-ALSR",
-				"(((S/SH-12-UYR4&&S/SH-12-UYR3&&~S/SH-12-S/EGNR)||(S/SH-12-JLSR&&S/SH/OV-12-JR))&&((102B-TPR&&102A-TPR&&101A-TPR&&~S/SH-12-S/EGNR)||(S/SH-12-S/EGNR&&RRBUNR)))"
+				"(((S/SH-12-UYR4&&S/SH-12-UYR3&&~S/SH-12-S/EGNR)||(S/SH-12-JSLR&&S/SH/OV-12-JR))&&((102B-TPR&&102A-TPR&&101A-TPR&&~S/SH-12-S/EGNR)||(S/SH-12-S/EGNR&&RRBUNR)))"
 			]
 		}
 	]

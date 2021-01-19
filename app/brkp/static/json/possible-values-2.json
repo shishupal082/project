@@ -42,8 +42,8 @@
         "S6-HR","SH6-HR",
         "SH6-TSR",
         "SH6-UYR1","SH6-UYR2","SH6-UYR3","SH6-UYR4",
-        "SH6/S/EGNR",
-        "SH6-JLSR","SH6-JR",
+        "SH6-S/EGNR",
+        "SH6-JSLR","SH6-JR",
         "SH6-JBPR"
     ],
     "sh8": [
@@ -96,11 +96,11 @@
         "OV12-SR",
         "S12-NNR","S12-NRR",
         "SH12-NNR","SH12-NRR",
-        "S/SH/OV-12-JR","OV12-JLSR",
+        "S/SH/OV-12-JR","OV12-JSLR",
         "S/SH-12-UYR1","S/SH-12-UYR2","S/SH-12-UYR3","S/SH-12-UYR4",
         "SH12-RECR","SH12-HECR",
         "S12-RECR","S12-HECR",
-        "S/SH-12-JLSR","S/SH/OV-12-JBPR",
+        "S/SH-12-JSLR","S/SH/OV-12-JBPR",
         "S/SH-12-EGNR", "S/SH-12-S/EGNR"
     ],
     "s13":[
