@@ -1,7 +1,7 @@
 {
     "s1": [
         "S1-HR", "S1-DR",
-        "S/C1-ALSR",
+        "S/C-1-ALSR",
         "S/C-1E-NNR",
         "S1A-NNR", "S1A-NRR",
         "S1B-NNR", "S1B-NRR",
@@ -9,20 +9,22 @@
         "C1A-NNR", "C1A-NRR",
         "C1B-NNR", "C1B-NRR",
         "C1E-NNR", "C1E-NRR",
-        "S/C1-A/B/E-NNR"
+        "S/C-1-A/B/E-NNR",
+        "S/C-1-EGNR"
     ],
     "s2": [
         "S2-UCR",
         "S2-HR",
-        "S/C2-ALSR",
+        "S/C-2-ALSR",
         "S/C-2B-NNR","S/C-2B-NRR",
-        "S/C2-A-NNR",
+        "S/C-2-A-NNR",
         "S2A-NNR", "S2A-NRR",
         "S2B-NNR", "S2B-NRR",
         "S2E-NNR", "S2E-NRR",
         "C2A-NNR", "C2A-NRR",
         "C2B-NNR", "C2B-NRR",
-        "C2E-NNR", "C2E-NRR"
+        "C2E-NNR", "C2E-NRR",
+        "S/C-2-EGNR"
     ],
     "sh5": [
         "SH5-HR",
@@ -41,7 +43,7 @@
         "SH6-TSR",
         "SH6-UYR1","SH6-UYR2","SH6-UYR3","SH6-UYR4",
         "SH6/S/EGNR",
-        "SH6-JSLR","SH6-JR",
+        "SH6-JLSR","SH6-JR",
         "SH6-JBPR"
     ],
     "sh8": [
@@ -50,13 +52,14 @@
         "SH8B-NNR","SH8B-NRR",
         "SH8-ALSR"
     ],
-    "sh9": [
+    "s9": [
         "S9-HR",
         "SH9-HR",
         "S9-NNR", "S9-NRR",
         "SH9A-NNR","SH9A-NRR",
         "SH9B-NNR","SH9B-NRR",
-        "S/SH-9-ALSR"
+        "S/SH-9-ALSR",
+        "S/SH-9-EGNR", "S/SH-9-S/EGNR"
     ],
     "s10": [
         "S10-HR",
@@ -65,7 +68,8 @@
         "S10-NNR","S10-NRR",
         "SH10-NNR","SH10-NRR",
         "S/SH-10-NNR","S/SH-10-NRR",
-        "OV10-NNR"
+        "OV10-NNR",
+        "S/SH-10-EGNR", "S/SH-10-S/EGNR"
     ],
     "s11": [
         "S11-HR",
@@ -75,10 +79,10 @@
         "SH11A-NNR","SH11A-NRR",
         "SH11B-NNR","SH11B-NRR",
         "SH11A/B-NNR", "SH11A/B-NRR",
-        "OV11",
         "OV1/11-NNR","OV1/11-NRR",
         "OV2/11-NNR","OV2/11-NRR",
-        "OV11-SR"
+        "OV11-SR",
+        "S/SH-11-EGNR", "S/SH-11-S/EGNR"
     ],
     "s12": [
         "S12-HR",
@@ -92,18 +96,20 @@
         "OV12-SR",
         "S12-NNR","S12-NRR",
         "SH12-NNR","SH12-NRR",
-        "S/SH/OV-12-JR","OV12-JSLR",
+        "S/SH/OV-12-JR","OV12-JLSR",
         "S/SH-12-UYR1","S/SH-12-UYR2","S/SH-12-UYR3","S/SH-12-UYR4",
         "SH12-RECR","SH12-HECR",
         "S12-RECR","S12-HECR",
-        "S/SH-12-S/EGNR","S/SH-12-JSLR","S/SH/OV-12-JBPR"
+        "S/SH-12-JLSR","S/SH/OV-12-JBPR",
+        "S/SH-12-EGNR", "S/SH-12-S/EGNR"
     ],
     "s13":[
         "S13-HR",
         "SH13-HR",
         "S/SH-13-ALSR",
         "S13-NNR","S13-NRR",
-        "SH13-NNR","SH13-NRR"
+        "SH13-NNR","SH13-NRR",
+        "S/SH-13-EGNR", "S/SH-13-S/EGNR"
     ],
     "s14":[
         "S14-HR",
@@ -112,7 +118,8 @@
         "S14-NNR","S14-NRR",
         "SH14-NNR","SH14-NRR",
         "S/SH-14-NNR",
-        "OV2/14-NNR"
+        "OV2/14-NNR",
+        "S/SH-14-EGNR", "S/SH-14-S/EGNR"
     ],
     "s21": ["S21-NNR","S21-NRR","S21-HR"],
     "s22": ["S22-NNR","S22-NRR","S22-HR"],

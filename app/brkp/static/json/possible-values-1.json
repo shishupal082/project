@@ -9,9 +9,19 @@
         "1T1-TPR", "1T1-TPR-R", "1T1-TPR-Y",
         "1T2-TPR", "1T2-TPR-R", "1T2-TPR-Y",
         "22A-TPR", "22A-TPR-R", "22A-TPR-Y",
-        "L1-TPR", "L3-TPR", "MLT1-TPR", "MLT2-TPR", "MLT3-TPR",
-        "101A-TPR", "101B-TPR", "102A-TPR", "102B-TPR", "108A-TPR", "108B-TPR",
-        "109A-TPR", "109B-TPR", "110A-TPR", "110B-TPR",
+        "L1-TPR","L1-TPR-R","L1-TPR-Y",
+        "L3-TPR","L3-TPR-R","L3-TPR-Y",
+        "ML-TPR","ML-TPR-R","ML-TPR-Y",
+        "102A-TPR","102A-TPR-R","102A-TPR-Y",
+        "102B-TPR","102B-TPR-R","102B-TPR-Y",
+        "101A-TPR","101A-TPR-R","101A-TPR-Y",
+        "101B-TPR","101B-TPR-R","101B-TPR-Y",
+        "108A-TPR","108A-TPR-R","108A-TPR-Y",
+        "108B-TPR","108B-TPR-R","108B-TPR-Y",
+        "109A-TPR","109A-TPR-R","109A-TPR-Y",
+        "109B-TPR","109B-TPR-R","109B-TPR-Y",
+        "110A-TPR","110A-TPR-R","110A-TPR-Y",
+        "110B-TPR","110B-TPR-R","110B-TPR-Y",
         "6A-TPR", "6A-TPR-R",
         "6-TPR", "6-TPR-R", "6-TPR-Y"
     ],
@@ -107,12 +117,14 @@
     "point-101": [
         "101-WR","101-WNR","101-WRR",
         "101-NWKR","101-RWKR",
-        "101-NWKLR","101-RWKLR"
+        "101-NWKLR","101-RWKLR",
+        "101-WLR"
     ],
     "point-102": [
         "102-WR","102-WNR","102-WRR",
         "102-NWKR","102-RWKR",
-        "102-NWKLR","102-RWKLR"
+        "102-NWKLR","102-RWKLR",
+        "102-WLR"
     ],
     "point-108": [
         "108A-WR","108B-WR",
@@ -124,22 +136,26 @@
         "108A-JBPR",
         "108A-UYR1","108A-UYR2",
         "108B/A-JBPR",
-        "108B/A-UYR1","108B/A-UYR2","108B/A-UYR3"
+        "108B/A-UYR1","108B/A-UYR2","108B/A-UYR3",
+        "108-WLR"
     ],
     "point-109": [
         "109-WR","109-WNR","109-WRR",
         "109-NWKR","109-RWKR",
-        "109-NWKLR","109-RWKLR"
+        "109-NWKLR","109-RWKLR",
+        "109-WLR"
     ],
     "point-110": [
         "110-WR","110-WNR","110-WRR",
         "110-NWKR","110-RWKR",
-        "110-NWKLR","110-RWKLR"
+        "110-NWKLR","110-RWKLR",
+        "110-WLR"
     ],
     "point-111": [
         "111-WR","111-WNR","111-WRR",
         "111-NWKR","111-RWKR",
-        "111-NWKLR","111-RWKLR"
+        "111-NWKLR","111-RWKLR",
+        "111-WLR"
     ],
     "point-6": [
         "6-WWR",
@@ -150,9 +166,9 @@
         "6A-NC", "6B-NC",
         "6A-RC", "6B-RC"
     ],
-    "power-checking": ["RRBUNR","RRBURR", "ZNR","ZRR", "GNRR-Common-1", "GNRR-Common-2",
+    "power-checking": ["ZNR","ZRR", "GNRR-Common-1", "GNRR-Common-2",
                     "UNR-Common", "UNR-Common-1", "Common-WR"],
-
+    "super-emergency": ["RRBUNR","RRBURR","E-KEY-IN"],
     "common-btn": ["OYN", "YYN", "YRN", "CHYN", "EGGN", "SMCR"],
     "common-r": ["OYNR", "YYNR", "YRNR", "CHYNR", "EGGNR"],
 
@@ -168,6 +184,5 @@
             "S11/SH11-EGNR","S12/SH12-EGNR",
             "S13/SH13-EGNR","S14/SH14-EGNR",
             "CH1R","CH2R","CH3R","CH4R","CH5R"],
-    "timer": ["OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3", "OV2/3/10/11-AJTR"],
     "timerDelay": ["delay-200ms"]
 }

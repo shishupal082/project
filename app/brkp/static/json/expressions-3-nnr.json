@@ -2,78 +2,78 @@
 	"S1A-NNR": ["~S1A-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "S1A-NNR"]
+			"val": ["S/C-1-ALSR", "S1A-NNR"]
 		}
 	],
 	"S1B-NNR": ["~S1B-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "S1B-NNR"]
+			"val": ["S/C-1-ALSR", "S1B-NNR"]
 		}
 	],
 	"S1E-NNR": ["~S1E-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "S1E-NNR"]
+			"val": ["S/C-1-ALSR", "S1E-NNR"]
 		}
 	],
 	"C1A-NNR": ["~C1A-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "C1A-NNR"]
+			"val": ["S/C-1-ALSR", "C1A-NNR"]
 		}
 	],
 	"C1B-NNR": ["~C1B-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "C1B-NNR"]
+			"val": ["S/C-1-ALSR", "C1B-NNR"]
 		}
 	],
 	"C1E-NNR": ["~C1E-NRR",
 		{
 			"op": "||",
-			"val": ["S/C1-ALSR", "C1E-NNR"]
+			"val": ["S/C-1-ALSR", "C1E-NNR"]
 		}
 	],
 	"S/C-1E-NNR": ["S1E-NNR", "C1E-NNR"],
-	"S/C1-A/B/E-NNR": ["S1A-NNR","S1B-NNR","S1E-NNR","C1A-NNR","C1B-NNR","C1E-NNR"],
+	"S/C-1-A/B/E-NNR": ["S1A-NNR","S1B-NNR","S1E-NNR","C1A-NNR","C1B-NNR","C1E-NNR"],
 	"S2A-NNR": ["~S2A-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "S2A-NNR"]
+			"val": ["S/C-2-ALSR", "S2A-NNR"]
 		}
 	],
 	"S2B-NNR": ["~S2B-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "S2B-NNR"]
+			"val": ["S/C-2-ALSR", "S2B-NNR"]
 		}
 	],
 	"S2E-NNR": ["~S2E-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "S2E-NNR"]
+			"val": ["S/C-2-ALSR", "S2E-NNR"]
 		}
 	],
 	"C2A-NNR": ["~C2A-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "C2A-NNR"]
+			"val": ["S/C-2-ALSR", "C2A-NNR"]
 		}
 	],
 	"C2B-NNR": ["~C2B-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "C2B-NNR"]
+			"val": ["S/C-2-ALSR", "C2B-NNR"]
 		}
 	],
 	"C2E-NNR": ["~C2E-NRR",
 		{
 			"op": "||",
-			"val": ["S/C2-ALSR", "C2E-NNR"]
+			"val": ["S/C-2-ALSR", "C2E-NNR"]
 		}
 	],
-	"S/C2-A-NNR": ["S2A-NNR","C2A-NNR"],
+	"S/C-2-A-NNR": ["S2A-NNR","C2A-NNR"],
 	"S/C-2B-NNR": ["S2B-NNR","C2B-NNR"],
 	"SH5A-NNR": ["~SH5A-NRR","(SH5-ALSR||SH5A-NNR)"],
 	"SH5B-NNR": ["~SH5B-NRR","(SH5-ALSR||SH5B-NNR)"],
@@ -163,7 +163,7 @@
 				"OV12-SR",
 				"(S/SH-12-UYR3&&S/SH-12-UYR4)",
 				"(108A/B-TRSR&&L1-TPR&&~S/SH-12-UYR1)",
-				"(OV12-JSLR&&S/SH/OV-12-JR)"
+				"(OV12-JLSR&&S/SH/OV-12-JR)"
 			]
 		}
 	],

@@ -1,6 +1,6 @@
 {
-    "S/C1-ALSR": 1,
-    "S/C2-ALSR": 1,
+    "S/C-1-ALSR": 1,
+    "S/C-2-ALSR": 1,
     "SH5-ALSR": 1,
     "SH6-ALSR": 1,
     "SH8-ALSR": 1,
@@ -49,6 +49,7 @@
     "108-WNR": 1,
     "108-NWKR": 1,
     "108-NWKLR": 1,
+    "110-WNR": 1,
     "110-NWKR": 1,
     "110-NWKLR": 1,
     "111-RWKR": 1,

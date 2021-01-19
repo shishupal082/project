@@ -5,7 +5,61 @@
 			"op": "||",
 			"val": [
 				"SH6-ALSR",
-				"((((6-TPR&&110B-TPR&&(108A-TPR||110-WRR)) && ((110A-TPR&&108B-TPR)||110-WNR) && ~SH6/S/EGNR)||(SH6/S/EGNR&&RRBUNR)) && ((SH6-UYR3&&SH6-UYR4&&~SH6/S/EGNR)||(SH6-JSLR&&SH6-JR)))"
+				"((((6-TPR&&110B-TPR&&(108A-TPR||110-WRR)) && ((110A-TPR&&108B-TPR)||110-WNR) && ~SH6/S/EGNR)||(SH6/S/EGNR&&RRBUNR)) && ((SH6-UYR3&&SH6-UYR4&&~SH6/S/EGNR)||(SH6-JLSR&&SH6-JR)))"
+			]
+		}
+	],
+	"SH6-UYR1": [
+		"~SH6-HR","~SH6-HECR",
+		"(~SH6A-NNR||~SH6B-NNR)",
+		{
+			"op": "||",
+			"val": ["SH6-UYR1",
+				{
+					"op": "&&",
+					"val": ["~6-TPR","~110B-TPR","(108A-TPR||110-WRR)","(110A-TPR||110-WNR)","~SH6-TSR"]
+				}
+			]
+		},
+		"~SH6-UYR3"
+	],
+	"SH6-UYR2": [
+		"~SH6-HR","~SH6-HECR",
+		"(~SH6A-NNR||~SH6B-NNR)",
+		{
+			"op": "||",
+			"val": ["SH6-UYR2",
+				{
+					"op": "&&",
+					"val": ["SH6-UYR1","6-TPR","~110B-TPR","(~108A-TPR||110-WRR)","(~110A-TPR||110-WNR)"]
+				}
+			]
+		},
+		"~SH6-UYR4"
+	],
+	"SH6-UYR3": [
+		"~SH6-HR","~SH6-HECR",
+		"(~SH6A-NNR||~SH6B-NNR)",
+		{
+			"op": "||",
+			"val": ["SH6-UYR3",
+				{
+					"op": "&&",
+					"val": ["SH6-UYR2","110B-TPR","((~108A-TPR&&~L1-TPR)||110-WRR)","((~110A-TPR&&~108B-TPR)||110-WNR)"]
+				}
+			]
+		}
+	],
+	"SH6-UYR4": [
+		"~SH6-HR","~SH6-HECR",
+		"(~SH6A-NNR||~SH6B-NNR)",
+		{
+			"op": "||",
+			"val": ["SH6-UYR4",
+				{
+					"op": "&&",
+					"val": ["SH6-UYR3","((110A-TPR&&~108B-TPR&&~ML-TPR)||110-WNR)"]
+				}
 			]
 		}
 	],
@@ -16,7 +70,7 @@
 			"op": "||",
 			"val": [
 				"S/SH-12-ALSR",
-				"(((S/SH-12-UYR4&&S/SH-12-UYR3&&~S/SH-12-S/EGNR)||(S/SH-12-JSLR&&S/SH/OV-12-JR))&&((102B-TPR&&102A-TPR&&101A-TPR&&~S/SH-12-S/EGNR)||(S/SH-12-S/EGNR&&RRBUNR)))"
+				"(((S/SH-12-UYR4&&S/SH-12-UYR3&&~S/SH-12-S/EGNR)||(S/SH-12-JLSR&&S/SH/OV-12-JR))&&((102B-TPR&&102A-TPR&&101A-TPR&&~S/SH-12-S/EGNR)||(S/SH-12-S/EGNR&&RRBUNR)))"
 			]
 		}
 	]

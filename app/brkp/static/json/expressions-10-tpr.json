@@ -1,4 +1,6 @@
 {
+	"L1-TPR-R": ["~L1-TPR"],
+	"L1-TPR-Y": [],
 	"6A-TPR-R": ["~6A-TPR"],
 	"6-TPR-R": ["~6-TPR"],
 	"6-TPR-Y": [
@@ -8,5 +10,22 @@
 	"22A-TPR-R": ["~22A-TPR"],
 	"22A-TPR-Y": [
 		"22A-TPR","~S/SH-12-ALSR"
+	],
+	"108A-TPR-R": [
+		"~108A-TPR"
+	],
+	"108A-TPR-Y": [
+		"108A-TPR","~SH6-ALSR"
+	],
+	"108B-TPR-R": [
+		"~108B-TPR"
+	],
+	"108B-TPR-Y": [
+	],
+	"110B-TPR-R": [
+		"~110B-TPR"
+	],
+	"110B-TPR-Y": [
+		"110B-TPR","~SH6-ALSR"
 	]
 }
