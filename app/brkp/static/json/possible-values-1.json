@@ -98,12 +98,11 @@
         "L2-UNR", "L1/1-UNR", "L1/2-UNR", "L3/1-UNR", "L3/2-UNR", "21A-UNR", "22A-UNR",
         "DD-UNR", "UD-UNR", "6A-UNR"
     ],
-    "pt-btn": ["101-WN","102-WN","108-WN","109-WN","110-WN","111-WN"],
     "pt-relay": ["4-WR","5-WR","6-WR"],
     "timer": [
         "OV2/3/10/11-AJTR2", "OV2/3/10/11-AJTR3"
     ],
-    "point": ["WWN(N)","WWN(R)","WWNR", "WWRR", "EWNR", "EWWNR"],
+    "point": ["WWN_N","WWN_R","WWNR", "WWRR", "EWNR", "EWWN","EWWNR"],
     "pointIndication": ["4-WLK", "5-WLK", "6-WLK"],
     "point-4": [
         "4-WWR",
@@ -115,44 +114,51 @@
         "4A-RC", "4B-RC"
     ],
     "point-101": [
-        "101-WR","101-WNR","101-WRR",
+        "101-WN","101-WR","101-WNR","101-WRR",
         "101-NWKR","101-RWKR",
         "101-NWKLR","101-RWKLR",
         "101-WLR"
     ],
     "point-102": [
-        "102-WR","102-WNR","102-WRR",
+        "102-WN","102-WR","102-WNR","102-WRR",
         "102-NWKR","102-RWKR",
         "102-NWKLR","102-RWKLR",
         "102-WLR"
     ],
     "point-108": [
+        "108A-WN","108B-WN",
         "108A-WR","108B-WR",
-        "108-WR","108-WNR","108-WRR",
+        "108-WNR","108-WRR",
         "108-NWKR","108-RWKR",
         "108-NWKLR","108-RWKLR",
-        "108-TRSR","108A-TRSR","108A/B-TRSR","108B/A-TRZR-_C-2B",
-        "108B/A-TRZR_SH-8B",
-        "108A-JBPR",
+        "108-WLR",
+        "108A-TRSR","108A-JBPR","108A-JSLR","108A-JR",
+        "108B/A-TRSR","108B/A-JBPR","108B/A-JSLR","108B/A-JR",
+        "108B/A-TRZR_C2A",
+        "108B/A-TRZR_C2B",
+        "108B/A-TRZR_S2A",
+        "108B/A-TRZR_S2B",
+        "108B/A-TRZR_SH8A",
+        "108B/A-TRZR_SH8B",
+        "108B/A-TRZR_SH6B",
         "108A-UYR1","108A-UYR2",
-        "108B/A-JBPR",
-        "108B/A-UYR1","108B/A-UYR2","108B/A-UYR3",
-        "108-WLR"
+        "108B/A-UYR1","108B/A-UYR2","108B/A-UYR3"
     ],
     "point-109": [
+        "109-WN",
         "109-WR","109-WNR","109-WRR",
         "109-NWKR","109-RWKR",
         "109-NWKLR","109-RWKLR",
         "109-WLR"
     ],
     "point-110": [
-        "110-WR","110-WNR","110-WRR",
+        "110-WN","110-WR","110-WNR","110-WRR",
         "110-NWKR","110-RWKR",
         "110-NWKLR","110-RWKLR",
         "110-WLR"
     ],
     "point-111": [
-        "111-WR","111-WNR","111-WRR",
+        "111-WN","111-WR","111-WNR","111-WRR",
         "111-NWKR","111-RWKR",
         "111-NWKLR","111-RWKLR",
         "111-WLR"
@@ -184,5 +190,5 @@
             "S11/SH11-EGNR","S12/SH12-EGNR",
             "S13/SH13-EGNR","S14/SH14-EGNR",
             "CH1R","CH2R","CH3R","CH4R","CH5R"],
-    "timerDelay": ["TimerSH6"]
+    "timerDelay": ["TimerSH6","Timer108ATRSR","TimerS/SH/OV-12"]
 }

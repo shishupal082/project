@@ -3,6 +3,11 @@
 		{
 			"op": "||",
 			"val": ["109-WRR","108-WNR", "(S/C-2-ALSR&&SH8-ALSR)"]
-		}
+		},
+		"(S/SH-9-ALSR||110-WNR)",
+		"S/SH-11-ALSR",
+		"(S/C-1-ALSR||102-WNR)",
+		"OV11-SR",
+		"(SH5-ALSR||102-WNR)"
 	]
 }

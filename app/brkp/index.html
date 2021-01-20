@@ -33,6 +33,12 @@
                         <button value="22A-UN=1" class="evt event_btn">22A-UN</button>
                     </div>
                 </td>
+                <td>
+                    <div>
+                        <button value="108A-WN=1" class="evt event_btn">108A-WN</button>
+                        <button value="108B-WN=1" class="evt event_btn">108B-WN</button>
+                    </div>
+                </td>
                 <td><div><span class="alert-danger badge" id="alarm"></span></div></td>
             </tr>
         </table>
@@ -56,6 +62,11 @@
                     <li>NWKLR/NWKLR used in HR (NWKR && ~WLR)</li>
                     <li>To pickup HR for shunt or main signal GN button need to release</li>
                     <li>Starter is interlocked with advance starter DECR</li>
+                    <li>Emergency route release => SH6 + EGGN => Signal put back to normal</li>
+                    <li>EUUYN then SH6-GN => SH6-JR timer start and route release after 2min</li>
+                    <li>Super emergency route release => SH6 + EGGN => Signal put back to normal</li>
+                    <li>S-KEY in + SH6-GN --> S/EGNR pickup and JSLR pickup (S-KEY can be taken out) --> JR pickup after 2min</li>
+                    <li>Route release If S-KEY is out otherwise wait for taking key out</li>
                 </ul>
             </div>
         </div>
@@ -74,12 +85,14 @@ var UICommonPath = {
                     "/app/brkp/static/json/expressions-3-nnr.json",
                     "/app/brkp/static/json/expressions-4-nrr.json",
                     "/app/brkp/static/json/expressions-5-ecr.json",
+                    "/app/brkp/static/json/expressions-6-wr.json",
                     "/app/brkp/static/json/expressions-7-ucr.json",
                     "/app/brkp/static/json/expressions-8-alsr.json",
                     "/app/brkp/static/json/expressions-9-hr.json",
                     "/app/brkp/static/json/expressions-10-tpr.json",
                     "/app/brkp/static/json/expressions-11-emergency.json",
-                    "/app/brkp/static/json/expressions-12-wlr.json"]
+                    "/app/brkp/static/json/expressions-12-wlr.json",
+                    "/app/brkp/static/json/expressions-13-trsr.json"]
 };
 </script>
 

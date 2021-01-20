@@ -1,0 +1,161 @@
+{
+    "108A-TRSR": [
+        "(SH6-ALSR||110-WRR)",
+        {
+            "op": "||",
+            "val": [
+                "108A-TRSR",
+                "(RRBUNR&&108A-JSLR&&108A-JR)",
+                "108A-TPR&&((108A-UYR1&&108A-UYR2)||(SH6A-NNR&&~108A-UYR1&&~108A-UYR2))"
+            ]
+        }
+    ],
+    "108A-UYR1": [
+        "~108A-TRSR",
+        {
+            "op": "||",
+            "val": [
+                "108A-UYR1",
+                "(110B-TPR&&((~108A-TPR&&~L1-TPR)||110-WRR))"
+            ]
+        }
+    ],
+    "108A-UYR2": [
+        "~108A-TRSR",
+        {
+            "op": "||",
+            "val": [
+                "108A-UYR2",
+                "(108A-UYR1&&108A-TPR&&~L1-TPR)"
+            ]
+        }
+    ],
+    "108A-JSLR": [
+        "(SH6-ALSR||110-WRR)",
+        {
+            "op": "||",
+            "val": [
+                "108A-JSLR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "~108A-TRSR",
+                        "(RRBURR||(EUUYNPR&&108A-TPR))",
+                        "108A-WR"
+                    ]
+                }
+            ]
+        },
+        "(108A-JBPR||108A-JSLR)",
+        "~SH6A-NRR"
+    ],
+    "108B/A-TRSR": [
+        {
+            "op": "||",
+            "val": [
+                "109-WRR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "(S/C-2-ALSR||(109-WNR&&S/C-2-JSLR&&C2-UCBPR))",
+                        "(SH8-ALSR||(SH8-JSLR&&109-WNR))"
+                    ]
+                }
+            ]
+        },
+        {
+            "op": "||",
+            "val": ["SH6-ALSR", "110-WNR", "(SH6-JSLR&&110-WRR)"]
+        },
+        {
+            "op": "||",
+            "val": [
+                "108B/A-TRSR",
+                "(RRBUNR&&108B/A-JSLR&&108B/A-JR)",
+                {
+                    "op": "&&",
+                    "val": [
+                        "108B-TPR","(108A-TPR||108-WNR)",
+                        {
+                            "op": "||",
+                            "val": [
+                                "(108B/A-UYR1&&108B/A-UYR2&&108B/A-UYR3)",
+                                "(S/C-2B-NNR&&S/C-2A-NNR&&SH6B-NNR&&SH8A-NNR&&SH8B-NNR&&~108B/A-UYR1&&~108B/A-UYR2&&~108B/A-UYR3)"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "108B/A-JSLR": [
+        {
+            "op": "||",
+            "val": [
+                "109-WRR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "(S/C-2-ALSR||(109-WNR&&S/C-2-JSLR&&C2-UCBPR))",
+                        "(SH8-ALSR||(SH8-JSLR&&109-WNR))"
+                    ]
+                }
+            ]
+        },
+        {
+            "op": "||",
+            "val": ["SH6-ALSR", "110-WNR", "(SH6-JSLR&&110-WRR)"]
+        },
+        {
+            "op": "||",
+            "val": [
+                "108B/A-JSLR",
+                {
+                    "op": "&&",
+                    "val": [
+                        "~108B/A-TRSR",
+                        "(RRBURR||(EUUYNPR&&108B-TPR&&(108A-TPR||108-WNR)))",
+                        "108B-WR","108B/A-JBPR","S/C-2A-2B-NRBPR","~SH6B-NRR","~SH8A-NRR","~SH8B-NRR"
+                    ]
+                }
+            ]
+        }
+    ],
+    "108B/A-UYR1": ["108B/A-TRSR",
+        {
+            "op": "||",
+            "val": ["108B/A-UYR1",
+                "110A-TPR&&~108B-TPR&&(~108A-TPR||108-WNR)&&(~ML-TPR||108-WRR)&&~108B/A-UYR3"
+            ]
+        }
+    ],
+    "108B/A-UYR2": ["108B/A-TRSR",
+        {
+            "op": "||",
+            "val": ["108B/A-UYR2",
+                "108B/A-UYR1&&108B-TPR&&((~108A-TPR&&~L1-TPR)||108-WNR)&&(~ML-TPR||108-WRR)"
+            ]
+        }
+    ],
+    "108B/A-UYR3": ["108B/A-TRSR",
+        {
+            "op": "||",
+            "val": ["108B/A-UYR3",
+                "108B/A-UYR2&&((108A-TPR&&~L1-TPR)||108-WNR)"
+            ]
+        }
+    ],
+
+    "108A-JBPR": ["~108A-JSLR","~108A-JR"],
+    "108A-JR": ["108A-JSLR","~108A-JBPR", "Timer108ATRSR"],
+    "108B/A-JBPR": ["~108B/A-JSLR","~108B/A-JR"],
+    "108B/A-JR": ["108B/A-JSLR","~108B/A-JBPR", "Timer108B/ATRSR"],
+    
+    "108B/A-TRZR_SH6B": ["SH6B-NNR", "(108B/A-TRSR||108B/A-TRZR_SH6B)"],
+    "108B/A-TRZR_SH8A": ["SH8A-NNR", "(108B/A-TRSR||108B/A-TRZR_SH8A)"],
+    "108B/A-TRZR_SH8B": ["SH8B-NNR", "(108B/A-TRSR||108B/A-TRZR_SH8B)"],
+    "108B/A-TRZR_S2A": ["S2A-NNR", "(108B/A-TRSR||108B/A-TRZR_S2A)"],
+    "108B/A-TRZR_S2B": ["S2B-NNR", "(108B/A-TRSR||108B/A-TRZR_S2B)"],
+    "108B/A-TRZR_C2A": ["C2A-NNR", "(108B/A-TRSR||108B/A-TRZR_C2A)"],
+    "108B/A-TRZR_C2B": ["C2B-NNR", "(108B/A-TRSR||108B/A-TRZR_C2B)"]
+}

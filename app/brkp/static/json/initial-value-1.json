@@ -10,13 +10,10 @@
     "S/SH-12-ALSR": 1,
     "S/SH-13-ALSR": 1,
     "S/SH-14-ALSR": 1,
-
-    "108A-TRSR": 1,
-    "108A/B-TRSR": 1,
-    "SH6-JBPR": 1,
-    "108A-JBPR": 1,
-    "108B/A-TRZR_SH-8B": 1,
-    "S/SH/OV-12-JBPR": 1,
+    "OV10-SR": 1,
+    "OV11-SR": 1,
+    "OV12-SR": 1,
+    "OV14-SR": 1,
 
     "SMCR": 1,
     "2A-TPR": 1,
@@ -65,5 +62,6 @@
     "GNCR": 1,
     "WNCR": 1,
     "UNCR": 1,
-    "TimerSH6": 1
+    "TimerSH6": 1,
+    "Timer108ATRSR": 1
 }

@@ -73,7 +73,7 @@
 			"val": ["S/C-2-ALSR", "C2E-NNR"]
 		}
 	],
-	"S/C-2-A-NNR": ["S2A-NNR","C2A-NNR"],
+	"S/C-2A-NNR": ["S2A-NNR","C2A-NNR"],
 	"S/C-2B-NNR": ["S2B-NNR","C2B-NNR"],
 	"SH5A-NNR": ["~SH5A-NRR","(SH5-ALSR||SH5A-NNR)"],
 	"SH5B-NNR": ["~SH5B-NRR","(SH5-ALSR||SH5B-NNR)"],
@@ -124,10 +124,28 @@
 	"S10-NNR": ["~S10-NRR","(S/SH-10-ALSR||S10-NNR)"],
 	"SH10-NNR": ["~SH10-NRR","(S/SH-10-ALSR||SH10-NNR)"],
 	"S/SH-10-NNR":["S10-NNR","SH10-NNR"],
+	"OV10-NNR": ["~OV10-NRR",
+		{
+			"op": "||",
+			"val": ["OV10-SR", "OV10-NNR"]
+		}
+	],
 	"S11-NNR": ["~S11-NRR","(S/SH-11-ALSR||S11-NNR)"],
 	"SH11A-NNR": ["~SH11A-NRR","(S/SH-11-ALSR||SH11A-NNR)"],
 	"SH11B-NNR": ["~SH11B-NRR","(S/SH-11-ALSR||SH11B-NNR)"],
 	"SH11A/B-NNR": ["SH11A-NNR","SH11B-NNR"],
+	"OV1/11-NNR": ["~OV1/11-NRR",
+		{
+			"op": "||",
+			"val": ["OV11-SR", "OV1/11-NNR"]
+		}
+	],
+	"OV2/11-NNR": ["~OV2/11-NRR",
+		{
+			"op": "||",
+			"val": ["OV11-SR", "OV2/11-NNR"]
+		}
+	],
 	"S12-NNR": ["~S12-NRR",
 		{
 			"op": "||",
@@ -162,7 +180,7 @@
 			"val": [
 				"OV12-SR",
 				"(S/SH-12-UYR3&&S/SH-12-UYR4)",
-				"(108A/B-TRSR&&L1-TPR&&~S/SH-12-UYR1)",
+				"(108B/A-TRSR&&L1-TPR&&~S/SH-12-UYR1)",
 				"(OV12-JSLR&&S/SH/OV-12-JR)"
 			]
 		}
@@ -172,13 +190,10 @@
 	"S14-NNR": ["~S14-NRR","(S/SH-14-ALSR||S14-NNR)"],
 	"SH14-NNR": ["~SH14-NRR","(S/SH-14-ALSR||SH14-NNR)"],
 	"S/SH-14-NNR": ["S14-NNR","SH14-NNR"],
-	"OV10-NNR": ["SMCR"],
-	"OV2/11-NNR": ["SMCR"],
-	"OV2/14-NNR": ["SMCR"],
-	"108-TRSR": ["SMCR"],
-	"108A/B-TRSR": ["SMCR"],
-	"108B/A-TRZR-_C-2B": ["SMCR"],
-	"108-WNR": ["SMCR"],
-	"SH5C-NNR": ["SMCR"],
-	"OV1/11-NNR": ["SMCR"]
+	"OV2/14-NNR": ["~OV2/14-NRR",
+		{
+			"op": "||",
+			"val": ["OV14-SR", "OV2/14-NNR"]
+		}
+	]
 }

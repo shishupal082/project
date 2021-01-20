@@ -65,5 +65,7 @@
 				}
 			]
 		}
-	]
+	],
+	"S/SH/OV-12-JBPR": ["~S/SH-12-JSLR","~OV12-JSLR","~S/SH/OV-12-JR"],
+	"S/SH/OV-12-JR": ["(S/SH-12-JSLR||OV12-JSLR)","TimerS/SH/OV-12"]
 }
