@@ -1,0 +1,35 @@
+{
+    "A/B-LCCKPR": ["A/B-LCCKR","~A/B-LCOKR"],
+    "A/B-LCOKPR": ["~A/B-LCCKR","A/B-LCOKR"],
+    "A/B-LCOFR1": ["~A/B-LCCKPR",
+        {
+            "op": "||",
+            "val": ["~A/B-LCOKPR","~UP-AR","~DN-AR"]
+        }
+        ,"~A/B-LCOFR2"
+    ],
+    "A-Close": ["A/B-LCCNR","~KLNR"],
+    "A-Open": ["A/B-LCONR","~KLNR"],
+    "B-Close": ["A/B-LCCNR","~KLNR"],
+    "B-Open": ["A/B-LCONR","~KLNR"],
+    "A/B-LCCKR": ["A-Close","B-Close"],
+    "A/B-LCOKR": ["A-Open","B-Open"],
+    "LimitSW17-18": ["A/B-LCCKPR","~LimitSW21-22"],
+    "LimitSW21-22": ["A/B-LCOKPR","~LimitSW17-18"],
+    "LockPostBoomMotor-A": ["A/B-LCCKR","((LPR&&~ULPR&&LimitSW17-18)||(ULPR&&~LPR&&LimitSW21-22))","(ULPR||~PBLR||PBLR)"],
+    "LockPostBoomMotor-B": ["A/B-LCCKR","((LPR&&~ULPR&&LimitSW17-18)||(ULPR&&~LPR&&LimitSW21-22))","(ULPR||~PBLR||PBLR)"],
+    "PBLR": ["A/B-LCCKR","LockPostBoomMotor-A", "LockPostBoomMotor-B"],
+    "GS3-NR": ["GS3_N","~GS3-DR"],
+    "GS3-RR": ["GS3_R","~GS4-RR","~GS3-NR"],
+    "GS4-NR": ["GS4_N","~GS4-HR"],
+    "GS4-RR": ["GS4_R","~GS3-RR","~GS4-NR"],
+    "GS3-DR": ["LX_IN_PR", "((KNLR&&GS1-LCLR)||SBNR)", "(GMCR||GS3-DR||GS4-HR)",
+        "GS3-RR","~GS3-NR"
+    ],
+    "GS4-HR": ["LX_IN_PR", "((KNLR&&GS1-LCLR)||SBNR)", "(GMCR||GS3-DR||GS4-HR)",
+        "GS4-RR","~GS4-NR", "GS2-ECPR"
+    ],
+    "KNLR": ["(PB1||KNLR)","CHCPR","GS1-LCLR",
+        "(~LXRR||~PB2)"
+    ]
+}

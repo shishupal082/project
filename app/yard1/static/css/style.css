@@ -112,15 +112,25 @@ hr {
     line-height: 0;
 }
 .yard .indication,
+.yard .indication span,
 .yard .shunt span {
     padding: 4px;
     height: 10px;
     line-height: 0;
 }
 .yard .shunt span.active,
+.yard .indication span.active,
 .yard .indication.active {
     color: #555;
     background-color: #ffff00;
+}
+.yard .indication span.active.red,
+.yard .indication.active.red {
+    background-color: #ff0000;
+}
+.yard .indication span.active.green,
+.yard .indication.active.green {
+    background-color: #00ff00;
 }
 .yard .btn-rotate {
     transform: rotate(-45deg);
@@ -144,6 +154,13 @@ hr {
 }
 .yard .event_btn.one {
     color: #1fb71f;
+}
+.yard .bigger-text {
+    position: absolute;
+}
+.yard .bigger-text span {
+    position: absolute;
+    top: -5px;
 }
 /* Debugging style */
 .yard.debug .btn,

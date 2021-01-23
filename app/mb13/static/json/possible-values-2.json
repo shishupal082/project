@@ -1,0 +1,33 @@
+{
+    "lc-gate": [
+    	"N/HECR","S/HECR",
+    	"N/RECR","S/RECR",
+    	"A-LCCCR","B-LCCCR",
+    	"LockPostBoomMotor-A","LockPostBoomMotor-B",
+    	"A-Close","A-Open",
+    	"B-Close","B-Open",
+    	"A-boom-locked","A-boom-open",
+        "B-boom-locked","B-boom-open",
+    	"A-LCOCR","B-LCOCR",
+    	"Gate-Locked","Gate-UnLocked",
+    	"A/B-LCCKR", "A/B-LCOKR",
+    	"A/B-LCONR","A/B-LCCNR",
+    	"A/B-LCCKPR",
+    	"A/B-LCOKPR","A/B-LCOFR1","A/B-LCOFR2"
+    ],
+    "lc-control": [
+        "GS3-GN","GS4-GN",
+    	"UP-ALSR","UP-JSLR","UP-JR","UP-AR","UP-AR1","UP-AR2",
+    	"DN-ALSR","DN-JSLR","DN-JR","DN-AR","DN-AR1","DN-AR2",
+    	"GS2-ECPR",
+    	"LXNR","LXRR","LX_IN_PR","JR",
+    	"GS1-DR","GS1-HR","GS1-NR",
+    	"GS3_N","GS3_R","GS3-NR","GS3-RR","GS3-DR","GS3-HR",
+    	"GS4_N","GS4_R","GS4-NR","GS4-RR","GS4-DR","GS4-HR",
+    	"GMCR","KLNR"
+
+    ],
+    "gate-power-panel": [
+	    "LPR","ULPR"
+	]
+}

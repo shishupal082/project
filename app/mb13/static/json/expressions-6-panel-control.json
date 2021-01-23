@@ -1,0 +1,13 @@
+{
+	"GS3_N": ["~GS3-GN"],
+	"GS3_R": ["GS3-GN"],
+	"GS4_N": ["~GS4-GN"],
+	"GS4_R": ["GS4-GN"],
+	"GMCR": ["KEY-IN"],
+
+    "A/B-LCONR": ["~KLNR","CHCPR","Auto/Manual","~A/B-LCCNR","GatePanel-Open-SW-Press"],
+    "A/B-LCCNR": ["~KLNR","CHCPR","Auto/Manual","~A/B-LCONR","GatePanel-Close-SW-Press"],
+    "CHCPR": ["CH-KEY-IN"],
+    "LPR": ["Gate-Lock/Unlock"],
+    "ULPR": ["~Gate-Lock/Unlock"]
+}

@@ -1,0 +1,31 @@
+{
+	"DN-AR": [
+		"DAT-TPR","3_4T-TPR","~GS4-HR",
+		"((DN-AR1&&DN-AR2)||DN-AR)"
+	],
+	"UP-AR": [
+		"1_2T-TPR","3_4T-TPR","~GS3-DR",
+		"((UP-AR1&&UP-AR2)||UP-AR)"
+	],
+	"UP-AR1": [
+		"~UP-AR", "((~UAT-TPR&&3_4T-TPR)||UP-AR1)"
+	],
+	"UP-AR2": [
+		"~UP-AR", "((UAT-TPR&&~3_4T-TPR)||UP-AR2)"
+	],
+	"DN-AR1": [
+		"~DN-AR", "((~DAT-TPR&&3_4T-TPR)||DN-AR1)"
+	],
+	"UP-AR2": [
+		"~UP-AR", "((DAT-TPR&&~3_4T-TPR)||UP-AR2)"
+	],
+	"LXNR": ["GS1-LCLR","KNLR", "~JR", "~PBR3"],
+	"LXRR": [
+		"GS3-RECR","GS4-RECR", "~GS3-DR", "~GS4-HR",
+		"((UP-ALSR&&DN-ALSR)||JR)"
+	],
+	"PBR3": ["GS1-LCLR","KNLR","(PB3||PBR3)"],
+	"GS1-LCLR": ["CHCPR", "A/B-LCCKR", "~A/B-LCOKR", "PBLR"],
+	"LX_IN_PR": ["((LXNR&&~SBNR)||(~LXNR&&SBNR))"],
+	"JR": ["~LX_IN_PR","GS3-RECR", "GS4-RECR", "(~UP-AR||~DN-AR)","Timer","(PBR3||PBR4)"]
+}

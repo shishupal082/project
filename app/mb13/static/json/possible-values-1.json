@@ -1,0 +1,44 @@
+{
+    "addDebug": [],
+    "tpr": [
+        "1_2T-TPR", "1_2T-TPR-R", "1_2T-TPR-Y",
+        "3_4T-TPR", "3_4T-TPR-R", "3_4T-TPR-Y",
+        "UAT-TPR","UAT-TPR-R","UAT-TPR-Y",
+        "DAT-TPR","DAT-TPR-R","DAT-TPR-Y",
+        "UAT-MB12-TPR", "UAT-MB12-TPR-R", "UAT-MB12-TPR-Y"
+    ],
+    "signal-ecr": [
+        "GS1-RECR","GS1-HECR","GS1-DECR",
+        "GS1-RECPR","GS1-HECPR","GS1-DECPR",
+        "GS2-DR","GS2-RECR","GS2-RECPR","GS2-DECR","GS2-DECPR",
+        "GS3-RECR","GS3-DECR",
+        "GS4-DECR","GS4-HECR","GS4-RECR",
+        "DGD-HHECR","DGD-DECR","DGD-HECR",
+        "DGD-HHR","DGD-DR"
+    ],
+    "panel-indication": [
+        "GS4-DGK","GS4-HGK","GS4-RGK","DGD-DGK","DGD-HHGK","DGD-HGK","GS3-DGK","GS3-RGK",
+        "GS1-DGK","GS1-HGK","GS1-RGK",
+        "PB1-KE","PB2-KE",
+        "NWK","SWK","NRK","SRK",
+        "KEY-IN-Y",
+        "3_4T-KE-R","3_4T-KE-Y",
+        "UP-AR-KE-R","DN-AR-KE-R"
+    ],
+    "controls": [
+        "KEY-IN","CH-KEY-IN", "PB1", "PB2", "PB3", "PBR3", "PB4", "PBR4", "DNA-M", "UPA-M", "RSB","KNLR","PBLR","SBNR","GS1-LCLR","CHCPR"
+    ],
+    "gate-panel-control": [
+        "Auto/Manual",
+        "Gate-Lock/Unlock",
+        "GatePanel-Open-SW-Press",
+        "GatePanel-Close-SW-Press",
+        "LimitSW17-18","LimitSW21-22"
+    ],
+    "gate-panel-indication": [
+        "GatePanel-Power-On",
+        "GatePanel-Lock","GatePanel-UnLock",
+        "A_B-LCCKR-K-G","A_B-LCOKR-K-R"
+    ],
+    "timerDelay": ["Timer"]
+}

@@ -1,0 +1,330 @@
+{
+    "0-row": {
+        "0-0": [""],
+        "0-1": ["1"],
+        "0-2": ["2"],
+        "0-3": ["3"],
+        "0-4": ["4"],
+        "0-5": ["5"],
+        "0-6": ["6"],
+        "0-7": ["7"],
+        "0-8": ["8"],
+        "0-9": ["9"],
+        "H-0": ["H"],
+        "G-0": ["G"],
+        "F-0": ["F"],
+        "E-0": ["E"],
+        "D-0": ["D"],
+        "C-0": ["C"],
+        "B-0": ["B"],
+        "A-0": ["A"]
+    },
+    "H-row": {
+        "H-1": [
+            ["","","<button class='evt event_btn btn circle'><span class='badge'>B</span></button>"],
+            [
+                "<div class='bigger-text'>Button for road signal put back to red.</div>"
+            ]
+        ]
+    },
+    "F-row": {
+        "F-2": [
+            ["","<button class='evt event_btn btn circle'><span class='badge'>B</span></button>","",""],
+            ["DN","Train",""],
+            ["approach","Mutting"]
+        ],
+        "F-6": [
+            [
+                "","",
+                "<div class='indication'><span id='PB1-KE' class='badge green active'>&nbsp;</span></div>",
+                "",""
+            ],
+            [
+                "","","<button id='PB1' value='PB1=1' class='evt event_btn btn circle toggle'><span class='badge'>PB-1</span></button>"
+            ],
+            ["Ga","te","","Cl","ose"]
+        ],
+        "F-5": [
+            [
+                "","",
+                "S","",""
+            ],
+            [
+                "",
+                "<div class='indication'><span id='SRK' class='badge red active'>&nbsp;</span></div>",
+                "",
+                "<div class='indication'><span id='SWK' class='badge yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "","C","","O"
+            ]
+        ]
+    },
+    "E-row": {
+        "E-6": [
+            [
+                "","",
+                "<div class='indication'><span id='PB2-KE' class='badge yellow active'>&nbsp;</span></div>",
+                "",""
+            ],
+            [
+                "","","<button id='PB2' value='PB2=1' class='evt event_btn btn circle toggle'><span class='badge'>PB-2</span></button>"
+            ],
+            ["Ga","te","","Op","en"]
+        ]
+    },
+    "D-row": {
+        "D-1": [
+            [
+            ],
+            [
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+            ]
+        ],
+        "D-2": [
+            [
+                "<div class='text-right'><span>GS</span></div>",
+                "<div class='text-left'><span>4D</span></div>",
+                "<div class='text-right'><span id='DGD-HGK' class='badge signal yellow active'>&nbsp;</span></div>",
+                "<span id='DGD-DGK' class='badge signal green active'>&nbsp;</span>",
+                "<div class='text-left'><span id='DGD-HHGK' class='badge signal yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","",
+                "<div class='text-right'><span>DA</span></div>",
+                "<div class='text-left'><span>T</span></div>"
+            ]
+        ],
+        "D-3": [
+            [
+                "","","","",
+                "<div class='shunt'><span class='badge yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green DAT-TPR' value='DAT-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "DN","app",
+                "roac",
+                "<div class='text-left'><span>h</span></div>"
+            ]
+        ],
+        "D-4": [
+            [
+                "<div class='text-right'><span>G</span></div>",
+                "<div class='text-left'><span>S4</span></div>",
+                "<div class='text-right'><span id='GS4-RGK' class='badge signal red active'>&nbsp;</span></div>",
+                "<span id='GS4-DGK' class='badge signal green active'>&nbsp;</span>",
+                "<div class='text-left'><span id='GS4-HGK' class='badge signal yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","",
+                "<button class='evt event_btn btn circle' value='GS4-GN=1'><span class='badge'>G</span></button>",
+                "<div class='text-right'><span>3</span></div>",
+                "<div class='text-left'><span>/4T</span></div>"
+            ]
+        ],
+        "D-5": [
+            [
+                "","",
+                "<button class='evt event_btn btn circle' value='GS3-GN=1'><span class='badge'>G</span></button>"
+            ],
+            [
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow 3_4T-TPR' value='3_4T-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<div class='text-right'><span id='GS3-DGK' class='badge signal green active'>&nbsp;</span></div>",
+                "<div class='text-left'><span id='GS3-RGK' class='badge signal red active'>&nbsp;</span></div>",
+                "<div class='text-right'><span>GS</span></div>",
+                "<div class='text-left'><span>3</span></div>"
+            ]
+        ],
+        "D-6": [
+            [
+                "<div class='shunt'><span class='badge yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "<button class='evt btn tpr green UAT-TPR' value='UAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green UAT-TPR' value='UAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green UAT-TPR' value='UAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green UAT-TPR' value='UAT-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green UAT-TPR' value='UAT-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "","UP","app","roac",
+                "<div class='text-left'><span>h</span></div>"
+            ]
+        ],
+        "D-7": [
+            [
+                "",
+                "<div class='text-right'><span>G</span></div>",
+                "<div class='text-left'><span>S2</span></div>",
+                "<div class='text-right'><span id='GS2-RECR' class='badge signal'>&nbsp;</span></div>",
+                "<span id='GS2-DECR' class='badge signal'>&nbsp;</span>"
+            ],
+            [
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>"
+            ],
+            []
+        ],
+        "D-8": [
+            [],
+            [
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>",
+                "<button class='btn green'></button>"
+            ],
+            [
+                "<div class='text-right'><span id='GS1-HGK' class='badge signal yellow active'>&nbsp;</span></div>",
+                "<span id='GS1-DGK' class='badge signal green active'>&nbsp;</span>",
+                "<div class='text-left'><span id='GS1-RGK' class='badge signal red active'>&nbsp;</span></div>",
+                "<div class='text-right'><span>GS</span></div>",
+                "<div class='text-left'><span>1</span></div>"
+            ]
+        ],
+        "D-9": [
+            [
+                "","",
+                "<div class='text-right'><span>UA</span></div>",
+                "<div class='text-left'><span>T</span></div>"
+            ],
+            [
+                "<button class='evt btn tpr yellow UAT-MB12-TPR' value='UAT-MB12-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow UAT-MB12-TPR' value='UAT-MB12-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow UAT-MB12-TPR' value='UAT-MB12-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow UAT-MB12-TPR' value='UAT-MB12-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow UAT-MB12-TPR' value='UAT-MB12-TPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            []
+        ]
+    },
+    "C-row": {
+        "C-2": [
+            [
+                "","",
+                "<div class='indication'><span id='KEY-IN-Y' class='badge yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "<div class='text-right'><span>G</span></div>",
+                "<div class='text-left'><span>ate</span></div>",
+                "<div class='text-left'><span>man</span></div>",
+                "key","in"
+            ]
+        ],
+        "C-6": [
+            [
+                "","(ELB)"
+            ],
+            [
+                "","<button id='PB3' value='PB3=1' class='evt event_btn btn circle toggle'><span class='badge'>PB-3</span></button>"
+            ],
+            [
+                "",
+                "<div class='bigger-text'><span>Signal</span></div>",
+                "",
+                "<div class='bigger-text'><span>Replaced</span></div>"
+            ]
+        ]
+    },
+    "B-row": {
+        "B-2": [
+            [],
+            [
+                "","",
+                "<button value='KEY-IN=0' class='evt event_btn btn circle'><span class='badge'>K</span></button>",
+                ""
+            ],
+            ["","","Key"]
+        ],
+        "B-4": [
+            [
+                "","",
+                "N","",""
+            ],
+            [
+                "",
+                "<div class='indication'><span id='NRK' class='badge red active'>&nbsp;</span></div>",
+                "",
+                "<div class='indication'><span id='NWK' class='badge yellow active'>&nbsp;</span></div>"
+            ],
+            [
+                "","C","","O"
+            ]
+        ],
+        "B-5": [
+            [
+                "","",
+                "<div class='text-right'><span>Ga</span></div>",
+                "<div class='text-left'><span>te</span></div>","",""
+            ],
+            [
+                "",
+                "<div class='indication'><span id='LC_CLOSED' class='badge yellow active'>&nbsp;</span></div>",
+                "",
+                "<div class='indication'><span id='LC_OPEN' class='badge red active'>&nbsp;</span></div>"
+            ],
+            [
+                "","C","","O"
+            ]
+        ],
+        "B-6": [
+            [
+                "",
+                "<div class='bigger-text'><span>(Sliding)</span></div>"
+            ],
+            [
+                "","<button class='evt event_btn btn circle'><span class='badge'>PB-4</span></button>"
+            ],
+            [
+                "",
+                "<div class='bigger-text'><span>Signal</span></div>",
+                "",
+                "<div class='bigger-text'><span>Replaced</span></div>"
+            ]
+        ],
+        "B-8": [
+            ["","","<button class='evt event_btn btn circle'><span class='badge'>B</span></button>"],
+            ["","UP","Train"],
+            [
+                "<div class='bigger-text'><span>Approach</span></div>",
+                "","",
+                "<div class='bigger-text'><span>Mutting</span></div>"
+            ]
+        ]
+    }
+}

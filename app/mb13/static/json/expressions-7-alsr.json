@@ -1,0 +1,38 @@
+{
+	"DN-ALSR": [
+		"~GS4-HR","~GS4-HECR",
+		"~GS4-DR","~GS4-DECR",
+		{
+			"op": "||",
+			"val": [
+				"DN-ALSR",
+				"(DN-JSLR&&DN-JR)",
+				"(DAT-TPR&&3_4T-TPR&&DN-AR1&&DN-AR2)"
+			]
+		}
+	],
+	"UP-ALSR": [
+		"~GS3-DR","~GS3-DECR",
+		{
+			"op": "||",
+			"val": [
+				"UP-ALSR",
+				"(UP-JSLR&&UP-JR)",
+				"(UAT-TPR&&3_4T-TPR&&UP-AR1&&UP-AR2)"
+			]
+		}
+	],
+	"UP-JSLR": [
+		"~GS3-DR","~GS3-DECR",
+		"~UP-ALSR", "GS3-NR", "(~UP-AR||UP-JSLR)"
+	],
+	"DN-JSLR": [
+		"~GS4-HR","~GS4-HECR",
+		"~GS4-DR","~GS4-DECR",
+		"~DN-ALSR", "GS4-NR", "(~DN-AR||DN-JSLR)"
+	],
+	"UP-JR": ["~GS3-DR","~GS3-DECR",
+		"UP-JSLR","Timer"],
+	"DN-JR": ["~GS4-HR","~GS4-HECR","~GS4-DR","~GS4-DECR",
+		"DN-JSLR","Timer"]
+}

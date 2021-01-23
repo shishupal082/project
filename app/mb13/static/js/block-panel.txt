@@ -1,0 +1,42 @@
+ASCR: Advance starter control relay
+ASCR = S21-NRR && 2T1-TPR && 2T2-TPR
+
+HSATPR
+HSATPR = 2T1-TPR
+HSBTPR = 2T2-TPR
+
+TAR1
+TAR1 = 2A-NRR || 2B-NRR || 2E-NRR || C2A-NRR || C2B-NRR || C2E-NRR
+
+ASGNCR
+ASGNCR = S21-GNCR
+S21-GNCR = ~S21-NRR && ~S21-DR && ~S21-DECR && 2T1-TPR && 2T2-TPR && S21-RECR
+
+AZTR (Train arrival)
+AZTR = XTPR
+
+o/p = S21-ACSR
+
+
+
+Other info
+------------------
+Point indication
+NWKR && WNR = Steady white
+~NWKR && WNR = Flashing white
+Point lock indication
+~WLK = Steady
+
+NWKLR = ~WLK && NWKR
+
+
+
+
+
+--> Signal taken off (Keep pressing UNR button)
+--> Now press SH6 + EGNR (Signal put back to Normal but route remail hold)
+--> Now left EGNR (Again signal will be taken off due to presence of GNRR + UNR) and left GNRR
+
+Cancellation
+--> GNRR + EGNR (Signal put back to normal but route not released)
+--> 

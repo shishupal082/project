@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>MB13</title>
+</head>
+<body>
+    <div class="container yard">
+        <center><h2>MB13 (Interlocked LC gate)</h2></center>
+        <table>
+            <tr>
+                <td>
+                    <button value="Auto/Manual=0" class="evt event_btn">Manual</button>
+                    <button value="Gate-Lock/Unlock=1" class="evt event_btn">Gate-Lock</button>
+                    <button class="evt event_btn">CH-KEY-OUT</button>
+                </td>
+                <td><div class='indication'>Power On <span id='GatePanel-Power-On' class='badge red'>&nbsp;</span></div></td>
+                <td><div class='indication'>Gate lock <span id='GatePanel-Lock' class='badge green'>&nbsp;</span></div></td>
+                <td><div class='indication'>LC Open <span id='A_B-LCOKR-K-R' class='badge green'>&nbsp;</span></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="GatePanel-Open-SW-Press" value="GatePanel-Open-SW-Press=1" class="evt event_btn">Open gate</button>
+                    <button id="GatePanel-Close-SW-Press" value="GatePanel-Close-SW-Press=1" class="evt event_btn">Close gate</button>
+                    <button value="GS2-DR=1" class="evt event_btn">GS2-DR</button>
+                </td>
+                <td></td>
+                <td><div class='indication'>Gate Un lock <span id='GatePanel-UnLock' class='badge green'>&nbsp;</span></div></td>
+                <td><div class='indication'>LC Close & Locked <span id='A_B-LCCKR-K-G' class='badge green'>&nbsp;</span></div></td>
+            </tr>
+        </table>
+        <hr></hr>
+        <div id="tableHtml"><center>Loading...</center></div>
+    </div>
+    <div>
+        <div id="changeValueData"></div>
+    </div>
+    <div class="container">
+        <div id="timerCount"></div>
+        <div id="currentValues"></div>
+        <div id="help" class="help hide">
+            <div>
+                <ul>
+                    <li><button id="toggleDisplayDomino">Toggle Display Domino</button></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+var UISetValueCountLimit = 800;
+var UIYardUrl = "/app/mb13/static/json/yard.json";
+var UICommonPath = {
+    "async-data": ["/app/mb13/static/json/async-data.json"],
+    "initial-value": ["/app/mb13/static/json/initial-value-1.json"],
+    "possible-value": ["/app/mb13/static/json/possible-values-1.json",
+                    "/app/mb13/static/json/possible-values-2.json"],
+    "expressions": ["/app/mb13/static/json/expressions-1-boom-control.json",
+                    "/app/mb13/static/json/expressions-2-ar.json",
+                    "/app/mb13/static/json/expressions-3-tpr.json",
+                    "/app/mb13/static/json/expressions-4-indication.json",
+                    "/app/mb13/static/json/expressions-5-aspect-control.json",
+                    "/app/mb13/static/json/expressions-6-panel-control.json",
+                    "/app/mb13/static/json/expressions-7-alsr.json"]
+};
+</script>
+
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/js/model.js"></script>
+<script type="text/javascript" src="/static/js/yard/yardApiModel.js"></script>
+
+<script type="text/javascript" src="/app/mb13/static/js/mb13View.js"></script>
+<script type="text/javascript" src="/app/mb13/static/js/mb13Script.js"></script>
+
+</body>
+</html>
