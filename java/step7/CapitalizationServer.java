@@ -27,7 +27,7 @@ public class CapitalizationServer {
      * messages.  It is certainly not necessary to do this.
      */
     public static void main(String[] args) {
-        String protocol = "byte1";
+        String protocol = "byte";
         int port = 9080;
         if (args != null) {
             if (args.length > 0) {
