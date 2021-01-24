@@ -50,7 +50,7 @@ public class CapitalizationClientV2 {
         while(dataIn > 0) {
             parsedResponse += (char)dataIn;
             StringTokenizer st = new StringTokenizer(parsedResponse, "|");
-            Boolean isResponseEnd = false;
+            boolean isResponseEnd = false;
             while (st.hasMoreElements()) {
                 if (st.nextElement().equals("END")) {
                     isResponseEnd = true;
@@ -68,6 +68,7 @@ public class CapitalizationClientV2 {
         return parsedResponse;
     }
     public String callServer(String request) {
+        String charsetName = "UTF-8";
         String response = null;
         try {
             if (client.isConnected()) {
@@ -76,7 +77,7 @@ public class CapitalizationClientV2 {
                 DataOutputStream out = new DataOutputStream(outToServer);
                 System.out.println("Send request : " + request + "::length=" + request.length());
 //              out.writeBytes(request);
-                out.write(request.getBytes("UTF-8"));
+                out.write(request.getBytes(charsetName));
                 response = this.getResponse();
                 System.out.println("Response : " + response + "::length=" + response.length());
             } else {
@@ -95,10 +96,10 @@ public class CapitalizationClientV2 {
         }
         return response;
     }
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String hostname = "127.0.0.1";
         Integer port = 9080;
         CapitalizationClientV2 clientV2 = new CapitalizationClientV2(hostname, port);
-        client.connectServer("args|END");
+//        client.connectServer("args|END");
     }
 }

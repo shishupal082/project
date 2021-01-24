@@ -13,10 +13,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
-import java.io.*;
-import java.net.*;
-import java.util.StringTokenizer;
-
 /**
  * Created by shishupalkumar on 12/08/16.
  */
@@ -30,22 +26,29 @@ public class CapitalizationServer {
      * client that connects just to show interesting logging
      * messages.  It is certainly not necessary to do this.
      */
-    public static void main(String[] args) throws Exception {
-        String protocol = "byte";
-        System.out.println("The capitalization server is running with protocol : " + protocol);
-        int clientNumber = 0;
-        Integer port = 9080;
-        if (args.length >= 1) {
-            port = Integer.parseInt(args[0]);
-        }
-        System.out.println("The capitalization server is running on port : " + port);
-        ServerSocket listener = new ServerSocket(port);
-        try {
-            while (true) {
-                new Capitalizer(listener.accept(), clientNumber++, protocol).start();
+    public static void main(String[] args) {
+        String protocol = "byte1";
+        int port = 9080;
+        if (args != null) {
+            if (args.length > 0) {
+                protocol = args[0];
             }
-        } finally {
-            listener.close();
+            if (args.length >= 2) {
+                port = Integer.parseInt(args[1]);
+            }
+        }
+        System.out.println("The capitalization server is running with protocol: " +
+                protocol + ", and port: " + port);
+        int clientNumber = 0;
+        int maxRequestCount = 50;
+        int requestCount = 0;
+        try (ServerSocket listener = new ServerSocket(port)) {
+            while (requestCount < maxRequestCount) {
+                new Capitalize(listener.accept(), clientNumber++, protocol).start();
+                requestCount++;
+            }
+        } catch (Exception e) {
+            System.out.println("Error in capitalize");
         }
     }
 
@@ -53,12 +56,12 @@ public class CapitalizationServer {
      * A private thread to handle capitalization requests on a particular
      * socket.  The client can communicate as long as they want.
      */
-    private static class Capitalizer extends Thread {
-        private Socket socket;
-        private int clientNumber;
-        private String protocol;
+    private static class Capitalize extends Thread {
+        private final Socket socket;
+        private final int clientNumber;
+        private final String protocol;
 
-        public Capitalizer(Socket socket, int clientNumber, String protocol) throws IOException {
+        public Capitalize(Socket socket, int clientNumber, String protocol) {
             this.socket = socket;
             this.clientNumber = clientNumber;
             this.protocol = protocol;
@@ -75,7 +78,7 @@ public class CapitalizationServer {
                 while(dataIn > 0) {
                     parsedRequest += (char) dataIn;
                     StringTokenizer st = new StringTokenizer(parsedRequest, "|");
-                    Boolean isRequestEnd = false;
+                    boolean isRequestEnd = false;
                     while (st.hasMoreElements()) {
                         if (st.nextElement().equals("END")) {
                             isRequestEnd = true;
@@ -100,13 +103,14 @@ public class CapitalizationServer {
             return request;
         }
         private void sendResponse(String response) throws IOException {
+            String charsetName = "UTF-8";
             System.out.println(clientNumber + " : Response : " + response);
             if (protocol.equals("byte")) {
                 response += "|END";
                 OutputStream outToServer = socket.getOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(outToServer);
 //                dataOutputStream.writeBytes(response);
-                dataOutputStream.write(response.getBytes("UTF-8"));
+                dataOutputStream.write(response.getBytes(charsetName));
             } else {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 out.println(response);

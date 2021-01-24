@@ -17,10 +17,11 @@ import java.util.StringTokenizer;
  * Created by shishupalkumar on 12/08/16.
  */
 public class CapitalizationClient {
-    private BufferedReader systemIn;
-    private String protocol = "byte";
+    private final BufferedReader systemIn;
+    private final String protocol;
     private Socket socket;
-    private CapitalizationClient() {
+    private CapitalizationClient(String protocol) {
+        this.protocol = protocol;
         systemIn = new BufferedReader(new InputStreamReader(System.in));
     }
     private String getResponse() throws IOException {
@@ -34,7 +35,7 @@ public class CapitalizationClient {
             while(dataIn > 0) {
                 parsedResponse += (char)dataIn;
                 StringTokenizer st = new StringTokenizer(parsedResponse, "|");
-                Boolean isResponseEnd = false;
+                boolean isResponseEnd = false;
                 while (st.hasMoreElements()) {
                     if (st.nextElement().equals("END")) {
                         isResponseEnd = true;
@@ -59,13 +60,14 @@ public class CapitalizationClient {
         return response;
     }
     private void sendRequest(String request) throws IOException {
+        String charsetName = "UTF-8";
         System.out.println("Request : " + request);
         if (protocol.equals("byte")) {
             OutputStream outToServer = socket.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outToServer);
             request += "|END";
 //            dataOutputStream.writeBytes(request);
-            dataOutputStream.write(request.getBytes("UTF-8"));
+            dataOutputStream.write(request.getBytes(charsetName));
         } else {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             out.println(request);
@@ -91,13 +93,7 @@ public class CapitalizationClient {
         sendRequest(userInput);
         System.out.println("Socket output : " + getResponse());
     }
-    private void connectToServer(String[] args) throws IOException {
-        String ip = "127.0.0.1";
-        Integer port = 9080;
-        if (args.length >= 2) {
-            ip = args[0];
-            port = Integer.parseInt(args[1]);
-        }
+    private void connectToServer(String ip, int port) throws IOException {
         socket = new Socket();
         socket.connect(new InetSocketAddress(ip, port), 10000);
 
@@ -108,7 +104,19 @@ public class CapitalizationClient {
      * Runs the client application.
      */
     public static void main(String[] args) throws Exception {
-        CapitalizationClient client = new CapitalizationClient();
-        client.connectToServer(args);
+        String protocol = "byte";
+        String ip = "127.0.0.1";
+        int port = 9080;
+        if (args.length >= 1) {
+            protocol = args[0];
+        }
+        if (args.length >= 2) {
+            port = Integer.parseInt(args[1]);
+        }
+        if (args.length >= 3) {
+            ip = args[2];
+        }
+        CapitalizationClient client = new CapitalizationClient(protocol);
+        client.connectToServer(ip, port);
     }
 }

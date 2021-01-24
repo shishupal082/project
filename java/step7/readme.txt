@@ -1,3 +1,5 @@
+This is based on tcp ip protocol
+
 1) Testing Date server and client
 --------------------------------------
 javac DateServer.java
