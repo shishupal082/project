@@ -1,5 +1,7 @@
 package com.project.communication.service;
 
+import com.project.communication.capitalization.CapitalizationClient;
+import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.capitalization.SingleThreadedCapitalizationClient;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
@@ -17,7 +19,8 @@ public class StartClient {
         if (AppConstant.appNameTimeClient.equals(protocolConfig.getName())) {
             TimeClient.main(protocolConfig);
         } else if (AppConstant.appNameClient.equals(protocolConfig.getName())) {
-            SingleThreadedCapitalizationClient.main(protocolConfig);
+//            SingleThreadedCapitalizationClient.main(protocolConfig);
+            CapitalizationClient.main(protocolConfig);
         } else {
             logger.info("invalid protocol config: "+ protocolConfig.toString());
         }

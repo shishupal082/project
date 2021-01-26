@@ -4,6 +4,7 @@ import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 
 public class SocketService {
@@ -20,5 +21,16 @@ public class SocketService {
             logger.info(clientId + "Error in closing socket" + e.getMessage());
 //            e.printStackTrace();
         }
+    }
+    public static InputStream getInputStream(int clientId, Socket socket) {
+        if (socket == null) {
+            return null;
+        }
+        try {
+            socket.getInputStream();
+        } catch (IOException e) {
+            logger.info(clientId+": Error in getting inputStream from socket");
+        }
+        return null;
     }
 }

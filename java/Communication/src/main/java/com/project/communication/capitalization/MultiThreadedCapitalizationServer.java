@@ -1,6 +1,7 @@
 package com.project.communication.capitalization;
 
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.threads.ServerThread;
 
 import java.io.IOException;
 import java.net.ServerSocket;

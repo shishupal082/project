@@ -1,5 +1,6 @@
-package com.project.communication.capitalization;
+package com.project.communication.threads;
 
+import com.project.communication.capitalization.ServerProgram;
 import com.project.communication.obj.ProtocolConfig;
 
 import java.net.Socket;
