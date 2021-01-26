@@ -24,12 +24,13 @@ pvt/
 uploaded_files/
 
 todo-app/
+todo-app-old/
 todo-nocommit/
 yard-app/
 yard-app-zip/
 pdf-app/
 web-app/
-
+comm-app/
 
 java/step1/.idea/
 java/step1/out/
@@ -53,6 +54,9 @@ java/step5/.idea/
 java/step5/out/
 java/step5/step5.iml
 
+java/step7/.idea/
+java/step7/out/
+java/step7/step7.iml
 
 java/todo/.idea/
 java/todo/src/main/main.iml
@@ -110,6 +114,10 @@ java/bridge/.idea/
 java/bridge/bridge.iml
 java/bridge/target/
 
+java/Communication/.idea/
+java/Communication/Communication.iml
+java/Communication/target/
+java/Communication/meta-data/Communication-*-SNAPSHOT.jar
 
 
 java/*.class

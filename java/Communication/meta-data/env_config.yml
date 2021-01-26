@@ -1,0 +1,35 @@
+programConfig:
+  timeServer:
+    name: timeServer
+    application: server
+    type: byte
+    clientPort: 1521
+  timeClient:
+    name: timeClient
+    application: client
+    type: byte
+    serverPort: 1521
+    serverIp: 127.0.0.1
+  timeInterceptor:
+    name: timeClient
+    application: interceptor
+    type: byte
+    clientPort: 9080
+    serverPort: 1521
+    serverIp: 127.0.0.1
+  serverSingleThread:
+    name: serverSingleThread
+    application: server
+    type: byte
+    clientPort: 1521
+  server:
+    name: server
+    application: server
+    type: byte
+    clientPort: 1521
+  client:
+    name: client
+    application: client
+    type: byte
+    serverPort: 1521
+    serverIp: 127.0.0.1
