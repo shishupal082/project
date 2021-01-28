@@ -13,6 +13,7 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.logging.AppenderFactory;
 import io.dropwizard.logging.FileAppenderFactory;
+import io.dropwizard.logging.LoggingFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
@@ -43,11 +44,12 @@ public class TodoApplication extends Application<TodoConfiguration> {
         String currentLogFilename = null;
         LoggingHelper loggingHelper = new LoggingHelper();
         try {
-            ImmutableList<AppenderFactory> immutableList = todoConfiguration.getLoggingFactory().getAppenders().asList();
+            LoggingFactory loggingFactory = todoConfiguration.getLoggingFactory();
+            ImmutableList<AppenderFactory> immutableList = loggingFactory.getAppenders().asList();
             FileAppenderFactory fileAppenderFactory = (FileAppenderFactory) immutableList.get(1);
             currentLogFilename = fileAppenderFactory.getCurrentLogFilename();
         } catch (Exception e) {
-            LOGGER.info("unable to get currentLogFileName from env_config.yml: {}", e);
+            LOGGER.info("unable to get currentLogFileName from env_config.yml: {}", e.getMessage());
         }
         if (currentLogFilename != null && !loggingHelper.isValidLoggingSetup(customLoggingPath, currentLogFilename)) {
             LOGGER.info("customLoggingPath and currentLogFilename are not equal.");

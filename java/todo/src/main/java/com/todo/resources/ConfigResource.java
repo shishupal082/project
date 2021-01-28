@@ -33,12 +33,12 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ConfigResource {
-    private static Logger logger = LoggerFactory.getLogger(ConfigResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConfigResource.class);
     @Context
     private HttpServletRequest httpServletRequest;
-    private TodoConfiguration todoConfiguration;
+    private final TodoConfiguration todoConfiguration;
 //    private ConfigService configService;
-    private ConfigInterface configInterface;
+    private final ConfigInterface configInterface;
     public ConfigResource(TodoConfiguration todoConfiguration) throws TodoException {
         this.todoConfiguration = todoConfiguration;
 //        configService = new ConfigService(todoConfiguration);
