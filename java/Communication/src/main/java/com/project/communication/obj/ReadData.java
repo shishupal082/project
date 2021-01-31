@@ -18,7 +18,7 @@ public class ReadData implements ReadInterface {
         readCharDataTimer.cancel();
     }
     @Override
-    public void printData() {
-        logger.info("PrintData: "+ ReadInput.getByteData());
+    public void printData(ReadInput readInput) {
+        logger.info("PrintData: "+ readInput.getByteData());
     }
 }

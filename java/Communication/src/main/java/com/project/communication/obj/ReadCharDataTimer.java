@@ -13,13 +13,13 @@ public class ReadCharDataTimer extends TimerTask {
     private final ReadInterface readInterface;
     private final CapitalizationServer capitalizationServer;
     private final CapitalizationClient capitalizationClient;
-    private final int reference;
+    private final ReadInput readInput;
     private int count = 0;
-    public ReadCharDataTimer(ReadInterface readInterface, int reference,
+    public ReadCharDataTimer(ReadInterface readInterface, ReadInput readInput,
                              CapitalizationServer capitalizationServer,
                              CapitalizationClient capitalizationClient) {
         this.readInterface = readInterface;
-        this.reference = reference;
+        this.readInput = readInput;
         this.capitalizationServer = capitalizationServer;
         this.capitalizationClient = capitalizationClient;
     }
@@ -28,12 +28,13 @@ public class ReadCharDataTimer extends TimerTask {
     }
     public void run() {
         count++;
-//        logger.info("count: " + count + ":" + reference + ":" + ReadInput.getByteData());
-//        this.readInterface.printData();
+        int reference = readInput.getReference();
+//        logger.info("count: " + count + ":" + reference + ":" + readInput.getByteDataV2());
+//        this.readInterface.printData(readInput);
         if (reference == 1 && capitalizationServer != null) {
-            this.capitalizationServer.receivedData(ReadInput.getByteData());
+            this.capitalizationServer.receivedData(readInput.getByteData());
         } else if (reference == 2 && capitalizationClient != null) {
-            this.capitalizationClient.receivedData(ReadInput.getByteData());
+            this.capitalizationClient.receivedData(readInput.getByteData());
         }
     }
 }

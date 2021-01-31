@@ -10,19 +10,21 @@ import java.net.Socket;
 
 public class ServerThreadV2 extends Thread {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(ServerThreadV2.class);
+    private final ProtocolConfig protocolConfig;
+    private final ReadInput readInput;
     private final Socket socket;
     private final int clientId;
-    private final ProtocolConfig protocolConfig;
     public ServerThreadV2(ProtocolConfig protocolConfig, int clientId, Socket socket) {
         this.protocolConfig = protocolConfig;
         this.clientId = clientId;
         this.socket = socket;
+        this.readInput = new ReadInput(clientId, 1);
     }
     public void run() {
         try {
-            CapitalizationServer server = new CapitalizationServer(protocolConfig, clientId, socket);
+            CapitalizationServer server = new CapitalizationServer(protocolConfig, readInput, socket);
             server.sendResponse("Welcome! #" + clientId);
-            ReadInput.readBytes(clientId, socket.getInputStream(), 1, server, null);
+            readInput.readBytes(socket.getInputStream(), server, null);
         } catch (IOException e) {
             logger.info(clientId+": Error in client handling");
         }

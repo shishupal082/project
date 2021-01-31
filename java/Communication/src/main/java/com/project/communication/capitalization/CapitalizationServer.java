@@ -19,11 +19,13 @@ import java.net.Socket;
 public class CapitalizationServer {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(CapitalizationServer.class);
     private final ProtocolConfig protocolConfig;
+    private final ReadInput readInput;
     private final int clientId;
     private final Socket socket;
-    public CapitalizationServer(ProtocolConfig protocolConfig, int clientId, Socket socket) {
+    public CapitalizationServer(ProtocolConfig protocolConfig, ReadInput readInput, Socket socket) {
         this.protocolConfig = protocolConfig;
-        this.clientId = clientId;
+        this.readInput = readInput;
+        this.clientId = readInput.getClientId();
         this.socket = socket;
     }
     public void receivedData(String byteData) {
@@ -43,7 +45,7 @@ public class CapitalizationServer {
             OutputStream outToServer = socket.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(outToServer);
             dataOutputStream.write(response.getBytes(AppConstant.UTF_8));
-            ReadInput.resetByteData();
+            readInput.resetByteData();
         } catch (IOException e) {
             logger.info("Error in sending data");
         }

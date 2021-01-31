@@ -13,17 +13,28 @@ import java.util.Timer;
 public class ReadInput {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(ReadInput.class);
     private final static BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));;
-    public static String byteData = "";
-    public static boolean breakRead = false;
-    public static ReadCharDataTimer oldTimer = null;
-    public ReadInput() {}
-    public static String getByteData() {
+    public String byteData = "";
+    public boolean breakRead = false;
+    public ReadCharDataTimer oldTimer = null;
+    private final int clientId;
+    private final int reference; // 1 for server, 2 for client
+    public ReadInput(int clientId, int reference) {
+        this.clientId = clientId;
+        this.reference = reference;
+    }
+    public int getClientId() {
+        return clientId;
+    }
+    public int getReference() {
+        return reference;
+    }
+    public String getByteData() {
         return byteData;
     }
-    public static void resetByteData() {
+    public void resetByteData() {
         byteData = "";
     }
-    public static void stopTimer() {
+    public void stopTimer() {
         if (oldTimer != null) {
             oldTimer.cancel();
         }
@@ -48,14 +59,14 @@ public class ReadInput {
         }
         return text;
     }
-    public static String readBytes(int clientId, InputStream inputStream,
-                                   int reference, CapitalizationServer capitalizationServer,
-                                   CapitalizationClient capitalizationClient) {
+    public String readBytes(InputStream inputStream,
+                            CapitalizationServer capitalizationServer,
+                            CapitalizationClient capitalizationClient) {
         ReadData readData = new ReadData();
-        ReadCharDataTimer readCharDataTimer = new ReadCharDataTimer(readData, reference,
+        ReadCharDataTimer readCharDataTimer = new ReadCharDataTimer(readData, this,
                 capitalizationServer, capitalizationClient);
         if (oldTimer != null) {
-            logger.info("closing old timer");
+            logger.info(clientId+": closing old timer");
             breakRead = true;
             oldTimer.stop();
         }
