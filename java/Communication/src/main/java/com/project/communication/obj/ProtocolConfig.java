@@ -2,6 +2,8 @@ package com.project.communication.obj;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.ArrayList;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class ProtocolConfig {
@@ -11,6 +13,7 @@ public class ProtocolConfig {
     private int clientPort;
     private int serverPort;
     private String serverIp;
+    private ArrayList<String> welcomeMessage;
 
     public String getName() {
         return name;
@@ -60,6 +63,14 @@ public class ProtocolConfig {
         this.serverIp = serverIp;
     }
 
+    public ArrayList<String> getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(ArrayList<String> welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
+
     @Override
     public String toString() {
         return "ProtocolConfig{" +
@@ -69,6 +80,7 @@ public class ProtocolConfig {
                 ", clientPort=" + clientPort +
                 ", serverPort=" + serverPort +
                 ", serverIp='" + serverIp + '\'' +
+                ", welcomeMessage=" + welcomeMessage +
                 '}';
     }
 }

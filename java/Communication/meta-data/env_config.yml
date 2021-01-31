@@ -27,6 +27,9 @@ programConfig:
     application: server
     type: byte
     clientPort: 1521
+    welcomeMessage:
+      - Welcome
+      - User
   client:
     name: client
     application: client

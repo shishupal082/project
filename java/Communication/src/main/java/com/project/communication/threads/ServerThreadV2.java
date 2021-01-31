@@ -8,6 +8,7 @@ import com.project.communication.service.ReadInput;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ServerThreadV2 extends Thread {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(ServerThreadV2.class);
@@ -24,7 +25,12 @@ public class ServerThreadV2 extends Thread {
     public void run() {
         try {
             CapitalizationServer server = new CapitalizationServer(protocolConfig, readInput, socket);
-            server.sendResponse("Welcome! #" + clientId);
+            ArrayList<String> welcomeMessage = protocolConfig.getWelcomeMessage();
+            if (welcomeMessage != null) {
+                for (String str: welcomeMessage) {
+                    server.sendResponse(str);
+                }
+            }
             readInput.readBytes(socket.getInputStream(), server,
                     null, null, null, null);
         } catch (IOException e) {
