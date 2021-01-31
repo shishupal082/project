@@ -4,6 +4,7 @@ import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.common.StaticService;
 import com.project.communication.config.ApplicationName;
+import com.project.communication.interceptorTcp.TransferRequest;
 import com.project.communication.obj.ProtocolConfig;
 
 public class StartProgram {

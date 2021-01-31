@@ -65,7 +65,7 @@ public class CapitalizationClient implements Runnable {
             CapitalizationClient client = new CapitalizationClient(protocolConfig, socket);
             Thread thread = new Thread(client);
             thread.start();
-            client.readInput.readBytes(socket.getInputStream(), null, client);
+            client.readInput.readBytes(socket.getInputStream(), null, client, null, null, null);
         } catch (Exception e) {
             logger.info("Socket output : " + e.getMessage());
         }

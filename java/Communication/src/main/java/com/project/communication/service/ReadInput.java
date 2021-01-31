@@ -4,8 +4,11 @@ import com.project.communication.capitalization.CapitalizationClient;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
+import com.project.communication.interceptorTcp.InterceptorServer;
 import com.project.communication.obj.ReadData;
 import com.project.communication.threads.ReadCharDataTimer;
+import com.project.communication.threads.interceptor.Interceptor;
+import com.project.communication.threads.interceptor.InterceptorClient;
 
 import java.io.*;
 import java.util.Timer;
@@ -18,6 +21,7 @@ public class ReadInput {
     public ReadCharDataTimer oldTimer = null;
     private final int clientId;
     private final int reference; // 1 for server, 2 for client, 0 for timeClient
+    // 3 for interceptor server, 4 for interceptor client
     public ReadInput(int clientId, int reference) {
         this.clientId = clientId;
         this.reference = reference;
@@ -61,10 +65,13 @@ public class ReadInput {
     }
     public String readBytes(InputStream inputStream,
                             CapitalizationServer capitalizationServer,
-                            CapitalizationClient capitalizationClient) {
+                            CapitalizationClient capitalizationClient,
+                            InterceptorServer interceptorServer,
+                            InterceptorClient interceptorClient,
+                            Interceptor interceptor) {
         ReadData readData = new ReadData();
         ReadCharDataTimer readCharDataTimer = new ReadCharDataTimer(readData, this,
-                capitalizationServer, capitalizationClient);
+                capitalizationServer, capitalizationClient, interceptorServer, interceptorClient, interceptor);
         if (oldTimer != null) {
             logger.info(clientId+": closing old timer");
             breakRead = true;

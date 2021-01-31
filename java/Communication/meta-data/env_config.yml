@@ -33,3 +33,10 @@ programConfig:
     type: byte
     serverPort: 1521
     serverIp: 127.0.0.1
+  interceptor:
+    name: interceptor
+    application: interceptor
+    type: byte
+    clientPort: 9080
+    serverPort: 1521
+    serverIp: 127.0.0.1

@@ -25,7 +25,8 @@ public class ServerThreadV2 extends Thread {
         try {
             CapitalizationServer server = new CapitalizationServer(protocolConfig, readInput, socket);
             server.sendResponse("Welcome! #" + clientId);
-            readInput.readBytes(socket.getInputStream(), server, null);
+            readInput.readBytes(socket.getInputStream(), server,
+                    null, null, null, null);
         } catch (IOException e) {
             logger.info(clientId+": Error in client handling");
         }
