@@ -20,7 +20,12 @@ public class LoggerV2 {
     public void info(String logText) {
         System.out.println(prePattern+pattern+postPattern+logText);
     }
-
+    public void info(int logText) {
+        System.out.println(prePattern+pattern+postPattern+logText);
+    }
+    public void info(StringBuilder stringBuilder) {
+        System.out.println(prePattern+pattern+postPattern+stringBuilder);
+    }
     public void info(String logPattern, String logText) {
         System.out.println(prePattern+pattern+postPattern+logText);
     }

@@ -12,9 +12,6 @@ public class SysUtils {
     public String getProjectWorkingDir() {
         return System.getProperty("user.dir");
     }
-    public void printLog(Object logStr) {
-        System.out.println(logStr);
-    }
     public Boolean deleteFileContent(String filePath) {
         boolean deleteFileContentStatus = false;
         try {

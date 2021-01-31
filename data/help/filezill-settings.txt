@@ -1,0 +1,39 @@
+Server setting
+----------------------------------
+Pre-requisite for filezilla server
+Enable ftp-server
+>> Open Turn windows faetures on or off
+>> Enable Internet Information Services --> FTP Server
+	--> FTP Extensibility
+	--> FTP Service
+
+Download and install
+https://filezilla-project.org/download.php?type=server
+
+After intallation start filezila server
+>> Open Services --> Filezilla server and start
+ 
+To create relevent user and folders
+
+>> Open FileZilla Server Interface
+>> Open Edit --> Users
+
+Create users and there directory access as per requirement
+
+Logs can be seen if configured
+
+
+Client setting
+----------------------------------
+Download and install
+https://filezilla-project.org/download.php?type=client
+Enter Hostname, Username, Password and Port (21 by default)
+>> Quickconnect
+
+telent
+----------------------------------
+telent hostname port
+telnet 127.0.0.1 21
+USER Test
+PASS Test
+

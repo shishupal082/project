@@ -36,10 +36,10 @@ public class SingleThreadedCapitalizationClient {
             socket.close();
         } catch (UnknownHostException ex) {
             SocketService.close(0, socket);
-            System.out.println("Server not found: " + ex.getMessage());
+            logger.info("Server not found: " + ex.getMessage());
         } catch (IOException ex) {
             SocketService.close(0, socket);
-            System.out.println("I/O error: " + ex.getMessage());
+            logger.info("I/O error: " + ex.getMessage());
         }
     }
 }

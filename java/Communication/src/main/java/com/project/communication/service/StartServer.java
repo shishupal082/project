@@ -1,7 +1,6 @@
 package com.project.communication.service;
 
 import com.project.communication.capitalization.CapitalizationServer;
-import com.project.communication.capitalization.MultiThreadedCapitalizationServer;
 import com.project.communication.capitalization.SingleThreadedCapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;

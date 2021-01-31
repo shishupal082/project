@@ -43,3 +43,8 @@ DocumentRoot "d:/project"
 Inside directory tag
 => Options Indexes FollowSymLinks Multiviews
 Here Indexes tag allow your folder to access if index.html or index.php file is missing
+
+Start /stop Apache in windows 10
+----------------------------------
+Open Services
+--> Choose service to start / stop
