@@ -3,6 +3,7 @@ package com.project.communication.capitalization;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.threads.ServerThreadV2;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -8,11 +8,7 @@ import java.util.TimerTask;
 
 public class ReadData implements ReadInterface {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(ReadData.class);
-
-//    private final ReadInput readInput;
-    public ReadData() {
-//        this.readInput = readInput;
-    }
+    public ReadData() {}
     @Override
     public void endReadChar(TimerTask readCharDataTimer) {
         readCharDataTimer.cancel();

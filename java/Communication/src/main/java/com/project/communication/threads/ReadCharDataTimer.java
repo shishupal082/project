@@ -1,9 +1,10 @@
-package com.project.communication.obj;
+package com.project.communication.threads;
 
 import com.project.communication.capitalization.CapitalizationClient;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
+import com.project.communication.obj.ReadInterface;
 import com.project.communication.service.ReadInput;
 
 import java.util.TimerTask;

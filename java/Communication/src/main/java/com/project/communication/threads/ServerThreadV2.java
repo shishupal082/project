@@ -1,5 +1,6 @@
-package com.project.communication.capitalization;
+package com.project.communication.threads;
 
+import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.obj.ProtocolConfig;

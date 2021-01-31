@@ -17,10 +17,12 @@ public class ServerProgram {
     private final Socket socket;
     private final int clientId;
     private final ProtocolConfig protocolConfig;
+    private final ReadInput readInput;
     public ServerProgram(ProtocolConfig protocolConfig, int clientId, Socket socket) {
         this.protocolConfig = protocolConfig;
         this.clientId = clientId;
         this.socket = socket;
+        this.readInput = new ReadInput(0, 0);
     }
     public void start() {
         try {
@@ -29,7 +31,7 @@ public class ServerProgram {
                 OutputStream outputStream = socket.getOutputStream();
                 String text;
                 do {
-                    text = ReadInput.readLine(inputStream);
+                    text = readInput.readLine(inputStream);
                     if (text == null) {
                         logger.info(clientId + ": Error in reading input");
                         break;

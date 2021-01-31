@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 public class SingleThreadedCapitalizationClient {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(SingleThreadedCapitalizationClient.class);
     public static void main(ProtocolConfig protocolConfig) {
+        ReadInput readInput = new ReadInput(0, 0);
         String hostname = protocolConfig.getServerIp();
         int port = protocolConfig.getServerPort();
         Socket socket = null;
@@ -26,7 +27,7 @@ public class SingleThreadedCapitalizationClient {
             do {
                 text = console.readLine();
                 SendOutput.sendLine(outputStream, text);
-                String result = ReadInput.readLine(inputStream);
+                String result = readInput.readLine(inputStream);
                 if (text == null) {
                     logger.info("Error in reading");
                     break;

@@ -13,11 +13,12 @@ import java.net.UnknownHostException;
 public class TimeClient {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(TimeClient.class);
     public static void main(ProtocolConfig protocolConfig) {
+        ReadInput readInput = new ReadInput(0, 0);
         String hostname = protocolConfig.getServerIp();
         int port = protocolConfig.getServerPort();
         try (Socket socket = new Socket(hostname, port)) {
             InputStream inputStream = socket.getInputStream();
-            String time = ReadInput.readLine(inputStream);
+            String time = readInput.readLine(inputStream);
             logger.info(time);
         } catch (UnknownHostException ex) {
             logger.info("Time Server not found: " + ex.getMessage());

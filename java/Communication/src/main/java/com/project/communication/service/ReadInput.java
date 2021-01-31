@@ -4,7 +4,7 @@ import com.project.communication.capitalization.CapitalizationClient;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.obj.ReadCharDataTimer;
+import com.project.communication.threads.ReadCharDataTimer;
 import com.project.communication.obj.ReadData;
 
 import java.io.*;
@@ -17,7 +17,7 @@ public class ReadInput {
     public boolean breakRead = false;
     public ReadCharDataTimer oldTimer = null;
     private final int clientId;
-    private final int reference; // 1 for server, 2 for client
+    private final int reference; // 1 for server, 2 for client, 0 for timeClient
     public ReadInput(int clientId, int reference) {
         this.clientId = clientId;
         this.reference = reference;
@@ -39,7 +39,7 @@ public class ReadInput {
             oldTimer.cancel();
         }
     }
-    public static String readLine(InputStream inputStream) {
+    public String readLine(InputStream inputStream) {
         String result = null;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -49,7 +49,7 @@ public class ReadInput {
         }
         return result;
     }
-    public static String readCommandLine() {
+    public String readCommandLine() {
         logger.info("Read command line");
         String text = "";
         try {

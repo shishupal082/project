@@ -1,6 +1,7 @@
 package com.project.communication.service;
 
 import com.project.communication.capitalization.CapitalizationServer;
+import com.project.communication.capitalization.MultiThreadedCapitalizationServer;
 import com.project.communication.capitalization.SingleThreadedCapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
@@ -20,8 +21,8 @@ public class StartServer {
         } else if (AppConstant.appNameServerSingleThread.equals(protocolConfig.getName())) {
             SingleThreadedCapitalizationServer.main(protocolConfig);
         } else if (AppConstant.appNameServer.equals(protocolConfig.getName())) {
-//            MultiThreadedCapitalizationServer.main(protocolConfig);
-            CapitalizationServer.main(protocolConfig);
+            MultiThreadedCapitalizationServer.main(protocolConfig);
+//            CapitalizationServer.main(protocolConfig);
         }
     }
 }

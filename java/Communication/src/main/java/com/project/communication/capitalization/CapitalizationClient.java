@@ -49,7 +49,7 @@ public class CapitalizationClient implements Runnable {
         logger.info("Enter string: ");
         String input = "";
         do {
-            input = ReadInput.readCommandLine();
+            input = readInput.readCommandLine();
             logger.info("input: " + input);
             sendRequest(input);
         } while (!input.equals("bye"));
