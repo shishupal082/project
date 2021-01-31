@@ -4,8 +4,8 @@ import com.project.communication.capitalization.CapitalizationClient;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.threads.ReadCharDataTimer;
 import com.project.communication.obj.ReadData;
+import com.project.communication.threads.ReadCharDataTimer;
 
 import java.io.*;
 import java.util.Timer;
