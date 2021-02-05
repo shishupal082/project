@@ -21,9 +21,19 @@ server:
   applicationContextPath: /
   adminContextPath: /admin
   connector:
-    port: 8080
+    port: 8081
     type: http
   rootPath: /*
+
+allowedOrigin:
+  - http://localhost
+  - http://127.0.0.1:9000
+  - http://127.0.0.1:8080
+  - http://localhost:9000
+  - http://localhost:8080
+  - http://localhost:9080
+  - chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop
+
 testConfig:
   common:
     configName: TestConfig

@@ -6,7 +6,7 @@
 
     <groupId>com.todo</groupId>
     <artifactId>todo</artifactId>
-    <version>1.5.5-bita-SNAPSHOT</version>
+    <version>1.5.6-bita-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

@@ -22,6 +22,7 @@ public class RequestFilter implements ContainerRequestFilter {
     private static Logger logger = LoggerFactory.getLogger(RequestFilter.class);
     @Context
     private HttpServletRequest httpServletRequest;
+    public RequestFilter() {}
     private String getCookieData(String cookieName) {
         Cookie[] cookies = httpServletRequest.getCookies();
         if (cookies == null){

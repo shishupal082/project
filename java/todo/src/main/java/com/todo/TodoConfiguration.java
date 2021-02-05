@@ -1,5 +1,6 @@
 package com.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.todo.config.DirectoryConfig;
 import com.todo.config.TestConfig;
 import com.todo.config.TodoFileConfig;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
  * Created by shishupalkumar on 11/01/17.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 public class TodoConfiguration extends Configuration {
     private TestConfig testConfig;
     private TodoFileConfig todoFileConfig;
@@ -25,6 +28,7 @@ public class TodoConfiguration extends Configuration {
     private String availableResourcePath;
     private ConfigInterface configInterface;
     private String dataStorage;
+    private ArrayList<String> allowedOrigin;
 
     public ArrayList<String> getAppConfigPath() {
         return appConfigPath;
@@ -110,5 +114,31 @@ public class TodoConfiguration extends Configuration {
 
     public void setDataStorage(String dataStorage) {
         this.dataStorage = dataStorage;
+    }
+
+    public ArrayList<String> getAllowedOrigin() {
+        return allowedOrigin;
+    }
+
+    public void setAllowedOrigin(ArrayList<String> allowedOrigin) {
+        this.allowedOrigin = allowedOrigin;
+    }
+
+    @Override
+    public String toString() {
+        return "TodoConfiguration{" +
+                "testConfig=" + testConfig +
+                ", todoFileConfig=" + todoFileConfig +
+                ", todoViewConfig=" + todoViewConfig +
+                ", directoryConfig=" + directoryConfig +
+                ", yamlObjectPath='" + yamlObjectPath + '\'' +
+                ", iniFilePath='" + iniFilePath + '\'' +
+                ", socketRequestDelimiter='" + socketRequestDelimiter + '\'' +
+                ", appConfigPath=" + appConfigPath +
+                ", availableResourcePath='" + availableResourcePath + '\'' +
+                ", configInterface=" + configInterface +
+                ", dataStorage='" + dataStorage + '\'' +
+                ", allowedOrigin=" + allowedOrigin +
+                '}';
     }
 }

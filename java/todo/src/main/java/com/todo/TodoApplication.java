@@ -56,6 +56,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
             SystemUtils.printLog(exitApplicationText);
             throw new Exception();
         }
+        LOGGER.info("todoConfiguration: {}", todoConfiguration);
         ConfigService.verifyAppConstantVersion("pom.xml");
         todoConfiguration.getAppConfigPath().addAll(appConfigPath);
         todoConfiguration.setDataStorage(dataStorage);
@@ -64,7 +65,7 @@ public class TodoApplication extends Application<TodoConfiguration> {
         environment.jersey().register(new FaviconResource());
         environment.jersey().register(new LogFilter());
         environment.jersey().register(new RequestFilter());
-        environment.jersey().register(new ResponseFilter());
+        environment.jersey().register(new ResponseFilter(todoConfiguration));
         environment.jersey().register(new TodoExceptionMapper());
         environment.jersey().register(new ConfigResource(todoConfiguration));
         environment.jersey().register(new CommandsResource(todoConfiguration));

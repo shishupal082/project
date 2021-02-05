@@ -1,1 +1,1 @@
-java -jar meta-data/todo-1.5.5-bita-SNAPSHOT.jar server file meta-data/config/env_config.yml meta-data/config/env_config_custom_logging.yaml meta-data/config/app_config.yaml meta-data/config/app_config_2.yaml
+java -jar meta-data/todo-1.5.6-bita-SNAPSHOT.jar server file meta-data/config/env_config.yml meta-data/config/env_config_custom_logging.yaml meta-data/config/app_config.yaml meta-data/config/app_config_2.yaml

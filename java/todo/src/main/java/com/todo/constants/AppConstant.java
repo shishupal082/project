@@ -16,8 +16,11 @@ public class AppConstant {
     public static final String FILENAME = "FILENAME";
     public static final String IP = "IP";
     public static final String PORT = "PORT";
+    public static final String ORIGIN = "origin";
+    public static final String ALLOWED_ACCESS= "Access-Control-Allow-Origin";
+    public static final String ALLOWED_HEADERS= "Access-Control-Allow-Headers";
     public static final String ProjectDashboard = "projectDashboard";
-    public static final String AppVersion = "1.5.5";
+    public static final String AppVersion = "1.5.6";
     public static final String V1 = "V1";
     public static final String V2 = "V2";
     public static final String DateTimeFormat = "YYYYMMdd'T'HHmmssSSS";

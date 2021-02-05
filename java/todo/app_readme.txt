@@ -674,3 +674,6 @@ added new parameter in env_config
 >> iniFilePath: meta-data/config/config.ini
 similar to yamlObjectPath
 
+1.5.6 2021-02-04
+=================
+Added allowed origin config parameter
