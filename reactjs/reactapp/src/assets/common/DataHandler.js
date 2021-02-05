@@ -14,6 +14,10 @@ var DataHandler;
 var CurrentData = $S.getDataObj();
 var keys = [];
 // keys.push("currentPageName");
+keys.push("currentFilterName");
+keys.push("currentPageName");
+keys.push("currentOptionName");
+keys.push("currentFieldsName");
 keys.push("availableDataPageName");
 // keys.push("dropdownFields");
 
@@ -42,6 +46,7 @@ keys.push("staticDataLoadStatus");
 keys.push("taskDataLoadStatus");
 keys.push("componentDataLoadStatus");
 keys.push("appDataLoadStatus");
+keys.push("firstTimeDataLoadStatus");
 // keys.push("currentSectionId");
 // keys.push("sectionName");
 // keys.push("currentSectionData");
@@ -76,6 +81,7 @@ CurrentData.setData("staticDataLoadStatus", "not-started");
 CurrentData.setData("taskDataLoadStatus", "not-started");
 CurrentData.setData("componentDataLoadStatus", "not-started");
 CurrentData.setData("appDataLoadStatus", "not-started");
+CurrentData.setData("firstTimeDataLoadStatus", "not-started");
 
 // CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 // CurrentData.setData("usersFilesData", []);
@@ -135,8 +141,20 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
+    setCurrentStaticData: function() {
+        var currentFilterName = $S.getUrlAttribute(window.location.href, "name", "");
+        DataHandler.setData("currentFilterName", currentFilterName);
+        var currentStaticData = this.getCurrentStaticData();
+        var currentPageName = currentStaticData.pageName;
+        var currentOptionName = currentStaticData.optionName;
+        var currentFieldsName = currentStaticData.fieldsName;
+        DataHandler.setData("currentPageName", currentPageName);
+        DataHandler.setData("currentOptionName", currentOptionName);
+        DataHandler.setData("currentFieldsName", currentFieldsName);
+
+    },
     getCurrentStaticData: function() {
-        var currentFiltername = $S.getUrlAttribute(window.location.href, "name", "");
+        var currentFiltername = DataHandler.getData("currentFilterName", "");
         var staticData = DataHandler.getData("staticData", {});
         var currentStaticData= {};
         if ($S.isArray(staticData.data)) {
@@ -167,26 +185,28 @@ DataHandler.extend({
         return headingText;
     },
     getPageName: function() {
-        var currentStaticData = this.getCurrentStaticData();
-        var pageName = currentStaticData.pageName;
-        return pageName;
+        return DataHandler.getData("currentPageName", "");
     },
     getOptionName: function() {
-        var currentStaticData = this.getCurrentStaticData();
-        var optionName = currentStaticData.optionName;
-        return optionName;
+        return DataHandler.getData("currentOptionName", "");
     },
     getFieldNames: function() {
-        var currentStaticData = this.getCurrentStaticData();
-        var fieldsName = currentStaticData.fieldsName;
+        var currentFilterName = DataHandler.getData("currentFilterName", "");
+        var fieldsName = [];
+        if (currentFilterName === "all") {
+            fieldsName = this._getAllFieldsName();
+        } else {
+            var currentStaticData = this.getCurrentStaticData();
+            fieldsName = currentStaticData.fieldsName;
+        }
         return fieldsName;
     }
 });
 DataHandler.extend({
     loadData: function(callback) {
         $S.loadJsonData(null, [Config.getApiUrl("static-data", null, true)], function(response, apiName, ajax){
-            DataHandler.setData("staticDataLoadStatus", "completed");
             DataHandler.setData("staticData", response);
+            DataHandler.setData("staticDataLoadStatus", "completed");
         }, function() {
             $S.log("taskData load complete");
             $S.callMethod(callback);
@@ -221,6 +241,7 @@ DataHandler.extend({
         this.loadData(function() {
             dataLoadStatus = DataHandler.isDataLoadComplete();
             if (dataLoadStatus) {
+                DataHandler.setCurrentStaticData();
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             }
         });
@@ -250,16 +271,37 @@ DataHandler.extend({
         }
         return result;
     },
-    getRenderData: function(pageName, optionName, fieldName) {
-        var i, j;
-        var apiData = [];
-        var temp, key;
-        fieldName = $S.isArray(fieldName) ? fieldName : [];
-        if (pageName === "app") {
+    _getApiData: function() {
+        var currentPageName = DataHandler.getData("currentPageName", "");
+        var apiData = {};
+        if (currentPageName === "app") {
             apiData = DataHandler.getData("appData",[]);
-        } else if (pageName === "task") {
+        } else if (currentPageName === "task") {
             apiData = DataHandler.getData("taskData", []);
         }
+        return apiData;
+    },
+    _getAllFieldsName: function() {
+        var apiData = this._getApiData();
+        var i;
+        var result = [];
+        for (i = 0; i < apiData.length; i++) {
+            if ($S.isObject(apiData[i].options)) {
+                if ($S.isString(apiData[i].options.name)) {
+                    result.push(apiData[i].options.name);
+                } else {
+                    result.push("Invalid options.name");
+                }
+            }
+        }
+        return result;
+    },
+    getRenderData: function(pageName, optionName, fieldName) {
+        var i, j;
+        var temp, key;
+        fieldName = $S.isArray(fieldName) ? fieldName : [];
+
+        var apiData = this._getApiData();
         var filteredData = [];
         for(j=0; j<fieldName.length; j++) {
             temp = "not-found";
