@@ -17,6 +17,14 @@
             "footerLinkText": "NAME-1-TASK"
         },
         {
+            "name": "all-task",
+            "heading": "Name 1 Heading TASK",
+            "optionName": "assets",
+            "pageName": "task",
+            "fieldsName": ["all"],
+            "footerLinkText": "ALL-TASK"
+        },
+        {
             "name": "name-1-app-op-1",
             "heading": "Name 1 Heading APP-OP-1",
             "optionName": "op-1",
@@ -33,7 +41,7 @@
     ],
     "footerData": [
         {
-            "entry": [["name-1", "name-1", "name-1-app-op-1"]]
+            "entry": [["name-1", "name-1", "name-1-app-op-1"],["all-task"]]
         },
         {
             "entry": [["direct-1"]]

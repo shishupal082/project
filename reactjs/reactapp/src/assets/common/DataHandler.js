@@ -228,13 +228,9 @@ DataHandler.extend({
         return DataHandler.getData("currentOptionName", "");
     },
     getFieldNames: function() {
-        var currentFilterName = DataHandler.getData("currentFilterName", "");
-        var fieldsName = [];
-        if (currentFilterName === "all") {
+        var fieldsName = DataHandler.getData("currentFieldsName", []);
+        if ($S.isArray(fieldsName) && fieldsName.length === 1 && fieldsName[0] === "all") {
             fieldsName = this._getAllFieldsName();
-        } else {
-            var currentStaticData = this.getCurrentStaticData();
-            fieldsName = currentStaticData.fieldsName;
         }
         return fieldsName;
     }
