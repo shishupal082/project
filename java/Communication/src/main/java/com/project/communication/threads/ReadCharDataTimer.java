@@ -4,6 +4,7 @@ import com.project.communication.capitalization.CapitalizationClient;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
+import com.project.communication.config.AppReference;
 import com.project.communication.interceptorTcp.InterceptorServer;
 import com.project.communication.obj.ReadInterface;
 import com.project.communication.service.ReadInput;
@@ -41,16 +42,16 @@ public class ReadCharDataTimer extends TimerTask {
     }
     public void run() {
         count++;
-        int reference = readInput.getReference();
-        logger.info("count: " + count + ":" + reference + ":" + readInput.getByteData());
-        this.readInterface.printData(readInput);
-        if (reference == 1 && capitalizationServer != null) {
+        AppReference reference = readInput.getReference();
+//        logger.info("count: " + count + ":" + reference + ":" + readInput.getByteData());
+//        this.readInterface.printData(readInput);
+        if (reference == AppReference.ONE && capitalizationServer != null) {
             this.capitalizationServer.receivedData(readInput.getByteData());
-        } else if (reference == 2 && capitalizationClient != null) {
+        } else if (reference == AppReference.TWO && capitalizationClient != null) {
             this.capitalizationClient.receivedData(readInput.getByteData());
-        } else if (reference == 3 && interceptorServer != null) {
+        } else if (reference == AppReference.THREE && interceptorServer != null) {
             this.interceptorServer.receivedData(readInput.getByteData(), interceptorClient, interceptor);
-        } else if (reference == 4 && interceptorClient != null) {
+        } else if (reference == AppReference.FOUR && interceptorClient != null) {
             this.interceptorClient.receivedData(readInput.getByteData(), interceptorServer, interceptor);
         }
     }

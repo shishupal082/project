@@ -5,6 +5,7 @@ import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.tcp.TcpClient;
 import com.project.communication.time.TimeClient;
 
 public class StartClient {
@@ -19,6 +20,8 @@ public class StartClient {
         } else if (AppConstant.appNameClient.equals(protocolConfig.getName())) {
 //            SingleThreadedCapitalizationClient.main(protocolConfig);
             CapitalizationClient.main(protocolConfig);
+        } else if (AppConstant.appNameTcpClient.equals(protocolConfig.getName())) {
+            TcpClient.main(protocolConfig);
         } else {
             logger.info("invalid protocol config: "+ protocolConfig.toString());
         }

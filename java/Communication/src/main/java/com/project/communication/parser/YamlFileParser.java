@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.obj.EnvConfig;
+import com.project.communication.config.EnvConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +22,9 @@ public class YamlFileParser {
             envConfig = objectMapper.readValue(new File(configFilePath), EnvConfig.class);
         } catch (IOException ioe) {
             logger.info("IOE : for file : " + configFilePath);
+        }
+        if (envConfig == null) {
+            envConfig = new EnvConfig();
         }
         return envConfig;
     }

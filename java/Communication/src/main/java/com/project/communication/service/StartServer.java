@@ -6,6 +6,7 @@ import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.tcp.TcpServer;
 import com.project.communication.time.TimeServer;
 
 public class StartServer {
@@ -22,6 +23,8 @@ public class StartServer {
         } else if (AppConstant.appNameServer.equals(protocolConfig.getName())) {
             MultiThreadedCapitalizationServer.main(protocolConfig);
 //            CapitalizationServer.main(protocolConfig);
+        } else if (AppConstant.appNameTcpServer.equals(protocolConfig.getName())) {
+            TcpServer.main(protocolConfig);
         }
     }
 }

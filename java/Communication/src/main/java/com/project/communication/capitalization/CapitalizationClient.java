@@ -3,6 +3,7 @@ package com.project.communication.capitalization;// package socketClient;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
+import com.project.communication.config.AppReference;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 import com.project.communication.service.SocketService;
@@ -24,7 +25,7 @@ public class CapitalizationClient implements Runnable {
     private CapitalizationClient(ProtocolConfig protocolConfig, Socket socket) {
         this.protocolConfig = protocolConfig;
         this.socket = socket;
-        this.readInput = new ReadInput(0, 2);
+        this.readInput = new ReadInput(0, AppReference.TWO, protocolConfig);
         systemIn = new BufferedReader(new InputStreamReader(System.in));
     }
     public void receivedData(String byteData) {

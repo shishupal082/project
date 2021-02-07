@@ -10,13 +10,16 @@ public class TextFileParser {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(TextFileParser.class);
     private final String filepath;
     private final boolean isNewFile;
+    private final boolean isLogger;
     public TextFileParser(final String filepath) {
         this.filepath = filepath;
         this.isNewFile = false;
+        this.isLogger = false;
     }
-    public TextFileParser(final String filepath, final boolean isNewFile) {
+    public TextFileParser(final String filepath, final boolean isNewFile, final boolean isLogger) {
         this.filepath = filepath;
         this.isNewFile = isNewFile;
+        this.isLogger = isLogger;
     }
     public boolean addText(String text) {
         if (text == null) {
@@ -36,7 +39,9 @@ public class TextFileParser {
             }
             writer.append(text);
             writer.close();
-            logger.info("Text added in: {}", filepath);
+            if (!isLogger) {
+                logger.info("Text added in: {}", filepath);
+            }
             textAddStatus = true;
         } catch (Exception e) {
             logger.info("Error in adding text in filename: {}", filepath);

@@ -2,6 +2,7 @@ package com.project.communication.capitalization;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
+import com.project.communication.config.AppReference;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 import com.project.communication.service.SendOutput;
@@ -13,7 +14,7 @@ import java.net.UnknownHostException;
 public class SingleThreadedCapitalizationClient {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(SingleThreadedCapitalizationClient.class);
     public static void main(ProtocolConfig protocolConfig) {
-        ReadInput readInput = new ReadInput(0, 0);
+        ReadInput readInput = new ReadInput(0, AppReference.ZERO, protocolConfig);
         String hostname = protocolConfig.getServerIp();
         int port = protocolConfig.getServerPort();
         Socket socket = null;

@@ -3,6 +3,7 @@ package com.project.communication.threads;
 import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
+import com.project.communication.config.AppReference;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 
@@ -20,7 +21,7 @@ public class ServerThreadV2 extends Thread {
         this.protocolConfig = protocolConfig;
         this.clientId = clientId;
         this.socket = socket;
-        this.readInput = new ReadInput(clientId, 1);
+        this.readInput = new ReadInput(clientId, AppReference.ONE, protocolConfig);
     }
     public void run() {
         try {
