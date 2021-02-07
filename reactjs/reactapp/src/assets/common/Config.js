@@ -16,6 +16,11 @@ Config.JQ = $$$.JQ;
 Config.queryParamName = $$$.queryParamName;
 Config.queryParamMapping = $$$.queryParamMapping;
 
+var staticDataApi = $$$.staticDataApi;
+if (!$S.isString(staticDataApi)) {
+    staticDataApi = "/files/v1/get/view/filedata?name=static-data.json";
+}
+
 var pageData = {};
 
 var pages = {
@@ -83,7 +88,7 @@ Config.goBackLinkData = [];
 
 
 var apiMapping = {};
-apiMapping["static-data"] = "/files/v1/get/view/filedata?name=static-data.json";
+apiMapping["static-data"] = staticDataApi;
 apiMapping["task-data"] = "/task/api/v2/tasks";
 apiMapping["component-data"] = "/task/api/v1/component/all";
 apiMapping["app-data"] = "/task/api/v2/app/all";
@@ -106,5 +111,19 @@ Config.getPageData = function(key, defaultValue) {
     }
     return defaultValue;
 };
+
+Config.footerData = [
+    {
+        "entry": [["1","2","3"],["4","5","6"]]
+    },
+    {
+        "type": "table-cols",
+        "entry": [["1,1", "2,1"], ["1,2", "2,2"], ["1,3"], ["1,4", "2,4", "3,4", "4,4"]]
+    },
+    {
+        "type": "table-rows",
+        "entry": [["1,1","1,2"], ["2,1"]]
+    }
+];
 
 export default Config;

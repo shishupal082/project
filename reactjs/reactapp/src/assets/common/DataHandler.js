@@ -167,22 +167,59 @@ DataHandler.extend({
         }
         return currentStaticData;
     },
-    getFooterFields: function() {
-        var staticData = DataHandler.getData("staticData", {});
-        var footerData = $S.clone(staticData.footerData);
-        if ($S.isArray(footerData) && footerData.length > 0 && $S.isArray(footerData[0].text)) {
-            for (var i = 0; i < footerData[0].text.length; i++) {
-                if (footerData[0].text[i].tag === "a") {
-                    footerData[0].text[i].href = Config.basepathname + footerData[0].text[i].href;
+    _convertRowToCol: function(data) {
+        var rows = [];
+        var maxRowLen = 0, i, j;
+        if ($S.isArray(data)) {
+            for (i = 0; i < data.length; i++) {
+                if ($S.isArray(data[i])) {
+                    if (data[i].length > maxRowLen) {
+                        maxRowLen = data[i].length;
+                    }
+                }
+            }
+            for (i = 0; i < maxRowLen; i++) {
+                rows.push([]);
+            }
+            for (i = 0; i < data.length; i++) {
+                if ($S.isArray(data[i])) {
+                    for(j=0; j<data[i].length; j++) {
+                        rows[j].push(data[i][j]);
+                    }
                 }
             }
         }
+        return rows;
+    },
+    getFooterData: function() {
+        var staticData = DataHandler.getData("staticData", {});
+        var staticFooterData = staticData.footerData;
+        var footerData = [];
+        if ($S.isArray(staticFooterData)) {
+            for (var i = 0; i < staticFooterData.length; i++) {
+                if (!$S.isArray(staticFooterData[i].entry)) {
+                    $S.log("Invalid footer entry: " + staticFooterData[i]);
+                    continue;
+                }
+                if (staticFooterData[i].type === "table-rows") {
+                    footerData.push({"type": "table", "entry": staticFooterData[i].entry});
+                } else if (staticFooterData[i].type === "table-cols") {
+                    footerData.push({"type": "table", "entry": this._convertRowToCol(staticFooterData[i].entry)});
+                } else {
+                    footerData.push({"type": "div", "entry": staticFooterData[i].entry});
+                }
+            }
+        }
+
         return footerData;
     },
     getHeadingText: function() {
         var currentStaticData = this.getCurrentStaticData();
         var headingText = currentStaticData.heading;
-        return headingText;
+        if ($S.isString(headingText) && headingText.length) {
+            return headingText;
+        }
+        return "Query parameter not found";
     },
     getPageName: function() {
         return DataHandler.getData("currentPageName", "");
@@ -204,7 +241,7 @@ DataHandler.extend({
 });
 DataHandler.extend({
     loadData: function(callback) {
-        $S.loadJsonData(null, [Config.getApiUrl("static-data", null, true)], function(response, apiName, ajax){
+        $S.loadJsonData(null, [Config.getApiUrl("static-data", null, false)], function(response, apiName, ajax){
             DataHandler.setData("staticData", response);
             DataHandler.setData("staticDataLoadStatus", "completed");
         }, function() {

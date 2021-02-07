@@ -1,0 +1,42 @@
+{
+    "data": [
+        {
+            "name": "name-1",
+            "heading": "Name 1 Heading APP",
+            "optionName": "assets",
+            "pageName": "app",
+            "fieldsName": ["NAME-1"],
+            "footerLinkText": "NAME-1-APP"
+        },
+        {
+            "name": "name-1-task",
+            "heading": "Name 1 Heading TASK",
+            "optionName": "assets",
+            "pageName": "task",
+            "fieldsName": ["NAME-1"],
+            "footerLinkText": "NAME-1-TASK"
+        },
+        {
+            "name": "name-1-app-op-1",
+            "heading": "Name 1 Heading APP-OP-1",
+            "optionName": "op-1",
+            "pageName": "task",
+            "fieldsName": ["NAME-1"],
+            "footerLinkText": "NAME-1-APP-OP-1"
+        },
+        {
+            "name": "direct-1",
+            "linkType": "direct",
+            "link": "http://localhost/files/v1/get/view/index.html?name=ui/src/prj/index.html",
+            "footerLinkText": "Direct link"
+        }
+    ],
+    "footerData": [
+        {
+            "entry": [["name-1", "name-1", "name-1-app-op-1"]]
+        },
+        {
+            "entry": [["direct-1"]]
+        }
+    ]
+}

@@ -23,6 +23,75 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 $S.extendObject(TemplateHandler);
 
 TemplateHandler.extend({
+    _generateLink: function(linkType, name) {
+        var text = name;
+        var href = "?name="+name;
+        var staticData = DataHandler.getData("staticData", {});
+        if ($S.isArray(staticData.data)) {
+            for (var i = 0; i < staticData.data.length; i++) {
+                if (staticData.data[i].name === name) {
+                    if (staticData.data[i].linkType === "direct") {
+                        href = staticData.data[i].link;
+                    } else {
+                        href = "?name=" + name;
+                    }
+                    if ($S.isString(staticData.data[i].footerLinkText)) {
+                        text = staticData.data[i].footerLinkText;
+                    }
+                    break;
+                }
+            }
+        }
+        return {"tag": "a", "href": href, "text": text};
+    },
+    generateFooterHtml: function(footerData) {
+        var htmlFields = [], i, j, k;
+        var divField = [{"tag": "div", "name": "tempDiv", "text": []}];
+        var divField2 = [{"tag": "div", "name": "tempDiv2", "text": []}];
+        var tableField = [{"tag": "table.tbody", "className": "", "name": "tempTable", "text": []}];
+        var trField = [{"tag": "tr", "name": "tempTr", "text": []}];
+
+        var tempDivField, tempDivField2, tempTableField, tempTrField;
+        if ($S.isArray(footerData)) {
+            for(i=0; i<footerData.length; i++) {
+                if (!$S.isArray(footerData[i].entry)) {
+                    continue;
+                }
+                if (footerData[i].type === "div") {
+                    tempDivField = $S.clone(divField);
+                    for (j=0; j<footerData[i].entry.length; j++) {
+                        if ($S.isArray(footerData[i].entry[j])) {
+                            tempDivField2 = $S.clone(divField2);
+                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
+                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(footerData[i].linkType, footerData[i].entry[j][k]));
+                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", {"tag": "a", "text": {"tag": "span", "text": "|"}});
+                            }
+                            TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(footerData[i].linkType, footerData[i].entry[j][k]));
+                            TemplateHelper.addItemInTextArray(tempDivField, "tempDiv", tempDivField2);
+                        }
+                    }
+                    htmlFields.push(tempDivField);
+                } else if (footerData[i].type === "table") {
+                    tempTableField = $S.clone(tableField);
+                    for (j=0; j<footerData[i].entry.length; j++) {
+                        if ($S.isArray(footerData[i].entry[j])) {
+                            tempTrField = $S.clone(trField);
+                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
+                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(footerData[i].linkType, footerData[i].entry[j][k])});
+                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": {"tag": "span", "text": "|"}});
+                            }
+                            TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(footerData[i].linkType, footerData[i].entry[j][k])});
+                            TemplateHelper.addItemInTextArray(tempTableField, "tempTable", tempTrField);
+                        }
+                    }
+                    htmlFields.push(tempTableField);
+                }
+            }
+        }
+        return htmlFields;
+    }
+});
+TemplateHandler.extend({
     getTemplate: function(pageName) {
         if (Template[pageName]) {
             return $S.clone(Template[pageName]);
@@ -49,7 +118,10 @@ TemplateHandler.extend({
         for (var i = 0; i < renderData.length; i++) {
             TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i, renderData[i]));
         }
-        var footerField = DataHandler.getFooterFields();
+        var footerData = DataHandler.getFooterData();
+        var footerField = this.getTemplate("footerField");
+        var footerFieldHtml = this.generateFooterHtml(footerData);
+        TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
         TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
         return renderField;
     },

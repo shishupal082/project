@@ -73,4 +73,6 @@ Template["tableTdField"] = [
     }
 ];
 
+Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
+
 export default Template;
