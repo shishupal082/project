@@ -369,11 +369,11 @@ DataHandler.extend({
             }
         }
         var finalOptionsData = [];
-        temp = ["Parameters"];
+        var heading = ["Parameters"];
         for (j = 0; j < optionsData.length; j++) {
-            temp.push(optionsData[j].name)
+            heading.push(optionsData[j].name)
         }
-        finalOptionsData.push(temp);
+        finalOptionsData.push(heading);
         rowKeys = rowKeys.sort();
         for (i = 0; i < rowKeys.length; i++) {
             key = rowKeys[i];
@@ -392,6 +392,7 @@ DataHandler.extend({
             }
             finalOptionsData.push(temp);
         }
+        finalOptionsData.push(heading);
         return finalOptionsData;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {

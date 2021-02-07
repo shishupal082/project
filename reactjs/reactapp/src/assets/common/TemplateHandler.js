@@ -98,25 +98,26 @@ TemplateHandler.extend({
         }
         return $S.clone(Template["noDataFound"]);
     },
-    _getTdField: function(r, c, tdData) {
+    _getTdField: function(isFirstRow, isLastRow, isFirstCol, tdData) {
         var tdField = this.getTemplate("tableTdField");
-        if (r === 0 || c === 0) {
+        if (isFirstRow || isLastRow || isFirstCol) {
             TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
         }
         TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
         return tdField;
     },
-    _getRowField: function(index, rowData) {
+    _getRowField: function(isFirstRow, isLastRow, rowData) {
         var trField = this.getTemplate("tableRowField");
         for (var i = 0; i < rowData.length; i++) {
-            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(index, i, rowData[i]));
+            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(isFirstRow, isLastRow, i===0, rowData[i]));
         }
         return trField;
     },
     GetPageRenderField: function(renderData) {
         var renderField = this.getTemplate("tableField");
+        var lastRowIndex = renderData.length-1;
         for (var i = 0; i < renderData.length; i++) {
-            TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i, renderData[i]));
+            TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i === 0, i === lastRowIndex, renderData[i]));
         }
         var footerData = DataHandler.getFooterData();
         var footerField = this.getTemplate("footerField");
