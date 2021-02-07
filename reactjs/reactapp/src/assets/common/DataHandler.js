@@ -374,6 +374,7 @@ DataHandler.extend({
             temp.push(optionsData[j].name)
         }
         finalOptionsData.push(temp);
+        rowKeys = rowKeys.sort();
         for (i = 0; i < rowKeys.length; i++) {
             key = rowKeys[i];
             temp = [];
