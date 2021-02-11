@@ -1,0 +1,2 @@
+2021-02-11@12:20:34 - 1234 - Application start
+2021-02-11@12:20:34 - 1234 - configData: TcpClient: 127.0.0.1:1521, TcpServer: 1521, LogFilePath : log1.txt, SaveResponseDir : ../../pvt/vb-data/
