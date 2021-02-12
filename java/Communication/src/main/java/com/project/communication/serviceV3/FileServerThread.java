@@ -1,11 +1,9 @@
 package com.project.communication.serviceV3;
 
-import com.project.communication.capitalization.CapitalizationServer;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ProtocolConfig;
-import com.project.communication.service.ReadInput;
 import com.project.communication.serviceV3.common.ReadInputV2;
 
 import java.io.IOException;
@@ -33,7 +31,7 @@ public class FileServerThread extends Thread {
                     server.sendResponse(str);
                 }
             }
-            readInputV2.readBytes(socket.getInputStream(), server, null);
+            readInputV2.readBytes(socket.getInputStream(), server, null, null);
         } catch (IOException e) {
             logger.info(clientId+": Error in client handling");
         }

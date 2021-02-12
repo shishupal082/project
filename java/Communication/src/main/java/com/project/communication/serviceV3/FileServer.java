@@ -2,14 +2,11 @@ package com.project.communication.serviceV3;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.config.AppConstant;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.parser.TextFileParser;
 import com.project.communication.serviceV3.common.ReadInputV2;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;

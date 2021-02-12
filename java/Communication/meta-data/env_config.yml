@@ -71,3 +71,9 @@ programConfig:
     type: byte
     serverPort: 9080
     serverIp: 127.0.0.1
+  actualClient:
+    name: actualClient
+    application: client
+    type: byte
+    serverPort: 1521
+    serverIp: 127.0.0.1

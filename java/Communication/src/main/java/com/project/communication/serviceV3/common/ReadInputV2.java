@@ -6,12 +6,12 @@ import com.project.communication.config.AppConstant;
 import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.SendOutput;
+import com.project.communication.serviceV3.ActualClient;
 import com.project.communication.serviceV3.FileClient;
 import com.project.communication.serviceV3.FileServer;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Date;
 import java.util.Timer;
 
 public class ReadInputV2 {
@@ -75,10 +75,11 @@ public class ReadInputV2 {
         }
     }
     public void readBytes(InputStream inputStream,
-                            FileServer fileServer,
-                            FileClient fileClient) {
+                          FileServer fileServer,
+                          FileClient fileClient,
+                          ActualClient actualClient) {
         TcpFileReadTimer readCharDataTimer = new TcpFileReadTimer(this,
-                fileServer, fileClient);
+                fileServer, fileClient, actualClient);
         if (oldTimerV4 != null) {
             logger.info(clientId+": closing old timer");
             this.stopTimer();
@@ -110,7 +111,7 @@ public class ReadInputV2 {
                           FileServer fileServer,
                           FileClient fileClient) {
         TcpFileReadTimer readCharDataTimer = new TcpFileReadTimer(this,
-                fileServer, fileClient);
+                fileServer, fileClient, null);
         if (oldTimerV4 != null) {
             logger.info(clientId+": closing old timer");
             this.stopTimer();

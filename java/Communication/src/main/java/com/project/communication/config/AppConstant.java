@@ -4,6 +4,7 @@ public class AppConstant {
     public static String appNameServer = "server";
     public static String appNameFileServer = "fileServer";
     public static String appNameFileClient = "fileClient";
+    public static String appNameActualClient = "actualClient";
     public static String appNameTcpServer = "tcpServer";
     public static String appNameTcpClient = "tcpClient";
     public static String appNameServerSingleThread = "serverSingleThread";
