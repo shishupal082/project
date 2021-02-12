@@ -6,6 +6,7 @@ import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.serviceV3.FileServer;
 import com.project.communication.tcp.TcpServer;
 import com.project.communication.time.TimeServer;
 
@@ -25,6 +26,10 @@ public class StartServer {
 //            CapitalizationServer.main(protocolConfig);
         } else if (AppConstant.appNameTcpServer.equals(protocolConfig.getName())) {
             TcpServer.main(protocolConfig);
+        } else if (AppConstant.appNameFileServer.equals(protocolConfig.getName())) {
+            FileServer.main(protocolConfig);
+        } else {
+            logger.info("invalid protocol config: "+ protocolConfig.toString());
         }
     }
 }

@@ -2,7 +2,7 @@ package com.project.communication.time;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.config.AppReference;
+import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 
@@ -14,7 +14,7 @@ import java.net.UnknownHostException;
 public class TimeClient {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(TimeClient.class);
     public static void main(ProtocolConfig protocolConfig) {
-        ReadInput readInput = new ReadInput(0, AppReference.ZERO, protocolConfig);
+        ReadInput readInput = new ReadInput(0, AppReferenceEnum.ZERO, protocolConfig);
         String hostname = protocolConfig.getServerIp();
         int port = protocolConfig.getServerPort();
         try (Socket socket = new Socket(hostname, port)) {

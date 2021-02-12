@@ -2,7 +2,7 @@ package com.project.communication.capitalization;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.config.AppReference;
+import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 import com.project.communication.service.SendOutput;
@@ -23,7 +23,7 @@ public class ServerProgram {
         this.protocolConfig = protocolConfig;
         this.clientId = clientId;
         this.socket = socket;
-        this.readInput = new ReadInput(0, AppReference.ZERO, protocolConfig);
+        this.readInput = new ReadInput(0, AppReferenceEnum.ZERO, protocolConfig);
     }
     public void start() {
         try {

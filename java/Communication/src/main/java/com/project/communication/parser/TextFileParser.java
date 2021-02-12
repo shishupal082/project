@@ -5,6 +5,8 @@ import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TextFileParser {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(TextFileParser.class);
@@ -20,6 +22,46 @@ public class TextFileParser {
         this.filepath = filepath;
         this.isNewFile = isNewFile;
         this.isLogger = isLogger;
+    }
+    public ArrayList<String> getTextDataByLine() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            File file = new File(filepath);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), AppConstant.UTF_8));
+            String str;
+            while ((str = in.readLine()) != null) {
+                result.add(str);
+            }
+            in.close();
+            logger.info("Text file read success: {}", filepath);
+        } catch (Exception e) {
+            logger.info("Error in reading text file: {}", e.getMessage());
+        }
+        return result;
+    }
+    public ArrayList<ArrayList<String>> getTextData() {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        try {
+            File file = new File(filepath);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file), AppConstant.UTF_8));
+            String str;
+            String[] tempArr;
+            ArrayList<String> temp;
+            while ((str = in.readLine()) != null) {
+                tempArr = str.split(",");
+                temp = new ArrayList<>(Arrays.asList(tempArr));
+                result.add(temp);
+            }
+            in.close();
+            logger.info("Text file read success: {}", filepath);
+        } catch (Exception e) {
+            logger.info("Error in reading text file: {}", e.getMessage());
+        }
+        return result;
     }
     public boolean addText(String text) {
         if (text == null) {

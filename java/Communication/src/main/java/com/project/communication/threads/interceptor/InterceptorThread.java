@@ -2,7 +2,7 @@ package com.project.communication.threads.interceptor;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.config.AppReference;
+import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
 
@@ -18,7 +18,7 @@ public class InterceptorThread extends Thread {
         this.protocolConfig = protocolConfig;
         this.clientId = clientId;
         this.socket = socket;
-        this.readInput = new ReadInput(clientId, AppReference.ONE, protocolConfig);
+        this.readInput = new ReadInput(clientId, AppReferenceEnum.ONE, protocolConfig);
     }
     public void run() {
 //        try {

@@ -57,3 +57,17 @@ programConfig:
     type: byteWithTVL
     serverPort: 1521
     serverIp: 127.0.0.1
+  fileServer:
+    name: fileServer
+    application: server
+    type: byte
+    clientPort: 9080
+    serverIp: 127.0.0.1
+    welcomeMessage:
+      - Welcome
+  fileClient:
+    name: fileClient
+    application: client
+    type: byte
+    serverPort: 9080
+    serverIp: 127.0.0.1

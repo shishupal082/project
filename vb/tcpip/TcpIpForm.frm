@@ -2,12 +2,12 @@ VERSION 5.00
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form TcpIpForm 
    Caption         =   "Form1"
-   ClientHeight    =   5325
+   ClientHeight    =   5730
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   10545
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5325
+   ScaleHeight     =   5730
    ScaleWidth      =   10545
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer ServerTimer 
@@ -126,6 +126,14 @@ Begin VB.Form TcpIpForm
       _Version        =   393216
       LocalPort       =   1521
    End
+   Begin VB.Label AppConfig 
+      Caption         =   "Config: "
+      Height          =   255
+      Left            =   360
+      TabIndex        =   14
+      Top             =   5280
+      Width           =   9855
+   End
    Begin VB.Label TimerCount 
       Caption         =   "TC"
       Height          =   255
@@ -161,13 +169,13 @@ Private IsServerStarted As Boolean
 Private RemotePort, LocalPort As Integer
 Private RemoteHost, Key, ServerReceivedData As String
 Private TimerCountValue As Integer
-Private SaveResponseDir As String
-Dim File As New File
+Private SaveResponseDir, LogFilePath As String
+Private File As New File
 Private Method As New MethodClass
-Dim HexToString As New HexToString
-Dim StringToHex As New StringToHex
-Dim HexCharToAscii As New HexCharToAscii
-Dim Test As New TestClass
+Private HexToString As New HexToString
+Private StringToHex As New StringToHex
+Private HexCharToAscii As New HexCharToAscii
+Private Test As New TestClass
 
 
 
@@ -185,21 +193,50 @@ SaveResponseDir = ""
 
 
 Dim lineCount As Integer
+Dim appConfigData(256) As String
 Dim configData(256) As String
 Dim appConfigFileName, configFileName As String
 appConfigFileName = "config/app-config.txt"
 configFileName = "config/config.txt"
-' configFileName = "config.txt"
 
-File.ReadFile appConfigFileName, configData, lineCount
+File.ReadFile appConfigFileName, appConfigData, lineCount
 
-If length = 1 Then
-    configFileName = configData(0)
+If lineCount > 0 Then
+    configFileName = appConfigData(0)
 End If
 
+File.ReadFile configFileName, configData, lineCount
+
+For I = 0 To lineCount
+    If configData(I) = "tcpClient" Then
+        I = I + 1
+        RemoteHost = configData(I)
+        I = I + 1
+        RemotePort = configData(I)
+    End If
+    If configData(I) = "tcpServer" Then
+        I = I + 1
+        LocalPort = configData(I)
+    End If
+    If configData(I) = "logFilepath" Then
+        I = I + 1
+        LogFilePath = configData(I)
+    End If
+    If configData(I) = "saveResponseDir" Then
+        I = I + 1
+        SaveResponseDir = configData(I)
+    End If
+Next
 Key = "1234"
+Dim finalConfigData As String
+finalConfigData = "TcpClient: " & RemoteHost & ":" & RemotePort
+finalConfigData = finalConfigData & ", TcpServer: " & LocalPort
+finalConfigData = finalConfigData & ", LogFilePath : " & LogFilePath
+finalConfigData = finalConfigData & ", SaveResponseDir : " & SaveResponseDir
+
 ServerReceivedData = ""
-AddLog "Application start"
+AddLog "configData: " & finalConfigData
+AppConfig.Caption = AppConfig.Caption & finalConfigData
 End Function
 
 Private Function ParseData(msg As String)
@@ -223,7 +260,7 @@ End Function
 
 
 Private Function AddLog(ByVal msg As String)
-File.LogText "log.txt", Key, msg
+File.LogText LogFilePath, Key, msg
 End Function
 
 'Private Function AddLogArray(ByRef dataArr() As String, ByVal length As Integer)
@@ -260,6 +297,7 @@ Private Function SendDataFromServer() As String
     End If
 End Function
 
+
 Private Sub CloseClient_Click()
 UpdateClientLog "Close client click"
 TcpClient.Close
@@ -268,11 +306,15 @@ End Sub
 
 Private Sub Form_Load()
 InitAppliction
+
+AddLog "Application start"
 End Sub
+
 
 Private Sub Form_Unload(Cancel As Integer)
 TcpServer.Close
 TcpClient.Close
+AddLog "Application closed"
 End Sub
 
 

@@ -3,7 +3,7 @@ package com.project.communication.threads.interceptor;
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
 import com.project.communication.config.AppConstant;
-import com.project.communication.config.AppReference;
+import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.interceptorTcp.InterceptorServer;
 import com.project.communication.obj.ProtocolConfig;
 import com.project.communication.service.ReadInput;
@@ -25,7 +25,7 @@ public class InterceptorClient implements Runnable {
         logger.info("interceptorClient: " + protocolConfig.toString());
         this.protocolConfig = protocolConfig;
         this.socket = socket;
-        this.readInput = new ReadInput(0, AppReference.FOUR, protocolConfig);
+        this.readInput = new ReadInput(0, AppReferenceEnum.FOUR, protocolConfig);
     }
 
     public Socket getSocket() {

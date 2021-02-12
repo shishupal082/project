@@ -2,7 +2,7 @@ package com.project.communication.threads;
 
 import com.project.communication.common.LoggerFactoryV2;
 import com.project.communication.common.LoggerV2;
-import com.project.communication.config.AppReference;
+import com.project.communication.config.AppReferenceEnum;
 import com.project.communication.obj.ReadInterface;
 import com.project.communication.service.ReadInput;
 import com.project.communication.tcp.TcpClient;
@@ -29,12 +29,12 @@ public class ReadTcpDataTimer extends TimerTask {
     }
     public void run() {
         count++;
-        AppReference reference = readInput.getReference();
+        AppReferenceEnum reference = readInput.getReference();
 //        logger.info("count: " + count + ":" + reference + ":" + readInput.getByteData());
 //        this.readInterface.printData(readInput);
-        if (reference == AppReference.ONE && tcpServer != null) {
+        if (reference == AppReferenceEnum.ONE && tcpServer != null) {
             this.tcpServer.receivedData(readInput.getByteData());
-        } else if (reference == AppReference.TWO && tcpClient != null) {
+        } else if (reference == AppReferenceEnum.TWO && tcpClient != null) {
             this.tcpClient.receivedData(readInput.getByteData());
         } else {
             logger.info("invalid reference: " + reference);

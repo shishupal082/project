@@ -1,11 +1,25 @@
 package com.project.communication.common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.UUID;
 
 
 public class SysUtils {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(SysUtils.class);
+    private final static BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
+    public SysUtils() {}
+    public String readCommandLine() {
+        String text = "";
+        try {
+            return systemIn.readLine();
+        } catch (IOException e) {
+            logger.info("IOException for reading command line");
+        }
+        return text;
+    }
     public Long getTimeInMsLong() {
         return System.currentTimeMillis();
     }
