@@ -1,2 +1,2 @@
-../../pvt/vb-config/config.txt
+../../pvt/vb-config/config/config.txt
 config/config.txt

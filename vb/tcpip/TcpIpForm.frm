@@ -188,7 +188,7 @@ RemoteHost = "127.0.0.1"
 RemotePort = 1521
 LocalPort = 1521
 
-IsEchoSystem = "False"
+IsEchoSystem = "True"
 SaveResponseDir = ""
 LogFilePath = "log.txt"
 
