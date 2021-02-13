@@ -4,7 +4,7 @@ programConfig:
     name: timeServer
     application: server
     type: byte
-    clientPort: 1521
+    clientPort: 9080
   timeClient:
     name: timeClient
     application: client
@@ -15,19 +15,19 @@ programConfig:
     name: timeClient
     application: interceptor
     type: byte
-    clientPort: 9080
-    serverPort: 1521
+    clientPort: 9081
+    serverPort: 9080
     serverIp: 127.0.0.1
   serverSingleThread:
     name: serverSingleThread
     application: server
     type: byte
-    clientPort: 1521
+    clientPort: 9080
   server:
     name: server
     application: server
     type: byte
-    clientPort: 1521
+    clientPort: 9080
     welcomeMessage:
       - Welcome
       - User
@@ -42,20 +42,20 @@ programConfig:
     application: interceptor
     type: byte
     clientPort: 9080
-    serverPort: 1521
+    serverPort: 9080
     serverIp: 127.0.0.1
   tcpServer:
     name: tcpServer
     application: server
     type: byteWithTVL
-    clientPort: 1521
+    clientPort: 9080
     welcomeMessage:
       - Welcome
   tcpClient:
     name: tcpClient
     application: client
     type: byteWithTVL
-    serverPort: 1521
+    serverPort: 9080
     serverIp: 127.0.0.1
   fileServer:
     name: fileServer
@@ -69,17 +69,17 @@ programConfig:
     name: fileClient
     application: client
     type: byte
-    serverPort: 9080
+    serverPort: 1521
     serverIp: 127.0.0.1
   actualClient:
     name: actualClient
     application: client
     type: byte
-    serverPort: 1521
+    serverPort: 9080
     serverIp: 127.0.0.1
   realTimeFileDataDisplay:
     name: realTimeFileDataDisplay
     application: realTimeFileDataDisplay
     type: byte
-    serverPort: 1521
+    serverPort: 9080
     serverIp: "D:/workspace/project/pvt/vb-data/"
