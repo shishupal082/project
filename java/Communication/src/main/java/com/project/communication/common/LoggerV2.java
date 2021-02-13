@@ -45,7 +45,7 @@ public class LoggerV2 {
         this.addText(prePattern+pattern+postPattern+stringBuilder);
     }
     public void info(String logPattern, String logText) {
-        this.addText(prePattern+pattern+postPattern+logText);
+        this.addText(prePattern+pattern+postPattern+logPattern+logText);
     }
 
     public void info(String logPattern, String logText, String logText2) {

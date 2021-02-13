@@ -11,6 +11,7 @@ public class AppConstant {
     public static String appNameTimeServer = "timeServer";
     public static String appNameClient = "client";
     public static String appNameTimeClient = "timeClient";
+    public static String appNameFileDataDisplay = "realTimeFileDataDisplay";
     public static String UTF_8 = "UTF-8";
     public static String protocolByte = "byte";
     public static String protocolText = "text";

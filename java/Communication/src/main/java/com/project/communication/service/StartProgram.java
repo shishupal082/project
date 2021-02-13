@@ -6,6 +6,7 @@ import com.project.communication.common.StaticService;
 import com.project.communication.config.ApplicationName;
 import com.project.communication.interceptorTcp.TransferRequest;
 import com.project.communication.obj.ProtocolConfig;
+import com.project.communication.serviceV2.StartFileDataDisplay;
 
 public class StartProgram {
     private final static LoggerV2 logger = LoggerFactoryV2.getLogger(StartProgram.class);
@@ -31,6 +32,8 @@ public class StartProgram {
             StartClient.main(protocolConfig);
         } else if (applicationName == ApplicationName.INTERCEPTOR) {
             TransferRequest.main(protocolConfig);
+        } else if(applicationName == ApplicationName.FileDataDisplay) {
+            StartFileDataDisplay.main(protocolConfig);
         } else {
             logger.info("invalid application name: "+ applicationNameStr);
         }

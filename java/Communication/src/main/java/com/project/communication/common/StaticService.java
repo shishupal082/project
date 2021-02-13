@@ -17,6 +17,9 @@ public class StaticService {
         if (ApplicationName.INTERCEPTOR.getApplicationName().equals(name)) {
             return ApplicationName.INTERCEPTOR;
         }
+        if (ApplicationName.FileDataDisplay.getApplicationName().equals(name)) {
+            return ApplicationName.FileDataDisplay;
+        }
         return null;
     }
 }

@@ -77,3 +77,9 @@ programConfig:
     type: byte
     serverPort: 1521
     serverIp: 127.0.0.1
+  realTimeFileDataDisplay:
+    name: realTimeFileDataDisplay
+    application: realTimeFileDataDisplay
+    type: byte
+    serverPort: 1521
+    serverIp: "D:/workspace/project/pvt/vb-data/"
