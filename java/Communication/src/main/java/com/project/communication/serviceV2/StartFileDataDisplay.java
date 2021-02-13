@@ -25,14 +25,17 @@ public class StartFileDataDisplay extends TimerTask {
         ScanResult scanResult = fileService.scanDirectory(protocolConfig.getServerIp(),
                 protocolConfig.getServerIp(), false);
         if (scanResult != null) {
-            for (ScanResult scanResult1: scanResult.getScanResults()) {
+            for (ScanResult scanResult1 : scanResult.getScanResults()) {
                 if (!oldFileNames.contains(scanResult1.getPathName())) {
                     newFileNames.add(scanResult1.getPathName());
                     oldFileNames.add(scanResult1.getPathName());
                 }
             }
         }
-        logger.info("New File Names Count: " + newFileNames.size() + ", " + newFileNames.toString());
+
+        if (newFileNames.size() > 0) {
+            logger.info("New File Names Count: " + newFileNames.size() + ", " + newFileNames.toString());
+        }
     }
     private void displayFileData(String filepath) {
         TextFileParser textFileParser = new TextFileParser(filepath);
@@ -55,7 +58,9 @@ public class StartFileDataDisplay extends TimerTask {
     @Override
     public void run() {
         count++;
-        logger.info("--------------------------------------------"+count);
+        if (newFileNames.size() > 0) {
+            logger.info("--------------------------------------------"+count);
+        }
         this.scanResult();
         this.displayNewFiles();
     }

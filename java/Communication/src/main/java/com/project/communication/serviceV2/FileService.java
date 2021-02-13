@@ -51,7 +51,7 @@ public class FileService {
             logger.info("Error fetching folder from :", folderPath);
         }
 //        logger.info("Scan folder result for folder : {}, {}", folderPath, finalFileScanResult);
-        logger.info("Scan complete for folder :", folderPath);
+//        logger.info("Scan complete for folder :", folderPath);
         return finalFileScanResult;
     }
 
