@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form TcpIpForm 
-   Caption         =   "Form1"
+   Caption         =   "TcpIp"
    ClientHeight    =   6435
    ClientLeft      =   120
    ClientTop       =   465
@@ -234,7 +234,7 @@ For I = 0 To lineCount
 Next
 Key = "1234"
 Dim finalConfigData As String
-finalConfigData = "TcpClient: " & RemoteHost & ":" & RemotePort
+finalConfigData = "v1.0.0, TcpClient: " & RemoteHost & ":" & RemotePort
 finalConfigData = finalConfigData & ", TcpServer: " & LocalPort
 finalConfigData = finalConfigData & ", LogFilePath: " & LogFilePath
 finalConfigData = finalConfigData & ", SaveResponseDir: " & SaveResponseDir
@@ -310,7 +310,7 @@ Private Function SendTextFromClient(ByVal msg As String)
 End Function
 Private Function SendTextFromServer(ByVal msg As String)
     If TcpServer.State <> sckConnected Then
-        UpdateClientLog "Not connected"
+        UpdateServerLog "Not connected"
     Else
         TcpServer.SendData msg
     End If
