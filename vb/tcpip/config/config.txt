@@ -1,9 +1,16 @@
 tcpClient
 127.0.0.1
 1521
+
+
+isEchoSystem
+True
+
 tcpServer
 1521
+
 logFilepath
 log.txt
+
 saveResponseDir
 ../../pvt/vb-data/

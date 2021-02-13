@@ -2,12 +2,12 @@ VERSION 5.00
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Begin VB.Form TcpIpForm 
    Caption         =   "Form1"
-   ClientHeight    =   5730
+   ClientHeight    =   6435
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   10545
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5730
+   ScaleHeight     =   6435
    ScaleWidth      =   10545
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer ServerTimer 
@@ -55,7 +55,7 @@ Begin VB.Form TcpIpForm
       Height          =   375
       Left            =   5880
       TabIndex        =   6
-      Text            =   "Text2"
+      Text            =   "ClientData"
       Top             =   1320
       Width           =   1575
    End
@@ -71,7 +71,7 @@ Begin VB.Form TcpIpForm
       Height          =   375
       Left            =   360
       TabIndex        =   4
-      Text            =   "Text1"
+      Text            =   "ServerData"
       Top             =   1440
       Width           =   2175
    End
@@ -128,7 +128,7 @@ Begin VB.Form TcpIpForm
    End
    Begin VB.Label AppConfig 
       Caption         =   "Config: "
-      Height          =   255
+      Height          =   975
       Left            =   360
       TabIndex        =   14
       Top             =   5280
@@ -151,7 +151,7 @@ Begin VB.Form TcpIpForm
       Width           =   3135
    End
    Begin VB.Label ClientLabel 
-      Caption         =   "Label1"
+      Caption         =   "Label2"
       Height          =   375
       Left            =   5880
       TabIndex        =   10
@@ -169,7 +169,7 @@ Private IsServerStarted As Boolean
 Private RemotePort, LocalPort As Integer
 Private RemoteHost, Key, ServerReceivedData As String
 Private TimerCountValue As Integer
-Private SaveResponseDir, LogFilePath As String
+Private SaveResponseDir, LogFilePath, IsEchoSystem As String
 Private File As New File
 Private Method As New MethodClass
 Private HexToString As New HexToString
@@ -184,12 +184,13 @@ Private Test As New TestClass
 Private Function InitAppliction()
 
 TimerCountValue = 0
+RemoteHost = "127.0.0.1"
 RemotePort = 1521
 LocalPort = 1521
-RemoteHost = "127.0.0.1"
-ServerText.Text = ""
 
+IsEchoSystem = "False"
 SaveResponseDir = ""
+LogFilePath = "log.txt"
 
 
 Dim lineCount As Integer
@@ -222,6 +223,10 @@ For I = 0 To lineCount
         I = I + 1
         LogFilePath = configData(I)
     End If
+    If configData(I) = "isEchoSystem" Then
+        I = I + 1
+        IsEchoSystem = configData(I)
+    End If
     If configData(I) = "saveResponseDir" Then
         I = I + 1
         SaveResponseDir = configData(I)
@@ -231,77 +236,55 @@ Key = "1234"
 Dim finalConfigData As String
 finalConfigData = "TcpClient: " & RemoteHost & ":" & RemotePort
 finalConfigData = finalConfigData & ", TcpServer: " & LocalPort
-finalConfigData = finalConfigData & ", LogFilePath : " & LogFilePath
-finalConfigData = finalConfigData & ", SaveResponseDir : " & SaveResponseDir
-
+finalConfigData = finalConfigData & ", LogFilePath: " & LogFilePath
+finalConfigData = finalConfigData & ", SaveResponseDir: " & SaveResponseDir
+finalConfigData = finalConfigData & ", IsEchoSystem: " & IsEchoSystem
 ServerReceivedData = ""
 AddLog "configData: " & finalConfigData
 AppConfig.Caption = AppConfig.Caption & finalConfigData
+
+
 End Function
 
-Private Function ParseData(msg As String)
+
+Private Function SaveReceivedData(msg As String, ByVal filename As String)
 
 Dim responseFileName As String
-responseFileName = SaveResponseDir & Format(Date, "yyyy-MM-dd") & "-" & Format(Hour(Time), "00") & "-" & Format(Minute(Time), "00") & ".log"
+responseFileName = SaveResponseDir & Format(Date, "yyyy-MM-dd") & "-" & Format(Hour(Time), "00") & "-" & Format(Minute(Time), "00") & Format(Second(Time), "00") & filename & ".log"
 
 Open responseFileName For Append As #1
     Print #1, msg
 Close #1
 sleep (500)
-Dim fileData(1000) As String
-Dim fileLengthCount As Integer
-
-File.ReadFile responseFileName, fileData, fileLengthCount
-
-
-ServerReceivedData = "Parsed"
 
 End Function
+
 
 
 Private Function AddLog(ByVal msg As String)
 File.LogText LogFilePath, Key, msg
 End Function
 
-'Private Function AddLogArray(ByRef dataArr() As String, ByVal length As Integer)
-'For I = 0 To length - 1
-'    AddLog dataArr(I)
-'Next
-'End Function
-
 
 Private Function UpdateServerLog(msg As String)
-AddLog msg
+AddLog "Server:" & msg
 ServerLog.Text = msg & vbCrLf & ServerLog.Text
 
 End Function
 
 Private Function UpdateClientLog(msg As String)
-AddLog msg
+AddLog "Client:" & msg
 ClientLog.Text = msg & vbCrLf & ClientLog.Text
 End Function
 
-Private Function SendDataFromServer() As String
-    msg = ServerText.Text
-    If msg = "" Then
-        Exit Function
-    End If
-    If TimerCountValue Mod 5 > 0 Then
-        Exit Function
-    End If
-    If TcpServer.State <> sckConnected Then
-        UpdateServerLog "Not connected"
-    Else
-        TcpServer.SendData msg
-        ServerText.Text = ""
-    End If
-End Function
-
-
 Private Sub CloseClient_Click()
-UpdateClientLog "Close client click"
 TcpClient.Close
-IsClientConnected = False
+If IsClientConnected = True Then
+    IsClientConnected = False
+    UpdateClientLog "Client disconnected"
+Else
+    UpdateClientLog "Client is not running"
+End If
 End Sub
 
 Private Sub Form_Load()
@@ -318,12 +301,27 @@ AddLog "Application closed"
 End Sub
 
 
-Private Sub SendFromClientButton_Click()
+Private Function SendTextFromClient(ByVal msg As String)
     If TcpClient.State <> sckConnected Then
         UpdateClientLog "Not connected"
     Else
-        TcpClient.SendData ClientText.Text
+        TcpClient.SendData msg
     End If
+End Function
+Private Function SendTextFromServer(ByVal msg As String)
+    If TcpServer.State <> sckConnected Then
+        UpdateClientLog "Not connected"
+    Else
+        TcpServer.SendData msg
+    End If
+End Function
+
+Private Sub SendFromClientButton_Click()
+    SendTextFromClient ClientText.Text
+End Sub
+
+Private Sub SendToClientButton_Click()
+    SendTextFromServer ServerText.Text
 End Sub
 
 Private Sub ServerTimer_Timer()
@@ -334,25 +332,26 @@ End Sub
 
 Private Sub StartClient_Click()
 
-UpdateClientLog "Start Client Click"
 If IsClientConnected = False Then
     TcpClient.RemoteHost = RemoteHost
     TcpClient.RemotePort = RemotePort
     TcpClient.Connect
     IsClientConnected = True
     ClientLabel.Caption = RemoteHost & ":" & RemotePort
+    UpdateClientLog "Client connected to " & RemoteHost & ":" & RemotePort
+Else
+    UpdateClientLog "Client already connected"
 End If
 End Sub
 
 Private Sub StartServer_Click()
 
-UpdateServerLog "Server Start Click"
 If IsServerStarted = False Then
     TcpServer.LocalPort = LocalPort
     TcpServer.Listen
     IsServerStarted = True
     ServerLabel.Caption = LocalPort
-    UpdateServerLog "Server started"
+    UpdateServerLog "Server started on port: " & LocalPort
 Else
     UpdateServerLog "Server already running"
 End If
@@ -363,9 +362,59 @@ End Sub
 Private Sub TcpClient_DataArrival(ByVal bytesTotal As Long)
 Dim msg As String
 TcpClient.GetData msg
+SaveReceivedData msg, "client-received"
+Dim isError As Boolean
+isError = False
 
-ClientReceived.Text = msg
+On Error GoTo A
+
+If IsEchoSystem = "True" Then
+    ClientReceived.Text = msg
+'    UpdateClientLog msg
+Else
+    isError = True
+    TcpServer.SendData msg
+    isError = False
+End If
+
+
+A:
+
+If isError Then
+    UpdateClientLog "Error in sending data to server: " & msg
+End If
+
 UpdateClientLog msg
+
+End Sub
+
+Private Sub TcpServer_DataArrival(ByVal bytesTotal As Long)
+
+Dim msg As String
+TcpServer.GetData msg
+SaveReceivedData msg, "server-received"
+
+Dim isError As Boolean
+isError = False
+
+On Error GoTo A
+If IsEchoSystem = "True" Then
+    ServerReceived.Text = msg
+    SendTextFromServer msg
+'    UpdateServerLog msg
+Else
+    isError = True
+    TcpClient.SendData msg
+    isError = False
+End If
+
+A:
+
+If isError Then
+    UpdateServerLog "Error in sending data to client: " & msg
+End If
+
+UpdateServerLog msg
 End Sub
 
 Private Sub TcpServer_ConnectionRequest(ByVal requestID As Long)
@@ -379,13 +428,31 @@ UpdateServerLog "New client added: " & requestID
 
 End Sub
 
-Private Sub TcpServer_DataArrival(ByVal bytesTotal As Long)
-Dim msg As String
-Dim value As String
-TcpServer.GetData msg
 
-ParseData msg
-
-ServerReceived.Text = ServerReceivedData
-UpdateServerLog msg
-End Sub
+'Private Function convertStrToByte(ByVal data As String, ByRef length As Integer, ByRef result() As Byte)
+'Dim charArr(1000) As String
+'
+'Method.ConvertStringToCharArr data, length, charArr
+'Method.ConvertStringToCharArr charArr, length, result
+'End Function
+'
+'Private Function sendDataFromClient(ByVal data As String)
+'Dim length As Integer
+'Dim byteArr(1000) As Byte
+'For I = 0 To length
+'    TcpClient.SendData byteArr(I)
+'    sleep (10)
+'Next
+'
+'End Function
+'
+'Private Function sendDataFromServer(ByVal data As String)
+'Dim length As Integer
+'Dim byteArr(1000) As Byte
+'For I = 0 To length
+'    TcpServer.SendData byteArr(I)
+'    sleep (10)
+'Next
+'
+'End Function
+'
