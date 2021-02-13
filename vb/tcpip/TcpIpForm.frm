@@ -10,13 +10,21 @@ Begin VB.Form TcpIpForm
    ScaleHeight     =   6435
    ScaleWidth      =   10545
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton StopServer 
+      Caption         =   "StopServer"
+      Height          =   615
+      Left            =   1920
+      TabIndex        =   15
+      Top             =   600
+      Width           =   1455
+   End
    Begin VB.Timer ServerTimer 
       Interval        =   1000
-      Left            =   3120
+      Left            =   4920
       Top             =   720
    End
    Begin VB.CommandButton CloseClient 
-      Caption         =   "CloseClient"
+      Caption         =   "StopClient"
       Height          =   495
       Left            =   7800
       TabIndex        =   12
@@ -30,7 +38,7 @@ Begin VB.Form TcpIpForm
       ScrollBars      =   2  'Vertical
       TabIndex        =   9
       Text            =   "TcpIpForm.frx":0000
-      Top             =   2880
+      Top             =   3000
       Width           =   4335
    End
    Begin VB.TextBox ServerLog 
@@ -119,12 +127,28 @@ Begin VB.Form TcpIpForm
       Width           =   1575
    End
    Begin MSWinsockLib.Winsock TcpServer 
-      Left            =   2400
+      Left            =   4320
       Top             =   720
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
       LocalPort       =   1521
+   End
+   Begin VB.Label ClientInfo 
+      Caption         =   "Client Info"
+      Height          =   255
+      Left            =   5760
+      TabIndex        =   17
+      Top             =   2640
+      Width           =   4215
+   End
+   Begin VB.Label ServerInfo 
+      Caption         =   "Server Info"
+      Height          =   375
+      Left            =   480
+      TabIndex        =   16
+      Top             =   2520
+      Width           =   3855
    End
    Begin VB.Label AppConfig 
       Caption         =   "Config: "
@@ -176,6 +200,7 @@ Private HexToString As New HexToString
 Private StringToHex As New StringToHex
 Private HexCharToAscii As New HexCharToAscii
 Private Test As New TestClass
+Private ServerReceiveCount, ServerSendCount, ClientReceiveCount, ClientSendCount As Integer
 
 
 
@@ -192,6 +217,10 @@ IsEchoSystem = "True"
 SaveResponseDir = ""
 LogFilePath = "log.txt"
 
+ServerReceiveCount = 0
+ServerSendCount = 0
+ClientReceiveCount = 0
+ClientSendCount = 0
 
 Dim lineCount As Integer
 Dim appConfigData(256) As String
@@ -285,6 +314,9 @@ If IsClientConnected = True Then
 Else
     UpdateClientLog "Client is not running"
 End If
+
+ClientReceiveCount = 0
+ClientSendCount = 0
 End Sub
 
 Private Sub Form_Load()
@@ -306,6 +338,7 @@ Private Function SendTextFromClient(ByVal msg As String)
         UpdateClientLog "Not connected"
     Else
         TcpClient.SendData msg
+        ClientSendCount = ClientSendCount + 1
     End If
 End Function
 Private Function SendTextFromServer(ByVal msg As String)
@@ -313,6 +346,7 @@ Private Function SendTextFromServer(ByVal msg As String)
         UpdateServerLog "Not connected"
     Else
         TcpServer.SendData msg
+        ServerSendCount = ServerSendCount + 1
     End If
 End Function
 
@@ -327,7 +361,30 @@ End Sub
 Private Sub ServerTimer_Timer()
 TimerCountValue = TimerCountValue + 1
 TimerCount.Caption = TimerCountValue
-' SendDataFromServer
+
+Dim serverLabelText, clientLabelText As String
+serverLabelText = LocalPort
+clientLabelText = RemoteHost & ":" & RemotePort
+
+
+If TcpServer.State <> sckConnected Then
+    serverLabelText = serverLabelText & ", " & "Not connected"
+Else
+    serverLabelText = serverLabelText & ", " & "Connected"
+End If
+
+
+If TcpClient.State <> sckConnected Then
+    clientLabelText = clientLabelText & ", " & "Not connected"
+Else
+    clientLabelText = clientLabelText & ", " & "Connected"
+End If
+
+ServerLabel.Caption = serverLabelText
+ClientLabel.Caption = clientLabelText
+ServerInfo.Caption = "SendCount = " & ServerSendCount & ", ReceiveCount = " & ServerReceiveCount
+ClientInfo.Caption = "SendCount = " & ClientSendCount & ", ReceiveCount = " & ClientReceiveCount
+
 End Sub
 
 Private Sub StartClient_Click()
@@ -359,7 +416,21 @@ End If
 End Sub
 
 
+Private Sub StopServer_Click()
+TcpServer.Close
+If IsServerStarted = True Then
+    IsServerStarted = False
+    UpdateServerLog "Server stoped"
+Else
+    UpdateServerLog "Server is not running"
+End If
+
+ServerReceiveCount = 0
+ServerSendCount = 0
+End Sub
+
 Private Sub TcpClient_DataArrival(ByVal bytesTotal As Long)
+ClientReceiveCount = ClientReceiveCount + 1
 Dim msg As String
 TcpClient.GetData msg
 SaveReceivedData msg, "client-received"
@@ -374,6 +445,7 @@ If IsEchoSystem = "True" Then
 Else
     isError = True
     TcpServer.SendData msg
+    ServerSendCount = ServerSendCount + 1
     isError = False
 End If
 
@@ -389,7 +461,7 @@ UpdateClientLog msg
 End Sub
 
 Private Sub TcpServer_DataArrival(ByVal bytesTotal As Long)
-
+ServerReceiveCount = ServerReceiveCount + 1
 Dim msg As String
 TcpServer.GetData msg
 SaveReceivedData msg, "server-received"
@@ -405,6 +477,7 @@ If IsEchoSystem = "True" Then
 Else
     isError = True
     TcpClient.SendData msg
+    ClientSendCount = ClientSendCount + 1
     isError = False
 End If
 
