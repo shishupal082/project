@@ -11,7 +11,7 @@
 </head>
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root"><center>Loading...</center></div>
 <script type="text/javascript">
 var GLOBAL = {
     baseapi: "",
