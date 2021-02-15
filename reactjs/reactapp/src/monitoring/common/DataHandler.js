@@ -338,7 +338,6 @@ DataHandler.extend({
         if ($S.isObject(section) && $S.isBoolean(section.disableFooter)) {
             return section.disableFooter;
         }
-
         return true;
     },
     getDefaultDateSelectionType: function() {

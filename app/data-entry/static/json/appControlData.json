@@ -1,0 +1,24 @@
+[
+    {
+        "id": "entry1-app",
+        "name": "Entry1 App",
+        "heading": "Entry1 App",
+        "disableFooter": true,
+        "unit": "Rs.",
+        "metaDataApi": [
+            "/app/data-entry/static/json/metaData.json"
+        ],
+        "csvMetaDataApi": []
+    },
+    {
+        "id": "entry2-app",
+        "name": "Entry2 App",
+        "heading": "Entry2 App",
+        "disableFooter": true,
+        "unit": "Day(s)",
+        "metaDataApi": [
+            "/app/data-entry/static/json/metaData.json"
+        ],
+        "csvMetaDataApi": []
+    }
+]

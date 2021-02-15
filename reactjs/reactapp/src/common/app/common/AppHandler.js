@@ -188,7 +188,31 @@ AppHandler.extend({
             }
         }
         return filterData;
-    }
+    },
+    convertRowToCol: function(data) {
+        var rows = [];
+        var maxRowLen = 0, i, j;
+        if ($S.isArray(data)) {
+            for (i = 0; i < data.length; i++) {
+                if ($S.isArray(data[i])) {
+                    if (data[i].length > maxRowLen) {
+                        maxRowLen = data[i].length;
+                    }
+                }
+            }
+            for (i = 0; i < maxRowLen; i++) {
+                rows.push([]);
+            }
+            for (i = 0; i < data.length; i++) {
+                if ($S.isArray(data[i])) {
+                    for(j=0; j<data[i].length; j++) {
+                        rows[j].push(data[i][j]);
+                    }
+                }
+            }
+        }
+        return rows;
+    },
 });
 
 var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
