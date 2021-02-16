@@ -189,7 +189,7 @@ AppHandler.extend({
         }
         return filterData;
     },
-    convertRowToCol: function(data) {
+    ConvertRowToCol: function(data) {
         var rows = [];
         var maxRowLen = 0, i, j;
         if ($S.isArray(data)) {
@@ -213,6 +213,23 @@ AppHandler.extend({
         }
         return rows;
     },
+    ParseCSVData: function(dataStr) {
+        var finalArr = [], i;
+        if (!$S.isString(dataStr)) {
+            return finalArr;
+        }
+        var arr = dataStr.split("\n");
+        for (i = 0; i < arr.length; i++) {
+            arr[i] = arr[i].split(",");
+        }
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i].length === 1 && arr[i][0].trim() === "") {
+                continue;
+            }
+            finalArr.push(arr[i]);
+        }
+        return finalArr;
+    }
 });
 
 var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};

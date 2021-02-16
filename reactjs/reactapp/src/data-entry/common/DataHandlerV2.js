@@ -49,7 +49,7 @@ DataHandlerV2.extend({
 	SubmitFormClick: function(appStateCallback, appDataCallback) {
 		var fieldsData = DataHandler.getData("fieldsData", {});
 		var currentAppId = DataHandler.getData("currentAppId", "");
-		var filter2 = DataHandler.getData("filter2", "");
+		// var filter2 = DataHandler.getData("filter2", "");
 		var appData = DataHandler.getCurrentAppData();
 		var filter2Data = DataHandler.getCurrentFilter2Data();
 		var finalText = [], value, temp3, userData;
@@ -81,12 +81,40 @@ DataHandlerV2.extend({
 				}
 			}
 		}
-		var filename = currentAppId + "-" + filter2 + ".csv";
+		var filename = currentAppId + ".csv";
 		if (finalText.length > 0 && isFormOk) {
 			this.callAddTextApi(appData.name, filter2Data.option, filename, finalText);
 		} else {
 			alert("Atleast one entry required");
 		}
+	}
+});
+
+DataHandlerV2.extend({
+	HandleUserDataCsvLoad: function(response) {
+		var responseArr = AppHandler.ParseCSVData(response);
+		var metaData = DataHandler.getData("metaData", {});
+		var accounts = [];
+		for (var i = 0; i < responseArr.length; i++) {
+			if (responseArr[i].length > 0) {
+				if (["true"].indexOf(responseArr[i][0]) < 0) {
+					continue;
+				}
+			} else {
+				continue;
+			}
+			if (responseArr[i].length >= 6) {
+				accounts.push({"id": responseArr[i][3],
+					"name": responseArr[i][5],
+					"team": responseArr[i][1],
+					"station": responseArr[i][2],
+					"designation": responseArr[i][4]});
+			} else {
+				$S.log("Invalid entry: " + responseArr[i].join(","));
+			}
+		}
+		metaData.accounts = accounts;
+		DataHandler.setData("metaData", metaData);
 	}
 });
 

@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 // import $$$ from '../../interface/global';
 import Config from "./Config";
+import DataHandlerV2 from "./DataHandlerV2";
 import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
@@ -46,8 +47,10 @@ keys.push("filter2");
 
 keys.push("appControlData");
 keys.push("metaData");
+keys.push("userData");
 keys.push("appControlDataLoadStatus");
 keys.push("metaDataLoadStatus");
+keys.push("userDataLoadStatus");
 
 keys.push("firstTimeDataLoadStatus");
 
@@ -94,6 +97,7 @@ CurrentData.setKeys(keys);
 
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
+CurrentData.setData("userDataLoadStatus", "not-started");
 
 // CurrentData.setData("staticDataLoadStatus", "not-started");
 // CurrentData.setData("taskDataLoadStatus", "not-started");
@@ -148,6 +152,7 @@ DataHandler.extend({
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("appControlDataLoadStatus");
         dataLoadStatusKey.push("metaDataLoadStatus");
+        dataLoadStatusKey.push("userDataLoadStatus");
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
         }
@@ -219,6 +224,20 @@ DataHandler.extend({
         }
         return currentAppData;
     },
+    getCurrentFilter1Data: function() {
+        var filter1 = this.getData("filter1", "");
+        var filter1Data = {};
+        var metaData = this.getData("metaData", {});
+        if ($S.isObject(metaData["filter1"]) && $S.isArray(metaData["filter1"].text)) {
+            for (var i = 0; i < metaData["filter1"].text.length; i++) {
+                if (metaData["filter1"].text[i].value === filter1) {
+                    filter1Data = metaData["filter1"].text[i];
+                    break;
+                }
+            }
+        }
+        return filter1Data;
+    },
     getCurrentFilter2Data: function() {
         var filter2 = this.getData("filter2", "");
         var filter2Data = {};
@@ -246,7 +265,7 @@ DataHandler.extend({
                 if (staticFooterData[i].type === "table-rows") {
                     footerData.push({"type": "table", "entry": staticFooterData[i].entry});
                 } else if (staticFooterData[i].type === "table-cols") {
-                    footerData.push({"type": "table", "entry": AppHandler.convertRowToCol(staticFooterData[i].entry)});
+                    footerData.push({"type": "table", "entry": AppHandler.ConvertRowToCol(staticFooterData[i].entry)});
                 } else {
                     footerData.push({"type": "div", "entry": staticFooterData[i].entry});
                 }
@@ -299,6 +318,16 @@ DataHandler.extend({
     }*/
 });
 DataHandler.extend({
+    loadUserData: function(callback) {
+        DataHandler.setData("userDataLoadStatus", "in_progress");
+        $S.loadJsonData(null, [Config.getApiUrl("user-data-csv", null, true)], function(response, apiName, ajax){
+            DataHandler.setData("userDataLoadStatus", "completed");
+            DataHandlerV2.HandleUserDataCsvLoad(response);
+        }, function() {
+            $S.log("userData load complete");
+            $S.callMethod(callback);
+        }, null, Api.getAjaxApiCallMethodV2());
+    },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
         var metaDataApi = [];
@@ -314,7 +343,7 @@ DataHandler.extend({
             DataHandler.metaDataInit();
         }, function() {
             $S.log("metaData load complete");
-            $S.callMethod(callback);
+            DataHandler.loadUserData(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
@@ -410,14 +439,20 @@ DataHandler.extend({
         var metaData = this.getData("metaData", {});
         var temp, temp2, temp3, i;
         var unit = this.getUnit();
+        var filter1Data = DataHandler.getCurrentFilter1Data();
+        var filterTeam = [];
+        if ($S.isArray(filter1Data.team)) {
+            filterTeam = filter1Data.team;
+        }
+        var count = 1;
         if ($S.isObject(metaData) && $S.isArray(metaData.accounts)) {
-            temp3 = ["S.No.", "Name", "Designation", "Unit", "Entry"];
+            temp3 = ["S.No.", "Name", "ID", "Unit", "Entry"];
             renderData.push(temp3);
             for (i = 0; i < metaData.accounts.length; i++) {
                 temp2 = [];
-                temp = {"s.no": i+1, "name": "", "designation": "", "unit": "", "input": {}};
+                temp = {"s.no": count, "name": "", "designation": "", "unit": "", "input": {}};
                 temp["name"] = metaData.accounts[i].name;
-                // temp["designation"] = metaData.accounts[i].id;
+                temp["designation"] = metaData.accounts[i].id;
                 temp["unit"] = unit;
                 temp["input"] = {"name": metaData.accounts[i].id, "defaultValue": "", "tag": "input"};
                 temp2.push(temp["s.no"]);
@@ -425,7 +460,10 @@ DataHandler.extend({
                 temp2.push(temp["designation"]);
                 temp2.push(temp["unit"]);
                 temp2.push(temp["input"]);
-                renderData.push(temp2);
+                if ($S.isString(metaData.accounts[i].team) && filterTeam.indexOf(metaData.accounts[i].team) >= 0) {
+                    count++;
+                    renderData.push(temp2);
+                }
             }
             renderData.push(temp3);
         }
