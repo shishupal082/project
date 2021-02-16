@@ -382,6 +382,9 @@ DataHandler.extend({
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
+        if ($S.isString(value)) {
+            value = value.trim();
+        }
         fieldsData[name] = value;
         this.setData("fieldsData", fieldsData);
     }

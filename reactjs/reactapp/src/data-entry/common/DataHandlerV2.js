@@ -23,7 +23,7 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
-	callAddTextApi: function(subject, heading, addTextFilename, finalText, callBack) {
+    callAddTextApi: function(subject, heading, addTextFilename, finalText, callBack) {
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
@@ -46,76 +46,76 @@ DataHandlerV2.extend({
             }
         });
     },
-	SubmitFormClick: function(appStateCallback, appDataCallback) {
-		var fieldsData = DataHandler.getData("fieldsData", {});
-		var currentAppId = DataHandler.getData("currentAppId", "");
-		// var filter2 = DataHandler.getData("filter2", "");
-		var appData = DataHandler.getCurrentAppData();
-		var filter2Data = DataHandler.getCurrentFilter2Data();
-		var finalText = [], value, temp3, userData;
-		var isFormOk = true;
-		if ($S.isObject(filter2Data) && $S.isString(filter2Data.date)) {
-			for (var usedid in fieldsData) {
-				value = fieldsData[usedid];
-				if (isNaN(value)) {
-					isFormOk = false;
-					alert("Enter value '" + value + "' is incorrect");
-					break;
-				}
-				userData = DataHandler.getUserInfoById(usedid);
-				if (!$S.isString(userData.id)) {
-					continue;
-				}
-				temp3 = [];
-				if ($S.isString(value) && value.length > 0) {
-					temp3.push(filter2Data.date);
-					temp3.push(userData.name + " " + filter2Data.option);
-					temp3.push("dr");
-					temp3.push(value);
-					temp3.push(usedid);
-					temp3.push(userData.name  + " " + filter2Data.option);
-					temp3.push("cr");
-					temp3.push(value);
-					temp3.push(filter2Data.value);
-					finalText.push(temp3.join(","));
-				}
-			}
-		}
-		var filename = currentAppId + ".csv";
-		if (finalText.length > 0 && isFormOk) {
-			this.callAddTextApi(appData.name, filter2Data.option, filename, finalText);
-		} else {
-			alert("Atleast one entry required");
-		}
-	}
+    SubmitFormClick: function(appStateCallback, appDataCallback) {
+        var fieldsData = DataHandler.getData("fieldsData", {});
+        var currentAppId = DataHandler.getData("currentAppId", "");
+        // var filter2 = DataHandler.getData("filter2", "");
+        var appData = DataHandler.getCurrentAppData();
+        var filter2Data = DataHandler.getCurrentFilter2Data();
+        var finalText = [], value, temp3, userData;
+        var isFormOk = true;
+        if ($S.isObject(filter2Data) && $S.isString(filter2Data.date)) {
+            for (var usedid in fieldsData) {
+                value = fieldsData[usedid];
+                if (isNaN(value)) {
+                    isFormOk = false;
+                    alert("Enter value '" + value + "' is incorrect");
+                    break;
+                }
+                userData = DataHandler.getUserInfoById(usedid);
+                if (!$S.isString(userData.id)) {
+                    continue;
+                }
+                temp3 = [];
+                if ($S.isString(value) && value.length > 0) {
+                    temp3.push(filter2Data.date);
+                    temp3.push(userData.name + " " + filter2Data.option);
+                    temp3.push("dr");
+                    temp3.push(value);
+                    temp3.push(usedid);
+                    temp3.push(userData.name + " " + filter2Data.option);
+                    temp3.push("cr");
+                    temp3.push(value);
+                    temp3.push(filter2Data.value);
+                    finalText.push(temp3.join(","));
+                }
+            }
+        }
+        var filename = currentAppId + ".csv";
+        if (finalText.length > 0 && isFormOk) {
+            this.callAddTextApi(appData.name, filter2Data.option, filename, finalText);
+        } else {
+            alert("Atleast one entry required");
+        }
+    }
 });
 
 DataHandlerV2.extend({
-	HandleUserDataCsvLoad: function(response) {
-		var responseArr = AppHandler.ParseCSVData(response);
-		var metaData = DataHandler.getData("metaData", {});
-		var accounts = [];
-		for (var i = 0; i < responseArr.length; i++) {
-			if (responseArr[i].length > 0) {
-				if (["true"].indexOf(responseArr[i][0]) < 0) {
-					continue;
-				}
-			} else {
-				continue;
-			}
-			if (responseArr[i].length >= 6) {
-				accounts.push({"id": responseArr[i][3],
-					"name": responseArr[i][5],
-					"team": responseArr[i][1],
-					"station": responseArr[i][2],
-					"designation": responseArr[i][4]});
-			} else {
-				$S.log("Invalid entry: " + responseArr[i].join(","));
-			}
-		}
-		metaData.accounts = accounts;
-		DataHandler.setData("metaData", metaData);
-	}
+    HandleUserDataCsvLoad: function(response) {
+        var responseArr = AppHandler.ParseCSVData(response);
+        var metaData = DataHandler.getData("metaData", {});
+        var accounts = [];
+        for (var i = 0; i < responseArr.length; i++) {
+            if (responseArr[i].length > 0) {
+                if (["true"].indexOf(responseArr[i][0]) < 0) {
+                    continue;
+                }
+            } else {
+                continue;
+            }
+            if (responseArr[i].length >= 6) {
+                accounts.push({"id": responseArr[i][3],
+                    "name": responseArr[i][5],
+                    "team": responseArr[i][1],
+                    "station": responseArr[i][2],
+                    "designation": responseArr[i][4]});
+            } else {
+                $S.log("Invalid entry: " + responseArr[i].join(","));
+            }
+        }
+        metaData.accounts = accounts;
+        DataHandler.setData("metaData", metaData);
+    }
 });
 
 })($S);
