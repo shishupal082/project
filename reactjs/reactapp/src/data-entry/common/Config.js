@@ -69,7 +69,6 @@ Config.goBackLinkData = [];
 
 var apiMapping = {};
 apiMapping["app-control-data"] = appControlDataApi;
-apiMapping["user-data-csv"] = "/public/csv/user_data.csv";
 apiMapping["addTextApi"] = "/api/add_text";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {

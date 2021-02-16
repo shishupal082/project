@@ -318,9 +318,21 @@ DataHandler.extend({
     }*/
 });
 DataHandler.extend({
+    getUserDataCsvApi: function() {
+        var currentAppData = this.getCurrentAppData();
+        var api = [];
+        if ($S.isObject(currentAppData) && $S.isArray(currentAppData.userDataApi)) {
+            for (var i = 0; i < currentAppData.userDataApi.length; i++) {
+                if ($S.isString(currentAppData.userDataApi[i]) && currentAppData.userDataApi[i].length > 0) {
+                    api.push(Config.dataLoadBaseapi + currentAppData.userDataApi[i]);
+                }
+            }
+        }
+        return api;
+    },
     loadUserData: function(callback) {
         DataHandler.setData("userDataLoadStatus", "in_progress");
-        $S.loadJsonData(null, [Config.getApiUrl("user-data-csv", null, true)], function(response, apiName, ajax){
+        $S.loadJsonData(null, this.getUserDataCsvApi(), function(response, apiName, ajax){
             DataHandler.setData("userDataLoadStatus", "completed");
             DataHandlerV2.HandleUserDataCsvLoad(response);
         }, function() {
