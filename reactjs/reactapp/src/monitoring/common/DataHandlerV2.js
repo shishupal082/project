@@ -154,7 +154,7 @@ DataHandlerV2.extend({
 
         postData["subject"] = station;
         postData["heading"] = heading;
-        postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+text+","+username];
+        postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+username+","+text];
         postData["filename"] = addTextFilename;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
