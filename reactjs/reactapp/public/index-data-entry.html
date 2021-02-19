@@ -21,12 +21,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App Monitoring</title>
+    <title>React App Data Entry</title>
     <!-- It will use nodejs to load static file -->
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/libs/bootstrap-v4.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/monitor/static/css/monitor-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/data-entry/static/css/data-entry-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -39,11 +39,6 @@
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="d-none" style="display: none;">
-      <input type="hidden" style="display: none;" name="uploadFileInstruction" id="uploadFileInstruction"
-        value="(Supported type: pdf,jpeg,jpg and png, max size < 10MB)"/>
-      <input type="hidden" style="display: none;" name="uploadTextInstruction" id="uploadTextInstruction" value=""/>
-    </div>
     <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
@@ -55,31 +50,19 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-<script type="text/javascript" src="http://localhost:8080/assets/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript">
 
 var GLOBAL = {
-    baseapi: "http://localhost:8080",
-    appControlDataPath: "/app/monitor/static/data/",
-    basepathname: "",
-    forceLogin: true
+    dataLoadBaseapi: "http://localhost:8080",
+    basepathname: ""
 };
 
-GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
-GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
-GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
-
-GLOBAL.validTeamAppControl = ["appControlDataTeam01",
-              "appControlDataTeam02","appControlDataTeam03",
-              "appControlDataTeam04","appControlDataTeam05"];
-
-
-GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
-GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
+GLOBAL.appControlDataApi = "/pvt/app-data/data-entry/appControlData.json";
 
 GLOBAL.gtag = gtag;
-GLOBAL.appVersion = "v1.0.3";
+GLOBAL.appVersion = "v1.0.1";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>

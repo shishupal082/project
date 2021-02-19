@@ -29,6 +29,10 @@ keys.push("csvDataByDate");
 keys.push("renderData");
 keys.push("renderFieldRow");
 
+
+keys.push("relatedUsersData");
+keys.push("relatedUsersDataLoadStatus");
+
 // keys.push("selectedDateType");
 keys.push("selectedDateParameter");
 keys.push("combinedDateSelectionParameter");
@@ -55,7 +59,7 @@ var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
         "selectedStation", "selectedType", "selectedDevice",
-        "loginUserDetailsLoadStatus", "usersFilesData"];
+        "relatedUsersData", "relatedUsersDataLoadStatus", "loginUserDetailsLoadStatus", "usersFilesData"];
 
 keys.push("addentry.subject");
 keys.push("addentry.heading");
@@ -69,7 +73,7 @@ CurrentData.setKeys(keys);
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("csvDataLoadStatus", "not-started");
-
+CurrentData.setData("relatedUsersDataLoadStatus", "not-started");
 CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("usersFilesData", []);
 
@@ -93,6 +97,7 @@ DataHandler.extend({
         dataLoadStatusKey.push("metaDataLoadStatus");
         dataLoadStatusKey.push("csvDataLoadStatus");
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
+        dataLoadStatusKey.push("relatedUsersDataLoadStatus");
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return "";
         }
@@ -485,6 +490,18 @@ DataHandler.extend({
         }
         return displayName;
     },
+    getValidUsers: function() {
+        var csvData = DataHandler.getData("csvData", []);
+        var users = [];
+        if ($S.isArray(csvData)) {
+            for (var i = 0; i < csvData.length; i++) {
+                if ($S.isString(csvData[i].username) && users.indexOf(csvData[i].username) < 0) {
+                    users.push(csvData[i].username);
+                }
+            }
+        }
+        return users;
+    },
     getValidTypes: function() {
         return this._getValidationData("monitoring-types");
     },
@@ -519,6 +536,9 @@ DataHandler.extend({
     },
     getAvailableDevice: function() {
         return this._getAvailableData("devices");
+    },
+    getDisplayUsername: function(username) {
+        return username;
     },
     getDisplayType: function(id) {
         return DataHandler._getDisplayName("monitoring-types", id);
@@ -564,6 +584,13 @@ DataHandler.extend({
         DataHandler.setPageData(appStateCallback, appDataCallback, "_fireSectionChange");
     },
     loadUserRelatedData: function(callback) {
+        function fireCallback() {
+            var loadStatus = ["loginUserDetailsLoadStatus", "relatedUsersDataLoadStatus"];
+            if(DataHandler.getDataLoadStatusByKey(loadStatus) !== "completed") {
+                return false;
+            }
+            $S.callMethod(callback);
+        }
         AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
             var isLogin = AppHandler.GetUserData("login", false);
             if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
@@ -571,11 +598,24 @@ DataHandler.extend({
                 return;
             }
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-            $S.callMethod(callback);
             setTimeout(function(){
                 DataHandler.setUserTeam();
             }, 1);
+            fireCallback();
         });
+        DataHandler.setData("relatedUsersDataLoadStatus", "in-progress");
+        $S.loadJsonData(null, [Config.getApiUrl("getRelatedUserDetails", null, true)], function(response, apiName, ajax){
+                var data = [];
+                if ($S.isObject(response) && $S.isArray(response.data)) {
+                    data = response.data;
+                }
+                DataHandler.setData("relatedUsersData", data);
+                console.log(response);
+            }, function() {
+                $S.log("relatedUsersData load complete");
+                DataHandler.setData("relatedUsersDataLoadStatus", "completed");
+                fireCallback();
+            }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
@@ -1042,6 +1082,18 @@ DataHandler.extend({
         }
         return jsonData;
     },
+    _getUsename: function(username) {
+        var validUsername = "info";
+        var relatedUserData = DataHandler.getData("relatedUsersData", []);
+        if ($S.isArray(relatedUserData)) {
+            for (var i = 0; i < relatedUserData.length; i++) {
+                if (relatedUserData[i].username === username) {
+                    validUsername = username;
+                }
+            }
+        }
+        return validUsername;
+    },
     generateValidData: function(jsonData) {
         var errorsData = DataHandler.getData("errorsData", []);
         var finalData = [];
@@ -1097,6 +1149,8 @@ DataHandler.extend({
                                     temp["stationDisplay"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
                                     temp["device"] = jsonData[i][j][3];
                                     temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
+                                    temp["username"] =this._getUsename(jsonData[i][j][4]);
+                                    temp["userDisplayName"] = this.getDisplayUsername(temp["username"]);
                                     if (jsonData[i][j].length >= 5) {
                                         temp["description"] = jsonData[i][j].slice(4).join();
                                     }

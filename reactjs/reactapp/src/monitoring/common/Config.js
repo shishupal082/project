@@ -118,6 +118,7 @@ Config.goBackLinkData = [];
 
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
+apiMapping["getRelatedUserDetails"] = "/api/get_related_users_data";
 apiMapping["getFilesInfo"] = "/api/get_files_info";
 apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["uploadfileApi"] = "/api/upload_file";

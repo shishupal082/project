@@ -76,8 +76,13 @@ TemplateHandler.extend({
         return trTemplate;
     },
     generateSummaryTables: function(summaryData) {
-        var typeData = {}, stationData = {}, deviceData = {};
+        var typeData = {}, stationData = {}, deviceData = {}, userData = {};
         for (var i = 0; i < summaryData.length; i++) {
+            if (userData[summaryData[i].username]) {
+                userData[summaryData[i].username].push(summaryData[i]);
+            } else {
+                userData[summaryData[i].username] = [summaryData[i]];
+            }
             if (typeData[summaryData[i].type]) {
                 typeData[summaryData[i].type].push(summaryData[i]);
             } else {
@@ -94,11 +99,13 @@ TemplateHandler.extend({
                 deviceData[summaryData[i].device] = [summaryData[i]];
             }
         }
+        var availableUsers = DataHandler.getValidUsers();
         var availableTypes = DataHandler.getValidTypes();
         var availableStations = DataHandler.getValidStation();
         var availableDevices = DataHandler.getValidDevice();
         var ref = {"sNo": 1};
         var summaryTable = TemplateHandler.getTemplate("summary.data.table");
+        TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableUsers, userData, DataHandler.getDisplayUsername, ref));
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableStations, stationData, DataHandler.getDisplayStation, ref));
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableTypes, typeData, DataHandler.getDisplayType, ref));
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableDevices, deviceData, DataHandler.getDisplayDevice, ref));
