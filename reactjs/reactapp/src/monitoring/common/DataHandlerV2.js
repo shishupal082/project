@@ -154,7 +154,7 @@ DataHandlerV2.extend({
 
         postData["subject"] = station;
         postData["heading"] = heading;
-        postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+username+","+text];
+        postData["text"] = [currentDateTime2+","+team+","+station+","+device+","+username+","+text+","];
         postData["filename"] = addTextFilename;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callBack);
@@ -207,7 +207,7 @@ DataHandlerV2.extend({
                     } else {
                         DataHandler.TrackApiRequest("uploadFile", "SUCCESS");
                         if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
-                            uploadFileMessage = "Uploaded file: " + response.data.fileName + "," + station + "," + team + "," + device;
+                            uploadFileMessage = "Uploaded file: " + response.data.fileName + "," + station + "," + team + "," + device + "," + username + ",";
                         }
                         DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
                     }
