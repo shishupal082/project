@@ -8,7 +8,7 @@
         "metaDataApi": [
             "/app/data-entry/static/json/metaData.json"
         ],
-        "csvMetaDataApi": []
+        "userDataApi": ["/app/data-entry/static/csv/user_data.csv"]
     },
     {
         "id": "entry2-app",
@@ -17,8 +17,8 @@
         "disableFooter": true,
         "unit": "Day(s)",
         "metaDataApi": [
-            "/app/data-entry/static/json/metaData.json"
+            "/app/data-entry/static/json/metaDataV2.json"
         ],
-        "csvMetaDataApi": []
+        "userDataApi": ["/app/data-entry/static/csv/user_data.csv"]
     }
 ]

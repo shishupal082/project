@@ -449,6 +449,16 @@ DataHandler.extend({
         }
         return result;
     },
+    _isFilterTeamSelected: function(selectedFilterTeam, userFilterTeam) {
+        if ($S.isArray(selectedFilterTeam) && $S.isString(userFilterTeam)) {
+            if (selectedFilterTeam.indexOf("all") >= 0) {
+                return true;
+            } else if (selectedFilterTeam.indexOf(userFilterTeam) >= 0) {
+                return true;
+            }
+        }
+        return false;
+    },
     getRenderData: function(pageName, optionName, fieldName) {
         var renderData = [];
         var metaData = this.getData("metaData", {});
@@ -475,12 +485,16 @@ DataHandler.extend({
                 temp2.push(temp["designation"]);
                 temp2.push(temp["unit"]);
                 temp2.push(temp["input"]);
-                if ($S.isString(metaData.accounts[i].team) && filterTeam.indexOf(metaData.accounts[i].team) >= 0) {
+                if (this._isFilterTeamSelected(filterTeam, metaData.accounts[i].team)) {
                     count++;
                     renderData.push(temp2);
                 }
             }
-            renderData.push(temp3);
+            if (renderData.length > 1) {
+                renderData.push(temp3);
+            } else {
+                renderData = [];
+            }
         }
         return renderData;
     },

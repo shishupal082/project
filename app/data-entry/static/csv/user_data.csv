@@ -1,0 +1,5 @@
+date,type,station,device,userId,Discription,otherInfo,
+
+date,team,station,userId,designation,Name,otherInfo,
+
+2021-02-21,team1,stn1,user/designation/stn,Designation,User display name,

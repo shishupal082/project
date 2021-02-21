@@ -20,14 +20,21 @@ Template["noMatch"] = [{
         "text": "No Data Found"
     }
 }];
-Template["noDataFound"] = [{
-    "tag": "center.h1",
-    "text": {
-        "tag": "span",
-        "className": "badge badge-primary",
-        "text": "No Data Found"
+Template["noDataFound"] = [
+    {
+        "tag": "center.h1",
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "text": "No Data Found"
+        }
+    },
+    {
+        "tag": "div",
+        "name": "footer",
+        "text": []
     }
-}];
+];
 Template["templateNotFound"] = [{
     "tag": "center.h1",
     "text": {

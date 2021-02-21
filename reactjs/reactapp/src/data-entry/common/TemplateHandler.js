@@ -112,8 +112,12 @@ TemplateHandler.extend({
     GetPageRenderField: function(renderData, footerData) {
         var renderField = this.getTemplate("tableField");
         var lastRowIndex = renderData.length-1;
-        for (var i = 0; i < renderData.length; i++) {
-            TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i === 0, i === lastRowIndex, renderData[i]));
+        if (renderData.length > 0) {
+            for (var i = 0; i < renderData.length; i++) {
+                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i === 0, i === lastRowIndex, renderData[i]));
+            }
+        } else {
+            renderField = this.getTemplate("noDataFound");
         }
         var footerField = this.getTemplate("footerField");
         var footerFieldHtml = this.generateFooterHtml(footerData);

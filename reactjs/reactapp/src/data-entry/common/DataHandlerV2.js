@@ -97,18 +97,19 @@ DataHandlerV2.extend({
         var accounts = [];
         for (var i = 0; i < responseArr.length; i++) {
             if (responseArr[i].length > 0) {
-                if (["true"].indexOf(responseArr[i][0]) < 0) {
+                if (!AppHandler.isValidDateStr(responseArr[i][0])) {
                     continue;
                 }
             } else {
                 continue;
             }
             if (responseArr[i].length >= 6) {
-                accounts.push({"id": responseArr[i][3],
-                    "name": responseArr[i][5],
-                    "team": responseArr[i][1],
-                    "station": responseArr[i][2],
-                    "designation": responseArr[i][4]});
+                accounts.push({
+                    "team": responseArr[i][1], // type
+                    "station": responseArr[i][2], // statuion
+                    "designation": responseArr[i][3], // device
+                    "id": responseArr[i][4], // userId
+                    "name": responseArr[i][5]}); // discription
             } else {
                 $S.log("Invalid entry: " + responseArr[i].join(","));
             }
