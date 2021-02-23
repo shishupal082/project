@@ -214,19 +214,50 @@ AppHandler.extend({
         return rows;
     },
     ParseCSVData: function(dataStr) {
-        var finalArr = [], i;
+        return this.ParseTextData(dataStr, ",", false, true);
+    },
+    ParseTextData: function(dataStr, wordBreak, skipEmpty, trimEntry) {
+        if (!$S.isString(wordBreak)) {
+            wordBreak = ",";
+        }
+        if (!$S.isBooleanTrue(skipEmpty)) {
+            skipEmpty = false;
+        }
+        if (!$S.isBooleanTrue(trimEntry)) {
+            trimEntry = true;
+        }
+        var finalArr = [], temp, i, j;
         if (!$S.isString(dataStr)) {
             return finalArr;
         }
         var arr = dataStr.split("\n");
         for (i = 0; i < arr.length; i++) {
-            arr[i] = arr[i].split(",");
+            arr[i] = arr[i].split(wordBreak);
         }
+
         for (i = 0; i < arr.length; i++) {
             if (arr[i].length === 1 && arr[i][0].trim() === "") {
                 continue;
             }
-            finalArr.push(arr[i]);
+            if (trimEntry) {
+                for (j = 0; j < arr[i].length; j++) {
+                    arr[i][j] = arr[i][j].trim();
+                }
+            }
+            temp = [];
+            if (skipEmpty) {
+                for (j = 0; j < arr[i].length; j++) {
+                    if (arr[i][j] === "") {
+                        continue;
+                    }
+                    temp.push(arr[i][j]);
+                }
+            } else {
+                temp = arr[i];
+            }
+            if (temp.length > 0) {
+                finalArr.push(temp);
+            }
         }
         return finalArr;
     }
