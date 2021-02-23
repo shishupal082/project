@@ -329,11 +329,35 @@ DataHandler.extend({
         }
         return result;
     },
+    _handleOptions: function(stnData, optionNames) {
+        var temp = {}, fieldData = {}, j, key, optionName;
+        temp["name"] = stnData.name;
+        temp["fieldData"] = {};
+        if ($S.isArray(optionNames) || optionNames.length < 1) {
+            for (j = 0; j < optionNames.length; j++) {
+                optionName = optionNames[j];
+                if ($S.isString(stnData[optionName])) {
+                    temp[optionName] = stnData[optionName];
+                    fieldData = this._generateFieldData(stnData[optionName]);
+                    for(key in fieldData) {
+                        if (optionNames.length > 1) {
+                            temp["fieldData"][optionName + ":" + key] = fieldData[key];
+                            key = optionName + ":" + key;
+                        } else {
+                            temp["fieldData"][key] = fieldData[key];
+                        }
+                    }
+                }
+            }
+        } else {
+            temp = stnData;
+        }
+        return temp;
+    },
     getRenderData: function(pageName, optionNames, fieldName) {
         var i, j;
-        var temp, key, optionName;
+        var temp, key;
         fieldName = $S.isArray(fieldName) ? fieldName : [];
-
         var apiData = this._getApiData();
         var filteredData = [];
         for(j=0; j<fieldName.length; j++) {
@@ -352,37 +376,16 @@ DataHandler.extend({
         }
         var optionsData = [];
         var rowKeys = [];
-        function handleOptions(stnData, optionNames) {
-            temp = {};
-            temp["name"] = stnData.name;
-            temp["fieldData"] = {};
-            var fieldData = {};
-            if ($S.isArray(optionNames) || optionNames.length < 1) {
-                for (j = 0; j < optionNames.length; j++) {
-                    optionName = optionNames[j];
-                    if ($S.isString(stnData[optionName])) {
-                        temp[optionName] = stnData[optionName];
-                        fieldData = DataHandler._generateFieldData(stnData[optionName]);
-                        for(key in fieldData) {
-                            if (optionNames.length > 1) {
-                                temp["fieldData"][optionName + ":" + key] = fieldData[key];
-                                key = optionName + ":" + key;
-                            } else {
-                                temp["fieldData"][key] = fieldData[key];
-                            }
-                            if (rowKeys.indexOf(key) < 0) {
-                                rowKeys.push(key);
-                            }
-                        }
+        for(i=0; i<filteredData.length; i++) {
+            temp = this._handleOptions(filteredData[i], optionNames);
+            if ($S.isObject(temp.fieldData)) {
+                for (key in temp.fieldData) {
+                    if (rowKeys.indexOf(key) < 0) {
+                        rowKeys.push(key);
                     }
                 }
-            } else {
-                temp = stnData;
             }
-            return temp;
-        }
-        for(i=0; i<filteredData.length; i++) {
-            optionsData.push(handleOptions(filteredData[i], optionNames));
+            optionsData.push(temp);
         }
         var finalOptionsData = [];
         var heading = ["Parameters"];

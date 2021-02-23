@@ -28,10 +28,12 @@ todo-app-old/
 todo-nocommit/
 yard-app/
 yard-app-zip/
+app-vb/
+app-data-entry/
+app-station-data/
 pdf-app/
 web-app/
 comm-app/
-station-data/
 
 java/step1/.idea/
 java/step1/out/
