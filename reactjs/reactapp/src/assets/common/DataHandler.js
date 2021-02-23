@@ -329,9 +329,9 @@ DataHandler.extend({
         }
         return result;
     },
-    getRenderData: function(pageName, optionName, fieldName) {
+    getRenderData: function(pageName, optionNames, fieldName) {
         var i, j;
-        var temp, key;
+        var temp, key, optionName;
         fieldName = $S.isArray(fieldName) ? fieldName : [];
 
         var apiData = this._getApiData();
@@ -352,21 +352,37 @@ DataHandler.extend({
         }
         var optionsData = [];
         var rowKeys = [];
-        for(i=0; i<filteredData.length; i++) {
+        function handleOptions(stnData, optionNames) {
             temp = {};
-            if ($S.isString(filteredData[i][optionName])) {
-                temp["name"] = filteredData[i].name;
-                temp[optionName] = filteredData[i][optionName];
-                temp["fieldData"] = this._generateFieldData(filteredData[i][optionName]);
-                for(key in temp["fieldData"]) {
-                    if (rowKeys.indexOf(key) < 0) {
-                        rowKeys.push(key);
+            temp["name"] = stnData.name;
+            temp["fieldData"] = {};
+            var fieldData = {};
+            if ($S.isArray(optionNames) || optionNames.length < 1) {
+                for (j = 0; j < optionNames.length; j++) {
+                    optionName = optionNames[j];
+                    if ($S.isString(stnData[optionName])) {
+                        temp[optionName] = stnData[optionName];
+                        fieldData = DataHandler._generateFieldData(stnData[optionName]);
+                        for(key in fieldData) {
+                            if (optionNames.length > 1) {
+                                temp["fieldData"][optionName + ":" + key] = fieldData[key];
+                                key = optionName + ":" + key;
+                            } else {
+                                temp["fieldData"][key] = fieldData[key];
+                            }
+                            if (rowKeys.indexOf(key) < 0) {
+                                rowKeys.push(key);
+                            }
+                        }
                     }
                 }
-                optionsData.push(temp);
             } else {
-                optionsData.push(filteredData[i]);
+                temp = stnData;
             }
+            return temp;
+        }
+        for(i=0; i<filteredData.length; i++) {
+            optionsData.push(handleOptions(filteredData[i], optionNames));
         }
         var finalOptionsData = [];
         var heading = ["Parameters"];
