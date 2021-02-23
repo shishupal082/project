@@ -1,0 +1,63 @@
+{
+    "accounts": [
+        {
+            "id": "staff1",
+            "name": "staff1 Name"
+        },
+        {
+            "id": "staff2",
+            "name": "staff3 Name"
+        },
+        {
+            "id": "staff3",
+            "name": "staff3 Name"
+        }
+    ],
+    "filter1": {
+        "type": "dropdown",
+        "selectName": "filter1",
+        "text": [
+            {
+                "value": "all",
+                "option": "All",
+                "team": ["all"]
+            },
+            {
+                "value": "team1",
+                "option": "Team1",
+                "team": ["team1"]
+            },
+            {
+                "value": "team2",
+                "option": "Team2",
+                "team": ["team2"]
+            }
+        ]
+    },
+    "filter2": {
+        "type": "dropdown",
+        "selectName": "filter2",
+        "text": [
+            {
+                "value": "nov2020",
+                "option": "Nov 2020",
+                "date": "2020-11-01 10:30"
+            },
+            {
+                "value": "dec2020",
+                "option": "Dec 2020",
+                "date": "2020-12-01 10:30"
+            },
+            {
+                "value": "jan2021",
+                "option": "Jan 2021",
+                "date": "2021-01-01 10:30"
+            },
+            {
+                "value": "feb2021",
+                "option": "Feb 2021",
+                "date": "2021-02-01 10:30"
+            }
+        ]
+    }
+}

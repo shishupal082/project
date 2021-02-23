@@ -1,0 +1,14 @@
+[
+    {
+        "id": "display-app-1",
+        "name": "Display Report",
+        "heading": "Display Report",
+        "disableFooter": true,
+        "wordBreak": "  ",
+        "skipEmpty": true,
+        "metaDataApi": [
+            "/app/data-display/static/json/metaData.json"
+        ],
+        "dataPathApi": ["/app/data-display/static/csv/report.txt"]
+    }
+]
