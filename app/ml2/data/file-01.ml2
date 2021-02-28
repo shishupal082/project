@@ -1,0 +1,150 @@
+%=================================================================================================
+				Multiline comment
+==================================================================================================
+							WARNING
+
+==================================================================================================
+PROJECT			: Project Name
+
+STATION			: STN-1
+==================================================================================================
+						PROGRAM HISTORY
+==================================================================================================
+REVISION			:  24
+
+FILE NAME			:  File name
+
+==================================================================================================
+
+==================================================================================================
+NOTE		:	THIS PROGRAM HAS BEEN DEBUGGED ON_ BY_ AND IS READY FOR FACTORY 
+			TESTING.
+
+NOTE		:	THIS PROGRAM HAS BEEN TESTED IN FACTORY ON_ BY_ AND IS READY FOR 
+			FIELD TESTING BY ASTS REPRESENTATIVE
+
+NOTE		:	THIS PROGRAM HAS BEEN TESTED AT FIELD ON_ BY_<Vendor> AND IS READY 
+			FOR FIELD TESTING BY <receiver> REPRESENTATIVE
+
+NOTE		:	THIS PROGRAM HAS BEEN TESTED AT FIELD ON_ BY_ (receiver) AND WAS PLACED IN 
+			SERVICE ON_ BY_ AND WITNESSED BY_
+
+==================================================================================================
+ABBREVIATIONS:
+STP	-	SLOW	TO PICK
+STR	-	SLOW	TO RELEASE
+F.A.T	-	FACTORY ACCEPTANCE TEST
+S.A.T	-	SITE ACCEPTANCE TEST
+ATIR	-	ACCEPTANCE TEST INCIDENT REPORT
+
+CPU FRONT PANEL LED DISPLAY
+LED 1		SPARE
+LED 2		SPARE
+LED 3		SYSTEM ALLOCATED FOR UPLOADING DATA & CPU RESETTING
+LED 4		SYSTEM BOOT UP
+LED 5		LINK BETWEEN same side C1, C2, C3, C4, C6, C7, C8, C9.
+LED 6		LINK BETWEEN other side C11, C12.
+LED 7		LINK BETWEEN montoring
+LED 8		SPARE
+
+COMPILER VERSION	: Cxyz3.0
+EXECUTIVE VERSION	: Cxyz3.0
+
+==================================================================================================
+							INDEX
+==================================================================================================
+
+BIT DEFINITION SECTION:
+
+		LOCAL	INPUT	AND OUTPUT SECTION
+		SERIAL COMMUNICATON SECTION
+		VITAL	BOOLEAN BIT	SECTION
+		NON VITAL BOOLEAN BIT SECTION
+		TIMER	BIT SECTION
+		USER DATA LOG SECTION
+		APPLICATION	DATA VERSION CONTROL SECTION
+
+==================================================================================================
+						START OF PROGRAM
+=================================================================================================\
+PROGRAM filename;
+
+%==================================================================================================
+						lOCAL INPUT AND OUTPUT SECTION
+=================================================================================================\
+INTERFACE
+LOCAL
+BOARD:			J1
+ADJUSTABLE ENABLE:	1
+TYPE:				OUT16
+
+OUTPUT:
+
+
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE;
+
+BOARD:			J2
+ADJUSTABLE ENABLE:	0
+TYPE:				OUT16
+
+OUTPUT:
+
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE,
+SPARE,			SPARE,			SPARE,			SPARE;
+
+COMM
+%=================================================================================================
+					SERIAL COMMUNICATION SECTION
+=================================================================================================\
+LINK:							C10		// ANY USER SELECTED TEXT STRING
+ADJUSTABLE ENABLE:				1
+PROTOCOL:						<>.PEER	// PQR.SLAVE, PQR.MASTER,
+									// OK.SLAVE, OK.MASTER, OK.PEER
+// PHYSICAL PORT DEFINITIONS
+ADJUSTABLE PORT:					"CPU.SERIAL.3";		// PORT 1 TO 4
+ADJUSTABLE BAUD:					19200;	// 150-38400 IN STEPS
+ADJUSTABLE STOPBITS:				1;		// 1 OR 2 (DEFAULT 1)
+ADJUSTABLE PARITY:				NONE;		// ODD, EVEN MARK, SPACE, NONE(DEFAULT
+ADJUSTABLE KEY.ON.DELAY:			0;		// KEY.ON.DELAY AND KEY.OFF.DELAY:	0-280	FOR
+ADJUSTABLE KEY.OFF.DELAY:			12;		// GENISYS AND 8-280 FOR Company PROTOCOL
+ADJUSTABLE GRANT.DELAY:				1000:MSEC;	// GENISYS AND 8-280 FOR Company PROTOCOL
+ADJUSTABLE POINT.POINT:				1;		// 0-FOR SLAVE PORT, 1-FOR MASTER PORT
+
+%=================================================================================================
+				VITAL SERIAL DATA LINK FROM C10 Company TO C1 Company
+=================================================================================================\
+// ADDRESS DEFINITION
+ADJUSTABLE xyz.ADDRESS:				10011
+ADJUSTABLE ENABLE:				1
+STATION.NAME:					C10_C1_01;
+ADJUSTABLE PEER.ADDRESS:			01101;
+ADJUSTABLE ACK.TIMEOUT:				1000:MSEC;
+ADJUSTABLE HEARTBEAT.INTERVAL:		1000:MSEC;
+ADJUSTABLE INDICATION.UPDATE.CYCLE:		10;
+ADJUSTABLE STALE.DATA.TIMEOUT:		2800:MSEC;
+ADJUSTABLE CLOCK.MASTER:			0;
+
+OUTPUT:
+// VITAL SERIAL OUTPUT TO C1 Company
+// MAXIMUM 128 OUTPUT BITS (16 BYTES) CAN BE DEFINED IN THIS ADDRESS SECTION.
+
+
+INPUT:
+// VITAL SERIAL INPUT FROM C1 Company
+// MAXIMUM 128 INPUT BITS (16 BYTES) CAN BE DEFINED IN THIS ADDRESS SECTION.
+
+
+LOGIC BEGIN
+%=================================================================================================
+				POINT NLR, NLPR, RLR, RLPR LOGIC
+=================================================================================================\
+
+ASSIGN	53_NLR_C7.C7C10 + 53_NLR_C9.C9C10 + 53_NLR_C5.C5C10 + 53_NLR_C11.C11C10		TO 53_NLR.INT;
+
+ASSIGN	53_NLR.INT * ~53_WNR.C10C5 * ~53_RLR * ~53_WNDISR.C4C10 * 
+		VDL_C10C4_OK * 53_WR_INT						TO 53_NLR;

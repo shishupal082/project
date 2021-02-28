@@ -20,6 +20,7 @@ addLog "Copying dependent file to desired location"
 # sed -i  ''  "1s/.*/import '.\\/model'; var $\\M = window.$\\M;/" ./src/libs/yardApiModel.js
 
 sed -i "1s/.*/import $\\S from '.\\/stack';/" ./src/libs/model.js
+sed -i "1s/.*/import $\\S from '.\\/stack';/" ./src/libs/ML2.js
 sed -i "1s/.*/import '.\\/model'; var $\\M = window.$\\M;/" ./src/libs/yardApiModel.js
 
 

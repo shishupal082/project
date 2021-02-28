@@ -1504,6 +1504,17 @@ Stack.extend({
     },
     getPlatform: function() {
         return Platform;
+    },
+    replaceString: function(str, find, replace) {
+        var temp;
+        if (isString(str)) {
+            temp = str.split(find);
+            if (temp.length > 1) {
+                str = temp.join(replace);
+                return this.replaceString(str, find, replace);
+            }
+        }
+        return str;
     }
 });
 
@@ -2071,6 +2082,30 @@ Stack.extend({
         } else {
             Stack.log("Gtag is Invalid");
         }
+    },
+    convertRowToColumn: function(data) {
+        var rows = [];
+        var maxRowLen = 0, i, j;
+        if (isArray(data)) {
+            for (i = 0; i < data.length; i++) {
+                if (isArray(data[i])) {
+                    if (data[i].length > maxRowLen) {
+                        maxRowLen = data[i].length;
+                    }
+                }
+            }
+            for (i = 0; i < maxRowLen; i++) {
+                rows.push([]);
+            }
+            for (i = 0; i < data.length; i++) {
+                if (isArray(data[i])) {
+                    for(j=0; j<data[i].length; j++) {
+                        rows[j].push(data[i][j]);
+                    }
+                }
+            }
+        }
+        return rows;
     }
 });
 /*End of direct access of methods*/

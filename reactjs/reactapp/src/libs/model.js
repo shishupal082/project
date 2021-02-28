@@ -95,7 +95,7 @@ function setValueTobeChecked(values) {
     return true;
 }
 function increaseProcessingCount(name) {
-    if (isProcessingCountEnable == false) {
+    if (isProcessingCountEnable === false) {
         return name;
     }
     if (processingCount[name]) {
@@ -133,7 +133,7 @@ var setValue = (function() {
             var oldValue = Model(key).get();
             currentValues[key] = value*1;
             var newValue = Model(key).get();
-            if (oldValue != newValue) {
+            if (oldValue !== newValue) {
                 setValueCount++;
                 keyEquivalent = "";
                 for (var i = 0; i < key.length; i++) {
@@ -141,12 +141,12 @@ var setValue = (function() {
                 }
                 if (changeValueDataLoggingEnable) {
                     changeValueData["all"].push(key);
-                    if (oldValue == 0) {
+                    if (oldValue === 0) {
                         changeValueData["0to1"].push(key);
                         changeValueData["0to1WithIndex"].push(key);
                         changeValueData["1to0WithIndex"].push(keyEquivalent);
                     }
-                    if (oldValue == 1) {
+                    if (oldValue === 1) {
                         changeValueData["1to0"].push(key);
                         changeValueData["1to0WithIndex"].push(key);
                         changeValueData["0to1WithIndex"].push(keyEquivalent);
@@ -198,10 +198,10 @@ Model.fn = Model.prototype = {
         return 0;
     },
     isUp: function(value) {
-        return this.get() == 1;
+        return this.get() === 1;
     },
     isDown: function(value) {
-        return this.get() == 0;
+        return this.get() === 0;
     },
     addExp: function(exp) {
         if (isValidKey(this.key)) {
@@ -236,7 +236,7 @@ Model.fn = Model.prototype = {
             possibleValues = [];
             for (var i = 0; i < extPossibleValues.length; i++) {
                 if (possibleValues.indexOf(extPossibleValues[i]) >= 0) {
-                    throw "Duplicate entry in possibleValues: " + extPossibleValues[i];
+                    throw new Error("Error: Duplicate entry in possibleValues: " + extPossibleValues[i]);
                 }
                 if ($S.isString(extPossibleValues[i]) && extPossibleValues[i].length > 0) {
                     possibleValues.push(extPossibleValues[i]);
@@ -619,9 +619,9 @@ Model.extend({
 });
 Model.extend({
     is: function(key, type) {
-        if (type == "up") {
+        if (type === "up") {
             return Model(key).isUp();
-        } else if (type == "dn") {
+        } else if (type === "dn") {
             return Model(key).isDown();
         }
         return false;
@@ -753,7 +753,7 @@ exps : {
 };
 */
     reCheckAllValuesV2: function() {
-        if (reCheckingStatus == false) {
+        if (reCheckingStatus === false) {
             return 0;
         }
         while(MStack.getTop() >= 0) {
@@ -766,7 +766,7 @@ exps : {
         return 1;
     },
     reCheckAllValues: function() {
-        if (reCheckingStatus == false) {
+        if (reCheckingStatus === false) {
             return 0;
         }
         for (var i = 0; i < valueToBeChecked.length; i++) {
@@ -785,7 +785,7 @@ exps : {
             newValue = modelNode.get();
             // To avoid further processing if value changed
             // Because it will already handle by setValue method
-            if (oldValue != newValue) {
+            if (oldValue !== newValue) {
                 break;
             }
         }
@@ -863,12 +863,12 @@ exps : {
                 }
                 tokenizedExpLength++;
             }
-            if (tokenizedExpLength != posixVal.length) {
+            if (tokenizedExpLength !== posixVal.length) {
                 isValidExpression = false;
                 $S.log(EvaluatingExpressionKey + ": invalid expression: " + exp);
             }
-            if (isValidExpression == false) {
-                throw EvaluatingExpressionKey + ": invalid expression:" + exp;
+            if (isValidExpression === false) {
+                throw new Error(EvaluatingExpressionKey + ": invalid expression:" + exp);
             }
         }
         /** Expression validation End **/

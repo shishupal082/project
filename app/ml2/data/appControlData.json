@@ -1,0 +1,13 @@
+[
+    {
+        "id": "ml2-file-reading",
+        "heading": "ML2",
+        "name": "ML2",
+        "disableFooter": false,
+        "baseapi": "",
+        "metaDataApi": ["/app/ml2/data/metaData.json"],
+        "rawDataApi": [
+            "/app/ml2/data/file-01.ml2"
+        ]
+    }
+]

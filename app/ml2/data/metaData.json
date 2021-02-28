@@ -1,0 +1,52 @@
+{
+    "list2Data": [
+        {
+            "name": "resourceUtilities",
+            "toText": "Resource Utilities"
+        },
+        {
+            "name": "assignStatement",
+            "toText": "Assign Statement"
+        },
+        {
+            "name": "expression",
+            "toText": "Expression"
+        },
+        {
+            "name": "ml2FileData",
+            "toText": "ML2 File Valid Data"
+        },
+        {
+            "name": "commentData",
+            "toText": "Comments"
+        },
+        {
+            "name": "ml2FileRawData",
+            "toText": "ML2 File Raw Data"
+        },
+        {
+            "name": "apiResponse",
+            "toText": "Api Response"
+        }
+    ],
+    "filter1": [
+        {
+            "type": "dropdown",
+            "selectName": "filter1",
+            "text": [
+                {
+                    "value": "53_NLR-related",
+                    "option": "Points",
+                    "searchSimilarKeys": true,
+                    "values": ["53_NLR"]
+                },
+                {
+                    "value": "53_NLR-only",
+                    "option": "Points",
+                    "searchSimilarKeys": false,
+                    "values": ["53_NLR"]
+                }
+            ]
+        }
+    ]
+}
