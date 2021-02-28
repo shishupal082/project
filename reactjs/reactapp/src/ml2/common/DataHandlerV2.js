@@ -24,34 +24,15 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 
 $S.extendObject(DataHandlerV2);
 
-DataHandlerV2.extend({
-});
 
 DataHandlerV2.extend({
-    HandleRawDataLoad: function(response) {
-        $M().setBinaryOperators(["*","+"]);
-        $ML2(response);
-    },
-    _generateDependent: function(arr) {
-        var result = [];
-        for (var i = 0; i < arr.length; i++) {
-            result.push({"tag": "div", "text": arr[i]});
-        }
-        return result;
-    },
-    getReourceUtilities: function() {
+    updateModel: function() {
         var expression = {};
         var duplicateExpression = {};
         var duplicateExpressionCount = 0;
         var possibleKeys = [];
-        var displayData = {};
-        var tableData = [], temp, i, j;
-        var currentData = DataHandler.getCurrentMetaData("filter1", "value");
-        var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
-        var searchSimilarKey = $S.isBooleanTrue(currentData["searchSimilarKeys"]) ? true : false;
-        var finalMonitorKey = monitorKey;
+        var i, j;
         var data = $ML2.getData("expression", []);
-
         var key, exp;
         for (i = 0; i<data.length; i++) {
             for( j=0; j<data[i].length; j++) {
@@ -76,6 +57,41 @@ DataHandlerV2.extend({
         }
         $S.log("duplicateExpressionCount: " + duplicateExpressionCount);
         console.log(duplicateExpression);
+        possibleKeys = possibleKeys.sort();
+        $M().setPossibleValues(possibleKeys);
+        for(var k in expression) {
+            $M(k).addExp(expression[k].split(" ").join(""));
+        }
+        $M.setVariableDependencies();
+    },
+    HandleRawDataLoad: function(response, callback) {
+        $M().setBinaryOperators(["*","+"]);
+        DataHandler.setData("evaluating", "in-progress");
+        setTimeout(function() {
+            $ML2(response);
+            DataHandlerV2.updateModel();
+            DataHandler.setData("evaluating", "completed");
+            $S.callMethod(callback);
+        }, 1);
+    },
+    ClearRawDataLoad: function(response) {
+        $ML2([]);
+    },
+    _generateDependent: function(arr) {
+        var result = [];
+        for (var i = 0; i < arr.length; i++) {
+            result.push({"tag": "div", "text": arr[i]});
+        }
+        return result;
+    },
+    getReourceUtilities: function() {
+        var possibleKeys = $M.getPossibleValues();
+        var displayData = {};
+        var tableData = [], temp, i, j;
+        var currentData = DataHandler.getCurrentMetaData("filter1", "value");
+        var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
+        var searchSimilarKey = $S.isBooleanTrue(currentData["searchSimilarKeys"]) ? true : false;
+        var finalMonitorKey = monitorKey;
         if (searchSimilarKey) {
             for(i=0; i<monitorKey.length; i++) {
                 if (finalMonitorKey.indexOf(monitorKey[i]) < 0) {
@@ -92,20 +108,13 @@ DataHandlerV2.extend({
                 }
             }
         }
-        possibleKeys = possibleKeys.sort();
-        $M().setPossibleValues(possibleKeys);
-        for(var k in expression) {
-            $M(k).addExp(expression[k].split(" ").join(""));
-        }
         $M.setVariableDependencies();
         for (i = 0; i < finalMonitorKey.length; i++) {
-            // $S.log(finalMonitorKey[i]);
-            // $S.log($M.getVariableDependenciesByKey(finalMonitorKey[i]));
             temp = $M.getVariableDependenciesByKey(finalMonitorKey[i]);
             displayData[finalMonitorKey[i]] = temp;
             tableData.push([finalMonitorKey[i], this._generateDependent(temp)]);
         }
-        $S.log(tableData);
+        console.log(tableData);
         tableData = $S.convertRowToColumn(tableData);
         return tableData;
     },

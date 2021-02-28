@@ -109,7 +109,13 @@ TemplateHandler.extend({
         }
         return trField;
     },
-    GetPageRenderField: function(renderData, footerData) {
+    GetPageRenderField: function(renderData, footerData, loadingStatus, evaluatingStatus) {
+        if (loadingStatus !== "completed") {
+            return this.getTemplate("loading");
+        }
+        if (evaluatingStatus !== "completed") {
+            return this.getTemplate("evaluating");
+        }
         var renderField = this.getTemplate("tableField");
         var lastRowIndex = renderData.length-1;
         if (renderData.length > 0) {

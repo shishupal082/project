@@ -47,12 +47,20 @@ Template["heading"] = [{
     "name": "heading-text",
     "text": ""
 }];
+Template["loading"] = [{
+    "tag": "center",
+    "text": "Loading..."
+}];
+Template["evaluating"] = [{
+    "tag": "center",
+    "text": "Evaluating..."
+}];
 Template["tableField"] = [
     {
         "tag": "div",
         "text": {
             "tag": "table.tbody",
-            "className": "table table-striped table-padded-px-5",
+            "className": "table table-striped table-bordered table-padded-px-5",
             "name": "tableEntry",
             "text": []
         }

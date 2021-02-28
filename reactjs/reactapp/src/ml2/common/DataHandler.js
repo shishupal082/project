@@ -33,6 +33,7 @@ keys.push("metaDataLoadStatus");
 keys.push("rawDataLoadStatus");
 
 keys.push("firstTimeDataLoadStatus");
+keys.push("evaluating");
 CurrentData.setKeys(keys);
 
 CurrentData.setData("appControlDataLoadStatus", "not-started");
@@ -40,6 +41,7 @@ CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("rawDataLoadStatus", "not-started");
 
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
+CurrentData.setData("evaluating", "not-started");
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -91,6 +93,17 @@ DataHandler.extend({
         }
         DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return true;
+    },
+    getDataLoadStatus: function() {
+        var isDataLoadComplete = this.isDataLoadComplete();
+        var firstTimeDataLoadStatus = this.getData("firstTimeDataLoadStatus", "");
+        if(firstTimeDataLoadStatus === "completed") {
+            if (isDataLoadComplete) {
+                return "completed";
+            }
+            return "in-progress";
+        }
+        return "not-started";
     }
 });
 
@@ -105,12 +118,11 @@ DataHandler.extend({
         }
         DataHandler.setData("list1Id", currentAppId);
     },
-    _getMetaDataCurrentValue: function(metaDataKey, fieldKey) {
+    _getMetaDataCurrentValue: function(metaDataKey, fieldKey, currentValue) {
         if (!$S.isString(metaDataKey) || !$S.isString(fieldKey)) {
             return "";
         }
         var metaData = this.getData("metaData", {});
-        var currentValue = this.getData(metaDataKey, "");
         var fieldItem = metaData[metaDataKey];
         var finalValue = "";
         if (metaDataKey === "filter1" && $S.isObject(metaData[metaDataKey])) {
@@ -137,8 +149,10 @@ DataHandler.extend({
         return finalValue;
     },
     metaDataInit: function() {
-        var list2Id = this._getMetaDataCurrentValue("list2Data", "name");
-        var filter1 = this._getMetaDataCurrentValue("filter1", "value");
+        var list2CurrentId = this.getData("list2Id", "");
+        var filter1CurrentId = this.getData("filter1", "");
+        var list2Id = this._getMetaDataCurrentValue("list2Data", "name", list2CurrentId);
+        var filter1 = this._getMetaDataCurrentValue("filter1", "value", filter1CurrentId);
         this.setData("list2Id", list2Id);
         this.setData("filter1", filter1);
     },
@@ -188,13 +202,15 @@ DataHandler.extend({
     },
     getBaseApi: function() {
         var currentAppData = this.getCurrentAppData();
-        var baseapi = "";
         if ($S.isObject(currentAppData)) {
-            if ($S.isString(currentAppData.baseapi)) {
-                baseapi = currentAppData.baseapi;
+            if ($S.isString(currentAppData.baseapi) && currentAppData.baseapi.length > 0) {
+                return currentAppData.baseapi;
             }
         }
-        return baseapi;
+        if ($S.isString(Config.baseapi) && Config.baseapi.length > 0) {
+            return Config.baseapi;
+        }
+        return "";
     },
     getRawDataApi: function() {
         var baseapi = this.getBaseApi();
@@ -211,10 +227,10 @@ DataHandler.extend({
     },
     isFooterDisabled: function() {
         var currentAppData = this.getCurrentAppData();
-        if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.disableFooter)) {
-            return true;
+        if ($S.isObject(currentAppData) && $S.isBooleanFalse(currentAppData.disableFooter)) {
+            return false;
         }
-        return false;
+        return true;
     },
     getFooterData: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -239,12 +255,20 @@ DataHandler.extend({
         return footerData;
     },
     getHeadingText: function() {
-        var currentStaticData = this.getCurrentAppData();
-        var headingText = currentStaticData.heading;
-        if ($S.isString(headingText) && headingText.length) {
-            return headingText;
+        var currentAppData = this.getCurrentAppData();
+        var headingText = $S.isString(currentAppData.heading) ? currentAppData.heading.trim() : "";
+        if (headingText.length === 0) {
+            var name = $S.isString(currentAppData.name) ? currentAppData.name.trim() : "";
+            if (name.length > 0) {
+                headingText = name;
+            }
         }
-        return "Current App Id not found";
+        if (this.getData("firstTimeDataLoadStatus") !== "completed") {
+            headingText = "Loading...";
+        } else if (headingText.length === 0) {
+            headingText = "Current App Id not found";
+        }
+        return headingText;
     },
 });
 DataHandler.extend({
@@ -258,7 +282,7 @@ DataHandler.extend({
         }, function() {
             DataHandler.setData("rawData", rawData);
             DataHandler.setData("rawDataLoadStatus", "completed");
-            DataHandlerV2.HandleRawDataLoad(rawData);
+            DataHandlerV2.HandleRawDataLoad(rawData, callback);
             $S.log("rawData load complete");
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethodV2());
@@ -301,17 +325,20 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         }, null, Api.getAjaxApiCallMethod());
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
 DataHandler.extend({
     OnReloadClick: function(appStateCallback, appDataCallback, currentList1Id) {
         DataHandler.setData("list1Id", currentList1Id);
+        DataHandler.setData("rawData", []);
+        DataHandlerV2.ClearRawDataLoad();
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
+        this.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnAppChange: function(appStateCallback, appDataCallback, list1Id) {
-        DataHandler.setData("list1Id", list1Id);
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
@@ -331,6 +358,8 @@ DataHandler.extend({
         var filter2Value = this.getData("filter2", "");
         var filterKeys = ["filter1", "filter2"];
         var filterValues = [filter1Value, filter2Value];
+        var list2Id = this.getData("list2Id", "");
+        var applicableList2Id = [];
         if ($S.isObject(metaData)) {
             for (j = 0; j < filterKeys.length; j++) {
                 if ($S.isObject(metaData[filterKeys[j]])) {
@@ -341,22 +370,25 @@ DataHandler.extend({
                             }
                         }
                     }
-                    filterOptions.push(metaData[filterKeys[j]]);
+                    if ($S.isArray(metaData[filterKeys[j]]["applicableList2Id"])) {
+                        applicableList2Id = metaData[filterKeys[j]]["applicableList2Id"];
+                        if (applicableList2Id.indexOf("all") >= 0 || applicableList2Id.indexOf(list2Id) >= 0) {
+                            filterOptions.push(metaData[filterKeys[j]]);
+                       }
+                    }
                 }
             }
         }
         return filterOptions;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
-        if (!this.isDataLoadComplete()) {
-            return;
-        }
+        var loadingStatus = this.getDataLoadStatus();
+        var evaluatingStatus = this.getData("evaluating", "");
         var renderData = DataHandlerV2.getRenderData(this.getData("list2Id", ""));
         var footerData = DataHandler.getFooterData();
-        var renderFieldRow = TemplateHandler.GetPageRenderField(renderData, footerData);
+        var renderFieldRow = TemplateHandler.GetPageRenderField(renderData, footerData, loadingStatus, evaluatingStatus);
         var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         var filterOptions = this.getFilterOptions();
-
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("currentList1Id", this.getData("list1Id", ""));
@@ -365,7 +397,7 @@ DataHandler.extend({
         appDataCallback("list1Data", this.getData("appControlData", []));
         appDataCallback("list2Data", this.getList2Data());
         appDataCallback("filterOptions", filterOptions);
-        appDataCallback("firstTimeDataLoadStatus", this.getData("firstTimeDataLoadStatus", ""));
+        appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }
 });

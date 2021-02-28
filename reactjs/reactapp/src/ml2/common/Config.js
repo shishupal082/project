@@ -3,6 +3,7 @@ import $S from "../../interface/stack.js";
 
 var Config = {};
 
+Config.baseapi = $$$.baseapi;
 Config.basepathname = $$$.basepathname;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
