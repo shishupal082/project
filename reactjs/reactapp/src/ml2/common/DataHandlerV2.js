@@ -74,6 +74,16 @@ DataHandlerV2.extend({
             $S.callMethod(callback);
         }, 1);
     },
+    setRenderData: function(callback) {
+        DataHandler.setData("evaluating", "in-progress");
+        DataHandler.setData("renderData", []);
+        setTimeout(function() {
+            DataHandler.setData("evaluating", "completed");
+            var renderData = DataHandlerV2.getRenderData(DataHandler.getData("list2Id", ""));
+            DataHandler.setData("renderData", renderData);
+            $S.callMethod(callback);
+        }, 1);
+    },
     ClearRawDataLoad: function(response) {
         $ML2([]);
     },

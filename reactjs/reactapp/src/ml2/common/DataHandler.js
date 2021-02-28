@@ -282,8 +282,11 @@ DataHandler.extend({
         }, function() {
             DataHandler.setData("rawData", rawData);
             DataHandler.setData("rawDataLoadStatus", "completed");
-            DataHandlerV2.HandleRawDataLoad(rawData, callback);
             $S.log("rawData load complete");
+            DataHandlerV2.HandleRawDataLoad(rawData, function() {
+                DataHandlerV2.setRenderData(callback);
+                $S.callMethod(callback);
+            });
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethodV2());
     },
@@ -343,10 +346,16 @@ DataHandler.extend({
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         DataHandler.setData("list2Id", list2Id);
+        DataHandlerV2.setRenderData(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
+        DataHandlerV2.setRenderData(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
@@ -384,7 +393,7 @@ DataHandler.extend({
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var loadingStatus = this.getDataLoadStatus();
         var evaluatingStatus = this.getData("evaluating", "");
-        var renderData = DataHandlerV2.getRenderData(this.getData("list2Id", ""));
+        var renderData = this.getData("renderData", []);
         var footerData = DataHandler.getFooterData();
         var renderFieldRow = TemplateHandler.GetPageRenderField(renderData, footerData, loadingStatus, evaluatingStatus);
         var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
