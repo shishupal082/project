@@ -87,10 +87,15 @@ DataHandlerV2.extend({
     ClearRawDataLoad: function(response) {
         $ML2([]);
     },
-    _generateDependent: function(arr) {
+    _generateDependent: function(arr, currentData) {
         var result = [];
         for (var i = 0; i < arr.length; i++) {
             result.push({"tag": "div", "text": arr[i]});
+        }
+        if ($S.isObject(currentData) && $S.isString(currentData.resultType)) {
+            if (currentData.resultType === "join" && $S.isString(currentData.joinBy)) {
+                result = arr.join(currentData.joinBy);
+            }
         }
         return result;
     },
@@ -125,13 +130,15 @@ DataHandlerV2.extend({
         var currentData = DataHandler.getCurrentMetaData("filter1", "value");
         var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
         var searchByPattern = $S.isBooleanTrue(currentData["searchByPattern"]) ? true : false;
-        var resultHorizontal = $S.isBooleanTrue(currentData["resultHorizontal"]) ? true : false;
+        var resultHorizontal = $S.isBooleanFalse(currentData["resultHorizontal"]) ? false : true;
         var finalMonitorKey = this._searchItems(monitorKey, possibleKeys, searchByPattern);
+        var resultPattern = $S.isArray(currentData["resultPattern"]) ? currentData["resultPattern"] : ["all"];
 
         for (i = 0; i < finalMonitorKey.length; i++) {
             temp = $M.getVariableDependenciesByKey(finalMonitorKey[i]);
             displayData[finalMonitorKey[i]] = temp;
-            tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp)]);
+            temp = this._searchItems(resultPattern, temp, true);
+            tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp, currentData)]);
         }
         console.log(tableData);
         if (resultHorizontal) {
