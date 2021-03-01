@@ -125,6 +125,7 @@ DataHandlerV2.extend({
         var currentData = DataHandler.getCurrentMetaData("filter1", "value");
         var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
         var searchByPattern = $S.isBooleanTrue(currentData["searchByPattern"]) ? true : false;
+        var resultHorizontal = $S.isBooleanTrue(currentData["resultHorizontal"]) ? true : false;
         var finalMonitorKey = this._searchItems(monitorKey, possibleKeys, searchByPattern);
 
         for (i = 0; i < finalMonitorKey.length; i++) {
@@ -133,7 +134,9 @@ DataHandlerV2.extend({
             tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp)]);
         }
         console.log(tableData);
-        tableData = $S.convertRowToColumn(tableData);
+        if (resultHorizontal) {
+            tableData = $S.convertRowToColumn(tableData);
+        }
         return tableData;
     },
     getRenderData: function(name) {
