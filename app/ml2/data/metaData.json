@@ -37,13 +37,13 @@
                 {
                     "value": "53_NLR-related",
                     "option": "Points",
-                    "searchSimilarKeys": true,
+                    "searchByPattern": true,
                     "values": ["53_NLR"]
                 },
                 {
                     "value": "53_NLR-only",
                     "option": "Points",
-                    "searchSimilarKeys": false,
+                    "searchByPattern": false,
                     "values": ["53_NLR"]
                 }
             ]

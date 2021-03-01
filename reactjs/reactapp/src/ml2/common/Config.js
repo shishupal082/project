@@ -8,8 +8,13 @@ Config.basepathname = $$$.basepathname;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
+Config.patternMatching = $$$.patternMatching;
 
 var appControlDataApi = $$$.appControlDataApi;
+
+if (!$S.isObject(Config.patternMatching)) {
+	Config.patternMatching = {};
+}
 
 var apiMapping = {};
 apiMapping["app-control-data"] = appControlDataApi;

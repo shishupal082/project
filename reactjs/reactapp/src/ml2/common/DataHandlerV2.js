@@ -2,7 +2,7 @@ import $S from "../../interface/stack.js";
 import $M from "../../interface/model.js";
 import $ML2 from "../../interface/ML2.js";
 import DataHandler from "./DataHandler";
-// import Config from "./Config";
+import Config from "./Config";
 
 
 // import AppHandler from "../../common/app/common/AppHandler";
@@ -11,6 +11,7 @@ var DataHandlerV2;
 
 (function($S){
 // var DT = $S.getDT();
+$M().setBinaryOperators(["*","+"]);
 DataHandlerV2 = function(arg) {
     return new DataHandlerV2.fn.init(arg);
 };
@@ -65,7 +66,6 @@ DataHandlerV2.extend({
         $M.setVariableDependencies();
     },
     HandleRawDataLoad: function(response, callback) {
-        $M().setBinaryOperators(["*","+"]);
         DataHandler.setData("evaluating", "in-progress");
         setTimeout(function() {
             $ML2(response);
@@ -94,31 +94,39 @@ DataHandlerV2.extend({
         }
         return result;
     },
+    _searchItems: function(searchingPattern, allData, searchByPattern) {
+        if (!$S.isArray(searchingPattern) || !$S.isArray(allData)) {
+            return [];
+        }
+        var result = [];
+        var i, j, temp1, temp2;
+        for(i=0; i<searchingPattern.length; i++) {
+            temp1 = searchingPattern[i];
+            if (searchByPattern) {
+                temp1 = Config.patternMatching[searchingPattern[i]];
+                if (temp1) {
+                    for(j=0; j<allData.length; j++) {
+                        temp2 = allData[j];
+                        if (temp2.search(temp1) >= 0) {
+                            result.push(temp2);
+                        }
+                    }
+                }
+            } else if (allData.indexOf(temp1) >= 0) {
+                result.push(temp1);
+            }
+        }
+        return result;
+    },
     getReourceUtilities: function() {
         var possibleKeys = $M.getPossibleValues();
         var displayData = {};
-        var tableData = [], temp, i, j;
+        var tableData = [], temp, i;
         var currentData = DataHandler.getCurrentMetaData("filter1", "value");
         var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
-        var searchSimilarKey = $S.isBooleanTrue(currentData["searchSimilarKeys"]) ? true : false;
-        var finalMonitorKey = monitorKey;
-        if (searchSimilarKey) {
-            for(i=0; i<monitorKey.length; i++) {
-                if (finalMonitorKey.indexOf(monitorKey[i]) < 0) {
-                    finalMonitorKey.push(monitorKey[i]);
-                }
-                for(j=0; j<possibleKeys.length; j++) {
-                    temp = possibleKeys[j].split(monitorKey[i]);
-                    if (temp.length === 2) {
-                        if (finalMonitorKey.indexOf(possibleKeys[j]) < 0) {
-                            finalMonitorKey.push(possibleKeys[j]);
-                        }
-                        $S.log("Similar keys: " + possibleKeys[j]);
-                    }
-                }
-            }
-        }
-        $M.setVariableDependencies();
+        var searchByPattern = $S.isBooleanTrue(currentData["searchByPattern"]) ? true : false;
+        var finalMonitorKey = this._searchItems(monitorKey, possibleKeys, searchByPattern);
+
         for (i = 0; i < finalMonitorKey.length; i++) {
             temp = $M.getVariableDependenciesByKey(finalMonitorKey[i]);
             displayData[finalMonitorKey[i]] = temp;
