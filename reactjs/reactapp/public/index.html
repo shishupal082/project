@@ -56,8 +56,10 @@ var GLOBAL = {
 GLOBAL.appControlDataApi = "http://localhost:8080/pvt/app-data/ei/appControlData.json";
 
 GLOBAL.patternMatching = {};
+GLOBAL.patternMatching["all"] = /[0-9|A-Z]{1,}/i;
 GLOBAL.patternMatching["points_NWKR"] = /[0-9]{2}_NWKR/i;
 GLOBAL.patternMatching["points_RWKR"] = /[0-9]{2}_RWKR/i;
+GLOBAL.patternMatching["points_relevant"] = /(63|67)_(N|R)WK[0-9]?R/i;
 
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";

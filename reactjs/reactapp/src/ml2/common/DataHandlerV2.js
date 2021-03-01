@@ -130,7 +130,7 @@ DataHandlerV2.extend({
         for (i = 0; i < finalMonitorKey.length; i++) {
             temp = $M.getVariableDependenciesByKey(finalMonitorKey[i]);
             displayData[finalMonitorKey[i]] = temp;
-            tableData.push([finalMonitorKey[i], this._generateDependent(temp)]);
+            tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp)]);
         }
         console.log(tableData);
         tableData = $S.convertRowToColumn(tableData);
