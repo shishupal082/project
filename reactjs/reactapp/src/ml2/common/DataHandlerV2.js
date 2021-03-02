@@ -110,7 +110,7 @@ DataHandlerV2.extend({
             if (searchByPattern) {
                 temp1 = Config.patternMatching[searchingPattern[i]];
                 if ($S.isUndefined(temp1)) {
-                    temp1 = new RegExp(searchingPattern[i]);
+                    temp1 = new RegExp(searchingPattern[i], 'i');
                 }
                 for(j=0; j<allData.length; j++) {
                     temp2 = allData[j];
