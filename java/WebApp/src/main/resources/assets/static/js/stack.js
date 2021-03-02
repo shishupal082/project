@@ -1507,7 +1507,7 @@ Stack.extend({
     },
     replaceString: function(str, find, replace) {
         var temp;
-        if (isString(str)) {
+        if (isString(str) && isString(find) && isString(replace) && find !== replace) {
             temp = str.split(find);
             if (temp.length > 1) {
                 str = temp.join(replace);
