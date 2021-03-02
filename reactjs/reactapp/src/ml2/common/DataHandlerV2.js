@@ -109,12 +109,13 @@ DataHandlerV2.extend({
             temp1 = searchingPattern[i];
             if (searchByPattern) {
                 temp1 = Config.patternMatching[searchingPattern[i]];
-                if (temp1) {
-                    for(j=0; j<allData.length; j++) {
-                        temp2 = allData[j];
-                        if (temp2.search(temp1) >= 0) {
-                            result.push(temp2);
-                        }
+                if ($S.isUndefined(temp1)) {
+                    temp1 = new RegExp(searchingPattern[i]);
+                }
+                for(j=0; j<allData.length; j++) {
+                    temp2 = allData[j];
+                    if (temp2.search(temp1) >= 0) {
+                        result.push(temp2);
                     }
                 }
             } else if (allData.indexOf(temp1) >= 0) {
