@@ -78,11 +78,13 @@ class App extends React.Component {
         DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
-        // var name = AppHandler.getFieldName(e);
+        var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
         if (value === "reload") {
             DataHandler.OnReloadClick(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
+        } else if (name === "toggle-display") {
+            DataHandler.OnToggleDisplayClick(this.appStateCallback, this.appDataCallback);
         }
     }
     // for input and textarea

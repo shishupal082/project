@@ -357,6 +357,19 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    OnToggleDisplayClick: function(appStateCallback, appDataCallback) {
+        var filter2 = this.getData("filter2", "");
+        if (filter2 === "vertical") {
+            filter2 = "horizontal";
+        } else {
+            filter2 = "vertical";
+        }
+        this.setData("filter2", filter2);
+        DataHandlerV2.setRenderData(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
 DataHandler.extend({

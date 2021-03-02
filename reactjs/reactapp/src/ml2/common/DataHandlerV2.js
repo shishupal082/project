@@ -131,7 +131,6 @@ DataHandlerV2.extend({
         var currentData = DataHandler.getCurrentMetaData("filter1", "value");
         var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
         var searchByPattern = $S.isBooleanTrue(currentData["searchByPattern"]) ? true : false;
-        var resultHorizontal = $S.isBooleanFalse(currentData["resultHorizontal"]) ? false : true;
         var finalMonitorKey = this._searchItems(monitorKey, possibleKeys, searchByPattern);
         var resultPattern = $S.isArray(currentData["resultPattern"]) ? currentData["resultPattern"] : ["all"];
 
@@ -142,7 +141,8 @@ DataHandlerV2.extend({
             tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp, currentData)]);
         }
         console.log(tableData);
-        if (resultHorizontal) {
+        var filter2 = DataHandler.getData("filter2", "");
+        if (filter2 !== "vertical") {
             tableData = $S.convertRowToColumn(tableData);
         }
         return tableData;
@@ -170,6 +170,10 @@ DataHandlerV2.extend({
                 }
                 renderData[i] = temp;
             }
+        }
+        var filter2 = DataHandler.getData("filter2", "");
+        if (filter2 === "vertical") {
+            renderData = $S.convertRowToColumn(renderData);
         }
         return renderData;
     },
