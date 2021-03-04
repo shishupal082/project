@@ -187,6 +187,21 @@ DataHandler.extend({
         }
         return result;
     },
+    getCurrentList2Data: function() {
+        var metaData = this.getData("metaData", {});
+        var list2Id = this.getData("list2Id", "");
+        var result = {};
+        var temp = $S.searchItems([list2Id], metaData.list2Data, false, "i", function(searchingPattern, el) {
+            if ($S.isObject(el) && $S.isString(el.name)) {
+                return searchingPattern.indexOf(el.name) >= 0;
+            }
+            return false;
+        });
+        if (temp.length > 0) {
+            result = temp[0];
+        }
+        return result;
+    },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
         var currentAppId = this.getData("list1Id", "");

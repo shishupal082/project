@@ -152,7 +152,20 @@ DataHandlerV2.extend({
         if (list2Id === "resourceUtilities") {
             return this.getReourceUtilities();
         }
-        var renderData = $ML2.getData(list2Id);
+        var ml2DataKeys = ["apiResponse", "ml2FileRawData", "ml2FileData", "commentData", "assignStatement", "expression"];
+        var renderData = [];
+        if (ml2DataKeys.indexOf(list2Id) >= 0) {
+            renderData = $ML2.getData(list2Id);
+        } else if (list2Id === "customeBlockData") {
+            var currentData = DataHandler.getCurrentList2Data();
+            renderData = $ML2.getBlockData(currentData.requiredBlockPattern);
+            renderData = renderData.filter(function(el, i) {
+                if ($S.isArray(el)) {
+                    return el.length > 0;
+                }
+                return false;
+            });
+        }
         var temp, i, j;
         if (list2Id === "assignStatement") {
             for(i = 0; i<renderData.length; i++) {

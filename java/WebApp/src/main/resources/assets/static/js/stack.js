@@ -1593,7 +1593,8 @@ Stack.extend({
         var j, temp1;
         function isTrue1(el, i, arr) {
             if (isFunction(isTrue)) {
-                return isTrue(searchingPattern, el, i, arr, searchByPattern, modifier);
+                var b = isTrue(searchingPattern, el, i, arr, searchByPattern, modifier);
+                return Stack.isBooleanTrue(b);
             }
             if (!isString(el)) {
                 return false;
