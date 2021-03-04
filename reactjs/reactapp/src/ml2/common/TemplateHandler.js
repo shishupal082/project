@@ -94,18 +94,20 @@ TemplateHandler.extend({
         }
         return $S.clone(Template["noDataFound"]);
     },
-    _getTdField: function(isFirstRow, isLastRow, isFirstCol, tdData) {
+    _getTdField: function(rowIndex, colIndex, isFirstRow, isLastRow, isFirstCol, tdData) {
         var tdField = this.getTemplate("tableTdField");
         // if (isFirstRow || isLastRow || isFirstCol) {
         //     TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
         // }
+        TemplateHelper.addClassTemplate(tdField, "tdData", "r-"+rowIndex+"-col-"+colIndex);
         TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
         return tdField;
     },
-    _getRowField: function(isFirstRow, isLastRow, rowData) {
+    _getRowField: function(rowIndex, isFirstRow, isLastRow, rowData) {
         var trField = this.getTemplate("tableRowField");
+        TemplateHelper.addClassTemplate(trField, "tableRowEntry", "r-"+rowIndex);
         for (var i = 0; i < rowData.length; i++) {
-            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(isFirstRow, isLastRow, i===0, rowData[i]));
+            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(rowIndex, i+1, isFirstRow, isLastRow, i===0, rowData[i]));
         }
         return trField;
     },
@@ -120,7 +122,7 @@ TemplateHandler.extend({
         var lastRowIndex = renderData.length-1;
         if (renderData.length > 0) {
             for (var i = 0; i < renderData.length; i++) {
-                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i === 0, i === lastRowIndex, renderData[i]));
+                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i+1, i === 0, i === lastRowIndex, renderData[i]));
             }
         } else {
             renderField = this.getTemplate("noDataFound");

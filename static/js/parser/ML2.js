@@ -2,7 +2,7 @@
 (function(window, $S) {
 
 var CurrentData = $S.getDataObj();
-var keys = ["apiResponse", "ml2FileRawData", "ml2FileData", "commentData", "assignStatement", "expression"];
+var keys = ["apiResponse", "ml2FileRawData", "ml2FileData", "commentData", "assignStatement", "expression", "inOut"];
 CurrentData.setKeys(keys);
 
 var ML2 = function(fileData, context) {
@@ -20,6 +20,7 @@ ML2.fn = ML2.prototype = {
         ML2Local.readData();//It will generate ml2FileData, commentData
         ML2Local.filterAssignStatement();
         ML2Local.generateExpression();
+        ML2Local.generateInOutData();
         return this;
     }
 };
@@ -43,9 +44,9 @@ ML2Local.extend({
 ML2.extend({
     getData: function(key, defaultValue, isDirect) {
         var result = ML2Local.getData(key, defaultValue, isDirect);
-        if (key === "apiResponse") {
+        if (["apiResponse"].indexOf(key) >= 0) {
             result = [result];
-        } else {
+        } else if (["inOut"].indexOf(key) < 0) {
             result = $S.convertRowToColumn(result);
         }
         return result;
@@ -248,6 +249,36 @@ ML2Local.extend({
         }
         ML2Local.setData("expression", expression);
         return expression;
+    },
+    generateInOutData: function() {
+        var data = ML2Local.getData("ml2FileData", []);
+        var result = [], i, j, k;
+        var temp, temp1, temp2;
+        var inPattern = "INPUT:", outPattern = "OUTPUT:", booleanBit = "BOOLEAN BITS";
+        var endPattern = ";";
+        if ($S.isArray(data)) {
+            for(i=0; i<data.length; i++) {
+                temp = [];
+                for (j = 0; j<data[i].length; j++) {
+                    temp2 = data[i][j];
+                    temp1 = $S.searchItems([inPattern, outPattern, booleanBit], [temp2], true);
+                    if (temp1.length > 0) {
+                        temp.push(temp2);
+                        for(k=j+1; k<data[i].length; k++) {
+                            temp2 = data[i][k];
+                            temp.push(temp2);
+                            temp1 = $S.searchItems([endPattern], [temp2], true);
+                            if (temp1.length > 0) {
+                                break;
+                            }
+                            j++;
+                        }
+                    }
+                }
+                result.push(temp);
+            }
+        }
+        ML2Local.setData("inOut", result);
     }
 });
 window.$ML2 = ML2;
