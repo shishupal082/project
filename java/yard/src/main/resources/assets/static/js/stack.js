@@ -1515,6 +1515,48 @@ Stack.extend({
             }
         }
         return str;
+    },
+    searchItems: function(searchingPattern, allData, searchByPattern, modifier, isTrue) {
+        if (!isArray(searchingPattern) || !isArray(allData)) {
+            return [];
+        }
+        if (Stack.isBooleanTrue(searchByPattern)) {
+            searchByPattern = true;
+        } else {
+            searchByPattern = false;
+        }
+        if (modifier === "g") {
+            modifier = 'g';
+        } else {
+            modifier = 'i';
+        }
+        var j, temp1;
+        function isTrue1(el, i, arr) {
+            if (isFunction(isTrue)) {
+                var b = isTrue(searchingPattern, el, i, arr, searchByPattern, modifier);
+                return Stack.isBooleanTrue(b);
+            }
+            if (!isString(el)) {
+                return false;
+            }
+            if (!searchByPattern) {
+                return searchingPattern.indexOf(el) >= 0;
+            }
+            for(j=0; j<searchingPattern.length; j++) {
+                if (!isString(searchingPattern[j])) {
+                    continue;
+                }
+                temp1 = new RegExp(searchingPattern[j], modifier);
+                if (el.search(temp1) >= 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        var result = allData.filter(function(el, i, arr) {
+            return isTrue1(el, i, arr);
+        });
+        return result;
     }
 });
 
@@ -1575,48 +1617,6 @@ Stack.extend({
             Stack.log("dataObj is invalid: " + key);
         }
         return dataObj;
-    },
-    searchItems: function(searchingPattern, allData, searchByPattern, modifier, isTrue) {
-        if (!isArray(searchingPattern) || !isArray(allData)) {
-            return [];
-        }
-        if (Stack.isBooleanTrue(searchByPattern)) {
-            searchByPattern = true;
-        } else {
-            searchByPattern = false;
-        }
-        if (modifier === "g") {
-            modifier = 'g';
-        } else {
-            modifier = 'i';
-        }
-        var j, temp1;
-        function isTrue1(el, i, arr) {
-            if (isFunction(isTrue)) {
-                var b = isTrue(searchingPattern, el, i, arr, searchByPattern, modifier);
-                return Stack.isBooleanTrue(b);
-            }
-            if (!isString(el)) {
-                return false;
-            }
-            if (!searchByPattern) {
-                return searchingPattern.indexOf(el) >= 0;
-            }
-            for(j=0; j<searchingPattern.length; j++) {
-                if (!isString(searchingPattern[j])) {
-                    continue;
-                }
-                temp1 = new RegExp(searchingPattern[j], modifier);
-                if (el.search(temp1) >= 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        var result = allData.filter(function(el, i, arr) {
-            return isTrue1(el, i, arr);
-        });
-        return result;
     }
 });
 
