@@ -13,7 +13,6 @@ Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.forceLogin = $$$.forceLogin;
-Config.userTeamMapping = $$$.userTeamMapping;
 
 Config.addTextFilenamePattern = $$$.addTextFilenamePattern;
 
@@ -26,10 +25,6 @@ Config.headingPattern = $$$.headingPattern;
 
 if (!$S.isString(Config.headingPattern)) {
     Config.headingPattern = "device";
-}
-
-if (!$S.isArray(Config.userTeamMapping)) {
-    Config.userTeamMapping = [];
 }
 
 var pageData = {};

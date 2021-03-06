@@ -288,7 +288,7 @@ Template["entry.table.tr"] = [
             },
             {
                 "tag": "td",
-                "name": "description",
+                "name": "descriptionV2",
                 "text": ""
             },
             {

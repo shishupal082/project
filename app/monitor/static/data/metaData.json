@@ -43,6 +43,16 @@
         {"name": "addentry", "toText": "Add Entry"},
         {"name": "uploadfile", "toText": "Upload file"}
     ],
+    "userTeamMapping": [
+        {
+            "id": "isTeam1",
+            "name": "team1"
+        },
+        {
+            "id": "isTeam2",
+            "name": "team2"
+        }
+    ],
     "entryTableHeadingTr": [
         {
             "tag": "tr",

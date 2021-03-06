@@ -101,6 +101,12 @@ DataHandler.extend({
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return "";
         }
+        var firstTimeDataLoadStatus = DataHandler.getData("firstTimeDataLoadStatus", "");
+        if (firstTimeDataLoadStatus !== "completed") {
+            setTimeout(function(){
+                DataHandler.setUserTeam();
+            }, 1);
+        }
         DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return "completed";
     },
@@ -263,8 +269,9 @@ DataHandler.extend({
 
 DataHandler.extend({
     setUserTeam: function() {
+        var metaData = DataHandler.getData("metaData", {});
         var team = "info", isValidTeam;
-        var userTeamMapping = Config.userTeamMapping;
+        var userTeamMapping = metaData.userTeamMapping;
         if ($S.isArray(userTeamMapping)) {
             for (var i = 0; i<userTeamMapping.length; i++) {
                 if ($S.isString(userTeamMapping[i].id)) {
@@ -594,9 +601,6 @@ DataHandler.extend({
                 return;
             }
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-            setTimeout(function(){
-                DataHandler.setUserTeam();
-            }, 1);
             fireCallback();
         });
         DataHandler.setData("relatedUsersDataLoadStatus", "in-progress");
@@ -824,40 +828,40 @@ DataHandler.extend({
         });
         return entryByTypeData;
     },
-    generateSummaryData: function(pageName) {
-        var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
-        var csvDataByDate = DataHandler.getData("csvDataByDate", []);
-        var tempRenderData = [], renderData = [];
-        var temp, i, j, k, startDate, endDate, fieldDate, isFound;
-        for (i=0; i < csvDataByDate.length; i++) {
-            for (j=0; j<csvDataByDate[i].items.length; j++) {
-                fieldDate = csvDataByDate[i].date;
-                for (k=0; k<selectedDateParameter.length; k++) {
-                    startDate = selectedDateParameter[k].dateRange[0];
-                    endDate = selectedDateParameter[k].dateRange[1];
-                    if (AppHandler.isDateLiesInRange(startDate, endDate, fieldDate)) {
-                        temp = {"dateHeading": selectedDateParameter[k].dateHeading, "item": csvDataByDate[i].items[j]};
-                        tempRenderData.push(temp);
-                    }
-                }
-            }
-        }
-        for (i = 0; i < tempRenderData.length; i++) {
-            isFound = false;
-            for (j = 0; j < renderData.length; j++) {
-                if (renderData[j]["dateHeading"] === tempRenderData[i]["dateHeading"]) {
-                    isFound = true;
-                    break;
-                }
-            }
-            if (isFound) {
-                renderData[j]["items"].push(tempRenderData[i]["item"]);
-            } else {
-                renderData.push({"dateHeading":tempRenderData[i]["dateHeading"], "items": [tempRenderData[i]["item"]]});
-            }
-        }
-        return renderData;
-    },
+    // generateSummaryData: function(pageName) {
+    //     var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
+    //     var csvDataByDate = DataHandler.getData("csvDataByDate", []);
+    //     var tempRenderData = [], renderData = [];
+    //     var temp, i, j, k, startDate, endDate, fieldDate, isFound;
+    //     for (i=0; i < csvDataByDate.length; i++) {
+    //         for (j=0; j<csvDataByDate[i].items.length; j++) {
+    //             fieldDate = csvDataByDate[i].date;
+    //             for (k=0; k<selectedDateParameter.length; k++) {
+    //                 startDate = selectedDateParameter[k].dateRange[0];
+    //                 endDate = selectedDateParameter[k].dateRange[1];
+    //                 if (AppHandler.isDateLiesInRange(startDate, endDate, fieldDate)) {
+    //                     temp = {"dateHeading": selectedDateParameter[k].dateHeading, "item": csvDataByDate[i].items[j]};
+    //                     tempRenderData.push(temp);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     for (i = 0; i < tempRenderData.length; i++) {
+    //         isFound = false;
+    //         for (j = 0; j < renderData.length; j++) {
+    //             if (renderData[j]["dateHeading"] === tempRenderData[i]["dateHeading"]) {
+    //                 isFound = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (isFound) {
+    //             renderData[j]["items"].push(tempRenderData[i]["item"]);
+    //         } else {
+    //             renderData.push({"dateHeading":tempRenderData[i]["dateHeading"], "items": [tempRenderData[i]["item"]]});
+    //         }
+    //     }
+    //     return renderData;
+    // },
     generateEntryByDateData: function(csvDataByDate) {
         if (!$S.isArray(csvDataByDate) || csvDataByDate.length < 1) {
             return [];
@@ -947,7 +951,7 @@ DataHandler.extend({
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
             return DataHandler.generateEntryByDateData(csvDataByDate);
         }
-        if (["entrybydatefilter"].indexOf(pageName) >= 0) {
+        if (["entrybydatefilter", "summary"].indexOf(pageName) >= 0) {
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
             var selectedStation, selectedType, selectedDevice;
             selectedStation = DataHandler.getData("selectedStation", "");
@@ -990,9 +994,9 @@ DataHandler.extend({
             var mapping = {"entrybytype": "type", "entrybystation": "station", "entrybydevice": "device"};
             return DataHandler.generateDataBySelection(mapping[pageName]);
         }
-        if (["summary"].indexOf(pageName) >= 0) {
-            return DataHandler.generateSummaryData(pageName);
-        }
+        // if (["summary"].indexOf(pageName) >= 0) {
+        //     return DataHandler.generateSummaryData(pageName);
+        // }
         return [];
     },
     getPageRenderField: function(pageName) {
@@ -1022,7 +1026,7 @@ DataHandler.extend({
                 goBackLinkData = [];
                 sectionsData = [];
                 hidePageTab = true;
-            } else if (currentPageName === "entrybydatefilter") {
+            } else if (["entrybydatefilter", "summary"].indexOf(currentPageName) >= 0) {
                 filterOptions = AppHandler.getFilterData(DataHandler.generateFilterData());
             }
             if (["home"].indexOf(currentPageName) >= 0) {
@@ -1149,6 +1153,10 @@ DataHandler.extend({
                                     temp["userDisplayName"] = this.getDisplayUsername(temp["username"]);
                                     if (jsonData[i][j].length >= 5) {
                                         temp["description"] = jsonData[i][j].slice(4).join();
+                                        var textV2 = temp["description"].split(";").map(function(el, i, arr) {
+                                            return {"tag": "li", "text": el};
+                                        });
+                                        temp["descriptionV2"] = {"tag": "ul", "className": "description-ul", "text": textV2}
                                     }
                                     if (!$S.isArray(dataByDate[temp["date"]])) {
                                         dataByDate[temp["date"]] = [];

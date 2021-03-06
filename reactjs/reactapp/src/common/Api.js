@@ -195,6 +195,9 @@ childGenerator = {
     "ol": function(props, data, reactChildText, key) {
         return <ol key={key} type={data.type} className={data.className}>{reactChildText}</ol>;
     },
+    "ul": function(props, data, reactChildText, key) {
+        return <ul key={key} type={data.type} className={data.className}>{reactChildText}</ul>;
+    },
     "object": function(props, data, reactChildText, key) {
         return <object key={key} type={data.type} className={data.className} id={data.id} data={data.data}>{reactChildText}</object>;
     },

@@ -23,10 +23,10 @@
     -->
     <title>React App Monitoring</title>
     <!-- It will use nodejs to load static file -->
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/libs/bootstrap-v4.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8080/app/monitor/static/css/monitor-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/monitor/static/css/monitor-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -55,13 +55,13 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-<script type="text/javascript" src="http://localhost:8080/assets/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript">
 
 var GLOBAL = {
     baseapi: "http://localhost:8080",
-    appControlDataPath: "/app/monitor/static/data/",
+    appControlDataPath: "/monitor/appControlData/",
     basepathname: "",
     forceLogin: true
 };
@@ -77,28 +77,6 @@ GLOBAL.validTeamAppControl = ["appControlDataTeam01",
 
 GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
 GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
-GLOBAL.userTeamMapping = [
-  {
-    "id": "isSignalTeam",
-    "name": "signal"
-  },
-  {
-    "id": "isTelecomTeam",
-    "name": "telecom"
-  },
-  {
-    "id": "isSAndTTeam",
-    "name": "sAndT"
-  },
-  {
-    "id": "isAMCTeam",
-    "name": "amc"
-  },
-  {
-    "id": "isSFRTeam",
-    "name": "sfr"
-  }
-];
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.4";
 GLOBAL.JQ = $;
