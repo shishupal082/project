@@ -25,6 +25,7 @@ keys.push("availableDataPageName");
 keys.push("csvRawData");
 keys.push("csvData");
 keys.push("csvDataByDate");
+keys.push("filterOptions");
 
 keys.push("renderData");
 keys.push("renderFieldRow");
@@ -58,7 +59,7 @@ var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
-        "selectedStation", "selectedType", "selectedDevice",
+        "stationSelected", "typeSelected", "deviceSelected", "usernameSelected",
         "relatedUsersData", "relatedUsersDataLoadStatus", "loginUserDetailsLoadStatus", "usersFilesData"];
 
 keys.push("addentry.subject");
@@ -203,18 +204,22 @@ DataHandler.extend({
             eventName = "empty-eventName";
         }
         var filterData = ":";
-        var firstValue = DataHandler.getData("selectedStation", "");
-        var secondValue = DataHandler.getData("selectedType", "");
-        var thirdValue = DataHandler.getData("selectedDevice", "");
+        var firstValue = DataHandler.getData("stationSelected", "");
+        var secondValue = DataHandler.getData("typeSelected", "");
+        var thirdValue = DataHandler.getData("deviceSelected", "");
+        var fouthValue = DataHandler.getData("usernameSelected", "");
         if (eventName === "select") {
             switch(name) {
-                case "selectedStation":
+                case "stationSelected":
                     firstValue = value;
                 break;
-                case "selectedType":
+                case "typeSelected":
                     secondValue = value;
                 break;
-                case "selectedDevice":
+                case "deviceSelected":
+                    thirdValue = value;
+                break;
+                case "usernameSelected":
                     thirdValue = value;
                 break;
                 default:
@@ -223,6 +228,7 @@ DataHandler.extend({
             filterData += "1-"+firstValue;
             filterData += "-2-"+secondValue;
             filterData += "-3-"+thirdValue;
+            filterData += "-4-"+fouthValue;
         } else {
             filterData += "reset";
         }
@@ -271,13 +277,14 @@ DataHandler.extend({
     setUserTeam: function() {
         var metaData = DataHandler.getData("metaData", {});
         var team = "info", isValidTeam;
-        var userTeamMapping = metaData.userTeamMapping;
-        if ($S.isArray(userTeamMapping)) {
+        var userTeamMapping;
+        if ($S.isObject(metaData) && $S.isArray(metaData["monitoring-types"])) {
+            userTeamMapping = metaData["monitoring-types"];
             for (var i = 0; i<userTeamMapping.length; i++) {
-                if ($S.isString(userTeamMapping[i].id)) {
-                    isValidTeam = AppHandler.GetUserData(userTeamMapping[i].id, false);
-                    if (isValidTeam && $S.isString(userTeamMapping[i].name)) {
-                        team = userTeamMapping[i].name;
+                if ($S.isString(userTeamMapping[i].key)) {
+                    isValidTeam = AppHandler.GetUserData(userTeamMapping[i].key, false);
+                    if (isValidTeam && $S.isString(userTeamMapping[i].id)) {
+                        team = userTeamMapping[i].id;
                     }
                 }
             }
@@ -503,7 +510,7 @@ DataHandler.extend({
                 }
             }
         }
-        return users;
+        return users.sort();
     },
     getValidTypes: function() {
         return this._getValidationData("monitoring-types");
@@ -539,6 +546,11 @@ DataHandler.extend({
     },
     getAvailableDevice: function() {
         return this._getAvailableData("devices");
+    },
+    getAvailableUsers: function() {
+        return this.getValidUsers().map(function(el, i, arr) {
+            return {"id": el, "name": el};
+        });
     },
     getDisplayUsername: function(username) {
         return username;
@@ -661,7 +673,6 @@ DataHandler.extend({
     },
     OnSectionChange: function(appStateCallback, appDataCallback, currentSectionId) {
         DataHandler.initData();
-        DataHandler._resetFilterData();
         DataHandler.setData("currentSectionId", currentSectionId);
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("csvDataLoadStatus", "not-started");
@@ -693,18 +704,31 @@ DataHandler.extend({
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "ForceReload");
     },
+    OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                if (filterOptions[i].selectName === name) {
+                    filterOptions[i].selectedValue = value;
+                }
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        this.OnDropdownChange(appStateCallback, appDataCallback, name, value);
+    },
     OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnDropdownChange");
     },
-    _resetFilterData: function() {
-        DataHandler.setData("selectedStation", "");
-        DataHandler.setData("selectedType", "");
-        DataHandler.setData("selectedDevice", "");
-    },
     OnResetFilter: function(appStateCallback, appDataCallback) {
-        DataHandler._resetFilterData();
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                filterOptions[i].selectedValue = "";
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
         DataHandler.setData("availableDataPageName", "");
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnResetFilter");
     },
@@ -722,10 +746,12 @@ DataHandler.extend({
         var csvRawData = DataHandler.getData("csvRawData", []);
         var csvData = DataHandler.generatePageData(csvRawData);
         var requiredData = DataHandler.generateValidData(csvData);
+        var filterOptions = DataHandler.generateFilterData(requiredData["finalData"]);
         DataHandler.setData("csvData", requiredData["finalData"]);
         DataHandler.setData("csvDataByDate", requiredData["dataByDate"]);
         DataHandler.setData("errorsData", requiredData["errorsData"]);
         DataHandler.setData("renderFieldRow", []);
+        DataHandler.setData("filterOptions", filterOptions);
         DataHandler._setDateFilterParameters();
         DataHandler.setPageData(appStateCallback, appDataCallback, "_handleDataLoad");
     },
@@ -828,40 +854,6 @@ DataHandler.extend({
         });
         return entryByTypeData;
     },
-    // generateSummaryData: function(pageName) {
-    //     var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
-    //     var csvDataByDate = DataHandler.getData("csvDataByDate", []);
-    //     var tempRenderData = [], renderData = [];
-    //     var temp, i, j, k, startDate, endDate, fieldDate, isFound;
-    //     for (i=0; i < csvDataByDate.length; i++) {
-    //         for (j=0; j<csvDataByDate[i].items.length; j++) {
-    //             fieldDate = csvDataByDate[i].date;
-    //             for (k=0; k<selectedDateParameter.length; k++) {
-    //                 startDate = selectedDateParameter[k].dateRange[0];
-    //                 endDate = selectedDateParameter[k].dateRange[1];
-    //                 if (AppHandler.isDateLiesInRange(startDate, endDate, fieldDate)) {
-    //                     temp = {"dateHeading": selectedDateParameter[k].dateHeading, "item": csvDataByDate[i].items[j]};
-    //                     tempRenderData.push(temp);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     for (i = 0; i < tempRenderData.length; i++) {
-    //         isFound = false;
-    //         for (j = 0; j < renderData.length; j++) {
-    //             if (renderData[j]["dateHeading"] === tempRenderData[i]["dateHeading"]) {
-    //                 isFound = true;
-    //                 break;
-    //             }
-    //         }
-    //         if (isFound) {
-    //             renderData[j]["items"].push(tempRenderData[i]["item"]);
-    //         } else {
-    //             renderData.push({"dateHeading":tempRenderData[i]["dateHeading"], "items": [tempRenderData[i]["item"]]});
-    //         }
-    //     }
-    //     return renderData;
-    // },
     generateEntryByDateData: function(csvDataByDate) {
         if (!$S.isArray(csvDataByDate) || csvDataByDate.length < 1) {
             return [];
@@ -888,62 +880,43 @@ DataHandler.extend({
         }
         return finalData;
     },
-    _isValidData: function(data, selectedStation, selectedType, selectedDevice) {
-        if (!$S.isObject(data)) {
-            return false;
+    _filterCsvData: function(csvDataByDate) {
+        if (!$S.isArray(csvDataByDate)) {
+            return [];
         }
-        if (!$S.isArray(selectedStation) || !$S.isArray(selectedType) || !$S.isArray(selectedDevice)) {
-            return false;
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var i, j, k;
+        var value, dataName;
+        var temp, temp2;
+        for(k=0; k<filterOptions.length; k++) {
+            temp2 = [];
+            if (filterOptions[k].type !== "dropdown") {
+                continue;
+            }
+            value = filterOptions[k].selectedValue;
+            dataName = filterOptions[k].dataName;
+            if (value === "") {
+                continue;
+            } else {
+                value = [value];
+            }
+            for (i = 0; i < csvDataByDate.length; i++) {
+                temp = {"date": csvDataByDate[i].date, "items": []};
+                for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                    if (value.indexOf(csvDataByDate[i].items[j][dataName]) >= 0) {
+                        temp["items"].push(csvDataByDate[i].items[j]);
+                    }
+                }
+                if (temp.items.length > 0) {
+                    temp2.push(temp);
+                }
+            }
+            csvDataByDate = temp2;
         }
-        if (selectedStation.indexOf(data.station) < 0) {
-            return false;
-        }
-        if (selectedType.indexOf(data.type) < 0) {
-            return false;
-        }
-        if (selectedDevice.indexOf(data.device) < 0) {
-            return false;
-        }
-        return true;
-    },
-    generateFilterData: function() {
-        var selectionOptions = [];
-        var selectedStation, selectedType, selectedDevice;
-        selectedStation = DataHandler.getData("selectedStation", "");
-        selectedType = DataHandler.getData("selectedType", "");
-        selectedDevice = DataHandler.getData("selectedDevice", "");
-        var availableStations, availableTypes, availableDevices, i;
-        availableStations = DataHandler.getAvailableStation();
-        availableTypes = DataHandler.getAvailableTypes();
-        availableDevices = DataHandler.getAvailableDevice();
-        var stationOptions = [], typeOptions = [], deviceOptions = [];
-        for (i = 0; i < availableStations.length; i++) {
-            stationOptions.push({"value": availableStations[i].id, "option": availableStations[i].name});
-        }
-        for (i = 0; i < availableTypes.length; i++) {
-            typeOptions.push({"value": availableTypes[i].id, "option": availableTypes[i].name});
-        }
-        for (i = 0; i < availableDevices.length; i++) {
-            deviceOptions.push({"value": availableDevices[i].id, "option": availableDevices[i].name});
-        }
-        if (stationOptions.length > 0) {
-            $S.addElAt(stationOptions, 0, {"value": "", "option": "All Station"});
-        }
-        if (typeOptions.length > 0) {
-            $S.addElAt(typeOptions, 0, {"value": "", "option": "All"});
-        }
-        if (deviceOptions.length > 0) {
-            $S.addElAt(deviceOptions, 0, {"value": "", "option": "All"});
-        }
-        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
-        selectionOptions.push({"type": "dropdown", "text": stationOptions, "selectName": "selectedStation", "selectedValue": selectedStation});
-        selectionOptions.push({"type": "dropdown", "text": typeOptions, "selectName": "selectedType", "selectedValue": selectedType});
-        selectionOptions.push({"type": "dropdown", "text": deviceOptions, "selectName": "selectedDevice", "selectedValue": selectedDevice});
-        selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
-        return selectionOptions;
+        return csvDataByDate;
     },
     getPageRenderData: function(pageName) {
-        var csvDataByDate, i, j;
+        var csvDataByDate;
         if (["entry"].indexOf(pageName) >= 0) {
             return DataHandler.getData("csvData", []);
         }
@@ -953,50 +926,13 @@ DataHandler.extend({
         }
         if (["entrybydatefilter", "summary"].indexOf(pageName) >= 0) {
             csvDataByDate = DataHandler.getData("csvDataByDate", []);
-            var selectedStation, selectedType, selectedDevice;
-            selectedStation = DataHandler.getData("selectedStation", "");
-            selectedType = DataHandler.getData("selectedType", "");
-            selectedDevice = DataHandler.getData("selectedDevice", "");
-            var validStation = DataHandler.getValidStation();
-            var validType = DataHandler.getValidTypes();
-            var validDevice = DataHandler.getValidDevice();
-            if (selectedStation === "") {
-                selectedStation = validStation;
-            } else {
-                selectedStation = [selectedStation];
-            }
-            if (selectedType === "") {
-                selectedType = validType;
-            } else {
-                selectedType = [selectedType];
-            }
-            if (selectedDevice === "") {
-                selectedDevice = validDevice;
-            } else {
-                selectedDevice = [selectedDevice];
-            }
-            var filteredData = [], temp, isValid;
-            for (i = 0; i < csvDataByDate.length; i++) {
-                temp = {"date": csvDataByDate[i].date, "items": []};
-                for (j = 0; j < csvDataByDate[i].items.length; j++) {
-                    isValid = DataHandler._isValidData(csvDataByDate[i].items[j], selectedStation, selectedType, selectedDevice);
-                    if (isValid) {
-                        temp["items"].push(csvDataByDate[i].items[j]);
-                    }
-                }
-                if (temp.items.length > 0) {
-                    filteredData.push(temp);
-                }
-            }
+            var filteredData = this._filterCsvData(csvDataByDate);
             return DataHandler.generateEntryByDateData(filteredData);
         }
         if (["entrybytype", "entrybystation", "entrybydevice"].indexOf(pageName) >= 0) {
             var mapping = {"entrybytype": "type", "entrybystation": "station", "entrybydevice": "device"};
             return DataHandler.generateDataBySelection(mapping[pageName]);
         }
-        // if (["summary"].indexOf(pageName) >= 0) {
-        //     return DataHandler.generateSummaryData(pageName);
-        // }
         return [];
     },
     getPageRenderField: function(pageName) {
@@ -1027,7 +963,7 @@ DataHandler.extend({
                 sectionsData = [];
                 hidePageTab = true;
             } else if (["entrybydatefilter", "summary"].indexOf(currentPageName) >= 0) {
-                filterOptions = AppHandler.getFilterData(DataHandler.generateFilterData());
+                filterOptions = DataHandler.getData("filterOptions", []);
             }
             if (["home"].indexOf(currentPageName) >= 0) {
                 pageDropdown = [];
@@ -1056,7 +992,7 @@ DataHandler.extend({
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
             appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
 
-            appDataCallback("filterOptions", filterOptions);
+            appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
             appStateCallback();
         }
     }
@@ -1082,7 +1018,7 @@ DataHandler.extend({
         }
         return jsonData;
     },
-    _getUsename: function(username) {
+    _getUsername: function(username) {
         var validUsername = "info";
         var relatedUserData = DataHandler.getData("relatedUsersData", []);
         if ($S.isArray(relatedUserData)) {
@@ -1093,6 +1029,71 @@ DataHandler.extend({
             }
         }
         return validUsername;
+    },
+    generateFilterData: function(csvData) {
+        if (!$S.isArray(csvData)) {
+            return [];
+        }
+        var metaData = this.getData("metaData", {});
+        var filterKeys = [], i, j, temp;
+        if ($S.isObject(metaData) && $S.isArray(metaData.filterKeys)) {
+            for(i=0; i<metaData.filterKeys.length; i++) {
+                if (!$S.isString(metaData.filterKeys[i])) {
+                    continue;
+                }
+                filterKeys.push(metaData.filterKeys[i]);
+            }
+        }
+        var tempFilterOptions = {};
+        for(i=0; i<filterKeys.length; i++) {
+            tempFilterOptions[filterKeys[i]] = {
+                "dataKey": filterKeys[i]+"Selected",
+                "dataName": filterKeys[i],
+                "dataDisplay": filterKeys[i]+"Display",
+                "possibleIds": [],
+                "filterOption": []
+            };
+        }
+        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
+        for(i=0; i<csvData.length; i++) {
+            for(j=0; j<filterKeys.length; j++) {
+                temp = csvData[i][tempFilterOptions[filterKeys[j]].dataName];
+                if (!$S.isString(temp) || temp.trim().length < 1) {
+                    continue;
+                }
+                temp = temp.trim();
+                if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
+                    tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
+                    tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": csvData[i][tempFilterOptions[filterKeys[j]].dataDisplay]});
+                }
+            }
+        }
+
+        for(temp in tempFilterOptions) {
+            tempFilterOptions[temp].filterOption.sort(function(a, b) {
+                return a.option > b.option ? 1 : -1;
+            });
+            if (tempFilterOptions[temp].filterOption.length > 0) {
+                $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
+            }
+        }
+        var selectionOptions = [];
+        for(i=0; i<filterKeys.length; i++) {
+            if (filterKeys[i] === "reset") {
+                selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
+                continue;
+            }
+            if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
+                selectionOptions.push({"type": "dropdown",
+                    "text": tempFilterOptions[filterKeys[i]].filterOption,
+                    "selectName": filterKeys[i]+"Selected",
+                    "selectedValue": "",
+                    "dataName": tempFilterOptions[filterKeys[i]].dataName,
+                    "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds
+                });
+            }
+        }
+        return selectionOptions;
     },
     generateValidData: function(jsonData) {
         var errorsData = DataHandler.getData("errorsData", []);
@@ -1149,8 +1150,8 @@ DataHandler.extend({
                                     temp["stationDisplay"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
                                     temp["device"] = jsonData[i][j][3];
                                     temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
-                                    temp["username"] =this._getUsename(jsonData[i][j][4]);
-                                    temp["userDisplayName"] = this.getDisplayUsername(temp["username"]);
+                                    temp["username"] =this._getUsername(jsonData[i][j][4]);
+                                    temp["usernameDisplay"] = this.getDisplayUsername(temp["username"]);
                                     if (jsonData[i][j].length >= 5) {
                                         temp["description"] = jsonData[i][j].slice(4).join();
                                         var textV2 = temp["description"].split(";").map(function(el, i, arr) {

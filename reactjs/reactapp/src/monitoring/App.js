@@ -119,7 +119,7 @@ class App extends React.Component {
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        var fiterNames = ["selectedStation", "selectedType", "selectedDevice"];
+        var fiterNames = ["stationSelected", "typeSelected", "deviceSelected", "usernameSelected"];
         var inputSelect = ["addentry.subject", "addentry.heading"];
         if (name === "list1-select") {
             var sectionId = value;
@@ -129,7 +129,7 @@ class App extends React.Component {
             this.gotoPage(value);
         } else if (fiterNames.indexOf(name) >= 0) {
             DataHandler.TrackFilterOperation("select", value, name);
-            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+            DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         } else if (inputSelect.indexOf(name) >= 0) {
             DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
