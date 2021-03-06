@@ -13,6 +13,7 @@ Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.forceLogin = $$$.forceLogin;
+Config.userTeamMapping = $$$.userTeamMapping;
 
 Config.addTextFilenamePattern = $$$.addTextFilenamePattern;
 
@@ -27,6 +28,9 @@ if (!$S.isString(Config.headingPattern)) {
     Config.headingPattern = "device";
 }
 
+if (!$S.isArray(Config.userTeamMapping)) {
+    Config.userTeamMapping = [];
+}
 
 var pageData = {};
 pageData["uploadFileInstruction"] = $$$.uploadFileInstruction;

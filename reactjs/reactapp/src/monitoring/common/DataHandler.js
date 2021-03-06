@@ -263,21 +263,17 @@ DataHandler.extend({
 
 DataHandler.extend({
     setUserTeam: function() {
-        var signal, telecom, sAndT, amc, team;
-        signal = AppHandler.GetUserData("isSignalTeam", false);
-        telecom = AppHandler.GetUserData("isTelecomTeam", false);
-        sAndT = AppHandler.GetUserData("isSAndTTeam", false);
-        amc = AppHandler.GetUserData("isAMCTeam", false);
-        if (signal) {
-            team = "signal";
-        } else if (telecom) {
-            team = "telecom";
-        } else if (sAndT) {
-            team = "sAndT";
-        } else if (amc) {
-            team = "amc";
-        } else {
-            team = "info";
+        var team = "info", isValidTeam;
+        var userTeamMapping = Config.userTeamMapping;
+        if ($S.isArray(userTeamMapping)) {
+            for (var i = 0; i<userTeamMapping.length; i++) {
+                if ($S.isString(userTeamMapping[i].id)) {
+                    isValidTeam = AppHandler.GetUserData(userTeamMapping[i].id, false);
+                    if (isValidTeam && $S.isString(userTeamMapping[i].name)) {
+                        team = userTeamMapping[i].name;
+                    }
+                }
+            }
         }
         this.setData("userTeam", team);
     }
