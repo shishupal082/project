@@ -1068,7 +1068,6 @@ DataHandler.extend({
                 }
             }
         }
-
         for(temp in tempFilterOptions) {
             tempFilterOptions[temp].filterOption.sort(function(a, b) {
                 return a.option > b.option ? 1 : -1;

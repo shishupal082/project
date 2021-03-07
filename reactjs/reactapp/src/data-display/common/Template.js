@@ -60,17 +60,6 @@ Template["tableField"] = [
     },
     {
         "tag": "div",
-        "name": "submit",
-        "className": "submit-btn",
-        "text": {
-            "tag": "button",
-            "className": "btn btn-primary",
-            "name": "addentry.submit",
-            "text": "Submit"
-        }
-    },
-    {
-        "tag": "div",
         "name": "footer",
         "text": []
     }

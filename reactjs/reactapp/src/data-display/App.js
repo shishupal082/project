@@ -7,7 +7,7 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
-import DataHandlerV2 from "./common/DataHandlerV2";
+// import DataHandlerV2 from "./common/DataHandlerV2";
 import Config from "./common/Config";;
 
 
@@ -87,15 +87,15 @@ class App extends React.Component {
         if (value === "reload") {
             DataHandler.OnReloadClick(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
-        } else if (name === "addentry.submit") {
-            DataHandlerV2.SubmitFormClick(this.appStateCallback, this.appDataCallback);
+        } else if (name === "reset-filter") {
+            DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
         }
     }
     // for input and textarea
     onChange(e) {
-        var name = e.currentTarget.name;
-        var value = e.currentTarget.value;
-        DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
+        // var name = e.currentTarget.name;
+        // var value = e.currentTarget.value;
+        // DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
     }
     // not working ?
     onFormSubmit(e) {
@@ -103,11 +103,16 @@ class App extends React.Component {
         e.preventDefault();
     }
     dropDownChange(e) {
-        var name = e.currentTarget.name;
+        var name = e.currentTarget.name, i;
         var value = e.currentTarget.value;
         var inputSelect = ["addentry.subject", "addentry.heading"];
-        var filterNames = ["filter1", "filter2"];
-        
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filterNames = [];
+        for(i=0; i<filterOptions.length; i++) {
+            if ($S.isString(filterOptions[i].selectName)) {
+                filterNames.push(filterOptions[i].selectName);
+            }
+        }
         if (name === "list1-select") {
             var sectionId = value;
             // DataHandler.TrackSectionView("dropdownSelect", sectionId);

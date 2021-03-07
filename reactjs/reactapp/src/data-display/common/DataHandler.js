@@ -14,22 +14,6 @@ var DataHandler;
 
 var CurrentData = $S.getDataObj();
 var keys = [];
-// keys.push("currentPageName");
-// keys.push("currentFilterName");
-// keys.push("currentPageName");
-// keys.push("currentOptionName");
-// keys.push("currentFieldsName");
-// keys.push("availableDataPageName");
-// keys.push("dropdownFields");
-
-// keys.push("appControlDataLoadStatus");
-// keys.push("metaDataLoadStatus");
-// keys.push("csvDataLoadStatus");
-// keys.push("firstTimeDataLoadStatus");
-
-// keys.push("csvRawData");
-// keys.push("csvData");
-// keys.push("csvDataByDate");
 
 keys.push("renderData");
 keys.push("renderFieldRow");
@@ -37,12 +21,7 @@ keys.push("renderFieldRow");
 
 keys.push("currentAppId");
 
-keys.push("filter1");
-keys.push("filter2");
-
-// keys.push("selectedDateType");
-// keys.push("selectedDateParameter");
-// keys.push("combinedDateSelectionParameter");
+keys.push("filterOptions");
 
 
 keys.push("appControlData");
@@ -56,41 +35,7 @@ keys.push("firstTimeDataLoadStatus");
 
 
 keys.push("fieldsData");
-// keys.push("staticData");
-// keys.push("taskData");
-// keys.push("componentData");
-// keys.push("appData");
-// keys.push("staticDataLoadStatus");
-// keys.push("taskDataLoadStatus");
-// keys.push("componentDataLoadStatus");
-// keys.push("appDataLoadStatus");
-// keys.push("currentSectionId");
-// keys.push("sectionName");
-// keys.push("currentSectionData");
-// keys.push("errorsData");
-
-// keys.push("homeFields");
-// keys.push("dropdownFields");
-
-
-// keys.push("selectedStation");
-// keys.push("selectedType");
-// keys.push("selectedDevice");
-
-// var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
-//         "currentSectionId", "currentPageName", "selectedDateType",
-//         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
-//         "homeFields", "dropdownFields",
-//         "selectedStation", "selectedType", "selectedDevice",
-//         "loginUserDetailsLoadStatus", "usersFilesData"];
-
 var bypassKeys = [];
-// keys.push("addentry.subject");
-// keys.push("addentry.heading");
-// keys.push("addentry.textarea");
-// keys.push("addentry.file");
-// keys.push("addentry.fileUploadPercentage");
-// keys.push("addentry.submitStatus"); //in_progress, completed
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -99,14 +44,7 @@ CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("reportDataLoadStatus", "not-started");
 
-// CurrentData.setData("staticDataLoadStatus", "not-started");
-// CurrentData.setData("taskDataLoadStatus", "not-started");
-// CurrentData.setData("componentDataLoadStatus", "not-started");
-// CurrentData.setData("appDataLoadStatus", "not-started");
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
-
-// CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
-// CurrentData.setData("usersFilesData", []);
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -173,43 +111,6 @@ DataHandler.extend({
         DataHandler.setData("currentAppId", currentAppId);
     },
     metaDataInit: function() {
-        var metaData = this.getData("metaData", {});
-        var currentFilter1 = this.getData("filter1", "");
-        var currentFilter2 = this.getData("filter2", "");
-        var filter1Data = metaData.filter1;
-        var filter2Data = metaData.filter2;
-        var i, filter1IsNotFound = true, filter2IsNotFound = true;
-        var finalFilter1 = "", finalFilter2 = "";
-        if ($S.isObject(filter1Data) && $S.isArray(filter1Data.text)) {
-            for (i = 0; i < filter1Data.text.length; i++) {
-                if (finalFilter1.length === 0 && $S.isString(filter1Data.text[i].value)) {
-                    finalFilter1 = filter1Data.text[i].value;
-                }
-                if (filter1Data.text[i].value === currentFilter1) {
-                    filter1IsNotFound = false;
-                    break;
-                }
-            }
-        }
-        if ($S.isObject(filter2Data) && $S.isArray(filter2Data.text)) {
-            for (i = 0; i < filter2Data.text.length; i++) {
-                if (finalFilter2.length === 0 && $S.isString(filter2Data.text[i].value)) {
-                    finalFilter2 = filter2Data.text[i].value;
-                }
-                if (filter2Data.text[i].value === currentFilter2) {
-                    filter2IsNotFound = false;
-                    break;
-                }
-            }
-        }
-        if (filter1IsNotFound) {
-            currentFilter1 = finalFilter1;
-        }
-        if (filter2IsNotFound) {
-            currentFilter2 = finalFilter2;
-        }
-        this.setData("filter1", currentFilter1);
-        this.setData("filter2", currentFilter2);
     },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
@@ -224,6 +125,14 @@ DataHandler.extend({
         }
         return currentAppData;
     },
+    getDisableFooterStatus: function() {
+        var currentAppData = this.getCurrentAppData();
+        var disableFooter = true;
+        if ($S.isBooleanFalse(currentAppData.disableFooter)) {
+            disableFooter = false;
+        }
+        return disableFooter;
+    },
     getWordBreak: function() {
         var currentAppData = this.getCurrentAppData();
         if ($S.isString(currentAppData.wordBreak)) {
@@ -237,34 +146,6 @@ DataHandler.extend({
             return currentAppData.skipEmpty;
         }
         return false;
-    },
-    getCurrentFilter1Data: function() {
-        var filter1 = this.getData("filter1", "");
-        var filter1Data = {};
-        var metaData = this.getData("metaData", {});
-        if ($S.isObject(metaData["filter1"]) && $S.isArray(metaData["filter1"].text)) {
-            for (var i = 0; i < metaData["filter1"].text.length; i++) {
-                if (metaData["filter1"].text[i].value === filter1) {
-                    filter1Data = metaData["filter1"].text[i];
-                    break;
-                }
-            }
-        }
-        return filter1Data;
-    },
-    getCurrentFilter2Data: function() {
-        var filter2 = this.getData("filter2", "");
-        var filter2Data = {};
-        var metaData = this.getData("metaData", {});
-        if ($S.isObject(metaData["filter2"]) && $S.isArray(metaData["filter2"].text)) {
-            for (var i = 0; i < metaData["filter2"].text.length; i++) {
-                if (metaData["filter2"].text[i].value === filter2) {
-                    filter2Data = metaData["filter2"].text[i];
-                    break;
-                }
-            }
-        }
-        return filter2Data;
     },
     getFooterData: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -351,6 +232,7 @@ DataHandler.extend({
             DataHandlerV2.HandleReportTextLoad(response);
         }, function() {
             $S.log("reportData load complete");
+            DataHandler.generateFilterOption();
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethodV2());
     },
@@ -400,118 +282,130 @@ DataHandler.extend({
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
-        DataHandler.setData(name, value);
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                if (filterOptions[i].selectName === name) {
+                    filterOptions[i].selectedValue = value;
+                }
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    OnInputChange: function(appStateCallback, appDataCallback, name, value) {
-        var fieldsData = this.getData("fieldsData", {});
-        if (!$S.isObject(fieldsData)) {
-            fieldsData = {};
+    OnResetClick: function(appStateCallback, appDataCallback, name, value) {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                filterOptions[i].selectedValue = "";
+            }
         }
-        if ($S.isString(value)) {
-            value = value.trim();
-        }
-        fieldsData[name] = value;
-        this.setData("fieldsData", fieldsData);
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
 DataHandler.extend({
-    _generateFieldData: function(dataStr) {
-        var result = {};
-        var temp, temp2, temp3;
-        var i;
-        if ($S.isString(dataStr)) {
-            temp = dataStr.split("|");
-            for(i=0; i<temp.length; i++) {
-                temp2 = temp[i].split("=");
-                if (temp2.length === 2) {
-                    temp3 = temp2[0].split(":");
-                    if (temp3.length === 2) {
-                        if (temp3[1] === "string") {
-                            result[temp3[0]] = temp2[1];
-                        } else if (temp3[1] === "string[]") {
-                            result[temp3[0]] = temp2[1].split(",");
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    },
-    _getApiData: function() {
-        var currentPageName = DataHandler.getData("currentPageName", "");
-        var apiData = {};
-        if (currentPageName === "app") {
-            apiData = DataHandler.getData("appData",[]);
-        } else if (currentPageName === "task") {
-            apiData = DataHandler.getData("taskData", []);
-        }
-        return apiData;
-    },
-    _getAllFieldsName: function() {
-        var apiData = this._getApiData();
-        var i;
-        var result = [];
-        for (i = 0; i < apiData.length; i++) {
-            if ($S.isObject(apiData[i].options)) {
-                if ($S.isString(apiData[i].options.name)) {
-                    result.push(apiData[i].options.name);
-                } else {
-                    result.push("Invalid options.name");
-                }
-            }
-        }
-        return result;
-    },
-    _isFilterTeamSelected: function(selectedFilterTeam, userFilterTeam) {
-        if ($S.isArray(selectedFilterTeam) && $S.isString(userFilterTeam)) {
-            if (selectedFilterTeam.indexOf("all") >= 0) {
-                return true;
-            } else if (selectedFilterTeam.indexOf(userFilterTeam) >= 0) {
-                return true;
-            }
-        }
-        return false;
-    },
     getRenderData: function(pageName, optionName, fieldName) {
-        var renderData = [];
         var reportData = this.getData("reportData", {});
-        var temp2, i, j;
-        if ($S.isArray(reportData)) {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var temp, temp2, i, j, k, filterIndex, filterValue;
+        if (!$S.isArray(reportData)) {
+            reportData = [];
+        }
+        for(k=0; k<filterOptions.length; k++) {
+            filterIndex = filterOptions[k].dataKey;
+            filterValue = filterOptions[k].selectedValue;
+            if (!$S.isNumber(filterIndex) || filterIndex < 0) {
+                continue;
+            }
+            if (!$S.isString(filterValue) || filterValue === "") {
+                continue;
+            }
+            temp = [];
             for (i = 0; i < reportData.length; i++) {
-                if ($S.isArray(reportData[i])) {
-                    temp2 = [];
-                    for (j = 0; j < reportData[i].length; j++) {
-                        temp2.push(reportData[i][j]);
+                if (!$S.isArray(reportData[i])) {
+                    continue;
+                }
+                temp2 = [];
+                for (j = 0; j < reportData[i].length; j++) {
+                    if (j === filterIndex && reportData[i][j] !== filterValue) {
+                        temp2 = [];
+                        break;
                     }
-                    renderData.push(temp2);
+                    temp2.push(reportData[i][j]);
+                }
+                if (temp2.length >= 1) {
+                    temp.push(temp2);
                 }
             }
+            reportData = temp;
         }
-        return renderData;
+        return reportData;
     },
-    getFilterOptions: function() {
-        var filterOptions = [], i, j;
+    generateFilterOption: function() {
+        var reportData = this.getData("reportData", []);
         var metaData = this.getData("metaData", {});
-        var filter1Value = this.getData("filter1", "");
-        var filter2Value = this.getData("filter2", "");
-        var filterKeys = ["filter1", "filter2"];
-        var filterValues = [filter1Value, filter2Value];
-        if ($S.isObject(metaData)) {
-            for (j = 0; j < filterKeys.length; j++) {
-                if ($S.isObject(metaData[filterKeys[j]])) {
-                    if ($S.isArray(metaData[filterKeys[j]].text)) {
-                        for (i = 0; i < metaData[filterKeys[j]].text.length; i++) {
-                            if (metaData[filterKeys[j]].text[i].value === filterValues[j]) {
-                                metaData[filterKeys[j]].text[i].selected = true;
-                            }
-                        }
-                    }
-                    filterOptions.push(metaData[filterKeys[j]]);
+        var filterIndex = [];
+        var minDataLength = metaData.minDataLength;
+        if (!$S.isNumber(minDataLength)) {
+            minDataLength = 2;
+        }
+        if ($S.isArray(metaData.filterIndex)) {
+            filterIndex = metaData.filterIndex.filter(function(el, i, arr) {
+                return $S.isNumber(el);
+            });
+        }
+        var tempFilterOptions = {};
+        var i, j, temp;
+        for(i=0; i<filterIndex.length; i++) {
+            tempFilterOptions[filterIndex[i]] = {
+                "dataKey": filterIndex[i],
+                "selectName": filterIndex[i]+"Selected",
+                "possibleIds": [],
+                "filterOption": []
+            };
+        }
+        for(i=0; i<reportData.length; i++) {
+            for(j=0; j<filterIndex.length; j++) {
+                if (filterIndex[i] === -1) {
+                    continue;
+                }
+                temp = reportData[i][tempFilterOptions[filterIndex[j]].dataKey];
+                if (!$S.isString(temp) || temp.trim().length < 1) {
+                    continue;
+                }
+                temp = temp.trim();
+                if (tempFilterOptions[filterIndex[j]].possibleIds.indexOf(temp) < 0) {
+                    tempFilterOptions[filterIndex[j]].possibleIds.push(temp);
+                    tempFilterOptions[filterIndex[j]].filterOption.push({"value": temp, "option": temp});
                 }
             }
         }
-        return filterOptions;
+        for(temp in tempFilterOptions) {
+            tempFilterOptions[temp].filterOption.sort(function(a, b) {
+                return a.option > b.option ? 1 : -1;
+            });
+            if (tempFilterOptions[temp].filterOption.length > 0) {
+                $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
+            }
+        }
+        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
+        var filterOptions = [];
+        for(i=0; i<filterIndex.length; i++) {
+            if (filterIndex[i] === -1) {
+                filterOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
+                continue;
+            }
+            if (tempFilterOptions[filterIndex[i]].filterOption.length > 0) {
+                filterOptions.push({"type": "dropdown",
+                    "dataKey": tempFilterOptions[filterIndex[i]].dataKey,
+                    "selectName": tempFilterOptions[filterIndex[i]].selectName,
+                    "text": tempFilterOptions[filterIndex[i]].filterOption,
+                    "selectedValue": ""
+                });
+            }
+        }
+        this.setData("filterOptions", filterOptions);
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         if (!this.isDataLoadComplete()) {
@@ -521,13 +415,14 @@ DataHandler.extend({
         var footerData = DataHandler.getFooterData();
         var renderFieldRow = TemplateHandler.GetPageRenderField(renderData, footerData);
         var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-        var filterOptions = this.getFilterOptions();
+        var filterOptions = DataHandler.getData("filterOptions", []);
 
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("currentList1Id", this.getData("currentAppId", ""));
         appDataCallback("list1Data", this.getData("appControlData", []));
-        appDataCallback("filterOptions", filterOptions);
+        appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
+        appDataCallback("disableFooter", this.getDisableFooterStatus());
         appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }
