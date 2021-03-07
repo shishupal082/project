@@ -1077,16 +1077,21 @@ DataHandler.extend({
             }
         }
         var selectionOptions = [];
+        var selectedValue;
         for(i=0; i<filterKeys.length; i++) {
             if (filterKeys[i] === "reset") {
                 selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
                 continue;
             }
+            selectedValue = DataHandler.getData(filterKeys[i]+"Selected", "");
+            if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
+                selectedValue = "";
+            }
             if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
                 selectionOptions.push({"type": "dropdown",
                     "text": tempFilterOptions[filterKeys[i]].filterOption,
                     "selectName": filterKeys[i]+"Selected",
-                    "selectedValue": "",
+                    "selectedValue": selectedValue,
                     "dataName": tempFilterOptions[filterKeys[i]].dataName,
                     "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds
                 });

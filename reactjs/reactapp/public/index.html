@@ -21,12 +21,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App Data Display</title>
+    <title>React App Monitoring</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/data-display/static/css/data-display-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/monitor/static/css/monitor-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -39,6 +39,11 @@
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="d-none" style="display: none;">
+      <input type="hidden" style="display: none;" name="uploadFileInstruction" id="uploadFileInstruction"
+        value="(Supported type: pdf,jpeg,jpg and png, max size < 10MB)"/>
+      <input type="hidden" style="display: none;" name="uploadTextInstruction" id="uploadTextInstruction" value=""/>
+    </div>
     <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
@@ -55,15 +60,25 @@
 <script type="text/javascript">
 
 var GLOBAL = {
-    dataLoadBaseapi: "http://localhost:8080",
-    basepathname: ""
+    baseapi: "http://localhost:8080",
+    appControlDataPath: "/monitor/appControlData/",
+    basepathname: "",
+    forceLogin: true
 };
 
-// GLOBAL.appControlDataApi = "/app/data-display/static/json/appControlData.json";
-GLOBAL.appControlDataApi = "/pvt/app-data/data-display/appControlData.json";
+GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
+GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
+GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
 
+GLOBAL.validTeamAppControl = ["appControlDataTeam01",
+              "appControlDataTeam02","appControlDataTeam03",
+              "appControlDataTeam04","appControlDataTeam05"];
+
+
+GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
+GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
 GLOBAL.gtag = gtag;
-GLOBAL.appVersion = "v1.0.1";
+GLOBAL.appVersion = "v1.0.4";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>
