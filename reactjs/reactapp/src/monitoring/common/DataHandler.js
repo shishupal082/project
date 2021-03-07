@@ -1047,7 +1047,7 @@ DataHandler.extend({
         var tempFilterOptions = {};
         for(i=0; i<filterKeys.length; i++) {
             tempFilterOptions[filterKeys[i]] = {
-                "dataKey": filterKeys[i]+"Selected",
+                "selectName": filterKeys[i]+"Selected",
                 "dataName": filterKeys[i],
                 "dataDisplay": filterKeys[i]+"Display",
                 "possibleIds": [],
@@ -1083,17 +1083,17 @@ DataHandler.extend({
                 selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
                 continue;
             }
-            selectedValue = DataHandler.getData(filterKeys[i]+"Selected", "");
+            selectedValue = DataHandler.getData(tempFilterOptions[filterKeys[i]].selectName, "");
             if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
                 selectedValue = "";
             }
             if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
                 selectionOptions.push({"type": "dropdown",
                     "text": tempFilterOptions[filterKeys[i]].filterOption,
-                    "selectName": filterKeys[i]+"Selected",
-                    "selectedValue": selectedValue,
+                    "selectName": tempFilterOptions[filterKeys[i]].selectName,
                     "dataName": tempFilterOptions[filterKeys[i]].dataName,
-                    "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds
+                    "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds,
+                    "selectedValue": selectedValue
                 });
             }
         }

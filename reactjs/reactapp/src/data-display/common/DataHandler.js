@@ -35,7 +35,7 @@ keys.push("firstTimeDataLoadStatus");
 
 
 keys.push("fieldsData");
-var bypassKeys = [];
+var bypassKeys = ["0Selected","1Selected","2Selected","3Selected","4Selected","5Selected","6Selected","7Selected","8Selected","9Selected"];
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -282,6 +282,7 @@ DataHandler.extend({
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
+        DataHandler.setData(name, value);
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
@@ -391,17 +392,22 @@ DataHandler.extend({
         }
         var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
         var filterOptions = [];
+        var selectedValue;
         for(i=0; i<filterIndex.length; i++) {
             if (filterIndex[i] === -1) {
                 filterOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
                 continue;
+            }
+            selectedValue = DataHandler.getData(tempFilterOptions[filterIndex[i]].selectName, "");
+            if (tempFilterOptions[filterIndex[i]].possibleIds.indexOf(selectedValue) < 0) {
+                selectedValue = "";
             }
             if (tempFilterOptions[filterIndex[i]].filterOption.length > 0) {
                 filterOptions.push({"type": "dropdown",
                     "dataKey": tempFilterOptions[filterIndex[i]].dataKey,
                     "selectName": tempFilterOptions[filterIndex[i]].selectName,
                     "text": tempFilterOptions[filterIndex[i]].filterOption,
-                    "selectedValue": ""
+                    "selectedValue": selectedValue
                 });
             }
         }
