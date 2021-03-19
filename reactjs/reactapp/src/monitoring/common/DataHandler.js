@@ -710,6 +710,7 @@ DataHandler.extend({
             for (var i = 0; i<filterOptions.length; i++) {
                 if (filterOptions[i].selectName === name) {
                     filterOptions[i].selectedValue = value;
+                    DataHandler.setData(name, value);
                 }
             }
         }
@@ -726,6 +727,7 @@ DataHandler.extend({
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
                 filterOptions[i].selectedValue = "";
+                DataHandler.setData(filterOptions[i].selectName, "");
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
