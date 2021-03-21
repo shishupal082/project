@@ -1,3 +1,11 @@
 {
-    "filterIndex": [1,2,4,-1]
+    "filterIndex": [1,2,4,-1],
+    "preFilter": {
+        "1": [
+            {
+                "value": "",
+                "option": "All"
+            }
+        ]
+    }
 }

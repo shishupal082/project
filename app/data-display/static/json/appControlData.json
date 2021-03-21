@@ -6,6 +6,10 @@
         "disableFooter": true,
         "wordBreak": "  ",
         "skipEmpty": true,
+        "loadReportDataFromApi": true,
+        "currentFileLoadType": "single-file",
+        "filenameUsername": ".",
+        "fileType": "[.]txt",
         "metaDataApi": [
             "/app/data-display/static/json/metaData.json"
         ],

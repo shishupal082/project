@@ -19,7 +19,10 @@ keys.push("renderData");
 keys.push("renderFieldRow");
 
 
-keys.push("currentAppId");
+keys.push("currentList1Id");
+keys.push("currentList2Id");
+keys.push("date-select");
+keys.push("apiDataPathResponse");
 
 keys.push("filterOptions");
 
@@ -100,30 +103,63 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    setCurrentAppId: function() {
+    setCurrentAppId: function(appId) {
         var appControlData = this.getData("appControlData", []);
-        var currentAppId = "";
+        var currentList1Id = "";
         if ($S.isArray(appControlData) && appControlData.length > 0) {
             if ($S.isString(appControlData[0]["id"])) {
-                currentAppId = appControlData[0]["id"];
+                currentList1Id = appControlData[0]["id"];
             }
         }
-        DataHandler.setData("currentAppId", currentAppId);
+        DataHandler.setData("currentList1Id", currentList1Id);
+        DataHandler.handleAppIdChange();
+    },
+    handleAppIdChange: function() {
+        var appControlData = this.getCurrentAppData();
+        var currentList2Id = "";
+        var currentFileLoadType = DataHandler.getData("date-select", "single-file");
+        if ($S.isObject(appControlData)) {
+            if ($S.isString(appControlData["currentFileLoadType"])) {
+                currentFileLoadType = appControlData["currentFileLoadType"];
+            }
+            if ($S.isArray(appControlData["dataPathApi"]) && appControlData["dataPathApi"].length > 0) {
+                currentList2Id = appControlData["dataPathApi"][0];
+            }
+        }
+        DataHandler.setData("date-select", currentFileLoadType);
+        DataHandler.setData("currentList2Id", currentList2Id);
+        DataHandler.setData("apiDataPathResponse", []);
     },
     metaDataInit: function() {
     },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
-        var currentAppId = this.getData("currentAppId", "");
+        var currentAppId = this.getData("currentList1Id", "");
         var currentAppData = {};
         if ($S.isArray(appControlData)) {
             for (var i = 0; i < appControlData.length; i++) {
                 if (appControlData[i]["id"] === currentAppId) {
                     currentAppData = appControlData[i];
+                    break;
                 }
             }
         }
         return currentAppData;
+    },
+    updateDataPathApi: function(api) {
+        var appControlData = this.getData("appControlData", []);
+        var currentAppId = this.getData("currentList1Id", "");
+        var currentAppData = {};
+        if ($S.isArray(appControlData)) {
+            for (var i = 0; i < appControlData.length; i++) {
+                if (appControlData[i]["id"] === currentAppId) {
+                    currentAppData = appControlData[i];
+                    currentAppData.dataPathApi = api;
+                    break;
+                }
+            }
+        }
+        this.setData("appControlData", appControlData);
     },
     getDisableFooterStatus: function() {
         var currentAppData = this.getCurrentAppData();
@@ -197,44 +233,121 @@ DataHandler.extend({
             return unit;
         }
         return "";
-    },/*
-    getPageName: function() {
-        return DataHandler.getData("currentPageName", "");
-    },
-    getOptionName: function() {
-        return DataHandler.getData("currentOptionName", "");
-    },
-    getFieldNames: function() {
-        var fieldsName = DataHandler.getData("currentFieldsName", []);
-        if ($S.isArray(fieldsName) && fieldsName.length === 1 && fieldsName[0] === "all") {
-            fieldsName = this._getAllFieldsName();
-        }
-        return fieldsName;
-    }*/
+    }
 });
 DataHandler.extend({
     getReportDataApi: function() {
+        var currentFileId = DataHandler.getData("currentList2Id", "");
+        if ($S.isString(currentFileId) && currentFileId.length > 0) {
+            return [Config.dataLoadBaseapi + DataHandler.generateApi(currentFileId)];
+        }
         var currentAppData = this.getCurrentAppData();
         var api = [];
         if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
             for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
                 if ($S.isString(currentAppData.dataPathApi[i]) && currentAppData.dataPathApi[i].length > 0) {
-                    api.push(Config.dataLoadBaseapi + currentAppData.dataPathApi[i]);
+                    api.push(Config.dataLoadBaseapi + DataHandler.generateApi(currentAppData.dataPathApi[i]));
+                    break;
                 }
             }
         }
         return api;
     },
-    loadReport: function(callback) {
-        DataHandler.setData("reportDataLoadStatus", "in_progress");
-        $S.loadJsonData(null, this.getReportDataApi(), function(response, apiName, ajax){
+    generateApi: function(path) {
+        var currentAppData = this.getCurrentAppData();
+        if ($S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
+            return "/view/file/" + path + "?u=" + AppHandler.GetUserData("username", "") + "&iframe=false";
+        }
+        return path;
+    },
+    getAllReportDataApi: function() {
+        var currentAppData = this.getCurrentAppData();
+        var api = [];
+        if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
+            for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
+                if ($S.isString(currentAppData.dataPathApi[i]) && currentAppData.dataPathApi[i].length > 0) {
+                    api.push(Config.dataLoadBaseapi + DataHandler.generateApi(currentAppData.dataPathApi[i]));
+                }
+            }
+        }
+        return api;
+    },
+    getAllReportDataApiV2: function() {
+        var currentAppData = this.getCurrentAppData();
+        var api = [];
+        if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
+            for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
+                if ($S.isString(currentAppData.dataPathApi[i]) && currentAppData.dataPathApi[i].length > 0) {
+                    api.push(currentAppData.dataPathApi[i]);
+                }
+            }
+        }
+        return api;
+    },
+    loadReportDataApi: function(callback) {
+        var currentAppData = this.getCurrentAppData();
+        var apiDataPathResponse = [];
+        var api = [];
+        var dataPathLength = 0;
+        if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
+            DataHandlerV2.loadDataPath(function(response) {
+                if ($S.isObject(response) && response.status === "SUCCESS" && $S.isArray(response.data)) {
+                    api = response.data.map(function(el, i, arr) {
+                        apiDataPathResponse.push(el);
+                        if (i===0) {
+                            DataHandler.setData("currentList2Id", el);
+                        }
+                        return el;
+                    });
+                }
+                dataPathLength = api.length;
+                if (dataPathLength > 0) {
+                    Config.dateSelection[1]["name"] = "All file (" + dataPathLength + ")";
+                } else {
+                    Config.dateSelection[1]["name"] = "All file (0)";
+                }
+                DataHandler.setData("apiDataPathResponse", apiDataPathResponse);
+                DataHandler.updateDataPathApi(api);
+                callback();
+            });
+        } else {
+            if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
+                dataPathLength = currentAppData.dataPathApi.length;
+            }
+            if (dataPathLength > 0) {
+                Config.dateSelection[1]["name"] = "All file (" + dataPathLength + ")";
+            } else {
+                Config.dateSelection[1]["name"] = "All file (0)";
+            }
+            callback();
+        }
+    },
+    loadReportByApiPath: function(apiPath, callback) {
+        var finalResponse = [];
+        $S.loadJsonData(null, apiPath, function(response, apiName, ajax){
             DataHandler.setData("reportDataLoadStatus", "completed");
-            DataHandlerV2.HandleReportTextLoad(response);
+            finalResponse.push(response);
         }, function() {
             $S.log("reportData load complete");
+            DataHandlerV2.HandleReportTextLoad(finalResponse);
             DataHandler.generateFilterOption();
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethodV2());
+    },
+    getCurrentReportData: function() {
+        var apiPath = DataHandler.getReportDataApi();
+        var dateSelect = DataHandler.getData("date-select");
+        if (dateSelect === "all-file") {
+            apiPath = DataHandler.getAllReportDataApi();
+        }
+        return apiPath;
+    },
+    loadReport: function(callback) {
+        DataHandler.setData("reportDataLoadStatus", "in_progress");
+        this.loadReportDataApi(function() {
+            var apiPath = DataHandler.getCurrentReportData();
+            DataHandler.loadReportByApiPath(apiPath, callback);
+        });
     },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
@@ -277,9 +390,17 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
     },
-    OnAppChange: function(appStateCallback, appDataCallback, list1Id) {
-        DataHandler.setData("currentAppId", list1Id);
+    OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
+        DataHandler.setData("currentList1Id", list1Id);
+        DataHandler.handleAppIdChange();
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
+    },
+    OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
+        DataHandler.setData("currentList2Id", list2Id);
+        var apiPath = Config.dataLoadBaseapi + DataHandler.generateApi(list2Id);
+        DataHandler.loadReportByApiPath([apiPath], function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
@@ -303,13 +424,19 @@ DataHandler.extend({
         }
         DataHandler.setData("filterOptions", filterOptions);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
+        DataHandler.setData("date-select", value);
+        DataHandler.loadReportByApiPath(DataHandler.getCurrentReportData(), function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
     }
 });
 DataHandler.extend({
     getRenderData: function(pageName, optionName, fieldName) {
         var reportData = this.getData("reportData", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var temp, temp2, i, j, k, filterIndex, filterValue;
+        var temp, temp2, temp3, i, j, k, filterIndex, filterValue;
         if (!$S.isArray(reportData)) {
             reportData = [];
         }
@@ -329,9 +456,12 @@ DataHandler.extend({
                 }
                 temp2 = [];
                 for (j = 0; j < reportData[i].length; j++) {
-                    if (j === filterIndex && reportData[i][j] !== filterValue) {
-                        temp2 = [];
-                        break;
+                    if (j === filterIndex) {
+                        temp3 = $S.searchItems([filterValue], [reportData[i][j]], true);
+                        if (temp3.length === 0) {
+                            temp2 = [];
+                            break;
+                        }
                     }
                     temp2.push(reportData[i][j]);
                 }
@@ -348,6 +478,7 @@ DataHandler.extend({
         var metaData = this.getData("metaData", {});
         var filterIndex = [];
         var minDataLength = metaData.minDataLength;
+        var preFilter = {};
         if (!$S.isNumber(minDataLength)) {
             minDataLength = 2;
         }
@@ -356,6 +487,9 @@ DataHandler.extend({
                 return $S.isNumber(el);
             });
         }
+        if ($S.isObject(metaData.preFilter)) {
+            preFilter = metaData.preFilter;
+        }
         var tempFilterOptions = {};
         var i, j, temp;
         for(i=0; i<filterIndex.length; i++) {
@@ -363,7 +497,8 @@ DataHandler.extend({
                 "dataKey": filterIndex[i],
                 "selectName": filterIndex[i]+"Selected",
                 "possibleIds": [],
-                "filterOption": []
+                "filterOption": [],
+                "preFilter": preFilter[filterIndex[i]]
             };
         }
         for(i=0; i<reportData.length; i++) {
@@ -386,7 +521,16 @@ DataHandler.extend({
             tempFilterOptions[temp].filterOption.sort(function(a, b) {
                 return a.option > b.option ? 1 : -1;
             });
-            if (tempFilterOptions[temp].filterOption.length > 0) {
+            if ($S.isArray(tempFilterOptions[temp].preFilter)) {
+                for (i=tempFilterOptions[temp].preFilter.length-1; i>=0; i--) {
+                    if ($S.isObject(tempFilterOptions[temp].preFilter[i]) && $S.isString(tempFilterOptions[temp].preFilter[i].value)) {
+                        if (tempFilterOptions[temp].possibleIds.indexOf(tempFilterOptions[temp].preFilter[i].value) < 0) {
+                            tempFilterOptions[temp].possibleIds.push(tempFilterOptions[temp].preFilter[i].value);
+                        }
+                        $S.addElAt(tempFilterOptions[temp].filterOption, 0, tempFilterOptions[temp].preFilter[i]);
+                    }
+                }
+            } else if (tempFilterOptions[temp].filterOption.length > 0) {
                 $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
             }
         }
@@ -425,10 +569,27 @@ DataHandler.extend({
 
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
-        appDataCallback("currentList1Id", this.getData("currentAppId", ""));
+        appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
         appDataCallback("list1Data", this.getData("appControlData", []));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
         appDataCallback("disableFooter", this.getDisableFooterStatus());
+
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var dateSelect = DataHandler.getData("date-select");
+        var apiPath = [];
+        var list2Data = [];
+        if (dateSelect === "single-file") {
+            apiPath = DataHandler.getAllReportDataApiV2();
+            list2Data = apiPath.map(function(el, i, arr) {
+                return {"name": el, "toText": el};
+            });
+        }
+        appDataCallback("list2Data", list2Data);
+        appDataCallback("currentList2Id", currentList2Id);
+        appDataCallback("dateSelectionRequiredPages", [currentList2Id]);
+        appDataCallback("dateSelection", Config.dateSelection);
+        appDataCallback("selectedDateType", dateSelect);
+
         appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }

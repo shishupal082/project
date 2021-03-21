@@ -69,7 +69,13 @@ Template["tableRowField"] = [
         "tag": "tr",
         "className": "",
         "name": "tableRowEntry",
-        "text": []
+        "text": [
+            {
+                "tag": "td",
+                "name": "s.no.",
+                "text": ""
+            }
+        ]
     }
 ];
 Template["tableTdField"] = [

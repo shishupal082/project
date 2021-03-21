@@ -8,7 +8,7 @@ import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
 // import DataHandlerV2 from "./common/DataHandlerV2";
-import Config from "./common/Config";;
+// import Config from "./common/Config";
 
 
 // var pages = Config.pages;
@@ -70,13 +70,13 @@ class App extends React.Component {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
     gotoPage(pageName) {
-        var pages = Config.pages;
-        if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(pages[pageName])
-        } else {
-            alert("page '" + pageName + "' not found");
-        }
-        DataHandler.TrackPageView(pageName);
+        // var pages = Config.pages;
+        // if ($S.isString(pages[pageName])) {
+        //     this.childAttribute["history"].push(pages[pageName])
+        // } else {
+        //     alert("page '" + pageName + "' not found");
+        // }
+        // DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
@@ -89,6 +89,8 @@ class App extends React.Component {
                 this.appDataCallback, this.appData.currentList1Id);
         } else if (name === "reset-filter") {
             DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
+        } else if (name === "date-select") {
+            DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         }
     }
     // for input and textarea
@@ -116,9 +118,9 @@ class App extends React.Component {
         if (name === "list1-select") {
             var sectionId = value;
             // DataHandler.TrackSectionView("dropdownSelect", sectionId);
-            DataHandler.OnAppChange(this.appStateCallback, this.appDataCallback, sectionId);
+            DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, sectionId);
         } else if (name === "list2-select") {
-            this.gotoPage(value);
+            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
         } else if (filterNames.indexOf(name) >= 0) {
             // DataHandler.TrackFilterOperation("select", value, name);
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);

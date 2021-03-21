@@ -58,10 +58,8 @@ for(var key in pages) {
 }
 
 Config.dateSelection = [
-    {"name": "Daily", "value": "daily"},
-    {"name": "Monthly", "value": "monthly"},
-    {"name": "Yearly", "value": "yearly"},
-    {"name": "All", "value": "all"}
+    {"name": "Single file", "value": "single-file"},
+    {"name": "All file", "value": "all-file"}
 ];
 
 Config.goBackLinkData = [];
@@ -70,6 +68,7 @@ Config.goBackLinkData = [];
 var apiMapping = {};
 apiMapping["app-control-data"] = appControlDataApi;
 apiMapping["addTextApi"] = "/api/add_text";
+apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
         if ($S.isBooleanTrue(addBaseUrl)) {

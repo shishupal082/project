@@ -104,6 +104,7 @@ TemplateHandler.extend({
     },
     _getRowField: function(rowIndex, isFirstRow, isLastRow, rowData) {
         var trField = this.getTemplate("tableRowField");
+        TemplateHelper.updateTemplateText(trField, {"s.no.": rowIndex});
         for (var i = 0; i < rowData.length; i++) {
             TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(rowIndex, i+1, isFirstRow, isLastRow, i===0, rowData[i]));
         }
