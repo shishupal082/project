@@ -56,7 +56,7 @@ ML2.extend({
         var temp, temp1, temp2;
         var blockStartPatterns = [];
         if ($S.isArray(blockFilterPattern)) {
-            blockStartPatterns = $S.searchItems(blockFilterPattern, blockFilterPattern, false, "i", function(sp, el) {
+            blockStartPatterns = $S.searchItems(blockFilterPattern, blockFilterPattern, false, false, "i", function(sp, el) {
                 return $S.isString(el) && el.trim().length > 0;
             });
         }
@@ -66,13 +66,13 @@ ML2.extend({
                 temp = [];
                 for (j = 0; j<data[i].length; j++) {
                     temp2 = data[i][j];
-                    temp1 = $S.searchItems(blockStartPatterns, [temp2], true);
+                    temp1 = $S.searchItems(blockStartPatterns, [temp2], true, false);
                     if (temp1.length > 0) {
                         temp.push(temp2);
                         for(k=j+1; k<data[i].length; k++) {
                             temp2 = data[i][k];
                             temp.push(temp2);
-                            temp1 = $S.searchItems([endPattern], [temp2], true);
+                            temp1 = $S.searchItems([endPattern], [temp2], true, false);
                             if (temp1.length > 0) {
                                 break;
                             }

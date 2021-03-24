@@ -5,6 +5,15 @@
             {
                 "value": "",
                 "option": "All"
+            },
+            {
+                "value": "Door",
+                "option": "Door Matching"
+            },
+            {
+                "value": "~Door",
+                "exceptValue": true,
+                "option": "Except Door Matching"
             }
         ]
     }

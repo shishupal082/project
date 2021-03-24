@@ -191,7 +191,7 @@ DataHandler.extend({
         var metaData = this.getData("metaData", {});
         var list2Id = this.getData("list2Id", "");
         var result = {};
-        var temp = $S.searchItems([list2Id], metaData.list2Data, false, "i", function(searchingPattern, el) {
+        var temp = $S.searchItems([list2Id], metaData.list2Data, false, false, "i", function(searchingPattern, el) {
             if ($S.isObject(el) && $S.isString(el.name)) {
                 return searchingPattern.indexOf(el.name) >= 0;
             }

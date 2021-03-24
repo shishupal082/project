@@ -436,13 +436,39 @@ DataHandler.extend({
     getRenderData: function(pageName, optionName, fieldName) {
         var reportData = this.getData("reportData", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var temp, temp2, temp3, i, j, k, filterIndex, filterValue;
+        var metaData = DataHandler.getData("metaData", {});
+        var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
+        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue;
+        var isRevert;
+        function _isResultRevert(filterIndex, filterValue) {
+            if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
+                return false;
+            }
+            if ($S.isObject(preFilter) && $S.isArray(preFilter[filterIndex])) {
+                for (l=0; l<preFilter[filterIndex].length; l++) {
+                    if ($S.isObject(preFilter[filterIndex][l]) && preFilter[filterIndex][l].value === filterValue) {
+                        if ($S.isBooleanTrue(preFilter[filterIndex][l].exceptValue)) {
+                            return true;
+                        }
+                        break;
+                    }
+                }
+            }
+            return false;
+        }
         if (!$S.isArray(reportData)) {
             reportData = [];
         }
         for(k=0; k<filterOptions.length; k++) {
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;
+            isRevert = _isResultRevert(filterIndex, filterValue);
+            if (isRevert) {
+                filterValue = filterValue.split("~").splice(1);
+                if (filterValue.length > 0) {
+                    filterValue = filterValue[0];
+                }
+            }
             if (!$S.isNumber(filterIndex) || filterIndex < 0) {
                 continue;
             }
@@ -457,7 +483,7 @@ DataHandler.extend({
                 temp2 = [];
                 for (j = 0; j < reportData[i].length; j++) {
                     if (j === filterIndex) {
-                        temp3 = $S.searchItems([filterValue], [reportData[i][j]], true);
+                        temp3 = $S.searchItems([filterValue], [reportData[i][j]], true, isRevert);
                         if (temp3.length === 0) {
                             temp2 = [];
                             break;

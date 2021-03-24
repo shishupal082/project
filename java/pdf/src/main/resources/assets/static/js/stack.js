@@ -1516,7 +1516,7 @@ Stack.extend({
         }
         return str;
     },
-    searchItems: function(searchingPattern, allData, searchByPattern, modifier, isTrue) {
+    searchItems: function(searchingPattern, allData, searchByPattern, isRevert, modifier, isTrue) {
         if (!isArray(searchingPattern) || !isArray(allData)) {
             return [];
         }
@@ -1524,6 +1524,11 @@ Stack.extend({
             searchByPattern = true;
         } else {
             searchByPattern = false;
+        }
+        if (Stack.isBooleanTrue(isRevert)) {
+            isRevert = true;
+        } else {
+            isRevert = false;
         }
         if (modifier === "g") {
             modifier = 'g';
@@ -1533,7 +1538,7 @@ Stack.extend({
         var j, temp1;
         function isTrue1(el, i, arr) {
             if (isFunction(isTrue)) {
-                var b = isTrue(searchingPattern, el, i, arr, searchByPattern, modifier);
+                var b = isTrue(searchingPattern, el, i, arr, searchByPattern, isRevert, modifier);
                 return Stack.isBooleanTrue(b);
             }
             if (!isString(el)) {
@@ -1554,7 +1559,11 @@ Stack.extend({
             return false;
         }
         var result = allData.filter(function(el, i, arr) {
-            return isTrue1(el, i, arr);
+            var t = isTrue1(el, i, arr);
+            if (isRevert) {
+                t = !t;
+            }
+            return  t;
         });
         return result;
     }
