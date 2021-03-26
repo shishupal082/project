@@ -75,6 +75,19 @@ Template["pageHeading"] = [
                 "tag": "span",
                 "text": {
                     "tag": "a",
+                    "name": "pageHeading.dataDisplayLink",
+                    "href": "/app/data-display",
+                    "text": "Data Display"
+                }
+            },
+            {
+                "tag": "span",
+                "text": " |  "
+            },
+            {
+                "tag": "span",
+                "text": {
+                    "tag": "a",
                     "name": "pageHeading.logoutLink",
                     "href": "/logout",
                     "text": "Logout"
