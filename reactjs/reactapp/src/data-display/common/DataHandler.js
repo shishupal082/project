@@ -235,6 +235,22 @@ DataHandler.extend({
         return "";
     }
 });
+
+DataHandler.extend({
+    loadUserRelatedData: function(callback) {
+        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
+            var isLogin = AppHandler.GetUserData("login", false);
+            if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+                return;
+            }
+            TemplateHandler.setHeadingUsername(AppHandler.GetUserData("username", ""));
+            DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+            $S.callMethod(callback);
+        });
+    }
+});
+
 DataHandler.extend({
     getReportDataApi: function() {
         var currentFileId = DataHandler.getData("currentList2Id", "");
@@ -368,20 +384,22 @@ DataHandler.extend({
         }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
-        $S.loadJsonData(null, [Config.getApiUrl("app-control-data", null, true)], function(response, apiName, ajax){
-            if ($S.isArray(response)) {
-                DataHandler.setData("appControlData", response);
-            } else {
-                DataHandler.setData("appControlData", []);
-            }
-            DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.setCurrentAppId();
-        }, function() {
-            $S.log("appControlData load complete");
-            DataHandler.loadDataByAppId(function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        }, null, Api.getAjaxApiCallMethod());
+        DataHandler.loadUserRelatedData(function() {
+            $S.loadJsonData(null, [Config.getApiUrl("app-control-data", null, true)], function(response, apiName, ajax){
+                if ($S.isArray(response)) {
+                    DataHandler.setData("appControlData", response);
+                } else {
+                    DataHandler.setData("appControlData", []);
+                }
+                DataHandler.setData("appControlDataLoadStatus", "completed");
+                DataHandler.setCurrentAppId();
+            }, function() {
+                $S.log("appControlData load complete");
+                DataHandler.loadDataByAppId(function() {
+                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                });
+            }, null, Api.getAjaxApiCallMethod());
+        });
     }
 });
 DataHandler.extend({
@@ -463,10 +481,12 @@ DataHandler.extend({
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;
             isRevert = _isResultRevert(filterIndex, filterValue);
-            if (isRevert) {
-                filterValue = filterValue.split("~").splice(1);
-                if (filterValue.length > 0) {
-                    filterValue = filterValue[0];
+            if (isRevert && $S.isString(filterValue)) {
+                temp = filterValue.split("~");
+                if (temp.length > 1) {
+                    if (temp[0] === "") {
+                        filterValue = temp.splice(1).join("~");
+                   }
                 }
             }
             if (!$S.isNumber(filterIndex) || filterIndex < 0) {

@@ -1,17 +1,5 @@
-import Config from "./Config";
-
 var Template = {};
-Template["noMatch"] = [{
-    "tag": "center.h5",
-    "text": {
-        "tag": "span",
-        "text": {
-            "tag": "a",
-            "href": Config.pages.home,
-            "text": "Goto Home Page"
-        }
-    }
-}];
+
 Template["noMatch"] = [{
     "tag": "center.h1",
     "text": {
@@ -43,11 +31,18 @@ Template["templateNotFound"] = [{
         "text": "Template not Found"
     }
 }];
-Template["heading"] = [{
-    "tag": "center.h2",
-    "name": "heading-text",
-    "text": ""
-}];
+Template["heading"] = [
+    {
+        "tag": "center.h2",
+        "name": "heading-text",
+        "text": ""
+    },
+    {
+        "tag": "center",
+        "name": "heading-link",
+        "text": []
+    }
+];
 Template["tableField"] = [
     {
         "tag": "div",

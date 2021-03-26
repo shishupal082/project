@@ -1,6 +1,7 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
+import Template from "./Template";
 // var requestId = $S.getRequestId();
 
 var Config = {};
@@ -11,10 +12,18 @@ var dataLoadBaseapi = $$$.dataLoadBaseapi;
 Config.basepathname = basepathname;
 Config.dataLoadBaseapi = dataLoadBaseapi;
 Config.appVersion = $$$.appVersion;
+Config.forceLogin = $$$.forceLogin;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 
+var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlDataApi;
+
+
+try {
+    headingJson = JSON.parse(headingJson);
+    Template["heading"][1].text = headingJson;
+} catch(e) {}
 
 var pageData = {};
 
@@ -32,7 +41,7 @@ var pages = {
 };
 
 Config.pages = pages;
-
+Template["heading"][1].text = headingJson;
 
 Config.home = "home";
 Config.entry = "entry";
@@ -69,6 +78,8 @@ var apiMapping = {};
 apiMapping["app-control-data"] = appControlDataApi;
 apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
+apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";;
+apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
         if ($S.isBooleanTrue(addBaseUrl)) {

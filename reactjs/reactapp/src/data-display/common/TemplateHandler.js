@@ -87,12 +87,22 @@ TemplateHandler.extend({
         return htmlFields;
     }
 });
+
 TemplateHandler.extend({
     getTemplate: function(pageName) {
         if (Template[pageName]) {
             return $S.clone(Template[pageName]);
         }
         return $S.clone(Template["noDataFound"]);
+    },
+    setHeadingUsername: function(username) {
+        var heading = this.getTemplate("heading");
+        if ($S.isString(username)) {
+            TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
+            Template["heading"] = heading;
+            return true;
+        }
+        return false;
     },
     _getTdField: function(rowIndex, colIndex, isFirstRow, isLastRow, isFirstCol, tdData) {
         var tdField = this.getTemplate("tableTdField");
