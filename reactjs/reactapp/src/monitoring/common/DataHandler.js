@@ -34,6 +34,8 @@ keys.push("renderFieldRow");
 keys.push("relatedUsersData");
 keys.push("relatedUsersDataLoadStatus");
 
+keys.push("allRelatedUsersData");
+
 // keys.push("selectedDateType");
 keys.push("selectedDateParameter");
 keys.push("combinedDateSelectionParameter");
@@ -606,28 +608,39 @@ DataHandler.extend({
             }
             $S.callMethod(callback);
         }
-        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
-            var isLogin = AppHandler.GetUserData("login", false);
-            if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
-                return;
-            }
+        var loginUserDetailsApi = Config.getApiUrl("getLoginUserDetails", null, true);
+        if ($S.isString(loginUserDetailsApi)) {
+            DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
+            AppHandler.LoadLoginUserDetails(loginUserDetailsApi, function() {
+                var isLogin = AppHandler.GetUserData("login", false);
+                if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+                    AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+                    return;
+                }
+                DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+                fireCallback();
+            });
+        } else {
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-            fireCallback();
-        });
-        DataHandler.setData("relatedUsersDataLoadStatus", "in-progress");
-        $S.loadJsonData(null, [Config.getApiUrl("getRelatedUserDetails", null, true)], function(response, apiName, ajax){
+        }
+        var relatedUserDetailsApi = Config.getApiUrl("getRelatedUserDetails", null, true);
+        if ($S.isString(relatedUserDetailsApi)) {
+            DataHandler.setData("relatedUsersDataLoadStatus", "in-progress");
+            $S.loadJsonData(null, [relatedUserDetailsApi], function(response, apiName, ajax){
                 var data = [];
                 if ($S.isObject(response) && $S.isArray(response.data)) {
                     data = response.data;
                 }
                 DataHandler.setData("relatedUsersData", data);
-                console.log(response);
             }, function() {
                 $S.log("relatedUsersData load complete");
                 DataHandler.setData("relatedUsersDataLoadStatus", "completed");
                 fireCallback();
             }, null, Api.getAjaxApiCallMethod());
+        } else {
+            DataHandler.setData("relatedUsersDataLoadStatus", "completed");
+        }
+        fireCallback();
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
@@ -757,6 +770,22 @@ DataHandler.extend({
         DataHandler._setDateFilterParameters();
         DataHandler.setPageData(appStateCallback, appDataCallback, "_handleDataLoad");
     },
+    _updateAllRelatedUsersData: function() {
+        var metaData = DataHandler.getData("metaData", {});
+        var relatedUsersData = DataHandler.getData("relatedUsersData", []);
+        var allRelatedUsersData = [];
+        if ($S.isArray(relatedUsersData) && relatedUsersData.length) {
+            allRelatedUsersData = relatedUsersData;
+        }
+        if ($S.isObject(metaData) && $S.isArray(metaData.usernames)) {
+            for(var i=0; i<metaData.usernames.length; i++) {
+                if ($S.isString(metaData.usernames[i].username) && metaData.usernames[i].username.length > 0) {
+                    allRelatedUsersData.push({"username": metaData.usernames[i].username});
+                }
+            }
+        }
+        DataHandler.setData("allRelatedUsersData", allRelatedUsersData);
+    },
     loadMetaData: function(appStateCallback, appDataCallback) {
         var metaDataApis = DataHandler.getmetaDataApis();
         var metaDataLoadStatus = DataHandler.getData("metaDataLoadStatus", "");
@@ -775,6 +804,7 @@ DataHandler.extend({
                     $S.log("metaData load complete");
                     DataHandler.setData("metaDataLoadStatus", "completed");
                     DataHandler.setData("metaData", finalMetaData);
+                    DataHandler._updateAllRelatedUsersData();
                     DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
                     DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
                     TemplateHandler.setEntryTableHeadingJson();
@@ -1022,11 +1052,12 @@ DataHandler.extend({
     },
     _getUsername: function(username) {
         var validUsername = "info";
-        var relatedUserData = DataHandler.getData("relatedUsersData", []);
+        var relatedUserData = DataHandler.getData("allRelatedUsersData", []);
         if ($S.isArray(relatedUserData)) {
             for (var i = 0; i < relatedUserData.length; i++) {
                 if (relatedUserData[i].username === username) {
                     validUsername = username;
+                    break;
                 }
             }
         }

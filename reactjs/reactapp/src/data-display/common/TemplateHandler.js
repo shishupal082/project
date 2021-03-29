@@ -120,7 +120,10 @@ TemplateHandler.extend({
         }
         return trField;
     },
-    GetPageRenderField: function(renderData, footerData) {
+    GetPageRenderField: function(dataLoadStatus, renderData, footerData) {
+        if (!dataLoadStatus) {
+            return this.getTemplate("loading");
+        }
         var renderField = this.getTemplate("tableField");
         var lastRowIndex = renderData.length-1;
         if (renderData.length > 0) {

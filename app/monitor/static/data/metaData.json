@@ -23,6 +23,12 @@
             "name": "Device 1"
         }
     ],
+    "usernames": [
+        {
+            "username": "user4",
+            "valid": true
+        }
+    ],
     "filterKeys": ["station", "type", "device", "username", "reset"],
     "homeFields": [
         {"name": "entry", "toText": "Entry"},

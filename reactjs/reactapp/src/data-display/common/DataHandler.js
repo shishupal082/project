@@ -30,6 +30,8 @@ keys.push("filterOptions");
 keys.push("appControlData");
 keys.push("metaData");
 keys.push("reportData");
+
+keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("metaDataLoadStatus");
 keys.push("reportDataLoadStatus");
@@ -43,6 +45,8 @@ var bypassKeys = ["0Selected","1Selected","2Selected","3Selected","4Selected","5
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
 
+
+CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("reportDataLoadStatus", "not-started");
@@ -91,6 +95,7 @@ DataHandler.extend({
     },
     isDataLoadComplete: function() {
         var dataLoadStatusKey = [];
+        dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
         dataLoadStatusKey.push("metaDataLoadStatus");
         dataLoadStatusKey.push("reportDataLoadStatus");
@@ -116,14 +121,16 @@ DataHandler.extend({
     },
     handleAppIdChange: function() {
         var appControlData = this.getCurrentAppData();
-        var currentList2Id = "";
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
         var currentFileLoadType = DataHandler.getData("date-select", "single-file");
         if ($S.isObject(appControlData)) {
             if ($S.isString(appControlData["currentFileLoadType"])) {
                 currentFileLoadType = appControlData["currentFileLoadType"];
             }
             if ($S.isArray(appControlData["dataPathApi"]) && appControlData["dataPathApi"].length > 0) {
-                currentList2Id = appControlData["dataPathApi"][0];
+                if (appControlData["dataPathApi"].indexOf(currentList2Id) < 0) {
+                    currentList2Id = appControlData["dataPathApi"][0];
+                }
             }
         }
         DataHandler.setData("date-select", currentFileLoadType);
@@ -238,16 +245,23 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadUserRelatedData: function(callback) {
-        AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
-            var isLogin = AppHandler.GetUserData("login", false);
-            if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
-                return;
-            }
-            TemplateHandler.setHeadingUsername(AppHandler.GetUserData("username", ""));
+        var loginUserDetailsApi = Config.getApiUrl("getLoginUserDetails", null, true);
+        if ($S.isString(loginUserDetailsApi)) {
+            DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
+            AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
+                var isLogin = AppHandler.GetUserData("login", false);
+                if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+                    AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+                    return;
+                }
+                TemplateHandler.setHeadingUsername(AppHandler.GetUserData("username", ""));
+                DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+                $S.callMethod(callback);
+            });
+        } else {
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
             $S.callMethod(callback);
-        });
+        }
     }
 });
 
@@ -307,14 +321,19 @@ DataHandler.extend({
         var dataPathLength = 0;
         if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
             DataHandlerV2.loadDataPath(function(response) {
+                var currentList2Id = DataHandler.getData("currentList2Id", "");
+                var firstCurrentList2Id = "";
                 if ($S.isObject(response) && response.status === "SUCCESS" && $S.isArray(response.data)) {
                     api = response.data.map(function(el, i, arr) {
                         apiDataPathResponse.push(el);
                         if (i===0) {
-                            DataHandler.setData("currentList2Id", el);
+                            firstCurrentList2Id = el;
                         }
                         return el;
                     });
+                    if (apiDataPathResponse.indexOf(currentList2Id) < 0) {
+                        DataHandler.setData("currentList2Id", firstCurrentList2Id);
+                    }
                 }
                 dataPathLength = api.length;
                 if (dataPathLength > 0) {
@@ -340,10 +359,11 @@ DataHandler.extend({
     },
     loadReportByApiPath: function(apiPath, callback) {
         var finalResponse = [];
+        DataHandler.setData("reportDataLoadStatus", "in_progress");
         $S.loadJsonData(null, apiPath, function(response, apiName, ajax){
-            DataHandler.setData("reportDataLoadStatus", "completed");
             finalResponse.push(response);
         }, function() {
+            DataHandler.setData("reportDataLoadStatus", "completed");
             $S.log("reportData load complete");
             DataHandlerV2.HandleReportTextLoad(finalResponse);
             DataHandler.generateFilterOption();
@@ -353,8 +373,11 @@ DataHandler.extend({
     getCurrentReportData: function() {
         var apiPath = DataHandler.getReportDataApi();
         var dateSelect = DataHandler.getData("date-select");
+        var currentAppData = this.getCurrentAppData();
         if (dateSelect === "all-file") {
-            apiPath = DataHandler.getAllReportDataApi();
+            if ($S.isBooleanTrue(currentAppData.enableLoadAllFile) || !$S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
+                apiPath = DataHandler.getAllReportDataApi();
+            }
         }
         return apiPath;
     },
@@ -376,24 +399,25 @@ DataHandler.extend({
             if ($S.isObject(response)) {
                 DataHandler.setData("metaData", response);
             }
-            DataHandler.setData("metaDataLoadStatus", "completed");
             DataHandler.metaDataInit();
         }, function() {
+            DataHandler.setData("metaDataLoadStatus", "completed");
             $S.log("metaData load complete");
             DataHandler.loadReport(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
+            DataHandler.setData("appControlDataLoadStatus", "in_progress");
             $S.loadJsonData(null, [Config.getApiUrl("app-control-data", null, true)], function(response, apiName, ajax){
                 if ($S.isArray(response)) {
                     DataHandler.setData("appControlData", response);
                 } else {
                     DataHandler.setData("appControlData", []);
                 }
-                DataHandler.setData("appControlDataLoadStatus", "completed");
                 DataHandler.setCurrentAppId();
             }, function() {
+                DataHandler.setData("appControlDataLoadStatus", "completed");
                 $S.log("appControlData load complete");
                 DataHandler.loadDataByAppId(function() {
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -407,6 +431,7 @@ DataHandler.extend({
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         DataHandler.setData("currentList1Id", list1Id);
@@ -419,6 +444,7 @@ DataHandler.extend({
         DataHandler.loadReportByApiPath([apiPath], function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value);
@@ -438,6 +464,7 @@ DataHandler.extend({
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
                 filterOptions[i].selectedValue = "";
+                DataHandler.setData(filterOptions[i].selectName, "");
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
@@ -448,6 +475,7 @@ DataHandler.extend({
         DataHandler.loadReportByApiPath(DataHandler.getCurrentReportData(), function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
 DataHandler.extend({
@@ -604,13 +632,15 @@ DataHandler.extend({
         this.setData("filterOptions", filterOptions);
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
-        if (!this.isDataLoadComplete()) {
-            return;
+        var dataLoadStatus = this.isDataLoadComplete();
+        var renderData = null;
+        var footerData = null;
+        if (dataLoadStatus) {
+            renderData = this.getRenderData();
+            footerData = DataHandler.getFooterData();
         }
-        var renderData = this.getRenderData();
-        var footerData = DataHandler.getFooterData();
-        var renderFieldRow = TemplateHandler.GetPageRenderField(renderData, footerData);
         var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData);
         var filterOptions = DataHandler.getData("filterOptions", []);
 
         appDataCallback("renderFieldRow", renderFieldRow);

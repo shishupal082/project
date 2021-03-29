@@ -24,17 +24,22 @@
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.monitoringLink","href":"/app/monitor/entrybydate","text":"View Data"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dashboardLink","href":"/dashboard","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
     <div id="root"><center>Loading...</center></div>
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
 <script type="text/javascript">
 
 var GLOBAL = {
     dataLoadBaseapi: "",
+    loginUserDetailsApi: "/app/monitor/static/data/login_user_details.json",
     basepathname: ""
 };
 
 // GLOBAL.appControlDataApi = "/app/data-display/static/json/appControlData.json";
 GLOBAL.appControlDataApi = "/pvt/app-data/data-display/appControlData.json";
+
+
+GLOBAL.headingJson = document.getElementById("headingJson").value;
 
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.1";

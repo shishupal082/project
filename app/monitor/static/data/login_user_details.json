@@ -1,0 +1,18 @@
+{
+    "status": "SUCCESS",
+    "failureCode": null,
+    "error": null,
+    "data": {
+        "username": "user1",
+        "displayName": "User1",
+        "login": true,
+        "roles": {
+            "isSAndTTeam": true,
+            "appControlDataTeam00": true,
+            "isUploadFileEnable": true,
+            "isAddTextEnable": true,
+            "isOtherUsersControlEnable": true,
+            "isUsersControlEnable": true
+        }
+    }
+}

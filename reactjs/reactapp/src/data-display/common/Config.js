@@ -8,6 +8,7 @@ var Config = {};
 
 var basepathname = $$$.basepathname;
 var dataLoadBaseapi = $$$.dataLoadBaseapi;
+var loginUserDetailsApi = $$$.loginUserDetailsApi;
 
 Config.basepathname = basepathname;
 Config.dataLoadBaseapi = dataLoadBaseapi;
@@ -75,10 +76,9 @@ Config.goBackLinkData = [];
 
 
 var apiMapping = {};
+apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["app-control-data"] = appControlDataApi;
-apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
-apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";;
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {

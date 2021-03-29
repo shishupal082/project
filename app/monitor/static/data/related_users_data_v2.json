@@ -1,0 +1,19 @@
+{
+    "status": "SUCCESS",
+    "failureCode": null,
+    "error": null,
+    "data": [
+        {
+            "username": "user1",
+            "valid": true
+        },
+        {
+            "username": "user2",
+            "valid": true
+        },
+        {
+            "username": "user3",
+            "valid": false
+        }
+    ]
+}

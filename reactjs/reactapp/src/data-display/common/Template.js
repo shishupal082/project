@@ -43,6 +43,12 @@ Template["heading"] = [
         "text": []
     }
 ];
+Template["loading"] = [
+    {
+        "tag": "center.h2",
+        "text": "Loading ..."
+    }
+];
 Template["tableField"] = [
     {
         "tag": "div",

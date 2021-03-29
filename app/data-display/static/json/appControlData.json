@@ -6,6 +6,7 @@
         "disableFooter": true,
         "wordBreak": "  ",
         "skipEmpty": true,
+        "enableLoadAllFile": true,
         "loadReportDataFromApi": true,
         "currentFileLoadType": "single-file",
         "filenameUsername": ".",

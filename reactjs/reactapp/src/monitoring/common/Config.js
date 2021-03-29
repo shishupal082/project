@@ -6,6 +6,8 @@ var requestId = $S.getRequestId();
 var Config = {};
 
 var basepathname = $$$.basepathname;
+var loginUserDetailsApi = $$$.loginUserDetailsApi;
+var relatedUserDetailsApi = $$$.usernamesApi;
 
 
 Config.baseapi = $$$.baseapi;
@@ -116,8 +118,8 @@ Config.goBackLinkData = [];
 
 
 var apiMapping = {};
-apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
-apiMapping["getRelatedUserDetails"] = "/api/get_related_users_data_v2";
+apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
+apiMapping["getRelatedUserDetails"] = relatedUserDetailsApi;
 apiMapping["getFilesInfo"] = "/api/get_files_info";
 apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["uploadfileApi"] = "/api/upload_file";
