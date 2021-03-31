@@ -319,18 +319,20 @@ DataHandler.extend({
         var apiDataPathResponse = [];
         var api = [];
         var dataPathLength = 0;
+        var temp;
         if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
             DataHandlerV2.loadDataPath(function(response) {
                 var currentList2Id = DataHandler.getData("currentList2Id", "");
                 var firstCurrentList2Id = "";
                 if ($S.isObject(response) && response.status === "SUCCESS" && $S.isArray(response.data)) {
-                    api = response.data.map(function(el, i, arr) {
-                        apiDataPathResponse.push(el);
-                        if (i===0) {
-                            firstCurrentList2Id = el;
+                    temp = response.data.sort();
+                    for(var i=temp.length-1; i>=0; i--) {
+                        api.push(temp[i]);
+                        apiDataPathResponse.push(temp[i]);
+                        if (firstCurrentList2Id.length < 1) {
+                            firstCurrentList2Id = temp[i];
                         }
-                        return el;
-                    });
+                    }
                     if (apiDataPathResponse.indexOf(currentList2Id) < 0) {
                         DataHandler.setData("currentList2Id", firstCurrentList2Id);
                     }
