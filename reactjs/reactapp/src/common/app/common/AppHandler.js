@@ -294,6 +294,80 @@ AppHandler.extend({
 });
 
 
+AppHandler.extend({
+    LoadDataFromRequestApi: function(request, callback) {
+        if (!$S.isArray(request) || request.length < 1) {
+            return $S.callMethod(callback);
+        }
+        var temp;
+        var tempRequestMapping = {};
+        function isValidRequest(el) {
+            if (!$S.isObject(el)) {
+                return false;
+            }
+            if (!$S.isArray(el.url)) {
+                return false;
+            }
+            if (!$S.isString(el.apiName)) {
+                return false;
+            }
+            if (!$S.isFunction(el.requestMethod)) {
+                return false;
+            }
+            return true;
+        }
+        function fireCallback() {
+            temp = true;
+            for (var k=0; k<request.length; k++) {
+                if (!isValidRequest(request[k])) {
+                    continue;
+                }
+                if ($S.isNumber(tempRequestMapping[request[k].apiName].requestCount)) {
+                    if (tempRequestMapping[request[k].apiName].requestCount !== tempRequestMapping[request[k].apiName].responseCount) {
+                        temp = false;
+                        break;
+                    }
+                }
+            }
+            if (temp) {
+                $S.callMethod(callback);
+            }
+        }
+        for (var i=0; i<request.length; i++) {
+            if (!isValidRequest(request[i])) {
+                continue;
+            }
+            tempRequestMapping[request[i].apiName] = {};
+            tempRequestMapping[request[i].apiName].requestCount = request[i].url.length;
+            tempRequestMapping[request[i].apiName].responseCount = 0;
+            if (request[i].url.length < 1) {
+                continue;
+            }
+            $S.loadJsonData(request[i].JQ, request[i].url, function(response, apiName, ajax){
+                for (var j=0; j<request.length; j++) {
+                    if (!isValidRequest(request[j])) {
+                        continue;
+                    }
+                    if ($S.isString(request[j].apiName) && request[j].apiName === apiName) {
+                        if (!$S.isNumber(tempRequestMapping[apiName].responseCount)) {
+                            tempRequestMapping[apiName].responseCount = 0;
+                        }
+                        tempRequestMapping[apiName].responseCount++;
+                        if (!$S.isArray(request[j].response)) {
+                            request[j].response = [];
+                        }
+                        request[j].response.push(response);
+                    }
+                }
+            }, function() {
+                fireCallback();
+            }, request[i].apiName, request[i].requestMethod);
+        }
+        fireCallback();
+    }
+});
+
+
 })($S);
 
 export default AppHandler;
