@@ -301,6 +301,7 @@ var DT = (function() {
     var dateTime;
     // var YYYY, MM, DD, hh, mm, ss, ms, mr; //mr = meridian (AM/PM)
     var MMMList = ["JAN", "FEB", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    var DDDList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     function isDateObject(dateObj) {
         if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
             if (isNumber(dateObj.getDate())) {
@@ -347,6 +348,7 @@ var DT = (function() {
         formatedValue["MM"] = month <= 9 ? "0"+month : month;
         formatedValue["MMM"] = MMMList[month-1];
         formatedValue["DD"] = date <= 9 ? "0"+date : date;
+        formatedValue["DDD"] = DDDList[currentDateTime.getDay()];
         formatedValue["hh"] = horus <= 9 ? "0"+horus : horus;
         formatedValue["mm"] = minutes <= 9 ? "0"+minutes : minutes;
         formatedValue["ss"] = seconds <= 9 ? "0" + seconds : seconds;
@@ -391,6 +393,13 @@ var DT = (function() {
             if (isDateObject(dateObj)) {
                 return dateObj;
             }
+        }
+        return null;
+    };
+    DateTime.prototype.addDate = function(dateObj, count) {
+        if (isDateObject(dateObj) && isNumber(count)) {
+            dateObj = new Date(dateObj.setDate(dateObj.getDate() + count));
+            return dateObj;
         }
         return null;
     };

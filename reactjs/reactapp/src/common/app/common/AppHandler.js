@@ -262,7 +262,27 @@ AppHandler.extend({
         return finalArr;
     }
 });
-
+AppHandler.extend({
+    GenerateDateBetween2Date: function(startDateStr, endDateStr) {
+        if (!this.isValidDateStr(startDateStr) || !this.isValidDateStr(endDateStr)) {
+            return [];
+        }
+        var dateArr = [];
+        var startDateObj = DT.getDateObj(startDateStr);
+        var endDateObj = DT.getDateObj(endDateStr);
+        if (startDateObj > endDateObj) {
+            startDateObj = endDateObj;
+            endDateObj = DT.getDateObj(startDateStr);
+        }
+        do {
+            dateArr.push({"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
+                "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
+            startDateObj = DT.addDate(startDateObj, 1);
+        } while(startDateObj <= endDateObj);
+        // dateArr.push(DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj));
+        return dateArr;
+    }
+});
 var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
 AppHandler.extend({
     GetUserDetails: function() {

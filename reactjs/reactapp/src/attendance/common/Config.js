@@ -43,7 +43,7 @@ Config.update = "update";
 Config.summary = "summary";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["entry", "update", "summary"];
+Config.dateSelectionRequired = ["summary"];
 
 Config.defaultPageFields = [];
 
@@ -66,6 +66,7 @@ apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["appControlData"] = appControlDataApi;
 apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
+apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {

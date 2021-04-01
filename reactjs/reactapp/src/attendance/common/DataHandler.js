@@ -29,7 +29,7 @@ keys.push("filterOptions");
 keys.push("appControlData");
 keys.push("metaData");
 keys.push("userData");
-keys.push("rawData");
+keys.push("attendanceData");
 
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
@@ -37,6 +37,7 @@ keys.push("appRelatedDataLoadStatus");
 
 keys.push("firstTimeDataLoadStatus");
 
+keys.push("dateParameters");
 
 keys.push("fieldsData");
 var bypassKeys = ["0Selected","1Selected","2Selected","3Selected","4Selected","5Selected","6Selected","7Selected","8Selected","9Selected"];
@@ -311,9 +312,35 @@ DataHandler.extend({
         }
         return api;
     },
+    loadAttendanceData: function(callback) {
+        var appControlData = DataHandler.getCurrentAppData();//{}
+        var request = [], attendanceDataApi = [];
+        if ($S.isArray(appControlData["attendanceDataApi"])) {
+            attendanceDataApi = appControlData["attendanceDataApi"];
+        }
+        attendanceDataApi = attendanceDataApi.map(function(el, i, arr) {
+            return Config.baseApi + el;
+        });
+        var attendanceDataRequest = {
+                            "url": attendanceDataApi,
+                            "apiName": "attendanceData",
+                            "requestMethod": Api.getAjaxApiCallMethodV2()};
+        request.push(attendanceDataRequest);
+        AppHandler.LoadDataFromRequestApi(request, function() {
+            var i;
+            for(i=0; i<request.length; i++) {
+                if (request[i].apiName === "attendanceData") {
+                    DataHandlerV2.handleAttendanceDataLoad(request[i].response);
+                    continue;
+                }
+            }
+            $S.log("attendanceData load complete");
+            $S.callMethod(callback);
+        });
+    },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
-        var request = [], metaDataApi = [], userDataApi = [], rawDataApi = [];
+        var request = [], metaDataApi = [], userDataApi = [], attendanceDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
         }
@@ -326,10 +353,10 @@ DataHandler.extend({
         userDataApi = userDataApi.map(function(el, i, arr) {
             return Config.baseApi + el;
         });
-        if ($S.isArray(appControlData["rawDataApi"])) {
-            rawDataApi = appControlData["rawDataApi"];
+        if ($S.isArray(appControlData["attendanceDataApi"])) {
+            attendanceDataApi = appControlData["attendanceDataApi"];
         }
-        rawDataApi = rawDataApi.map(function(el, i, arr) {
+        attendanceDataApi = attendanceDataApi.map(function(el, i, arr) {
             return Config.baseApi + el;
         });
         var metaDataRequest = {
@@ -340,13 +367,13 @@ DataHandler.extend({
                             "url": userDataApi,
                             "apiName": "userData",
                             "requestMethod": Api.getAjaxApiCallMethodV2()};
-        var rawDataRequest = {
-                            "url": rawDataApi,
-                            "apiName": "rawData",
+        var attendanceDataRequest = {
+                            "url": attendanceDataApi,
+                            "apiName": "attendanceData",
                             "requestMethod": Api.getAjaxApiCallMethodV2()};
         request.push(metaDataRequest);
         request.push(userDataRequest);
-        request.push(rawDataRequest);
+        request.push(attendanceDataRequest);
         DataHandler.setData("appRelatedDataLoadStatus", "in_progress");
         AppHandler.LoadDataFromRequestApi(request, function() {
             var i;
@@ -359,13 +386,12 @@ DataHandler.extend({
                     DataHandlerV2.handleUserDataLoad(request[i].response);
                     continue;
                 }
-                if (request[i].apiName === "rawData") {
-                    DataHandlerV2.handleRawDataLoad(request[i].response);
+                if (request[i].apiName === "attendanceData") {
+                    DataHandlerV2.handleAttendanceDataLoad(request[i].response);
                     continue;
                 }
             }
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
-            console.log(request);
             $S.log("currentAppData load complete");
             $S.callMethod(callback);
         });
@@ -432,6 +458,16 @@ DataHandler.extend({
         DataHandler.setData("filterOptions", filterOptions);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
+    OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
+        if (name === "") {
+            return;
+        }
+        DataHandlerV2.callAddTextApi(name, value, function() {
+            DataHandler.loadAttendanceData(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        });
+    },
     OnResetClick: function(appStateCallback, appDataCallback, name, value) {
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
@@ -445,8 +481,8 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getRenderData: function(pageName, optionName, fieldName) {
-        var reportData = this.getData("reportData", {});
+    getRenderDataOld: function(pageName, optionName, fieldName) {
+        var reportData = {};
         var filterOptions = DataHandler.getData("filterOptions", []);
         var metaData = DataHandler.getData("metaData", {});
         var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
@@ -512,6 +548,14 @@ DataHandler.extend({
             reportData = temp;
         }
         return reportData;
+    },
+    getRenderData: function(pageName, optionName, fieldName) {
+        var dateParameters = this.getData("dateParameters", {});
+        var monthlyData = [];
+        if ($S.isObject(dateParameters) && $S.isArray(dateParameters.monthly)) {
+            monthlyData = dateParameters.monthly;
+        }
+        return monthlyData;
     },
     generateFilterOption: function() {
         var reportData = this.getData("reportData", []);

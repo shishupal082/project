@@ -107,7 +107,6 @@ class App extends React.Component {
     dropDownChange(e) {
         var name = e.currentTarget.name, i;
         var value = e.currentTarget.value;
-        var inputSelect = ["addentry.subject", "addentry.heading"];
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filterNames = [];
         for(i=0; i<filterOptions.length; i++) {
@@ -117,14 +116,12 @@ class App extends React.Component {
         }
         if (name === "list1-select") {
             var sectionId = value;
-            // DataHandler.TrackSectionView("dropdownSelect", sectionId);
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, sectionId);
         } else if (name === "list2-select") {
             DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
         } else if (filterNames.indexOf(name) >= 0) {
-            // DataHandler.TrackFilterOperation("select", value, name);
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
-        } else if (inputSelect.indexOf(name) >= 0) {
+        } else {
             DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
     }

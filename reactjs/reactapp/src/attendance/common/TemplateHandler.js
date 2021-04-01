@@ -120,15 +120,70 @@ TemplateHandler.extend({
         }
         return trField;
     },
+    _generateAttendance: function(attendanceData, attendanceOption, userData, dateAttr) {
+        var text = "", temp;
+        var selectName = userData.userId + "," + dateAttr.dateStr + "," + userData.username;
+        if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userData.userId])) {
+            if ($S.isArray(attendanceData[userData.userId].attendance)) {
+                temp = attendanceData[userData.userId].attendance;
+                for(var i=temp.length-1; i>=0; i--) {
+                    if (!$S.isObject(temp[i])) {
+                        continue;
+                    }
+                    if (dateAttr.dateStr === temp[i].date) {
+                        text = temp[i].type;
+                        break;
+                    }
+                }
+            }
+        }
+        if ($S.isObject(attendanceOption)) {
+            attendanceOption.value = text;
+            attendanceOption.name = selectName;
+        } else {
+            attendanceOption = text;
+        }
+        return {"tag": "td", "text": attendanceOption};
+    },
+    _generateIndividualTable: function(data) {
+        var template2 = this.getTemplate("monthlyTemplate.data.table");
+        var template3 = this.getTemplate("monthlyTemplate.data.table.tr");
+        var i, j, template3Data;
+        var userData = DataHandler.getData("userData", []);
+        var attendanceData = DataHandler.getData("attendanceData", {});
+        var attendanceOption = DataHandler.getData("metaData", {}).attendanceOption;
+        if ($S.isArray(data.allDate)) {
+            for(i=0; i<data.allDate.length; i++) {
+                TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": data.allDate[i].date});
+            }
+            TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+            for (j=0; j<userData.length; j++) {
+                template3 = this.getTemplate("monthlyTemplate.data.table.tr");
+                template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                TemplateHelper.updateTemplateText(template3, template3Data);
+                for(i=0; i<data.allDate.length; i++) {
+                    TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, $S.clone(attendanceOption), userData[j], data.allDate[i]));
+                }
+                // TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": j});
+                TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+            }
+        }
+        TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3)
+        return template2;
+    },
     GetPageRenderField: function(dataLoadStatus, renderData, footerData) {
         if (!dataLoadStatus) {
             return this.getTemplate("loading");
         }
-        var renderField = this.getTemplate("tableField");
-        var lastRowIndex = renderData.length-1;
+        var renderField = this.getTemplate("monthlyTemplate");
+        var template1, template2;
         if (renderData.length > 0) {
             for (var i = 0; i < renderData.length; i++) {
-                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i+1, i === 0, i === lastRowIndex, renderData[i]));
+                template1 = this.getTemplate("monthlyTemplate.data");
+                TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
+                template2 = this._generateIndividualTable(renderData[i]);
+                TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
+                TemplateHelper.addItemInTextArray(renderField, "monthlyTemplate.data", template1);
             }
         } else {
             renderField = this.getTemplate("noDataFound");

@@ -49,6 +49,70 @@ Template["loading"] = [
         "text": "Loading ..."
     }
 ];
+
+Template["monthlyTemplate"] = [
+    {
+        "tag": "div",
+        "name": "monthlyTemplate.data",
+        "text": []
+    },
+    {
+        "tag": "div",
+        "name": "footer",
+        "text": []
+    }
+];
+Template["monthlyTemplate.data"] = [
+    {
+        "tag": "div",
+        "text": [
+            {
+                "tag": "h2",
+                "className": "badge badge-primary",
+                "name": "monthlyTemplate.data.dateHeading",
+                "text": ""
+            },
+            {
+                "tag": "button",
+                "className": "btn btn-primary pt-0 pb-0 ml-10px",
+                "value": "reload",
+                "name": "reload",
+                "text": "Reload"
+            }
+        ]
+    },
+    {
+        "tag": "div",
+        "name": "monthlyTemplate.data.table",
+        "text": []
+    }
+];
+Template["monthlyTemplate.data.table"] = [
+    {
+        "tag": "table.tbody",
+        "className": "table-striped table-padded-px-5",
+        "name": "monthlyTemplate.data.table.tr",
+        "text": []
+    }
+];
+Template["monthlyTemplate.data.table.tr"] = [
+    {
+        "tag": "tr",
+        "name": "monthlyTemplate.data.table.tr.tds",
+        "text": [
+            {
+                "tag": "td",
+                "name": "monthlyTemplate.table.tr.s_no",
+                "text": "S.No."
+            },
+            {
+                "tag": "td",
+                "name": "monthlyTemplate.table.tr.name",
+                "text": "Name"
+            }
+        ]
+    }
+];
 Template["tableField"] = [
     {
         "tag": "div",
