@@ -28,7 +28,7 @@ DataHandlerV2.extend({
         var finalData = [];
         if ($S.isArray(response)) {
             for (var i = 0; i<response.length; i++) {
-                finalData = finalData.concat(AppHandler.ParseTextData(response[i], ",", true, true));
+                finalData = finalData.concat(AppHandler.ParseTextData(response[i], ",", false, true));
             }
         }
         return finalData;
@@ -55,8 +55,7 @@ DataHandlerV2.extend({
     },
     handleAttendanceDataLoad: function(response) {
         var attendanceData = this._generateResponse(response);
-        var tempAttendanceData = [], finalAttendanceData = [];
-        var tempData = {};
+        var finalAttendanceData = {};
         var i, temp;
         for(i=0; i<attendanceData.length; i++) {
             if (!$S.isArray(attendanceData[i]) || attendanceData[i].length < 5) {
@@ -70,14 +69,13 @@ DataHandlerV2.extend({
             temp["date"] = attendanceData[i][2];
             temp["username"] = attendanceData[i][3];
             temp["type"] = attendanceData[i][4];
-            if (!$S.isObject(tempData[temp["userId"]])) {
-                tempData[temp["userId"]] = {"attendance": []};
+            if (!$S.isObject(finalAttendanceData[temp["userId"]])) {
+                finalAttendanceData[temp["userId"]] = {"attendance": []};
             }
-            tempData[temp["userId"]].attendance.push(temp);
-            tempAttendanceData.push(temp);
+            finalAttendanceData[temp["userId"]].attendance.push(temp);
         }
 
-        DataHandler.setData("attendanceData", tempData);
+        DataHandler.setData("attendanceData", finalAttendanceData);
     },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
