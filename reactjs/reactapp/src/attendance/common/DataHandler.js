@@ -196,10 +196,13 @@ DataHandler.extend({
         return footerData;
     },
     getHeadingText: function() {
-        var currentStaticData = this.getCurrentAppData();
-        var headingText = currentStaticData.heading;
-        if ($S.isString(headingText) && headingText.length) {
+        var currentAppData = this.getCurrentAppData();
+        var headingText = currentAppData.heading;
+        var name = currentAppData.name;
+        if ($S.isString(headingText) && headingText.length > 0) {
             return headingText;
+        } else if ($S.isString(name) && name.length > 0) {
+            return name;
         }
         return "Query parameter not found";
     }
@@ -482,10 +485,12 @@ DataHandler.extend({
         var renderData = null;
         var footerData = null;
         var appHeading = null;
+        var dateSelection = null;
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = DataHandler.getFooterData();
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
+            dateSelection = Config.dateSelection;
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData);
         var currentList2Id = DataHandler.getData("currentList2Id", "");
@@ -508,7 +513,7 @@ DataHandler.extend({
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", DataHandler.getData("currentList2Id", ""));
         appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
-        appDataCallback("dateSelection", Config.dateSelection);
+        appDataCallback("dateSelection", dateSelection);
         appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
 
         appDataCallback("firstTimeDataLoadStatus", "completed");

@@ -139,9 +139,9 @@ TemplateHandler.extend({
     },
     generateUpdateEntryRenderField: function(renderData, attendanceOption) {
         var renderField = this.getTemplate("monthlyTemplate");
-        var template1, template2;
+        var i, template1, template2;
         if ($S.isArray(renderData) && renderData.length > 0) {
-            for (var i = 0; i < renderData.length; i++) {
+            for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
                 TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
                 template2 = this._generateIndividualTable(renderData[i], attendanceOption);
@@ -224,7 +224,7 @@ TemplateHandler.extend({
         }
         var template1, template2, validDate;
         if ($S.isArray(renderData) && renderData.length > 0) {
-            for (i = 0; i < renderData.length; i++) {
+            for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
                 TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
                 validDate = [];
