@@ -8,7 +8,7 @@ import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
 // import DataHandlerV2 from "./common/DataHandlerV2";
-// import Config from "./common/Config";
+import Config from "./common/Config";
 
 
 // var pages = Config.pages;
@@ -70,12 +70,12 @@ class App extends React.Component {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
     gotoPage(pageName) {
-        // var pages = Config.pages;
-        // if ($S.isString(pages[pageName])) {
-        //     this.childAttribute["history"].push(pages[pageName])
-        // } else {
-        //     alert("page '" + pageName + "' not found");
-        // }
+        var pages = Config.pages;
+        if ($S.isString(pages[pageName])) {
+            this.childAttribute["history"].push(pages[pageName]);
+        } else {
+            alert("page '" + pageName + "' not found");
+        }
         // DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
@@ -118,7 +118,7 @@ class App extends React.Component {
             var sectionId = value;
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, sectionId);
         } else if (name === "list2-select") {
-            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
+            this.gotoPage(value);
         } else if (filterNames.indexOf(name) >= 0) {
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         } else {
@@ -134,7 +134,7 @@ class App extends React.Component {
     }
     pageComponentDidMount(pageName) {
         this.addTab(pageName);
-        // DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
         $S.log("App:componentDidMount");
@@ -162,13 +162,31 @@ class App extends React.Component {
     render() {
         var methods = this.methods;
         var commonData = this.appData;
+        var pages = Config.pages;
+        const entry = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.entry}/>);
+        const update = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.update}/>);
+        const summary = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.summary}/>);
+        const noMatch = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.noMatch}/>);
+
         return (<BrowserRouter>
             <Switch>
-                <Route
+                <Route exact path={pages.home}
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
                     )}
                 />
+                <Route path={pages.entry} component={entry}/>
+                <Route path={pages.update} component={update}/>
+                <Route path={pages.summary} component={summary}/>
+                <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
         // return (

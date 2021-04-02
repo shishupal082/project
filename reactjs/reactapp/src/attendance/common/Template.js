@@ -5,7 +5,7 @@ Template["noMatch"] = [{
     "text": {
         "tag": "span",
         "className": "badge badge-primary",
-        "text": "No Data Found"
+        "text": "Page Not Found"
     }
 }];
 Template["noDataFound"] = [
@@ -49,7 +49,28 @@ Template["loading"] = [
         "text": "Loading ..."
     }
 ];
-
+Template["home"] = [{
+    "tag": "div",
+    "text": {
+        "tag": "div",
+        "className": "list-group",
+        "name": "home.link",
+        "text": []
+    }
+}];
+Template["home.link"] = [
+    {
+        "tag": "link",
+        "name": "home.link.toUrl",
+        "url": "",
+        "text": {
+            "tag": "button",
+            "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+            "name": "home.link.toText",
+            "text": ""
+        }
+    }
+];
 Template["monthlyTemplate"] = [
     {
         "tag": "div",

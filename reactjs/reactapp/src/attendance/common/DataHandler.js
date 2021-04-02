@@ -3,6 +3,7 @@ import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
 import TemplateHandler from "./TemplateHandler";
+import PageHandler from "./PageHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -29,7 +30,9 @@ keys.push("filterOptions");
 keys.push("appControlData");
 keys.push("metaData");
 keys.push("userData");
+keys.push("filteredUserData");
 keys.push("attendanceData");
+keys.push("latestAttendanceData");
 
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
@@ -115,26 +118,32 @@ DataHandler.extend({
             }
         }
         DataHandler.setData("currentList1Id", currentList1Id);
-        DataHandler.handleAppIdChange();
     },
     handleAppIdChange: function() {
-        var appControlData = this.getCurrentAppData();
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var currentFileLoadType = DataHandler.getData("date-select", "single-file");
-        if ($S.isObject(appControlData)) {
-            if ($S.isString(appControlData["currentFileLoadType"])) {
-                currentFileLoadType = appControlData["currentFileLoadType"];
-            }
-            if ($S.isArray(appControlData["dataPathApi"]) && appControlData["dataPathApi"].length > 0) {
-                if (appControlData["dataPathApi"].indexOf(currentList2Id) < 0) {
-                    currentList2Id = appControlData["dataPathApi"][0];
+        var currentAppData = DataHandler.getCurrentAppData();
+        var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
+        var i;
+        if ($S.isArray(currentAppData.dateRange) && currentAppData.dateRange.length === 2) {
+            allDate = AppHandler.GenerateDateBetween2Date(currentAppData.dateRange[0], currentAppData.dateRange[1]);
+            startLimit = currentAppData.dateRange[0];
+            endLimit = currentAppData.dateRange[1];
+            tempAllDate = allDate.map(function(el, i, arr){
+                return el.dateStr;
+            });
+            arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
+            if ($S.isObject(arrangedDate)) {
+                for(var key in arrangedDate) {
+                    if ($S.isArray(arrangedDate[key])) {
+                        for (i=0; i<arrangedDate[key].length; i++) {
+                            if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
+                                arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
+                            }
+                        }
+                    }
                 }
             }
         }
-        DataHandler.setData("date-select", currentFileLoadType);
-        DataHandler.setData("currentList2Id", currentList2Id);
-    },
-    metaDataInit: function() {
+        DataHandler.setData("dateParameters", arrangedDate);
     },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
@@ -252,7 +261,7 @@ DataHandler.extend({
                     AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
                     return;
                 }
-                TemplateHandler.setHeadingUsername(AppHandler.GetUserData("username", ""));
+                TemplateHandler.SetHeadingUsername(AppHandler.GetUserData("username", ""));
                 DataHandler.setData("loginUserDetailsLoadStatus", "completed");
                 $S.callMethod(callback);
             });
@@ -411,6 +420,7 @@ DataHandler.extend({
             DataHandler.setCurrentAppId();
             DataHandler.setData("appControlDataLoadStatus", "completed");
             $S.log("appControlData load complete");
+            DataHandler.handleAppIdChange();
             DataHandler.loadDataByAppId(function() {
                 $S.callMethod(callback);
             });
@@ -436,11 +446,17 @@ DataHandler.extend({
         DataHandler.handleAppIdChange();
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
-    OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
+    PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
+        var oldList2Id = DataHandler.getData("currentList2Id", "");
         DataHandler.setData("currentList2Id", list2Id);
-        // var apiPath = Config.baseApi + DataHandler.generateApi(list2Id);
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        if (oldList2Id !== list2Id) {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        }
     },
+    // OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
+    //     DataHandler.setData("currentList2Id", list2Id);
+    //     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    // },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         DataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -551,11 +567,16 @@ DataHandler.extend({
     },
     getRenderData: function(pageName, optionName, fieldName) {
         var dateParameters = this.getData("dateParameters", {});
-        var monthlyData = [];
-        if ($S.isObject(dateParameters) && $S.isArray(dateParameters.monthly)) {
-            monthlyData = dateParameters.monthly;
+        var dateSelect = this.getData("date-select", "");
+        var currentList2Id = this.getData("currentList2Id", "");
+        var result = [];
+        if ([Config.update].indexOf(currentList2Id) >= 0) {
+            dateSelect = "monthly";
         }
-        return monthlyData;
+        if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
+            result = dateParameters[dateSelect];
+        }
+        return result;
     },
     generateFilterOption: function() {
         var reportData = this.getData("reportData", []);
@@ -652,29 +673,26 @@ DataHandler.extend({
         var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData);
         var filterOptions = DataHandler.getData("filterOptions", []);
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var list2Data = [];
+        var list1Data = [];
+        if (currentList2Id !== Config.home) {
+            list1Data = this.getData("appControlData", []);
+            list2Data = PageHandler.getList2Data();
+        }
 
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
+        appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
-        appDataCallback("list1Data", this.getData("appControlData", []));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
         appDataCallback("disableFooter", this.getDisableFooterStatus());
 
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var dateSelect = DataHandler.getData("date-select");
-        var apiPath = [];
-        var list2Data = [];
-        if (dateSelect === "single-file") {
-            apiPath = DataHandler.getAllReportDataApiV2();
-            list2Data = apiPath.map(function(el, i, arr) {
-                return {"name": el, "toText": el};
-            });
-        }
         appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", currentList2Id);
-        appDataCallback("dateSelectionRequiredPages", [currentList2Id]);
+        appDataCallback("currentList2Id", DataHandler.getData("currentList2Id", ""));
+        appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
         appDataCallback("dateSelection", Config.dateSelection);
-        appDataCallback("selectedDateType", dateSelect);
+        appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
 
         appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();

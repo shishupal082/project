@@ -52,11 +52,13 @@ DataHandlerV2.extend({
             finalUserData.push(temp);
         }
         DataHandler.setData("userData", finalUserData);
+        DataHandler.setData("filteredUserData", finalUserData);
     },
     handleAttendanceDataLoad: function(response) {
         var attendanceData = this._generateResponse(response);
         var finalAttendanceData = {};
-        var i, temp;
+        var latestAttendanceData = {};
+        var i, temp, temp2;
         for(i=0; i<attendanceData.length; i++) {
             if (!$S.isArray(attendanceData[i]) || attendanceData[i].length < 5) {
                 continue;
@@ -74,8 +76,23 @@ DataHandlerV2.extend({
             }
             finalAttendanceData[temp["userId"]].attendance.push(temp);
         }
-
+        for(var key in finalAttendanceData) {
+            if (!$S.isObject(latestAttendanceData[key])) {
+                latestAttendanceData[key] = {"attendance": []};
+            }
+            if ($S.isArray(finalAttendanceData[key].attendance)) {
+                temp = [];
+                for(i=finalAttendanceData[key].attendance.length-1; i>=0; i--) {
+                    temp2 = finalAttendanceData[key].attendance[i];
+                    if (temp.indexOf(temp2.date) < 0) {
+                        temp.push(temp2.date);
+                        latestAttendanceData[key].attendance.push(temp2);
+                    }
+                }
+            }
+        }
         DataHandler.setData("attendanceData", finalAttendanceData);
+        DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
@@ -87,27 +104,15 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("metaData", finalMetaData);
-        var allDate, tempAllDate, arrangedDate;
-        if ($S.isArray(finalMetaData.dateRange) && finalMetaData.dateRange.length === 2) {
-            allDate = AppHandler.GenerateDateBetween2Date(finalMetaData.dateRange[0], finalMetaData.dateRange[1]);
-            tempAllDate = allDate.map(function(el, i, arr){
-                return el.dateStr;
-            });
-            arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
-            if ($S.isObject(arrangedDate)) {
-                for(var key in arrangedDate) {
-                    if ($S.isArray(arrangedDate[key])) {
-                        for (i=0; i<arrangedDate[key].length; i++) {
-                            if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
-                                arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1]);
-                            }
-                        }
-                    }
-                }
+        var dateSelect = DataHandler.getData("date-select", "");
+        if (dateSelect === "") {
+            if ($S.isString(finalMetaData.dateSelect) && finalMetaData.dateSelect.length > 0) {
+                dateSelect = finalMetaData.dateSelect;
+            } else {
+                dateSelect = Config.defaultDateSelect;
             }
         }
-        DataHandler.setData("dateParameters", arrangedDate);
-        DataHandler.metaDataInit();
+        DataHandler.setData("date-select", dateSelect);
     }
 });
 

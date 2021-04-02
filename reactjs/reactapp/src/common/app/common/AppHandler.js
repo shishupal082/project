@@ -263,23 +263,32 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
-    GenerateDateBetween2Date: function(startDateStr, endDateStr) {
+    GenerateDateBetween2Date: function(startDateStr, endDateStr, startLimit, endLimit) {
         if (!this.isValidDateStr(startDateStr) || !this.isValidDateStr(endDateStr)) {
             return [];
+        }
+        if (!this.isValidDateStr(startLimit)) {
+            startLimit = startDateStr;
+        }
+        if (!this.isValidDateStr(endLimit)) {
+            endLimit = endDateStr;
         }
         var dateArr = [];
         var startDateObj = DT.getDateObj(startDateStr);
         var endDateObj = DT.getDateObj(endDateStr);
+        var startLimitDateObj = DT.getDateObj(startLimit);
+        var endLimitDateObj = DT.getDateObj(endLimit);
         if (startDateObj > endDateObj) {
             startDateObj = endDateObj;
             endDateObj = DT.getDateObj(startDateStr);
         }
         do {
-            dateArr.push({"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
-                "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
+            if (startLimitDateObj <= startDateObj && startDateObj <= endLimitDateObj) {
+                dateArr.push({"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
+                    "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
+            }
             startDateObj = DT.addDate(startDateObj, 1);
         } while(startDateObj <= endDateObj);
-        // dateArr.push(DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj));
         return dateArr;
     }
 });

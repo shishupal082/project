@@ -59,7 +59,7 @@ Config.dateSelection = [
     {"name": "Yearly", "value": "yearly"},
     {"name": "All", "value": "all"}
 ];
-
+Config.defaultDateSelect = "monthly";
 
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;

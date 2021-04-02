@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 // import Config from "./Config";
 import DataHandler from "./DataHandler";
+import PageHandler from "./PageHandler";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
@@ -46,7 +47,6 @@ TemplateHandler.extend({
         var divField2 = [{"tag": "div", "name": "tempDiv2", "text": []}];
         var tableField = [{"tag": "table.tbody", "className": "", "name": "tempTable", "text": []}];
         var trField = [{"tag": "tr", "name": "tempTr", "text": []}];
-
         var tempDivField, tempDivField2, tempTableField, tempTrField;
         if ($S.isArray(footerData)) {
             for(i=0; i<footerData.length; i++) {
@@ -87,39 +87,7 @@ TemplateHandler.extend({
         return htmlFields;
     }
 });
-
 TemplateHandler.extend({
-    getTemplate: function(pageName) {
-        if (Template[pageName]) {
-            return $S.clone(Template[pageName]);
-        }
-        return $S.clone(Template["noDataFound"]);
-    },
-    setHeadingUsername: function(username) {
-        var heading = this.getTemplate("heading");
-        if ($S.isString(username)) {
-            TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
-            Template["heading"] = heading;
-            return true;
-        }
-        return false;
-    },
-    _getTdField: function(rowIndex, colIndex, isFirstRow, isLastRow, isFirstCol, tdData) {
-        var tdField = this.getTemplate("tableTdField");
-        if (isFirstCol) {
-            TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
-        }
-        TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
-        return tdField;
-    },
-    _getRowField: function(rowIndex, isFirstRow, isLastRow, rowData) {
-        var trField = this.getTemplate("tableRowField");
-        TemplateHelper.updateTemplateText(trField, {"s.no.": rowIndex});
-        for (var i = 0; i < rowData.length; i++) {
-            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(rowIndex, i+1, isFirstRow, isLastRow, i===0, rowData[i]));
-        }
-        return trField;
-    },
     _generateAttendance: function(attendanceData, attendanceOption, userData, dateAttr) {
         var text = "", temp;
         var selectName = userData.userId + "," + dateAttr.dateStr + "," + userData.username;
@@ -138,6 +106,7 @@ TemplateHandler.extend({
             }
         }
         if ($S.isObject(attendanceOption)) {
+            attendanceOption = $S.clone(attendanceOption);
             attendanceOption.value = text;
             attendanceOption.name = selectName;
         } else {
@@ -145,13 +114,12 @@ TemplateHandler.extend({
         }
         return {"tag": "td", "text": attendanceOption};
     },
-    _generateIndividualTable: function(data) {
+    _generateIndividualTable: function(data, attendanceOption) {
         var template2 = this.getTemplate("monthlyTemplate.data.table");
         var template3 = this.getTemplate("monthlyTemplate.data.table.tr");
         var i, j, template3Data;
-        var userData = DataHandler.getData("userData", []);
+        var userData = DataHandler.getData("filteredUserData", []);
         var attendanceData = DataHandler.getData("attendanceData", {});
-        var attendanceOption = DataHandler.getData("metaData", {}).attendanceOption;
         if ($S.isArray(data.allDate)) {
             for(i=0; i<data.allDate.length; i++) {
                 TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": data.allDate[i].date});
@@ -162,34 +130,177 @@ TemplateHandler.extend({
                 template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
                 TemplateHelper.updateTemplateText(template3, template3Data);
                 for(i=0; i<data.allDate.length; i++) {
-                    TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, $S.clone(attendanceOption), userData[j], data.allDate[i]));
+                    TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i]));
                 }
-                // TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": j});
                 TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
             }
         }
-        TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3)
         return template2;
     },
-    GetPageRenderField: function(dataLoadStatus, renderData, footerData) {
-        if (!dataLoadStatus) {
-            return this.getTemplate("loading");
-        }
+    generateUpdateEntryRenderField: function(renderData, attendanceOption) {
         var renderField = this.getTemplate("monthlyTemplate");
         var template1, template2;
         if (renderData.length > 0) {
             for (var i = 0; i < renderData.length; i++) {
                 template1 = this.getTemplate("monthlyTemplate.data");
                 TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
-                template2 = this._generateIndividualTable(renderData[i]);
+                template2 = this._generateIndividualTable(renderData[i], attendanceOption);
                 TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
                 TemplateHelper.addItemInTextArray(renderField, "monthlyTemplate.data", template1);
             }
         } else {
             renderField = this.getTemplate("noDataFound");
         }
-        var footerField = this.getTemplate("footerField");
+        return renderField;
+    },
+    _generateAttendanceCount: function(validDate, attendanceData, userData, summaryFields) {
+        var result = [];
+        var i, j;
+        var attendance = attendanceData[userData.userId].attendance;
+        var type, count, totalCount = 0;
+        if ($S.isArray(summaryFields)) {
+            for(i=0; i<summaryFields.length; i++) {
+                type = summaryFields[i].text;
+                count = 0;
+                if ($S.isArray(attendance)) {
+                    for (j = 0; j < attendance.length; j++) {
+                        if (validDate.indexOf(attendance[j].date) >= 0) {
+                            count += $S.searchItems(summaryFields[i].value, [attendance[j].type], summaryFields[i].searchByPattern).length;
+                        }
+                    }
+                }
+                totalCount += count;
+                result.push({"name": type, "count": count});
+            }
+        }
+        if (totalCount <= 0) {
+            result = null;
+        }
+        return result;
+    },
+    _generateIndividualTableV2: function(validDate, userData, attendanceData) {
+        var template2 = this.getTemplate("monthlyTemplate.data.table");
+        var template3, headingRow = this.getTemplate("monthlyTemplate.data.table.tr");
+        var i, j, k, template3Data, temp;
+        var headingRowAdded = false, template2Added = false;
+        var summaryFields = DataHandler.getData("metaData", {}).summaryFields;
+        if ($S.isArray(summaryFields)) {
+            for(i=0; i<summaryFields.length; i++) {
+                TemplateHelper.addItemInTextArray(headingRow, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": summaryFields[i].text});
+            }
+            for (j=0; j<userData.length; j++) {
+                template3 = this.getTemplate("monthlyTemplate.data.table.tr");
+                template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                temp = this._generateAttendanceCount(validDate, attendanceData, userData[j], summaryFields);
+                if ($S.isArray(temp)) {
+                    TemplateHelper.updateTemplateText(template3, template3Data);
+                    for(k=0; k<temp.length; k++) {
+                        TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": temp[k].count});
+                    }
+                    if (!headingRowAdded) {
+                        TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", headingRow);
+                        headingRowAdded = true;
+                    }
+                    template2Added = true;
+                    TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+                }
+            }
+        }
+        if (!template2Added) {
+            template2 = null;
+        }
+        return template2;
+    },
+    generateSummaryRenderField: function(renderData) {
+        var userData = DataHandler.getData("filteredUserData", []);
+        var attendanceData = DataHandler.getData("latestAttendanceData", {});
+        var renderField = this.getTemplate("monthlyTemplate");
+        var userDataV2 = [], i;
+        var validTemplate = false;
+        for (i = 0; i < userData.length; i++) {
+            if ($S.isObject(attendanceData[userData[i].userId]) && attendanceData[userData[i].userId].attendance.length > 0) {
+                userDataV2.push(userData[i]);
+            }
+        }
+        var template1, template2, validDate;
+        if (renderData.length > 0) {
+            for (i = 0; i < renderData.length; i++) {
+                template1 = this.getTemplate("monthlyTemplate.data");
+                TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
+                validDate = [];
+                if ($S.isArray(renderData[i].allDate)) {
+                    validDate = renderData[i].allDate.map(function(el, i, arr) {
+                        return el.dateStr;
+                    });
+                }
+                template2 = this._generateIndividualTableV2(validDate, userDataV2, attendanceData);
+                if ($S.isArray(template2)) {
+                    validTemplate = true;
+                    TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
+                    TemplateHelper.addItemInTextArray(renderField, "monthlyTemplate.data", template1);
+                }
+            }
+        }
+        if (!validTemplate) {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
+    },
+    generateHomeRenderField: function() {
+        var homeFields = PageHandler.getList2Data();
+        var template = this.getTemplate("home");
+        for (var i = 0; i< homeFields.length; i++) {
+            var linkTemplate = TemplateHandler.getTemplate("home.link");
+            TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "url", homeFields[i].toUrl);
+            TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": homeFields[i].toText});
+            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+        }
+        return template;
+    }
+});
+TemplateHandler.extend({
+    getTemplate: function(pageName) {
+        if (Template[pageName]) {
+            return $S.clone(Template[pageName]);
+        }
+        return $S.clone(Template["templateNotFound"]);
+    },
+    SetHeadingUsername: function(username) {
+        var heading = this.getTemplate("heading");
+        if ($S.isString(username)) {
+            TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
+            Template["heading"] = heading;
+            return true;
+        }
+        return false;
+    },
+    GetPageRenderField: function(dataLoadStatus, renderData, footerData) {
+        if (!dataLoadStatus) {
+            return this.getTemplate("loading");
+        }
+        var attendanceOption = DataHandler.getData("metaData", {}).attendanceOption;
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var renderField;
+        switch(currentList2Id) {
+            case "entry":
+                renderField = this.generateUpdateEntryRenderField(renderData, "");
+            break;
+            case "update":
+                renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption);
+            break;
+            case "summary":
+                renderField = this.generateSummaryRenderField(renderData);
+            break;
+            case "home":
+                renderField = this.generateHomeRenderField();
+            break;
+            case "noMatch":
+            default:
+                renderField = this.getTemplate("noMatch");
+            break;
+        }
         var footerFieldHtml = this.generateFooterHtml(footerData);
+        var footerField = this.getTemplate("footerField");
         TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
         TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
         return renderField;
