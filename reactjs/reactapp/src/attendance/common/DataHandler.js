@@ -165,21 +165,6 @@ DataHandler.extend({
         }
         return currentAppData;
     },
-    updateDataPathApi: function(api) {
-        var appControlData = this.getData("appControlData", []);
-        var currentAppId = this.getData("currentList1Id", "");
-        var currentAppData = {};
-        if ($S.isArray(appControlData)) {
-            for (var i = 0; i < appControlData.length; i++) {
-                if (appControlData[i]["id"] === currentAppId) {
-                    currentAppData = appControlData[i];
-                    currentAppData.dataPathApi = api;
-                    break;
-                }
-            }
-        }
-        this.setData("appControlData", appControlData);
-    },
     getDisableFooterStatus: function() {
         var currentAppData = this.getCurrentAppData();
         var disableFooter = true;
@@ -187,20 +172,6 @@ DataHandler.extend({
             disableFooter = false;
         }
         return disableFooter;
-    },
-    getWordBreak: function() {
-        var currentAppData = this.getCurrentAppData();
-        if ($S.isString(currentAppData.wordBreak)) {
-            return currentAppData.wordBreak;
-        }
-        return ",";
-    },
-    isSkipEmpty: function() {
-        var currentAppData = this.getCurrentAppData();
-        if ($S.isBooleanTrue(currentAppData.skipEmpty)) {
-            return currentAppData.skipEmpty;
-        }
-        return false;
     },
     getFooterData: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -231,27 +202,6 @@ DataHandler.extend({
             return headingText;
         }
         return "Query parameter not found";
-    },
-    getUserInfoById: function(id) {
-        var metaData = this.getData("metaData", {});
-        var userData = {};
-        if ($S.isArray(metaData.accounts)) {
-            for (var i = 0; i < metaData.accounts.length; i++) {
-                if (metaData.accounts[i].id === id) {
-                    userData = metaData.accounts[i];
-                    break;
-                }
-            }
-        }
-        return userData;
-    },
-    getUnit: function() {
-        var currentStaticData = this.getCurrentAppData();
-        var unit = currentStaticData.unit;
-        if ($S.isString(unit) && unit.length) {
-            return unit;
-        }
-        return "";
     }
 });
 
@@ -421,7 +371,15 @@ DataHandler.extend({
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
         AppHandler.LoadDataFromRequestApi(request, function() {
             if ($S.isArray(request[0].response) && request[0].response.length > 0) {
-                DataHandler.setData("appControlData", request[0].response[0]);
+                if ($S.isArray(request[0].response[0])) {
+                    request[0].response[0].map(function(el, i, arr) {
+                        if ($S.isObject(el)) {
+                            el.id = "app-id-" + i;
+                        }
+                        return el;
+                    });
+                    DataHandler.setData("appControlData", request[0].response[0]);
+                }
             }
             DataHandler.setCurrentAppId();
             DataHandler.setData("appControlDataLoadStatus", "completed");

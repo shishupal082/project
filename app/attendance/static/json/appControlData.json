@@ -1,6 +1,5 @@
 [
     {
-        "id": "attendance",
         "name": "Attendance",
         "heading": "Attendance",
         "disableFooter": false,
