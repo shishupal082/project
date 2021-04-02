@@ -364,10 +364,24 @@ DataHandler.extend({
             $S.callMethod(callback);
         });
     },
+    getAppControlDataPath: function() {
+        var appControlApi = Config.getApiUrl("appControlData", null, true);
+        var appControlDataPath = Config.appControlDataPath;
+        var validAppControl = Config.validAppControl;
+        if ($S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
+            for(var i=0; i<validAppControl.length; i++) {
+                if (AppHandler.GetUserData(validAppControl[i])) {
+                    appControlApi = Config.baseApi + appControlDataPath + validAppControl[i] + ".json";
+                    break;
+                }
+            }
+        }
+        return appControlApi;
+    },
     loadAppControlData: function(callback) {
         var request = [];
         var appControlRequest = {
-                            "url": [Config.getApiUrl("appControlData", null, true)],
+                            "url": [this.getAppControlDataPath()],
                             "apiName": "appControlData",
                             "requestMethod": Api.getAjaxApiCallMethod()};
         request.push(appControlRequest);

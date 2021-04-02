@@ -15,6 +15,9 @@ Config.forceLogin = $$$.forceLogin;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
+Config.appControlDataPath = $$$.appControlDataPath;
+Config.validAppControl = $$$.validAppControl;
+
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
