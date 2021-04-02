@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 import DataHandler from "./DataHandler";
 import Config from "./Config";
+// import PageHandler from "./PageHandler";
 
 
 // import Api from "../../common/Api";
@@ -24,6 +25,21 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
+    getList2Data: function() {
+        var metaData = DataHandler.getData("metaData", {});
+        var disabledPages = [];
+        if ($S.isObject(metaData) && $S.isArray(metaData.disabledPages)) {
+            disabledPages = metaData.disabledPages;
+        }
+        var pages = Config.pages;
+        var list2Data = [];
+        for(var key in pages) {
+            if (key !== "home" && disabledPages.indexOf(key) < 0) {
+                list2Data.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
+            }
+        }
+        return list2Data;
+    },
     _generateResponse: function(response) {
         var finalData = [];
         if ($S.isArray(response)) {
@@ -45,14 +61,24 @@ DataHandlerV2.extend({
                 continue;
             }
             temp = {};
+            temp["team"] = userData[i][1];
+            temp["teamDisplay"] = temp["team"];
             temp["station"] = userData[i][2];
+            temp["stationDisplay"] = temp["station"];
+            temp["designation"] = userData[i][3];
+            temp["designationDisplay"] = temp["designation"];
             temp["userId"] = userData[i][4];
             temp["username"] = userData[i][5];
+            temp["usernameDisplay"] = temp["username"];
             temp["displayName"] = temp["username"] + ", " + temp["station"];
             finalUserData.push(temp);
         }
         DataHandler.setData("userData", finalUserData);
         DataHandler.setData("filteredUserData", finalUserData);
+        var metaData = DataHandler.getData("metaData", {});
+        var filterDataValues = DataHandler.getFilterDataValues();
+        var filterOptions = AppHandler.generateFilterData(metaData, finalUserData, filterDataValues);
+        DataHandler.setData("filterOptions", filterOptions);
     },
     handleAttendanceDataLoad: function(response) {
         var attendanceData = this._generateResponse(response);
@@ -119,15 +145,23 @@ DataHandlerV2.extend({
 DataHandlerV2.extend({
     callAddTextApi: function(subject, heading, callBack) {
         var url = Config.getApiUrl("addTextApi", null, true);
+        var currentAppData = DataHandler.getCurrentAppData();
         if (!$S.isString(url)) {
             return;
         }
+        if (!$S.isObject(currentAppData)) {
+            return;
+        }
+        if (!$S.isString(currentAppData.saveDataFilename) || currentAppData.saveDataFilename.length < 1) {
+            alert("Invalid saveDataFilename.");
+            return;
+        }
         var postData = {};
-        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/") + "," + subject+","+heading+",";
+        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
         postData["subject"] = subject;
         postData["heading"] = heading;
         postData["text"] = [attr];
-        postData["filename"] = "attendance.csv";
+        postData["filename"] = currentAppData.saveDataFilename;
         var msg = "Error in saving data, Please Try again.";
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             if (status === "FAILURE") {

@@ -1,7 +1,7 @@
 import $S from "../../interface/stack.js";
 // import Config from "./Config";
 import DataHandler from "./DataHandler";
-import PageHandler from "./PageHandler";
+import DataHandlerV2 from "./DataHandlerV2";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
@@ -140,7 +140,7 @@ TemplateHandler.extend({
     generateUpdateEntryRenderField: function(renderData, attendanceOption) {
         var renderField = this.getTemplate("monthlyTemplate");
         var template1, template2;
-        if (renderData.length > 0) {
+        if ($S.isArray(renderData) && renderData.length > 0) {
             for (var i = 0; i < renderData.length; i++) {
                 template1 = this.getTemplate("monthlyTemplate.data");
                 TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
@@ -223,7 +223,7 @@ TemplateHandler.extend({
             }
         }
         var template1, template2, validDate;
-        if (renderData.length > 0) {
+        if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = 0; i < renderData.length; i++) {
                 template1 = this.getTemplate("monthlyTemplate.data");
                 TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
@@ -247,7 +247,7 @@ TemplateHandler.extend({
         return renderField;
     },
     generateHomeRenderField: function() {
-        var homeFields = PageHandler.getList2Data();
+        var homeFields = DataHandlerV2.getList2Data();
         var template = this.getTemplate("home");
         for (var i = 0; i< homeFields.length; i++) {
             var linkTemplate = TemplateHandler.getTemplate("home.link");

@@ -1,0 +1,96 @@
+{
+    "disabledPages": [],
+    "filterKeys": ["station", "team", "designation", "username", "reset"],
+    "preFilter": {
+        "station": [
+            {
+                "value": "(stn1|stn2)",
+                "option": "Stn Unit"
+            },
+            {
+                "exceptValue": true,
+                "value": "~(stn1|stn2)",
+                "option": "Except Stn Unit"
+            },
+            {
+                "value": "",
+                "option": "All"
+            }
+        ]
+    },
+    "dateSelect": "monthly",
+    "summaryFields": [
+        {
+            "text": "LAP",
+            "searchByPattern": false,
+            "value": ["LAP"]
+        },
+        {
+            "text": "CL",
+            "searchByPattern": false,
+            "value": ["CL"]
+        },
+        {
+            "text": "LAP+CL",
+            "searchByPattern": true,
+            "value": ["^(LAP|CL)$"]
+        },
+        {
+            "text": "CCL",
+            "searchByPattern": false,
+            "value": ["CCL"]
+        },
+        {
+            "text": "PL",
+            "searchByPattern": false,
+            "value": ["PL"]
+        },
+        {
+            "text": "All Leave",
+            "searchByPattern": true,
+            "value": ["^(LAP|CL|CCL|PL)$"]
+        },
+        {
+            "text": "A",
+            "searchByPattern": false,
+            "value": ["A"]
+        }
+    ],
+    "attendanceOption": {
+        "tag": "select",
+        "className": "custom-dropdown",
+        "value": "",
+        "text": [
+            {
+                "tag": "option",
+                "value": "",
+                "text": ""
+            },
+            {
+                "tag": "option",
+                "value": "LAP",
+                "text": "LAP"
+            },
+            {
+                "tag": "option",
+                "value": "CL",
+                "text": "CL"
+            },
+            {
+                "tag": "option",
+                "value": "A",
+                "text": "A"
+            },
+            {
+                "tag": "option",
+                "value": "CCL",
+                "text": "CCL"
+            },
+            {
+                "tag": "option",
+                "value": "PL",
+                "text": "PL"
+            }
+        ]
+    }
+}

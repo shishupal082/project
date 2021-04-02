@@ -3,7 +3,6 @@ import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
 import TemplateHandler from "./TemplateHandler";
-import PageHandler from "./PageHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -43,7 +42,7 @@ keys.push("firstTimeDataLoadStatus");
 keys.push("dateParameters");
 
 keys.push("fieldsData");
-var bypassKeys = ["0Selected","1Selected","2Selected","3Selected","4Selected","5Selected","6Selected","7Selected","8Selected","9Selected"];
+var bypassKeys = ["teamSelected","stationSelected","designationSelected","usernameSelected"];
 
 keys = keys.concat(bypassKeys);
 CurrentData.setKeys(keys);
@@ -74,6 +73,13 @@ DataHandler.extend({
     },
     getData: function(key, defaultValue, isDirect) {
         return CurrentData.getData(key, defaultValue, isDirect);
+    },
+    getFilterDataValues: function() {
+        var result = {};
+        for (var i=0; i<bypassKeys.length; i++) {
+            result[bypassKeys[i]] = this.getData(bypassKeys[i]);
+        }
+        return result;
     },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
@@ -453,10 +459,6 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     },
-    // OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
-    //     DataHandler.setData("currentList2Id", list2Id);
-    //     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-    // },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         DataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -489,7 +491,9 @@ DataHandler.extend({
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
                 filterOptions[i].selectedValue = "";
-                DataHandler.setData(filterOptions[i].selectName, "");
+                if ($S.isString(filterOptions[i].selectName)) {
+                    DataHandler.setData(filterOptions[i].selectName, "");
+                }
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
@@ -497,74 +501,6 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getRenderDataOld: function(pageName, optionName, fieldName) {
-        var reportData = {};
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        var metaData = DataHandler.getData("metaData", {});
-        var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
-        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue;
-        var isRevert;
-        function _isResultRevert(filterIndex, filterValue) {
-            if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
-                return false;
-            }
-            if ($S.isObject(preFilter) && $S.isArray(preFilter[filterIndex])) {
-                for (l=0; l<preFilter[filterIndex].length; l++) {
-                    if ($S.isObject(preFilter[filterIndex][l]) && preFilter[filterIndex][l].value === filterValue) {
-                        if ($S.isBooleanTrue(preFilter[filterIndex][l].exceptValue)) {
-                            return true;
-                        }
-                        break;
-                    }
-                }
-            }
-            return false;
-        }
-        if (!$S.isArray(reportData)) {
-            reportData = [];
-        }
-        for(k=0; k<filterOptions.length; k++) {
-            filterIndex = filterOptions[k].dataKey;
-            filterValue = filterOptions[k].selectedValue;
-            isRevert = _isResultRevert(filterIndex, filterValue);
-            if (isRevert && $S.isString(filterValue)) {
-                temp = filterValue.split("~");
-                if (temp.length > 1) {
-                    if (temp[0] === "") {
-                        filterValue = temp.splice(1).join("~");
-                   }
-                }
-            }
-            if (!$S.isNumber(filterIndex) || filterIndex < 0) {
-                continue;
-            }
-            if (!$S.isString(filterValue) || filterValue === "") {
-                continue;
-            }
-            temp = [];
-            for (i = 0; i < reportData.length; i++) {
-                if (!$S.isArray(reportData[i])) {
-                    continue;
-                }
-                temp2 = [];
-                for (j = 0; j < reportData[i].length; j++) {
-                    if (j === filterIndex) {
-                        temp3 = $S.searchItems([filterValue], [reportData[i][j]], true, isRevert);
-                        if (temp3.length === 0) {
-                            temp2 = [];
-                            break;
-                        }
-                    }
-                    temp2.push(reportData[i][j]);
-                }
-                if (temp2.length >= 1) {
-                    temp.push(temp2);
-                }
-            }
-            reportData = temp;
-        }
-        return reportData;
-    },
     getRenderData: function(pageName, optionName, fieldName) {
         var dateParameters = this.getData("dateParameters", {});
         var dateSelect = this.getData("date-select", "");
@@ -576,116 +512,39 @@ DataHandler.extend({
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             result = dateParameters[dateSelect];
         }
+        var userData = DataHandler.getData("userData", []);
+        var metaData = DataHandler.getData("metaData", {});
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions);
+        DataHandler.setData("filteredUserData", filteredUserData);
         return result;
-    },
-    generateFilterOption: function() {
-        var reportData = this.getData("reportData", []);
-        var metaData = this.getData("metaData", {});
-        var filterIndex = [];
-        var minDataLength = metaData.minDataLength;
-        var preFilter = {};
-        if (!$S.isNumber(minDataLength)) {
-            minDataLength = 2;
-        }
-        if ($S.isArray(metaData.filterIndex)) {
-            filterIndex = metaData.filterIndex.filter(function(el, i, arr) {
-                return $S.isNumber(el);
-            });
-        }
-        if ($S.isObject(metaData.preFilter)) {
-            preFilter = metaData.preFilter;
-        }
-        var tempFilterOptions = {};
-        var i, j, temp;
-        for(i=0; i<filterIndex.length; i++) {
-            tempFilterOptions[filterIndex[i]] = {
-                "dataKey": filterIndex[i],
-                "selectName": filterIndex[i]+"Selected",
-                "possibleIds": [],
-                "filterOption": [],
-                "preFilter": preFilter[filterIndex[i]]
-            };
-        }
-        for(i=0; i<reportData.length; i++) {
-            for(j=0; j<filterIndex.length; j++) {
-                if (filterIndex[i] === -1) {
-                    continue;
-                }
-                temp = reportData[i][tempFilterOptions[filterIndex[j]].dataKey];
-                if (!$S.isString(temp) || temp.trim().length < 1) {
-                    continue;
-                }
-                temp = temp.trim();
-                if (tempFilterOptions[filterIndex[j]].possibleIds.indexOf(temp) < 0) {
-                    tempFilterOptions[filterIndex[j]].possibleIds.push(temp);
-                    tempFilterOptions[filterIndex[j]].filterOption.push({"value": temp, "option": temp});
-                }
-            }
-        }
-        for(temp in tempFilterOptions) {
-            tempFilterOptions[temp].filterOption.sort(function(a, b) {
-                return a.option > b.option ? 1 : -1;
-            });
-            if ($S.isArray(tempFilterOptions[temp].preFilter)) {
-                for (i=tempFilterOptions[temp].preFilter.length-1; i>=0; i--) {
-                    if ($S.isObject(tempFilterOptions[temp].preFilter[i]) && $S.isString(tempFilterOptions[temp].preFilter[i].value)) {
-                        if (tempFilterOptions[temp].possibleIds.indexOf(tempFilterOptions[temp].preFilter[i].value) < 0) {
-                            tempFilterOptions[temp].possibleIds.push(tempFilterOptions[temp].preFilter[i].value);
-                        }
-                        $S.addElAt(tempFilterOptions[temp].filterOption, 0, tempFilterOptions[temp].preFilter[i]);
-                    }
-                }
-            } else if (tempFilterOptions[temp].filterOption.length > 0) {
-                $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
-            }
-        }
-        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
-        var filterOptions = [];
-        var selectedValue;
-        for(i=0; i<filterIndex.length; i++) {
-            if (filterIndex[i] === -1) {
-                filterOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
-                continue;
-            }
-            selectedValue = DataHandler.getData(tempFilterOptions[filterIndex[i]].selectName, "");
-            if (tempFilterOptions[filterIndex[i]].possibleIds.indexOf(selectedValue) < 0) {
-                selectedValue = "";
-            }
-            if (tempFilterOptions[filterIndex[i]].filterOption.length > 0) {
-                filterOptions.push({"type": "dropdown",
-                    "dataKey": tempFilterOptions[filterIndex[i]].dataKey,
-                    "selectName": tempFilterOptions[filterIndex[i]].selectName,
-                    "text": tempFilterOptions[filterIndex[i]].filterOption,
-                    "selectedValue": selectedValue
-                });
-            }
-        }
-        this.setData("filterOptions", filterOptions);
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var dataLoadStatus = this.isDataLoadComplete();
         var renderData = null;
         var footerData = null;
+        var appHeading = null;
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = DataHandler.getFooterData();
+            appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
-        var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData);
-        var filterOptions = DataHandler.getData("filterOptions", []);
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var list2Data = [];
         var list1Data = [];
-        if (currentList2Id !== Config.home) {
+        var filterOptions = [];
+        if (dataLoadStatus && currentList2Id !== Config.home) {
             list1Data = this.getData("appControlData", []);
-            list2Data = PageHandler.getList2Data();
+            list2Data = DataHandlerV2.getList2Data();
+            filterOptions = DataHandler.getData("filterOptions", []);
+            filterOptions = AppHandler.getFilterData(filterOptions);
         }
-
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
-        appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
+        appDataCallback("filterOptions", filterOptions);
         appDataCallback("disableFooter", this.getDisableFooterStatus());
 
         appDataCallback("list2Data", list2Data);

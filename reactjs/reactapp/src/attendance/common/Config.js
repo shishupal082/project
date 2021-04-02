@@ -43,7 +43,7 @@ Config.update = "update";
 Config.summary = "summary";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["summary"];
+Config.dateSelectionRequired = ["entry", "summary"];
 
 Config.defaultPageFields = [];
 
