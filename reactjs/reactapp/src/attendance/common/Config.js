@@ -22,7 +22,7 @@ Config.validAppControl = $$$.validAppControl;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
 var headingJson = $$$.headingJson;
-var appControlDataApi = $$$.appControlDataApi;
+var appControlDataApi = $$$.appControlApi;
 
 
 try {

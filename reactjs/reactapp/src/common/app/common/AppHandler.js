@@ -6,6 +6,7 @@ var AppHandler;
 
 (function($S){
 var DT = $S.getDT();
+var requestId = $S.getRequestId();
 
 AppHandler = function(arg) {
     return new AppHandler.fn.init(arg);
@@ -395,7 +396,41 @@ AppHandler.extend({
         fireCallback();
     }
 });
-
+AppHandler.extend({
+    loadAppControlData: function(appControlApi, baseApi, appControlDataPath, validAppControl, callback) {
+        if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
+            for(var i=0; i<validAppControl.length; i++) {
+                if (this.GetUserData(validAppControl[i])) {
+                    appControlApi = baseApi + appControlDataPath + validAppControl[i] + ".json?v=" + requestId;
+                    break;
+                }
+            }
+        }
+        var request = [];
+        var appControlRequest = {
+                            "url": [appControlApi],
+                            "apiName": "appControlData",
+                            "requestMethod": Api.getAjaxApiCallMethod()};
+        request.push(appControlRequest);
+        var appControlData = [];
+        AppHandler.LoadDataFromRequestApi(request, function() {
+            if ($S.isArray(request[0].response) && request[0].response.length > 0) {
+                if ($S.isArray(request[0].response[0])) {
+                    request[0].response[0].map(function(el, i, arr) {
+                        if ($S.isObject(el)) {
+                            el.id = "app-id-" + i;
+                        }
+                        return el;
+                    });
+                    appControlData = request[0].response[0];
+                }
+            }
+            if ($S.isFunction(callback)) {
+                callback(appControlData);
+            }
+        });
+    }
+});
 AppHandler.extend({
     generateFilterData: function(metaData, csvData, filterSelectedValues) {
         if (!$S.isArray(csvData)) {

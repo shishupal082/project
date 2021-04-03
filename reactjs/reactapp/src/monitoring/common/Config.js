@@ -10,7 +10,7 @@ var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUserDetailsApi = $$$.usernamesApi;
 
 
-Config.baseapi = $$$.baseapi;
+Config.baseApi = $$$.baseApi;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
@@ -35,23 +35,12 @@ pageData["uploadTextInstruction"] = $$$.uploadTextInstruction;
 
 var appControlApi = $$$.appControlApi;
 
-if (!$S.isArray(appControlApi)) {
-    appControlApi = [];
+if ($S.isString(appControlApi)) {
+    appControlApi = Config.baseApi + appControlApi + "?v="+ requestId;;
 }
-Config.appControlApi = appControlApi.map(function(el, i, arr) {
-    return Config.baseapi + el + "?v="+ requestId;
-});
-
-Config.validTeamAppControl = $$$.validTeamAppControl;
-
-var appControlDataPath = $$$.appControlDataPath;
-Config.updateAppControlApi = function(teamAppControlData) {
-    if ($S.isString(appControlDataPath) && appControlDataPath.length > 0) {
-        if ($S.isString(teamAppControlData) && teamAppControlData.length > 0) {
-            Config.appControlApi = [Config.baseapi + appControlDataPath + teamAppControlData + ".json?v="+ requestId];
-        }
-    }
-};
+Config.appControlApi = appControlApi;
+Config.appControlDataPath = $$$.appControlDataPath;
+Config.validAppControl = $$$.validAppControl;
 
 var pages = {
     "home": basepathname+"/",
@@ -128,7 +117,7 @@ apiMapping["entryByDateUrl"] = pages.entrybydate;
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
         if ($S.isBooleanTrue(addBaseUrl)) {
-            return Config.baseapi + apiMapping[key];
+            return Config.baseApi + apiMapping[key];
         } else {
             // used for redirect on fileupload or addtext
             return apiMapping[key];
@@ -142,7 +131,7 @@ Config.createCsvApi = function(filepath, username, requestId) {
     if ($S.isString(username) && username.length > 0) {
         selector += "&u=" + username;
     }
-    return Config.baseapi + "/view/file/" + filepath + "?" + selector;
+    return Config.baseApi + "/view/file/" + filepath + "?" + selector;
 };
 
 Config.getPageData = function(key, defaultValue) {

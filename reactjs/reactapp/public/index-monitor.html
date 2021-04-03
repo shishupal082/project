@@ -60,22 +60,24 @@
 <script type="text/javascript">
 
 var GLOBAL = {
-    baseapi: "http://localhost:8080",
-    appControlDataPath: "/monitor/appControlData/",
+    baseApi: "http://localhost:8080",
+    basepathname: "",
     loginUserDetailsApi: "/api/get_login_user_details",
     usernamesApi: "/api/get_related_users_data_v2",
-    basepathname: "",
+    appControlDataPath: "/monitor/appControlDatav2/",
     forceLogin: true
 };
 
-GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
-GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
-GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
+// GLOBAL.appControlApi = "/app/monitor/static/data/appControlData.json";
+GLOBAL.appControlApi = "/monitor/appControlData.json";
 
-GLOBAL.validTeamAppControl = ["appControlDataTeam01",
+GLOBAL.validAppControl = ["appControlDataTeam01",
               "appControlDataTeam02","appControlDataTeam03",
               "appControlDataTeam04","appControlDataTeam05"];
 
+
+GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
+GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
 
 GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
 GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;

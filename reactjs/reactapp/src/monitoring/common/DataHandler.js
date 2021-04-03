@@ -43,7 +43,6 @@ keys.push("combinedDateSelectionParameter");
 
 // keys.push("appControlData");
 // keys.push("metaData");
-// keys.push("sectionsData");
 // keys.push("currentSectionId");
 keys.push("sectionName");
 keys.push("currentSectionData");
@@ -57,7 +56,7 @@ keys.push("errorsData");
 // keys.push("selectedType");
 // keys.push("selectedDevice");
 
-var bypassKeys = ["userTeam", "appControlData", "metaData", "sectionsData",
+var bypassKeys = ["userTeam", "appControlData", "metaData",
         "currentSectionId", "currentPageName", "selectedDateType",
         "appControlDataLoadStatus", "metaDataLoadStatus", "csvDataLoadStatus", "firstTimeDataLoadStatus",
         "homeFields", "dropdownFields",
@@ -296,20 +295,12 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    getAvailableSection: function() {
-        var appControlData = DataHandler.getData("appControlData", {});
-        var availableSection = [];
-        if ($S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-            availableSection = appControlData.sections;
-        }
-        return availableSection;
-    },
     getDefaultSectionId: function() {
-        var appControlData = DataHandler.getData("appControlData", {});
+        var appControlData = DataHandler.getData("appControlData", []);
         var sectionId = "";
-        if ($S.isObject(appControlData) && $S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-            if ($S.isString(appControlData.sections[0].id) && appControlData.sections[0].id.length > 0) {
-                sectionId = appControlData.sections[0].id;
+        if ($S.isArray(appControlData) && appControlData.length > 0) {
+            if ($S.isString(appControlData[0].id) && appControlData[0].id.length > 0) {
+                sectionId = appControlData[0].id;
             }
         }
         return sectionId;
@@ -323,7 +314,7 @@ DataHandler.extend({
         return false;
     },
     getSectionData: function(sectionId) {
-        var sectionsData = DataHandler.getData("sectionsData", []);
+        var sectionsData = DataHandler.getData("appControlData", []);
         var sectionData = {};
         if ($S.isString(sectionId) && sectionId.length > 0) {
             if ($S.isArray(sectionsData)) {
@@ -358,11 +349,11 @@ DataHandler.extend({
         return true;
     },
     getDefaultDateSelectionType: function() {
-        var appControlData = DataHandler.getData("appControlData", {});
+        var appControlData = DataHandler.getData("appControlData", []);
         var defaultDateSelectionType = "";
-        if ($S.isObject(appControlData) && $S.isArray(appControlData.sections) && appControlData.sections.length > 0) {
-            if ($S.isString(appControlData.sections[0].defaultDateSelectionType) && appControlData.sections[0].defaultDateSelectionType.length > 0) {
-                defaultDateSelectionType = appControlData.sections[0].defaultDateSelectionType;
+        if ($S.isArray(appControlData) && appControlData.length > 0) {
+            if ($S.isString(appControlData[0].defaultDateSelectionType) && appControlData[0].defaultDateSelectionType.length > 0) {
+                defaultDateSelectionType = appControlData[0].defaultDateSelectionType;
             }
         }
         return defaultDateSelectionType;
@@ -426,7 +417,7 @@ DataHandler.extend({
         var metaDataApis = [];
         if (sectionData && $S.isArray(sectionData["metaDataApis"])) {
             metaDataApis = sectionData["metaDataApis"].map(function(el, i, arr) {
-                return Config.baseapi + el + "?v=" + requestId;
+                return Config.baseApi + el + "?v=" + requestId;
             });
         }
         return metaDataApis;
@@ -437,7 +428,7 @@ DataHandler.extend({
         var csvDataApis = [];
         if (sectionData && $S.isArray(sectionData["csvDataApis"])) {
             csvDataApis = sectionData["csvDataApis"].map(function(el, i, arr) {
-                return Config.baseapi + el + "?v=" + requestId;
+                return Config.baseApi + el + "?v=" + requestId;
             });
         }
         return csvDataApis;
@@ -644,39 +635,18 @@ DataHandler.extend({
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
-            var team, temDepenedentAppControlExist;
-            var validTeamAppControl = Config.validTeamAppControl;
-            if ($S.isArray(validTeamAppControl)) {
-                for (var i = 0; i < validTeamAppControl.length; i++) {
-                    team = validTeamAppControl[i];
-                    if (!$S.isString(team)) {
-                        continue;
-                    }
-                    temDepenedentAppControlExist = AppHandler.GetUserData(team, false);
-                    if (temDepenedentAppControlExist) {
-                        Config.updateAppControlApi(team);
-                        break;
-                    }
-                }
-            }
             DataHandler.setData("appControlDataLoadStatus", "in-progress");
-            $S.loadJsonData(null, Config.appControlApi, function(response, apiName, ajax){
-                if ($S.isObject(response)) {
-                    DataHandler.setData("appControlData", response);
-                } else {
-                    DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
-                }
-            }, function() {
+            AppHandler.loadAppControlData(Config.appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(response) {
+                DataHandler.setData("appControlData", response);
                 $S.log("appControlData load complete");
                 DataHandler.setData("appControlDataLoadStatus", "completed");
-                DataHandler.setData("sectionsData", DataHandler.getAvailableSection());
                 DataHandler.setData("selectedDateType", DataHandler.getDefaultDateSelectionType());
                 DataHandler.setData("currentSectionId", DataHandler.getDefaultSectionId());
                 DataHandler.TrackSectionView("loadingPage", DataHandler.getData("currentSectionId", ""));
                 DataHandler.TrackPageView(DataHandler.getData("currentPageName", ""));
                 DataHandler._fireSectionChange(appStateCallback, appDataCallback);
-            }, null, Api.getAjaxApiCallMethod());
-        })
+            });
+        });
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, currentPageName) {
         DataHandler.setData("currentPageName", currentPageName);
@@ -986,7 +956,7 @@ DataHandler.extend({
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
             var goBackLinkData = Config.goBackLinkData;
-            var sectionsData = DataHandler.getData("sectionsData", []);
+            var sectionsData = DataHandler.getData("appControlData", []);
             var pageDropdown = DataHandler.getData("dropdownFields", []);
             var filterOptions = [];
             var hidePageTab = false;

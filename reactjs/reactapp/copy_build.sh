@@ -25,8 +25,8 @@ distDir=dist-accountv2-app
 distDir=dist-data-entry-app
 distDir=dist-assets-app
 distDir=dist-ml2-app
-distDir=dist-monitoring-app
 distDir=dist-data-display-app
+distDir=dist-monitoring-app
 distDir=dist-attendance-app
 
 addLog "Dist directory : ${distDir}"

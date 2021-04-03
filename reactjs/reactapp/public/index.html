@@ -61,13 +61,15 @@ var GLOBAL = {
     loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/attendance/json/meta-data/",
-    validAppControl: ["appControlData01"],
     forceLogin: true
 };
 
+
+GLOBAL.validAppControl = ["appControlData01"];
+
 // GLOBAL.appControlDataApi = "/app/data-display/static/json/appControlData.json";
 // GLOBAL.appControlDataApi = "/pvt/app-data/data-display/appControlData.json";
-GLOBAL.appControlDataApi = "/attendance/json/meta-data/appControlData.json";
+GLOBAL.appControlApi = "/attendance/json/meta-data/appControlData.json";
 
 GLOBAL.headingJson = document.getElementById("headingJson").value;
 

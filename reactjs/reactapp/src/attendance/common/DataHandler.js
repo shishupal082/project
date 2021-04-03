@@ -364,43 +364,13 @@ DataHandler.extend({
             $S.callMethod(callback);
         });
     },
-    getAppControlDataPath: function() {
-        var appControlApi = Config.getApiUrl("appControlData", null, true);
-        var appControlDataPath = Config.appControlDataPath;
-        var validAppControl = Config.validAppControl;
-        if ($S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
-            for(var i=0; i<validAppControl.length; i++) {
-                if (AppHandler.GetUserData(validAppControl[i])) {
-                    appControlApi = Config.baseApi + appControlDataPath + validAppControl[i] + ".json";
-                    break;
-                }
-            }
-        }
-        return appControlApi;
-    },
     loadAppControlData: function(callback) {
-        var request = [];
-        var appControlRequest = {
-                            "url": [this.getAppControlDataPath()],
-                            "apiName": "appControlData",
-                            "requestMethod": Api.getAjaxApiCallMethod()};
-        request.push(appControlRequest);
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
-        AppHandler.LoadDataFromRequestApi(request, function() {
-            if ($S.isArray(request[0].response) && request[0].response.length > 0) {
-                if ($S.isArray(request[0].response[0])) {
-                    request[0].response[0].map(function(el, i, arr) {
-                        if ($S.isObject(el)) {
-                            el.id = "app-id-" + i;
-                        }
-                        return el;
-                    });
-                    DataHandler.setData("appControlData", request[0].response[0]);
-                }
-            }
-            DataHandler.setCurrentAppId();
-            DataHandler.setData("appControlDataLoadStatus", "completed");
+        AppHandler.loadAppControlData(Config.getApiUrl("appControlData", null, true), Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(response) {
+            DataHandler.setData("appControlData", response);
             $S.log("appControlData load complete");
+            DataHandler.setData("appControlDataLoadStatus", "completed");
+            DataHandler.setCurrentAppId();
             DataHandler.handleAppIdChange();
             DataHandler.loadDataByAppId(function() {
                 $S.callMethod(callback);

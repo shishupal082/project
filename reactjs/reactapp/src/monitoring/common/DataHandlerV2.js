@@ -176,7 +176,9 @@ DataHandlerV2.extend({
         if (!$S.isString(url)) {
             return;
         }
+        var entryByDateUrl = Config.getApiUrl("entryByDateUrl", "", false);
         var username = AppHandler.GetUserData("username", "");
+        var addTextAfterFileUploadDisable = AppHandler.GetUserData("addTextAfterFileUploadDisable", false);
         url += "?u=" + username;
         var team = DataHandler.getData("userTeam", "info");
         var heading = this._generateStringFromPattern("heading", Config.headingPattern, username, device, team);
@@ -209,7 +211,11 @@ DataHandlerV2.extend({
                         if ($S.isObject(response.data) && $S.isString(response.data.fileName) && response.data.fileName.length > 0) {
                             uploadFileMessage = "Uploaded file: " + response.data.fileName + "," + station + "," + team + "," + device + "," + username + ",";
                         }
-                        DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
+                        if ($S.isBooleanTrue(addTextAfterFileUploadDisable)) {
+                            AppHandler.LazyRedirect(entryByDateUrl, 250);
+                        } else {
+                            DataHandlerV2.callAddTextApi(station, device, uploadFileMessage);
+                        }
                     }
                 }
             }
