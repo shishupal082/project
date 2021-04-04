@@ -7,11 +7,8 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
-// import DataHandlerV2 from "./common/DataHandlerV2";
 import Config from "./common/Config";
 
-
-// var pages = Config.pages;
 
 class App extends React.Component {
     constructor(props) {

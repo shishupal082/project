@@ -120,35 +120,47 @@ TemplateHandler.extend({
         var i, j, template3Data;
         var userData = DataHandler.getData("filteredUserData", []);
         var attendanceData = DataHandler.getData("attendanceData", {});
+        var isValidTemplate = false;
         if ($S.isArray(data.allDate)) {
             for(i=0; i<data.allDate.length; i++) {
                 TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": data.allDate[i].date});
             }
-            TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
-            for (j=0; j<userData.length; j++) {
-                template3 = this.getTemplate("monthlyTemplate.data.table.tr");
-                template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
-                TemplateHelper.updateTemplateText(template3, template3Data);
-                for(i=0; i<data.allDate.length; i++) {
-                    TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i]));
-                }
+            if (userData.length > 0) {
+                isValidTemplate = true;
                 TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+                for (j=0; j<userData.length; j++) {
+                    template3 = this.getTemplate("monthlyTemplate.data.table.tr");
+                    template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                    TemplateHelper.updateTemplateText(template3, template3Data);
+                    for(i=0; i<data.allDate.length; i++) {
+                        TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i]));
+                    }
+                    TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+                }
             }
+        }
+        if (!isValidTemplate) {
+            template2 = null;
         }
         return template2;
     },
     generateUpdateEntryRenderField: function(renderData, attendanceOption) {
         var renderField = this.getTemplate("monthlyTemplate");
         var i, template1, template2;
+        var isValidTemplate = false;
         if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
-                TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
                 template2 = this._generateIndividualTable(renderData[i], attendanceOption);
-                TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
-                TemplateHelper.addItemInTextArray(renderField, "monthlyTemplate.data", template1);
+                if ($S.isArray(template2)) {
+                    isValidTemplate = true;
+                    TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
+                    TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
+                    TemplateHelper.addItemInTextArray(renderField, "monthlyTemplate.data", template1);
+                }
             }
-        } else {
+        }
+        if (!isValidTemplate) {
             renderField = this.getTemplate("noDataFound");
         }
         return renderField;
@@ -181,16 +193,17 @@ TemplateHandler.extend({
     _generateIndividualTableV2: function(validDate, userData, attendanceData) {
         var template2 = this.getTemplate("monthlyTemplate.data.table");
         var template3, headingRow = this.getTemplate("monthlyTemplate.data.table.tr");
-        var i, j, k, template3Data, temp;
+        var i, j, k, template3Data, temp, count;
         var headingRowAdded = false, template2Added = false;
         var summaryFields = DataHandler.getData("metaData", {}).summaryFields;
         if ($S.isArray(summaryFields)) {
             for(i=0; i<summaryFields.length; i++) {
                 TemplateHelper.addItemInTextArray(headingRow, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": summaryFields[i].text});
             }
+            count = 1;
             for (j=0; j<userData.length; j++) {
                 template3 = this.getTemplate("monthlyTemplate.data.table.tr");
-                template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                template3Data = {"monthlyTemplate.table.tr.s_no": count++, "monthlyTemplate.table.tr.name": userData[j].displayName};
                 temp = this._generateAttendanceCount(validDate, attendanceData, userData[j], summaryFields);
                 if ($S.isArray(temp)) {
                     TemplateHelper.updateTemplateText(template3, template3Data);
@@ -203,6 +216,8 @@ TemplateHandler.extend({
                     }
                     template2Added = true;
                     TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+                } else {
+                    count--;
                 }
             }
         }

@@ -85,10 +85,10 @@ Template["monthlyTemplate"] = [
 ];
 Template["monthlyTemplate.data"] = [
     {
-        "tag": "div",
+        "tag": "div.h3",
         "text": [
             {
-                "tag": "h2",
+                "tag": "span",
                 "className": "badge badge-primary",
                 "name": "monthlyTemplate.data.dateHeading",
                 "text": ""
@@ -111,7 +111,7 @@ Template["monthlyTemplate.data"] = [
 Template["monthlyTemplate.data.table"] = [
     {
         "tag": "table.tbody",
-        "className": "table-striped table-padded-px-5",
+        "className": "table-bordered table-bordered-dark table-striped table-padded-px-5",
         "name": "monthlyTemplate.data.table.tr",
         "text": []
     }
@@ -132,43 +132,6 @@ Template["monthlyTemplate.data.table.tr"] = [
                 "text": "Name"
             }
         ]
-    }
-];
-Template["tableField"] = [
-    {
-        "tag": "div",
-        "text": {
-            "tag": "table.tbody",
-            "className": "table-striped table-padded-px-5",
-            "name": "tableEntry",
-            "text": []
-        }
-    },
-    {
-        "tag": "div",
-        "name": "footer",
-        "text": []
-    }
-];
-Template["tableRowField"] = [
-    {
-        "tag": "tr",
-        "className": "",
-        "name": "tableRowEntry",
-        "text": [
-            {
-                "tag": "td",
-                "name": "s.no.",
-                "text": ""
-            }
-        ]
-    }
-];
-Template["tableTdField"] = [
-    {
-        "tag": "td",
-        "name": "tdData",
-        "text": ""
     }
 ];
 
