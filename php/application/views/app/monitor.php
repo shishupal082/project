@@ -21,16 +21,23 @@
     <div id="root"><center>Loading...</center></div>
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
 <script type="text/javascript">
+
 var GLOBAL = {
-    baseapi: "",
-    appControlDataPath: "/app/monitor/static/data/appControlData_",
+    baseApi: "",
     basepathname: "/app/monitorv2",
+    loginUserDetailsApi: "/api/get_login_user_details",
+    usernamesApi: "/api/get_related_users_data_v2",
+    appControlDataPath: "/app/monitor/static/data/",
     forceLogin: false
 };
 
-// GLOBAL.appControlApi = ["/app/monitor/static/data/appControlData.json"];
 
-GLOBAL.appControlApi = ["/pvt/app-data/monitor/appControlData01.json"];
+
+GLOBAL.validAppControl = ["appControlDataTeam01",
+              "appControlDataTeam02","appControlDataTeam03",
+              "appControlDataTeam04","appControlDataTeam05"];
+
+GLOBAL.appControlApi = "/pvt/app-data/monitor/appControlData01.json";
 
 GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-device-report.csv";
 GLOBAL.headingPattern = "device";

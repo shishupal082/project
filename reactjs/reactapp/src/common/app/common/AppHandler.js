@@ -344,6 +344,11 @@ AppHandler.extend({
             if (!$S.isFunction(el.requestMethod)) {
                 return false;
             }
+            for (var i=0; i<el.url.length; i++) {
+                if (!$S.isString(el.url[i])) {
+                    return false;
+                }
+            }
             return true;
         }
         function fireCallback() {
@@ -419,6 +424,9 @@ AppHandler.extend({
                     break;
                 }
             }
+        }
+        if (!$S.isString(appControlApi) || appControlApi.length < 1) {
+            return callback();
         }
         var request = [];
         var appControlRequest = {

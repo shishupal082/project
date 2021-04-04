@@ -5,10 +5,10 @@
         "disableFooter": false,
         "saveDataFilename": "attendance.csv",
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
-        "metaDataApi": ["/data/json/meta-data/metaData.json"],
-        "userDataApi": ["/data/csv/user_data.csv"],
+        "metaDataApi": ["/app/attendance/static/json/metaData.json"],
+        "userDataApi": ["/app/attendance/static/csv/user_data.csv"],
         "attendanceDataApi": [
-            "/view/file/default/attendance.csv"
+            "/app/attendance/static/csv/attendance.csv"
         ]
     }
 ]

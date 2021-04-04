@@ -37,6 +37,8 @@ var appControlApi = $$$.appControlApi;
 
 if ($S.isString(appControlApi)) {
     appControlApi = Config.baseApi + appControlApi + "?v="+ requestId;;
+} else {
+    appControlApi = null;
 }
 Config.appControlApi = appControlApi;
 Config.appControlDataPath = $$$.appControlDataPath;

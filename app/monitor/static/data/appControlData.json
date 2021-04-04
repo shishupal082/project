@@ -1,53 +1,51 @@
-{
-    "sections": [
-        {
-            "id": "uploadedData",
-            "name": "Field Report",
-            "defaultDateSelectionType": "daily",
-            "disableFooter": true,
-            "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
-            "csvDataApis": ["/api/get_uploaded_csv_data"]
-        },
-        {
-            "id": "section-i",
-            "name": "Section i Name",
-            "defaultDateSelectionType": "monthly",
-            "disableFooter": false,
-            "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
-            "csvDataApis": [
-                "/pvt/app-data/monitor/oct-2020.csv",
-                "/pvt/app-data/monitor/nov-2020.csv"
-            ]
-        },
-        {
-            "id": "section-J",
-            "name": "Section J Name",
-            "defaultDateSelectionType": "monthly",
-            "disableFooter": false,
-            "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
-            "csvDataApis": []
-        },
-        {
-            "id": "section-1",
-            "name": "Section 1 Name",
-            "defaultDateSelectionType": "monthly",
-            "disableFooter": false,
-            "metaDataApis": ["/app/monitor/static/data/metaData.json"],
-            "csvDataApis": [
-                "/app/monitor/static/data/list-1.csv",
-                "/app/monitor/static/data/list-2.csv"
-            ]
-        },
-        {
-            "id": "section-2",
-            "name": "Section 2 Name",
-            "defaultDateSelectionType": "all",
-            "disableFooter": true,
-            "disabledPages": ["entry"],
-            "metaDataApis": ["/app/monitor/static/data/metaData.json"],
-            "csvDataApis": [
-                "/app/monitor/static/data/list-2.csv"
-            ]
-        }
-    ]
-}
+[
+    {
+        "id": "uploadedData",
+        "name": "Field Report",
+        "defaultDateSelectionType": "daily",
+        "disableFooter": true,
+        "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
+        "csvDataApis": ["/api/get_uploaded_csv_data"]
+    },
+    {
+        "id": "section-i",
+        "name": "Section i Name",
+        "defaultDateSelectionType": "monthly",
+        "disableFooter": false,
+        "metaDataApis": ["/pvt/app-data/monitor/metaData.json"],
+        "csvDataApis": [
+            "/pvt/app-data/monitor/oct-2020.csv",
+            "/pvt/app-data/monitor/nov-2020.csv"
+        ]
+    },
+    {
+        "id": "section-J",
+        "name": "Section J Name",
+        "defaultDateSelectionType": "monthly",
+        "disableFooter": false,
+        "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
+        "csvDataApis": []
+    },
+    {
+        "id": "section-1",
+        "name": "Section 1 Name",
+        "defaultDateSelectionType": "monthly",
+        "disableFooter": false,
+        "metaDataApis": ["/app/monitor/static/data/metaData.json"],
+        "csvDataApis": [
+            "/app/monitor/static/data/list-1.csv",
+            "/app/monitor/static/data/list-2.csv"
+        ]
+    },
+    {
+        "id": "section-2",
+        "name": "Section 2 Name",
+        "defaultDateSelectionType": "all",
+        "disableFooter": true,
+        "disabledPages": ["entry"],
+        "metaDataApis": ["/app/monitor/static/data/metaData.json"],
+        "csvDataApis": [
+            "/app/monitor/static/data/list-2.csv"
+        ]
+    }
+]

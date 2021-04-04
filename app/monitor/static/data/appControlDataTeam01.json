@@ -1,12 +1,10 @@
-{
-    "sections": [
-        {
-            "id": "section-J",
-            "name": "Section J Name",
-            "defaultDateSelectionType": "monthly",
-            "disableFooter": true,
-            "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
-            "csvDataApis": ["/api/get_uploaded_csv_data"]
-        }
-    ]
-}
+[
+    {
+        "id": "section-J",
+        "name": "Section J Name",
+        "defaultDateSelectionType": "monthly",
+        "disableFooter": true,
+        "metaDataApis": ["/app/monitor/static/data/metaData2.json", "/pvt/app-data/monitor/metaData.json"],
+        "csvDataApis": ["/api/get_uploaded_csv_data"]
+    }
+]
