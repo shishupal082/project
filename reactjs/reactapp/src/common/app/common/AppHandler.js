@@ -397,6 +397,20 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
+    getHeadingText: function(currentAppData) {
+        var headingText = "App Heading";
+        if (!$S.isObject(currentAppData)) {
+            return headingText;
+        }
+        var heading = currentAppData.heading;
+        var name = currentAppData.name;
+        if ($S.isString(heading) && heading.length > 0) {
+            headingText = heading;
+        } else if ($S.isString(name) && name.length > 0) {
+            headingText = name;
+        }
+        return headingText;
+    },
     loadAppControlData: function(appControlApi, baseApi, appControlDataPath, validAppControl, callback) {
         if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
             for(var i=0; i<validAppControl.length; i++) {

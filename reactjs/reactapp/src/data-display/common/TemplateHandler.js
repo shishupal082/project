@@ -107,16 +107,20 @@ TemplateHandler.extend({
     _getTdField: function(rowIndex, colIndex, isFirstRow, isLastRow, isFirstCol, tdData) {
         var tdField = this.getTemplate("tableTdField");
         if (isFirstCol) {
-            TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
+            TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "td.b");
         }
         TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
         return tdField;
     },
     _getRowField: function(rowIndex, isFirstRow, isLastRow, rowData) {
         var trField = this.getTemplate("tableRowField");
+        var colIndex = 0;
         TemplateHelper.updateTemplateText(trField, {"s.no.": rowIndex});
-        for (var i = 0; i < rowData.length; i++) {
-            TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(rowIndex, i+1, isFirstRow, isLastRow, i===0, rowData[i]));
+        if ($S.isObject(rowData)) {
+            while($S.isString(rowData[colIndex])) {
+                TemplateHelper.addItemInTextArray(trField, "tableRowEntry", this._getTdField(rowIndex, colIndex+1, isFirstRow, isLastRow, colIndex===0, rowData[colIndex]));
+                colIndex++;
+            }
         }
         return trField;
     },

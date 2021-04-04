@@ -1,6 +1,5 @@
 [
     {
-        "id": "display-app-1",
         "name": "Display Report",
         "heading": "Display Report",
         "disableFooter": true,

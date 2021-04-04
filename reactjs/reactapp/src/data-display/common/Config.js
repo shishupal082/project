@@ -7,15 +7,17 @@ import Template from "./Template";
 var Config = {};
 
 var basepathname = $$$.basepathname;
-var dataLoadBaseapi = $$$.dataLoadBaseapi;
+var baseApi = $$$.baseApi;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 
 Config.basepathname = basepathname;
-Config.dataLoadBaseapi = dataLoadBaseapi;
+Config.baseApi = baseApi;
 Config.appVersion = $$$.appVersion;
 Config.forceLogin = $$$.forceLogin;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
+Config.appControlDataPath = $$$.appControlDataPath;
+Config.validAppControl = $$$.validAppControl;
 
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlDataApi;
@@ -77,13 +79,13 @@ Config.goBackLinkData = [];
 
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
-apiMapping["app-control-data"] = appControlDataApi;
+apiMapping["appControlData"] = appControlDataApi;
 apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
         if ($S.isBooleanTrue(addBaseUrl)) {
-            return dataLoadBaseapi + apiMapping[key];
+            return baseApi + apiMapping[key];
         } else {
             // used for redirect
             return apiMapping[key];

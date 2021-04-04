@@ -54,7 +54,7 @@ Template["tableField"] = [
         "tag": "div",
         "text": {
             "tag": "table.tbody",
-            "className": "table-striped table-padded-px-5",
+            "className": "table-striped table-bordered table-bordered-dark table-padded-px-5",
             "name": "tableEntry",
             "text": []
         }

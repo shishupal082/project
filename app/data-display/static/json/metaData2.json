@@ -1,5 +1,5 @@
 {
-    "filterIndex": [1,2,4,-1],
+    "filterKeys": ["1","2","4","reset"],
     "preFilter": {
         "1": [
             {

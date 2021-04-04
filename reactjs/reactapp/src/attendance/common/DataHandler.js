@@ -197,14 +197,7 @@ DataHandler.extend({
     },
     getHeadingText: function() {
         var currentAppData = this.getCurrentAppData();
-        var headingText = currentAppData.heading;
-        var name = currentAppData.name;
-        if ($S.isString(headingText) && headingText.length > 0) {
-            return headingText;
-        } else if ($S.isString(name) && name.length > 0) {
-            return name;
-        }
-        return "Query parameter not found";
+        return AppHandler.getHeadingText(currentAppData);
     }
 });
 
