@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 // import App from './account/App';
 // import App from './search/App';
 // import App from './auth/App';
-import App from './monitoring/App';
+import App from './monitoringv2/App';
 // import App from './assets/App';
 // import App from './data-entry/App';
 // import App from './data-display/App';

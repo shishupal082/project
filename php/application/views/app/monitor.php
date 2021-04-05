@@ -14,6 +14,7 @@
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div class="d-none" style="display: none;">
+      <input type="hidden" style="display: none;" name="headingJson" id="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dashboardLink","href":"/dashboard","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dataDisplayLink","href":"/app/data-display","text":"Data Display"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'/>
       <input type="hidden" style="display: none;" name="uploadFileInstruction" id="uploadFileInstruction"
         value="(Supported type: pdf,jpeg,jpg,png,csv and txt, max size < 10MB)"/>
       <input type="hidden" style="display: none;" name="uploadTextInstruction" id="uploadTextInstruction" value=""/>
@@ -47,6 +48,7 @@ GLOBAL.validTeamAppControl = ["appControlDataTeam01",
               "appControlDataTeam04","appControlDataTeam05","appControlDataTeam06"];
 
 
+GLOBAL.headingJson = document.getElementById("headingJson").value;
 GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
 GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
 
@@ -57,8 +59,8 @@ GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 
 </script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script1.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script2.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script3.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-monitoringv2-app/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-monitoringv2-app/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-monitoringv2-app/script3.js"></script>
 </body>
 </html>

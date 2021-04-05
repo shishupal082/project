@@ -139,7 +139,7 @@ function addElAt(arr, index, el) {
     return 0;
 }
 function capitalize(str) {
-    if (isString(str)) {
+    if (isString(str) && str.length > 0) {
         return str.replace(/^./, str[0].toUpperCase());
     }
     return str;
