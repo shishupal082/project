@@ -118,10 +118,6 @@ TemplateHandler.extend({
             }
             generateAvailableData(summaryData[i]);
         }
-        // availableUsers = DataHandler.getValidUsers();
-        // availableTypes = DataHandler.getValidTypes();
-        // availableStations = DataHandler.getValidStation();
-        // availableDevices = DataHandler.getValidDevice();
         var ref = {"sNo": 1};
         var summaryTable = TemplateHandler.getTemplate("summary.data.table");
         TemplateHelper.addItemInTextArray(summaryTable, "summary.data.table.tr", TemplateHandler._generateSummaryFieldTr(availableUsers, userData, DataHandler.getDisplayUsername, ref));
@@ -151,12 +147,6 @@ TemplateHandler.extend({
         var heading = DataHandler.getData("addentry.heading", "");
         var comment = DataHandler.getData("addentry.textarea", "");
         var percentageComplete = DataHandler.getData("addentry.fileUploadPercentage", "");
-        // var filename = "";
-        // var file = DataHandler.getData("addentry.file", "", true);
-
-        // if ($S.isObject(file) && $S.isString(file.name)) {
-        //     filename = file.name;
-        // }
         if ($S.isNumeric(percentageComplete)) {
             percentageComplete += "% Completed";
         }
@@ -198,35 +188,7 @@ TemplateHandler.extend({
             TemplateHelper.addClassTemplate(template, submitBtnName, "btn-primary");
             TemplateHelper.removeClassTemplate(template, submitBtnName, "btn-link disabled");
         }
-    },
-    /*
-    generateFilter: function(data) {
-        var template = TemplateHandler.getTemplate("entrybydatefilter.filter");
-        var selectedStation, selectedType, selectedDevice;
-        selectedStation = DataHandler.getData("selectedStation", "");
-        selectedType = DataHandler.getData("selectedType", "");
-        selectedDevice = DataHandler.getData("selectedDevice", "");
-        var values = {"selectedStation": selectedStation, "selectedType": selectedType, "selectedDevice": selectedDevice};
-        TemplateHelper.updateTemplateValue(template, values);
-        var availableStations, availableTypes, availableDevices, temp, i;
-        availableStations = DataHandler.getAvailableStation();
-        availableTypes = DataHandler.getAvailableTypes();
-        availableDevices = DataHandler.getAvailableDevice();
-        for (i = 0; i < availableStations.length; i++) {
-            temp = {"value": availableStations[i].id, "text": availableStations[i].name, "tag": "option"};
-            TemplateHelper.addItemInTextArray(template, "selectedStation", temp);
-        }
-        for (i = 0; i < availableTypes.length; i++) {
-            temp = {"value": availableTypes[i].id, "text": availableTypes[i].name, "tag": "option"};
-            TemplateHelper.addItemInTextArray(template, "selectedType", temp);
-        }
-        for (i = 0; i < availableDevices.length; i++) {
-            temp = {"value": availableDevices[i].id, "text": availableDevices[i].name, "tag": "option"};
-            TemplateHelper.addItemInTextArray(template, "selectedDevice", temp);
-        }
-        return template;
     }
-    */
 });
 
 TemplateHandler.extend({

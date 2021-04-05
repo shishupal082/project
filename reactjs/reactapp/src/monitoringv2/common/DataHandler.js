@@ -542,6 +542,12 @@ DataHandler.extend({
             return {"id": el, "name": el};
         });
     },
+    getAvailableStation: function() {
+        return this._getAvailableData("stations");
+    },
+    getAvailableDevice: function() {
+        return this._getAvailableData("devices");
+    },
     getDisplayUsername: function(username) {
         return username;
     },
