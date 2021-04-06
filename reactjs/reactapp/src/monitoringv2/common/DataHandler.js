@@ -308,7 +308,8 @@ DataHandler.extend({
     isDisabledPage: function(pageName) {
         var currentSectionData = this.getCurrentAppData({});
         var disabledPages = currentSectionData.disabledPages;
-        if ($S.isArray(disabledPages) && $S.isString(pageName)) {
+        var pages = Config.pages;
+        if ($S.isArray(disabledPages) && $S.isString(pageName) && $S.isString(pages[pageName])) {
             return disabledPages.indexOf(pageName) >= 0;
         }
         return false;
@@ -358,37 +359,32 @@ DataHandler.extend({
         }
         return defaultDateSelectionType;
     },
-    getMetaDataDropdownFields: function() {
+    _generatePageFieldsFromMetaData: function(key) {
         var metaData = DataHandler.getData("metaData", {});
-        var dropdownFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.dropdownFields)) {
-            for (var i = 0; i < metaData.dropdownFields.length; i++) {
-                metaData.dropdownFields[i].toUrl = Config.pages[metaData.dropdownFields[i].name];
-                if (!this.isDisabledPage(metaData.dropdownFields[i].name)) {
-                    dropdownFields.push(metaData.dropdownFields[i]);
+        var pageFields = [];
+        if ($S.isString(key) && $S.isObject(metaData) && $S.isArray(metaData[key])) {
+            for (var i = 0; i < metaData[key].length; i++) {
+                metaData[key][i].toUrl = Config.pages[metaData[key][i].name];
+                if (!this.isDisabledPage(metaData[key][i].name)) {
+                    pageFields.push(metaData[key][i]);
                 }
             }
         }
-        if (dropdownFields.length < 1) {
-            dropdownFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
+        if (pageFields.length < 1 && $S.isArray(Config.defaultPageFields)) {
+            pageFields = Config.defaultPageFields.filter(function(el, i, arr) {
+                if ($S.isObject(el)) {
+                    return !DataHandler.isDisabledPage(el.name);
+                }
+                return false;
+            });
         }
-        return dropdownFields;
+        return pageFields;
+    },
+    getMetaDataDropdownFields: function() {
+        return this._generatePageFieldsFromMetaData("dropdownFields");
     },
     getMetaDataHomeFields: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var homeFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.homeFields)) {
-            for (var i = 0; i < metaData.homeFields.length; i++) {
-                metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
-                if (!this.isDisabledPage(metaData.homeFields[i].name)) {
-                    homeFields.push(metaData.homeFields[i]);
-                }
-            }
-        }
-        if (homeFields.length < 1) {
-            homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
-        }
-        return homeFields;
+        return this._generatePageFieldsFromMetaData("homeFields");
     },
     getMetaDataPageHeading: function(pageName) {
         var pageHeading = "Page Not Found";
