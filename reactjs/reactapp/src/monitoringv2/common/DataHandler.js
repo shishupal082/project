@@ -823,9 +823,6 @@ DataHandler.extend({
             return entryByTypeData;
         }
         var availableDataByType = DataHandler.getValidMetaData(attr);
-        if ($S.isArray(availableDataByType) && availableDataByType.length < 1) {
-            entryByTypeData = [];
-        }
         function isAttrExist(attr) {
             if (!$S.isString(attr)) {
                 return true;
@@ -1128,7 +1125,7 @@ DataHandler.extend({
                                     temp = {};
                                     temp["date"] = jsonData[i][j][0];
                                     temp["type"] = jsonData[i][j][1];
-                                    temp["typeDisplay"] = DataHandler.getDisplayType(temp["typeDisplay"]);
+                                    temp["typeDisplay"] = DataHandler.getDisplayType(temp["type"]);
                                     temp["station"] = jsonData[i][j][2];
                                     temp["stationDisplay"] = DataHandler.getDisplayStation(temp["station"]);
                                     temp["device"] = jsonData[i][j][3];
