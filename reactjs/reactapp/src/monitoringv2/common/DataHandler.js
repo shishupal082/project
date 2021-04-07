@@ -364,6 +364,9 @@ DataHandler.extend({
         var pageFields = [];
         if ($S.isString(key) && $S.isObject(metaData) && $S.isArray(metaData[key])) {
             for (var i = 0; i < metaData[key].length; i++) {
+                if (!$S.isObject(metaData[key][i])) {
+                    continue;
+                }
                 metaData[key][i].toUrl = Config.pages[metaData[key][i].name];
                 if (!this.isDisabledPage(metaData[key][i].name)) {
                     pageFields.push(metaData[key][i]);
@@ -386,7 +389,7 @@ DataHandler.extend({
     getMetaDataHomeFields: function() {
         return this._generatePageFieldsFromMetaData("homeFields");
     },
-    getMetaDataPageHeading: function(pageName) {
+    getMetaDataDropdownText: function(pageName) {
         var pageHeading = "Page Not Found";
         if (this.isDisabledPage(pageName)) {
             return pageHeading;
@@ -404,7 +407,6 @@ DataHandler.extend({
         return pageHeading;
     },
     getMetaDataPageHeadingV2: function() {
-        // var pageHeading = DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
         return "";
     },
     getmetaDataApis: function() {
@@ -717,7 +719,7 @@ DataHandler.extend({
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnResetFilter");
     },
     GetTabDisplayText: function(pageName) {
-        return DataHandler.getMetaDataPageHeading(pageName);
+        return DataHandler.getMetaDataDropdownText(pageName);
     }
 });
 
@@ -835,6 +837,16 @@ DataHandler.extend({
             }
             return false;
         }
+        for (i = 0; i < csvDataByDate.length; i++) {
+            if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
+                for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                    temp2 = csvDataByDate[i].items[j][attr];
+                    if (!isAttrExist(temp2)) {
+                        availableDataByType.push({"id": temp2, "name": this._getDisplayNameFromId(temp2)});
+                    }
+                }
+            }
+        }
         for (m = 0; m < availableDataByType.length; m++) {
             entryByTypeData.push({"fieldName": availableDataByType[m]["id"], "fieldNameDisplay": availableDataByType[m]["name"], "data": []});
             for(k=0; k<selectedDateParameter.length; k++) {
@@ -844,9 +856,6 @@ DataHandler.extend({
                     if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
                         for (j = 0; j < csvDataByDate[i].items.length; j++) {
                             temp2 = csvDataByDate[i].items[j][attr];
-                            if (!isAttrExist(temp2)) {
-                                availableDataByType.push({"id": temp2, "name": this._getDisplayNameFromId(temp2)});
-                            }
                             if (availableDataByType[m]["id"] === temp2) {
                                 if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], csvDataByDate[i].items[j].date)) {
                                     temp.items.push(csvDataByDate[i].items[j]);
@@ -1104,110 +1113,34 @@ DataHandler.extend({
         }
         return selectionOptions;
     },
-    // generateFilterData: function(csvData) {
-    //     if (!$S.isArray(csvData)) {
-    //         return [];
-    //     }
-    //     var metaData = this.getData("metaData", {});
-    //     var filterKeys = [], i, j, temp;
-    //     if ($S.isObject(metaData) && $S.isArray(metaData.filterKeys)) {
-    //         for(i=0; i<metaData.filterKeys.length; i++) {
-    //             if (!$S.isString(metaData.filterKeys[i])) {
-    //                 continue;
-    //             }
-    //             filterKeys.push(metaData.filterKeys[i]);
-    //         }
-    //     }
-    //     var tempFilterOptions = {};
-    //     for(i=0; i<filterKeys.length; i++) {
-    //         tempFilterOptions[filterKeys[i]] = {
-    //             "selectName": filterKeys[i]+"Selected",
-    //             "dataName": filterKeys[i],
-    //             "dataDisplay": filterKeys[i]+"Display",
-    //             "possibleIds": [],
-    //             "filterOption": []
-    //         };
-    //     }
-    //     var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
-    //     for(i=0; i<csvData.length; i++) {
-    //         for(j=0; j<filterKeys.length; j++) {
-    //             temp = csvData[i][tempFilterOptions[filterKeys[j]].dataName];
-    //             if (!$S.isString(temp) || temp.trim().length < 1) {
-    //                 continue;
-    //             }
-    //             temp = temp.trim();
-    //             if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
-    //                 tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
-    //                 tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": csvData[i][tempFilterOptions[filterKeys[j]].dataDisplay]});
-    //             }
-    //         }
-    //     }
-    //     for(temp in tempFilterOptions) {
-    //         tempFilterOptions[temp].filterOption.sort(function(a, b) {
-    //             return a.option > b.option ? 1 : -1;
-    //         });
-    //         if (tempFilterOptions[temp].filterOption.length > 0) {
-    //             $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
-    //         }
-    //     }
-    //     var selectionOptions = [];
-    //     var selectedValue;
-    //     for(i=0; i<filterKeys.length; i++) {
-    //         if (filterKeys[i] === "reset") {
-    //             selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
-    //             continue;
-    //         }
-    //         selectedValue = DataHandler.getData(tempFilterOptions[filterKeys[i]].selectName, "");
-    //         if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
-    //             selectedValue = "";
-    //         }
-    //         if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
-    //             selectionOptions.push({"type": "dropdown",
-    //                 "text": tempFilterOptions[filterKeys[i]].filterOption,
-    //                 "selectName": tempFilterOptions[filterKeys[i]].selectName,
-    //                 "dataName": tempFilterOptions[filterKeys[i]].dataName,
-    //                 "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds,
-    //                 "selectedValue": selectedValue
-    //             });
-    //         }
-    //     }
-    //     return selectionOptions;
-    // },
     generateValidData: function(jsonData) {
         var errorsData = DataHandler.getData("errorsData", []);
         var finalData = [];
         var dataByDate = {};
-        var isValidDate, isValidType, isValidStation, isValidDevice;
+        var temp;
         if ($S.isArray(jsonData)) {
             for (var i = 0; i < jsonData.length; i++) {
                 if ($S.isArray(jsonData[i])) {
                     for (var j = 0; j < jsonData[i].length; j++) {
                         if ($S.isArray(jsonData[i][j]) && jsonData[i][j].length > 1) {
-                            isValidDate = true;
-                            isValidType = true;
-                            isValidStation = true;
-                            isValidDevice = true;
                             if (jsonData[i][j].length >= 4) {
-                                if (!AppHandler.isValidDateStr(jsonData[i][j][0])) {
-                                    isValidType = false;
-                                }
-                                if (isValidDate && isValidType && isValidStation && isValidDevice) {
-                                    var temp = {};
+                                if (AppHandler.isValidDateStr(jsonData[i][j][0])) {
+                                    temp = {};
                                     temp["date"] = jsonData[i][j][0];
                                     temp["type"] = jsonData[i][j][1];
-                                    temp["typeDisplay"] = DataHandler.getDisplayType(jsonData[i][j][1]);
+                                    temp["typeDisplay"] = DataHandler.getDisplayType(temp["typeDisplay"]);
                                     temp["station"] = jsonData[i][j][2];
-                                    temp["stationDisplay"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
+                                    temp["stationDisplay"] = DataHandler.getDisplayStation(temp["station"]);
                                     temp["device"] = jsonData[i][j][3];
-                                    temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
-                                    temp["username"] =this._getUsername(jsonData[i][j][4]);
-                                    temp["usernameDisplay"] = this.getDisplayUsername(temp["username"]);
+                                    temp["deviceDisplay"] = DataHandler.getDisplayDevice(temp["device"]);
                                     if (jsonData[i][j].length >= 5) {
+                                        temp["username"] =this._getUsername(jsonData[i][j][4]);
+                                        temp["usernameDisplay"] = this.getDisplayUsername(temp["username"]);
                                         temp["description"] = jsonData[i][j].slice(4).join();
                                         var textV2 = temp["description"].split(";").map(function(el, i, arr) {
                                             return {"tag": "li", "text": el};
                                         });
-                                        temp["descriptionV2"] = {"tag": "ul", "className": "description-ul", "text": textV2}
+                                        temp["descriptionV2"] = {"tag": "ul", "className": "description-ul", "text": textV2};
                                     }
                                     if (!$S.isArray(dataByDate[temp["date"]])) {
                                         dataByDate[temp["date"]] = [];
