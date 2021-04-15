@@ -2,3 +2,12 @@
     appearance: none;
     background: none;
 }
+.day-SUN {
+    background-color: #ffeeba;
+}
+.day-nh {
+    background-color: #f5c6cb;
+}
+.day-ph {
+    background-color: #c3e6cb;
+}

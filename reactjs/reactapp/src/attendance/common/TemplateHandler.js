@@ -88,7 +88,28 @@ TemplateHandler.extend({
     }
 });
 TemplateHandler.extend({
-    _generateAttendance: function(attendanceData, attendanceOption, userData, dateAttr) {
+    _getTdClassNameFromDateAttr: function(dateAttr, nhList, phList) {
+        var className = "";
+        if (!$S.isArray(nhList)) {
+            nhList = [];
+        }
+        if (!$S.isArray(phList)) {
+            phList = [];
+        }
+        if ($S.isObject(dateAttr)) {
+            if ($S.isString(dateAttr.day)) {
+                className = "day-"+dateAttr.day;
+            }
+            if (nhList.indexOf(dateAttr.dateStr) >= 0) {
+                className += " day-nh";
+            }
+            if (phList.indexOf(dateAttr.dateStr) >= 0) {
+                className += " day-ph";
+            }
+        }
+        return className;
+    },
+    _generateAttendance: function(attendanceData, attendanceOption, userData, dateAttr, nhList, phList) {
         var text = "", temp;
         var selectName = userData.userId + "," + dateAttr.dateStr + "," + userData.username;
         if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userData.userId])) {
@@ -112,9 +133,10 @@ TemplateHandler.extend({
         } else {
             attendanceOption = text;
         }
-        return {"tag": "td", "text": attendanceOption};
+        var className = this._getTdClassNameFromDateAttr(dateAttr, nhList, phList);
+        return {"tag": "td", "className":className, "text": attendanceOption};
     },
-    _generateIndividualTable: function(data, attendanceOption) {
+    _generateIndividualTable: function(data, attendanceOption, nhList, phList) {
         var template2 = this.getTemplate("monthlyTemplate.data.table");
         var template3 = this.getTemplate("monthlyTemplate.data.table.tr");
         var i, j, template3Data;
@@ -123,7 +145,7 @@ TemplateHandler.extend({
         var isValidTemplate = false;
         if ($S.isArray(data.allDate)) {
             for(i=0; i<data.allDate.length; i++) {
-                TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": data.allDate[i].date});
+                TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "className": this._getTdClassNameFromDateAttr(data.allDate[i], nhList, phList), "text": data.allDate[i].date});
             }
             if (userData.length > 0) {
                 isValidTemplate = true;
@@ -133,7 +155,7 @@ TemplateHandler.extend({
                     template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
                     TemplateHelper.updateTemplateText(template3, template3Data);
                     for(i=0; i<data.allDate.length; i++) {
-                        TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i]));
+                        TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i], nhList, phList));
                     }
                     TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
                 }
@@ -144,14 +166,14 @@ TemplateHandler.extend({
         }
         return template2;
     },
-    generateUpdateEntryRenderField: function(renderData, attendanceOption) {
+    generateUpdateEntryRenderField: function(renderData, attendanceOption, nhList, phList) {
         var renderField = this.getTemplate("monthlyTemplate");
         var i, template1, template2;
         var isValidTemplate = false;
         if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
-                template2 = this._generateIndividualTable(renderData[i], attendanceOption);
+                template2 = this._generateIndividualTable(renderData[i], attendanceOption, nhList, phList);
                 if ($S.isArray(template2)) {
                     isValidTemplate = true;
                     TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
@@ -195,7 +217,8 @@ TemplateHandler.extend({
         var template3, headingRow = this.getTemplate("monthlyTemplate.data.table.tr");
         var i, j, k, template3Data, temp, count;
         var headingRowAdded = false, template2Added = false;
-        var summaryFields = DataHandler.getData("metaData", {}).summaryFields;
+        var metaData = DataHandler.getData("metaData", {});
+        var summaryFields = metaData.summaryFields;
         if ($S.isArray(summaryFields)) {
             for(i=0; i<summaryFields.length; i++) {
                 TemplateHelper.addItemInTextArray(headingRow, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": summaryFields[i].text});
@@ -293,15 +316,18 @@ TemplateHandler.extend({
         if (!dataLoadStatus) {
             return this.getTemplate("loading");
         }
-        var attendanceOption = DataHandler.getData("metaData", {}).attendanceOption;
+        var metaData = DataHandler.getData("metaData", {});
+        var attendanceOption = metaData.attendanceOption;
+        var nhList = metaData.nhList;
+        var phList = metaData.phList;
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var renderField;
         switch(currentList2Id) {
             case "entry":
-                renderField = this.generateUpdateEntryRenderField(renderData, "");
+                renderField = this.generateUpdateEntryRenderField(renderData, "", nhList, phList);
             break;
             case "update":
-                renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption);
+                renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption, nhList, phList);
             break;
             case "summary":
                 renderField = this.generateSummaryRenderField(renderData);
