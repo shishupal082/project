@@ -1,5 +1,6 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
+import Template from "./Template";
 
 var requestId = $S.getRequestId();
 
@@ -22,6 +23,11 @@ if (!$S.isString(Config.addTextFilenamePattern)) {
     Config.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-report.csv";
 }
 
+var headingJson = $$$.headingJson;
+try {
+    headingJson = JSON.parse(headingJson);
+    Template["pageHeading"][1].text = headingJson;
+} catch(e) {}
 
 Config.headingPattern = $$$.headingPattern;
 

@@ -7,6 +7,7 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
+import DataHandlerTA from "./common/DataHandlerTA";
 import Config from "./common/Config";
 
 
@@ -88,13 +89,15 @@ class App extends React.Component {
             DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "date-select") {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
+        } else if (value === "addentry.submit") {
+            DataHandlerTA.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         }
     }
     // for input and textarea
     onChange(e) {
-        // var name = e.currentTarget.name;
-        // var value = e.currentTarget.value;
-        // DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
+        var name = e.currentTarget.name;
+        var value = e.currentTarget.value;
+        DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
     }
     // not working ?
     onFormSubmit(e) {
@@ -169,6 +172,9 @@ class App extends React.Component {
         const summary = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.summary}/>);
+        const ta = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.ta}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
@@ -183,6 +189,7 @@ class App extends React.Component {
                 <Route path={pages.entry} component={entry}/>
                 <Route path={pages.update} component={update}/>
                 <Route path={pages.summary} component={summary}/>
+                <Route path={pages.ta} component={ta}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

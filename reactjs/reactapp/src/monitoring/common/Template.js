@@ -1,23 +1,11 @@
-import Config from "./Config";
-
 var Template = {};
-Template["noMatch"] = [{
-    "tag": "center.h5",
-    "text": {
-        "tag": "span",
-        "text": {
-            "tag": "a",
-            "href": Config.pages.home,
-            "text": "Goto Home Page"
-        }
-    }
-}];
+
 Template["noMatch"] = [{
     "tag": "center.h1",
     "text": {
         "tag": "span",
         "className": "badge badge-primary",
-        "text": "No Data Found"
+        "text": "Page not Found"
     }
 }];
 Template["noDataFound"] = [{
@@ -44,56 +32,8 @@ Template["pageHeading"] = [
     },
     {
         "tag": "center",
-        "text": [
-            {
-                "tag": "span",
-                "text": "Login as: "
-            },
-            {
-                "tag": "span.b",
-                "name": "pageHeading.username",
-                "text": ""
-            },
-            {
-                "tag": "span",
-                "text": " |  "
-            },
-            {
-                "tag": "span",
-                "text": {
-                    "tag": "a",
-                    "name": "pageHeading.dashboardLink",
-                    "href": "/dashboard",
-                    "text": "Dashboard"
-                }
-            },
-            {
-                "tag": "span",
-                "text": " |  "
-            },
-            {
-                "tag": "span",
-                "text": {
-                    "tag": "a",
-                    "name": "pageHeading.dataDisplayLink",
-                    "href": "/app/data-display",
-                    "text": "Data Display"
-                }
-            },
-            {
-                "tag": "span",
-                "text": " |  "
-            },
-            {
-                "tag": "span",
-                "text": {
-                    "tag": "a",
-                    "name": "pageHeading.logoutLink",
-                    "href": "/logout",
-                    "text": "Logout"
-                }
-            }
-        ]
+        "name": "heading-link",
+        "text": []
     }
 ];
 Template["home"] = [{

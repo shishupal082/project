@@ -2,10 +2,11 @@ import $S from "../../interface/stack.js";
 // import Config from "./Config";
 import DataHandler from "./DataHandler";
 import DataHandlerV2 from "./DataHandlerV2";
+// import DataHandlerTA from "./DataHandlerTA";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
-// import AppHandler from "../../common/app/common/AppHandler";
+import AppHandler from "../../common/app/common/AppHandler";
 
 var TemplateHandler;
 (function($S){
@@ -23,70 +24,6 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 
 $S.extendObject(TemplateHandler);
 
-TemplateHandler.extend({
-    _generateLink: function(linkType, name) {
-        var text = name;
-        var href = "";
-        var staticData = DataHandler.getData("metaData", {});
-        if ($S.isArray(staticData.footerLink)) {
-            for (var i = 0; i < staticData.footerLink.length; i++) {
-                if (staticData.footerLink[i].name === name) {
-                    href = staticData.footerLink[i].link;
-                    if ($S.isString(staticData.footerLink[i].footerLinkText)) {
-                        text = staticData.footerLink[i].footerLinkText;
-                    }
-                    break;
-                }
-            }
-        }
-        return {"tag": "a", "href": href, "text": text};
-    },
-    generateFooterHtml: function(footerData) {
-        var htmlFields = [], i, j, k;
-        var divField = [{"tag": "div", "name": "tempDiv", "text": []}];
-        var divField2 = [{"tag": "div", "name": "tempDiv2", "text": []}];
-        var tableField = [{"tag": "table.tbody", "className": "", "name": "tempTable", "text": []}];
-        var trField = [{"tag": "tr", "name": "tempTr", "text": []}];
-        var tempDivField, tempDivField2, tempTableField, tempTrField;
-        if ($S.isArray(footerData)) {
-            for(i=0; i<footerData.length; i++) {
-                if (!$S.isArray(footerData[i].entry)) {
-                    continue;
-                }
-                if (footerData[i].type === "div") {
-                    tempDivField = $S.clone(divField);
-                    for (j=0; j<footerData[i].entry.length; j++) {
-                        if ($S.isArray(footerData[i].entry[j])) {
-                            tempDivField2 = $S.clone(divField2);
-                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
-                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(footerData[i].linkType, footerData[i].entry[j][k]));
-                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", {"tag": "a", "text": {"tag": "span", "text": "|"}});
-                            }
-                            TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(footerData[i].linkType, footerData[i].entry[j][k]));
-                            TemplateHelper.addItemInTextArray(tempDivField, "tempDiv", tempDivField2);
-                        }
-                    }
-                    htmlFields.push(tempDivField);
-                } else if (footerData[i].type === "table") {
-                    tempTableField = $S.clone(tableField);
-                    for (j=0; j<footerData[i].entry.length; j++) {
-                        if ($S.isArray(footerData[i].entry[j])) {
-                            tempTrField = $S.clone(trField);
-                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
-                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(footerData[i].linkType, footerData[i].entry[j][k])});
-                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": {"tag": "span", "text": "|"}});
-                            }
-                            TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(footerData[i].linkType, footerData[i].entry[j][k])});
-                            TemplateHelper.addItemInTextArray(tempTableField, "tempTable", tempTrField);
-                        }
-                    }
-                    htmlFields.push(tempTableField);
-                }
-            }
-        }
-        return htmlFields;
-    }
-});
 TemplateHandler.extend({
     _getTdClassNameFromDateAttr: function(dateAttr, nhList, phList) {
         var className = "";
@@ -297,6 +234,46 @@ TemplateHandler.extend({
     }
 });
 TemplateHandler.extend({
+    _getTdField: function(isFirstRow, isLastRow, isFirstCol, tdData) {
+        var tdField = this.getTemplate("taTdField");
+        if (isFirstRow || isLastRow || isFirstCol) {
+            TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
+        }
+        TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
+        return tdField;
+    },
+    _getRowField: function(s_no, rowData, unit, summaryLink) {
+        var trField = this.getTemplate("taRowField");
+        var trData = {};
+        trData["taRowField.s_no"] = s_no;
+        trData["taRowField.name"] = rowData.displayName;
+        trData["taRowField.unit"] = unit;
+        TemplateHelper.updateTemplateText(trField, trData);
+        TemplateHelper.setTemplateAttr(trField, "taRowField.entry.name", "name", rowData.userId);
+        TemplateHelper.setTemplateAttr(trField, "taRowField.summaryLink.href", "href", summaryLink);
+        return trField;
+    },
+    generateTaRenderField: function(renderData, unit, summaryLink) {
+        var renderField = this.getTemplate("taField");
+        if (!$S.isArray(renderData)) {
+            return this.getTemplate("noDataFound");
+        }
+        var trField;
+        if (renderData.length > 0) {
+            trField = this.getTemplate("taRowField");
+            TemplateHelper.updateTemplateText(trField, {"taRowField.entry": {"tag": "b", "text": "Entry"}, "taRowField.summaryLink": ""});
+            TemplateHelper.updateTemplateText(trField, {"submit": ""});
+            TemplateHelper.addItemInTextArray(renderField, "tableEntry", trField);
+            for (var i = 0; i < renderData.length; i++) {
+                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i+1, renderData[i], unit, summaryLink));
+            }
+        } else {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
+    },
+});
+TemplateHandler.extend({
     getTemplate: function(pageName) {
         if (Template[pageName]) {
             return $S.clone(Template[pageName]);
@@ -317,30 +294,41 @@ TemplateHandler.extend({
             return this.getTemplate("loading");
         }
         var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData();
         var attendanceOption = metaData.attendanceOption;
         var nhList = metaData.nhList;
         var phList = metaData.phList;
         var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var unit, summaryLink;
         var renderField;
-        switch(currentList2Id) {
-            case "entry":
-                renderField = this.generateUpdateEntryRenderField(renderData, "", nhList, phList);
-            break;
-            case "update":
-                renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption, nhList, phList);
-            break;
-            case "summary":
-                renderField = this.generateSummaryRenderField(renderData);
-            break;
-            case "home":
-                renderField = this.generateHomeRenderField();
-            break;
-            case "noMatch":
-            default:
-                renderField = this.getTemplate("noMatch");
-            break;
+        if (DataHandlerV2.isPageDisabled(currentList2Id)) {
+            renderField = this.getTemplate("noMatch");
+        } else {
+            switch(currentList2Id) {
+                case "entry":
+                    renderField = this.generateUpdateEntryRenderField(renderData, "", nhList, phList);
+                break;
+                case "update":
+                    renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption, nhList, phList);
+                break;
+                case "summary":
+                    renderField = this.generateSummaryRenderField(renderData);
+                break;
+                case "home":
+                    renderField = this.generateHomeRenderField();
+                break;
+                case "ta":
+                    unit = $S.findParam([metaData, currentAppData], "unit", "");
+                    summaryLink = $S.findParam([metaData, currentAppData], "summaryLink", null);
+                    renderField = this.generateTaRenderField(renderData, unit, summaryLink);
+                break;
+                case "noMatch":
+                default:
+                    renderField = this.getTemplate("noMatch");
+                break;
+            }
         }
-        var footerFieldHtml = this.generateFooterHtml(footerData);
+        var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
         var footerField = this.getTemplate("footerField");
         TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
         TemplateHelper.addItemInTextArray(renderField, "footer", footerField);

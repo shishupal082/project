@@ -40,6 +40,13 @@ DataHandlerV2.extend({
         }
         return list2Data;
     },
+    isPageDisabled: function(pageName) {
+        var metaData = DataHandler.getData("metaData", {});
+        if ($S.isObject(metaData) && $S.isArray(metaData.disabledPages)) {
+            return metaData.disabledPages.indexOf(pageName) >= 0;
+        }
+        return false;
+    },
     _generateResponse: function(response) {
         var finalData = [];
         if ($S.isArray(response)) {

@@ -173,32 +173,24 @@ DataHandler.extend({
         }
         return disableFooter;
     },
-    getFooterData: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var staticFooterData = metaData.footerData;
-        var footerData = [];
-        if ($S.isArray(staticFooterData)) {
-            for (var i = 0; i < staticFooterData.length; i++) {
-                if (!$S.isArray(staticFooterData[i].entry)) {
-                    $S.log("Invalid footer entry: " + staticFooterData[i]);
-                    continue;
-                }
-                if (staticFooterData[i].type === "table-rows") {
-                    footerData.push({"type": "table", "entry": staticFooterData[i].entry});
-                } else if (staticFooterData[i].type === "table-cols") {
-                    footerData.push({"type": "table", "entry": AppHandler.ConvertRowToCol(staticFooterData[i].entry)});
-                } else {
-                    footerData.push({"type": "div", "entry": staticFooterData[i].entry});
-                }
-            }
-        }
-
-        return footerData;
-    },
     getHeadingText: function() {
         var currentAppData = this.getCurrentAppData();
         return AppHandler.getHeadingText(currentAppData);
-    }
+    },
+    getUserInfoById: function(userId) {
+        var userData = DataHandler.getData("userData", []);
+        if (!$S.isString(userId) || userId.length === 0 || !$S.isArray(userData)) {
+            return {};
+        }
+        for (var i = 0; i < userData.length; i++) {
+            if ($S.isObject(userData[i])) {
+                if (userId === userData[i].userId) {
+                    return userData[i];
+                }
+            }
+        }
+        return {};
+    },
 });
 
 DataHandler.extend({
@@ -436,14 +428,28 @@ DataHandler.extend({
         }
         DataHandler.setData("filterOptions", filterOptions);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    OnInputChange: function(appStateCallback, appDataCallback, name, value) {
+        var fieldsData = this.getData("fieldsData", {});
+        if (!$S.isObject(fieldsData)) {
+            fieldsData = {};
+        }
+        if ($S.isString(value)) {
+            value = value.trim();
+        }
+        fieldsData[name] = value;
+        this.setData("fieldsData", fieldsData);
     }
 });
 DataHandler.extend({
-    getRenderData: function(pageName, optionName, fieldName) {
+    getRenderData: function() {
         var dateParameters = this.getData("dateParameters", {});
         var dateSelect = this.getData("date-select", "");
         var currentList2Id = this.getData("currentList2Id", "");
         var result = [];
+        if (DataHandlerV2.isPageDisabled(currentList2Id)) {
+            return result;
+        }
         if ([Config.update].indexOf(currentList2Id) >= 0) {
             dateSelect = "monthly";
         }
@@ -455,6 +461,9 @@ DataHandler.extend({
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions);
         DataHandler.setData("filteredUserData", filteredUserData);
+        if ([Config.ta].indexOf(currentList2Id) >= 0) {
+            return filteredUserData;
+        }
         return result;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
@@ -465,7 +474,7 @@ DataHandler.extend({
         var dateSelection = null;
         if (dataLoadStatus) {
             renderData = this.getRenderData();
-            footerData = DataHandler.getFooterData();
+            footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelection = Config.dateSelection;
         }
@@ -479,6 +488,9 @@ DataHandler.extend({
             list2Data = DataHandlerV2.getList2Data();
             filterOptions = DataHandler.getData("filterOptions", []);
             filterOptions = AppHandler.getFilterData(filterOptions);
+        }
+        if (DataHandlerV2.isPageDisabled(currentList2Id)) {
+            filterOptions = [];
         }
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);

@@ -134,6 +134,98 @@ Template["monthlyTemplate.data.table.tr"] = [
         ]
     }
 ];
+Template["taField"] = [
+    {
+        "tag": "div",
+        "text": {
+            "tag": "table.tbody",
+            "className": "table-striped table-padded-px-5",
+            "name": "tableEntry",
+            "text": []
+        }
+    },
+    {
+        "tag": "div",
+        "name": "submit",
+        "className": "submit-btn",
+        "text": {
+            "tag": "button",
+            "className": "btn btn-primary",
+            "name": "addentry.submit",
+            "value": "addentry.submit",
+            "text": "Submit"
+        }
+    },
+    {
+        "tag": "div",
+        "name": "footer",
+        "text": []
+    }
+];
+Template["taRowField"] = [
+    {
+        "tag": "tr",
+        "className": "",
+        "name": "tableRowEntry",
+        "text": [
+            {
+                "tag": "td",
+                "text": {
+                    "tag": "b",
+                    "name": "taRowField.s_no",
+                    "text": "S.No."
+                }
+            },
+            {
+                "tag": "td",
+                "name": "taRowField.name",
+                "text": {
+                    "tag": "b",
+                    "text": "Name"
+                }
+            },
+            {
+                "tag": "td",
+                "name": "taRowField.unit",
+                "text": {
+                    "tag": "b",
+                    "text": "Unit"
+                }
+            },
+            {
+                "tag": "td",
+                "name": "taRowField.entry",
+                "text": {
+                    "tag": "input",
+                    "name": "taRowField.entry.name",
+                    "defaultValue": ""
+                }
+            },
+            {
+                "tag": "td",
+                "name": "submit",
+                "className": "submit-btn",
+                "text": {
+                    "tag": "button",
+                    "className": "btn btn-primary",
+                    "name": "addentry.submit",
+                    "value": "addentry.submit",
+                    "text": "Save"
+                }
+            },
+            {
+                "tag": "td",
+                "name": "taRowField.summaryLink",
+                "text": {
+                    "tag": "a",
+                    "name": "taRowField.summaryLink.href",
+                    "href": "",
+                    "text": "Summary"
+                }
+            }
+        ]
+    }
+];
 
 Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
 

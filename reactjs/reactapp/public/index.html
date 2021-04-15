@@ -21,12 +21,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App Monitoring</title>
+    <title>React App Attendance</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/monitor/static/css/monitor-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/attendance/static/css/attendance-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -39,12 +39,7 @@
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="d-none" style="display: none;">
-      <input type="hidden" style="display: none;" name="headingJson" id="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dashboardLink","href":"/dashboard","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dataDisplayLink","href":"/app/data-display","text":"Data Display"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'/>
-      <input type="hidden" style="display: none;" name="uploadFileInstruction" id="uploadFileInstruction"
-        value="(Supported type: pdf,jpeg,jpg and png, max size < 10MB)"/>
-      <input type="hidden" style="display: none;" name="uploadTextInstruction" id="uploadTextInstruction" value=""/>
-    </div>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.monitoringLink","href":"/app/monitor/entrybydate","text":"View Data"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dashboardLink","href":"/dashboard","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
     <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
@@ -64,30 +59,22 @@ var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
     loginUserDetailsApi: "/api/get_login_user_details",
-    usernamesApi: "/api/get_related_users_data_v2",
-    appControlDataPath: "/monitor/appControlData/",
+    relatedUsersDataApi: "/api/get_related_users_data_v2",
+    appControlDataPath: "/attendance/json/meta-data-ta/",
     forceLogin: true
 };
 
-// GLOBAL.appControlApi = "/app/monitor/static/data/appControlData.json";
-// GLOBAL.appControlApi = "/monitor/appControlData.json";
-GLOBAL.appControlApi = "/pvt/app-data/monitor/appControlData01.json";
 
-GLOBAL.validAppControl = ["appControlDataTeam01",
-              "appControlDataTeam02","appControlDataTeam03",
-              "appControlDataTeam04","appControlDataTeam050"];
+GLOBAL.validAppControl = ["appControlData01"];
 
-
-GLOBAL.addTextFilenamePattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv";
-GLOBAL.headingPattern = "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team";
+// GLOBAL.appControlDataApi = "/app/data-display/static/json/appControlData.json";
+// GLOBAL.appControlDataApi = "/pvt/app-data/data-display/appControlData.json";
+GLOBAL.appControlApi = "/attendance/json/meta-data-ta/appControlData.json";
 
 GLOBAL.headingJson = document.getElementById("headingJson").value;
-GLOBAL.uploadFileInstruction = document.getElementById("uploadFileInstruction").value;
-GLOBAL.uploadTextInstruction = document.getElementById("uploadTextInstruction").value;
-
 
 GLOBAL.gtag = gtag;
-GLOBAL.appVersion = "v1.0.4";
+GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>

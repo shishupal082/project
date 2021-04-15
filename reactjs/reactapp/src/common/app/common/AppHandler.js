@@ -1,5 +1,6 @@
 import $S from '../../../interface/stack.js';
 import Api from '../../Api.js';
+import TemplateHelper from '../../TemplateHelper.js';
 
 
 var AppHandler;
@@ -599,7 +600,92 @@ AppHandler.extend({
         return reportData;
     }
 });
-
+AppHandler.extend({
+    GetFooterData: function(metaData) {
+        if (!$S.isObject(metaData)) {
+            metaData = {};
+        }
+        var staticFooterData = metaData.footerData;
+        var footerData = [];
+        if ($S.isArray(staticFooterData)) {
+            for (var i = 0; i < staticFooterData.length; i++) {
+                if (!$S.isArray(staticFooterData[i].entry)) {
+                    $S.log("Invalid footer entry: " + staticFooterData[i]);
+                    continue;
+                }
+                if (staticFooterData[i].type === "table-rows") {
+                    footerData.push({"type": "table", "entry": staticFooterData[i].entry});
+                } else if (staticFooterData[i].type === "table-cols") {
+                    footerData.push({"type": "table", "entry": this.ConvertRowToCol(staticFooterData[i].entry)});
+                } else {
+                    footerData.push({"type": "div", "entry": staticFooterData[i].entry});
+                }
+            }
+        }
+        return footerData;
+    },
+    _generateLink: function(metaData, linkType, name) {
+        var text = name;
+        var href = "";
+        if ($S.isObject(metaData) && $S.isArray(metaData.footerLink)) {
+            for (var i = 0; i < metaData.footerLink.length; i++) {
+                if (metaData.footerLink[i].name === name) {
+                    href = metaData.footerLink[i].link;
+                    if ($S.isString(metaData.footerLink[i].footerLinkText)) {
+                        text = metaData.footerLink[i].footerLinkText;
+                    }
+                    break;
+                }
+            }
+        }
+        return {"tag": "a", "href": href, "text": text};
+    },
+    GenerateFooterHtml: function(metaData, footerData) {
+        var htmlFields = [], i, j, k;
+        var divField = [{"tag": "div", "name": "tempDiv", "text": []}];
+        var divField2 = [{"tag": "div", "name": "tempDiv2", "text": []}];
+        var tableField = [{"tag": "table.tbody", "className": "", "name": "tempTable", "text": []}];
+        var trField = [{"tag": "tr", "name": "tempTr", "text": []}];
+        var tempDivField, tempDivField2, tempTableField, tempTrField;
+        if ($S.isArray(footerData)) {
+            for(i=0; i<footerData.length; i++) {
+                if (!$S.isArray(footerData[i].entry)) {
+                    continue;
+                }
+                if (footerData[i].type === "div") {
+                    tempDivField = $S.clone(divField);
+                    for (j=0; j<footerData[i].entry.length; j++) {
+                        if ($S.isArray(footerData[i].entry[j])) {
+                            tempDivField2 = $S.clone(divField2);
+                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
+                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(metaData, footerData[i].linkType, footerData[i].entry[j][k]));
+                                TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", {"tag": "a", "text": {"tag": "span", "text": "|"}});
+                            }
+                            TemplateHelper.addItemInTextArray(tempDivField2, "tempDiv2", this._generateLink(metaData, footerData[i].linkType, footerData[i].entry[j][k]));
+                            TemplateHelper.addItemInTextArray(tempDivField, "tempDiv", tempDivField2);
+                        }
+                    }
+                    htmlFields.push(tempDivField);
+                } else if (footerData[i].type === "table") {
+                    tempTableField = $S.clone(tableField);
+                    for (j=0; j<footerData[i].entry.length; j++) {
+                        if ($S.isArray(footerData[i].entry[j])) {
+                            tempTrField = $S.clone(trField);
+                            for (k = 0; k < footerData[i].entry[j].length-1; k++) {
+                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(metaData, footerData[i].linkType, footerData[i].entry[j][k])});
+                                TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": {"tag": "span", "text": "|"}});
+                            }
+                            TemplateHelper.addItemInTextArray(tempTrField, "tempTr", {"tag": "td", "text": this._generateLink(metaData, footerData[i].linkType, footerData[i].entry[j][k])});
+                            TemplateHelper.addItemInTextArray(tempTableField, "tempTable", tempTrField);
+                        }
+                    }
+                    htmlFields.push(tempTableField);
+                }
+            }
+        }
+        return htmlFields;
+    }
+});
 })($S);
 
 export default AppHandler;

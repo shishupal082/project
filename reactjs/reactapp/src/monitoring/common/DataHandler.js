@@ -306,31 +306,33 @@ DataHandler.extend({
         return sectionId;
     },
     isDisabledPage: function(pageName) {
-        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""), {});
+        var currentSectionData = this.getCurrentAppData({});
         var disabledPages = currentSectionData.disabledPages;
-        if ($S.isArray(disabledPages) && $S.isString(pageName)) {
+        var pages = Config.pages;
+        if ($S.isArray(disabledPages) && $S.isString(pageName) && $S.isString(pages[pageName])) {
             return disabledPages.indexOf(pageName) >= 0;
         }
         return false;
     },
-    getSectionData: function(sectionId) {
+    getCurrentAppData: function(defaultData) {
+        var currentAppId = DataHandler.getData("currentSectionId", "");
         var sectionsData = DataHandler.getData("appControlData", []);
-        var sectionData = {};
-        if ($S.isString(sectionId) && sectionId.length > 0) {
+        var currentAppData = defaultData;
+        if ($S.isString(currentAppId) && currentAppId.length > 0) {
             if ($S.isArray(sectionsData)) {
                 for (var i = 0; i< sectionsData.length; i++) {
-                    if (sectionId === sectionsData[i].id) {
-                        sectionData = sectionsData[i];
+                    if (currentAppId === sectionsData[i].id) {
+                        currentAppData = sectionsData[i];
                         break;
                     }
                 }
             }
         }
-        return sectionData;
+        return currentAppData;
     },
     getSectionName: function() {
         var sectionId = DataHandler.getData("currentSectionId", "");
-        var section = DataHandler.getSectionData(sectionId);
+        var section = DataHandler.getCurrentAppData({});
         if ($S.isObject(section) && $S.isString(section.name)) {
             return section.name;
         }
@@ -338,8 +340,7 @@ DataHandler.extend({
     },
     getDisableFooterStatus: function() {
         var currentPageName = DataHandler.getData("currentPageName", "");
-        var sectionId = DataHandler.getData("currentSectionId", "");
-        var section = DataHandler.getSectionData(sectionId);
+        var section = DataHandler.getCurrentAppData({});
         if (["addentry", "uploadfile"].indexOf(currentPageName) >= 0) {
             return true;
         }
@@ -358,39 +359,37 @@ DataHandler.extend({
         }
         return defaultDateSelectionType;
     },
-    getMetaDataDropdownFields: function() {
+    _generatePageFieldsFromMetaData: function(key) {
         var metaData = DataHandler.getData("metaData", {});
-        var dropdownFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.dropdownFields)) {
-            for (var i = 0; i < metaData.dropdownFields.length; i++) {
-                metaData.dropdownFields[i].toUrl = Config.pages[metaData.dropdownFields[i].name];
-                if (!this.isDisabledPage(metaData.dropdownFields[i].name)) {
-                    dropdownFields.push(metaData.dropdownFields[i]);
+        var pageFields = [];
+        if ($S.isString(key) && $S.isObject(metaData) && $S.isArray(metaData[key])) {
+            for (var i = 0; i < metaData[key].length; i++) {
+                if (!$S.isObject(metaData[key][i])) {
+                    continue;
+                }
+                metaData[key][i].toUrl = Config.pages[metaData[key][i].name];
+                if (!this.isDisabledPage(metaData[key][i].name)) {
+                    pageFields.push(metaData[key][i]);
                 }
             }
         }
-        if (dropdownFields.length < 1) {
-            dropdownFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
+        if (pageFields.length < 1 && $S.isArray(Config.defaultPageFields)) {
+            pageFields = Config.defaultPageFields.filter(function(el, i, arr) {
+                if ($S.isObject(el)) {
+                    return !DataHandler.isDisabledPage(el.name);
+                }
+                return false;
+            });
         }
-        return dropdownFields;
+        return pageFields;
+    },
+    getMetaDataDropdownFields: function() {
+        return this._generatePageFieldsFromMetaData("dropdownFields");
     },
     getMetaDataHomeFields: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var homeFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.homeFields)) {
-            for (var i = 0; i < metaData.homeFields.length; i++) {
-                metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
-                if (!this.isDisabledPage(metaData.homeFields[i].name)) {
-                    homeFields.push(metaData.homeFields[i]);
-                }
-            }
-        }
-        if (homeFields.length < 1) {
-            homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
-        }
-        return homeFields;
+        return this._generatePageFieldsFromMetaData("homeFields");
     },
-    getMetaDataPageHeading: function(pageName) {
+    getMetaDataDropdownText: function(pageName) {
         var pageHeading = "Page Not Found";
         if (this.isDisabledPage(pageName)) {
             return pageHeading;
@@ -408,7 +407,6 @@ DataHandler.extend({
         return pageHeading;
     },
     getMetaDataPageHeadingV2: function() {
-        // var pageHeading = DataHandler.getMetaDataPageHeading(DataHandler.getData("currentPageName", ""));
         return "";
     },
     getmetaDataApis: function() {
@@ -480,16 +478,31 @@ DataHandler.extend({
         }
         return validationData;
     },
+    _getDisplayNameFromId: function(id) {
+        var currentAppData = this.getCurrentAppData({});
+        if ($S.isString(id)) {
+            id = $S.capitalize(id);
+            if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.indicateInvalidId)) {
+                id = id + "*";
+            }
+        }
+        return id;
+    },
     _getDisplayName: function(key, id) {
         var metaData = DataHandler.getData("metaData", {});
         var displayName = id;
+        var isFound = false;
         if ($S.isString(key) && $S.isArray(metaData[key])) {
             for (var i = 0; i < metaData[key].length; i++) {
                 if (metaData[key][i]["id"] === id) {
+                    isFound = true;
                     displayName = DataHandler._getName(metaData[key][i]);
                     break;
                 }
             }
+        }
+        if (!isFound) {
+            displayName = this._getDisplayNameFromId(displayName);
         }
         return displayName;
     },
@@ -504,15 +517,6 @@ DataHandler.extend({
             }
         }
         return users.sort();
-    },
-    getValidTypes: function() {
-        return this._getValidationData("monitoring-types");
-    },
-    getValidStation: function() {
-        return this._getValidationData("stations");
-    },
-    getValidDevice: function() {
-        return this._getValidationData("devices");
     },
     getValidMetaData: function(name) {
         var data = [];
@@ -531,19 +535,16 @@ DataHandler.extend({
         }
         return data;
     },
-    getAvailableTypes: function() {
-        return this._getAvailableData("monitoring-types");
+    getAvailableUsers: function() {
+        return this.getValidUsers().map(function(el, i, arr) {
+            return {"id": el, "name": el};
+        });
     },
     getAvailableStation: function() {
         return this._getAvailableData("stations");
     },
     getAvailableDevice: function() {
         return this._getAvailableData("devices");
-    },
-    getAvailableUsers: function() {
-        return this.getValidUsers().map(function(el, i, arr) {
-            return {"id": el, "name": el};
-        });
     },
     getDisplayUsername: function(username) {
         return username;
@@ -584,7 +585,7 @@ DataHandler.extend({
         return null;
     },
     _fireSectionChange: function(appStateCallback, appDataCallback) {
-        var currentSectionData = DataHandler.getSectionData(DataHandler.getData("currentSectionId", ""));
+        var currentSectionData = DataHandler.getCurrentAppData({});
         DataHandler.setData("currentSectionData", currentSectionData);
         DataHandler.setData("sectionName", DataHandler.getSectionName());
         DataHandler.loadMetaData(appStateCallback, appDataCallback);
@@ -718,7 +719,7 @@ DataHandler.extend({
         DataHandler.setPageData(appStateCallback, appDataCallback, "OnResetFilter");
     },
     GetTabDisplayText: function(pageName) {
-        return DataHandler.getMetaDataPageHeading(pageName);
+        return DataHandler.getMetaDataDropdownText(pageName);
     }
 });
 
@@ -766,9 +767,7 @@ DataHandler.extend({
                 var finalMetaData = {};
                 $S.loadJsonData(null, metaDataApis, function(response, apiName, ajax){
                     if ($S.isObject(response)) {
-                        finalMetaData = Object.assign({}, finalMetaData, response);
-                    } else {
-                        DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
+                        finalMetaData = Object.assign(finalMetaData, response);
                     }
                 }, function() {
                     $S.log("metaData load complete");
@@ -783,6 +782,8 @@ DataHandler.extend({
             }
         } else if(metaDataLoadStatus === "not-started" && loadStatus === "completed") {
             DataHandler.setData("metaDataLoadStatus", "completed");
+            DataHandler.setData("homeFields", DataHandler.getMetaDataHomeFields());
+            DataHandler.setData("dropdownFields", DataHandler.getMetaDataDropdownFields());
             DataHandler.setPageData(appStateCallback, appDataCallback, "loadMetaData2");
         }
     },
@@ -797,8 +798,6 @@ DataHandler.extend({
                 $S.loadJsonData(null, csvDataApis, function(response, apiName, ajax){
                     if ($S.isString(response)) {
                         csvData.push(response);
-                    } else {
-                        DataHandler.addDataInArray("errorsData", {"text": ajax.url, "href": ajax.url});
                     }
                 }, function() {
                     $S.log("csvData load complete");
@@ -819,13 +818,31 @@ DataHandler.extend({
         var entryByTypeData = [];
         var csvDataByDate = DataHandler.getData("csvDataByDate", []);
         var selectedDateParameter = DataHandler.getData("selectedDateParameter", []);
-        var temp, i, j, k, m, dateRange;
-        var availableDataByType = DataHandler.getValidMetaData(attr);
+        var temp, i, j, k, m, n, dateRange, temp2;
         if (!$S.isString(attr) || attr.length < 1) {
             return entryByTypeData;
         }
-        if ($S.isArray(availableDataByType) && availableDataByType.length < 1) {
-            return entryByTypeData;
+        var availableDataByType = DataHandler.getValidMetaData(attr);
+        function isAttrExist(attr) {
+            if (!$S.isString(attr)) {
+                return true;
+            }
+            for (n = 0; n < availableDataByType.length; n++) {
+                if (availableDataByType[n]["id"] === attr) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        for (i = 0; i < csvDataByDate.length; i++) {
+            if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
+                for (j = 0; j < csvDataByDate[i].items.length; j++) {
+                    temp2 = csvDataByDate[i].items[j][attr];
+                    if (!isAttrExist(temp2)) {
+                        availableDataByType.push({"id": temp2, "name": this._getDisplayNameFromId(temp2)});
+                    }
+                }
+            }
         }
         for (m = 0; m < availableDataByType.length; m++) {
             entryByTypeData.push({"fieldName": availableDataByType[m]["id"], "fieldNameDisplay": availableDataByType[m]["name"], "data": []});
@@ -835,7 +852,8 @@ DataHandler.extend({
                 for (i = 0; i < csvDataByDate.length; i++) {
                     if (csvDataByDate[i] && $S.isArray(csvDataByDate[i].items)) {
                         for (j = 0; j < csvDataByDate[i].items.length; j++) {
-                            if (availableDataByType[m]["id"] === csvDataByDate[i].items[j][attr]) {
+                            temp2 = csvDataByDate[i].items[j][attr];
+                            if (availableDataByType[m]["id"] === temp2) {
                                 if (AppHandler.isDateLiesInRange(dateRange[0], dateRange[1], csvDataByDate[i].items[j].date)) {
                                     temp.items.push(csvDataByDate[i].items[j]);
                                 }
@@ -1001,24 +1019,14 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    _fileToJson: function(fileData) {
-        var fileJsonData = [];
-        if ($S.isString(fileData)) {
-            fileData = fileData.split("\n");
-            for(var i=0; i<fileData.length; i++) {
-                fileJsonData.push(fileData[i].split(","));
-            }
-        }
-        return fileJsonData;
-    },
     generatePageData: function(csvData) {
         var jsonData = [];
         if ($S.isArray(csvData)) {
             for (var i = 0; i < csvData.length; i++) {
-                jsonData.push(DataHandler._fileToJson(csvData[i]));
+                jsonData = jsonData.concat(AppHandler.ParseTextData(csvData[i], ",", false, true));
             }
         }
-        return jsonData;
+        return [jsonData];
     },
     _getUsername: function(username) {
         var validUsername = "info";
@@ -1106,65 +1114,30 @@ DataHandler.extend({
         var errorsData = DataHandler.getData("errorsData", []);
         var finalData = [];
         var dataByDate = {};
-        var validTypes = DataHandler.getValidTypes();
-        var validStation = DataHandler.getValidStation();
-        var validDevice = DataHandler.getValidDevice();
-        var isValidDate, isValidType, isValidStation, isValidDevice;
+        var temp;
         if ($S.isArray(jsonData)) {
             for (var i = 0; i < jsonData.length; i++) {
                 if ($S.isArray(jsonData[i])) {
                     for (var j = 0; j < jsonData[i].length; j++) {
                         if ($S.isArray(jsonData[i][j]) && jsonData[i][j].length > 1) {
-                            isValidDate = true;
-                            isValidType = true;
-                            isValidStation = true;
-                            isValidDevice = true;
                             if (jsonData[i][j].length >= 4) {
-                                if (!AppHandler.isValidDateStr(jsonData[i][j][0])) {
-                                    isValidType = false;
-                                    errorsData.push({"reason": "Invalid date", "data": jsonData[i][j].join()});
-                                }
-                                if (isValidType && validTypes.indexOf(jsonData[i][j][1]) < 0) {
-                                    // isValidType = false;
-                                    if (jsonData[i][j].length >= 5) {
-                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid type";
-                                    }
-                                    jsonData[i][j][1] = "info";
-                                    // errorsData.push({"reason": "Invalid type", "data": jsonData[i][j].join()});
-                                }
-                                if (isValidType && validStation.indexOf(jsonData[i][j][2]) < 0) {
-                                    // isValidType = false;
-                                    // errorsData.push({"reason": "Invalid station", "data": jsonData[i][j].join()});
-                                    if (jsonData[i][j].length >= 5) {
-                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid station";
-                                    }
-                                    jsonData[i][j][2] = "info";
-                                }
-                                if (isValidType && validDevice.indexOf(jsonData[i][j][3]) < 0) {
-                                    // isValidType = false;
-                                    // errorsData.push({"reason": "Invalid device", "data": jsonData[i][j].join()});
-                                    if (jsonData[i][j].length >= 5) {
-                                        jsonData[i][j][4] = jsonData[i][j].slice(1).join() + ",Invalid device";
-                                    }
-                                    jsonData[i][j][3] = "info";
-                                }
-                                if (isValidDate && isValidType && isValidStation && isValidDevice) {
-                                    var temp = {};
+                                if (AppHandler.isValidDateStr(jsonData[i][j][0])) {
+                                    temp = {};
                                     temp["date"] = jsonData[i][j][0];
                                     temp["type"] = jsonData[i][j][1];
-                                    temp["typeDisplay"] = DataHandler.getDisplayType(jsonData[i][j][1]);
+                                    temp["typeDisplay"] = DataHandler.getDisplayType(temp["type"]);
                                     temp["station"] = jsonData[i][j][2];
-                                    temp["stationDisplay"] = DataHandler.getDisplayStation(jsonData[i][j][2]);
+                                    temp["stationDisplay"] = DataHandler.getDisplayStation(temp["station"]);
                                     temp["device"] = jsonData[i][j][3];
-                                    temp["deviceDisplay"] = DataHandler.getDisplayDevice(jsonData[i][j][3]);
-                                    temp["username"] =this._getUsername(jsonData[i][j][4]);
-                                    temp["usernameDisplay"] = this.getDisplayUsername(temp["username"]);
+                                    temp["deviceDisplay"] = DataHandler.getDisplayDevice(temp["device"]);
                                     if (jsonData[i][j].length >= 5) {
+                                        temp["username"] =this._getUsername(jsonData[i][j][4]);
+                                        temp["usernameDisplay"] = this.getDisplayUsername(temp["username"]);
                                         temp["description"] = jsonData[i][j].slice(4).join();
                                         var textV2 = temp["description"].split(";").map(function(el, i, arr) {
                                             return {"tag": "li", "text": el};
                                         });
-                                        temp["descriptionV2"] = {"tag": "ul", "className": "description-ul", "text": textV2}
+                                        temp["descriptionV2"] = {"tag": "ul", "className": "description-ul", "text": textV2};
                                     }
                                     if (!$S.isArray(dataByDate[temp["date"]])) {
                                         dataByDate[temp["date"]] = [];
@@ -1172,8 +1145,6 @@ DataHandler.extend({
                                     finalData.push(temp);
                                     dataByDate[temp["date"]].push(temp);
                                 }
-                            } else {
-                                errorsData.push({"reason": "Invalid entry", "data": jsonData[i][j].join()});
                             }
                         }
                     }

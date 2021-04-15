@@ -35,7 +35,8 @@ var pages = {
     "home": basepathname+"/",
     "entry": basepathname+"/entry",
     "update": basepathname+"/update",
-    "summary": basepathname+"/summary"
+    "summary": basepathname+"/summary",
+    "ta": basepathname+"/ta"
 };
 
 Config.pages = pages;
@@ -44,6 +45,7 @@ Config.home = "home";
 Config.entry = "entry";
 Config.update = "update";
 Config.summary = "summary";
+Config.ta = "ta";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = ["entry", "summary"];
