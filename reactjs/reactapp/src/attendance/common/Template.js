@@ -196,9 +196,9 @@ Template["taRowField"] = [
                 "tag": "td",
                 "name": "taRowField.entry",
                 "text": {
-                    "tag": "input",
+                    "tag": "inputV2",
                     "name": "taRowField.entry.name",
-                    "defaultValue": ""
+                    "value": ""
                 }
             },
             {

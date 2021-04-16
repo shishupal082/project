@@ -36,11 +36,8 @@ class App extends CI_Controller {
 		log_message_prod("Post request: ".json_encode($_POST));
 		echo(json_encode($_POST));
 	}
-	public function accounts() {
-		$this->load->view("app/account.php");
-	}
 	public function accountsv2() {
-		$this->load->view("app/accountv2.php");
+		$this->load->view("app/accounts.php");
 	}
 	public function monitorv2() {
 		$this->load->view("app/monitor.php");

@@ -234,21 +234,14 @@ TemplateHandler.extend({
     }
 });
 TemplateHandler.extend({
-    _getTdField: function(isFirstRow, isLastRow, isFirstCol, tdData) {
-        var tdField = this.getTemplate("taTdField");
-        if (isFirstRow || isLastRow || isFirstCol) {
-            TemplateHelper.setTemplateAttr(tdField, "tdData", "tag", "th");
-        }
-        TemplateHelper.updateTemplateText(tdField, {"tdData": tdData});
-        return tdField;
-    },
-    _getRowField: function(s_no, rowData, unit, summaryLink) {
+    _getRowField: function(s_no, rowData, unit, summaryLink, value) {
         var trField = this.getTemplate("taRowField");
         var trData = {};
         trData["taRowField.s_no"] = s_no;
         trData["taRowField.name"] = rowData.displayName;
         trData["taRowField.unit"] = unit;
         TemplateHelper.updateTemplateText(trField, trData);
+        TemplateHelper.setTemplateAttr(trField, "taRowField.entry.name", "value", value);
         TemplateHelper.setTemplateAttr(trField, "taRowField.entry.name", "name", rowData.userId);
         TemplateHelper.setTemplateAttr(trField, "taRowField.summaryLink.href", "href", summaryLink);
         return trField;
@@ -258,14 +251,19 @@ TemplateHandler.extend({
         if (!$S.isArray(renderData)) {
             return this.getTemplate("noDataFound");
         }
-        var trField;
+        var fieldsData = DataHandler.getData("fieldsData", {});
+        var trField, value;
         if (renderData.length > 0) {
             trField = this.getTemplate("taRowField");
             TemplateHelper.updateTemplateText(trField, {"taRowField.entry": {"tag": "b", "text": "Entry"}, "taRowField.summaryLink": ""});
             TemplateHelper.updateTemplateText(trField, {"submit": ""});
             TemplateHelper.addItemInTextArray(renderField, "tableEntry", trField);
             for (var i = 0; i < renderData.length; i++) {
-                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i+1, renderData[i], unit, summaryLink));
+                if (!$S.isString(renderData[i].userId) || renderData[i].userId.length === 0) {
+                    continue;
+                }
+                value = $S.isUndefined(fieldsData[renderData[i].userId]) ? "" : fieldsData[renderData[i].userId];
+                TemplateHelper.addItemInTextArray(renderField, "tableEntry", this._getRowField(i+1, renderData[i], unit, summaryLink, value));
             }
         } else {
             renderField = this.getTemplate("noDataFound");

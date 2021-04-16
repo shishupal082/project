@@ -178,7 +178,7 @@ DataHandler.extend({
         return AppHandler.getHeadingText(currentAppData);
     },
     getUserInfoById: function(userId) {
-        var userData = DataHandler.getData("userData", []);
+        var userData = DataHandler.getData("filteredUserData", []);
         if (!$S.isString(userId) || userId.length === 0 || !$S.isArray(userData)) {
             return {};
         }

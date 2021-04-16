@@ -37,13 +37,13 @@ DataHandlerTA.extend({
         $S.callMethod(callBack);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callBack);
             if (status === "FAILURE") {
                 alert("Error in uploading data, Please Try again.");
             } else {
                 DataHandler.setData("fieldsData", {});
                 alert("Data upload completed.");
             }
+            $S.callMethod(callBack);
         });
     },
     SubmitFormClick: function(appStateCallback, appDataCallback) {

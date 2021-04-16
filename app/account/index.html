@@ -3,37 +3,23 @@
 <head>
     <meta charset="UTF-8" />
     <title>Accounting Application</title>
-    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css">
-    <link rel="stylesheet" type="text/css" href="/app/account/static/css/account.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/account/static/css/account.css"/>
 </head>
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root"><center>Loading...</center></div>
 <script type="text/javascript">
 var GLOBAL = {
     baseapi: "",
-    basepathname: "/app/account",
+    basepathname: "/account",
     backIconUrl: "/static/img/icons/back-32.png"
 };
-
-GLOBAL.userControlDataApi = ["/pvt/app-data/account/userControl.json"];
-
-/**
-
-GLOBAL.pageHeading = {};
-GLOBAL.pageHeading["accountsummarybydate"] = "Account Summary By Date";
-
-GLOBAL.linkHeading = {};
-GLOBAL.linkHeading["accountsummarybydate"] = "Account Summary By Date";
-
-GLOBAL.removeHomeLink = {};
-GLOBAL.removeHomeLink["journal"] = true;
-GLOBAL.removeHomeLink["ledger"] = true;
-GLOBAL.removeHomeLink["currentbal"] = true;
-
-GLOBAL.homeFieldsSequence = ["journalbydate"];
-
-*/
+GLOBAL.gtag = null;
+GLOBAL.appControlApi = ["/pvt/app-data/account/userControlV2.json"];
+GLOBAL.appVersion = "1.0.0";
 window.GLOBAL = GLOBAL;
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-account-app/script1.js"></script>

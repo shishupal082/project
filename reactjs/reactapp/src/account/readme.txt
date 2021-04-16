@@ -40,4 +40,8 @@ Page reload option not available in
     - Ledger
     - Current balance
 
+2021-04-16
+-----------------
+remove folder accountv2 app
+    - actually removed account app folder and rename accountv2 as account
 
