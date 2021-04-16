@@ -37,7 +37,7 @@ class App extends CI_Controller {
 		echo(json_encode($_POST));
 	}
 	public function accountsv2() {
-		$this->load->view("app/accounts.php");
+		$this->load->view("app/account.php");
 	}
 	public function monitorv2() {
 		$this->load->view("app/monitor.php");
