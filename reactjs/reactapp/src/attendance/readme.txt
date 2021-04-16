@@ -7,4 +7,4 @@ Now valid pages:
     - update
     - ta
 ta:
-	- added support for filter validation in upload data
+    - added support for filter validation in upload data

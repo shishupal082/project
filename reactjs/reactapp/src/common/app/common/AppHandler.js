@@ -455,6 +455,22 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
+    getSearchByPattern: function(filterOption, selectedValue) {
+        if (!$S.isString(selectedValue) || selectedValue.length === 0) {
+            return false;
+        }
+        if ($S.isArray(filterOption)) {
+            for(var i=0; i<filterOption.length; i++) {
+                if (!$S.isObject(filterOption[i])) {
+                    continue;
+                }
+                if (filterOption[i].value === selectedValue) {
+                    return $S.isBooleanTrue(filterOption[i].searchByPattern);
+                }
+            }
+        }
+        return false;
+    },
     generateFilterData: function(metaData, csvData, filterSelectedValues) {
         if (!$S.isArray(csvData)) {
             return [];
@@ -546,7 +562,7 @@ AppHandler.extend({
     getFilteredData: function(metaData, csvData, filterOptions) {
         var reportData = csvData;
         var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
-        var temp, temp2, temp3, i, k, l, filterIndex, filterValue;
+        var temp, temp2, temp3, i, k, l, filterIndex, filterValue, searchByPattern;
         var isRevert;
         function _isResultRevert(filterIndex, filterValue) {
             if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
@@ -589,7 +605,8 @@ AppHandler.extend({
             for (i = 0; i < reportData.length; i++) {
                 temp = reportData[i];
                 if ($S.isObject(temp) && $S.isString(temp[filterIndex])) {
-                    temp2 = $S.searchItems([filterValue], [temp[filterIndex]], true, isRevert);
+                    searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue);
+                    temp2 = $S.searchItems([filterValue], [temp[filterIndex]], searchByPattern, isRevert);
                     if (temp2.length > 0) {
                         temp3.push(temp);
                     }
