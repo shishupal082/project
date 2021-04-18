@@ -221,7 +221,7 @@ DataHandler.extend({
     },
     getHeadingText: function() {
         var currentStaticData = this.getCurrentAppData();
-        return AppHandler.getHeadingText(currentStaticData);
+        return AppHandler.getHeadingText(currentStaticData, "App Heading");
     },
     getUserInfoById: function(id) {
         var metaData = this.getData("metaData", {});

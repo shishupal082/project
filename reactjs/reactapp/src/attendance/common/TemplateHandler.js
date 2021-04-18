@@ -272,6 +272,86 @@ TemplateHandler.extend({
     },
 });
 TemplateHandler.extend({
+    _updateTdText: function(tdData) {
+        if (!$S.isObject(tdData)) {
+            return tdData;
+        }
+        var value = $S.findParam([tdData], "value", "");
+        var fieldName = $S.findParam([tdData], "fieldName", "");
+        var text = $S.findParam([tdData], "text", "");
+        var temp = {};
+        if ($S.isObject(text) || $S.isArray(text)) {
+            temp[fieldName] = value;
+            TemplateHelper.updateTemplateText(text, temp);
+            return text;
+        }
+        return value;
+    },
+    _generateTr: function(trData, rowIndex) {
+        var renderFieldTr = this.getTemplate("dbviewField.tr");
+        var i, tdField, temp;
+        if (!$S.isArray(trData)) {
+            trData = [];
+        }
+        if (trData.length > 0) {
+            tdField = {"tag": "td.b", "text": rowIndex+1};
+            TemplateHelper.addItemInTextArray(renderFieldTr, "dbviewField.tr.tds", tdField);
+        }
+        for (i=0; i<trData.length; i++) {
+            temp = this._updateTdText(trData[i]);
+            tdField = {"tag": "td", "text": temp};
+            TemplateHelper.addItemInTextArray(renderFieldTr, "dbviewField.tr.tds", tdField);
+        }
+        return renderFieldTr;
+    },
+    _generateFirstTr: function(trData, rowIndex) {
+        var renderFieldTr = this.getTemplate("dbviewField.tr");
+        var i, tdField, isSortable, sortableValue, tdText, defaultClassName = "btn btn-light", className, additionalClassName;
+        if (!$S.isArray(trData)) {
+            trData = [];
+        }
+        sortableValue = DataHandler.getData("sortable", "");
+        if (trData.length > 0) {
+            tdField = {"tag": "td.b", "text": "S.No."};
+            TemplateHelper.addItemInTextArray(renderFieldTr, "dbviewField.tr.tds", tdField);
+        }
+        for (i=0; i<trData.length; i++) {
+            isSortable = $S.findParam([trData[i]], "isSortable", false);
+            if ($S.isBooleanTrue(isSortable)) {
+                if (sortableValue === trData[i].name) {
+                    additionalClassName = " active";
+                } else {
+                    additionalClassName = "";
+                }
+                className = defaultClassName + additionalClassName;
+                tdText = [{"tag": "button.b", "className": className, "name": "sortable", "value": trData[i].name, "text": AppHandler.getHeadingText(trData[i])}];
+            } else {
+                tdText = [{"tag": "b", "text": AppHandler.getHeadingText(trData[i])}];
+            }
+            tdField = {"tag": "td", "text": tdText};
+            TemplateHelper.addItemInTextArray(renderFieldTr, "dbviewField.tr.tds", tdField);
+        }
+        return renderFieldTr;
+    },
+    generateDbViewRenderField: function(renderData) {
+        var renderField = this.getTemplate("dbviewField");
+        var renderFieldTr, i;
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            for (i = 0; i < renderData.length; i++) {
+                if (i===0) {
+                    renderFieldTr = this._generateFirstTr(renderData[i], i);
+                    TemplateHelper.addItemInTextArray(renderField, "dbviewField.trs", renderFieldTr);
+                }
+                renderFieldTr = this._generateTr(renderData[i], i);
+                TemplateHelper.addItemInTextArray(renderField, "dbviewField.trs", renderFieldTr);
+            }
+        } else {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
+    }
+});
+TemplateHandler.extend({
     getTemplate: function(pageName) {
         if (Template[pageName]) {
             return $S.clone(Template[pageName]);
@@ -319,6 +399,9 @@ TemplateHandler.extend({
                     unit = $S.findParam([metaData, currentAppData], "unit", "");
                     summaryLink = $S.findParam([metaData, currentAppData], "summaryLink", null);
                     renderField = this.generateTaRenderField(renderData, unit, summaryLink);
+                break;
+                case "dbview":
+                    renderField = this.generateDbViewRenderField(renderData);
                 break;
                 case "noMatch":
                 default:

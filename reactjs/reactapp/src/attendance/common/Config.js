@@ -36,7 +36,8 @@ var pages = {
     "entry": basepathname+"/entry",
     "update": basepathname+"/update",
     "summary": basepathname+"/summary",
-    "ta": basepathname+"/ta"
+    "ta": basepathname+"/ta",
+    "dbview": basepathname+"/dbview"
 };
 
 Config.pages = pages;
@@ -46,6 +47,7 @@ Config.entry = "entry";
 Config.update = "update";
 Config.summary = "summary";
 Config.ta = "ta";
+Config.dbview = "dbview";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = ["entry", "summary"];

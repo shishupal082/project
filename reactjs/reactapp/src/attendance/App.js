@@ -7,7 +7,6 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
-import DataHandlerTA from "./common/DataHandlerTA";
 import Config from "./common/Config";
 
 
@@ -90,7 +89,9 @@ class App extends React.Component {
         } else if (name === "date-select") {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         } else if (value === "addentry.submit") {
-            DataHandlerTA.SubmitFormClick(this.appStateCallback, this.appDataCallback);
+            DataHandler.SubmitFormClick(this.appStateCallback, this.appDataCallback);
+        } else if (name === "sortable") {
+            DataHandler.SortClick(this.appStateCallback, this.appDataCallback, name, value);
         }
     }
     // for input and textarea
@@ -175,6 +176,9 @@ class App extends React.Component {
         const ta = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.ta}/>);
+        const dbview = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.dbview}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
@@ -190,6 +194,7 @@ class App extends React.Component {
                 <Route path={pages.update} component={update}/>
                 <Route path={pages.summary} component={summary}/>
                 <Route path={pages.ta} component={ta}/>
+                <Route path={pages.dbview} component={dbview}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

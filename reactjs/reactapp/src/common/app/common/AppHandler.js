@@ -265,6 +265,59 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
+    _generateTableRow: function(rowData, rowIndex) {
+        var result = {}, i, j, temp;
+        if ($S.isArray(rowData) && $S.isArray(rowIndex)) {
+            for (i = 0; i < rowData.length; i++) {
+                if (i < rowIndex.length-1) {
+                    result[rowIndex[i]] = rowData[i];
+                } else {
+                    temp = [];
+                    for(j=i; j<rowData.length; j++) {
+                        if ($S.isString(rowData[j]) && rowData[j].length > 0) {
+                            temp.push(rowData[j]);
+                        }
+                    }
+                    i = j;
+                    result[rowIndex[rowIndex.length-1]] = temp.join(",");
+                }
+            }
+        }
+        return result;
+    },
+    ConvertJsonToTable: function(jsonData, dataIndex) {
+        var maxLength = 0, i, j;
+        if (!$S.isArray(jsonData)) {
+            jsonData = [];
+        }
+        for(i=0; i<jsonData.length; i++) {
+            if ($S.isArray(jsonData[i])) {
+                if (maxLength < jsonData[i].length) {
+                    maxLength = jsonData[i].length;
+                }
+            }
+        }
+        for(i=0; i<jsonData.length; i++) {
+            if ($S.isArray(jsonData[i])) {
+                for(j = jsonData[i].length; j<maxLength; j++) {
+                    jsonData[i].push("");
+                }
+            }
+        }
+        if (!$S.isArray(dataIndex) || dataIndex.length === 0) {
+            dataIndex = [];
+            for (i=0; i<maxLength; i++) {
+                dataIndex.push(i.toString());
+            }
+        }
+        var result = [];
+        for(i=0; i<jsonData.length; i++) {
+            result.push(this._generateTableRow(jsonData[i], dataIndex));
+        }
+        return result;
+    }
+});
+AppHandler.extend({
     GenerateDateBetween2Date: function(startDateStr, endDateStr, startLimit, endLimit) {
         if (!this.isValidDateStr(startDateStr) || !this.isValidDateStr(endDateStr)) {
             return [];
@@ -403,8 +456,8 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
-    getHeadingText: function(currentAppData) {
-        var headingText = "App Heading";
+    getHeadingText: function(currentAppData, defaultValue) {
+        var headingText = defaultValue;
         if (!$S.isObject(currentAppData)) {
             return headingText;
         }
@@ -471,7 +524,7 @@ AppHandler.extend({
         }
         return false;
     },
-    generateFilterData: function(metaData, csvData, filterSelectedValues) {
+    generateFilterDataOld: function(metaData, csvData, filterSelectedValues) {
         if (!$S.isArray(csvData)) {
             return [];
         }
@@ -559,10 +612,117 @@ AppHandler.extend({
         }
         return selectionOptions;
     },
-    getFilteredData: function(metaData, csvData, filterOptions) {
+    generateFilterData: function(metaData, csvData, filterSelectedValues, searchParam) {
+        if (!$S.isArray(csvData)) {
+            return [];
+        }
+        if (!$S.isObject(filterSelectedValues)) {
+            filterSelectedValues = {};
+        }
+        var filterKeys = [], i, j, temp, temp2;
+        var preFilter = {};
+        if ($S.isObject(metaData) && $S.isArray(metaData.filterKeys)) {
+            for(i=0; i<metaData.filterKeys.length; i++) {
+                if (!$S.isString(metaData.filterKeys[i])) {
+                    continue;
+                }
+                filterKeys.push(metaData.filterKeys[i]);
+            }
+            if ($S.isObject(metaData.preFilter)) {
+                preFilter = metaData.preFilter;
+            }
+        }
+        var tempFilterOptions = {};
+        for(i=0; i<filterKeys.length; i++) {
+            tempFilterOptions[filterKeys[i]] = {
+                "selectName": filterKeys[i]+"Selected",
+                "dataKey": filterKeys[i],
+                "dataDisplay": filterKeys[i]+"Display",
+                "possibleIds": [],
+                "filterOption": [],
+                "preFilter": preFilter[filterKeys[i]]
+            };
+        }
+        var resetButton = [{"name": "reset-filter", "value": "reset-filter", "display": "Reset"}];
+        function getFilterText(data, key) {
+            if ($S.isObject(data)) {
+                return data[key];
+            }
+            if ($S.isArray(data)) {
+                for(var i=0; i<data.length; i++) {
+                    if ($S.isObject(data[i]) && $S.isString(data[i][searchParam])) {
+                        if (key === data[i][searchParam]) {
+                            return data[i].value;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        for(i=0; i<csvData.length; i++) {
+            for(j=0; j<filterKeys.length; j++) {
+                temp = getFilterText(csvData[i], tempFilterOptions[filterKeys[j]].dataKey);//csvData[i][tempFilterOptions[filterKeys[j]].dataKey];
+                if (!$S.isString(temp) || temp.trim().length < 1) {
+                    continue;
+                }
+                temp = temp.trim();
+                temp2 = getFilterText(csvData[i], tempFilterOptions[filterKeys[j]].dataDisplay);
+                if (!$S.isString(temp2)) {
+                    temp2 = temp;
+                }
+                if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
+                    tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
+                    tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});//csvData[i][tempFilterOptions[filterKeys[j]].dataDisplay]});
+                }
+            }
+        }
+        for(temp in tempFilterOptions) {
+            tempFilterOptions[temp].filterOption.sort(function(a, b) {
+                return a.option > b.option ? 1 : -1;
+            });
+            if ($S.isArray(tempFilterOptions[temp].preFilter)) {
+                for (i=tempFilterOptions[temp].preFilter.length-1; i>=0; i--) {
+                    if ($S.isObject(tempFilterOptions[temp].preFilter[i]) && $S.isString(tempFilterOptions[temp].preFilter[i].value)) {
+                        if (tempFilterOptions[temp].possibleIds.indexOf(tempFilterOptions[temp].preFilter[i].value) < 0) {
+                            tempFilterOptions[temp].possibleIds.push(tempFilterOptions[temp].preFilter[i].value);
+                        }
+                        $S.addElAt(tempFilterOptions[temp].filterOption, 0, tempFilterOptions[temp].preFilter[i]);
+                    }
+                }
+            } else if (tempFilterOptions[temp].filterOption.length > 0) {
+                $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
+            }
+        }
+        var selectionOptions = [];
+        var selectedValue;
+        for(i=0; i<filterKeys.length; i++) {
+            if (filterKeys[i] === "reset") {
+                selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
+                continue;
+            }
+            selectedValue = filterSelectedValues[tempFilterOptions[filterKeys[i]].selectName];
+            if (!$S.isString(selectedValue)) {
+                selectedValue = "";
+            }
+            if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
+                selectedValue = "";
+            }
+            if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
+                selectionOptions.push({"type": "dropdown",
+                    "text": tempFilterOptions[filterKeys[i]].filterOption,
+                    "selectName": tempFilterOptions[filterKeys[i]].selectName,
+                    "dataKey": tempFilterOptions[filterKeys[i]].dataKey,
+                    "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds,
+                    "selectedValue": selectedValue
+                });
+            }
+        }
+        return selectionOptions;
+    },
+    getFilteredData: function(metaData, csvData, filterOptions, searchParam) {
         var reportData = csvData;
         var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
-        var temp, temp2, temp3, i, k, l, filterIndex, filterValue, searchByPattern;
+        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, searchByPattern;
         var isRevert;
         function _isResultRevert(filterIndex, filterValue) {
             if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
@@ -609,6 +769,20 @@ AppHandler.extend({
                     temp2 = $S.searchItems([filterValue], [temp[filterIndex]], searchByPattern, isRevert);
                     if (temp2.length > 0) {
                         temp3.push(temp);
+                    }
+                } else if ($S.isArray(temp)) {
+                    for (j=0; j<temp.length; j++) {
+                        if (!$S.isObject(temp[j])) {
+                            continue;
+                        }
+                        if (temp[j][searchParam] === filterIndex) {
+                            searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue);
+                            temp2 = $S.searchItems([filterValue], [temp[j]["value"]], searchByPattern, isRevert);
+                            if (temp2.length > 0) {
+                                temp3.push(temp);
+                                break;
+                            }
+                        }
                     }
                 }
             }

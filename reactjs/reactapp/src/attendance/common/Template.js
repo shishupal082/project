@@ -227,6 +227,29 @@ Template["taRowField"] = [
     }
 ];
 
-Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
+Template["dbviewField"] = [
+    {
+        "tag": "div",
+        "text": {
+            "tag": "table.tbody",
+            "className": "table-striped table-padded-px-5",
+            "name": "dbviewField.trs",
+            "text": []
+        }
+    },
+    {
+        "tag": "div",
+        "name": "footer",
+        "text": []
+    }
+];
 
+Template["dbviewField.tr"] = [
+    {
+        "tag": "tr",
+        "name": "dbviewField.tr.tds",
+        "text": []
+    }
+];
+Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
 export default Template;

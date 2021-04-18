@@ -3,8 +3,6 @@ import DataHandler from "./DataHandler";
 import Config from "./Config";
 
 
-// import AppHandler from "../../common/app/common/AppHandler";
-
 var DataHandlerTA;
 
 (function($S){
@@ -23,7 +21,7 @@ DataHandlerTA.fn = DataHandlerTA.prototype = {
 $S.extendObject(DataHandlerTA);
 
 DataHandlerTA.extend({
-    callAddTextApi: function(subject, heading, addTextFilename, finalText, callBack) {
+    callAddTextApi: function(subject, heading, addTextFilename, finalText, callback) {
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
@@ -34,7 +32,7 @@ DataHandlerTA.extend({
         postData["text"] = finalText;
         postData["filename"] = addTextFilename;
         DataHandler.setData("addentry.submitStatus", "in_progress");
-        $S.callMethod(callBack);
+        $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
             if (status === "FAILURE") {
@@ -43,10 +41,10 @@ DataHandlerTA.extend({
                 DataHandler.setData("fieldsData", {});
                 alert("Data upload completed.");
             }
-            $S.callMethod(callBack);
+            $S.callMethod(callback);
         });
     },
-    SubmitFormClick: function(appStateCallback, appDataCallback) {
+    SubmitFormClick: function(callback) {
         var fieldsData = DataHandler.getData("fieldsData", {});
         var appData = DataHandler.getCurrentAppData();
         var filter2Data = {};
@@ -90,7 +88,7 @@ DataHandlerTA.extend({
             alert("Invalid filename.");
         } else if (finalText.length > 0 && isFormOk) {
             this.callAddTextApi(appData.name, filter2Data.option, filename, finalText, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                $S.callMethod(callback);
             });
         } else {
             alert("Atleast one entry required.");

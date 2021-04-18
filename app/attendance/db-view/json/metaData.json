@@ -1,0 +1,85 @@
+{
+    "disabledPages": ["entry","summary","ta", "update"],
+    "dbDataApis": [
+        {
+            "tableName": "table1",
+            "dataIndex": ["id", "data1", "data2"],
+            "apis": ["/app/attendance/db-view/csv/table1.csv"]
+        },
+        {
+            "tableName": "table2",
+            "dataIndex": ["date", "type", "station", "device", "id", "description"],
+            "apis": ["/app/attendance/db-view/csv/main-table.csv"]
+        }
+    ],
+    "resultPattern": [
+        {
+            "tableName": "table1",
+            "name": "id",
+            "heading": "ID"
+        },
+        {
+            "tableName": "table1",
+            "name": "data1",
+            "heading": "Data1"
+        },
+        {
+            "tableName": "table1",
+            "name": "data2",
+            "heading": "Data2",
+            "fieldName": "data1",
+            "text": {"tag": "div","text": {"tag": "b", "name": "data1", "text": ""}}
+        },
+        {
+            "tableName": "table2",
+            "name": "id",
+            "heading": "id"
+        }
+    ],
+    "resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "table1",
+                    "col": "id"
+                },
+                {
+                    "tableName": "table2",
+                    "col": "id"
+                }
+            ]
+        }
+    ],
+    "resultCriteria2": [
+        {
+            "op": "==",
+            "values": [
+                {
+                    "tableName": "table1",
+                    "col": "id"
+                },
+                {
+                    "tableName": "table2",
+                    "col": "id"
+                }
+            ]
+        }
+    ],
+    "resultCriteria3": [
+        {
+            "op": "!=",
+            "values": [
+                {
+                    "tableName": "table1",
+                    "col": "id"
+                },
+                {
+                    "tableName": "table2",
+                    "col": "id"
+                }
+            ]
+        }
+    ]
+}

@@ -27,9 +27,10 @@ $S.extendObject(DataHandlerV2);
 DataHandlerV2.extend({
     getList2Data: function() {
         var metaData = DataHandler.getData("metaData", {});
-        var disabledPages = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.disabledPages)) {
-            disabledPages = metaData.disabledPages;
+        var currentAppData = DataHandler.getCurrentAppData();
+        var disabledPages = $S.findParam([currentAppData, metaData], "disabledPages");
+        if (!$S.isArray(disabledPages)) {
+            disabledPages = [];
         }
         var pages = Config.pages;
         var list2Data = [];
@@ -42,8 +43,10 @@ DataHandlerV2.extend({
     },
     isPageDisabled: function(pageName) {
         var metaData = DataHandler.getData("metaData", {});
-        if ($S.isObject(metaData) && $S.isArray(metaData.disabledPages)) {
-            return metaData.disabledPages.indexOf(pageName) >= 0;
+        var currentAppData = DataHandler.getCurrentAppData();
+        var disabledPages = $S.findParam([currentAppData, metaData], "disabledPages");
+        if ($S.isArray(disabledPages)) {
+            return disabledPages.indexOf(pageName) >= 0;
         }
         return false;
     },
@@ -82,10 +85,6 @@ DataHandlerV2.extend({
         }
         DataHandler.setData("userData", finalUserData);
         DataHandler.setData("filteredUserData", finalUserData);
-        var metaData = DataHandler.getData("metaData", {});
-        var filterDataValues = DataHandler.getFilterDataValues();
-        var filterOptions = AppHandler.generateFilterData(metaData, finalUserData, filterDataValues);
-        DataHandler.setData("filterOptions", filterOptions);
     },
     handleAttendanceDataLoad: function(response) {
         var attendanceData = this._generateResponse(response);
@@ -146,6 +145,13 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("date-select", dateSelect);
+    },
+    generateFilterOptions: function() {
+        var metaData = DataHandler.getData("metaData", {});
+        var userData = DataHandler.getData("userData", []);
+        var filterDataValues = DataHandler.getData("filterValues", {});
+        var filterOptions = AppHandler.generateFilterData(metaData, userData, filterDataValues);
+        DataHandler.setData("filterOptions", filterOptions);
     }
 });
 
