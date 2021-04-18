@@ -52,63 +52,46 @@ DataHandlerV2.extend({
         }
         return false;
     },
-    _generateResponse: function(response) {
-        var finalData = [];
-        if ($S.isArray(response)) {
-            for (var i = 0; i<response.length; i++) {
-                finalData = finalData.concat(AppHandler.ParseTextData(response[i], ",", false, true));
+    getDBViewTableData: function(tableName) {
+        if (!$S.isString(tableName) || tableName.length < 1) {
+            return [];
+        }
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        if ($S.isObject(dbViewData)) {
+            if ($S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
+                return dbViewData[tableName].tableData;
             }
         }
-        return finalData;
+        return [];
     },
-    handleUserDataLoad: function(response) {
-        var userData = this._generateResponse(response);
-        var finalUserData = [];
-        var i, temp;
-        for(i=0; i<userData.length; i++) {
-            if (!$S.isArray(userData[i]) || userData[i].length < 6) {
-                continue;
-            }
-            if (!AppHandler.isValidDateStr(userData[i][0])) {
-                continue;
-            }
-            temp = {};
-            temp["team"] = userData[i][1];
-            temp["teamDisplay"] = temp["team"];
-            temp["station"] = userData[i][2];
-            temp["stationDisplay"] = temp["station"];
-            temp["designation"] = userData[i][3];
-            temp["designationDisplay"] = temp["designation"];
-            temp["userId"] = userData[i][4];
-            temp["username"] = userData[i][5];
-            temp["usernameDisplay"] = temp["username"];
-            temp["displayName"] = temp["username"] + ", " + temp["station"];
-            finalUserData.push(temp);
-        }
+    handleUserDataLoad: function() {
+        var finalUserData = this.getDBViewTableData("table1");
         DataHandler.setData("userData", finalUserData);
         DataHandler.setData("filteredUserData", finalUserData);
     },
-    handleAttendanceDataLoad: function(response) {
-        var attendanceData = this._generateResponse(response);
+    handleAttendanceDataLoad: function() {
+        var attendanceData = this.getDBViewTableData("table2");
         var finalAttendanceData = {};
         var latestAttendanceData = {};
-        var i, temp, temp2;
+        var i, userId, temp, temp2;
+        if (!$S.isArray(attendanceData)) {
+            attendanceData = [];
+        }
         for(i=0; i<attendanceData.length; i++) {
-            if (!$S.isArray(attendanceData[i]) || attendanceData[i].length < 5) {
+            if (!$S.isObject(attendanceData[i])) {
                 continue;
             }
-            if (!AppHandler.isValidDateStr(attendanceData[i][0])) {
+            if (!AppHandler.isValidDateStr(attendanceData[i]["date"])) {
                 continue;
             }
-            temp = {};
-            temp["userId"] = attendanceData[i][1];
-            temp["date"] = attendanceData[i][2];
-            temp["username"] = attendanceData[i][3];
-            temp["type"] = attendanceData[i][4];
-            if (!$S.isObject(finalAttendanceData[temp["userId"]])) {
-                finalAttendanceData[temp["userId"]] = {"attendance": []};
+            userId = attendanceData[i]["userId"];
+            if (!$S.isString(userId) || userId.length < 1) {
+                continue;
             }
-            finalAttendanceData[temp["userId"]].attendance.push(temp);
+            if (!$S.isObject(finalAttendanceData[userId])) {
+                finalAttendanceData[userId] = {"attendance": []};
+            }
+            finalAttendanceData[userId].attendance.push(attendanceData[i]);
         }
         for(var key in finalAttendanceData) {
             if (!$S.isObject(latestAttendanceData[key])) {

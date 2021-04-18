@@ -241,6 +241,18 @@ DataHandlerDBView.extend({
             }
         }
     },
+    handlePageLoadV2: function(callback) {
+        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
+        var status = DataHandler.getDataLoadStatusByKey(keys);
+        if (status === "completed") {
+            status = DataHandler.getData("dbViewDataLoadStatus");
+            if (status === "not-started") {
+                this._loadDBViewData(function() {
+                    $S.callMethod(callback);
+                });
+            }
+        }
+    },
     _sortResult: function(filteredData) {
         var sortableValue = DataHandler.getData("sortableValue", "");
         var sortableName = DataHandler.getData("sortable", "");

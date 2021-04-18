@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="theme-color" content="#000000"/>
+    <title>App Attendance</title>
+    <!-- It will use nodejs to load static file -->
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/attendance/static/css/attendance-style.css"/>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-75647007-1');
+</script>
+
+  </head>
+  <body class="theme-grey">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag": "hr"}]'></div>
+    <div id="root"><center>Loading...</center></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+
+<script type="text/javascript">
+
+var GLOBAL = {
+    baseApi: "",
+    basepathname: "/app/assetsv2",
+    loginUserDetailsApi: "/api/get_login_user_details",
+    relatedUsersDataApi: "/api/get_related_users_data_v2",
+    appControlDataPath: "/attendance/json/meta-data/",
+    forceLogin: false
+};
+
+GLOBAL.disabledPages = ["ta","entry","update","summary"];
+GLOBAL.validAppControl = [];
+
+// GLOBAL.appControlApi = "/app/data-display/static/json/appControlData.json";
+GLOBAL.appControlApi = "/pvt/app-data/assetsv2/appControlData.json";
+// GLOBAL.appControlApi = "/app/attendance/static/json/appControlData.json";
+
+GLOBAL.headingJson = document.getElementById("headingJson").value;
+
+GLOBAL.gtag = gtag;
+GLOBAL.appVersion = "v1.0.0";
+GLOBAL.JQ = $;
+window.GLOBAL = GLOBAL;
+</script>
+
+<script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script3.js"></script>
+
+</body>
+
+</html>

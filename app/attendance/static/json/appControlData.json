@@ -6,9 +6,17 @@
         "saveDataFilename": "attendance.csv",
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
         "metaDataApi": ["/app/attendance/static/json/metaData.json"],
-        "userDataApi": ["/app/attendance/static/csv/user_data.csv"],
-        "attendanceDataApi": [
-            "/app/attendance/static/csv/attendance.csv"
+        "dbDataApis": [
+            {
+                "tableName": "table1",
+                "dataIndex": ["date", "team", "station", "designation", "userId", "name", "description"],
+                "apis": ["/app/attendance/static/csv/user_data.csv"]
+            },
+            {
+                "tableName": "table2",
+                "dataIndex": ["entryTime", "userId", "date", "username", "type", "updatedBy", "description"],
+                "apis": ["/app/attendance/static/csv/attendance.csv"]
+            }
         ]
     }
 ]

@@ -124,12 +124,26 @@ Template["monthlyTemplate.data.table.tr"] = [
             {
                 "tag": "td",
                 "name": "monthlyTemplate.table.tr.s_no",
-                "text": "S.No."
+                "text": {
+                    "tag": "b",
+                    "text": "S.No."
+                }
+            },
+            {
+                "tag": "td",
+                "name": "monthlyTemplate.table.tr.station",
+                "text": {
+                    "tag": "b",
+                    "text": "Station"
+                }
             },
             {
                 "tag": "td",
                 "name": "monthlyTemplate.table.tr.name",
-                "text": "Name"
+                "text": {
+                    "tag": "b",
+                    "text": "Name"
+                }
             }
         ]
     }
@@ -182,6 +196,14 @@ Template["taRowField"] = [
                 "text": {
                     "tag": "b",
                     "text": "Name"
+                }
+            },
+            {
+                "tag": "td",
+                "name": "taRowField.station",
+                "text": {
+                    "tag": "b",
+                    "text": "Station"
                 }
             },
             {

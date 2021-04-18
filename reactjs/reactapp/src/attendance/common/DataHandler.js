@@ -298,72 +298,50 @@ DataHandler.extend({
     },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
-        var request = [], metaDataApi = [], userDataApi = [], attendanceDataApi = [];
+        var request = [], metaDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
             return Config.baseApi + el;
         });
-        if ($S.isArray(appControlData["userDataApi"])) {
-            userDataApi = appControlData["userDataApi"];
-        }
-        userDataApi = userDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el;
-        });
-        if ($S.isArray(appControlData["attendanceDataApi"])) {
-            attendanceDataApi = appControlData["attendanceDataApi"];
-        }
-        attendanceDataApi = attendanceDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el;
-        });
         var metaDataRequest = {
                             "url": metaDataApi,
                             "apiName": "metaData",
                             "requestMethod": Api.getAjaxApiCallMethod()};
-        var userDataRequest = {
-                            "url": userDataApi,
-                            "apiName": "userData",
-                            "requestMethod": Api.getAjaxApiCallMethodV2()};
-        var attendanceDataRequest = {
-                            "url": attendanceDataApi,
-                            "apiName": "attendanceData",
-                            "requestMethod": Api.getAjaxApiCallMethodV2()};
         request.push(metaDataRequest);
-        request.push(userDataRequest);
-        request.push(attendanceDataRequest);
         DataHandler.setData("appRelatedDataLoadStatus", "in_progress");
         DataHandler.setData("dbViewDataLoadStatus", "not-started");
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
         AppHandler.LoadDataFromRequestApi(request, function() {
-            var i;
-            for(i=0; i<request.length; i++) {
+            for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
                     DataHandlerV2.handleMetaDataLoad(request[i].response);
-                    continue;
-                }
-                if (request[i].apiName === "userData") {
-                    DataHandlerV2.handleUserDataLoad(request[i].response);
-                    continue;
-                }
-                if (request[i].apiName === "attendanceData") {
-                    DataHandlerV2.handleAttendanceDataLoad(request[i].response);
-                    continue;
                 }
             }
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            if ([Config.dbview].indexOf(currentList2Id) < 0) {
+            DataHandler.handlePageRouting(callback);
+        });
+    },
+    handlePageRouting: function(callback) {
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        if ([Config.dbview].indexOf(currentList2Id) >= 0) {
+            DataHandlerDBView.handlePageLoad(callback);
+        } else if ([Config.summary, Config.ta, Config.entry, Config.update].indexOf(currentList2Id) >= 0) {
+            DataHandlerDBView.handlePageLoadV2(function() {
+                DataHandlerV2.handleUserDataLoad();
+                DataHandlerV2.handleAttendanceDataLoad();
                 DataHandlerV2.generateFilterOptions();
                 $S.callMethod(callback);
-            } else {
-                DataHandlerDBView.handlePageLoad(callback);
-            }
-        });
+            });
+        } else {
+            $S.callMethod(callback);
+        }
     },
     loadAppControlData: function(callback) {
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
-        AppHandler.loadAppControlData(Config.getApiUrl("appControlData", null, true), Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(response) {
+        var appControlApi = Config.getApiUrl("appControlData", null, true);
+        AppHandler.loadAppControlData(appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(response) {
             DataHandler.setData("appControlData", response);
             $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
@@ -397,11 +375,9 @@ DataHandler.extend({
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         DataHandler.setData("currentList2Id", list2Id);
-        if ([Config.dbview].indexOf(list2Id) >= 0) {
-            DataHandlerDBView.handlePageLoad(function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        }
+        DataHandler.handlePageRouting(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
         if (oldList2Id !== list2Id) {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }

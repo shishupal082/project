@@ -1,5 +1,4 @@
 {
-    "disabledPages": [],
     "filterKeys": ["station", "team", "designation", "username", "reset"],
     "preFilter": {
         "station": [

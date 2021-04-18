@@ -89,7 +89,9 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
                 for (j=0; j<userData.length; j++) {
                     template3 = this.getTemplate("monthlyTemplate.data.table.tr");
-                    template3Data = {"monthlyTemplate.table.tr.s_no": j+1, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                    template3Data = {"monthlyTemplate.table.tr.s_no": j+1,
+                                    "monthlyTemplate.table.tr.name": userData[j].name,
+                                    "monthlyTemplate.table.tr.station": userData[j].station};
                     TemplateHelper.updateTemplateText(template3, template3Data);
                     for(i=0; i<data.allDate.length; i++) {
                         TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", this._generateAttendance(attendanceData, attendanceOption, userData[j], data.allDate[i], nhList, phList));
@@ -163,7 +165,9 @@ TemplateHandler.extend({
             count = 1;
             for (j=0; j<userData.length; j++) {
                 template3 = this.getTemplate("monthlyTemplate.data.table.tr");
-                template3Data = {"monthlyTemplate.table.tr.s_no": count++, "monthlyTemplate.table.tr.name": userData[j].displayName};
+                template3Data = {"monthlyTemplate.table.tr.s_no": count++,
+                            "monthlyTemplate.table.tr.name": userData[j].name,
+                            "monthlyTemplate.table.tr.station": userData[j].station};
                 temp = this._generateAttendanceCount(validDate, attendanceData, userData[j], summaryFields);
                 if ($S.isArray(temp)) {
                     TemplateHelper.updateTemplateText(template3, template3Data);
@@ -238,7 +242,8 @@ TemplateHandler.extend({
         var trField = this.getTemplate("taRowField");
         var trData = {};
         trData["taRowField.s_no"] = s_no;
-        trData["taRowField.name"] = rowData.displayName;
+        trData["taRowField.name"] = rowData.name;
+        trData["taRowField.station"] = rowData.station;
         trData["taRowField.unit"] = unit;
         TemplateHelper.updateTemplateText(trField, trData);
         TemplateHelper.setTemplateAttr(trField, "taRowField.entry.name", "value", value);
