@@ -35,6 +35,38 @@ var syncData = {
         "src": "../static/libs/bootstrap-react-v3.1.1.css",
         "destinationDir": "../reactjs/reactapp/src/libs/"
     },
+    "react2_ftp": {
+        "src": [
+            "../reactjs/reactapp/src/common/app/common/AppHandler.js"
+        ],
+        "destinationDir": [
+            "../../ftp-application/reactjs/reactapp/src/common/app/common/"
+        ]
+    },
+    "react3_ftp": {
+        "src": [
+            "../reactjs/reactapp/src/common/app/components/AppComponent.js",
+            "../reactjs/reactapp/src/common/app/components/AppComponentWrapper.js",
+            "../reactjs/reactapp/src/common/app/components/Errors.js",
+            "../reactjs/reactapp/src/common/app/components/Footer.js",
+            "../reactjs/reactapp/src/common/app/components/Heading.js",
+            "../reactjs/reactapp/src/common/app/components/PageFilter.js",
+            "../reactjs/reactapp/src/common/app/components/PageTab.js",
+            "../reactjs/reactapp/src/common/app/components/SelectFilter.js"
+        ],
+        "destinationDir": [
+            "../../ftp-application/reactjs/reactapp/src/common/app/components/"
+        ]
+    },
+    "react4_ftp": {
+        "src": [
+            "../reactjs/reactapp/src/common/Api.js",
+            "../reactjs/reactapp/src/common/TemplateHelper.js"
+        ],
+        "destinationDir": [
+            "../../ftp-application/reactjs/reactapp/src/common/"
+        ]
+    },
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
         "destinationDir": [
@@ -126,15 +158,6 @@ var syncData = {
         "destinationDir": [
             "../../ftp-application/FTP/src/main/resources/assets/static/img/",
             "../../ftp-application/reactjs/reactapp/public/assets/static/img/"
-        ]
-    },
-    "reactapp-sync": {
-        "src": [
-            "../reactjs/reactapp/src/common/Api.js",
-            "../reactjs/reactapp/src/common/TemplateHelper.js",
-        ],
-        "destinationDir": [
-            "../../ftp-application/reactjs/reactapp/src/common/"
         ]
     }
 };
