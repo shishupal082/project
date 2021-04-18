@@ -668,7 +668,7 @@ AppHandler.extend({
                 temp = temp.trim();
                 temp2 = getFilterText(csvData[i], tempFilterOptions[filterKeys[j]].dataDisplay);
                 if (!$S.isString(temp2)) {
-                    temp2 = temp;
+                    temp2 = $S.capitalize(temp);
                 }
                 if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
                     tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
