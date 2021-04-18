@@ -17,6 +17,7 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
+Config.disabledPages = $$$.disabledPages;
 
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;

@@ -28,7 +28,8 @@ DataHandlerV2.extend({
     getList2Data: function() {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var disabledPages = $S.findParam([currentAppData, metaData], "disabledPages");
+        var configDisabledPage = {"disabledPages": Config.disabledPages};
+        var disabledPages = $S.findParam([currentAppData, metaData, configDisabledPage], "disabledPages");
         if (!$S.isArray(disabledPages)) {
             disabledPages = [];
         }
@@ -44,7 +45,8 @@ DataHandlerV2.extend({
     isPageDisabled: function(pageName) {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var disabledPages = $S.findParam([currentAppData, metaData], "disabledPages");
+        var configDisabledPage = {"disabledPages": Config.disabledPages};
+        var disabledPages = $S.findParam([currentAppData, metaData, configDisabledPage], "disabledPages");
         if ($S.isArray(disabledPages)) {
             return disabledPages.indexOf(pageName) >= 0;
         }
