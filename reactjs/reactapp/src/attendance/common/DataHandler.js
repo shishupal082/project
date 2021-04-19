@@ -270,32 +270,6 @@ DataHandler.extend({
         }
         return api;
     },
-    loadAttendanceData: function(callback) {
-        var appControlData = DataHandler.getCurrentAppData();//{}
-        var request = [], attendanceDataApi = [];
-        if ($S.isArray(appControlData["attendanceDataApi"])) {
-            attendanceDataApi = appControlData["attendanceDataApi"];
-        }
-        attendanceDataApi = attendanceDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el;
-        });
-        var attendanceDataRequest = {
-                            "url": attendanceDataApi,
-                            "apiName": "attendanceData",
-                            "requestMethod": Api.getAjaxApiCallMethodV2()};
-        request.push(attendanceDataRequest);
-        AppHandler.LoadDataFromRequestApi(request, function() {
-            var i;
-            for(i=0; i<request.length; i++) {
-                if (request[i].apiName === "attendanceData") {
-                    DataHandlerV2.handleAttendanceDataLoad(request[i].response);
-                    continue;
-                }
-            }
-            $S.log("attendanceData load complete");
-            $S.callMethod(callback);
-        });
-    },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
         var request = [], metaDataApi = [];
@@ -428,7 +402,8 @@ DataHandler.extend({
             return;
         }
         DataHandlerV2.callAddTextApi(name, value, function() {
-            DataHandler.loadAttendanceData(function() {
+            DataHandler.setData("dbViewDataLoadStatus", "not-started");
+            DataHandler.handlePageRouting(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });

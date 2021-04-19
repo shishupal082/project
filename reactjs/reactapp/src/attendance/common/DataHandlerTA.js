@@ -73,11 +73,11 @@ DataHandlerTA.extend({
             temp3 = [];
             if ($S.isString(value) && value.length > 0) {
                 temp3.push(filter2Data.date);
-                temp3.push(userData.username + " " + filter2Data.option);
+                temp3.push(userData.name + " " + filter2Data.option);
                 temp3.push("dr");
                 temp3.push(value);
                 temp3.push(userId);
-                temp3.push(userData.username + " " + filter2Data.option);
+                temp3.push(userData.name + " " + filter2Data.option);
                 temp3.push("cr");
                 temp3.push(value);
                 temp3.push(filter2Data.value);

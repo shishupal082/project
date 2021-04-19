@@ -48,7 +48,7 @@ TemplateHandler.extend({
     },
     _generateAttendance: function(attendanceData, attendanceOption, userData, dateAttr, nhList, phList) {
         var text = "", temp;
-        var selectName = userData.userId + "," + dateAttr.dateStr + "," + userData.username;
+        var selectName = userData.userId + "," + dateAttr.dateStr + "," + userData.name;
         if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userData.userId])) {
             if ($S.isArray(attendanceData[userData.userId].attendance)) {
                 temp = attendanceData[userData.userId].attendance;
