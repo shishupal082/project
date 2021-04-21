@@ -18,6 +18,43 @@
                 "dataIndex": ["entryTime", "userId", "date", "username", "type", "updatedBy", "description"],
                 "apis": ["/app/attendance/static/csv/attendance.csv"]
             }
-        ]
+        ],
+        "resultPattern": [
+            {
+                "tableName": "table1",
+                "name": "date",
+                "heading": "Date",
+                "isSortable": true
+            },
+            {
+                "tableName": "table1",
+                "name": "team",
+                "heading": "Team",
+                "isSortable": true
+            },
+            {
+                "tableName": "table2",
+                "name": "station",
+                "heading": "Station",
+                "isSortable": true
+            },
+            {
+                "tableName": "table2",
+                "name": "description",
+                "heading": "Description",
+                "word-break": ";",
+                "word-break-tag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ul", "className":"m-0", "text": [], "name": "info"}
+            },
+            {
+                "tableName": "table1",
+                "name": "name",
+                "heading": "Name",
+                "isSortable": true,
+                "fieldName": "name",
+                "text": {"tag": "b", "text": "", "name": "name"}
+            }
+        ],
     }
 ]

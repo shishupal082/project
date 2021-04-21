@@ -370,7 +370,17 @@ TemplateHandler.extend({
         var value = $S.findParam([tdData], "value", "");
         var fieldName = $S.findParam([tdData], "fieldName", "");
         var text = $S.findParam([tdData], "text", "");
+        var wordBreak = $S.findParam([tdData], "word-break", "");
+        var wordBreakTag = $S.findParam([tdData], "word-break-tag", "");
         var temp = {};
+        if ($S.isString(wordBreak) && wordBreak.length > 0) {
+            if (!$S.isString(wordBreakTag) || wordBreakTag.length === 0) {
+                wordBreakTag = "li";
+            }
+            value = value.split(";").map(function(el,i, arr) {
+                return {"tag": wordBreakTag, "text": el};
+            });
+        }
         if ($S.isObject(text) || $S.isArray(text)) {
             temp[fieldName] = value;
             TemplateHelper.updateTemplateText(text, temp);
