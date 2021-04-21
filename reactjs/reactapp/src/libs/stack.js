@@ -1529,7 +1529,7 @@ Stack.extend({
         if (!isString(searchName)) {
             searchName = "";
         }
-        if (isUndefined(defaultValue)) {
+        if (!isNumber(defaultValue)) {
             defaultValue = "";
         }
         if (isArray(requestedArray) && isString(sortableName) && isString(sortableValue) && sortableName.length > 0 && sortableValue.length > 0) {
