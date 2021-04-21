@@ -18,8 +18,10 @@
         ]
     },
     "dateSelect": "monthly",
+    "sortableFields": ["name", "lap"],
     "summaryFields": [
         {
+            "name": "lap",
             "text": "LAP",
             "searchByPattern": false,
             "value": ["LAP"]

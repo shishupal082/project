@@ -73,7 +73,13 @@ TemplateHandler.extend({
         var className = this._getTdClassNameFromDateAttr(dateAttr, nhList, phList);
         return {"tag": "td", "className":className, "text": attendanceOption};
     },
-    _generateIndividualTable: function(data, attendanceOption, nhList, phList) {
+    _updateHeadingRowAttendance: function(headingRow, sortableFields, stationName, name) {
+        var template3Data = {};
+        template3Data[stationName] = this._generateHeading({"name": "station", "text": "Station"}, sortableFields);
+        template3Data[name] = this._generateHeading({"name": "name", "text": "Name"}, sortableFields);
+        TemplateHelper.updateTemplateText(headingRow, template3Data);
+    },
+    _generateIndividualTable: function(data, sortableFields, attendanceOption, nhList, phList) {
         var template2 = this.getTemplate("monthlyTemplate.data.table");
         var template3 = this.getTemplate("monthlyTemplate.data.table.tr");
         var i, j, template3Data;
@@ -81,6 +87,7 @@ TemplateHandler.extend({
         var attendanceData = DataHandler.getData("attendanceData", {});
         var isValidTemplate = false;
         if ($S.isArray(data.allDate)) {
+            this._updateHeadingRowAttendance(template3, sortableFields, "monthlyTemplate.table.tr.station", "monthlyTemplate.table.tr.name");
             for(i=0; i<data.allDate.length; i++) {
                 TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "className": this._getTdClassNameFromDateAttr(data.allDate[i], nhList, phList), "text": data.allDate[i].date});
             }
@@ -105,14 +112,14 @@ TemplateHandler.extend({
         }
         return template2;
     },
-    generateUpdateEntryRenderField: function(renderData, attendanceOption, nhList, phList) {
+    generateUpdateEntryRenderField: function(renderData, sortableFields, attendanceOption, nhList, phList) {
         var renderField = this.getTemplate("monthlyTemplate");
         var i, template1, template2;
         var isValidTemplate = false;
         if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
-                template2 = this._generateIndividualTable(renderData[i], attendanceOption, nhList, phList);
+                template2 = this._generateIndividualTable(renderData[i], sortableFields, attendanceOption, nhList, phList);
                 if ($S.isArray(template2)) {
                     isValidTemplate = true;
                     TemplateHelper.updateTemplateText(template1, {"monthlyTemplate.data.dateHeading": renderData[i].dateHeading});
@@ -126,11 +133,33 @@ TemplateHandler.extend({
         }
         return renderField;
     },
-    _generateAttendanceCount: function(validDate, attendanceData, userData, summaryFields) {
+    _updateTotalCount: function(totalCountObj, key, count) {
+        if (!$S.isObject(totalCountObj) || !$S.isString(key) || key.length < 1) {
+            return;
+        }
+        if ($S.isNumber(totalCountObj[key])) {
+            totalCountObj[key] += count;
+        } else {
+            totalCountObj[key] = count;
+        }
+    },
+    _generateAttendanceCount: function(validDate, attendanceData, userData, summaryFields, defaultCount, totalCountObj) {
         var result = [];
         var i, j;
+        if (!$S.isObject(attendanceData)) {
+            attendanceData = {};
+        }
+        if (!$S.isObject(userData)) {
+            userData = {};
+        }
+        if (!$S.isObject(attendanceData[userData.userId])) {
+            attendanceData[userData.userId] = {};
+        }
+        if ($S.isUndefined(defaultCount)) {
+            defaultCount = "";
+        }
         var attendance = attendanceData[userData.userId].attendance;
-        var type, count, totalCount = 0;
+        var type, count, totalCount = 0, displayCount;
         if ($S.isArray(summaryFields)) {
             for(i=0; i<summaryFields.length; i++) {
                 type = summaryFields[i].text;
@@ -143,7 +172,13 @@ TemplateHandler.extend({
                     }
                 }
                 totalCount += count;
-                result.push({"name": type, "count": count});
+                if (count === 0) {
+                    displayCount = defaultCount;
+                } else {
+                    displayCount = count;
+                    this._updateTotalCount(totalCountObj, type, count);
+                }
+                result.push({"name": type, "count": displayCount});
             }
         }
         if (totalCount <= 0) {
@@ -151,24 +186,74 @@ TemplateHandler.extend({
         }
         return result;
     },
-    _generateIndividualTableV2: function(validDate, userData, attendanceData) {
+    _addTotalRow: function(template2, validDate, summaryFields, defaultCount, totalCountObj) {
+        if (!$S.isArray(validDate) || validDate.length < 1) {
+            return;
+        }
+        if (!$S.isObject(totalCountObj)) {
+            totalCountObj = {};
+        }
+        var template3 = this.getTemplate("monthlyTemplate.data.table.tr");
+        var template3Data = {"monthlyTemplate.table.tr.s_no": "",
+                        "monthlyTemplate.table.tr.station": "",
+                        "monthlyTemplate.table.tr.name": {"tag": "b", "text": "Total"}};
+        var temp = [], type, count, displayCount, i;
+        if ($S.isArray(summaryFields)) {
+            for(i=0; i<summaryFields.length; i++) {
+                type = summaryFields[i].text;
+                count = 0;
+                if ($S.isNumber(totalCountObj[type])) {
+                    count = totalCountObj[type];
+                }
+                if (count === 0) {
+                    displayCount = defaultCount;
+                } else {
+                    displayCount = count;
+                }
+                temp.push({"name": type, "count": displayCount});
+            }
+        }
+        if ($S.isArray(temp)) {
+            TemplateHelper.updateTemplateText(template3, template3Data);
+            for(i=0; i<temp.length; i++) {
+                TemplateHelper.addItemInTextArray(template3, "monthlyTemplate.data.table.tr.tds", {"tag": "td.b", "text": temp[i].count});
+            }
+            TemplateHelper.addItemInTextArray(template2, "monthlyTemplate.data.table.tr", template3);
+        }
+    },
+    _generateHeading: function(data, sortableFields) {
+        if (!$S.isObject(data)) {
+            return "";
+        }
+        var sortableName = DataHandler.getData("sortable", "");
+        var className = "btn btn-light";
+        if ($S.isArray(sortableFields) && $S.isString(data.name) && sortableFields.indexOf(data.name) >= 0) {
+            if (sortableName === data.name) {
+                className += " active";
+            }
+            return {"tag": "button.b", "className": className, "value": data.name, "name": "sortable", "text": data.text};
+        }
+        return {"tag": "b", "text": data.text};
+    },
+    _generateIndividualTableV2: function(validDate, userData, attendanceData, summaryFields, defaultCount, sortableFields) {
         var template2 = this.getTemplate("monthlyTemplate.data.table");
         var template3, headingRow = this.getTemplate("monthlyTemplate.data.table.tr");
         var i, j, k, template3Data, temp, count;
         var headingRowAdded = false, template2Added = false;
-        var metaData = DataHandler.getData("metaData", {});
-        var summaryFields = metaData.summaryFields;
+        var totalCount = {};
         if ($S.isArray(summaryFields)) {
+            this._updateHeadingRowAttendance(headingRow, sortableFields, "monthlyTemplate.table.tr.station", "monthlyTemplate.table.tr.name");
             for(i=0; i<summaryFields.length; i++) {
-                TemplateHelper.addItemInTextArray(headingRow, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text": summaryFields[i].text});
+                TemplateHelper.addItemInTextArray(headingRow, "monthlyTemplate.data.table.tr.tds", {"tag": "td", "text":
+                        this._generateHeading({"name": summaryFields[i].name, "text": summaryFields[i].text}, sortableFields)});
             }
             count = 1;
             for (j=0; j<userData.length; j++) {
                 template3 = this.getTemplate("monthlyTemplate.data.table.tr");
                 template3Data = {"monthlyTemplate.table.tr.s_no": count++,
-                            "monthlyTemplate.table.tr.name": userData[j].name,
-                            "monthlyTemplate.table.tr.station": userData[j].station};
-                temp = this._generateAttendanceCount(validDate, attendanceData, userData[j], summaryFields);
+                            "monthlyTemplate.table.tr.station": userData[j].station,
+                            "monthlyTemplate.table.tr.name": userData[j].name};
+                temp = this._generateAttendanceCount(validDate, attendanceData, userData[j], summaryFields, defaultCount, totalCount);
                 if ($S.isArray(temp)) {
                     TemplateHelper.updateTemplateText(template3, template3Data);
                     for(k=0; k<temp.length; k++) {
@@ -185,23 +270,23 @@ TemplateHandler.extend({
                 }
             }
         }
-        if (!template2Added) {
+        if (template2Added) {
+            this._addTotalRow(template2, validDate, summaryFields, defaultCount, totalCount);
+        } else {
             template2 = null;
         }
         return template2;
     },
-    generateSummaryRenderField: function(renderData) {
-        var userData = DataHandler.getData("filteredUserData", []);
+    generateSummaryRenderField: function(renderData, sortableFields) {
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
+        var userDataV2 = DataHandler.getData("filteredUserData", []);
         var renderField = this.getTemplate("monthlyTemplate");
-        var userDataV2 = [], i;
+        var metaData = DataHandler.getData("metaData", {});
+        var appControlData = DataHandler.getCurrentAppData();
+        var summaryFields = $S.findParam([appControlData, metaData], "summaryFields");
+        var defaultCount = $S.findParam([appControlData, metaData], "defaultCount");
         var validTemplate = false;
-        for (i = 0; i < userData.length; i++) {
-            if ($S.isObject(attendanceData[userData[i].userId]) && attendanceData[userData[i].userId].attendance.length > 0) {
-                userDataV2.push(userData[i]);
-            }
-        }
-        var template1, template2, validDate;
+        var i, template1, template2, validDate;
         if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = renderData.length-1; i>=0 ; i--) {
                 template1 = this.getTemplate("monthlyTemplate.data");
@@ -212,7 +297,7 @@ TemplateHandler.extend({
                         return el.dateStr;
                     });
                 }
-                template2 = this._generateIndividualTableV2(validDate, userDataV2, attendanceData);
+                template2 = this._generateIndividualTableV2(validDate, userDataV2, attendanceData, summaryFields, defaultCount, sortableFields);
                 if ($S.isArray(template2)) {
                     validTemplate = true;
                     TemplateHelper.addItemInTextArray(template1, "monthlyTemplate.data.table", template2);
@@ -251,7 +336,7 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(trField, "taRowField.summaryLink.href", "href", summaryLink);
         return trField;
     },
-    generateTaRenderField: function(renderData, unit, summaryLink) {
+    generateTaRenderField: function(renderData, sortableFields, unit, summaryLink) {
         var renderField = this.getTemplate("taField");
         if (!$S.isArray(renderData)) {
             return this.getTemplate("noDataFound");
@@ -260,6 +345,7 @@ TemplateHandler.extend({
         var trField, value;
         if (renderData.length > 0) {
             trField = this.getTemplate("taRowField");
+            this._updateHeadingRowAttendance(trField, sortableFields, "taRowField.station", "taRowField.name");
             TemplateHelper.updateTemplateText(trField, {"taRowField.entry": {"tag": "b", "text": "Entry"}, "taRowField.summaryLink": ""});
             TemplateHelper.updateTemplateText(trField, {"submit": ""});
             TemplateHelper.addItemInTextArray(renderField, "tableEntry", trField);
@@ -379,8 +465,9 @@ TemplateHandler.extend({
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
         var attendanceOption = metaData.attendanceOption;
-        var nhList = metaData.nhList;
-        var phList = metaData.phList;
+        var nhList = $S.findParam([currentAppData, metaData], "nhList");
+        var phList = $S.findParam([currentAppData, metaData], "phList");
+        var sortableFields = $S.findParam([currentAppData, metaData], "sortableFields");
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var unit, summaryLink;
         var renderField;
@@ -389,13 +476,13 @@ TemplateHandler.extend({
         } else {
             switch(currentList2Id) {
                 case "entry":
-                    renderField = this.generateUpdateEntryRenderField(renderData, "", nhList, phList);
+                    renderField = this.generateUpdateEntryRenderField(renderData, sortableFields, "", nhList, phList);
                 break;
                 case "update":
-                    renderField = this.generateUpdateEntryRenderField(renderData, attendanceOption, nhList, phList);
+                    renderField = this.generateUpdateEntryRenderField(renderData, "", attendanceOption, nhList, phList);
                 break;
                 case "summary":
-                    renderField = this.generateSummaryRenderField(renderData);
+                    renderField = this.generateSummaryRenderField(renderData, sortableFields);
                 break;
                 case "home":
                     renderField = this.generateHomeRenderField();
@@ -403,7 +490,7 @@ TemplateHandler.extend({
                 case "ta":
                     unit = $S.findParam([metaData, currentAppData], "unit", "");
                     summaryLink = $S.findParam([metaData, currentAppData], "summaryLink", null);
-                    renderField = this.generateTaRenderField(renderData, unit, summaryLink);
+                    renderField = this.generateTaRenderField(renderData, sortableFields, unit, summaryLink);
                 break;
                 case "dbview":
                     renderField = this.generateDbViewRenderField(renderData);

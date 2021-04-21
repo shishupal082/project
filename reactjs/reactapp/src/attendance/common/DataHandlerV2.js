@@ -103,7 +103,9 @@ DataHandlerV2.extend({
                     temp2 = finalAttendanceData[key].attendance[i];
                     if (temp.indexOf(temp2.date) < 0) {
                         temp.push(temp2.date);
-                        latestAttendanceData[key].attendance.push(temp2);
+                        if (temp2.type !== "") {
+                            latestAttendanceData[key].attendance.push(temp2);
+                        }
                     }
                 }
             }

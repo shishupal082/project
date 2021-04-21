@@ -109,7 +109,9 @@ DataHandler.extend({
         dataLoadStatusKey.push("appControlDataLoadStatus");
         dataLoadStatusKey.push("appRelatedDataLoadStatus");
         var currentList2Id = this.getData("currentList2Id", "");
-        if (currentList2Id === Config.dbview) {
+        var pageRequiredDataLoadStatus = [Config.entry, Config.update,
+                    Config.summary, Config.ta, Config.dbview];
+        if (pageRequiredDataLoadStatus.indexOf(currentList2Id) >= 0) {
             dataLoadStatusKey.push("dbViewDataLoadStatus");
         }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
@@ -294,10 +296,10 @@ DataHandler.extend({
             }
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            DataHandler.handlePageRouting(callback);
+            DataHandler.handlePageRouting(null, callback);
         });
     },
-    handlePageRouting: function(callback) {
+    handlePageRouting: function(reason, callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         if ([Config.dbview].indexOf(currentList2Id) >= 0) {
             DataHandlerDBView.handlePageLoad(callback);
@@ -308,7 +310,7 @@ DataHandler.extend({
                 DataHandlerV2.generateFilterOptions();
                 $S.callMethod(callback);
             });
-        } else {
+        } else if (reason !== "pageComponentDidMount" || [Config.home].indexOf(currentList2Id) >= 0) {
             $S.callMethod(callback);
         }
     },
@@ -349,7 +351,7 @@ DataHandler.extend({
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         DataHandler.setData("currentList2Id", list2Id);
-        DataHandler.handlePageRouting(function() {
+        DataHandler.handlePageRouting("pageComponentDidMount", function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
         if (oldList2Id !== list2Id) {
@@ -403,7 +405,7 @@ DataHandler.extend({
         }
         DataHandlerV2.callAddTextApi(name, value, function() {
             DataHandler.setData("dbViewDataLoadStatus", "not-started");
-            DataHandler.handlePageRouting(function() {
+            DataHandler.handlePageRouting(null, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -432,17 +434,34 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
+    _generateSummaryUserData: function(renderData, filteredUserData) {
+        if (!$S.isArray(filteredUserData)) {
+            filteredUserData = [];
+        }
+        var attendanceData = DataHandler.getData("latestAttendanceData", {});
+        if (!$S.isObject(attendanceData)) {
+            attendanceData = {};
+        }
+        var userDataV2 = [];
+        var i;
+        for (i = 0; i < filteredUserData.length; i++) {
+            if ($S.isObject(attendanceData[filteredUserData[i].userId]) && attendanceData[filteredUserData[i].userId].attendance.length > 0) {
+                userDataV2.push(filteredUserData[i]);
+            }
+        }
+        return userDataV2;
+    },
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
         if ([Config.dbview].indexOf(currentList2Id) >= 0) {
             return DataHandlerDBView.getRenderData();
         }
-        var dateParameters = this.getData("dateParameters", {});
-        var dateSelect = this.getData("date-select", "");
         var result = [];
         if (DataHandlerV2.isPageDisabled(currentList2Id)) {
             return result;
         }
+        var dateParameters = this.getData("dateParameters", {});
+        var dateSelect = this.getData("date-select", "");
         if ([Config.update].indexOf(currentList2Id) >= 0) {
             dateSelect = "monthly";
         }
@@ -453,10 +472,15 @@ DataHandler.extend({
         var metaData = DataHandler.getData("metaData", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions);
-        DataHandler.setData("filteredUserData", filteredUserData);
         if ([Config.ta].indexOf(currentList2Id) >= 0) {
-            return filteredUserData;
+            result = filteredUserData;
+        } else if ([Config.summary].indexOf(currentList2Id) >= 0) {
+            filteredUserData = this._generateSummaryUserData(result, filteredUserData);
         }
+        if ([Config.update].indexOf(currentList2Id) < 0) {
+            filteredUserData = DataHandlerDBView.SortResult(filteredUserData);
+        }
+        DataHandler.setData("filteredUserData", filteredUserData);
         return result;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
