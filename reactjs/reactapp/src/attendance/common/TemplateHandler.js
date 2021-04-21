@@ -378,7 +378,7 @@ TemplateHandler.extend({
                 wordBreakTag = "li";
             }
             value = value.split(";").map(function(el,i, arr) {
-                return {"tag": wordBreakTag, "text": el};
+                return {"tag": wordBreakTag, "text": el.trim()};
             });
         }
         if ($S.isObject(text) || $S.isArray(text)) {

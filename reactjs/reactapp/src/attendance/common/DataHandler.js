@@ -478,7 +478,9 @@ DataHandler.extend({
             filteredUserData = this._generateSummaryUserData(result, filteredUserData);
         }
         if ([Config.update].indexOf(currentList2Id) < 0) {
-            filteredUserData = DataHandlerDBView.SortResult(filteredUserData);
+            var sortableValue = DataHandler.getData("sortableValue", "");
+            var sortableName = DataHandler.getData("sortable", "");
+            filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName);
         }
         DataHandler.setData("filteredUserData", filteredUserData);
         return result;

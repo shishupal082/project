@@ -253,49 +253,6 @@ DataHandlerDBView.extend({
             }
         }
     },
-    SortResult: function(filteredData) {
-        var sortableValue = DataHandler.getData("sortableValue", "");
-        var sortableName = DataHandler.getData("sortable", "");
-        if ($S.isArray(filteredData) && $S.isString(sortableName) && $S.isString(sortableValue) && sortableName.length > 0 && sortableValue.length > 0) {
-            filteredData = filteredData.sort(function(a, b) {
-                var i, aName = null, bName = null;
-                if ($S.isArray(a)) {
-                    for (i=0; i<a.length; i++) {
-                        if (sortableName === a[i]["name"]) {
-                            aName = a[i]["value"];
-                            break;
-                        }
-                    }
-                } else if ($S.isObject(a)) {
-                    aName = a[sortableName];
-                }
-                if ($S.isArray(b)) {
-                    for (i=0; i<b.length; i++) {
-                        if (sortableName === b[i]["name"]) {
-                            bName = b[i]["value"];
-                            break;
-                        }
-                    }
-                } else if ($S.isObject(b)) {
-                    bName = b[sortableName];
-                }
-                if (sortableValue === "ascending") {
-                    if (aName > bName) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                } else {
-                    if (aName < bName) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                }
-            });
-        }
-        return filteredData;
-    },
     getRenderData: function() {
         var renderData = DataHandler.getData("dbViewDataTable", []);
         var filteredData = [];
@@ -305,7 +262,9 @@ DataHandlerDBView.extend({
         metaDataTemp["preFilter"] = $S.findParam([currentAppData, metaData], "preFilter", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
         filteredData = AppHandler.getFilteredData(metaDataTemp, renderData, filterOptions, "name");
-        filteredData = this.SortResult(filteredData);
+        var sortableValue = DataHandler.getData("sortableValue", "");
+        var sortableName = DataHandler.getData("sortable", "");
+        filteredData = $S.sortResult(filteredData, sortableValue, sortableName, "name");
         return filteredData;
     }
 });

@@ -1525,6 +1525,53 @@ Stack.extend({
         }
         return str;
     },
+    sortResult: function(requestedArray, sortableValue, sortableName, searchName) {
+        if (!isString(searchName)) {
+            searchName = "";
+        }
+        if (isArray(requestedArray) && isString(sortableName) && isString(sortableValue) && sortableName.length > 0 && sortableValue.length > 0) {
+            requestedArray = requestedArray.sort(function(a, b) {
+                var i, aName = null, bName = null, temp;
+                if (isArray(a)) {
+                    for (i=0; i<a.length; i++) {
+                        if (sortableName === a[i][searchName]) {
+                            aName = a[i]["value"];
+                            break;
+                        }
+                    }
+                } else if (isObject(a)) {
+                    aName = a[sortableName];
+                } else {
+                    aName = a;
+                }
+                if (isArray(b)) {
+                    for (i=0; i<b.length; i++) {
+                        if (sortableName === b[i][searchName]) {
+                            bName = b[i]["value"];
+                            break;
+                        }
+                    }
+                } else if (isObject(b)) {
+                    bName = b[sortableName];
+                } else {
+                    bName = b;
+                }
+                if (sortableValue === "ascending") {
+                    temp = aName;
+                    aName = bName;
+                    bName = temp;
+                }
+                if (aName < bName) {
+                    return 1;
+                } else if (aName > bName) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+        }
+        return requestedArray;
+    },
     searchItems: function(searchingPattern, allData, searchByPattern, isRevert, modifier, isTrue) {
         if (!isArray(searchingPattern) || !isArray(allData)) {
             return [];
