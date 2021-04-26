@@ -34,6 +34,16 @@ AppHandler.extend({
         } else {
             window.location.href = url;
         }
+    },
+    LazyReload: function(delay) {
+        // standard value of delay = 250 (i.e. 250ms)
+        if ($S.isNumber(delay)) {
+            window.setTimeout(function() {
+                window.location.reload();
+            }, delay);
+        } else {
+            window.location.reload();
+        }
     }
 });
 AppHandler.extend({

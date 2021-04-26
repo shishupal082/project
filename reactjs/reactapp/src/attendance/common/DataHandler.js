@@ -53,6 +53,9 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 
+//TA page
+keys.push("addentry.submitStatus");
+
 CurrentData.setKeys(keys);
 
 
@@ -60,6 +63,8 @@ CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("appRelatedDataLoadStatus", "not-started");
 CurrentData.setData("dbViewDataLoadStatus", "not-started");
+
+CurrentData.setData("addentry.submitStatus", "not-started");
 
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
 
@@ -191,8 +196,11 @@ DataHandler.extend({
             return {};
         }
         for (var i = 0; i < userData.length; i++) {
-            if ($S.isObject(userData[i])) {
-                if (userId === userData[i].userId) {
+            if (!$S.isArray(userData[i])) {
+                continue;
+            }
+            for (var j=0; j<userData[i].length; j++) {
+                if (userData[i][j].name === "userId" && userId === userData[i][j].value) {
                     return userData[i];
                 }
             }
@@ -299,16 +307,29 @@ DataHandler.extend({
             DataHandler.handlePageRouting(null, callback);
         });
     },
+    loadAttendanceData: function(attendanceDataApis, callback) {
+        DataHandlerDBView.loadAttendanceData(attendanceDataApis, function(attendanceDbTable) {
+            DataHandlerV2.handleAttendanceDataLoad(attendanceDbTable);
+            $S.callMethod(callback);
+        });
+    },
     handlePageRouting: function(reason, callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        if ([Config.dbview].indexOf(currentList2Id) >= 0) {
-            DataHandlerDBView.handlePageLoad(callback);
-        } else if ([Config.summary, Config.ta, Config.entry, Config.update].indexOf(currentList2Id) >= 0) {
-            DataHandlerDBView.handlePageLoadV2(function() {
-                DataHandlerV2.handleUserDataLoad();
-                DataHandlerV2.handleAttendanceDataLoad();
-                DataHandlerV2.generateFilterOptions();
+        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData();
+        var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
+        var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
+        if ([Config.dbview, Config.ta].indexOf(currentList2Id) >= 0) {
+            DataHandlerDBView.handlePageLoad(dbDataApis, function() {
+                DataHandlerDBView.generateFinalTable();
+                DataHandlerDBView.generateFilterOptions();
                 $S.callMethod(callback);
+            });
+        } else if ([Config.summary, Config.entry, Config.update].indexOf(currentList2Id) >= 0) {
+            DataHandlerDBView.handlePageLoad(dbDataApis, function() {
+                DataHandlerDBView.generateFinalTable();
+                DataHandlerDBView.generateFilterOptions();
+                DataHandler.loadAttendanceData(attendanceDataApis, callback);
             });
         } else if (reason !== "pageComponentDidMount" || [Config.home].indexOf(currentList2Id) >= 0) {
             $S.callMethod(callback);
@@ -348,15 +369,14 @@ DataHandler.extend({
         DataHandler.handleAppIdChange();
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
-    PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
-        var oldList2Id = DataHandler.getData("currentList2Id", "");
+    OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         DataHandler.setData("currentList2Id", list2Id);
-        DataHandler.handlePageRouting("pageComponentDidMount", function() {
-            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        });
-        if (oldList2Id !== list2Id) {
-            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        }
+        DataHandlerDBView.generateFinalTable();
+        DataHandlerDBView.generateFilterOptions();
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
+        DataHandler.setData("currentList2Id", list2Id);
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         DataHandler.setData("date-select", value);
@@ -403,9 +423,11 @@ DataHandler.extend({
         if (name === "") {
             return;
         }
+        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData();
+        var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
         DataHandlerV2.callAddTextApi(name, value, function() {
-            DataHandler.setData("dbViewDataLoadStatus", "not-started");
-            DataHandler.handlePageRouting(null, function() {
+            DataHandler.loadAttendanceData(attendanceDataApis, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -434,7 +456,7 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    _generateSummaryUserData: function(renderData, filteredUserData) {
+    _generateSummaryUserData: function(filteredUserData) {
         if (!$S.isArray(filteredUserData)) {
             filteredUserData = [];
         }
@@ -443,47 +465,69 @@ DataHandler.extend({
             attendanceData = {};
         }
         var userDataV2 = [];
-        var i;
+        var i, userId;
         for (i = 0; i < filteredUserData.length; i++) {
-            if ($S.isObject(attendanceData[filteredUserData[i].userId]) && attendanceData[filteredUserData[i].userId].attendance.length > 0) {
-                userDataV2.push(filteredUserData[i]);
+            userId = $S.findParam(filteredUserData[i], "userId", "", "name", "value");
+            if ($S.isObject(attendanceData[userId])) {
+                if ($S.isArray(attendanceData[userId].attendance) && attendanceData[userId].attendance.length > 0) {
+                    userDataV2.push(filteredUserData[i]);
+                }
             }
         }
         return userDataV2;
     },
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
-        if ([Config.dbview].indexOf(currentList2Id) >= 0) {
-            return DataHandlerDBView.getRenderData();
+        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home].indexOf(currentList2Id) >= 0) {
+            return [];
         }
-        var result = [];
-        if (DataHandlerV2.isPageDisabled(currentList2Id)) {
-            return result;
-        }
+        var dateArray = [];
         var dateParameters = this.getData("dateParameters", {});
         var dateSelect = this.getData("date-select", "");
         if ([Config.update].indexOf(currentList2Id) >= 0) {
             dateSelect = "monthly";
         }
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
-            result = dateParameters[dateSelect];
+            dateArray = dateParameters[dateSelect];
         }
-        var userData = DataHandler.getData("userData", []);
+        var renderData = [], i;
+        var userData = DataHandler.getData("dbViewDataTable", []);
         var metaData = DataHandler.getData("metaData", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions);
-        if ([Config.ta].indexOf(currentList2Id) >= 0) {
-            result = filteredUserData;
-        } else if ([Config.summary].indexOf(currentList2Id) >= 0) {
-            filteredUserData = this._generateSummaryUserData(result, filteredUserData);
-        }
-        if ([Config.update].indexOf(currentList2Id) < 0) {
-            var sortableValue = DataHandler.getData("sortableValue", "");
-            var sortableName = DataHandler.getData("sortable", "");
-            filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName);
-        }
+        var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions, "name");
         DataHandler.setData("filteredUserData", filteredUserData);
-        return result;
+        var sortableValue = DataHandler.getData("sortableValue", "");
+        var sortableName = DataHandler.getData("sortable", "");
+        if ([Config.summary].indexOf(currentList2Id) >= 0) {
+            filteredUserData = this._generateSummaryUserData(filteredUserData);
+        } else {
+            filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName, "name");
+        }
+        switch(currentList2Id) {
+            case "entry":
+            case "update":
+                renderData = DataHandlerV2.GenerateEntryUpdateUserData(dateArray, filteredUserData, currentList2Id);
+            break;
+            case "summary":
+                renderData = DataHandlerV2.GenerateSummaryUserData(dateArray, filteredUserData);
+                for (i=0; i<renderData.length; i++) {
+                    if ($S.isObject(renderData[i]) && $S.isArray(renderData[i].tableData)) {
+                        renderData[i].tableData = $S.sortResult(renderData[i].tableData, sortableValue, sortableName, "name");
+                    }
+                }
+                DataHandlerV2.GenerateSummaryTotalRow(renderData);
+            break;
+            case "ta":
+                renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
+            break;
+            case "dbview":
+                renderData = [{"tableData": filteredUserData}];
+            break;
+            default:
+                renderData = [];
+            break;
+        }
+        return renderData;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var dataLoadStatus = this.isDataLoadComplete();
@@ -497,8 +541,8 @@ DataHandler.extend({
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelection = Config.dateSelection;
         }
-        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData);
         var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, currentList2Id);
         var list2Data = [];
         var list1Data = [];
         var filterOptions = [];

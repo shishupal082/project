@@ -120,6 +120,7 @@ class App extends React.Component {
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, sectionId);
         } else if (name === "list2-select") {
             this.gotoPage(value);
+            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
         } else if (filterNames.indexOf(name) >= 0) {
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         } else {

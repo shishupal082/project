@@ -71,10 +71,10 @@ Template["home.link"] = [
         }
     }
 ];
-Template["monthlyTemplate"] = [
+Template["dbviewField"] = [
     {
         "tag": "div",
-        "name": "monthlyTemplate.data",
+        "name": "tableView",
         "text": []
     },
     {
@@ -83,14 +83,14 @@ Template["monthlyTemplate"] = [
         "text": []
     }
 ];
-Template["monthlyTemplate.data"] = [
+Template["tableView"] = [
     {
         "tag": "div.h3",
         "text": [
             {
                 "tag": "span",
                 "className": "badge badge-primary",
-                "name": "monthlyTemplate.data.dateHeading",
+                "name": "tableHeading",
                 "text": ""
             },
             {
@@ -104,168 +104,26 @@ Template["monthlyTemplate.data"] = [
     },
     {
         "tag": "div",
-        "name": "monthlyTemplate.data.table",
+        "name": "tableData",
+        "text":[]
+    }
+];
+Template["tableData"] = [
+    {
+        "tag": "table.tbody",
+        "className": "table-striped table-padded-px-5",
+        "name": "tableData.table.tr",
         "text": []
     }
 ];
-Template["monthlyTemplate.data.table"] = [
+Template["tableDataV2"] = [
     {
         "tag": "table.tbody",
         "className": "table-bordered table-bordered-dark table-striped table-padded-px-5",
-        "name": "monthlyTemplate.data.table.tr",
+        "name": "tableData.table.tr",
         "text": []
     }
 ];
-Template["monthlyTemplate.data.table.tr"] = [
-    {
-        "tag": "tr",
-        "name": "monthlyTemplate.data.table.tr.tds",
-        "text": [
-            {
-                "tag": "td",
-                "name": "monthlyTemplate.table.tr.s_no",
-                "text": {
-                    "tag": "b",
-                    "text": "S.No."
-                }
-            },
-            {
-                "tag": "td",
-                "name": "monthlyTemplate.table.tr.station",
-                "text": {
-                    "tag": "b",
-                    "text": "Station"
-                }
-            },
-            {
-                "tag": "td",
-                "name": "monthlyTemplate.table.tr.name",
-                "text": {
-                    "tag": "b",
-                    "text": "Name"
-                }
-            }
-        ]
-    }
-];
-Template["taField"] = [
-    {
-        "tag": "div",
-        "text": {
-            "tag": "table.tbody",
-            "className": "table-striped table-padded-px-5",
-            "name": "tableEntry",
-            "text": []
-        }
-    },
-    {
-        "tag": "div",
-        "name": "submit",
-        "className": "submit-btn",
-        "text": {
-            "tag": "button",
-            "className": "btn btn-primary",
-            "name": "addentry.submit",
-            "value": "addentry.submit",
-            "text": "Submit"
-        }
-    },
-    {
-        "tag": "div",
-        "name": "footer",
-        "text": []
-    }
-];
-Template["taRowField"] = [
-    {
-        "tag": "tr",
-        "className": "",
-        "name": "tableRowEntry",
-        "text": [
-            {
-                "tag": "td",
-                "text": {
-                    "tag": "b",
-                    "name": "taRowField.s_no",
-                    "text": "S.No."
-                }
-            },
-            {
-                "tag": "td",
-                "name": "taRowField.name",
-                "text": {
-                    "tag": "b",
-                    "text": "Name"
-                }
-            },
-            {
-                "tag": "td",
-                "name": "taRowField.station",
-                "text": {
-                    "tag": "b",
-                    "text": "Station"
-                }
-            },
-            {
-                "tag": "td",
-                "name": "taRowField.unit",
-                "text": {
-                    "tag": "b",
-                    "text": "Unit"
-                }
-            },
-            {
-                "tag": "td",
-                "name": "taRowField.entry",
-                "text": {
-                    "tag": "inputV2",
-                    "name": "taRowField.entry.name",
-                    "value": ""
-                }
-            },
-            {
-                "tag": "td",
-                "name": "submit",
-                "className": "submit-btn",
-                "text": {
-                    "tag": "button",
-                    "className": "btn btn-primary",
-                    "name": "addentry.submit",
-                    "value": "addentry.submit",
-                    "text": "Save"
-                }
-            },
-            {
-                "tag": "td",
-                "name": "taRowField.summaryLink",
-                "text": {
-                    "tag": "a",
-                    "name": "taRowField.summaryLink.href",
-                    "href": "",
-                    "text": "Summary"
-                }
-            }
-        ]
-    }
-];
-
-Template["dbviewField"] = [
-    {
-        "tag": "div",
-        "text": {
-            "tag": "table.tbody",
-            "className": "table-striped table-padded-px-5",
-            "name": "dbviewField.trs",
-            "text": []
-        }
-    },
-    {
-        "tag": "div",
-        "name": "footer",
-        "text": []
-    }
-];
-
 Template["dbviewField.tr"] = [
     {
         "tag": "tr",

@@ -37,6 +37,7 @@ DataHandlerDBView.extend({
     },
     _getTableData: function(request) {
         var tableData = {}, i, temp;
+        var wordBreak;
         if ($S.isArray(request)) {
             for(i=0; i<request.length; i++) {
                 if (!$S.isObject(request[i])) {
@@ -51,14 +52,16 @@ DataHandlerDBView.extend({
                 tableData[request[i].apiName]["tableName"] = request[i].apiName;
                 tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
+                tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
                 tableData[request[i].apiName]["response"] = request[i].response;
             }
         }
         for(var key in tableData) {
             tableData[key]["responseJson"] = [];
+            wordBreak = tableData[key].wordBreak;
             if ($S.isArray(tableData[key]["response"])) {
                 for(i=0; i<tableData[key]["response"].length; i++) {
-                    temp = AppHandler.ParseTextData(tableData[key]["response"][i], ",", false, true);
+                    temp = AppHandler.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
                     tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
                 }
             }
@@ -66,10 +69,7 @@ DataHandlerDBView.extend({
         }
         return tableData;
     },
-    _loadDBViewData: function(callback) {
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis");
+    _loadDBViewData: function(dbDataApis, callback) {
         var request = [], i, temp, urls;
         if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
             for(i=0; i<dbDataApis.length; i++) {
@@ -91,31 +91,35 @@ DataHandlerDBView.extend({
                 temp = {};
                 temp.apis = dbDataApis[i].apis;
                 temp.dataIndex = dbDataApis[i].dataIndex;
+                temp.wordBreak = dbDataApis[i].wordBreak;
                 temp.apiName = dbDataApis[i].tableName.trim();
                 temp.requestMethod = Api.getAjaxApiCallMethodV2();
                 temp.url = urls;
                 request.push(temp);
             }
         }
-        var tableData = {};
         if (request.length < 1) {
-            DataHandler.setData("dbViewDataLoadStatus", "completed");
             $S.callMethod(callback);
         } else {
-            DataHandler.setData("dbViewDataLoadStatus", "in-progress");
             AppHandler.LoadDataFromRequestApi(request, function() {
-                DataHandler.setData("dbViewDataLoadStatus", "completed");
-                tableData = DataHandlerDBView._getTableData(request);
-                DataHandler.setData("dbViewData", tableData);
-                $S.callMethod(callback);
+                if ($S.isFunction(callback)) {
+                    callback(request);
+                }
             });
         }
     },
-    _generateFinalTable: function() {
+    generateFinalTable: function() {
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
         var dbViewData = DataHandler.getData("dbViewData", {});
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var resultPattern = $S.findParam([currentAppData, metaData], "resultPattern", []);
+        currentList2Id = $S.capitalize(currentList2Id);
+        var resultPatternKey = "resultPattern";
+        var validResultPatternKeys = $S.findParam([currentAppData, metaData], "resultPatternKeys", []);
+        if ($S.isArray(validResultPatternKeys) && validResultPatternKeys.indexOf("resultPattern"+currentList2Id) >= 0) {
+            resultPatternKey = "resultPattern"+currentList2Id;
+        }
+        var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         var resultCriteria = $S.findParam([currentAppData, metaData], "resultCriteria", []);
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
@@ -227,45 +231,31 @@ DataHandlerDBView.extend({
         }
         DataHandler.setData("dbViewDataTable", finalTable);
     },
-    handlePageLoad: function(callback) {
+    handlePageLoad: function(dbDataApis, callback) {
         var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
+        var tableData;
         if (status === "completed") {
             status = DataHandler.getData("dbViewDataLoadStatus");
             if (status === "not-started") {
-                this._loadDBViewData(function() {
-                    DataHandlerDBView._generateFinalTable();
-                    DataHandlerDBView.generateFilterOptions();
+                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                this._loadDBViewData(dbDataApis, function(request) {
+                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    tableData = DataHandlerDBView._getTableData(request);
+                    DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
             }
         }
     },
-    handlePageLoadV2: function(callback) {
-        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
-        var status = DataHandler.getDataLoadStatusByKey(keys);
-        if (status === "completed") {
-            status = DataHandler.getData("dbViewDataLoadStatus");
-            if (status === "not-started") {
-                this._loadDBViewData(function() {
-                    $S.callMethod(callback);
-                });
+    loadAttendanceData: function(attendanceDataApis, callback) {
+        var tableData;
+        DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
+            tableData = DataHandlerDBView._getTableData(request);
+            if ($S.isFunction(callback)) {
+                callback(tableData);
             }
-        }
-    },
-    getRenderData: function() {
-        var renderData = DataHandler.getData("dbViewDataTable", []);
-        var filteredData = [];
-        var metaDataTemp = {"filterKeys": [], "preFilter": {}};
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        metaDataTemp["preFilter"] = $S.findParam([currentAppData, metaData], "preFilter", {});
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        filteredData = AppHandler.getFilteredData(metaDataTemp, renderData, filterOptions, "name");
-        var sortableValue = DataHandler.getData("sortableValue", "");
-        var sortableName = DataHandler.getData("sortable", "");
-        filteredData = $S.sortResult(filteredData, sortableValue, sortableName, "name");
-        return filteredData;
+        });
     }
 });
 DataHandlerDBView.extend({

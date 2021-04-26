@@ -10,6 +10,7 @@
         "dbDataApis": [
             {
                 "tableName": "table1",
+                "wordBreak": ",",
                 "dataIndex": ["date", "team", "station", "designation", "userId", "name", "description"],
                 "apis": ["/app/attendance/static/csv/user_data.csv"]
             },
@@ -42,8 +43,8 @@
                 "tableName": "table2",
                 "name": "description",
                 "heading": "Description",
-                "word-break": ";",
-                "word-break-tag": "li",
+                "wordBreak": ";",
+                "wordBreakTag": "li",
                 "fieldName": "info",
                 "text": {"tag": "ul", "className":"m-0", "text": [], "name": "info"}
             },
@@ -56,5 +57,6 @@
                 "text": {"tag": "b", "text": "", "name": "name"}
             }
         ],
+        "linkText": {"entry": "Entry Page"}
     }
 ]

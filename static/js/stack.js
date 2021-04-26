@@ -1632,18 +1632,28 @@ Stack.extend({
         });
         return result;
     },
-    findParam: function(availableItems, key, defaultValue) {
+    findParam: function(availableItems, key, defaultValue, searchName, searchValue) {
         if (!isArray(availableItems)) {
             return defaultValue;
         }
         if (!isString(key) || key.length === 0) {
             return defaultValue;
         }
+        if (!isString(searchName) || searchName.length === 0) {
+            searchName = "";
+        }
+        if (!isString(searchValue) || searchValue.length === 0) {
+            searchValue = "";
+        }
         for (var i = 0; i < availableItems.length; i++) {
             if (!isObject(availableItems[i])) {
                 continue;
             }
-            if (!isUndefined(availableItems[i][key])) {
+            if (searchName !== "" && searchValue !== "") {
+                if (availableItems[i][searchName] === key) {
+                    return availableItems[i][searchValue];
+                }
+            } else if (!isUndefined(availableItems[i][key])) {
                 return availableItems[i][key]
             }
         }

@@ -5,6 +5,9 @@ body.theme-green {
 body.theme-grey {
     background-color: #eee;
 }
+.b-1px {
+    border: 1px solid;
+}
 .p-0 {
     padding: 0;
 }
