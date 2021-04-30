@@ -263,7 +263,7 @@ DataHandlerV2.extend({
             attendanceOption = "";
         }
         if ($S.isArray(dateArray)) {
-            for(i=0; i<dateArray.length; i++) {
+            for(i=dateArray.length-1; i>=0; i--) {
                 if (!$S.isObject(dateArray[i])) {
                     continue;
                 }
@@ -319,7 +319,7 @@ DataHandlerV2.extend({
         var i, j, k, temp, userDataV2, isCounting, userId;
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
         if ($S.isArray(dateArray)) {
-            for(i=0; i<dateArray.length; i++) {
+            for(i=dateArray.length-1; i>=0; i--) {
                 if (!$S.isObject(dateArray[i])) {
                     continue;
                 }
