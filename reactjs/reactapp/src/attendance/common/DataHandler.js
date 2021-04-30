@@ -376,7 +376,13 @@ DataHandler.extend({
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
-        DataHandler.setData("currentList2Id", list2Id);
+        var oldList2Id = DataHandler.getData("currentList2Id", "");
+        if (oldList2Id !== list2Id) {
+            DataHandler.setData("currentList2Id", list2Id);
+            this.handlePageRouting("pageComponentDidMount", function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         DataHandler.setData("date-select", value);

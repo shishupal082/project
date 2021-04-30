@@ -245,6 +245,8 @@ DataHandlerDBView.extend({
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
+            } else {
+                $S.callMethod(callback);
             }
         }
     },

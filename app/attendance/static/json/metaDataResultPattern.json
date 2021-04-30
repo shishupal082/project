@@ -1,0 +1,251 @@
+{
+    "resultPatternKeys": ["resultPatternEntry", "resultPatternUpdate", "resultPatternSummary", "resultPatternTa", "resultPatternDbview"],
+    "resultPatternDbview": [
+        {
+            "tableName": "table1",
+            "name": "station",
+            "heading": "Station",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "designation",
+            "heading": "Designation",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "UserId"
+        }
+    ],
+    "resultPatternTa": [
+        {
+            "tableName": "table1",
+            "name": "team",
+            "heading": "Team",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "station",
+            "heading": "Station",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "designation",
+            "heading": "Designation",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "UserId",
+            "hidden": true
+        },
+        {
+            "name": "unit",
+            "heading": "Unit",
+            "value": "Rs."
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "Entry",
+            "fieldName": "taRowField.entry.name",
+            "text": {
+                "tag": "inputV2",
+                "name": "taRowField.entry.name2",
+                "value": ""
+            }
+        },
+        {
+            "heading": "Save",
+            "className": "submit-btn",
+            "text": {
+                "tag": "button",
+                "className": "btn btn-primary",
+                "name": "addentry.submit",
+                "value": "addentry.submit",
+                "text": "Save"
+            }
+        },
+        {
+            "heading": "Summary Link",
+            "text": {
+                "tag": "a",
+                "name": "taRowField.summaryLink.href",
+                "href": "/summary",
+                "text": "Summary"
+            }
+        }
+    ],
+    "resultPatternEntry": [
+        {
+            "tableName": "table1",
+            "name": "station",
+            "heading": "Station",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "designation",
+            "heading": "Designation",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "UserId",
+            "hidden": true
+        }
+    ],
+    "resultPatternUpdate": [
+        {
+            "tableName": "table1",
+            "name": "station",
+            "heading": "Station",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "designation",
+            "heading": "Designation",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "UserId",
+            "hidden": true
+        }
+    ],
+    "resultPatternSummary": [
+        {
+            "tableName": "table1",
+            "name": "station",
+            "heading": "Station",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "designation",
+            "heading": "Designation",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "userId",
+            "heading": "UserId",
+            "hidden": true
+        },
+        {
+            "heading": "LAP",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "lap",
+            "pattern": ["LAP"]
+        },
+        {
+            "heading": "CL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "cl",
+            "pattern": ["CL"]
+        },
+        {
+            "heading": "LAP+CL",
+            "isSortable": true,
+            "searchByPattern": true,
+            "name": "lap_and_cl",
+            "pattern": ["^(LAP|CL)$"]
+        },
+        {
+            "heading": "CCL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "ccl",
+            "pattern": ["CCL"]
+        },
+        {
+            "heading": "PL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "pl",
+            "pattern": ["PL"]
+        },
+        {
+            "heading": "SL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "suplimentry_leave",
+            "pattern": ["SL"]
+        },
+        {
+            "heading": "SCL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "special_leave",
+            "pattern": ["SCL"]
+        },
+        {
+            "heading": "All Leave",
+            "isSortable": true,
+            "searchByPattern": true,
+            "name": "all_leave",
+            "pattern": ["^(LAP|CL|CCL|PL|SL|SCL|LHAP-1|LHAP-2)$"]
+        },
+        {
+            "heading": "Rest",
+            "isSortable": false,
+            "searchByPattern": false,
+            "name": "rest",
+            "pattern": ["Rest"]
+        },
+        {
+            "heading": "PH+NH",
+            "isSortable": false,
+            "searchByPattern": true,
+            "name": "ph_nh",
+            "pattern": ["^(PH|NH)$"]
+        },
+        {
+            "heading": "A",
+            "isSortable": false,
+            "searchByPattern": false,
+            "name": "absent",
+            "pattern": ["A"]
+        }
+    ]
+}
