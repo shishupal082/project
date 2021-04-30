@@ -46,6 +46,7 @@ Template["heading"] = [
 Template["loading"] = [
     {
         "tag": "center.h2",
+        "name": "loadingText",
         "text": "Loading ..."
     }
 ];

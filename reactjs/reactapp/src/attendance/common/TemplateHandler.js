@@ -10,7 +10,7 @@ import AppHandler from "../../common/app/common/AppHandler";
 
 var TemplateHandler;
 (function($S){
-
+var loadingCount = 0;
 TemplateHandler = function(arg) {
     return new TemplateHandler.fn.init(arg);
 };
@@ -198,10 +198,12 @@ TemplateHandler.extend({
         return false;
     },
     GetPageRenderField: function(dataLoadStatus, renderData, footerData, pageName) {
-        if (!dataLoadStatus) {
-            return this.getTemplate("loading");
-        }
         var renderField;
+        if (!dataLoadStatus) {
+            renderField = this.getTemplate("loading");
+            TemplateHelper.updateTemplateText(renderField, {"loadingText": "Loading ..." + (loadingCount++)});
+            return renderField;
+        }
         if (DataHandlerV2.isPageDisabled(pageName)) {
             renderField = this.getTemplate("noMatch");
         } else {
