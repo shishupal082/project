@@ -178,13 +178,14 @@ DataHandler.extend({
         }
         return currentAppData;
     },
-    getDisableFooterStatus: function() {
+    getBooleanParam: function(name, defaultValue) {
         var currentAppData = this.getCurrentAppData();
-        var disableFooter = true;
-        if ($S.isBooleanFalse(currentAppData.disableFooter)) {
-            disableFooter = false;
+        var metaData = this.getData("metaData", {});
+        var booleanVal = $S.findParam([currentAppData, metaData], name);
+        if ($S.isBoolean(booleanVal)) {
+            return booleanVal;
         }
-        return disableFooter;
+        return defaultValue;
     },
     getHeadingText: function() {
         var currentAppData = this.getCurrentAppData();
@@ -568,7 +569,8 @@ DataHandler.extend({
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
         appDataCallback("filterOptions", filterOptions);
-        appDataCallback("disableFooter", this.getDisableFooterStatus());
+        appDataCallback("disableFooter", this.getBooleanParam("disableFooter", false));
+        appDataCallback("enableToggleButton", this.getBooleanParam("enableToggleButton", true));
 
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", DataHandler.getData("currentList2Id", ""));

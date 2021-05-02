@@ -29,6 +29,10 @@ class App extends React.Component {
             "list2Data": [],
             "currentList2Id": "", // same as pageName
 
+            "list3Text": "Select...",
+            "list3Data": [],
+            "currentList3Id": "",
+
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "pageHeading": "",
             "pageTab": [],
@@ -41,6 +45,8 @@ class App extends React.Component {
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
             "disableFooter": true,
+            "disableFooterV2": false,
+            "enableToggleButton": true,
 
             "filterOptions": []
         };
@@ -88,7 +94,9 @@ class App extends React.Component {
             DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "date-select") {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
-        } else if (value === "addentry.submit") {
+        } else if (name === "footer-filter-toggle") {
+            AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.disableFooterV2);
+        }else if (value === "addentry.submit") {
             DataHandler.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "sortable") {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, name, value);

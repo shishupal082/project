@@ -162,7 +162,16 @@ AppHandler.extend({
         return combinedDateSelectionParameter;
     }
 });
-
+AppHandler.extend({
+    HandleToggleClick: function(appStateCallback, appDataCallback, oldValue) {
+        var newValue = true;
+        if ($S.isBooleanTrue(oldValue)) {
+            newValue = false;
+        }
+        appDataCallback("disableFooterV2", newValue);
+        appStateCallback();
+    }
+});
 AppHandler.extend({
     // single select filter data
     getFilterData: function(selectionOptions) {

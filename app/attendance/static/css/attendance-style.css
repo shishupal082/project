@@ -11,3 +11,9 @@
 .day-ph {
     background-color: #c3e6cb;
 }
+.container.APP-COMPONENT {
+    max-width: 100%;
+}
+select.form-control {
+    min-width: 120px;
+}

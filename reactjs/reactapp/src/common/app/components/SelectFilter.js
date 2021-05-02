@@ -16,6 +16,7 @@ class SelectFilter extends React.Component {
         var self = this;
         var list1Data = this.props.data.list1Data;
         var list2Data = this.props.data.list2Data;
+        var list3Data = this.props.data.list3Data;
         var dateSelection = this.props.data.dateSelection;
         var dateSelectionRequiredPages = this.props.data.dateSelectionRequiredPages;
 
@@ -25,6 +26,9 @@ class SelectFilter extends React.Component {
         if (!$S.isArray(list2Data)) {
             list2Data = [];
         }
+        if (!$S.isArray(list3Data)) {
+            list3Data = [];
+        }
         if (!$S.isArray(dateSelection)) {
             dateSelection = [];
         }
@@ -32,6 +36,7 @@ class SelectFilter extends React.Component {
             dateSelectionRequiredPages = [];
         }
         var list2ItemNotFound = true;
+        var list3ItemNotFound = true;
         var list1Text = null;
         if ($S.isString(this.props.data.list1Text) && this.props.data.list1Text.length > 0) {
             list1Text = <td className="pr-5px">{this.props.data.list1Text}</td>;
@@ -42,6 +47,12 @@ class SelectFilter extends React.Component {
         var list2Dropdown = list2Data.map(function(el, i, arr) {
             if (el.name === self.props.data.currentList2Id) {
                 list2ItemNotFound = false;
+            }
+            return <option key={i} value={el.name}>{el.toText}</option>
+        });
+        var list3Dropdown = list3Data.map(function(el, i, arr) {
+            if (el.name === self.props.data.currentList3Id) {
+                list3ItemNotFound = false;
             }
             return <option key={i} value={el.name}>{el.toText}</option>
         });
@@ -67,6 +78,14 @@ class SelectFilter extends React.Component {
         } else {
             list2Dropdown = null;
         }
+        if (list3Dropdown.length > 0) {
+            if (list3ItemNotFound) {
+                $S.addElAt(list3Dropdown, 0, <option key={list2Dropdown.length}>{this.props.data.list3Text}</option>);
+            }
+            list3Dropdown = <td><select className="form-control" name="list3-select" onChange={this.props.methods.dropDownChange} value={this.props.data.currentList3Id}>{list3Dropdown}</select></td>;
+        } else {
+            list3Dropdown = null;
+        }
         if (dateSelection.length > 0) {
             dateSelection = <td><div className="btn-group" role="group" aria-label="Basic example">
                             {dateSelection}
@@ -76,6 +95,10 @@ class SelectFilter extends React.Component {
             dateSelection = null;
         }
         var reloadButton = <td><button className="btn btn-primary" name="filter-reload" value="reload" onClick={this.props.methods.onClick}>Reload</button></td>;
+        var toggleButton = <td><button className="btn btn-primary" name="footer-filter-toggle" value="toggle" onClick={this.props.methods.onClick}>Toggle</button></td>;
+        if (!$S.isBooleanTrue(this.props.data.enableToggleButton)) {
+            toggleButton = null;
+        }
         if (this.props.data.firstTimeDataLoadStatus === "completed") {
             if (list1Data.length < 1) {
                 list1Text = null;
@@ -84,15 +107,21 @@ class SelectFilter extends React.Component {
             if (list2Data.length < 1) {
                 list2Dropdown = null;
             }
+            if (list3Data.length < 1) {
+                list3Dropdown = null;
+            }
             if (list1Data.length < 1 && list2Data.length < 1) {
                 reloadButton = null;
+                toggleButton = null;
             }
         } else {
             dateSelection = null;
             list1Text = null;
             list1Dropdown = null;
             list2Dropdown = null;
+            list3Dropdown = null;
             reloadButton = null;
+            toggleButton = null;
         }
         return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>
@@ -101,6 +130,7 @@ class SelectFilter extends React.Component {
                     {list2Dropdown}
                     {dateSelection}
                     {reloadButton}
+                    {toggleButton}
                 </tr></tbody></table></div>
             </div>);
     }

@@ -16,7 +16,7 @@ class Footer extends React.Component {
         var footerClass = "footer-div";
         var footerWithContent = "footer-wrap h-45px";
         var footerWithNoContent = "footer-wrap h-15px";
-        if ($S.isBooleanTrue(this.props.data.disableFooter)) {
+        if ($S.isBooleanTrue(this.props.data.disableFooter) || $S.isBooleanTrue(this.props.data.disableFooterV2)) {
             footerClass += " d-none";
             footerWithContent += " d-none";
         } else {
