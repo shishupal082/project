@@ -288,7 +288,7 @@ DataHandlerV2.extend({
         return renderData;
     },
     _getAttendanceCount: function(attendanceData, dateAttr, userData, userId) {
-        var count = 0;
+        var count = 0, temp, dateResult = [];
         var attendance, startDate, endDate;
         if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userId])) {
             if ($S.isArray(attendanceData[userId].attendance)) {
@@ -306,19 +306,24 @@ DataHandlerV2.extend({
                             endDate = dateAttr.dateRange[1];
                         }
                         if (AppHandler.isDateLiesInRange(startDate, endDate, attendance[i].date)) {
-                            count += $S.searchItems(userData.pattern, [attendance[i].type], userData.searchByPattern).length;
+                            temp = $S.searchItems(userData.pattern, [attendance[i].type], userData.searchByPattern);
+                            if (temp.length > 0) {
+                                dateResult.push(attendance[i].date);
+                            }
+                            count += temp.length;
                         }
                     }
                 }
             }
         }
-        return count;
+        return {"count": count, "dateResult": dateResult};
     },
     GenerateSummaryUserData: function(dateArray, userData) {
         var renderData = [];
         var i, j, k, temp, temp2, userDataV2, userDataV3, isCounting, userId, addFinal;
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
         var displayAllSummaryEntry = DataHandler.getBooleanParam("displayAllSummaryEntry", false);
+        var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
         if ($S.isArray(dateArray)) {
             for(i=dateArray.length-1; i>=0; i--) {
                 if (!$S.isObject(dateArray[i])) {
@@ -340,8 +345,11 @@ DataHandlerV2.extend({
                                     }
                                     if (isCounting) {
                                         temp2 = this._getAttendanceCount(attendanceData, dateArray[i], userDataV2[j][k], userId);
-                                        userDataV2[j][k].value = temp2;
-                                        if (temp2 > 0 || displayAllSummaryEntry) {
+                                        userDataV2[j][k].value = temp2.count;
+                                        if (displayDateSummary) {
+                                            userDataV2[j][k].value = temp2.dateResult.join(", ");
+                                        }
+                                        if (temp2.count > 0 || displayAllSummaryEntry) {
                                             addFinal = true;
                                         }
                                     }

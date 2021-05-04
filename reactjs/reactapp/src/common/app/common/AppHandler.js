@@ -396,7 +396,6 @@ AppHandler.extend({
     }
 });
 
-
 AppHandler.extend({
     LoadDataFromRequestApi: function(request, callback) {
         if (!$S.isArray(request) || request.length < 1) {
@@ -467,6 +466,7 @@ AppHandler.extend({
                         request[j].response.push(response);
                     }
                 }
+                fireCallback();
             }, function() {
                 fireCallback();
             }, request[i].apiName, request[i].requestMethod);

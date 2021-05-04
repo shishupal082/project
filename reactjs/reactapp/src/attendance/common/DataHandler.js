@@ -509,6 +509,7 @@ DataHandler.extend({
         DataHandler.setData("filteredUserData", filteredUserData);
         var sortableValue = DataHandler.getData("sortableValue", "");
         var sortableName = DataHandler.getData("sortable", "");
+        var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else {
@@ -526,7 +527,9 @@ DataHandler.extend({
                         renderData[i].tableData = $S.sortResult(renderData[i].tableData, sortableValue, sortableName, "name");
                     }
                 }
-                DataHandlerV2.GenerateSummaryTotalRow(renderData);
+                if (!displayDateSummary) {
+                    DataHandlerV2.GenerateSummaryTotalRow(renderData);
+                }
             break;
             case "ta":
                 renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
