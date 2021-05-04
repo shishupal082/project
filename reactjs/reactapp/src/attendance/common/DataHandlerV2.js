@@ -316,18 +316,21 @@ DataHandlerV2.extend({
     },
     GenerateSummaryUserData: function(dateArray, userData) {
         var renderData = [];
-        var i, j, k, temp, userDataV2, isCounting, userId;
+        var i, j, k, temp, temp2, userDataV2, userDataV3, isCounting, userId, addFinal;
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
+        var displayAllSummaryEntry = DataHandler.getBooleanParam("displayAllSummaryEntry", false);
         if ($S.isArray(dateArray)) {
             for(i=dateArray.length-1; i>=0; i--) {
                 if (!$S.isObject(dateArray[i])) {
                     continue;
                 }
                 userDataV2 = $S.clone(userData);
+                userDataV3 = [];
                 if ($S.isArray(userDataV2)) {
                     for (j = 0; j < userDataV2.length; j++) {
                         if ($S.isArray(userDataV2[j])) {
                             isCounting = false;
+                            addFinal = false;
                             for(k=0; k<userDataV2[j].length; k++) {
                                 if ($S.isObject(userDataV2[j][k])) {
                                     if (userDataV2[j][k].name === "userId") {
@@ -336,14 +339,21 @@ DataHandlerV2.extend({
                                         continue;
                                     }
                                     if (isCounting) {
-                                        userDataV2[j][k].value = this._getAttendanceCount(attendanceData, dateArray[i], userDataV2[j][k], userId);
+                                        temp2 = this._getAttendanceCount(attendanceData, dateArray[i], userDataV2[j][k], userId);
+                                        userDataV2[j][k].value = temp2;
+                                        if (temp2 > 0 || displayAllSummaryEntry) {
+                                            addFinal = true;
+                                        }
                                     }
                                 }
+                            }
+                            if (addFinal) {
+                                userDataV3.push(userDataV2[j]);
                             }
                         }
                     }
                 }
-                temp = {"tableHeading": dateArray[i].dateHeading, "tableData": userDataV2};
+                temp = {"tableHeading": dateArray[i].dateHeading, "tableData": userDataV3};
                 renderData.push(temp);
             }
         }

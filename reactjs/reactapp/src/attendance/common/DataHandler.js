@@ -467,6 +467,10 @@ DataHandler.extend({
         if (!$S.isArray(filteredUserData)) {
             filteredUserData = [];
         }
+        var displayAllSummaryEntry = this.getBooleanParam("displayAllSummaryEntry", false);
+        if ($S.isBooleanTrue(displayAllSummaryEntry)) {
+            return filteredUserData;
+        }
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
         if (!$S.isObject(attendanceData)) {
             attendanceData = {};
