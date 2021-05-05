@@ -210,16 +210,19 @@ DataHandlerV2.extend({
         }
         return className;
     },
-    _getAttendanceField: function(attendanceData, userData, dateAttr, attendanceOption) {
+    _getAttendanceField: function(attendanceData, userData, dateAttr, attendanceOption, selectFieldName) {
         var text = "", temp;
         var userId = "", name = "";
         var i;
+        if (!$S.isString(selectFieldName) || selectFieldName.length < 1) {
+            selectFieldName = "name";
+        }
         if ($S.isArray(userData)) {
             for(i = 0; i<userData.length; i++) {
                 if ($S.isObject(userData[i])) {
                     if (userData[i].name === "userId") {
                         userId = userData[i].value;
-                    } else if (userData[i].name === "name") {
+                    } else if (userData[i].name === selectFieldName) {
                         name = userData[i].value;
                     }
                 }
@@ -258,6 +261,7 @@ DataHandlerV2.extend({
         var nhList = $S.findParam([currentAppData, metaData], "nhList", []);
         var phList = $S.findParam([currentAppData, metaData], "phList", []);
         var attendanceOption = $S.findParam([currentAppData, metaData], "attendanceOption", {});
+        var selectFieldName = $S.findParam([currentAppData, metaData], "selectFieldName", {});
         var textFilter = $S.getTextFilter(), className;
         if (pageName === "entry") {
             attendanceOption = "";
@@ -276,7 +280,7 @@ DataHandlerV2.extend({
                             temp["heading"] = dateArray[i].allDate[k].date.toString();
                             className = this._getTdClassNameFromDateAttr(dateArray[i].allDate[k], nhList, phList);
                             temp["className"] = textFilter(userDataV2[j].className).addClass(className).getClassName();
-                            temp["value"] = this._getAttendanceField(attendanceData, userDataV2[j], dateArray[i].allDate[k], attendanceOption);
+                            temp["value"] = this._getAttendanceField(attendanceData, userDataV2[j], dateArray[i].allDate[k], attendanceOption, selectFieldName);
                             userDataV2[j].push(temp);
                         }
                     }

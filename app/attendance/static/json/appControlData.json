@@ -6,6 +6,7 @@
         "enableToggleButton": true,
         "displayAllSummaryEntry": true,
         "displayDateSummary": true,
+        "selectFieldName": "name",
         "defaultCount": "--",
         "saveDataFilename": "attendance.csv",
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
