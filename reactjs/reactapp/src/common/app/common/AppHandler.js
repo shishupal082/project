@@ -466,7 +466,7 @@ AppHandler.extend({
                         request[j].response.push(response);
                     }
                 }
-                fireCallback();
+                // fireCallback();
             }, function() {
                 fireCallback();
             }, request[i].apiName, request[i].requestMethod);
