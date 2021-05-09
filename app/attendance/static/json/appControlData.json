@@ -10,6 +10,47 @@
         "defaultCount": "--",
         "saveDataFilename": "attendance.csv",
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
+        "list3Data_1": [
+            {
+                "name": "",
+                "text": "All"
+            },
+            {
+                "name": "apr2021",
+                "text": "April-May 2021",
+                "dateRange": ["2021-04-11 00:00", "2021-05-10 23:59"]
+            },
+            {
+                "name": "mar2021",
+                "text": "March 2021",
+                "dateRange": ["2021-03-01 00:00", "2021-03-31 23:59"]
+            },
+            {
+                "name": "feb2021",
+                "text": "Feb 2021",
+                "dateRange": ["2021-02-01 00:00", "2021-02-28 23:59"]
+            },
+            {
+                "name": "jan2021",
+                "text": "Jan 2021",
+                "dateRange": ["2021-01-01 00:00", "2021-01-31 23:59"]
+            },
+            {
+                "name": "dec2020",
+                "text": "Dec 2020",
+                "dateRange": ["2020-12-11 00:00", "2020-12-31 23:59"]
+            }
+        ],
+        "list3Data_2": [
+            {
+                "name": "",
+                "text": "Select..."
+            },
+            {
+                "name": "section",
+                "text": "Order by Section"
+            }
+        ],
         "metaDataApi": ["/app/attendance/static/json/metaData.json"],
         "dbDataApis": [
             {

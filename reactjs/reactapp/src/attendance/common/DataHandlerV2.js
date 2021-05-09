@@ -52,6 +52,26 @@ DataHandlerV2.extend({
         }
         return list2Data;
     },
+    getList3Data: function() {
+        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData();
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var name = "list3Data_1";
+        if ([Config.dbview, Config.ta].indexOf(currentList2Id) >= 0) {
+            name = "list3Data_2";
+        }
+        var list3Data = $S.findParam([currentAppData, metaData], name, {});
+        if ($S.isArray(list3Data)) {
+            for (var i = 0; i < list3Data.length; i++) {
+                if ($S.isObject(list3Data[i])) {
+                    if (!$S.isString(list3Data[i].name)) {
+                        list3Data[i].name = "list3-name-" + i;
+                    }
+                }
+            }
+        }
+        return list3Data;
+    },
     isPageDisabled: function(pageName) {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
@@ -465,6 +485,46 @@ DataHandlerV2.extend({
         }
         renderData.push({"tableData": userData});
         return renderData;
+    },
+    GenerateFinalDBViewData: function(dbViewData) {
+        var finalData = [];
+        var list3Data = DataHandler.getCurrentList3Data();
+        var i, j, name, key, heading, isFound, temp = {}, temp2 = [];
+        if ($S.isObject(list3Data) && $S.isString(list3Data.value) && list3Data.value.length > 0) {
+            name = list3Data.value;
+            for(i=0; i<dbViewData.length; i++) {
+                if (!$S.isArray(dbViewData[i])) {
+                    continue;
+                }
+                isFound = false;
+                for(j=0; j<dbViewData[i].length; j++) {
+                    if (!$S.isObject(dbViewData[i][j])) {
+                        continue;
+                    }
+                    key = dbViewData[i][j].name;
+                    if (key === name) {
+                        heading = dbViewData[i][j].value;
+                        isFound = true;
+                        if (temp2.indexOf(heading) < 0) {
+                            temp2.push(heading);
+                            temp[heading] = {"tableHeading": heading, tableData: []};
+                        }
+                        break;
+                    }
+                }
+                if (isFound) {
+                    temp[heading]["tableData"].push(dbViewData[i]);
+                }
+            }
+            temp2 = temp2.sort();
+            for(i=0; i<temp2.length; i++) {
+                key = temp2[i];
+                finalData.push({"tableHeading": temp[key].tableHeading, "tableData": temp[key].tableData});
+            }
+        } else {
+            finalData.push({"tableData": dbViewData});
+        }
+        return finalData;
     }
 });
 

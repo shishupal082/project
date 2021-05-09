@@ -54,7 +54,7 @@ class SelectFilter extends React.Component {
             if (el.name === self.props.data.currentList3Id) {
                 list3ItemNotFound = false;
             }
-            return <option key={i} value={el.name}>{el.toText}</option>
+            return <option key={i} value={el.name}>{el.text}</option>
         });
         dateSelection = dateSelection.map(function(el, i, arr) {
             var className = "btn ";
@@ -80,7 +80,7 @@ class SelectFilter extends React.Component {
         }
         if (list3Dropdown.length > 0) {
             if (list3ItemNotFound) {
-                $S.addElAt(list3Dropdown, 0, <option key={list2Dropdown.length}>{this.props.data.list3Text}</option>);
+                $S.addElAt(list3Dropdown, 0, <option key={list3Dropdown.length}>{this.props.data.list3Text}</option>);
             }
             list3Dropdown = <td><select className="form-control" name="list3-select" onChange={this.props.methods.dropDownChange} value={this.props.data.currentList3Id}>{list3Dropdown}</select></td>;
         } else {
@@ -110,7 +110,7 @@ class SelectFilter extends React.Component {
             if (list3Data.length < 1) {
                 list3Dropdown = null;
             }
-            if (list1Data.length < 1 && list2Data.length < 1) {
+            if (list1Data.length < 1 && list2Data.length < 1 && list3Data.length < 1) {
                 reloadButton = null;
                 toggleButton = null;
             }
@@ -128,6 +128,7 @@ class SelectFilter extends React.Component {
                     {list1Text}
                     {list1Dropdown}
                     {list2Dropdown}
+                    {list3Dropdown}
                     {dateSelection}
                     {reloadButton}
                     {toggleButton}
