@@ -20,6 +20,10 @@ class SelectFilter extends React.Component {
         var dateSelection = this.props.data.dateSelection;
         var dateSelectionRequiredPages = this.props.data.dateSelectionRequiredPages;
 
+        var list1Text = null;
+        var list2ItemNotFound = true;
+        var list3ItemNotFound = true;
+
         if (!$S.isArray(list1Data)) {
             list1Data = [];
         }
@@ -35,9 +39,6 @@ class SelectFilter extends React.Component {
         if (!$S.isArray(dateSelectionRequiredPages)) {
             dateSelectionRequiredPages = [];
         }
-        var list2ItemNotFound = true;
-        var list3ItemNotFound = true;
-        var list1Text = null;
         if ($S.isString(this.props.data.list1Text) && this.props.data.list1Text.length > 0) {
             list1Text = <td className="pr-5px">{this.props.data.list1Text}</td>;
         }
@@ -51,10 +52,10 @@ class SelectFilter extends React.Component {
             return <option key={i} value={el.name}>{el.toText}</option>
         });
         var list3Dropdown = list3Data.map(function(el, i, arr) {
-            if (el.name === self.props.data.currentList3Id) {
+            if (el.value === self.props.data.currentList3Id) {
                 list3ItemNotFound = false;
             }
-            return <option key={i} value={el.name}>{el.text}</option>
+            return <option key={i} value={el.value}>{el.text}</option>
         });
         dateSelection = dateSelection.map(function(el, i, arr) {
             var className = "btn ";

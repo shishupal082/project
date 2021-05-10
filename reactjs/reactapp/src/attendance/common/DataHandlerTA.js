@@ -50,12 +50,15 @@ DataHandlerTA.extend({
         var appData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var filename = $S.findParam([appData, metaData], "filename", "");
-        var dateField = $S.findParam([appData, metaData], "date", {});
+        var dateField = DataHandler.getCurrentList3Data();
         if (!$S.isString(filename) || filename.length === 0) {
             alert("Invalid filename.");
             return;
         }
         if (!$S.isObject(dateField) || !AppHandler.isValidDateStr(dateField.date)) {
+            alert("Invalid date parameter.");
+            return;
+        } else if (!$S.isString(dateField.name) || dateField.name.length < 1) {
             alert("Invalid date parameter.");
             return;
         }
@@ -78,14 +81,14 @@ DataHandlerTA.extend({
             temp3 = [];
             if ($S.isString(value) && value.length > 0) {
                 temp3.push(dateField.date);
-                temp3.push(name + " " + dateField.option);
+                temp3.push(name + " " + dateField.text);
                 temp3.push("dr");
                 temp3.push(value);
                 temp3.push(userId);
-                temp3.push(name + " " + dateField.option);
+                temp3.push(name + " " + dateField.text);
                 temp3.push("cr");
                 temp3.push(value);
-                temp3.push(dateField.value);
+                temp3.push(dateField.name);
                 finalText.push(temp3.join(","));
             }
         }

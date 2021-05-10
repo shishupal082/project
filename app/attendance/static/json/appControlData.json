@@ -12,43 +12,70 @@
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
         "list3Data_1": [
             {
-                "name": "",
+                "value": "",
                 "text": "All"
             },
             {
-                "name": "apr2021",
+                "value": "uniqueId",
                 "text": "April-May 2021",
                 "dateRange": ["2021-04-11 00:00", "2021-05-10 23:59"]
             },
             {
-                "name": "mar2021",
+                "value": "mar2021",
                 "text": "March 2021",
                 "dateRange": ["2021-03-01 00:00", "2021-03-31 23:59"]
             },
             {
-                "name": "feb2021",
+                "value": "feb2021",
                 "text": "Feb 2021",
                 "dateRange": ["2021-02-01 00:00", "2021-02-28 23:59"]
             },
             {
-                "name": "jan2021",
+                "value": "jan2021",
                 "text": "Jan 2021",
                 "dateRange": ["2021-01-01 00:00", "2021-01-31 23:59"]
             },
             {
-                "name": "dec2020",
+                "value": "dec2020",
                 "text": "Dec 2020",
                 "dateRange": ["2020-12-11 00:00", "2020-12-31 23:59"]
             }
         ],
         "list3Data_2": [
             {
-                "name": "",
+                "value": "",
                 "text": "Select..."
             },
             {
-                "name": "section",
-                "text": "Order by Section"
+                "value": "uniqueId",
+                "text": "Order by Section",
+                "name": "section"
+            }
+        ],
+        "list3Data_3": [
+            {
+                "value": "uniqueId",
+                "text": "April 2020",
+                "date": "2020-04-01 11:00",
+                "name": "apr2020"
+            },
+            {
+                "value": "apr2021",
+                "text": "April 2021",
+                "date": "2021-04-01 11:00",
+                "name": "apr2021"
+            },
+            {
+                "value": "mar2020",
+                "text": "March 2020",
+                "date": "2020-03-01 11:00",
+                "name": "mar2020"
+            },
+            {
+                "value": "mar2021",
+                "text": "March 2021",
+                "date": "2021-03-01 11:00",
+                "name": "mar2021"
             }
         ],
         "metaDataApi": ["/app/attendance/static/json/metaData.json"],

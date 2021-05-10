@@ -57,15 +57,17 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var name = "list3Data_1";
-        if ([Config.dbview, Config.ta].indexOf(currentList2Id) >= 0) {
+        if ([Config.dbview].indexOf(currentList2Id) >= 0) {
             name = "list3Data_2";
+        } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
+            name = "list3Data_3";
         }
         var list3Data = $S.findParam([currentAppData, metaData], name, {});
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
-                    if (!$S.isString(list3Data[i].name)) {
-                        list3Data[i].name = "list3-name-" + i;
+                    if (!$S.isString(list3Data[i].value)) {
+                        list3Data[i].value = "list3-value-" + i;
                     }
                 }
             }

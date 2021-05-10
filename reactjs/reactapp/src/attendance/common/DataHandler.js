@@ -189,7 +189,7 @@ DataHandler.extend({
         if ($S.isArray(list3Data)) {
             for(var i=0; i<list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
-                    if (list3Data[i]["name"] === list3Id) {
+                    if (list3Data[i]["value"] === list3Id) {
                         currentList3Data = list3Data[i];
                         break;
                     }
