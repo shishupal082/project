@@ -422,13 +422,13 @@ DataHandler.extend({
     },
     SortClick: function(appStateCallback, appDataCallback, name, value) {
         var sortableValue = DataHandler.getData("sortableValue", "");
-        if (sortableValue === "ascending") {
-            sortableValue = "descending";
-        } else if (sortableValue === "descending") {
+        if (sortableValue === "descending") {
+            sortableValue = "ascending";
+        } else if (sortableValue === "ascending") {
             sortableValue = "";
             value = "";
         } else {
-            sortableValue = "ascending";
+            sortableValue = "descending";
         }
         DataHandler.setData("sortable", value);
         DataHandler.setData("sortableValue", sortableValue);
