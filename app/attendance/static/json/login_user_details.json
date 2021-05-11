@@ -1,0 +1,16 @@
+{
+    "status":"SUCCESS",
+    "failureCode":null,
+    "error":null,
+    "data":{
+        "username":"Login User",
+        "displayName":"Login User",
+        "roles":{
+            "isAddTextEnable":true,
+            "isUploadFileEnable":true,
+            "attendanceUser":true,
+            "appControlTeam14":true
+        },
+        "login":true
+    }
+}

@@ -58,7 +58,7 @@ DataHandlerTA.extend({
         if (!$S.isObject(dateField) || !AppHandler.isValidDateStr(dateField.date)) {
             alert("Invalid date parameter.");
             return;
-        } else if (!$S.isString(dateField.name) || dateField.name.length < 1) {
+        } else if (!$S.isString(dateField.value) || dateField.value.length < 1) {
             alert("Invalid date parameter.");
             return;
         }
@@ -88,12 +88,12 @@ DataHandlerTA.extend({
                 temp3.push(name + " " + dateField.text);
                 temp3.push("cr");
                 temp3.push(value);
-                temp3.push(dateField.name);
+                temp3.push(dateField.value);
                 finalText.push(temp3.join(","));
             }
         }
         if (finalText.length > 0 && isFormOk) {
-            this.callAddTextApi(appData.name, dateField.option, filename, finalText, function() {
+            this.callAddTextApi(appData.name, dateField.text, filename, finalText, function() {
                 $S.callMethod(callback);
             });
         } else {

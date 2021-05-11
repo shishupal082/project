@@ -12,11 +12,13 @@
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
         "list3Data_1": [
             {
-                "value": "",
-                "text": "All"
+                "name": "",
+                "text": "All",
+                "value": ""
             },
             {
-                "value": "uniqueId",
+                "defaultSelected": true,
+                "name": "uniqueId_auto_generated",
                 "text": "April-May 2021",
                 "dateRange": ["2021-04-11 00:00", "2021-05-10 23:59"]
             },
@@ -43,39 +45,38 @@
         ],
         "list3Data_2": [
             {
-                "value": "",
+                "name": "",
                 "text": "Select..."
             },
             {
-                "value": "uniqueId",
+                "defaultSelected": true,
+                "name": "uniqueId_auto_generated",
                 "text": "Order by Section",
-                "name": "section"
+                "value": "section"
             }
         ],
         "list3Data_3": [
             {
-                "value": "uniqueId",
+                "defaultSelected": true,
+                "name": "uniqueId_auto_generated",
                 "text": "April 2020",
                 "date": "2020-04-01 11:00",
-                "name": "apr2020"
+                "value": "apr2020"
             },
             {
-                "value": "apr2021",
                 "text": "April 2021",
                 "date": "2021-04-01 11:00",
-                "name": "apr2021"
+                "value": "apr2021"
             },
             {
-                "value": "mar2020",
                 "text": "March 2020",
                 "date": "2020-03-01 11:00",
-                "name": "mar2020"
+                "value": "mar2020"
             },
             {
-                "value": "mar2021",
                 "text": "March 2021",
                 "date": "2021-03-01 11:00",
-                "name": "mar2021"
+                "value": "mar2021"
             }
         ],
         "metaDataApi": ["/app/attendance/static/json/metaData.json"],

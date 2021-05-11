@@ -62,12 +62,12 @@ DataHandlerV2.extend({
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";
         }
-        var list3Data = $S.findParam([currentAppData, metaData], name, {});
+        var list3Data = $S.findParam([currentAppData, metaData], name, []);
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
-                    if (!$S.isString(list3Data[i].value)) {
-                        list3Data[i].value = "list3-value-" + i;
+                    if (!$S.isString(list3Data[i].name)) {
+                        list3Data[i].name = name + "-name-" + i;
                     }
                 }
             }
@@ -168,6 +168,25 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("date-select", dateSelect);
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var keys, list3Data, currentList3Id = "";
+        if ($S.isObject(currentList3Data)) {
+            keys = Object.keys(currentList3Data);
+            if (keys.length < 1) {
+                list3Data = this.getList3Data();
+                if ($S.isArray(list3Data)) {
+                    for (i = 0; i < list3Data.length; i++) {
+                        if ($S.isObject(list3Data[i])) {
+                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
+                                currentList3Id = list3Data[i].name;
+                                DataHandler.setData("currentList3Id", currentList3Id);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     },
     generateFilterOptions: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -200,9 +219,7 @@ DataHandlerV2.extend({
         postData["filename"] = currentAppData.saveDataFilename;
         var msg = "Error in saving data, Please Try again.";
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
-            if (status === "FAILURE") {
-                alert(msg);
-            } else if ($S.isObject(response) && response.status === "FAILURE") {
+            if (status === "FAILURE" || ($S.isObject(response) && response.status === "FAILURE")) {
                 alert(msg);
             }
             $S.callMethod(callBack);
@@ -519,7 +536,7 @@ DataHandlerV2.extend({
                 }
             }
             temp2 = temp2.sort();
-            for(i=0; i<temp2.length; i++) {
+            for(i=temp2.length-1; i>=0; i--) {
                 key = temp2[i];
                 finalData.push({"tableHeading": temp[key].tableHeading, "tableData": temp[key].tableData});
             }

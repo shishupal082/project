@@ -52,10 +52,10 @@ class SelectFilter extends React.Component {
             return <option key={i} value={el.name}>{el.toText}</option>
         });
         var list3Dropdown = list3Data.map(function(el, i, arr) {
-            if (el.value === self.props.data.currentList3Id) {
+            if (el.name === self.props.data.currentList3Id) {
                 list3ItemNotFound = false;
             }
-            return <option key={i} value={el.value}>{el.text}</option>
+            return <option key={i} value={el.name}>{el.text}</option>
         });
         dateSelection = dateSelection.map(function(el, i, arr) {
             var className = "btn ";
