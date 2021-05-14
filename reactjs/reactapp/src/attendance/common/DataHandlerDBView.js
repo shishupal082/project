@@ -231,6 +231,35 @@ DataHandlerDBView.extend({
         }
         DataHandler.setData("dbViewDataTable", finalTable);
     },
+    _handleDefaultSorting: function(tableData) {
+        if (!$S.isObject(tableData)) {
+            return;
+        }
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
+        var i, tableName;
+        if ($S.isArray(defaultSorting)) {
+            for(i=0; i<defaultSorting.length; i++) {
+                if ($S.isObject(defaultSorting[i]) && $S.isString(defaultSorting[i].table)) {
+                    if (defaultSorting[i].table.length === 0) {
+                        continue;
+                    }
+                    if (!$S.isString(defaultSorting[i].index)) {
+                        continue;
+                    }
+                    tableName = defaultSorting[i].table;
+                    if (!$S.isObject(tableData[tableName])) {
+                        continue;
+                    }
+                    if (!$S.isArray(tableData[tableName].tableData)) {
+                        continue;
+                    }
+                    tableData[tableName].tableData = $S.sortResult(tableData[tableName].tableData, defaultSorting[i].sortableValue, defaultSorting[i].index, "name");
+                }
+            }
+        }
+    },
     handlePageLoad: function(dbDataApis, callback) {
         var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
@@ -242,6 +271,7 @@ DataHandlerDBView.extend({
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
                     tableData = DataHandlerDBView._getTableData(request);
+                    DataHandlerDBView._handleDefaultSorting(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
@@ -254,6 +284,7 @@ DataHandlerDBView.extend({
         var tableData;
         DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
             tableData = DataHandlerDBView._getTableData(request);
+            DataHandlerDBView._handleDefaultSorting(tableData);
             if ($S.isFunction(callback)) {
                 callback(tableData);
             }

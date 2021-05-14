@@ -93,6 +93,18 @@
                 "apis": ["/app/attendance/static/csv/attendance.csv"]
             }
         ],
+        "defaultSorting": [
+            {
+                "table": "table1",
+                "index": "date",
+                "sortableValue": "ascending"
+            },
+            {
+                "table": "table2",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            }
+        ],
         "resultPattern": [
             {
                 "tableName": "table1",
