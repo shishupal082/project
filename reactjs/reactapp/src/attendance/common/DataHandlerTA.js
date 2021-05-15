@@ -7,7 +7,7 @@ import AppHandler from "../../common/app/common/AppHandler";
 var DataHandlerTA;
 
 (function($S){
-// var DT = $S.getDT();
+var DT = $S.getDT();
 DataHandlerTA = function(arg) {
     return new DataHandlerTA.fn.init(arg);
 };
@@ -65,6 +65,8 @@ DataHandlerTA.extend({
         var finalText = [], value, temp3, userData;
         var isFormOk = true;
         var userId, name;
+        var entryTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms","/");
+        var uploadedBy = AppHandler.GetUserData("username", "");
         for (var key in fieldsData) {
             value = fieldsData[key];
             if (isNaN(value)) {
@@ -89,6 +91,8 @@ DataHandlerTA.extend({
                 temp3.push("cr");
                 temp3.push(value);
                 temp3.push(dateField.value);
+                temp3.push(entryTime);
+                temp3.push(uploadedBy);
                 finalText.push(temp3.join(","));
             }
         }

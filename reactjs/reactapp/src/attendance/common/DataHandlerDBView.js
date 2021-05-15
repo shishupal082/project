@@ -67,6 +67,7 @@ DataHandlerDBView.extend({
             }
             tableData[key]["tableData"] = AppHandler.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
         }
+        DataHandlerDBView._handleDefaultSorting(tableData);
         return tableData;
     },
     _loadDBViewData: function(dbDataApis, callback) {
@@ -238,7 +239,7 @@ DataHandlerDBView.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
-        var i, tableName;
+        var i, j, tableName, temp;
         if ($S.isArray(defaultSorting)) {
             for(i=0; i<defaultSorting.length; i++) {
                 if ($S.isObject(defaultSorting[i]) && $S.isString(defaultSorting[i].table)) {
@@ -255,7 +256,13 @@ DataHandlerDBView.extend({
                     if (!$S.isArray(tableData[tableName].tableData)) {
                         continue;
                     }
-                    tableData[tableName].tableData = $S.sortResult(tableData[tableName].tableData, defaultSorting[i].sortableValue, defaultSorting[i].index, "name");
+                    temp = [];
+                    if ($S.isArray(tableData[tableName].tableData)) {
+                        for(j=tableData[tableName].tableData.length-1; j>=0; j--) {
+                            temp.push(tableData[tableName].tableData[j]);
+                        }
+                    }
+                    tableData[tableName].tableData = $S.sortResult(temp, defaultSorting[i].sortableValue, defaultSorting[i].index, "name");
                 }
             }
         }
@@ -271,7 +278,6 @@ DataHandlerDBView.extend({
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
                     tableData = DataHandlerDBView._getTableData(request);
-                    DataHandlerDBView._handleDefaultSorting(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
@@ -284,7 +290,6 @@ DataHandlerDBView.extend({
         var tableData;
         DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
             tableData = DataHandlerDBView._getTableData(request);
-            DataHandlerDBView._handleDefaultSorting(tableData);
             if ($S.isFunction(callback)) {
                 callback(tableData);
             }

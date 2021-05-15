@@ -135,7 +135,7 @@ DataHandlerV2.extend({
             }
             if ($S.isArray(finalAttendanceData[key].attendance)) {
                 temp = [];
-                for(i=finalAttendanceData[key].attendance.length-1; i>=0; i--) {
+                for(i=0; i<finalAttendanceData[key].attendance.length; i++) {
                     temp2 = finalAttendanceData[key].attendance[i];
                     if (temp.indexOf(temp2.date) < 0) {
                         temp.push(temp2.date);
@@ -212,7 +212,7 @@ DataHandlerV2.extend({
             return;
         }
         var postData = {};
-        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
+        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
         postData["subject"] = subject;
         postData["heading"] = heading;
         postData["text"] = [attr];
