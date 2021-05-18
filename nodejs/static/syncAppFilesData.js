@@ -82,7 +82,7 @@ var syncData = {
             "../java/pdf/src/main/resources/assets/static/js/",
             "../java/WebApp/src/main/resources/assets/static/js/",
             "../reactjs/reactapp/src/libs/",
-            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
+            "../../ftp-application/FTP/src/main/resources/assets/static/js/",
             "../../ftp-application/reactjs/reactapp/src/libs/"
         ]
     },

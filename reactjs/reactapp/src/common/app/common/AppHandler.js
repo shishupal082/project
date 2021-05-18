@@ -381,7 +381,9 @@ AppHandler.extend({
         return dateArr;
     }
 });
+
 var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
+
 AppHandler.extend({
     GetUserDetails: function() {
         return userDetails;
@@ -406,6 +408,36 @@ AppHandler.extend({
             }
         }, function() {
             $S.log("Load loginUserDetails complete.");
+            $S.callMethod(callback);
+        }, null, Api.getAjaxApiCallMethod());
+    }
+});
+
+var staticData = {"appVersion": "", "uploadFileApiVersion": "",
+                "headingJson": "", "afterLoginLinkJson": "",
+                "footerLinkJson": "", "footerLinkJsonAfterLogin": "",
+                "jsonFileData": {}};
+
+AppHandler.extend({
+    GetAllStaticDetails: function() {
+        return staticData;
+    },
+    GetStaticData: function(key, defaultValue) {
+        if ($S.isString(staticData[key])) {
+            return staticData[key];
+        }
+        return defaultValue;
+    },
+    LoadStaticData: function(url, callback) {
+        if (!$S.isString(url)) {
+            $S.callMethod(callback);
+        }
+        $S.loadJsonData(null, [url], function(response, apiName, ajax){
+            if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
+                staticData = response["data"];
+            }
+        }, function() {
+            $S.log("Load staticData complete.");
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     }
@@ -910,6 +942,14 @@ AppHandler.extend({
         }
         return htmlFields;
     }
+});
+AppHandler.extend({
+    getTemplate: function(allTemplate, pageName, defaultTemplate) {
+        if ($S.isObject(allTemplate) && allTemplate[pageName]) {
+            return $S.clone(allTemplate[pageName]);
+        }
+        return defaultTemplate;
+    },
 });
 })($S);
 
