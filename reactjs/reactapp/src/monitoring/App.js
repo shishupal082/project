@@ -20,6 +20,7 @@ class App extends React.Component {
             isLoaded: false
         };
         this.appData = {
+            "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
             "goBackLinkData": [], // Used for back url
 

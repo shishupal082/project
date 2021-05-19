@@ -19,13 +19,17 @@ class AppComponentWrapper extends React.Component {
     }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
-        var containerClassName = this.props.currentPageName;
-        if ($S.isString(containerClassName)) {
-            containerClassName += " container APP-COMPONENT";
+        var appComponentClassName = this.props.currentPageName;
+        var addContainerClass = this.props.data.addContainerClass;
+        if ($S.isString(appComponentClassName)) {
+            appComponentClassName += " APP-COMPONENT";
         } else {
-            containerClassName = "container APP-COMPONENT";
+            appComponentClassName = "APP-COMPONENT";
         }
-        return (<div className={containerClassName}>
+        if ($S.isBooleanTrue(addContainerClass)) {
+            appComponentClassName += " container";
+        }
+        return (<div className={appComponentClassName}>
                     <Heading data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>
                     <PageTab data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/>

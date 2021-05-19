@@ -3,8 +3,10 @@ import Config from "./Config";
 import FTPHelper from "./FTPHelper";
 import GATracking from "./GATracking";
 
+import Template from "./Template";
 import UserControl from "./UserControl";
 import AppHandler from "../common/app/common/AppHandler";
+import TemplateHelper from "../common/TemplateHelper";
 
 var DataHandler;
 
@@ -72,6 +74,39 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
+    _handleStaticDataLoad: function() {
+        var appHeading = AppHandler.GetStaticData("headingJson", []);
+        var afterLoginLinkJson = AppHandler.GetStaticData("afterLoginLinkJson", []);
+        var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
+        try {
+            appHeading = JSON.parse(appHeading);
+        } catch(e) {}
+        try {
+            afterLoginLinkJson = JSON.parse(afterLoginLinkJson);
+        } catch(e) {}
+        try {
+            footerLinkJsonAfterLogin = JSON.parse(footerLinkJsonAfterLogin);
+        } catch(e) {}
+        Template["heading"] = appHeading;
+        Template["link"] = afterLoginLinkJson;
+        Template["footerLinkJsonAfterLogin"] = footerLinkJsonAfterLogin;
+
+        var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
+        field.text = AppHandler.GetUserData("username", "");
+
+        var isAdmin = AppHandler.GetUserData("isAdminTextDisplayEnable", false);
+        if ($S.isBooleanTrue(isAdmin)) {
+            TemplateHelper.removeClassTemplate(Template["link"], "link.is-admin", "d-none");
+        } else {
+            TemplateHelper.addClassTemplate(Template["link"], "link.is-admin", "d-none");
+        }
+        var userDetails = AppHandler.GetUserDetails();
+        if ($S.isObject(userDetails) && $S.isObject(userDetails.roles)) {
+            for(var key in userDetails.roles) {
+                TemplateHelper.removeClassTemplate(Template["footerLinkJsonAfterLogin"], key, "d-none");
+            }
+        }
+    },
     loadPageData: function(callBack) {
         var isLogin = AppHandler.GetUserData("login", false);
         var pageName = DataHandler.getData("pageName", "");
@@ -93,6 +128,7 @@ DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         AppHandler.LoadStaticData(Config.getApiUrl("getStaticDataApi", false, true), function() {
             AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", false, true), function() {
+                DataHandler._handleStaticDataLoad();
                 DataHandler.loadPageData(function() {
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                 });
@@ -224,17 +260,6 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    _getAppHeading: function() {
-        var appHeading = AppHandler.GetStaticData("headingJson", false);
-        if ($S.isString(appHeading)) {
-            try {
-                appHeading = JSON.parse(appHeading);
-            } catch(e) {}
-        } else {
-            appHeading = null;
-        }
-        return appHeading;
-    },
     _getRenderFieldRow: function() {
         var pageName = DataHandler.getData("pageName", "");
         var renderFieldRow = [];
@@ -245,14 +270,13 @@ DataHandler.extend({
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         // var dataLoadStatus = this.isDataLoadComplete();
-        var appHeading = this._getAppHeading();
         // if (dataLoadStatus) {
         //     renderData = this.getRenderData();
         // }
         var renderFieldRow = this._getRenderFieldRow();
 
         appDataCallback("renderFieldRow", renderFieldRow);
-        appDataCallback("appHeading", appHeading);
+        appDataCallback("appHeading", AppHandler.getTemplate(Template, "heading", []));
 
         appStateCallback();
     }

@@ -16,7 +16,8 @@ class App extends React.Component {
         this.appData = {
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "pageHeading": "",
-            "renderFieldRow": []
+            "renderFieldRow": [],
+            "disableFooter": true
         };
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
