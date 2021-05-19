@@ -1,5 +1,5 @@
 var Template = {};
-Template["noPageFound"] = [
+Template["pageNotFound"] = [
     {
         "tag": "center.h1",
         "text": {

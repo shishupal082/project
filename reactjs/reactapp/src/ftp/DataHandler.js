@@ -76,10 +76,14 @@ DataHandler.extend({
 DataHandler.extend({
     _handleStaticDataLoad: function() {
         var appHeading = AppHandler.GetStaticData("headingJson", []);
+        var pageNotFound = AppHandler.GetStaticData("pageNotFoundJson", []);
         var afterLoginLinkJson = AppHandler.GetStaticData("afterLoginLinkJson", []);
         var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
         try {
             appHeading = JSON.parse(appHeading);
+        } catch(e) {}
+        try {
+            pageNotFound = JSON.parse(pageNotFound);
         } catch(e) {}
         try {
             afterLoginLinkJson = JSON.parse(afterLoginLinkJson);
@@ -87,9 +91,18 @@ DataHandler.extend({
         try {
             footerLinkJsonAfterLogin = JSON.parse(footerLinkJsonAfterLogin);
         } catch(e) {}
-        Template["heading"] = appHeading;
-        Template["link"] = afterLoginLinkJson;
-        Template["footerLinkJsonAfterLogin"] = footerLinkJsonAfterLogin;
+        if ($S.isArray(appHeading) && appHeading.length > 0) {
+            Template["heading"] = appHeading;
+        }
+        if ($S.isArray(pageNotFound) && pageNotFound.length > 0) {
+            Template["pageNotFound"] = pageNotFound;
+        }
+        if ($S.isArray(afterLoginLinkJson) && afterLoginLinkJson.length > 0) {
+            Template["link"] = afterLoginLinkJson;
+        }
+        if ($S.isArray(footerLinkJsonAfterLogin) && footerLinkJsonAfterLogin.length > 0) {
+            Template["footerLinkJsonAfterLogin"] = footerLinkJsonAfterLogin;
+        }
 
         var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
         field.text = AppHandler.GetUserData("username", "");
@@ -110,14 +123,18 @@ DataHandler.extend({
     loadPageData: function(callBack) {
         var isLogin = AppHandler.GetUserData("login", false);
         var pageName = DataHandler.getData("pageName", "");
-        if ($S.isBooleanTrue(Config.forceLogin) && isLogin) {
-            if (pageName === Config.users_control) {
-                UserControl.loadPageData(function(response) {
-                    DataHandler.setData("users_control.response", response);
+        if ($S.isBooleanTrue(Config.forceLogin)) {
+            if (isLogin) {
+                if (pageName === Config.users_control) {
+                    UserControl.loadPageData(function(response) {
+                        DataHandler.setData("users_control.response", response);
+                        $S.callMethod(callBack);
+                    });
+                } else {
                     $S.callMethod(callBack);
-                });
+                }
             } else {
-                $S.callMethod(callBack);
+                AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", false));
             }
         } else {
             $S.callMethod(callBack);
@@ -265,19 +282,16 @@ DataHandler.extend({
         var renderFieldRow = [];
         if (pageName === Config.users_control) {
             renderFieldRow = UserControl.getRenderFieldRow();
+        } else {
+            renderFieldRow = AppHandler.getTemplate(Template, "pageNotFound", {});
         }
         return renderFieldRow;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
-        // var dataLoadStatus = this.isDataLoadComplete();
-        // if (dataLoadStatus) {
-        //     renderData = this.getRenderData();
-        // }
         var renderFieldRow = this._getRenderFieldRow();
-
+        var appHeading = AppHandler.getTemplate(Template, "heading", []);
+        appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", renderFieldRow);
-        appDataCallback("appHeading", AppHandler.getTemplate(Template, "heading", []));
-
         appStateCallback();
     }
 });
