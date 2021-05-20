@@ -142,10 +142,11 @@ Template["upload_file"] = [
                                     "text": "Subject"
                                 },
                                 {
-                                    "tag": "input",
+                                    "tag": "inputV2",
                                     "className": "form-control",
                                     "name": "upload_file.subject",
                                     "type": "text",
+                                    "value": "",
                                     "text": ""
                                 }
                             ]
@@ -160,10 +161,11 @@ Template["upload_file"] = [
                                     "text": "Heading"
                                 },
                                 {
-                                    "tag": "input",
+                                    "tag": "inputV2",
                                     "className": "form-control",
                                     "name": "upload_file.heading",
                                     "type": "text",
+                                    "value": "",
                                     "text": ""
                                 }
                             ]

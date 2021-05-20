@@ -425,6 +425,10 @@ AppHandler.extend({
     GetStaticData: function(key, defaultValue) {
         if ($S.isString(staticData[key])) {
             return staticData[key];
+        } else if ($S.isObject(staticData[key])) {
+            return staticData[key];
+        } else if ($S.isArray(staticData[key])) {
+            return staticData[key];
         }
         return defaultValue;
     },

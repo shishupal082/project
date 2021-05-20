@@ -5,6 +5,7 @@ import GATracking from "./GATracking";
 
 import Template from "./Template";
 import UserControl from "./UserControl";
+import UploadFile from "./UploadFile";
 import AppHandler from "../common/app/common/AppHandler";
 import TemplateHelper from "../common/TemplateHelper";
 
@@ -79,6 +80,8 @@ DataHandler.extend({
         var pageNotFound = AppHandler.GetStaticData("pageNotFoundJson", []);
         var afterLoginLinkJson = AppHandler.GetStaticData("afterLoginLinkJson", []);
         var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
+        var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
+        var uploadFileInstruction;
         try {
             appHeading = JSON.parse(appHeading);
         } catch(e) {}
@@ -102,6 +105,13 @@ DataHandler.extend({
         }
         if ($S.isArray(footerLinkJsonAfterLogin) && footerLinkJsonAfterLogin.length > 0) {
             Template["footerLinkJsonAfterLogin"] = footerLinkJsonAfterLogin;
+        }
+
+        if ($S.isObject(jsonFileData) && $S.isObject(jsonFileData.config)) {
+            if ($S.isString(jsonFileData.config.uploadFileInstruction)) {
+                uploadFileInstruction = jsonFileData.config.uploadFileInstruction;
+                TemplateHelper.setTemplateAttr(Template["upload_file"], "upload_file.message", "text", uploadFileInstruction);
+            }
         }
 
         var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
@@ -153,19 +163,40 @@ DataHandler.extend({
         });
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, pageName) {
+        var disabledPages = Config.disabledPages;
+        if ($S.isArray(disabledPages) && disabledPages.indexOf(pageName) >= 0) {
+            pageName = Config.noMatch;
+        }
         this.setData("pageName", pageName);
+    },
+    OnFileUploadChange: function(appStateCallback, appDataCallback, name, value) {
+        CurrentFormData.setData(name, value, true);
+    },
+    OnInputChange: function(appStateCallback, appDataCallback, name, value) {
+        DataHandler.setData(name, value.trim());
+    },
+    OnFormSubmit: function(appStateCallback, appDataCallback) {
+        var pageName = DataHandler.getData("pageName", "");
+        if (pageName === Config.upload_file) {
+            var file = CurrentFormData.getData("upload_file.file", {}, true);
+            UploadFile.upload(file, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
     }
 });
 DataHandler.extend({
-    handleInputChange: function(e) {
-        var currentTarget = e.currentTarget;
-        var fieldName = currentTarget.name;
-        if (fieldName === "upload_file.file") {
-            var file = currentTarget.files[0];
-            CurrentFormData.setData(fieldName, file, true);
-        } else {
-            CurrentFormData.setData(fieldName, currentTarget.value.trim());
+    getAleartMessage: function(response) {
+        var messageMap = {};
+        if (!$S.isObject(response)) {
+            return response;
         }
+        var messageCode = response.failureCode;
+        var error = response.error;
+        if ($S.isString(messageMap[messageCode])) {
+            return messageMap[messageCode];
+        }
+        return error;
     },
     handleButtonClick: function(e, Data, callBack) {
         var currentTarget = e.currentTarget;
@@ -279,9 +310,12 @@ DataHandler.extend({
 DataHandler.extend({
     _getRenderFieldRow: function() {
         var pageName = DataHandler.getData("pageName", "");
+        var file = CurrentFormData.getData("upload_file.file", {}, true);
         var renderFieldRow = [];
         if (pageName === Config.users_control) {
             renderFieldRow = UserControl.getRenderFieldRow();
+        } else if (pageName === Config.upload_file) {
+            renderFieldRow = UploadFile.getRenderFieldRow(file);
         } else {
             renderFieldRow = AppHandler.getTemplate(Template, "pageNotFound", {});
         }
@@ -290,8 +324,14 @@ DataHandler.extend({
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var renderFieldRow = this._getRenderFieldRow();
         var appHeading = AppHandler.getTemplate(Template, "heading", []);
+
+        var finalResponse = [];
+        finalResponse.push(AppHandler.getTemplate(Template, "link", []));
+        finalResponse.push(renderFieldRow);
+        finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
+
         appDataCallback("appHeading", appHeading);
-        appDataCallback("renderFieldRow", renderFieldRow);
+        appDataCallback("renderFieldRow", finalResponse);
         appStateCallback();
     }
 });

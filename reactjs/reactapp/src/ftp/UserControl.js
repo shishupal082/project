@@ -62,11 +62,7 @@ UserControl.extend({
             TemplateHelper.updateTemplateText(rowTemplate, data[i]);
             TemplateHelper.addItemInTextArray(renderFieldRow, "usersControl.data", rowTemplate);
         }
-        var finalResponse = [];
-        finalResponse.push(AppHandler.getTemplate(Template, "link", []));
-        finalResponse.push(renderFieldRow);
-        finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
-        return finalResponse;
+        return renderFieldRow;
     }
 });
 })($S);

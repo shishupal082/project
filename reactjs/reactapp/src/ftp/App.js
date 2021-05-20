@@ -22,6 +22,7 @@ class App extends React.Component {
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
@@ -33,6 +34,7 @@ class App extends React.Component {
             onClick: this.onClick,
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
+            onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
             getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
@@ -51,12 +53,19 @@ class App extends React.Component {
     onChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
+        var appStateCallback = this.appStateCallback;
+        var appDataCallback = this.appDataCallback;
+        if (name === "upload_file.file") {
+            DataHandler.OnFileUploadChange(appStateCallback, appDataCallback, name, e.currentTarget.files[0]);
+        } else {
+            DataHandler.OnInputChange(appStateCallback, appDataCallback, name, value);
+        }
     }
     // not working ?
     onFormSubmit(e) {
-        alert("onFormSubmit");
         e.preventDefault();
+        DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback);
+        return false;
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;
