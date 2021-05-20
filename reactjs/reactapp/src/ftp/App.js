@@ -3,8 +3,8 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 
 import AppComponent from "../common/app/components/AppComponent";
-import DataHandler from "./DataHandler";
-import Config from "./Config";
+import DataHandler from "./common/DataHandler";
+import Config from "./common/Config";
 
 
 class App extends React.Component {
@@ -46,8 +46,11 @@ class App extends React.Component {
     gotoPage(pageName) {
     }
     onClick(e) {
-        // var name = AppHandler.getFieldName(e);
-        // var value = AppHandler.getFieldValue(e);
+        var name = e.currentTarget.name;
+        var value = e.currentTarget.value;
+        var appStateCallback = this.appStateCallback;
+        var appDataCallback = this.appDataCallback;
+        DataHandler.OnButtonClick(appStateCallback, appDataCallback, name, value);
     }
     // for input and textarea
     onChange(e) {

@@ -1,10 +1,12 @@
-import $S from "../interface/stack.js";
-import Api from '../common/Api.js';
-import Config from "./Config";
-import Template from "./Template";
-import DataHandler from "./DataHandler";
-import TemplateHelper from "../common/TemplateHelper";
-import AppHandler from "../common/app/common/AppHandler";
+import $S from "../../interface/stack.js";
+
+import Api from '../../common/Api.js';
+import TemplateHelper from "../../common/TemplateHelper";
+import AppHandler from "../../common/app/common/AppHandler";
+
+import Config from "../common/Config";
+import Template from "../common/Template";
+import DataHandler from "../common/DataHandler";
 
 
 var UserControl;

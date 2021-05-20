@@ -1,9 +1,12 @@
-import $S from "../interface/stack.js";
-import Config from "./Config";
-import Template from "./Template";
-import DataHandler from "./DataHandler";
-import TemplateHelper from "../common/TemplateHelper";
-import AppHandler from "../common/app/common/AppHandler";
+import $S from "../../interface/stack.js";
+
+import TemplateHelper from "../../common/TemplateHelper";
+import AppHandler from "../../common/app/common/AppHandler";
+
+import Config from "../common/Config";
+import GATracking from "../common/GATracking";
+import Template from "../common/Template";
+import DataHandler from "../common/DataHandler";
 
 
 var UploadFile;
@@ -105,10 +108,10 @@ UploadFile.extend({
             $S.callMethod(callback);
             console.log(response);
             if (status === "FAILURE" || !$S.isObject(response)) {
-                // GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
+                GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
                 alert("Error in uploading file, Please Try again.");
             } else {
-                // GATracking.trackResponseAfterLogin("upload_file", response);
+                GATracking.trackResponseAfterLogin("upload_file", response);
                 UploadFile.handleApiResponse(callback, ajax, response);
             }
         }, function(percentComplete) {

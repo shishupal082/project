@@ -1,9 +1,9 @@
-import $$$ from '../interface/global';
-import $S from "../interface/stack.js";
+import $$$ from '../../interface/global';
+import $S from "../../interface/stack.js";
 
 var RequestId = $S.getRequestId();
 
-var Config = {};
+var Config = {"name": "Config", "imgExt": ["jpg", "jpeg", "png"]};
 
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
@@ -15,6 +15,7 @@ Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
+Config.navigator = $$$.navigator;
 
 
 var staticDataApi = $$$.staticDataApi;

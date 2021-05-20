@@ -1,13 +1,15 @@
-import $S from "../interface/stack.js";
-import Config from "./Config";
-import FTPHelper from "./FTPHelper";
-import GATracking from "./GATracking";
+import $S from "../../interface/stack.js";
 
+import AppHandler from "../../common/app/common/AppHandler";
+import TemplateHelper from "../../common/TemplateHelper";
+
+import Config from "./Config";
+import GATracking from "./GATracking";
 import Template from "./Template";
-import UserControl from "./UserControl";
-import UploadFile from "./UploadFile";
-import AppHandler from "../common/app/common/AppHandler";
-import TemplateHelper from "../common/TemplateHelper";
+
+import UserControl from "../pages/UserControl";
+import UploadFile from "../pages/UploadFile";
+import Dashboard from "../pages/Dashboard";
 
 var DataHandler;
 
@@ -18,6 +20,7 @@ var keys = [];
 
 
 keys.push("pageName");
+keys.push("platform");
 keys.push("upload_file.file");
 keys.push("upload_file.percentComplete");
 keys.push("upload_file.subject");
@@ -57,14 +60,64 @@ DataHandler.extend({
     },
     getData: function(key, defaultValue) {
         return CurrentFormData.getData(key, defaultValue);
+    },
+    trackUIEvent: function(event, status, reason, comment) {
+        var postData = {"event": event, "status": status, "reason": reason};
+        postData["comment"] = comment;
+        var url = Config.getApiUrl("track_event", "", true);
+        $S.sendPostRequest(Config.JQ, url, postData);
+    },
+    getNavigatorData: function(key) {
+        var result = key;
+        try {
+            var uiNavigator = Config.navigator;
+            if ($S.isString(uiNavigator[key])) {
+                result = uiNavigator[key];
+            }
+        } catch(err) {
+            result = "error in " + key;
+        }
+        return result;
+    },
+    getUserAgentTrackingData: function() {
+        var trackingData = [];
+        var trackingKey = ["platform","appVersion","appCodeName","appName"];
+        for(var i=0; i<trackingKey.length; i++) {
+            trackingData.push(this.getNavigatorData(trackingKey[i]));
+        }
+        return trackingData.join(",");
+    },
+    isAndroid: function() {
+        var platform = this.getNavigatorData("platform");
+        var appVersion = this.getNavigatorData("appVersion");
+        var isLinuxArmv = platform.search(/linux armv/i) >= 0;
+        var isLinuxAndroid = appVersion.search(/linux; android/i) >= 0;
+        if (isLinuxArmv && isLinuxAndroid) {
+            return true;
+        }
+        var event = "android_check";
+        var status = "FAILURE";
+        var reason = "";
+        var comment = "";
+        if (isLinuxArmv) {
+            comment = this.getUserAgentTrackingData();
+            reason = "LINUX_ARMV_NOT_ANDROID";
+        } else if (isLinuxAndroid) {
+            comment = this.getUserAgentTrackingData();
+            reason = "ANDROID_NOT_LINUX_ARMV";
+        } else {
+            return false;
+        }
+        this.trackUIEvent(event, status, reason, comment);
+        return false;
     }
 });
 DataHandler.extend({
     getPdfDownloadLink: function(filename) {
-        return Config.baseapi + "/download/file/" + filename + "?u=" + Config.getUserData("username", "");
+        return Config.baseApi + "/download/file/" + filename + "?u=" + AppHandler.GetUserData("username", "");
     },
     getPdfViewLink: function(filename) {
-        return Config.baseapi + "/view/file/" + filename + "?u=" + Config.getUserData("username", "");
+        return Config.baseApi + "/view/file/" + filename + "?u=" + AppHandler.GetUserData("username", "");
     },
     getCurrentPdfLink: function(Data) {
         var pdfLink = CurrentFormData.getData("dashboard.currentPdfLink", null);
@@ -81,6 +134,12 @@ DataHandler.extend({
         var afterLoginLinkJson = AppHandler.GetStaticData("afterLoginLinkJson", []);
         var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
         var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
+        var isAdminTextDisplayEnable = AppHandler.GetUserData("isAdminTextDisplayEnable", false);
+        if (!isAdminTextDisplayEnable) {
+            this.setData("dashboard.orderBy", "orderByUsername");
+        } else {
+            this.setData("dashboard.orderBy", "orderByDate");
+        }
         var uploadFileInstruction;
         try {
             appHeading = JSON.parse(appHeading);
@@ -140,6 +199,10 @@ DataHandler.extend({
                         DataHandler.setData("users_control.response", response);
                         $S.callMethod(callBack);
                     });
+                } else if (pageName === Config.dashboard) {
+                    Dashboard.loadPageData(function(response) {
+                        $S.callMethod(callBack);
+                    });
                 } else {
                     $S.callMethod(callBack);
                 }
@@ -153,6 +216,10 @@ DataHandler.extend({
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
+        var isAndroid = this.isAndroid();
+        if (isAndroid) {
+            this.setData("platform", "Android");
+        }
         AppHandler.LoadStaticData(Config.getApiUrl("getStaticDataApi", false, true), function() {
             AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", false, true), function() {
                 DataHandler._handleStaticDataLoad();
@@ -183,6 +250,28 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         }
+    },
+    OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
+        var pageName = DataHandler.getData("pageName", "");
+        if (pageName === Config.dashboard) {
+            DataHandler.setData("dashboard.orderBy", value);
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        }
+    },
+    OnButtonClick: function(appStateCallback, appDataCallback, name, value) {
+        if (name === "dashboard.fileinfo.view") {
+            GATracking.trackResponseAfterLogin("view_file", {"status": "IFRAME"});
+            DataHandler.setData("dashboard.currentPdfLink", value);
+            window.scrollTo(0, 0);
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        } else if (name === "dashboard.fileinfo.delete") {
+            var deleting = window.confirm("Are you sure? You want to delete file: " + value);
+            if (deleting) {
+                Dashboard.deleteFile(value, function() {
+                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                }); 
+            }
+        }
     }
 });
 DataHandler.extend({
@@ -197,114 +286,6 @@ DataHandler.extend({
             return messageMap[messageCode];
         }
         return error;
-    },
-    handleButtonClick: function(e, Data, callBack) {
-        var currentTarget = e.currentTarget;
-        if (currentTarget.name === "dashboard.fileinfo.view") {
-            GATracking.trackResponseAfterLogin("view_file", {"status": "IFRAME"});
-            CurrentFormData.setData("dashboard.currentPdfLink", currentTarget.value);
-            window.scrollTo(0, 0);
-            callBack(true);
-        } else if (currentTarget.name === "dashboard.fileinfo.delete") {
-            var deleting = window.confirm("Are you sure? You want to delete file: " + currentTarget.value);
-            if (deleting) {
-               DataHandler.deleteFile(Data, callBack, currentTarget.value); 
-            }
-        }
-    },
-    handleDropDownChange: function(e, Data, callBack) {
-        DataHandler.setData("dashboard.orderBy", e.currentTarget.value);
-        callBack(true);
-    }
-});
-DataHandler.extend({
-    deleteFile: function(Data, callBack, filename) {
-        var url = Config.apiMapping["delete_file"];
-        var postData = {};
-        postData["filename"] = filename;
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
-            console.log(response);
-            if (status === "FAILURE") {
-                GATracking.trackResponseAfterLogin("delete_file", {"status": "FAILURE_RESPONSE"});
-                alert("Error in delete file, Please Try again.");
-            } else {
-                GATracking.trackResponseAfterLogin("delete_file", response);
-                DataHandler.handleApiResponse(Data, callBack, "delete_file", ajax, response);
-            }
-        });
-    },
-    handleFormSubmit: function(e, Data, callBack) {
-        var pageName = Config.getDataHandler("page", "");
-        var url = Config.apiMapping[pageName];
-        if ($S.isString(url)) {
-            if (pageName === "upload_file") {
-                var formData = new FormData();
-                var uploadFileApiVersion = Config.getDataHandler("upload_file_api_version", "v1");
-                if (uploadFileApiVersion === "v2") {
-                    var subject = DataHandler.getData("upload_file.subject", "");
-                    var heading = DataHandler.getData("upload_file.heading", "");
-                    if ($S.isString(subject) && $S.isString(heading)) {
-                        if (subject.length < 1) {
-                            alert("Subject required");
-                            return;
-                        }
-                        if (heading.length < 1) {
-                            alert("Heading required");
-                            return
-                        }
-                    } else {
-                        alert("Subject and Heading required");
-                        return;
-                    }
-                    formData.append("subject", subject);
-                    formData.append("heading", heading);
-                }
-                DataHandler.setData("formSubmitStatus", "in_progress");
-                DataHandler.setData("upload_file.percentComplete", 0);
-                $S.callMethod(callBack);
-                formData.append("file", CurrentFormData.getData("upload_file.file", {}, true));
-                $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
-                    DataHandler.setData("formSubmitStatus", "completed");
-                    $S.callMethod(callBack);
-                    console.log(response);
-                    if (status === "FAILURE") {
-                        GATracking.trackResponseAfterLogin("upload_file", {"status": "FAILURE_RESPONSE"});
-                        alert("Error in uploading file, Please Try again.");
-                    } else {
-                        GATracking.trackResponseAfterLogin("upload_file", response);
-                        DataHandler.handleApiResponse(Data, callBack, pageName, ajax, response);
-                    }
-                }, function(percentComplete) {
-                    DataHandler.setData("upload_file.percentComplete", percentComplete);
-                    $S.callMethod(callBack);
-                });
-            }
-        }
-    }
-});
-DataHandler.extend({
-    handleApiResponse: function(Data, callBack, apiName, ajax, response) {
-        if (apiName === "upload_file") {
-            if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response));
-                if (response.failureCode === "UNAUTHORIZED_USER") {
-                    FTPHelper.pageReload();
-                }
-            } else {
-                alert("File saved as: " + response.data.fileName);
-                Config.location.href = "/dashboard";
-            }
-        } else if (apiName === "delete_file") {
-            if (response.status === "FAILURE") {
-                alert(Config.getAleartMessage(response));
-                if (response.failureCode === "UNAUTHORIZED_USER") {
-                    FTPHelper.pageReload();
-                }
-            } else {
-                alert("File deleted");
-                Config.location.href = "/dashboard";
-            }
-        }
     }
 });
 DataHandler.extend({
@@ -316,6 +297,8 @@ DataHandler.extend({
             renderFieldRow = UserControl.getRenderFieldRow();
         } else if (pageName === Config.upload_file) {
             renderFieldRow = UploadFile.getRenderFieldRow(file);
+        } else if (pageName === Config.dashboard) {
+            renderFieldRow = Dashboard.getRenderFieldRow();
         } else {
             renderFieldRow = AppHandler.getTemplate(Template, "pageNotFound", {});
         }

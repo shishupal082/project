@@ -1,5 +1,8 @@
-import $$$ from '../interface/global';
-import $S from "../interface/stack.js";
+import $$$ from '../../interface/global';
+import $S from "../../interface/stack.js";
+
+import AppHandler from "../../common/app/common/AppHandler";
+
 import DataHandler from "./DataHandler";
 
 
@@ -67,7 +70,7 @@ GATracking.extend({
         if (!$S.isObject(response)) {
             return;
         }
-        var username = DataHandler.getData("ui.username", "empty-username");
+        var username = AppHandler.GetUserData("username", "empty-username");
         var action = event + "_" + response.status;
         GATracking(action).send(username);
     }
