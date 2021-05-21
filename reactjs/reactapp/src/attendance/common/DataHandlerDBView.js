@@ -84,7 +84,7 @@ DataHandlerDBView.extend({
                     return false;
                 });
                 urls = urls.map(function(el, j, arr) {
-                    return Config.baseApi + el + "?v=" + Config.appVersion;
+                    return Config.baseApi + el + "?v=" + Config.requestId;
                 });
                 if (urls.length < 1) {
                     continue;

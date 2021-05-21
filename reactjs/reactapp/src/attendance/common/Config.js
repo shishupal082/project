@@ -2,9 +2,8 @@ import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
 import Template from "./Template";
-// var requestId = $S.getRequestId();
 
-var Config = {};
+var Config = {requestId: $S.getRequestId()};
 
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
