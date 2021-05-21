@@ -8,11 +8,12 @@ var Config = {};
 
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
+var appVersion = $$$.appVersion;
 
 Config.baseApi = baseApi;
 Config.basepathname = basepathname;
+Config.appVersion = appVersion;
 Config.forceLogin = $$$.forceLogin;
-Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
@@ -72,7 +73,7 @@ Config.defaultDateSelect = "monthly";
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
-apiMapping["appControlData"] = appControlDataApi;
+apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
 apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
 apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["loginRedirectUrl"] = "/login";
