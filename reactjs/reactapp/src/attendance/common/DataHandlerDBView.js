@@ -71,7 +71,7 @@ DataHandlerDBView.extend({
         return tableData;
     },
     _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, temp, urls;
+        var request = [], i, temp, urls, temp2;
         if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
             for(i=0; i<dbDataApis.length; i++) {
                 if (!this._isValidTableEntry(dbDataApis[i])) {
@@ -84,7 +84,13 @@ DataHandlerDBView.extend({
                     return false;
                 });
                 urls = urls.map(function(el, j, arr) {
-                    return Config.baseApi + el + "?v=" + Config.requestId;
+                    if ($S.isString(el)) {
+                        temp2 = el.split("?");
+                        if (temp2.length > 1) {
+                            return Config.baseApi + el + "&requestId=" + Config.requestId;
+                        }
+                    }
+                    return Config.baseApi + el + "?requestId=" + Config.requestId;
                 });
                 if (urls.length < 1) {
                     continue;
