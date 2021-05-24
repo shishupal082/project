@@ -45,14 +45,54 @@
         ],
         "list3Data_2": [
             {
-                "name": "",
-                "text": "Select..."
+                "name": "list3Data_2_1",
+                "text": "All"
             },
             {
                 "defaultSelected": true,
-                "name": "uniqueId_auto_generated",
-                "text": "Order by Section",
-                "value": "section"
+                "text": "Order by Station",
+                "value": [
+                    {
+                        "key": "station",
+                        "text": {
+                            "tag": "h4",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "className": "badge badge-primary",
+                                    "name": "station"
+                                },
+                                {
+                                    "tag": "button",
+                                    "name": "reload",
+                                    "value": "reload",
+                                    "className": "btn btn-primary pt-0 pb-0 ml-10px",
+                                    "text": "Realod"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "text": "Order by Location",
+                "value": [{"key": "designation"}]
+            },
+            {
+                "text": "Order by Station & Location",
+                "value": [{"key": "station"}, {"key": "designation"}]
+            },
+            {
+                "text": "Order by Location & Station",
+                "value": [{"key": "designation"}, {"key": "station"}]
+            },
+            {
+                "text": "Order by Location & Station & Team",
+                "value": [{"key": "designation"}, {"key": "station"}, {"key": "team"}]
+            },
+            {
+                "text": "Order by Team & Location & Station",
+                "value": [{"key": "team"}, {"key": "designation"}, {"key": "station"}]
             }
         ],
         "list3Data_3": [
