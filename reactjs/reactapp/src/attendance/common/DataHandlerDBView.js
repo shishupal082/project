@@ -5,6 +5,7 @@ import Config from "./Config";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import TemplateHelper from "../../common/TemplateHelper";
 
 var DataHandlerDBView;
 
@@ -71,7 +72,7 @@ DataHandlerDBView.extend({
         return tableData;
     },
     _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, temp, urls, temp2;
+        var request = [], i, temp, urls;
         if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
             for(i=0; i<dbDataApis.length; i++) {
                 if (!this._isValidTableEntry(dbDataApis[i])) {
@@ -85,8 +86,7 @@ DataHandlerDBView.extend({
                 });
                 urls = urls.map(function(el, j, arr) {
                     if ($S.isString(el)) {
-                        temp2 = el.split("?");
-                        if (temp2.length > 1) {
+                        if (el.split("?").length > 1) {
                             return Config.baseApi + el + "&requestId=" + Config.requestId;
                         }
                     }
@@ -314,6 +314,53 @@ DataHandlerDBView.extend({
         var filterOptions = AppHandler.generateFilterData(metaDataTemp, dbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewDataTable;
+    },
+    GenerateFinalDBViewData: function(dbViewData) {
+        var finalDataV2 = [], temp3, temp4;
+        var list3Data = DataHandler.getCurrentList3Data();
+        var l3Data;
+        var i, k, name, heading;
+        if ($S.isObject(list3Data) && $S.isArray(list3Data.value) && list3Data.value.length > 0) {
+            for(i=0; i<dbViewData.length; i++) {
+                if (!$S.isArray(dbViewData[i])) {
+                    continue;
+                }
+                temp3 = finalDataV2;
+                for(k=0; k<list3Data.value.length; k++) {
+                    l3Data = list3Data.value[k];
+                    if (!$S.isObject(l3Data) || !$S.isString(l3Data.key)) {
+                        continue;
+                    }
+                    name = l3Data.key;
+                    heading = $S.findParam(dbViewData[i], name, "", "name", "value");
+                    if (!$S.isString(heading) || heading.length < 1) {
+                        heading = "Empty";
+                    }
+                    temp4 = TemplateHelper(temp3).searchField(heading);
+                    if ($S.isObject(temp4) && temp4.name === heading) {
+
+                    } else {
+                        temp4 = {"name": heading, "key": l3Data.key, "text": []};
+                        if ($S.isArray(temp3)) {
+                            temp3.push(temp4);
+                        } else if ($S.isObject(temp3) && $S.isArray(temp3.text)) {
+                            temp3.text.push(temp4);
+                        }
+                    }
+                    temp3 = temp4;
+                }
+                if ($S.isObject(temp4)) {
+                    if ($S.isArray(temp4.text)) {
+                        TemplateHelper.addItemInTextArray(temp4, heading, dbViewData[i]);
+                        temp3 = temp4;
+                    }
+                }
+                temp4 = null;
+            }
+            return finalDataV2;
+        } else {
+            return [{"text": dbViewData}];
+        }
     }
 });
 

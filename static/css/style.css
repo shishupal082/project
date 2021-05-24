@@ -62,6 +62,18 @@ body.theme-grey {
 .h-45px {
     height: 45px;
 }
+.fs-80 {
+    font-size: 80%;
+}
+.fs-60 {
+    font-size: 60%;
+}
+.fs-50 {
+    font-size: 50%;
+}
+.fs-40 {
+    font-size: 40%;
+}
 table.table-padded-px-5 > thead > tr > th,
 table.table-padded-px-5 > thead > tr > td,
 table.table-padded-px-5 > tbody > tr > th,

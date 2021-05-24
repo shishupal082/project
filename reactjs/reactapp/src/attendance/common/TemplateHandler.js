@@ -179,6 +179,73 @@ TemplateHandler.extend({
             renderField = this.getTemplate("noDataFound");
         }
         return renderField;
+    },
+    _generateHeading: function(headingText, key, currentList3Data) {
+        var heading = headingText;
+        var formValue = {"tableHeading": headingText};
+        var currentField = null;
+        var i = 0, isFound = false;
+        formValue[key] = headingText;
+        if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
+            for (i = 0; i < currentList3Data.value.length; i++) {
+                if (!$S.isObject(currentList3Data.value[i])) {
+                    continue;
+                }
+                if (currentList3Data.value[i].key === key) {
+                    currentField = currentList3Data.value[i];
+                    break;
+                }
+            }
+        }
+        if ($S.isObject(currentField)) {
+            if ($S.isObject(currentField.text) || $S.isArray(currentField.text)) {
+                heading = $S.clone(currentField.text);
+                isFound = true;
+            }
+        }
+        if (!isFound) {
+            if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
+                if (i === 0 && currentList3Data.value.length === 1) {
+                    heading = this.getTemplate("dbViewHeading1-1");
+                } else if (i === 0 && currentList3Data.value.length > 1) {
+                    heading = this.getTemplate("dbViewHeading1-many");
+                } else if (i === 1 && currentList3Data.value.length >= 2) {
+                    heading = this.getTemplate("dbViewHeading2-many");
+                } else if (currentList3Data.value.length > 2) {
+                    heading = this.getTemplate("dbViewHeading3-many");
+                }
+            }
+        }
+        if (!$S.isString(heading)) {
+            TemplateHelper.updateTemplateText(heading, formValue);
+        }
+        return heading;
+    },
+    _recursiveGenerateHeading: function(renderField, tempRenderData, currentList3Data) {
+        if (!$S.isArray(tempRenderData)) {
+            return;
+        }
+        for (var i=0; i<tempRenderData.length; i++) {
+            if ($S.isObject(tempRenderData[i])) {
+                if ($S.isString(tempRenderData[i].name)) {
+                    renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
+                }
+                this._recursiveGenerateHeading(renderField, tempRenderData[i].text, currentList3Data)
+            } else if ($S.isArray(tempRenderData[i])) {
+                renderField.push(this.generateDbViewRenderFieldV2([{"tableData": tempRenderData}], true, "tableData"));
+                break;
+            }
+        }
+    },
+    generateDbViewRenderFieldV3: function(renderData) {
+        var renderField = [];
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            this._recursiveGenerateHeading(renderField, renderData, currentList3Data);
+        } else {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
     }
 });
 TemplateHandler.extend({
@@ -214,8 +281,10 @@ TemplateHandler.extend({
                     renderField = this.generateDbViewRenderFieldV2(renderData, true, "tableDataV2");
                 break;
                 case "ta":
-                case "dbview":
                     renderField = this.generateDbViewRenderFieldV2(renderData, true, "tableData");
+                break;
+                case "dbview":
+                    renderField = this.generateDbViewRenderFieldV3(renderData);
                 break;
                 case "home":
                     renderField = this.generateHomeRenderField();

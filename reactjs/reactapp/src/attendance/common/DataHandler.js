@@ -561,7 +561,7 @@ DataHandler.extend({
                 renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
             break;
             case "dbview":
-                renderData = DataHandlerV2.GenerateFinalDBViewData(filteredUserData);
+                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData);
             break;
             default:
                 renderData = [];

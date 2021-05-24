@@ -504,46 +504,6 @@ DataHandlerV2.extend({
         }
         renderData.push({"tableData": userData});
         return renderData;
-    },
-    GenerateFinalDBViewData: function(dbViewData) {
-        var finalData = [];
-        var list3Data = DataHandler.getCurrentList3Data();
-        var i, j, name, key, heading, isFound, temp = {}, temp2 = [];
-        if ($S.isObject(list3Data) && $S.isString(list3Data.value) && list3Data.value.length > 0) {
-            name = list3Data.value;
-            for(i=0; i<dbViewData.length; i++) {
-                if (!$S.isArray(dbViewData[i])) {
-                    continue;
-                }
-                isFound = false;
-                for(j=0; j<dbViewData[i].length; j++) {
-                    if (!$S.isObject(dbViewData[i][j])) {
-                        continue;
-                    }
-                    key = dbViewData[i][j].name;
-                    if (key === name) {
-                        heading = dbViewData[i][j].value;
-                        isFound = true;
-                        if (temp2.indexOf(heading) < 0) {
-                            temp2.push(heading);
-                            temp[heading] = {"tableHeading": heading, tableData: []};
-                        }
-                        break;
-                    }
-                }
-                if (isFound) {
-                    temp[heading]["tableData"].push(dbViewData[i]);
-                }
-            }
-            temp2 = temp2.sort();
-            for(i=temp2.length-1; i>=0; i--) {
-                key = temp2[i];
-                finalData.push({"tableHeading": temp[key].tableHeading, "tableData": temp[key].tableData});
-            }
-        } else {
-            finalData.push({"tableData": dbViewData});
-        }
-        return finalData;
     }
 });
 

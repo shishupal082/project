@@ -84,9 +84,75 @@ Template["dbviewField"] = [
         "text": []
     }
 ];
+Template["dbViewHeading1-1"] = [
+    {
+        "tag": "div.h4",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "tableHeading",
+                "text": ""
+            },
+            {
+                "tag": "button",
+                "className": "btn btn-primary pt-0 pb-0 ml-10px",
+                "value": "reload",
+                "name": "reload",
+                "text": "Reload"
+            }
+        ]
+    }
+];
+Template["dbViewHeading1-many"] = [
+    {
+        "tag": "div.h4",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "tableHeading",
+                "text": ""
+            }
+        ]
+    }
+];
+Template["dbViewHeading2-many"] = [
+    {
+        "tag": "div.h6",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "tableHeading",
+                "text": ""
+            },
+            {
+                "tag": "button",
+                "className": "btn btn-primary pt-0 pb-0 ml-10px fs-80",
+                "value": "reload",
+                "name": "reload",
+                "text": "Reload"
+            }
+        ]
+    }
+];
+Template["dbViewHeading3-many"] = [
+    {
+        "tag": "div.b",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-secondary",
+                "name": "tableHeading",
+                "text": ""
+            }
+        ]
+    }
+];
 Template["tableView"] = [
     {
-        "tag": "div.h3",
+        "tag": "div.h4",
         "text": [
             {
                 "tag": "span",
