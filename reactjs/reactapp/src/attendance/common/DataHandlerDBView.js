@@ -320,6 +320,9 @@ DataHandlerDBView.extend({
         var list3Data = DataHandler.getCurrentList3Data();
         var l3Data;
         var i, k, name, heading;
+        if (!$S.isArray(dbViewData) || dbViewData.length < 1) {
+            return null;
+        }
         if ($S.isObject(list3Data) && $S.isArray(list3Data.value) && list3Data.value.length > 0) {
             for(i=0; i<dbViewData.length; i++) {
                 if (!$S.isArray(dbViewData[i])) {
