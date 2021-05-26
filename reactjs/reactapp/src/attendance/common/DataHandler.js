@@ -139,18 +139,14 @@ DataHandler.extend({
         }
         DataHandler.setData("currentList1Id", currentList1Id);
     },
-    generateDateParameter: function() {
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
-        var selectedDateRange = this.getCurrentList3Data();
-        var dateRange = $S.findParam([selectedDateRange, currentAppData, metaData], "dateRange", []);
+    GetDataParameterFromDate: function(dateRange) {
         var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
         var i;
         if ($S.isArray(dateRange) && dateRange.length === 2) {
             allDate = AppHandler.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
             startLimit = dateRange[0];
             endLimit = dateRange[1];
-            tempAllDate = allDate.map(function(el, i, arr) {
+            tempAllDate = allDate.map(function(el, index, arr) {
                 return el.dateStr;
             });
             arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
@@ -166,7 +162,14 @@ DataHandler.extend({
                 }
             }
         }
-        DataHandler.setData("dateParameters", arrangedDate);
+        return arrangedDate;
+    },
+    generateDateParameter: function() {
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var selectedDateRange = this.getCurrentList3Data();
+        var dateRange = $S.findParam([selectedDateRange, currentAppData, metaData], "dateRange", []);
+        DataHandler.setData("dateParameters", this.GetDataParameterFromDate(dateRange));
     },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
@@ -527,7 +530,7 @@ DataHandler.extend({
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateArray = dateParameters[dateSelect];
         }
-        var renderData = [], i;
+        var renderData = [], i, currentList3Data;
         var userData = DataHandler.getData("dbViewDataTable", []);
         var metaData = DataHandler.getData("metaData", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
@@ -561,7 +564,8 @@ DataHandler.extend({
                 renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
             break;
             case "dbview":
-                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData);
+                currentList3Data = this.getCurrentList3Data();
+                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data);
             break;
             default:
                 renderData = [];

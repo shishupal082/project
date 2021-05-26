@@ -69,15 +69,20 @@ AppHandler.extend({
     isValidDateStr: function(dateStr) {
         var p1Formate = "YYYY/-/MM/-/DD";
         var p2Formate = "YYYY/-/MM/-/DD/ /hh/:/mm";
+        var p3Formate = "YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms";
         //2020-05-31
         var p1 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9]/i;
         //2020-05-31 00:00
         var p2 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]/i;
+        //2021-05-26 00:00:09.987
+        var p3 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]{3}/i;
         var dateObj;
-        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10)) {
+        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10 || dateStr.length === 23)) {
             dateObj = DT.getDateObj(dateStr);
             if (dateObj !== null) {
-                if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
+                if (dateStr.search(p3) >= 0 && dateStr === DT.formateDateTime(p3Formate, "/", dateObj)) {
+                    return true;
+                } else if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
                     return true;
                 } else if (dateStr.search(p1) >= 0 && dateStr === DT.formateDateTime(p1Formate, "/", dateObj)) {
                     return true;
@@ -87,6 +92,9 @@ AppHandler.extend({
         return false;
     },
     isDateLiesInRange: function(startDate, endDate, fieldDate) {
+        if ($S.isString(fieldDate) && fieldDate.length === 10) {
+            fieldDate += " 00:00";
+        }
         startDate = DT.getDateObj(startDate);
         endDate = DT.getDateObj(endDate);
         fieldDate = DT.getDateObj(fieldDate);
@@ -361,6 +369,12 @@ AppHandler.extend({
         }
         if (!this.isValidDateStr(endLimit)) {
             endLimit = endDateStr;
+        }
+        if ($S.isString(startLimit) && startLimit.length === 10) {
+            startLimit += " 00:00";
+        }
+        if ($S.isString(endLimit) && endLimit.length === 10) {
+            endLimit += " 23:59";
         }
         var dateArr = [];
         var startDateObj = DT.getDateObj(startDateStr);

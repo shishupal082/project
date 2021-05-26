@@ -26,3 +26,27 @@ Added sortable heading for result pattern for all pages
 
 Seprate resultPattern option is added for all 5 pages
     - entry, update, summary, ta, dbview
+
+2021-05-26
+-----------------------
+
+List3Data for dbView
+
+list3Data_2: [
+        {
+            "text": "Order by Date & Station 3",
+            "value": [{"key": "date"}, {"key": "station"}, {"key": "date"}, {"key": "station"}, {"key": "deviceId"}]
+        },
+        {
+            "text": "Order by Date & Station 3",
+            "value": [{"key": "date"}, {"key": "station"}, {"key": "date"}, {"key": "station"}, {"key": "deviceId"}]
+        }
+]
+
+[{"key": "date"}, {"key": "station"}, {"key": "date"}, {"key": "date"}]
+
+- Two continuous entry of same key will be treated one
+
+[{"key": "date"}, {"key": "station"}, {"key": "date"}, {"key": "station"}, {"key": "deviceId"}]
+- Index for all date key will be 0 and all station heading will be 1
+- Index for deviceId will be 4

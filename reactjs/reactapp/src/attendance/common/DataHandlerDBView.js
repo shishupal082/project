@@ -302,6 +302,7 @@ DataHandlerDBView.extend({
         });
     }
 });
+var GlobalArray = [];
 DataHandlerDBView.extend({
     generateFilterOptions: function() {
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
@@ -315,9 +316,149 @@ DataHandlerDBView.extend({
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewDataTable;
     },
-    GenerateFinalDBViewData: function(dbViewData) {
+    _convertRenderToDbData: function(renderData) {
+        if (!$S.isArray(renderData)) {
+            return $S.clone(GlobalArray);
+        }
+        for (var i = 0; i < renderData.length; i++) {
+            if ($S.isObject(renderData[i])) {
+                this._convertRenderToDbData(renderData[i].text)
+            } else if ($S.isArray(renderData[i])) {
+                GlobalArray = GlobalArray.concat(renderData);
+                break;
+            }
+        }
+        return $S.clone(GlobalArray);
+    },
+    _handleDateParameterV2: function(renderData, key, availableDate) {
+        if (!$S.isArray(renderData)) {
+            return renderData;
+        }
+        for (var i=0; i<renderData.length; i++) {
+            if ($S.isObject(renderData[i])) {
+                if (renderData[i].key === key) {
+                    GlobalArray = [];
+                    if (availableDate.indexOf(renderData[i].name) < 0) {
+                        availableDate.push(renderData[i].name);
+                    }
+                    renderData[i].text = this._convertRenderToDbData(renderData[i].text);
+                } else {
+                    this._handleDateParameterV2(renderData[i].text, key, availableDate);
+                }
+            }
+        }
+        return renderData;
+    },
+    _handleDateParameterV3: function(renderData, key, list3Data) {
+        if (!$S.isArray(renderData)) {
+            return renderData;
+        }
+        for (var i=0; i<renderData.length; i++) {
+            if ($S.isObject(renderData[i])) {
+                if (renderData[i].key === key) {
+                    renderData[i].text = this.GenerateFinalDBViewData(renderData[i].text, list3Data);
+                } else {
+                    this._handleDateParameterV3(renderData[i].text, key, list3Data);
+                }
+            }
+        }
+        return renderData;
+    },
+    _handleDateParameterV5: function(renderData, key, dateRange) {
+        var finalData = [], temp;
+        for(var i=dateRange.length-1; i>=0; i--) {
+            temp = {"key": key, "name": dateRange[i].dateHeading, "text": []};
+            for (var j=0; j<renderData.length; j++) {
+                if (AppHandler.isDateLiesInRange(dateRange[i].dateRange[0], dateRange[i].dateRange[1], renderData[j].name)) {
+                    if ($S.isArray(renderData[j].text)) {
+                        temp.text = temp.text.concat(renderData[j].text);
+                    }
+                }
+            }
+            if (temp.text.length > 0) {
+                finalData.push(temp);
+            }
+        }
+        return finalData;
+    },
+    _handleDateParameterV4: function(renderData, key, dateRange) {
+        if (!$S.isArray(renderData)) {
+            return renderData;
+        }
+        for (var i=0; i<renderData.length; i++) {
+            if ($S.isObject(renderData[i])) {
+                if (renderData[i].key === key) {
+                    renderData = this._handleDateParameterV5(renderData, key, dateRange);
+                    break;
+                } else {
+                    renderData[i].text = this._handleDateParameterV4(renderData[i].text, key, dateRange);
+                }
+            }
+        }
+        return renderData;
+    },
+    _handleDateParameter: function(renderData, currentList3Data) {
+        var dateSelect = DataHandler.getData("date-select");
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
+        if (!$S.isString(dateSelect) || dateSelect.length < 1) {
+            return renderData;
+        }
+        if (!$S.isArray(renderData)) {
+            return renderData;
+        }
+        if (!$S.isObject(dateParameterField)) {
+            return renderData;
+        }
+        if (!$S.isString(dateParameterField.table)) {
+            return renderData;
+        }
+        if (!$S.isString(dateParameterField.fieldName) || dateParameterField.fieldName.length < 1) {
+            return renderData;
+        }
+        if (!$S.isObject(currentList3Data)) {
+            return renderData;
+        }
+        if (!$S.isArray(currentList3Data.value)) {
+            return renderData;
+        }
+        var l3Data = null, i;
+        var key = dateParameterField.fieldName;
+        var tempList3Data = {};
+        for(i=0; i<currentList3Data.value.length; i++) {
+            if (!$S.isObject(currentList3Data.value[i])) {
+                continue;
+            }
+            if (dateParameterField.fieldName === currentList3Data.value[i].key) {
+                l3Data = currentList3Data.value[i];
+                break;
+            }
+        }
+        var availableDate = [];
+        tempList3Data["value"] = currentList3Data.value.splice(i+1);
+        if (!$S.isObject(l3Data)) {
+            return renderData;
+        }
+        var tempRenderData = $S.clone(renderData);
+        this._handleDateParameterV2(tempRenderData, key, availableDate);
+        availableDate = availableDate.sort();
+        var dateRange = [];
+        if (availableDate.length >= 0) {
+            dateRange.push(availableDate[0]);
+            dateRange.push(availableDate[availableDate.length-1]);
+        }
+        var dateParameters = DataHandler.GetDataParameterFromDate(dateRange);
+        if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
+            dateParameters = dateParameters[dateSelect];
+            tempRenderData = this._handleDateParameterV4(tempRenderData, key, dateParameters);
+        }
+        this._handleDateParameterV3(tempRenderData, key, tempList3Data);
+        return tempRenderData;
+    },
+    GenerateFinalDBViewData: function(dbViewData, currentList3Data) {
         var finalDataV2 = [], temp3, temp4;
-        var list3Data = DataHandler.getCurrentList3Data();
+        var list3Data = currentList3Data;
         var l3Data;
         var i, k, name, heading;
         if (!$S.isArray(dbViewData) || dbViewData.length < 1) {
@@ -360,6 +501,7 @@ DataHandlerDBView.extend({
                 }
                 temp4 = null;
             }
+            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data);
             return finalDataV2;
         } else {
             return [{"text": dbViewData}];

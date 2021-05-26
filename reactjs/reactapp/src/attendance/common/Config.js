@@ -51,7 +51,7 @@ Config.ta = "ta";
 Config.dbview = "dbview";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["entry", "summary"];
+Config.dateSelectionRequired = ["entry", "summary", "dbview"];
 
 Config.defaultPageFields = [];
 
