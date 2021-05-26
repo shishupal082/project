@@ -440,8 +440,7 @@ DataHandlerDBView.extend({
         if (!$S.isObject(l3Data)) {
             return renderData;
         }
-        var tempRenderData = $S.clone(renderData);
-        this._handleDateParameterV2(tempRenderData, key, availableDate);
+        this._handleDateParameterV2(renderData, key, availableDate);
         availableDate = availableDate.sort();
         var dateRange = [];
         if (availableDate.length >= 0) {
@@ -451,10 +450,10 @@ DataHandlerDBView.extend({
         var dateParameters = DataHandler.GetDataParameterFromDate(dateRange);
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateParameters = dateParameters[dateSelect];
-            tempRenderData = this._handleDateParameterV4(tempRenderData, key, dateParameters);
+            renderData = this._handleDateParameterV4(renderData, key, dateParameters);
         }
-        this._handleDateParameterV3(tempRenderData, key, tempList3Data);
-        return tempRenderData;
+        this._handleDateParameterV3(renderData, key, tempList3Data);
+        return renderData;
     },
     GenerateFinalDBViewData: function(dbViewData, currentList3Data) {
         var finalDataV2 = [], temp3, temp4;
