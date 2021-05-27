@@ -490,10 +490,11 @@ DataHandler.extend({
         return filteredData;
     },
     generateFilterOption: function() {
+        var currentAppData = this.getCurrentAppData();
         var reportData = this.getData("reportData", []);
         var metaData = this.getData("metaData", {});
         var filterValues = DataHandler.getFilterDataValues();
-        var filterOptions = AppHandler.generateFilterData(metaData, reportData, filterValues);
+        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, reportData, filterValues);
         this.setData("filterOptions", filterOptions);
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {

@@ -305,14 +305,11 @@ DataHandlerDBView.extend({
 var GlobalArray = [];
 DataHandlerDBView.extend({
     generateFilterOptions: function() {
-        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var metaDataTemp = {"filterKeys": [], "preFilter": {}};
-        var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
+        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
+        var metaData = DataHandler.getData("metaData", {});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
-        metaDataTemp["filterKeys"] = $S.findParam([currentAppData, metaData], "filterKeys", []);
-        metaDataTemp["preFilter"] = $S.findParam([currentAppData, metaData], "preFilter", {});
-        var filterOptions = AppHandler.generateFilterData(metaDataTemp, dbViewDataTable, filterSelectedValues, "name");
+        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewDataTable;
     },

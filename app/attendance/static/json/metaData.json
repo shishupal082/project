@@ -1,5 +1,20 @@
 {
     "filterKeys": ["station", "team", "designation", "username", "reset"],
+    "stationPreFilter": [
+        {
+            "value": "(stn1|stn2)",
+            "option": "Stn Unit"
+        },
+        {
+            "exceptValue": true,
+            "value": "~(stn1|stn2)",
+            "option": "Except Stn Unit"
+        },
+        {
+            "value": "",
+            "option": "All"
+        }
+    ],
     "preFilter": {
         "station": [
             {

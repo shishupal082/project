@@ -705,24 +705,35 @@ AppHandler.extend({
         }
         return selectionOptions;
     },
-    generateFilterData: function(metaData, csvData, filterSelectedValues, searchParam) {
+    generateFilterData: function(currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
         if (!$S.isArray(csvData)) {
             return [];
         }
         if (!$S.isObject(filterSelectedValues)) {
             filterSelectedValues = {};
         }
+        var metaDataTemp = {"filterKeys": [], "preFilter": {}};
+        metaDataTemp["filterKeys"] = $S.findParam([currentAppData, metaData], "filterKeys", []);
+        metaDataTemp["preFilter"] = $S.findParam([currentAppData, metaData], "preFilter", {});
+        if (!$S.isObject(metaDataTemp["preFilter"])) {
+            metaDataTemp["preFilter"] = {};
+        }
         var filterKeys = [], i, j, temp, temp2;
         var preFilter = {};
-        if ($S.isObject(metaData) && $S.isArray(metaData.filterKeys)) {
-            for(i=0; i<metaData.filterKeys.length; i++) {
-                if (!$S.isString(metaData.filterKeys[i])) {
+        if ($S.isObject(metaDataTemp) && $S.isArray(metaDataTemp.filterKeys)) {
+            for(i=0; i<metaDataTemp.filterKeys.length; i++) {
+                if (!$S.isString(metaDataTemp.filterKeys[i]) || metaDataTemp.filterKeys[i].length < 1) {
                     continue;
                 }
-                filterKeys.push(metaData.filterKeys[i]);
+                temp = metaDataTemp.filterKeys[i];
+                filterKeys.push(temp);
+                temp2 = $S.findParam([currentAppData, metaData], temp + "Prefilter", []);
+                if ($S.isArray(temp2) && temp2.length > 0) {
+                    metaDataTemp["preFilter"][temp] = temp2;
+                }
             }
-            if ($S.isObject(metaData.preFilter)) {
-                preFilter = metaData.preFilter;
+            if ($S.isObject(metaDataTemp.preFilter)) {
+                preFilter = metaDataTemp.preFilter;
             }
         }
         var tempFilterOptions = {};

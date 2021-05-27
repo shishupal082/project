@@ -189,10 +189,11 @@ DataHandlerV2.extend({
         }
     },
     generateFilterOptions: function() {
+        var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var userData = DataHandler.getData("userData", []);
         var filterDataValues = DataHandler.getData("filterValues", {});
-        var filterOptions = AppHandler.generateFilterData(metaData, userData, filterDataValues);
+        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, userData, filterDataValues);
         DataHandler.setData("filterOptions", filterOptions);
     }
 });
