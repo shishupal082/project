@@ -346,16 +346,16 @@ DataHandlerDBView.extend({
         }
         return renderData;
     },
-    _handleDateParameterV3: function(renderData, key, list3Data) {
+    _handleDateParameterV3: function(renderData, key, list3Data, dateParameterField) {
         if (!$S.isArray(renderData)) {
             return renderData;
         }
         for (var i=0; i<renderData.length; i++) {
             if ($S.isObject(renderData[i])) {
                 if (renderData[i].key === key) {
-                    renderData[i].text = this.GenerateFinalDBViewData(renderData[i].text, list3Data);
+                    renderData[i].text = this.GenerateFinalDBViewData(renderData[i].text, list3Data, dateParameterField);
                 } else {
-                    this._handleDateParameterV3(renderData[i].text, key, list3Data);
+                    this._handleDateParameterV3(renderData[i].text, key, list3Data, dateParameterField);
                 }
             }
         }
@@ -394,11 +394,8 @@ DataHandlerDBView.extend({
         }
         return renderData;
     },
-    _handleDateParameter: function(renderData, currentList3Data) {
+    _handleDateParameter: function(renderData, currentList3Data, dateParameterField) {
         var dateSelect = DataHandler.getData("date-select");
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
-        var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
         if (!$S.isString(dateSelect) || dateSelect.length < 1) {
             return renderData;
         }
@@ -449,19 +446,21 @@ DataHandlerDBView.extend({
             dateParameters = dateParameters[dateSelect];
             renderData = this._handleDateParameterV4(renderData, key, dateParameters);
         }
-        this._handleDateParameterV3(renderData, key, tempList3Data);
+        this._handleDateParameterV3(renderData, key, tempList3Data, dateParameterField);
         return renderData;
     },
-    SortDbViewResult: function(renderData, sortableValue, sortableName) {
+    SortDbViewResult: function(renderData, sortableValue, sortableName, dateParameterField) {
         if (!$S.isArray(renderData)) {
             return renderData;
         }
         for (var i=0; i<renderData.length; i++) {
             if ($S.isObject(renderData[i])) {
                 if (i===0) {
-                    renderData = $S.sortResult(renderData, "descending", "name", "", "");
+                    if (!$S.isObject(dateParameterField) || dateParameterField.fieldName !== renderData[i].key) {
+                        renderData = $S.sortResult(renderData, "descending", "name", "", "");
+                    }
                 }
-                this.SortDbViewResult(renderData[i].text, sortableValue, sortableName);
+                this.SortDbViewResult(renderData[i].text, sortableValue, sortableName, dateParameterField);
             } else if ($S.isArray(renderData[i])) {
                 renderData = $S.sortResult(renderData, sortableValue, sortableName, "name", "");
                 break;
@@ -469,7 +468,7 @@ DataHandlerDBView.extend({
         }
         return renderData;
     },
-    GenerateFinalDBViewData: function(dbViewData, currentList3Data) {
+    GenerateFinalDBViewData: function(dbViewData, currentList3Data, dateParameterField) {
         var finalDataV2 = [], temp3, temp4;
         var list3Data = currentList3Data;
         var l3Data;
@@ -514,7 +513,7 @@ DataHandlerDBView.extend({
                 }
                 temp4 = null;
             }
-            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data);
+            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data, dateParameterField);
             return finalDataV2;
         } else {
             return [{"text": dbViewData}];

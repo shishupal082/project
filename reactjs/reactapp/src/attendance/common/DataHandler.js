@@ -531,14 +531,17 @@ DataHandler.extend({
             dateArray = dateParameters[dateSelect];
         }
         var renderData = [], i, currentList3Data;
-        var userData = DataHandler.getData("dbViewDataTable", []);
+        var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
+        var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions, "name");
         DataHandler.setData("filteredUserData", filteredUserData);
         var sortableValue = DataHandler.getData("sortableValue", "");
         var sortableName = DataHandler.getData("sortable", "");
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
+        var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
+
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.dbview].indexOf(currentList2Id) < 0) {
@@ -565,8 +568,8 @@ DataHandler.extend({
             break;
             case "dbview":
                 currentList3Data = this.getCurrentList3Data();
-                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data);
-                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName);
+                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField);
+                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName, dateParameterField);
             break;
             default:
                 renderData = [];
