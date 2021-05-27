@@ -455,15 +455,16 @@ DataHandlerDBView.extend({
         this._handleDateParameterV3(renderData, key, tempList3Data);
         return renderData;
     },
-    _sortHeading: function(renderData) {
+    SortDbViewResult: function(renderData, sortableValue, sortableName) {
         if (!$S.isArray(renderData)) {
             return renderData;
         }
         for (var i=0; i<renderData.length; i++) {
             if ($S.isObject(renderData[i])) {
                 renderData = $S.sortResult(renderData, "descending", "name", "", "");
-                this._sortHeading(renderData[i].text);
-                break;
+                this.SortDbViewResult(renderData[i].text, sortableValue, sortableName);
+            } else if ($S.isArray(renderData[i])) {
+                renderData = $S.sortResult(renderData, sortableValue, sortableName, "name", "");
             }
         }
         return renderData;
@@ -513,7 +514,6 @@ DataHandlerDBView.extend({
                 }
                 temp4 = null;
             }
-            this._sortHeading(finalDataV2);
             finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data);
             return finalDataV2;
         } else {

@@ -541,7 +541,7 @@ DataHandler.extend({
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
-        } else {
+        } else if ([Config.dbview].indexOf(currentList2Id) < 0) {
             filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName, "name");
         }
         switch(currentList2Id) {
@@ -566,6 +566,7 @@ DataHandler.extend({
             case "dbview":
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data);
+                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName);
             break;
             default:
                 renderData = [];
