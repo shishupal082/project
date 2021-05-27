@@ -714,7 +714,7 @@ AppHandler.extend({
         if (!$S.isArray(filterKeys)) {
             filterKeys = [];
         }
-        var finalKeys = [], finalPreFilter = {}, temp, temp2;
+        var finalKeys = [], temp, temp2;
         for(var i=0; i<filterKeys.length; i++) {
             if (!$S.isString(filterKeys[i]) || filterKeys[i].length < 1) {
                 continue;
@@ -723,10 +723,10 @@ AppHandler.extend({
             finalKeys.push(temp);
             temp2 = $S.findParam([currentAppData, metaData], temp + "Prefilter", []);
             if ($S.isArray(temp2) && temp2.length > 0) {
-                finalPreFilter[temp] = temp2;
+                preFilter[temp] = temp2;
             }
         }
-        return {"preFilter": finalPreFilter, "filterKeys": finalKeys};
+        return {"preFilter": preFilter, "filterKeys": finalKeys};
     },
     generateFilterData: function(currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
         if (!$S.isArray(csvData)) {
