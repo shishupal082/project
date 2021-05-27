@@ -705,6 +705,29 @@ AppHandler.extend({
         }
         return selectionOptions;
     },
+    _getRequiredMetaData: function(currentAppData, metaData) {
+        var preFilter = $S.findParam([currentAppData, metaData], "preFilter", {});
+        var filterKeys = $S.findParam([currentAppData, metaData], "filterKeys", []);
+        if (!$S.isObject(preFilter)) {
+            preFilter = {};
+        }
+        if (!$S.isArray(filterKeys)) {
+            filterKeys = [];
+        }
+        var finalKeys = [], finalPreFilter = {}, temp, temp2;
+        for(var i=0; i<filterKeys.length; i++) {
+            if (!$S.isString(filterKeys[i]) || filterKeys[i].length < 1) {
+                continue;
+            }
+            temp = filterKeys[i];
+            finalKeys.push(temp);
+            temp2 = $S.findParam([currentAppData, metaData], temp + "Prefilter", []);
+            if ($S.isArray(temp2) && temp2.length > 0) {
+                finalPreFilter[temp] = temp2;
+            }
+        }
+        return {"preFilter": finalPreFilter, "filterKeys": finalKeys};
+    },
     generateFilterData: function(currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
         if (!$S.isArray(csvData)) {
             return [];
@@ -712,30 +735,11 @@ AppHandler.extend({
         if (!$S.isObject(filterSelectedValues)) {
             filterSelectedValues = {};
         }
-        var metaDataTemp = {"filterKeys": [], "preFilter": {}};
-        metaDataTemp["filterKeys"] = $S.findParam([currentAppData, metaData], "filterKeys", []);
-        metaDataTemp["preFilter"] = $S.findParam([currentAppData, metaData], "preFilter", {});
-        if (!$S.isObject(metaDataTemp["preFilter"])) {
-            metaDataTemp["preFilter"] = {};
-        }
-        var filterKeys = [], i, j, temp, temp2;
-        var preFilter = {};
-        if ($S.isObject(metaDataTemp) && $S.isArray(metaDataTemp.filterKeys)) {
-            for(i=0; i<metaDataTemp.filterKeys.length; i++) {
-                if (!$S.isString(metaDataTemp.filterKeys[i]) || metaDataTemp.filterKeys[i].length < 1) {
-                    continue;
-                }
-                temp = metaDataTemp.filterKeys[i];
-                filterKeys.push(temp);
-                temp2 = $S.findParam([currentAppData, metaData], temp + "Prefilter", []);
-                if ($S.isArray(temp2) && temp2.length > 0) {
-                    metaDataTemp["preFilter"][temp] = temp2;
-                }
-            }
-            if ($S.isObject(metaDataTemp.preFilter)) {
-                preFilter = metaDataTemp.preFilter;
-            }
-        }
+        var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);
+        var filterKeys = metaDataTemp["filterKeys"];
+        var preFilter = metaDataTemp["preFilter"];
+        var i, j, temp, temp2;
+
         var tempFilterOptions = {};
         for(i=0; i<filterKeys.length; i++) {
             tempFilterOptions[filterKeys[i]] = {
@@ -823,9 +827,10 @@ AppHandler.extend({
         }
         return selectionOptions;
     },
-    getFilteredData: function(metaData, csvData, filterOptions, searchParam) {
+    getFilteredData: function(currentAppData, metaData, csvData, filterOptions, searchParam) {
         var reportData = csvData;
-        var preFilter = $S.isObject(metaData) ? metaData.preFilter : {};
+        var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);
+        var preFilter = metaDataTemp["preFilter"];
         var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, searchByPattern;
         var isRevert;
         function _isResultRevert(filterIndex, filterValue) {

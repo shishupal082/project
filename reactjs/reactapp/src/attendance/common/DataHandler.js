@@ -535,7 +535,7 @@ DataHandler.extend({
         var metaData = DataHandler.getData("metaData", {});
         var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var filteredUserData = AppHandler.getFilteredData(metaData, userData, filterOptions, "name");
+        var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name");
         DataHandler.setData("filteredUserData", filteredUserData);
         var sortableValue = DataHandler.getData("sortableValue", "");
         var sortableName = DataHandler.getData("sortable", "");

@@ -483,10 +483,11 @@ DataHandler.extend({
 });
 DataHandler.extend({
     getRenderData: function(pageName, optionName, fieldName) {
+        var currentAppData = this.getCurrentAppData();
         var metaData = this.getData("metaData", {});
         var reportData = this.getData("reportData", {});
         var filterOptions = this.getData("filterOptions", []);
-        var filteredData = AppHandler.getFilteredData(metaData, reportData, filterOptions);
+        var filteredData = AppHandler.getFilteredData(currentAppData, metaData, reportData, filterOptions);
         return filteredData;
     },
     generateFilterOption: function() {
