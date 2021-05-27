@@ -1526,6 +1526,9 @@ Stack.extend({
         return str;
     },
     sortResult: function(requestedArray, sortableValue, sortableName, searchName, defaultValue) {
+        // sortableValue: "ascending" or "descending"
+        // sortableName: used for [{},{}]
+        // serachName: used for [[{},{}], [{},{}]]
         if (!isString(searchName)) {
             searchName = "";
         }
@@ -1569,6 +1572,8 @@ Stack.extend({
                     temp = aName;
                     aName = bName;
                     bName = temp;
+                } else if (sortableValue !== "descending") {
+                    return 0;
                 }
                 if (aName < bName) {
                     return 1;

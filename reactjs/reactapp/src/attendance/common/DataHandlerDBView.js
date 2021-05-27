@@ -455,6 +455,19 @@ DataHandlerDBView.extend({
         this._handleDateParameterV3(renderData, key, tempList3Data);
         return renderData;
     },
+    _sortHeading: function(renderData) {
+        if (!$S.isArray(renderData)) {
+            return renderData;
+        }
+        for (var i=0; i<renderData.length; i++) {
+            if ($S.isObject(renderData[i])) {
+                renderData = $S.sortResult(renderData, "descending", "name", "", "");
+                this._sortHeading(renderData[i].text);
+                break;
+            }
+        }
+        return renderData;
+    },
     GenerateFinalDBViewData: function(dbViewData, currentList3Data) {
         var finalDataV2 = [], temp3, temp4;
         var list3Data = currentList3Data;
@@ -500,6 +513,7 @@ DataHandlerDBView.extend({
                 }
                 temp4 = null;
             }
+            this._sortHeading(finalDataV2);
             finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data);
             return finalDataV2;
         } else {

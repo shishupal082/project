@@ -592,16 +592,25 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
-    getSearchByPattern: function(filterOption, selectedValue) {
+    getSearchByPattern: function(filterOption, selectedValue, isRevert) {
         if (!$S.isString(selectedValue) || selectedValue.length === 0) {
             return false;
+        }
+        if ($S.isBooleanTrue(isRevert)) {
+            isRevert = true;
+        } else {
+            isRevert = false;
         }
         if ($S.isArray(filterOption)) {
             for(var i=0; i<filterOption.length; i++) {
                 if (!$S.isObject(filterOption[i])) {
                     continue;
                 }
-                if (filterOption[i].value === selectedValue) {
+                if (isRevert) {
+                    if (filterOption[i].value === "~" + selectedValue) {
+                        return $S.isBooleanTrue(filterOption[i].searchByPattern);
+                    }
+                } else if (filterOption[i].value === selectedValue) {
                     return $S.isBooleanTrue(filterOption[i].searchByPattern);
                 }
             }
@@ -849,7 +858,7 @@ AppHandler.extend({
             for (i = 0; i < reportData.length; i++) {
                 temp = reportData[i];
                 if ($S.isObject(temp) && $S.isString(temp[filterIndex])) {
-                    searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue);
+                    searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue, isRevert);
                     temp2 = $S.searchItems([filterValue], [temp[filterIndex]], searchByPattern, isRevert);
                     if (temp2.length > 0) {
                         temp3.push(temp);
@@ -860,7 +869,7 @@ AppHandler.extend({
                             continue;
                         }
                         if (temp[j][searchParam] === filterIndex) {
-                            searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue);
+                            searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue, isRevert);
                             temp2 = $S.searchItems([filterValue], [temp[j]["value"]], searchByPattern, isRevert);
                             if (temp2.length > 0) {
                                 temp3.push(temp);
