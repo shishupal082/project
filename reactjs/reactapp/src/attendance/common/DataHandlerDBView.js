@@ -461,10 +461,13 @@ DataHandlerDBView.extend({
         }
         for (var i=0; i<renderData.length; i++) {
             if ($S.isObject(renderData[i])) {
-                renderData = $S.sortResult(renderData, "descending", "name", "", "");
+                if (i===0) {
+                    renderData = $S.sortResult(renderData, "descending", "name", "", "");
+                }
                 this.SortDbViewResult(renderData[i].text, sortableValue, sortableName);
             } else if ($S.isArray(renderData[i])) {
                 renderData = $S.sortResult(renderData, sortableValue, sortableName, "name", "");
+                break;
             }
         }
         return renderData;
