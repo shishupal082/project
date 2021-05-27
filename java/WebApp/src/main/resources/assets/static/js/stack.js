@@ -1535,7 +1535,23 @@ Stack.extend({
         if (!isNumber(defaultValue)) {
             defaultValue = "";
         }
+        var isNumericData = false;
         if (isArray(requestedArray) && isString(sortableName) && isString(sortableValue) && sortableName.length > 0 && sortableValue.length > 0) {
+            for (var p = 0; p < requestedArray.length; p++) {
+                if (isObject(requestedArray[p])) {
+                    isNumericData = Stack.isBooleanTrue(requestedArray[p].isNumericData);
+                    break;
+                } else if (isArray(requestedArray[p])) {
+                    for (var q=0; q<requestedArray[p].length; q++) {
+                        if (isObject(requestedArray[p][q])) {
+                            if (sortableName === requestedArray[p][q][searchName]) {
+                                isNumericData = Stack.isBooleanTrue(requestedArray[p][q].isNumericData);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             requestedArray = requestedArray.sort(function(a, b) {
                 var i, aName = null, bName = null, temp;
                 if (isArray(a)) {
@@ -1567,6 +1583,14 @@ Stack.extend({
                 }
                 if (isUndefined(bName)) {
                     bName = defaultValue;
+                }
+                if (isNumericData) {
+                    if (isNumeric(aName)) {
+                        aName = aName * 1;
+                    }
+                    if (isNumeric(bName)) {
+                        bName = bName * 1;
+                    }
                 }
                 if (sortableValue === "ascending") {
                     temp = aName;
