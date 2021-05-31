@@ -1,5 +1,5 @@
 {
-    "disabledPages": ["entry","summary","ta", "update"],
+    "enabledPages": ["entry","summary","ta", "update", "dbview"],
     "dbDataApis": [
         {
             "tableName": "table1",

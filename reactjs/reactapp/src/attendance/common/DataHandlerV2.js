@@ -28,11 +28,11 @@ DataHandlerV2.extend({
     getList2Data: function() {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var configDisabledPage = {"disabledPages": Config.disabledPages};
-        var disabledPages = $S.findParam([currentAppData, metaData, configDisabledPage], "disabledPages");
+        var configEnabledPage = {"enabledPages": Config.enabledPages};
+        var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages");
         var linkText = $S.findParam([currentAppData, metaData], "linkText");
-        if (!$S.isArray(disabledPages)) {
-            disabledPages = [];
+        if (!$S.isArray(enabledPages)) {
+            enabledPages = [];
         }
         if (!$S.isObject(linkText)) {
             linkText = {};
@@ -41,7 +41,7 @@ DataHandlerV2.extend({
         var list2Data = [];
         var temp;
         for(var key in pages) {
-            if (key !== "home" && disabledPages.indexOf(key) < 0) {
+            if (key !== "home" && enabledPages.indexOf(key) >= 0) {
                 if ($S.isString(linkText[key])) {
                     temp = linkText[key];
                 } else {
@@ -75,14 +75,17 @@ DataHandlerV2.extend({
         return list3Data;
     },
     isPageDisabled: function(pageName) {
+        if (pageName === "home") {
+            return false;
+        }
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var configDisabledPage = {"disabledPages": Config.disabledPages};
-        var disabledPages = $S.findParam([currentAppData, metaData, configDisabledPage], "disabledPages");
-        if ($S.isArray(disabledPages)) {
-            return disabledPages.indexOf(pageName) >= 0;
+        var configEnabledPage = {"enabledPages": Config.enabledPages};
+        var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages");
+        if ($S.isArray(enabledPages)) {
+            return enabledPages.indexOf(pageName) < 0;
         }
-        return false;
+        return true;
     },
     getDBViewTableData: function(tableName) {
         if (!$S.isString(tableName) || tableName.length < 1) {
