@@ -57,7 +57,7 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var name = "list3Data_1";
-        if ([Config.dbview].indexOf(currentList2Id) >= 0) {
+        if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
             name = "list3Data_2";
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";

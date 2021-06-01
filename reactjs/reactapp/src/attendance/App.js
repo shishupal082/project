@@ -191,6 +191,9 @@ class App extends React.Component {
         const dbview = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.dbview}/>);
+        const dbview_summary = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.dbview_summary}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
@@ -207,6 +210,7 @@ class App extends React.Component {
                 <Route path={pages.summary} component={summary}/>
                 <Route path={pages.ta} component={ta}/>
                 <Route path={pages.dbview} component={dbview}/>
+                <Route path={pages.dbview_summary} component={dbview_summary}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

@@ -198,5 +198,55 @@ Template["dbviewField.tr"] = [
         "text": []
     }
 ];
+Template["dbviewSummaryField"] = [
+    {
+        "tag": "table.tbody",
+        "className": "table table-striped table-padded-px-5",
+        "name": "dbviewSummaryField",
+        "text": [
+            {
+                "tag": "tr",
+                "text": [
+                    {
+                        "tag": "th",
+                        "text": "S.No."
+                    },
+                    {
+                        "tag": "th",
+                        "text": "Description"
+                    },
+                    {
+                        "tag": "th",
+                        "className": "text-center",
+                        "text": "Count"
+                    }
+                ]
+            }
+        ]
+    }
+];
+Template["dbviewSummaryField.tr"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "dbviewSummaryField.tr.s_no",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "dbviewSummaryField.tr.description",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "dbviewSummaryField.tr.count",
+                "className": "text-center",
+                "text": ""
+            }
+        ]
+    }
+];
 Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
 export default Template;

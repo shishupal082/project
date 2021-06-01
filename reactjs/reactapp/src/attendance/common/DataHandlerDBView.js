@@ -116,11 +116,11 @@ DataHandlerDBView.extend({
         }
     },
     generateFinalTable: function() {
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var currentList2IdOrg = DataHandler.getData("currentList2Id", "");
         var dbViewData = DataHandler.getData("dbViewData", {});
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        currentList2Id = $S.capitalize(currentList2Id);
+        var currentList2Id = $S.capitalize(currentList2IdOrg);
         var resultPatternKey = "resultPattern";
         var validResultPatternKeys = $S.findParam([currentAppData, metaData], "resultPatternKeys", []);
         if ($S.isArray(validResultPatternKeys) && validResultPatternKeys.indexOf("resultPattern"+currentList2Id) >= 0) {
@@ -132,6 +132,10 @@ DataHandlerDBView.extend({
         var finalTable = [], temp, temp2, tableName;
         var tempJoinResult = [];
         var force1stEntry, isNotMatching;
+        if (currentList2IdOrg === Config.dbview_summary && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+            resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
+            resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
+        }
         if (!$S.isArray(resultPattern)) {
             resultPattern = [];
         }

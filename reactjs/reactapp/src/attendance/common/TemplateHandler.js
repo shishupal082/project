@@ -230,7 +230,7 @@ TemplateHandler.extend({
                 if ($S.isString(tempRenderData[i].name)) {
                     renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
                 }
-                this._recursiveGenerateHeading(renderField, tempRenderData[i].text, currentList3Data)
+                this._recursiveGenerateHeading(renderField, tempRenderData[i].text, currentList3Data);
             } else if ($S.isArray(tempRenderData[i])) {
                 renderField.push(this.generateDbViewRenderFieldV2([{"tableData": tempRenderData}], true, "tableData"));
                 break;
@@ -242,6 +242,75 @@ TemplateHandler.extend({
         var currentList3Data = DataHandler.getCurrentList3Data();
         if ($S.isArray(renderData) && renderData.length > 0) {
             this._recursiveGenerateHeading(renderField, renderData, currentList3Data);
+        } else {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
+    },
+    _generateDbViewSummaryTr: function(trsData) {
+        var field = this.getTemplate("dbviewSummaryField");
+        var trField, temp;
+        if ($S.isArray(trsData) && trsData.length > 0) {
+            for(var i=0; i<trsData.length; i++) {
+                trField = this.getTemplate("dbviewSummaryField.tr");
+                temp = {};
+                temp["dbviewSummaryField.tr.s_no"] = i+1;
+                if (!$S.isObject(trsData[i])) {
+                    continue;
+                }
+                if ($S.isString(trsData[i].name) && trsData[i].name.length > 0) {
+                    temp["dbviewSummaryField.tr.description"] = trsData[i].name;
+                } else {
+                    temp["dbviewSummaryField.tr.description"] = "Total";
+                }
+                if ($S.isArray(trsData[i].text) && trsData[i].text.length > 0) {
+                    if ($S.isObject(trsData[i].text[0])) {
+                        if ($S.isArray(trsData[i].text[0].text)) {
+                            temp["dbviewSummaryField.tr.count"] = trsData[i].text[0].text.length;
+                        } else {
+                            temp["dbviewSummaryField.tr.count"] = trsData[i].text.length;
+                        }
+                    } else {
+                        temp["dbviewSummaryField.tr.count"] = trsData[i].text.length;
+                    }
+                } else {
+                    temp["dbviewSummaryField.tr.count"] = 0;
+                }
+                TemplateHelper.updateTemplateText(trField, temp);
+                TemplateHelper.addItemInTextArray(field, "dbviewSummaryField", trField);
+            }
+        }
+        return field;
+    },
+    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data) {
+        if (!$S.isArray(tempRenderData) || tempRenderData.length < 1) {
+            return;
+        }
+        var isBreak = false;
+        for (var i=0; i<tempRenderData.length; i++) {
+            if (!$S.isObject(tempRenderData[i]) || !$S.isArray(tempRenderData[i].text)) {
+                continue;
+            }
+            for(var j=0; j<tempRenderData[i].text.length; j++) {
+                if (!$S.isObject(tempRenderData[i].text[j]) || !$S.isString(tempRenderData[i].text[j].key)) {
+                    renderField.push(this._generateDbViewSummaryTr(tempRenderData));
+                    isBreak = true;
+                    break;
+                }
+                break;
+            }
+            if (isBreak) {
+                break;
+            }
+            renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
+            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data));
+        }
+    },
+    generateDbViewRenderFieldV4: function(renderData) {
+        var renderField = [];
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data);
         } else {
             renderField = this.getTemplate("noDataFound");
         }
@@ -285,6 +354,9 @@ TemplateHandler.extend({
                 break;
                 case "dbview":
                     renderField = this.generateDbViewRenderFieldV3(renderData);
+                break;
+                case "dbview_summary":
+                    renderField = this.generateDbViewRenderFieldV4(renderData);
                 break;
                 case "home":
                     renderField = this.generateHomeRenderField();

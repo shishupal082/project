@@ -116,7 +116,7 @@ DataHandler.extend({
         dataLoadStatusKey.push("appRelatedDataLoadStatus");
         var currentList2Id = this.getData("currentList2Id", "");
         var pageRequiredDataLoadStatus = [Config.entry, Config.update,
-                    Config.summary, Config.ta, Config.dbview];
+                    Config.summary, Config.ta, Config.dbview, Config.dbview_summary];
         if (pageRequiredDataLoadStatus.indexOf(currentList2Id) >= 0) {
             dataLoadStatusKey.push("dbViewDataLoadStatus");
         }
@@ -348,7 +348,7 @@ DataHandler.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
-        if ([Config.dbview, Config.ta].indexOf(currentList2Id) >= 0) {
+        if ([Config.dbview, Config.ta, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
             DataHandlerDBView.handlePageLoad(dbDataApis, function() {
                 DataHandler.handleApiDataLoad();
                 $S.callMethod(callback);
@@ -544,7 +544,7 @@ DataHandler.extend({
 
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
-        } else if ([Config.dbview].indexOf(currentList2Id) < 0) {
+        } else if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) < 0) {
             filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName, "name");
         }
         switch(currentList2Id) {
@@ -567,6 +567,7 @@ DataHandler.extend({
                 renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
             break;
             case "dbview":
+            case "dbview_summary":
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField);
                 renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName, dateParameterField);
