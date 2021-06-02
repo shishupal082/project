@@ -3,6 +3,7 @@ import $S from "../../interface/stack.js";
 import DataHandler from "./DataHandler";
 import DataHandlerV2 from "./DataHandlerV2";
 // import DataHandlerTA from "./DataHandlerTA";
+// import DataHandlerAddFieldReport from "./DataHandlerAddFieldReport";
 
 import Template from "./Template";
 import TemplateHelper from "../../common/TemplateHelper";
@@ -10,6 +11,7 @@ import AppHandler from "../../common/app/common/AppHandler";
 
 var TemplateHandler;
 (function($S){
+var DT = $S.getDT();
 var loadingCount = 0;
 TemplateHandler = function(arg) {
     return new TemplateHandler.fn.init(arg);
@@ -315,6 +317,53 @@ TemplateHandler.extend({
             renderField = this.getTemplate("noDataFound");
         }
         return renderField;
+    },
+    generateDbViewRenderFieldV5: function(renderData) {
+        var renderField = this.getTemplate("addFieldReport");
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var additionalDataRequired = $S.findParam([currentAppData, metaData], "addFieldReport.additionalDataRequired", []);
+        var stations = $S.findParam([currentAppData, metaData], "addFieldReport.stations", []);
+        var devices = $S.findParam([currentAppData, metaData], "addFieldReport.devices", []);
+        var currentDateTime;
+        if (!$S.isArray(additionalDataRequired)) {
+            additionalDataRequired = [];
+        }
+        if (!$S.isArray(stations)) {
+            stations = [];
+        }
+        if (!$S.isArray(devices)) {
+            devices = [];
+        }
+        for (var i = 0; i < additionalDataRequired.length; i++) {
+            TemplateHelper.removeClassTemplate(renderField, additionalDataRequired[i], "d-none");
+        }
+        var temp = {};
+        var key = "addFieldReport.dateTime.field", value;
+        if (additionalDataRequired.indexOf("addFieldReport.dateTime") >= 0) {
+            value = DataHandler.getFieldsData(key, "");
+            if (!$S.isString(value) || value.trim().length === 0) {
+                currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
+                temp[key] = currentDateTime;
+                TemplateHelper.updateTemplateValue(renderField, temp);
+                DataHandler.setFieldsData(key, currentDateTime);
+            }
+        }
+        $S.addElAt(stations, 0, {"text": "Select station...", "value": ""});
+        $S.addElAt(devices, 0, {"text": "Select device...", "value": ""});
+        TemplateHelper.updateTemplateText(renderField, {"addFieldReport.station": stations});
+        TemplateHelper.updateTemplateText(renderField, {"addFieldReport.device": devices});
+
+        var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
+        var submitBtnName = "addFieldReport.submit";
+        if (formSubmitStatus === "in_progress") {
+            TemplateHelper.removeClassTemplate(renderField, submitBtnName, "btn-primary");
+            TemplateHelper.addClassTemplate(renderField, submitBtnName, "btn-link disabled");
+        } else {
+            TemplateHelper.addClassTemplate(renderField, submitBtnName, "btn-primary");
+            TemplateHelper.removeClassTemplate(renderField, submitBtnName, "btn-link disabled");
+        }
+        return renderField;
     }
 });
 TemplateHandler.extend({
@@ -357,6 +406,9 @@ TemplateHandler.extend({
                 break;
                 case "dbview_summary":
                     renderField = this.generateDbViewRenderFieldV4(renderData);
+                break;
+                case "add_field_report":
+                    renderField = this.generateDbViewRenderFieldV5(renderData);
                 break;
                 case "home":
                     renderField = this.generateHomeRenderField();

@@ -10,6 +10,252 @@
         "defaultCount": "--",
         "saveDataFilename": "attendance.csv",
         "dateRange": ["2021-01-11 00:00", "2021-02-10 23:59"],
+        "addFieldReport.addTextFilenamePattern": "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv",
+        "addFieldReport.successRedirectUrl": "{basepathname}/{dbview}",
+        "addFieldReport.additionalDataRequired": ["addFieldReport.dateTime", "addFieldReport.userId"],
+        "addFieldReport.stations": [
+            {
+                "value": "MURI",
+                "text": "Muri"
+            },
+            {
+                "value": "MK-4",
+                "text": "MK-4"
+            },
+            {
+                "value": "THO",
+                "text": "THO"
+            },
+            {
+                "value": "MK-5",
+                "text": "MK-5"
+            },
+            {
+                "value": "MK-10",
+                "text": "MK-10"
+            },
+            {
+                "value": "MK-11",
+                "text": "MK-11"
+            },
+            {
+                "value": "JAA",
+                "text": "JAA"
+            },
+            {
+                "value": "MK-12",
+                "text": "MK-12"
+            },
+            {
+                "value": "MK-16",
+                "text": "MK-16"
+            },
+            {
+                "value": "MK-18",
+                "text": "MK-18"
+            },
+            {
+                "value": "BLNG",
+                "text": "BLNG"
+            },
+            {
+                "value": "MB-12",
+                "text": "MB-12"
+            },
+            {
+                "value": "MB-13",
+                "text": "MB-13"
+            },
+            {
+                "value": "HRBR",
+                "text": "HRBR"
+            },
+            {
+                "value": "GRE",
+                "text": "GRE"
+            },
+            {
+                "value": "BRKP",
+                "text": "BRKP"
+            },
+            {
+                "value": "MAEL",
+                "text": "MAEL"
+            },
+            {
+                "value": "RMT",
+                "text": "RMT"
+            },
+            {
+                "value": "ILU",
+                "text": "ILU"
+            },
+            {
+                "value": "TRAN",
+                "text": "TRAN"
+            },
+            {
+                "value": "SSIA",
+                "text": "SSIA"
+            },
+            {
+                "value": "TUL",
+                "text": "TUL"
+            },
+            {
+                "value": "BKKI",
+                "text": "Bakarkuri (Telecom)"
+            },
+            {
+                "value": "LTMD",
+                "text": "LTMD"
+            },
+            {
+                "value": "HNSL",
+                "text": "Hesalong (Telecom)"
+            },
+            {
+                "value": "JHMR",
+                "text": "JHMR"
+            },
+            {
+                "value": "GDBR",
+                "text": "GDBR"
+            },
+            {
+                "value": "INFO",
+                "text": "INFO"
+            }
+        ],
+        "addFieldReport.devices": [
+            {
+                "value": "Signal",
+                "text": "Signal"
+            },
+            {
+                "value": "Alarm",
+                "text": "Alarm"
+            },
+            {
+                "value": "Power",
+                "text": "Power"
+            },
+            {
+                "value": "IPS",
+                "text": "IPS"
+            },
+            {
+                "value": "TLJB",
+                "text": "TLJB"
+            },
+            {
+                "value": "RACK",
+                "text": "RACK"
+            },
+            {
+                "value": "LVCD",
+                "text": "LVCD"
+            },
+            {
+                "value": "AxleCounter",
+                "text": "AXLE Counter"
+            },
+            {
+                "value": "LC-Gate",
+                "text": "LC gate"
+            },
+            {
+                "value": "TrackCircuit",
+                "text": "Track circuit"
+            },
+            {
+                "value": "Point",
+                "text": "Point"
+            },
+            {
+                "value": "EI",
+                "text": "EI"
+            },
+            {
+                "value": "BlockInstrument",
+                "text": "Block Instrument"
+            },
+            {
+                "value": "Quad",
+                "text": "Quad cable"
+            },
+            {
+                "value": "VHF",
+                "text": "VHF"
+            },
+            {
+                "value": "EC",
+                "text": "EC socket"
+            },
+            {
+                "value": "OFC-equipment",
+                "text": "OFC-equipment"
+            },
+            {
+                "value": "Battery",
+                "text": "Battery"
+            },
+            {
+                "value": "Telephone",
+                "text": "Telephone"
+            },
+            {
+                "value": "Datacom",
+                "text": "Datacom"
+            },
+            {
+                "value": "DataLogger",
+                "text": "Data Logger"
+            },
+            {
+                "value": "DataLoggerReport",
+                "text": "Data Logger Report"
+            },
+            {
+                "value": "DataLoggerFault",
+                "text": "Data Logger Fault"
+            },
+            {
+                "value": "Interlocking",
+                "text": "Interlocking"
+            },
+            {
+                "value": "Panel",
+                "text": "Panel"
+            },
+            {
+                "value": "StaffMovement",
+                "text": "Staff movement"
+            },
+            {
+                "value": "Inspection",
+                "text": "Inspection"
+            },
+            {
+                "value": "Survey",
+                "text": "Survey"
+            },
+            {
+                "value": "OfficeWork",
+                "text": "Office work"
+            },
+            {
+                "value": "INFO",
+                "text": "INFO"
+            }
+        ],
+        "addFieldReport.teamMapping": {
+            "isSignalTeam": "Signal",
+            "isTelecomTeam": "Telecom",
+            "isSAndTTeam": "sAndT",
+            "isAMCTeam": "AMC",
+            "isSFRTeam": "SFR"
+        },
         "list3Data_1": [
             {
                 "name": "",

@@ -54,6 +54,7 @@ class App extends React.Component {
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
@@ -65,6 +66,7 @@ class App extends React.Component {
             onClick: this.onClick,
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
+            onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
             getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
@@ -111,8 +113,10 @@ class App extends React.Component {
     }
     // not working ?
     onFormSubmit(e) {
-        alert("onFormSubmit");
         e.preventDefault();
+        var name = AppHandler.getFieldName(e);
+        var value = AppHandler.getFieldValue(e);
+        DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback, name, value);
     }
     dropDownChange(e) {
         var name = e.currentTarget.name, i;
@@ -194,6 +198,9 @@ class App extends React.Component {
         const dbview_summary = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.dbview_summary}/>);
+        const add_field_report = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.add_field_report}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
@@ -211,6 +218,7 @@ class App extends React.Component {
                 <Route path={pages.ta} component={ta}/>
                 <Route path={pages.dbview} component={dbview}/>
                 <Route path={pages.dbview_summary} component={dbview_summary}/>
+                <Route path={pages.add_field_report} component={add_field_report}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

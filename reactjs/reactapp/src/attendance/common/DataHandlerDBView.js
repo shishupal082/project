@@ -442,8 +442,22 @@ DataHandlerDBView.extend({
         availableDate = availableDate.sort();
         var dateRange = [];
         if (availableDate.length >= 0) {
-            dateRange.push(availableDate[0]);
-            dateRange.push(availableDate[availableDate.length-1]);
+            for(i=0; i<availableDate.length; i++) {
+                if (AppHandler.isValidDateStr(availableDate[i])) {
+                    dateRange.push(availableDate[i]);
+                    break;
+                } else {
+                    $S.log("Invalid date entry: " + availableDate[i]);
+                }
+            }
+            for(i=availableDate.length-1; i>=0; i--) {
+                if (AppHandler.isValidDateStr(availableDate[i])) {
+                    dateRange.push(availableDate[i]);
+                    break;
+                } else {
+                    $S.log("Invalid date entry: " + availableDate[i]);
+                }
+            }
         }
         var dateParameters = DataHandler.GetDataParameterFromDate(dateRange);
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {

@@ -59,7 +59,7 @@ AppHandler.extend({
     },
     getFieldValue: function(e) {
         var tagName = this.getTagName(e);
-        if ($S.isString(tagName) && tagName === "span") {
+        if ($S.isString(tagName) && ["span", "form"].indexOf(tagName) >= 0) {
             return e.currentTarget.getAttribute("value");
         }
         return e.currentTarget.value;

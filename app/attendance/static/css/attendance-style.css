@@ -11,8 +11,23 @@
 .day-ph {
     background-color: #c3e6cb;
 }
-.container.APP-COMPONENT {
+.APP-COMPONENT.container.entry,
+.APP-COMPONENT.container.upload,
+.APP-COMPONENT.container.summary {
     max-width: 100%;
+}
+.APP-COMPONENT.add_field_report .SELECT-FILTER {
+    text-align: center;
+}
+.APP-COMPONENT.add_field_report .SELECT-FILTER table {
+    display: inline;
+}
+.APP-COMPONENT.add_field_report .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.add_field_report .SELECT-FILTER [name="list1-select"],
+.APP-COMPONENT.add_field_report .SELECT-FILTER [name="footer-filter-toggle"],
+.APP-COMPONENT.add_field_report .FOOTER,
+.APP-COMPONENT.add_field_report .PAGE-FILTER {
+    display: none;
 }
 select.form-control {
     min-width: 120px;
@@ -22,4 +37,12 @@ table.table-padded-px-5 > thead > tr > td,
 table.table-padded-px-5 > tbody > tr > th,
 table.table-padded-px-5 > tbody > tr > td {
     padding: 1px;
+}
+.form-div > div {
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
 }

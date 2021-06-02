@@ -52,19 +52,35 @@ DataHandlerV2.extend({
         }
         return list2Data;
     },
-    getList3Data: function() {
+    getList3Data: function(pageName) {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var name = "list3Data_1";
-        if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
+        var name = "list3Data", i;
+        if ([Config.home].indexOf(currentList2Id) >= 0) {
+            var configEnabledPage = {"enabledPages": Config.enabledPages};
+            var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages", []);
+            if ($S.isArray(enabledPages) && $S.isArray(Config.enabledPages)) {
+                for (i = 0; i<enabledPages.length; i++) {
+                    if ($S.isString(enabledPages[0]) && Config.enabledPages.indexOf(enabledPages[0]) >= 0) {
+                        currentList2Id = enabledPages[0];
+                        break;
+                    }
+                }
+            }
+        }
+        if ([Config.entry, Config.update, Config.summary].indexOf(currentList2Id) >= 0) {
+            name = "list3Data_1";
+        } else if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
             name = "list3Data_2";
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";
+        } else if ([Config.add_field_report].indexOf(currentList2Id) >= 0) {
+            name = "list3Data_4";
         }
         var list3Data = $S.findParam([currentAppData, metaData], name, []);
         if ($S.isArray(list3Data)) {
-            for (var i = 0; i < list3Data.length; i++) {
+            for (i = 0; i < list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
                     if (!$S.isString(list3Data[i].name)) {
                         list3Data[i].name = name + "-name-" + i;

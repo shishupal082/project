@@ -214,7 +214,7 @@ childGenerator = {
         return <label htmlFor={data.htmlFor} key={key} className={data.className}>{reactChildText}</label>;
     },
     "form": function(props, data, reactChildText, key) {
-        return <form key={key} method={data.method} action={data.action} onSubmit={props.onFormSubmit} id={data.id} encType={data.enctype}>{reactChildText}</form>;
+        return <form key={key} method={data.method} action={data.action} onSubmit={props.onFormSubmit} name={data.name} value={data.value} id={data.id} encType={data.enctype}>{reactChildText}</form>;
     },
     "button": function(props, data, reactChildText, key) {
         var btnClassName = data.className;

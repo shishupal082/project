@@ -39,7 +39,8 @@ var pages = {
     "summary": basepathname+"/summary",
     "ta": basepathname+"/ta",
     "dbview": basepathname+"/dbview",
-    "dbview_summary": basepathname+"/dbview_summary"
+    "dbview_summary": basepathname+"/dbview_summary",
+    "add_field_report": basepathname+"/add_field_report"
 };
 
 Config.pages = pages;
@@ -51,6 +52,7 @@ Config.summary = "summary";
 Config.ta = "ta";
 Config.dbview = "dbview";
 Config.dbview_summary = "dbview_summary";
+Config.add_field_report = "add_field_report";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = ["entry", "summary", "dbview", "dbview_summary"];

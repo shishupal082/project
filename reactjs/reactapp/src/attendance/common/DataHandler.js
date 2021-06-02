@@ -4,6 +4,7 @@ import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
 import DataHandlerTA from "./DataHandlerTA";
 import DataHandlerDBView from "./DataHandlerDBView";
+import DataHandlerAddFieldReport from "./DataHandlerAddFieldReport";
 import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
@@ -55,6 +56,7 @@ keys.push("dateParameters");
 keys.push("fieldsData");
 
 //TA page
+//Add Field Report Page
 keys.push("addentry.submitStatus");
 
 CurrentData.setKeys(keys);
@@ -88,6 +90,28 @@ DataHandler.extend({
     },
     getData: function(key, defaultValue, isDirect) {
         return CurrentData.getData(key, defaultValue, isDirect);
+    },
+    setFieldsData: function(key, value) {
+        var fieldsData = this.getData("fieldsData", {});
+        if (!$S.isObject(fieldsData)) {
+            fieldsData = {};
+        }
+        if ($S.isString(value)) {
+            value = value.trim();
+        }
+        fieldsData[key] = value;
+        this.setData("fieldsData", fieldsData);
+    },
+    getFieldsData: function(key, defaultValue) {
+        var fieldsData = this.getData("fieldsData", {});
+        if ($S.isString(key) && key.length > 0) {
+            if ($S.isObject(fieldsData)) {
+                if ($S.isUndefined(fieldsData[key])) {
+                    return defaultValue;
+                }
+            }
+        }
+        return defaultValue;
     },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
@@ -348,7 +372,7 @@ DataHandler.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
-        if ([Config.dbview, Config.ta, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
+        if ([Config.dbview, Config.ta, Config.dbview_summary, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             DataHandlerDBView.handlePageLoad(dbDataApis, function() {
                 DataHandler.handleApiDataLoad();
                 $S.callMethod(callback);
@@ -423,6 +447,11 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
     },
+    OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
+        DataHandlerAddFieldReport.SubmitForm(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
+    },
     SortClick: function(appStateCallback, appDataCallback, name, value) {
         var sortableValue = DataHandler.getData("sortableValue", "");
         if (sortableValue === "descending") {
@@ -459,14 +488,19 @@ DataHandler.extend({
         if (name === "") {
             return;
         }
+        var currentList2Id = DataHandler.getData("currentList2Id", "");
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
-        DataHandlerV2.callAddTextApi(name, value, function() {
-            DataHandler.loadAttendanceData(attendanceDataApis, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        if ([Config.update].indexOf(currentList2Id) >= 0) {
+            var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
+            DataHandlerV2.callAddTextApi(name, value, function() {
+                DataHandler.loadAttendanceData(attendanceDataApis, function() {
+                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                });
             });
-        });
+        } else {
+            DataHandler.setFieldsData(name, value);
+        }
     },
     OnResetClick: function(appStateCallback, appDataCallback, name, value) {
         var filterOptions = DataHandler.getData("filterOptions", []);
@@ -480,15 +514,7 @@ DataHandler.extend({
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
-        var fieldsData = this.getData("fieldsData", {});
-        if (!$S.isObject(fieldsData)) {
-            fieldsData = {};
-        }
-        if ($S.isString(value)) {
-            value = value.trim();
-        }
-        fieldsData[name] = value;
-        this.setData("fieldsData", fieldsData);
+        this.setFieldsData(name, value);
     }
 });
 DataHandler.extend({
@@ -518,7 +544,7 @@ DataHandler.extend({
     },
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
-        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home].indexOf(currentList2Id) >= 0) {
+        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             return [];
         }
         var dateArray = [];
