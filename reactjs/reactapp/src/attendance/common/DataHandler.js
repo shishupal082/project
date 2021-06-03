@@ -420,6 +420,14 @@ DataHandler.extend({
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
+        var pages = Config.pages;
+        if (!$S.isString(pages[list2Id])) {
+            var currentList2Data = DataHandlerV2.getList2DataByName(list2Id);
+            if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
+                AppHandler.LazyRedirect(currentList2Data.toUrl);
+            }
+            return;
+        }
         DataHandler.setData("currentList2Id", list2Id);
         DataHandler.handleApiDataLoad();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);

@@ -36,7 +36,7 @@ DataHandlerAddFieldReport.extend({
         }
         return "INFO";
     },
-    _generateStringFromPattern: function(pattern, username, device, team) {
+    _generateStringFromPattern: function(pattern, username, station, device, team) {
         if (!$S.isString(pattern)) {
             return pattern;
         }
@@ -44,6 +44,9 @@ DataHandlerAddFieldReport.extend({
             pattern = DT.getDateTime(pattern, "/");
             if ($S.isString(username)) {
                 pattern = pattern.replaceAll("username", username);
+            }
+            if ($S.isString(station)) {
+                pattern = pattern.replaceAll("station", station);
             }
             if ($S.isString(device)) {
                 pattern = pattern.replaceAll("device", device);
@@ -82,7 +85,7 @@ DataHandlerAddFieldReport.extend({
         var metaData = DataHandler.getData("metaData", {});
         var successRedirectUrl = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectUrl", "");
         var userTeamMapping = $S.findParam([currentAppData, metaData], "addFieldReport.teamMapping", {});
-        var addTextFilenamePattern = $S.findParam([currentAppData, metaData], "addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-field-report.csv");
+        var addTextFilenamePattern = $S.findParam([currentAppData, metaData, Config.tempConfig], "addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
         var username = AppHandler.GetUserData("username", "");
         var team = this._getUserTeam(userTeamMapping);
         formData["team"] = team;
@@ -101,7 +104,7 @@ DataHandlerAddFieldReport.extend({
         var postData = {};
         postData["subject"] = formData["addFieldReport.station"];
         postData["heading"] = formData["addFieldReport.device"];
-        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, username, formData["addFieldReport.device"], team);
+        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, username, formData["addFieldReport.station"], formData["addFieldReport.device"], team);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
         successRedirectUrl = this._generateFinalRedirectUrl(successRedirectUrl, Config.basepathname, Config.dbview);

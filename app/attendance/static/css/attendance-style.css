@@ -22,8 +22,8 @@
 .APP-COMPONENT.add_field_report .SELECT-FILTER table {
     display: inline;
 }
+.APP-COMPONENT.add_field_report .SELECT-FILTER [name="list3-select"],
 .APP-COMPONENT.add_field_report .SELECT-FILTER [name="filter-reload"],
-.APP-COMPONENT.add_field_report .SELECT-FILTER [name="list1-select"],
 .APP-COMPONENT.add_field_report .SELECT-FILTER [name="footer-filter-toggle"],
 .APP-COMPONENT.add_field_report .FOOTER,
 .APP-COMPONENT.add_field_report .PAGE-FILTER {

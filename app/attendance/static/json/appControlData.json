@@ -13,6 +13,13 @@
         "addFieldReport.addTextFilenamePattern": "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv",
         "addFieldReport.successRedirectUrl": "{basepathname}/{dbview}",
         "addFieldReport.additionalDataRequired": ["addFieldReport.dateTime", "addFieldReport.userId"],
+        "redirectPages": [
+            {
+                "name": "upload_file",
+                "toText": "Upload File",
+                "toUrl": "/upload_file"
+            }
+        ],
         "addFieldReport.stations": [
             {
                 "value": "MURI",

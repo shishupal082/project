@@ -17,7 +17,13 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
-Config.enabledPages = $$$.enabledPages;
+
+Config.tempConfig = {
+    "enabledPages": $$$.enabledPages,
+    "redirectPages": $$$.redirectPages,
+    "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
+    "linkText": $$$.linkText
+};
 
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;

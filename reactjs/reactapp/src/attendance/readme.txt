@@ -50,3 +50,10 @@ list3Data_2: [
 [{"key": "date"}, {"key": "station"}, {"key": "date"}, {"key": "station"}, {"key": "deviceId"}]
 - Index for all date key will be 0 and all station heading will be 1
 - Index for deviceId will be 4
+
+2021-06-03
+----------------
+Added support for adding text with flexible dateTime and userId based on config file
+New page added app: add_field_report
+
+Added concept of redirect on page change using redirectPages config

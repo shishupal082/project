@@ -1474,6 +1474,13 @@ Stack.extend({
     isString: function(value) {
         return isString(value);
     },
+    isStringV2: function(value) {
+        var temp = isString(value);
+        if (temp) {
+            return value.trim().length > 0;
+        }
+        return false;
+    },
     capitalize: function(str) {
         return capitalize(str);
     },

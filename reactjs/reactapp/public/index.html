@@ -61,13 +61,26 @@ var GLOBAL = {
     loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/secondAppData/attendance/json/meta-data/",
+    addTextFilenamePattern: "YYYY/-/MM/-/DD/-/hh/-/mm/-user-field-report-device.csv",
     forceLogin: false
 };
 
 
 GLOBAL.validAppControl = ["appControlTeam11", "appControlTeam12",
-                          "appControlTeam13", "appControlTeam14"];
-
+                        "appControlTeam13", "appControlTeam14",
+                        "appControlTeam15"];
+GLOBAL.redirectPages = [
+    {
+        "name": "upload_file",
+        "toText": "Upload File",
+        "toUrl": "/upload_file"
+    }
+];
+GLOBAL.linkText = {
+    "add_field_report": "Add Entry",
+    "dbview": "Entry By Date",
+    "dbview_summary": "Summary"
+};
 GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
 // GLOBAL.appControlDataPath = "/roleAttendanceUser/json/covid19/";
 

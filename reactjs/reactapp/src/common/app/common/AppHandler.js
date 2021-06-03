@@ -381,6 +381,8 @@ AppHandler.extend({
         var endDateObj = DT.getDateObj(endDateStr);
         var startLimitDateObj = DT.getDateObj(startLimit);
         var endLimitDateObj = DT.getDateObj(endLimit);
+        endLimitDateObj.setHours(23);
+        endLimitDateObj.setMinutes(59);
         if (startDateObj > endDateObj) {
             startDateObj = endDateObj;
             endDateObj = DT.getDateObj(startDateStr);
@@ -391,7 +393,7 @@ AppHandler.extend({
                     "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
             }
             startDateObj = DT.addDate(startDateObj, 1);
-        } while(startDateObj <= endDateObj);
+        } while(startDateObj <= endLimitDateObj);
         return dateArr;
     }
 });

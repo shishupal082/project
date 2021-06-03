@@ -28,9 +28,9 @@ DataHandlerV2.extend({
     getList2Data: function() {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var configEnabledPage = {"enabledPages": Config.enabledPages};
-        var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages");
-        var linkText = $S.findParam([currentAppData, metaData], "linkText");
+        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
+        var redirectPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "redirectPages");
+        var linkText = $S.findParam([currentAppData, metaData, Config.tempConfig], "linkText");
         if (!$S.isArray(enabledPages)) {
             enabledPages = [];
         }
@@ -39,7 +39,7 @@ DataHandlerV2.extend({
         }
         var pages = Config.pages;
         var list2Data = [];
-        var temp;
+        var temp, i;
         for(var key in pages) {
             if (key !== "home" && enabledPages.indexOf(key) >= 0) {
                 if ($S.isString(linkText[key])) {
@@ -50,7 +50,39 @@ DataHandlerV2.extend({
                 list2Data.push({"name": key, "toText": temp, "toUrl": pages[key]});
             }
         }
+        if ($S.isArray(redirectPages)) {
+            for(i=0; i<redirectPages.length; i++) {
+                temp = redirectPages[i];
+                if (!$S.isObject(temp)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.name)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toText)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toUrl)) {
+                    continue;
+                }
+                list2Data.push({"name": temp.name, "toText": temp.toText, "toUrl": temp.toUrl});
+            }
+        }
         return list2Data;
+    },
+    getList2DataByName: function(name) {
+        var list2Data = this.getList2Data();
+        if ($S.isArray(list2Data)) {
+            for(var i=0; i<list2Data.length; i++) {
+                if (!$S.isObject(list2Data[i])) {
+                    continue;
+                }
+                if (list2Data[i].name === name) {
+                    return list2Data[i];
+                }
+            }
+        }
+        return null;
     },
     getList3Data: function(pageName) {
         var metaData = DataHandler.getData("metaData", {});
@@ -58,11 +90,10 @@ DataHandlerV2.extend({
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var name = "list3Data", i;
         if ([Config.home].indexOf(currentList2Id) >= 0) {
-            var configEnabledPage = {"enabledPages": Config.enabledPages};
-            var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages", []);
-            if ($S.isArray(enabledPages) && $S.isArray(Config.enabledPages)) {
+            var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages", []);
+            if ($S.isArray(enabledPages) && $S.isArray(Config.tempConfig.enabledPages)) {
                 for (i = 0; i<enabledPages.length; i++) {
-                    if ($S.isString(enabledPages[0]) && Config.enabledPages.indexOf(enabledPages[0]) >= 0) {
+                    if ($S.isString(enabledPages[0]) && Config.tempConfig.enabledPages.indexOf(enabledPages[0]) >= 0) {
                         currentList2Id = enabledPages[0];
                         break;
                     }
@@ -71,12 +102,10 @@ DataHandlerV2.extend({
         }
         if ([Config.entry, Config.update, Config.summary].indexOf(currentList2Id) >= 0) {
             name = "list3Data_1";
-        } else if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) >= 0) {
+        } else if ([Config.dbview, Config.dbview_summary, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             name = "list3Data_2";
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";
-        } else if ([Config.add_field_report].indexOf(currentList2Id) >= 0) {
-            name = "list3Data_4";
         }
         var list3Data = $S.findParam([currentAppData, metaData], name, []);
         if ($S.isArray(list3Data)) {
@@ -96,8 +125,7 @@ DataHandlerV2.extend({
         }
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var configEnabledPage = {"enabledPages": Config.enabledPages};
-        var enabledPages = $S.findParam([currentAppData, metaData, configEnabledPage], "enabledPages");
+        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
         if ($S.isArray(enabledPages)) {
             return enabledPages.indexOf(pageName) < 0;
         }

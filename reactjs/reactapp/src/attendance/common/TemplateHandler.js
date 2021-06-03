@@ -325,6 +325,7 @@ TemplateHandler.extend({
         var additionalDataRequired = $S.findParam([currentAppData, metaData], "addFieldReport.additionalDataRequired", []);
         var stations = $S.findParam([currentAppData, metaData], "addFieldReport.stations", []);
         var devices = $S.findParam([currentAppData, metaData], "addFieldReport.devices", []);
+        var userIds = $S.findParam([currentAppData, metaData], "addFieldReport.userIds", []);
         var currentDateTime;
         if (!$S.isArray(additionalDataRequired)) {
             additionalDataRequired = [];
@@ -335,10 +336,14 @@ TemplateHandler.extend({
         if (!$S.isArray(devices)) {
             devices = [];
         }
+        if (!$S.isArray(userIds)) {
+            userIds = [];
+        }
+        userIds = userIds.sort();
         for (var i = 0; i < additionalDataRequired.length; i++) {
             TemplateHelper.removeClassTemplate(renderField, additionalDataRequired[i], "d-none");
         }
-        var temp = {};
+        var temp = {}, temp2;
         var key = "addFieldReport.dateTime.field", value;
         if (additionalDataRequired.indexOf("addFieldReport.dateTime") >= 0) {
             value = DataHandler.getFieldsData(key, "");
@@ -348,6 +353,20 @@ TemplateHandler.extend({
                 TemplateHelper.updateTemplateValue(renderField, temp);
                 DataHandler.setFieldsData(key, currentDateTime);
             }
+        }
+        temp = [{"text": "Select User...", "value": ""}];
+        temp2 = [];
+        for(i=0; i<userIds.length; i++) {
+            if ($S.isString(userIds[i]) && userIds[i].length > 0) {
+                if (temp2.indexOf(userIds[i]) >= 0) {
+                    continue;
+                }
+                temp2.push(userIds[i]);
+                temp.push({"text": userIds[i], "value": userIds[i]});
+            }
+        }
+        if (additionalDataRequired.indexOf("addFieldReport.userId") >= 0) {
+            TemplateHelper.updateTemplateText(renderField, {"addFieldReport.userId.field": temp});
         }
         $S.addElAt(stations, 0, {"text": "Select station...", "value": ""});
         $S.addElAt(devices, 0, {"text": "Select device...", "value": ""});

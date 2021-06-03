@@ -79,8 +79,6 @@ class App extends React.Component {
         var pages = Config.pages;
         if ($S.isString(pages[pageName])) {
             this.childAttribute["history"].push(pages[pageName]);
-        } else {
-            alert("page '" + pageName + "' not found");
         }
         // DataHandler.TrackPageView(pageName);
     }
