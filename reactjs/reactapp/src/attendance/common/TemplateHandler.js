@@ -325,8 +325,9 @@ TemplateHandler.extend({
         var additionalDataRequired = $S.findParam([currentAppData, metaData], "addFieldReport.additionalDataRequired", []);
         var stations = $S.findParam([currentAppData, metaData], "addFieldReport.stations", []);
         var devices = $S.findParam([currentAppData, metaData], "addFieldReport.devices", []);
-        var userIds = $S.findParam([currentAppData, metaData], "addFieldReport.userIds", []);
-        var currentDateTime;
+        var userIdsObj = $S.findParam([currentAppData, metaData], "addFieldReport.userIds", {});
+        var currentDateTime, userIds = [];
+        var temp = {}, temp2;
         if (!$S.isArray(additionalDataRequired)) {
             additionalDataRequired = [];
         }
@@ -336,26 +337,34 @@ TemplateHandler.extend({
         if (!$S.isArray(devices)) {
             devices = [];
         }
-        if (!$S.isArray(userIds)) {
-            userIds = [];
+        if (!$S.isObject(userIdsObj)) {
+            userIdsObj = {};
+        }
+        for(temp2 in userIdsObj) {
+            if ($S.isArray(userIdsObj[temp2])) {
+                userIds = userIds.concat(userIdsObj[temp2]);
+            }
         }
         userIds = userIds.sort();
         for (var i = 0; i < additionalDataRequired.length; i++) {
             TemplateHelper.removeClassTemplate(renderField, additionalDataRequired[i], "d-none");
         }
-        var temp = {}, temp2;
         var key = "addFieldReport.dateTime.field", value;
         if (additionalDataRequired.indexOf("addFieldReport.dateTime") >= 0) {
             value = DataHandler.getFieldsData(key, "");
+            temp = {};
             if (!$S.isString(value) || value.trim().length === 0) {
                 currentDateTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
                 temp[key] = currentDateTime;
-                TemplateHelper.updateTemplateValue(renderField, temp);
                 DataHandler.setFieldsData(key, currentDateTime);
+            } else {
+                temp[key] = value;
             }
+            TemplateHelper.updateTemplateValue(renderField, temp);
         }
         temp = [{"text": "Select User...", "value": ""}];
         temp2 = [];
+        key = "addFieldReport.userId.field";
         for(i=0; i<userIds.length; i++) {
             if ($S.isString(userIds[i]) && userIds[i].length > 0) {
                 if (temp2.indexOf(userIds[i]) >= 0) {
@@ -365,14 +374,40 @@ TemplateHandler.extend({
                 temp.push({"text": userIds[i], "value": userIds[i]});
             }
         }
+        temp2 = {};
+        temp2[key] = temp;
         if (additionalDataRequired.indexOf("addFieldReport.userId") >= 0) {
-            TemplateHelper.updateTemplateText(renderField, {"addFieldReport.userId.field": temp});
+            TemplateHelper.updateTemplateText(renderField, temp2);
+            temp2 = {};
+            temp2[key] = DataHandler.getFieldsData(key, "");
+            TemplateHelper.updateTemplateValue(renderField, temp2);
         }
         $S.addElAt(stations, 0, {"text": "Select station...", "value": ""});
         $S.addElAt(devices, 0, {"text": "Select device...", "value": ""});
-        TemplateHelper.updateTemplateText(renderField, {"addFieldReport.station": stations});
-        TemplateHelper.updateTemplateText(renderField, {"addFieldReport.device": devices});
+        key = "addFieldReport.station";
+        value = DataHandler.getFieldsData(key, "");
+        temp2 = {};
+        temp = {};
+        temp2[key] = value;
+        temp[key] = stations;
+        TemplateHelper.updateTemplateText(renderField, temp);
+        TemplateHelper.updateTemplateValue(renderField, temp2);
 
+        key = "addFieldReport.device";
+        value = DataHandler.getFieldsData(key, "");
+        temp2 = {};
+        temp = {};
+        temp[key] = stations;
+        temp2[key] = value;
+        TemplateHelper.updateTemplateText(renderField, temp);
+        TemplateHelper.updateTemplateValue(renderField, temp2);
+
+
+        key = "addFieldReport.comment";
+        value = DataHandler.getFieldsData(key, "");
+        temp2 = {};
+        temp2[key] = value;
+        TemplateHelper.updateTemplateValue(renderField, temp2);
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var submitBtnName = "addFieldReport.submit";
         if (formSubmitStatus === "in_progress") {

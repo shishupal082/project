@@ -243,7 +243,7 @@ childGenerator = {
     },
     // Whenever field changes, we have to update template, to reflect on the screen
     "select": function(props, data, reactChildText, key) {
-        return <select key={key} name={data.name} className={data.className} value={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
+        return <select key={key} name={data.name} className={data.className} defaultValue={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
     },
     "textarea": function(props, data, reactChildText, key) {
         return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} value={data.value} onChange={props.onChange}></textarea>;

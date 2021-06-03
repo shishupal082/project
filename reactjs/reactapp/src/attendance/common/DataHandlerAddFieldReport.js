@@ -36,6 +36,20 @@ DataHandlerAddFieldReport.extend({
         }
         return "INFO";
     },
+    _getUserTeamV2: function(userId, userData) {
+        if (!$S.isObject(userData) || !$S.isStringV2(userId)) {
+            return "INFO";
+        }
+        for (var team in userData) {
+            if (!$S.isArray(userData[team])) {
+                continue;
+            }
+            if (userData[team].indexOf(userId) >= 0) {
+                return team;
+            }
+        }
+        return "INFO";
+    },
     _generateStringFromPattern: function(pattern, username, station, device, team) {
         if (!$S.isString(pattern)) {
             return pattern;
@@ -84,11 +98,8 @@ DataHandlerAddFieldReport.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var successRedirectUrl = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectUrl", "");
-        var userTeamMapping = $S.findParam([currentAppData, metaData], "addFieldReport.teamMapping", {});
         var addTextFilenamePattern = $S.findParam([currentAppData, metaData, Config.tempConfig], "addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
         var username = AppHandler.GetUserData("username", "");
-        var team = this._getUserTeam(userTeamMapping);
-        formData["team"] = team;
         var finalText = [], temp, i;
         temp = formData["addFieldReport.comment"].split("\n");
         for (i = 0; i < temp.length; i++) {
@@ -104,7 +115,7 @@ DataHandlerAddFieldReport.extend({
         var postData = {};
         postData["subject"] = formData["addFieldReport.station"];
         postData["heading"] = formData["addFieldReport.device"];
-        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, username, formData["addFieldReport.station"], formData["addFieldReport.device"], team);
+        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
         successRedirectUrl = this._generateFinalRedirectUrl(successRedirectUrl, Config.basepathname, Config.dbview);
@@ -150,6 +161,8 @@ DataHandlerAddFieldReport.extend({
             fieldsData = {};
         }
         var additionalDataRequired = $S.findParam([currentAppData, metaData], "addFieldReport.additionalDataRequired", []);
+        var userTeamMapping = $S.findParam([currentAppData, metaData], "addFieldReport.teamMapping", {});
+        var userIds = $S.findParam([currentAppData, metaData], "addFieldReport.userIds", {});
         if (!$S.isArray(additionalDataRequired)) {
             additionalDataRequired = [];
         }
@@ -167,21 +180,25 @@ DataHandlerAddFieldReport.extend({
         key = "addFieldReport.dateTime.field";
         if (formDataKey.indexOf(key) >= 0) {
             value = formData[key];
-            if (value.length !== 16) {
-                alert(this._getAleartMessage(key, value));
-                return;
-            }
             if (!AppHandler.isValidDateStr(value)) {
                 alert(this._getAleartMessage(key + ".invalid", value));
+                return;
+            }
+            if (value.length !== 16) {
+                alert(this._getAleartMessage(key, value));
                 return;
             }
         } else {
             formData[key] = formData["currentDateTime"];
         }
         key = "addFieldReport.userId.field";
-        if (formDataKey.indexOf(key) < 0) {
+        var team = this._getUserTeam(userTeamMapping);
+        if (formDataKey.indexOf(key) >= 0) {
+            team = this._getUserTeamV2(formData[key], userIds);
+        } else {
             formData[key] = formData["currentUserId"];
         }
+        formData["team"] = team;
         for(key in formData) {
             value = formData[key];
             if (!$S.isString(value) || value.length === 0) {

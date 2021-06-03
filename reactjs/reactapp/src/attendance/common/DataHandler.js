@@ -108,6 +108,8 @@ DataHandler.extend({
             if ($S.isObject(fieldsData)) {
                 if ($S.isUndefined(fieldsData[key])) {
                     return defaultValue;
+                } else {
+                    return fieldsData[key];
                 }
             }
         }
