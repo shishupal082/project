@@ -421,6 +421,7 @@ TemplateHandler.extend({
                     renderField = this.generateDbViewRenderFieldV2(renderData, true, "tableData");
                 break;
                 case "dbview":
+                case "custom_dbview":
                     renderField = this.generateDbViewRenderFieldV3(renderData);
                 break;
                 case "dbview_summary":

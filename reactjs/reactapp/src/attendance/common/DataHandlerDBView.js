@@ -132,7 +132,7 @@ DataHandlerDBView.extend({
         var finalTable = [], temp, temp2, tableName;
         var tempJoinResult = [];
         var force1stEntry, isNotMatching;
-        if (currentList2IdOrg === Config.dbview_summary && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+        if ([Config.dbview_summary, Config.custom_dbview].indexOf(currentList2IdOrg) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
             resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         }

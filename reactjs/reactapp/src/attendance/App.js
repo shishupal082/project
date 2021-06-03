@@ -193,6 +193,9 @@ class App extends React.Component {
         const dbview = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.dbview}/>);
+        const custom_dbview = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.custom_dbview}/>);
         const dbview_summary = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.dbview_summary}/>);
@@ -216,6 +219,7 @@ class App extends React.Component {
                 <Route path={pages.ta} component={ta}/>
                 <Route path={pages.dbview} component={dbview}/>
                 <Route path={pages.dbview_summary} component={dbview_summary}/>
+                <Route path={pages.custom_dbview} component={custom_dbview}/>
                 <Route path={pages.add_field_report} component={add_field_report}/>
                 <Route component={noMatch}/>
             </Switch>

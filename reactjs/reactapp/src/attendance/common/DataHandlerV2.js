@@ -30,6 +30,7 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
         var redirectPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "redirectPages");
+        var pageOrder = $S.findParam([currentAppData, metaData, Config.tempConfig], "pageOrder");
         var linkText = $S.findParam([currentAppData, metaData, Config.tempConfig], "linkText");
         if (!$S.isArray(enabledPages)) {
             enabledPages = [];
@@ -37,10 +38,20 @@ DataHandlerV2.extend({
         if (!$S.isObject(linkText)) {
             linkText = {};
         }
+        if (!$S.isArray(pageOrder)) {
+            pageOrder = [];
+        }
         var pages = Config.pages;
         var list2Data = [];
-        var temp, i;
-        for(var key in pages) {
+        var temp, i, key;
+        temp = Object.keys(pages);
+        for(i=0; i<temp.length; i++) {
+            if (pageOrder.indexOf(temp[i]) < 0) {
+                pageOrder.push(temp[i]);
+            }
+        }
+        for(i=0; i<pageOrder.length; i++) {
+            key = pageOrder[i];
             if (key !== "home" && enabledPages.indexOf(key) >= 0) {
                 if ($S.isString(linkText[key])) {
                     temp = linkText[key];
@@ -102,7 +113,7 @@ DataHandlerV2.extend({
         }
         if ([Config.entry, Config.update, Config.summary].indexOf(currentList2Id) >= 0) {
             name = "list3Data_1";
-        } else if ([Config.dbview, Config.dbview_summary, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             name = "list3Data_2";
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";

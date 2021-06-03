@@ -22,7 +22,8 @@ Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
     "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
-    "linkText": $$$.linkText
+    "linkText": $$$.linkText,
+    "pageOrder": $$$.pageOrder
 };
 
 
@@ -46,6 +47,7 @@ var pages = {
     "ta": basepathname+"/ta",
     "dbview": basepathname+"/dbview",
     "dbview_summary": basepathname+"/dbview_summary",
+    "custom_dbview": basepathname+"/custom_dbview",
     "add_field_report": basepathname+"/add_field_report"
 };
 
@@ -58,10 +60,11 @@ Config.summary = "summary";
 Config.ta = "ta";
 Config.dbview = "dbview";
 Config.dbview_summary = "dbview_summary";
+Config.custom_dbview = "custom_dbview";
 Config.add_field_report = "add_field_report";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["entry", "summary", "dbview", "dbview_summary"];
+Config.dateSelectionRequired = ["entry", "summary", "dbview", "dbview_summary", "custom_dbview"];
 
 Config.defaultPageFields = [];
 

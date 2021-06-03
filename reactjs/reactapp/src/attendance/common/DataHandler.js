@@ -140,7 +140,8 @@ DataHandler.extend({
         dataLoadStatusKey.push("appRelatedDataLoadStatus");
         var currentList2Id = this.getData("currentList2Id", "");
         var pageRequiredDataLoadStatus = [Config.entry, Config.update,
-                    Config.summary, Config.ta, Config.dbview, Config.dbview_summary];
+                    Config.summary, Config.ta, Config.dbview,
+                    Config.dbview_summary, Config.custom_dbview];
         if (pageRequiredDataLoadStatus.indexOf(currentList2Id) >= 0) {
             dataLoadStatusKey.push("dbViewDataLoadStatus");
         }
@@ -211,6 +212,17 @@ DataHandler.extend({
     },
     getCurrentList3Data: function() {
         var list3Id = this.getData("currentList3Id", "");
+        var list2Id = this.getData("currentList2Id", "");
+        if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
+            var currentAppData = this.getCurrentAppData();
+            var metaData = this.getData("metaData", {});
+            var configList3Id = $S.findParam([currentAppData, metaData], "customDBView.list3Data_2.selected");
+            if ($S.isString(configList3Id)) {
+                list3Id = configList3Id;
+            } else {
+                list3Id = "";
+            }
+        }
         var list3Data = DataHandlerV2.getList3Data();
         var currentList3Data = {};
         if ($S.isArray(list3Data)) {
@@ -255,6 +267,16 @@ DataHandler.extend({
         }
         return {};
     },
+    applyResetFilter: function() {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                filterOptions[i].selectedValue = "";
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", {});
+    }
 });
 
 DataHandler.extend({
@@ -372,7 +394,7 @@ DataHandler.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
-        if ([Config.dbview, Config.ta, Config.dbview_summary, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        if ([Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             DataHandlerDBView.handlePageLoad(dbDataApis, function() {
                 DataHandler.handleApiDataLoad();
                 $S.callMethod(callback);
@@ -428,6 +450,9 @@ DataHandler.extend({
             }
             return;
         }
+        if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
+            DataHandler.applyResetFilter();
+        }
         DataHandler.setData("currentList2Id", list2Id);
         DataHandler.handleApiDataLoad();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -440,6 +465,9 @@ DataHandler.extend({
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         if (oldList2Id !== list2Id) {
+            if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
+                DataHandler.applyResetFilter();
+            }
             DataHandler.setData("currentList2Id", list2Id);
             this.handlePageRouting("pageComponentDidMount", function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -511,14 +539,7 @@ DataHandler.extend({
         }
     },
     OnResetClick: function(appStateCallback, appDataCallback, name, value) {
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        if ($S.isArray(filterOptions)) {
-            for (var i = 0; i<filterOptions.length; i++) {
-                filterOptions[i].selectedValue = "";
-            }
-        }
-        DataHandler.setData("filterOptions", filterOptions);
-        DataHandler.setData("filterValues", {});
+        DataHandler.applyResetFilter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
@@ -578,7 +599,7 @@ DataHandler.extend({
 
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
-        } else if ([Config.dbview, Config.dbview_summary].indexOf(currentList2Id) < 0) {
+        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
             filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName, "name");
         }
         switch(currentList2Id) {
@@ -602,6 +623,7 @@ DataHandler.extend({
             break;
             case "dbview":
             case "dbview_summary":
+            case "custom_dbview":
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField);
                 renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName, dateParameterField);
