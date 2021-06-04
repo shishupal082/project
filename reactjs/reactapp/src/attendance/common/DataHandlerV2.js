@@ -209,6 +209,10 @@ DataHandlerV2.extend({
     },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
+        var appControlMetaData = DataHandler.getData("appControlMetaData", {});
+        if ($S.isObject(appControlMetaData)) {
+            finalMetaData = appControlMetaData;
+        }
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
                 if ($S.isObject(metaDataResponse[i])) {

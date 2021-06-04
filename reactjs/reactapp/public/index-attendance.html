@@ -66,9 +66,10 @@ var GLOBAL = {
 };
 
 
-GLOBAL.validAppControl = ["appControlTeam11", "appControlTeam12",
-                        "appControlTeam13", "appControlTeam14",
-                        "appControlTeam15"];
+GLOBAL.validAppControl = ["appControlDataTeam01",
+        "appControlTeam11", "appControlTeam12",
+        "appControlTeam13", "appControlTeam14",
+        "appControlTeam15"];
 GLOBAL.redirectPages = [
     {
         "name": "upload_file",
@@ -79,10 +80,11 @@ GLOBAL.redirectPages = [
 GLOBAL.linkText = {
     "add_field_report": "Add Entry",
     "dbview": "Entry By Date Filter",
-    "dbview_summary": "Summary",
+    "dbview_summary": "DBView Summary",
     "custom_dbview": "Entry By Date"
 };
-GLOBAL.pageOrder = ["custom_dbview", "dbview", "dbview_summary", "add_field_report"];
+GLOBAL.pageOrder = ["entry", "update", "ta", "summary",
+        "dbview", "dbview_summary", "custom_dbview", "add_field_report"];
 
 GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
 // GLOBAL.appControlDataPath = "/roleAttendanceUser/json/covid19/";
@@ -92,7 +94,7 @@ GLOBAL.appControlApi = "/roleAttendanceUser/json/attendance/appControlData.json"
 // GLOBAL.appControlApi = "/secondAppData/attendance/json/meta-data-ta/appControlData.json";
 // GLOBAL.appControlApi = "/pvt/app-data/attendance/appControlTeam14.json";
 GLOBAL.headingJson = document.getElementById("headingJson").value;
-GLOBAL.enabledPages = ["entry", "update", "ta", "summary", "dbview", "dbview_summary", "add_field_report"];
+GLOBAL.enabledPages = ["entry", "update", "ta", "summary", "dbview", "dbview_summary", "custom_dbview", "add_field_report"];
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;

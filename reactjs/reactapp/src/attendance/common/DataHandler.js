@@ -33,6 +33,7 @@ keys.push("filterOptions");
 
 
 keys.push("appControlData");
+keys.push("appControlMetaData");
 keys.push("metaData");
 keys.push("userData");
 keys.push("filteredUserData");
@@ -413,8 +414,9 @@ DataHandler.extend({
     loadAppControlData: function(callback) {
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
         var appControlApi = Config.getApiUrl("appControlData", null, true);
-        AppHandler.loadAppControlData(appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(response) {
-            DataHandler.setData("appControlData", response);
+        AppHandler.loadAppControlData(appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(appControlData, metaData) {
+            DataHandler.setData("appControlData", appControlData);
+            DataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
             DataHandler.setCurrentAppId();

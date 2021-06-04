@@ -558,6 +558,25 @@ AppHandler.extend({
         }
         return headingText;
     },
+    _addAppId: function(response) {
+        var metaData = {};
+        var appControlData = [];
+        if ($S.isObject(response)) {
+            if ($S.isArray(response.list1Data)) {
+                appControlData = response.list1Data;
+            }
+            if ($S.isObject(response.metaData)) {
+                metaData = response.metaData;
+            }
+        }
+        appControlData.map(function(el, i, arr) {
+            if ($S.isObject(el)) {
+                el.id = "app-id-" + i;
+            }
+            return el;
+        });
+        return {"appControlData": appControlData, "metaData": metaData};
+    },
     loadAppControlData: function(appControlApi, baseApi, appControlDataPath, validAppControl, callback) {
         if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
             for(var i=0; i<validAppControl.length; i++) {
@@ -576,21 +595,14 @@ AppHandler.extend({
                             "apiName": "appControlData",
                             "requestMethod": Api.getAjaxApiCallMethod()};
         request.push(appControlRequest);
-        var appControlData = [];
+        var result, fileResponse;
         AppHandler.LoadDataFromRequestApi(request, function() {
             if ($S.isArray(request[0].response) && request[0].response.length > 0) {
-                if ($S.isArray(request[0].response[0])) {
-                    request[0].response[0].map(function(el, i, arr) {
-                        if ($S.isObject(el)) {
-                            el.id = "app-id-" + i;
-                        }
-                        return el;
-                    });
-                    appControlData = request[0].response[0];
-                }
+                fileResponse = request[0].response[0];
             }
             if ($S.isFunction(callback)) {
-                callback(appControlData);
+                result = AppHandler._addAppId(fileResponse);
+                callback(result.appControlData, result.metaData);
             }
         });
     }

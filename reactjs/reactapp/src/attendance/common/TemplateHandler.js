@@ -397,7 +397,7 @@ TemplateHandler.extend({
         value = DataHandler.getFieldsData(key, "");
         temp2 = {};
         temp = {};
-        temp[key] = stations;
+        temp[key] = devices;
         temp2[key] = value;
         TemplateHelper.updateTemplateText(renderField, temp);
         TemplateHelper.updateTemplateValue(renderField, temp2);
