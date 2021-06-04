@@ -568,6 +568,8 @@ AppHandler.extend({
             if ($S.isObject(response.metaData)) {
                 metaData = response.metaData;
             }
+        } else if ($S.isArray(response)) {
+            appControlData = response;
         }
         appControlData.map(function(el, i, arr) {
             if ($S.isObject(el)) {
