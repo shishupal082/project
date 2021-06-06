@@ -95,7 +95,7 @@ TemplateHandler.extend({
     },
     _generateFirstTr: function(trData, isSortableFieldRequired) {
         var renderFieldTr = this.getTemplate("dbviewField.tr");
-        var i, j, tdField, isSortable, sortingFields, tdText, isFound, isDescending;
+        var i, tdField, isSortable, sortingFields, tdText, isFound;
         var defaultClassName = "btn", className, additionalClassName;
         var isValidTr = false;
         var tdClassName = "";
@@ -117,21 +117,19 @@ TemplateHandler.extend({
             isValidTr = true;
             isSortable = $S.findParam([trData[i]], "isSortable", false);
             if ($S.isBooleanTrue(isSortable) && $S.isBooleanTrue(isSortableFieldRequired)) {
-                isDescending = false;
                 isFound = $S.searchItems([trData[i].name], sortingFields, false, false, "i",
                     function(searchingPattern, el, i, arr, searchByPattern, isRevert, modifier) {
                         if (!$S.isObject(el)) {
                             return false;
                         }
                         if (searchingPattern.indexOf(el.name) >= 0) {
-                            isDescending = el.value === "descending";
                             return true;
                         }
                         return false;
                     }
                 );
-                if (isFound.length > 0) {
-                    if (isDescending) {
+                if (isFound.length > 0 && $S.isObject(isFound[0])) {
+                    if (isFound[0].value === "descending") {
                         additionalClassName = " btn-primary";
                     } else {
                         additionalClassName = " btn-secondary";
