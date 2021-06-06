@@ -50,12 +50,12 @@ DataHandlerAddFieldReport.extend({
         }
         return "INFO";
     },
-    _generateStringFromPattern: function(pattern, username, station, device, team) {
+    _generateStringFromPattern: function(pattern, dateTimeStr, username, station, device, team) {
         if (!$S.isString(pattern)) {
             return pattern;
         }
         try {
-            pattern = DT.getDateTime(pattern, "/");
+            pattern = DT.getDateTimeV2(dateTimeStr, pattern, "/");
             if ($S.isString(username)) {
                 pattern = pattern.replaceAll("username", username);
             }
@@ -69,7 +69,7 @@ DataHandlerAddFieldReport.extend({
                 pattern = pattern.replaceAll("team", team);
             }
         } catch(e) {
-            // DataHandler.TrackDebug("Error in generating " + name);
+            DataHandler.TrackDebug("Error in generating filename from pattern");
             pattern = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
         }
         return pattern;
@@ -82,7 +82,7 @@ DataHandlerAddFieldReport.extend({
             pattern = pattern.replaceAll("{basepathname}", basepathname);
             pattern = pattern.replaceAll("{dbview}", dbview);
         } catch(e) {
-            // DataHandler.TrackDebug("Error in generating " + name);
+            DataHandler.TrackDebug("Error in generating final redirect link");
             pattern = basepathname + "/" + dbview;
         }
         return pattern;
@@ -115,7 +115,7 @@ DataHandlerAddFieldReport.extend({
         var postData = {};
         postData["subject"] = formData["addFieldReport.station"];
         postData["heading"] = formData["addFieldReport.device"];
-        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
+        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, formData["addFieldReport.dateTime.field"], username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
         successRedirectUrl = this._generateFinalRedirectUrl(successRedirectUrl, Config.basepathname, Config.dbview);
@@ -126,10 +126,10 @@ DataHandlerAddFieldReport.extend({
             $S.callMethod(callback);
             // console.log(response);
             if (status === "FAILURE") {
-                // DataHandler.TrackApiRequest("uploadText", "FAILURE");
+                DataHandler.TrackApiRequest("uploadText", "FAILURE");
                 alert("Error in uploading data, Please Try again.");
             } else {
-                // DataHandler.TrackApiRequest("uploadText", "SUCCESS");
+                DataHandler.TrackApiRequest("uploadText", "SUCCESS");
                 AppHandler.LazyRedirect(successRedirectUrl, 250);
             }
         });

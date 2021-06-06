@@ -44,8 +44,9 @@ keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
 
-keys.push("sortable");
-keys.push("sortableValue");
+// keys.push("sortable");
+// keys.push("sortableValue");
+keys.push("sortingFields");
 keys.push("dbViewData");
 keys.push("dbViewDataTable");
 keys.push("dbViewDataLoadStatus");
@@ -155,7 +156,61 @@ DataHandler.extend({
         return true;
     }
 });
-
+DataHandler.extend({
+    getNavigatorData: function(key) {
+        var result = key;
+        try {
+            var uiNavigator = Config.navigator;
+            if ($S.isString(uiNavigator[key])) {
+                result = uiNavigator[key];
+            }
+        } catch(err) {
+            result = "error in " + key;
+        }
+        return result;
+    },
+    getUserAgentTrackingData: function() {
+        var trackingData = [];
+        var trackingKey = ["platform","appVersion","appCodeName","appName"];
+        for(var i=0; i<trackingKey.length; i++) {
+            trackingData.push(this.getNavigatorData(trackingKey[i]));
+        }
+        return trackingData.join(",");
+    },
+    getPageUrl: function(pageName) {
+        return window.location.pathname;
+    },
+    _getTrackUsername: function() {
+        var username = AppHandler.GetUserData("username", "");
+        if (!$S.isString(username) || username.length < 1) {
+            username = "empty-username";
+        }
+        return username;
+    },
+    send: function(trackingAction, eventCategory, eventLabel) {
+        if (Config.gtag) {
+            $S.pushGAEvent(Config.gtag, eventCategory, trackingAction, eventLabel);
+        }
+    },
+    TrackApiRequest: function(requestName, requestStatus) {
+        var username = this._getTrackUsername();
+        DataHandler.send(username, requestName+":"+requestStatus, DataHandler.getPageUrl());
+    },
+    TrackDebug: function(content) {
+        if (!$S.isString(content) || content.length < 1) {
+            content = "empty-content";
+        }
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "Debug:"+content, DataHandler.getUserAgentTrackingData());
+    },
+    TrackPageView: function(pageName) {
+        if (!$S.isString(pageName) || pageName.length < 1) {
+            pageName = "empty-pageName";
+        }
+        var username = this._getTrackUsername();
+        DataHandler.send(username, "pageView:"+pageName, DataHandler.getPageUrl());
+    }
+});
 DataHandler.extend({
     setCurrentAppId: function(appId) {
         var appControlData = this.getData("appControlData", []);
@@ -429,6 +484,7 @@ DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
+                DataHandler.TrackPageView(DataHandler.getData("currentList2Id", ""));
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -493,17 +549,38 @@ DataHandler.extend({
         });
     },
     SortClick: function(appStateCallback, appDataCallback, name, value) {
-        var sortableValue = DataHandler.getData("sortableValue", "");
-        if (sortableValue === "descending") {
-            sortableValue = "ascending";
-        } else if (sortableValue === "ascending") {
-            sortableValue = "";
-            value = "";
-        } else {
-            sortableValue = "descending";
+        // var sortableValue = DataHandler.getData("sortableValue", "");
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        var finalSortingField = [];
+        var temp = {};
+        if (!$S.isArray(sortingFields)) {
+            sortingFields = [];
         }
-        DataHandler.setData("sortable", value);
-        DataHandler.setData("sortableValue", sortableValue);
+        for(var i=0; i<sortingFields.length; i++) {
+            if (!$S.isObject(sortingFields[i])) {
+                continue;
+            }
+            if (sortingFields[i].name === value) {
+                temp = sortingFields[i];
+                continue;
+            }
+            if (["descending", "ascending"].indexOf(sortingFields[i].value) >= 0) {
+                finalSortingField.push(sortingFields[i]);
+            }
+        }
+        if (temp.value === "descending") {
+            temp.value = "ascending";
+            finalSortingField.push(temp);
+        } else if (temp.value === "ascending") {
+            // Do nothing
+        } else {
+            temp.name = value;
+            temp.value = "descending";
+            finalSortingField.push(temp);
+        }
+        // DataHandler.setData("sortable", value);
+        // DataHandler.setData("sortableValue", sortableValue);
+        DataHandler.setData("sortingFields", finalSortingField);
         return DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
@@ -596,15 +673,16 @@ DataHandler.extend({
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name");
         DataHandler.setData("filteredUserData", filteredUserData);
-        var sortableValue = DataHandler.getData("sortableValue", "");
-        var sortableName = DataHandler.getData("sortable", "");
+        // var sortableValue = DataHandler.getData("sortableValue", "");
+        // var sortableName = DataHandler.getData("sortable", "");
+        var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
         var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
 
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
-            filteredUserData = $S.sortResult(filteredUserData, sortableValue, sortableName, "name");
+            filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
         }
         switch(currentList2Id) {
             case "entry":
@@ -615,7 +693,7 @@ DataHandler.extend({
                 renderData = DataHandlerV2.GenerateSummaryUserData(dateArray, filteredUserData);
                 for (i=0; i<renderData.length; i++) {
                     if ($S.isObject(renderData[i]) && $S.isArray(renderData[i].tableData)) {
-                        renderData[i].tableData = $S.sortResult(renderData[i].tableData, sortableValue, sortableName, "name");
+                        renderData[i].tableData = $S.sortResultV2(renderData[i].tableData, sortingFields, "name");
                     }
                 }
                 if (!displayDateSummary) {
@@ -630,7 +708,7 @@ DataHandler.extend({
             case "custom_dbview":
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField);
-                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortableValue, sortableName, dateParameterField);
+                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             default:
                 renderData = [];

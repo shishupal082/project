@@ -294,7 +294,7 @@ Template["addFieldReport"] = [
                                     ]
                                 },
                                 {
-                                    "tag": "inputV2",
+                                    "tag": "input",
                                     "className": "form-control",
                                     "name": "addFieldReport.dateTime.field",
                                     "value": ""
@@ -383,7 +383,7 @@ Template["addFieldReport"] = [
                                     "text": "Comment"
                                 },
                                 {
-                                    "tag": "textareaV2",
+                                    "tag": "textarea",
                                     "className": "w-100",
                                     "name": "addFieldReport.comment",
                                     "rows": "3",

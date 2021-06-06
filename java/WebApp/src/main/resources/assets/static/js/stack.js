@@ -364,6 +364,13 @@ var DT = (function() {
         var currentDateTime = new Date();
         return this.formateDateTime(format, seprator, currentDateTime);
     };
+    DateTime.prototype.getDateTimeV2 = function(dateTimeStr, format, seprator) {
+        var currentDateTime = this.getDateObj(dateTimeStr);
+        if (currentDateTime === null) {
+            currentDateTime = new Date();
+        }
+        return this.formateDateTime(format, seprator, currentDateTime);
+    };
     DateTime.prototype.getDayNumberTimeFromSeconds = function(seconds, format, seprator) {
         var response = "";
         var formatKeys = format ? format.split(seprator) : [];
@@ -1614,6 +1621,17 @@ Stack.extend({
                     return 0;
                 }
             });
+        }
+        return requestedArray;
+    },
+    sortResultV2: function(requestedArray, sortingFields, searchName, defaultValue) {
+        if (isArray(sortingFields)) {
+            for(var i=0; i<sortingFields.length; i++) {
+                if (!isObject(sortingFields[i])) {
+                    continue;
+                }
+                requestedArray = Stack.sortResult(requestedArray, sortingFields[i].value, sortingFields[i].name, searchName, defaultValue);
+            }
         }
         return requestedArray;
     },

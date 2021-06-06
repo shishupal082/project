@@ -481,7 +481,7 @@ Template["addentry"] = [
                                     "text": "Comment"
                                 },
                                 {
-                                    "tag": "textareaV2",
+                                    "tag": "textarea",
                                     "className": "w-100",
                                     "name": "addentry.textarea",
                                     "rows": "3",

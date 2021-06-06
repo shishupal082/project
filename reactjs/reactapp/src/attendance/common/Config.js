@@ -5,6 +5,7 @@ import Template from "./Template";
 
 var Config = {requestId: $S.getRequestId()};
 
+Config.navigator = $$$.navigator;
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
 var appVersion = $$$.appVersion;
@@ -17,6 +18,7 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
+
 
 Config.tempConfig = {
     "enabledPages": $$$.enabledPages,

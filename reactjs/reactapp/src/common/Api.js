@@ -224,13 +224,6 @@ childGenerator = {
         var inputField = <input key={key} type={data.type} name={data.name}
                             placeholder={data.placeholder} className={data.className}
                             id={data.id} onChange={props.onChange}
-                            value={data.value}/>;
-        return inputField;
-    },
-    "inputV2": function(props, data, reactChildText, key) {
-        var inputField = <input key={key} type={data.type} name={data.name}
-                            placeholder={data.placeholder} className={data.className}
-                            id={data.id} onChange={props.onChange}
                             defaultValue={data.value}/>;
         return inputField;
     },
@@ -241,14 +234,10 @@ childGenerator = {
                     value={data.value} required/>;
         return inputField;
     },
-    // Whenever field changes, we have to update template, to reflect on the screen
     "select": function(props, data, reactChildText, key) {
         return <select key={key} name={data.name} className={data.className} defaultValue={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
     },
     "textarea": function(props, data, reactChildText, key) {
-        return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} value={data.value} onChange={props.onChange}></textarea>;
-    },
-    "textareaV2": function(props, data, reactChildText, key) {
         return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} defaultValue={data.value} onChange={props.onChange}></textarea>;
     },
     "option": function(props, data, reactChildText, key) {
@@ -276,3 +265,14 @@ validTags = Object.keys(childGenerator);
 
 })($S);
 export default Api;
+
+// "input": function(props, data, reactChildText, key) {
+//     var inputField = <input key={key} type={data.type} name={data.name}
+//                         placeholder={data.placeholder} className={data.className}
+//                         id={data.id} onChange={props.onChange}
+//                         value={data.value}/>;
+//     return inputField;
+// },
+// "textarea": function(props, data, reactChildText, key) {
+//     return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} value={data.value} onChange={props.onChange}></textarea>;
+// },

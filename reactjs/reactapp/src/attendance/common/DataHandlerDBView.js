@@ -467,7 +467,7 @@ DataHandlerDBView.extend({
         this._handleDateParameterV3(renderData, key, tempList3Data, dateParameterField);
         return renderData;
     },
-    SortDbViewResult: function(renderData, sortableValue, sortableName, dateParameterField) {
+    SortDbViewResult: function(renderData, sortingFields, dateParameterField) {
         if (!$S.isArray(renderData)) {
             return renderData;
         }
@@ -478,9 +478,9 @@ DataHandlerDBView.extend({
                         renderData = $S.sortResult(renderData, "descending", "name", "", "");
                     }
                 }
-                this.SortDbViewResult(renderData[i].text, sortableValue, sortableName, dateParameterField);
+                this.SortDbViewResult(renderData[i].text, sortingFields, dateParameterField);
             } else if ($S.isArray(renderData[i])) {
-                renderData = $S.sortResult(renderData, sortableValue, sortableName, "name", "");
+                renderData = $S.sortResultV2(renderData, sortingFields, "name", "");
                 break;
             }
         }

@@ -95,17 +95,20 @@ TemplateHandler.extend({
     },
     _generateFirstTr: function(trData, isSortableFieldRequired) {
         var renderFieldTr = this.getTemplate("dbviewField.tr");
-        var i, tdField, isSortable, sortableValue, tdText;
-        var defaultClassName = "btn btn-light", className, additionalClassName;
+        var i, j, tdField, isSortable, sortingFields, tdText, isFound, isDescending;
+        var defaultClassName = "btn", className, additionalClassName;
         var isValidTr = false;
         var tdClassName = "";
         if (!$S.isArray(trData)) {
             trData = [];
         }
-        sortableValue = DataHandler.getData("sortable", "");
+        sortingFields = DataHandler.getData("sortingFields", []);
         if (trData.length > 0) {
             tdField = {"tag": "td.b", "text": "S.No."};
             TemplateHelper.addItemInTextArray(renderFieldTr, "dbviewField.tr.tds", tdField);
+        }
+        if (!$S.isArray(sortingFields)) {
+            sortingFields = [];
         }
         for (i=0; i<trData.length; i++) {
             if ($S.isObject(trData[i]) && $S.isBooleanTrue(trData[i].hidden)) {
@@ -114,10 +117,27 @@ TemplateHandler.extend({
             isValidTr = true;
             isSortable = $S.findParam([trData[i]], "isSortable", false);
             if ($S.isBooleanTrue(isSortable) && $S.isBooleanTrue(isSortableFieldRequired)) {
-                if (sortableValue === trData[i].name) {
-                    additionalClassName = " active";
+                isDescending = false;
+                isFound = $S.searchItems([trData[i].name], sortingFields, false, false, "i",
+                    function(searchingPattern, el, i, arr, searchByPattern, isRevert, modifier) {
+                        if (!$S.isObject(el)) {
+                            return false;
+                        }
+                        if (searchingPattern.indexOf(el.name) >= 0) {
+                            isDescending = el.value === "descending";
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                if (isFound.length > 0) {
+                    if (isDescending) {
+                        additionalClassName = " btn-primary";
+                    } else {
+                        additionalClassName = " btn-secondary";
+                    }
                 } else {
-                    additionalClassName = "";
+                    additionalClassName = " btn-light";
                 }
                 className = defaultClassName + additionalClassName;
                 tdText = [{"tag": "button.b", "className": className, "name": "sortable", "value": trData[i].name, "text": AppHandler.getHeadingText(trData[i])}];
