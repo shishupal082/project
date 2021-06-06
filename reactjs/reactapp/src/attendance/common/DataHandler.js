@@ -157,61 +157,6 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getNavigatorData: function(key) {
-        var result = key;
-        try {
-            var uiNavigator = Config.navigator;
-            if ($S.isString(uiNavigator[key])) {
-                result = uiNavigator[key];
-            }
-        } catch(err) {
-            result = "error in " + key;
-        }
-        return result;
-    },
-    getUserAgentTrackingData: function() {
-        var trackingData = [];
-        var trackingKey = ["platform","appVersion","appCodeName","appName"];
-        for(var i=0; i<trackingKey.length; i++) {
-            trackingData.push(this.getNavigatorData(trackingKey[i]));
-        }
-        return trackingData.join(",");
-    },
-    getPageUrl: function(pageName) {
-        return window.location.pathname;
-    },
-    _getTrackUsername: function() {
-        var username = AppHandler.GetUserData("username", "");
-        if (!$S.isString(username) || username.length < 1) {
-            username = "empty-username";
-        }
-        return username;
-    },
-    send: function(trackingAction, eventCategory, eventLabel) {
-        if (Config.gtag) {
-            $S.pushGAEvent(Config.gtag, eventCategory, trackingAction, eventLabel);
-        }
-    },
-    TrackApiRequest: function(requestName, requestStatus) {
-        var username = this._getTrackUsername();
-        DataHandler.send(username, requestName+":"+requestStatus, DataHandler.getPageUrl());
-    },
-    TrackDebug: function(content) {
-        if (!$S.isString(content) || content.length < 1) {
-            content = "empty-content";
-        }
-        var username = this._getTrackUsername();
-        DataHandler.send(username, "Debug:"+content, DataHandler.getUserAgentTrackingData());
-    },
-    TrackPageView: function(pageName) {
-        if (!$S.isString(pageName) || pageName.length < 1) {
-            pageName = "empty-pageName";
-        }
-        var username = this._getTrackUsername();
-        DataHandler.send(username, "pageView:"+pageName, DataHandler.getPageUrl());
-    }
-});
-DataHandler.extend({
     setCurrentAppId: function(appId) {
         var appControlData = this.getData("appControlData", []);
         var currentList1Id = "";
@@ -484,7 +429,7 @@ DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
-                DataHandler.TrackPageView(DataHandler.getData("currentList2Id", ""));
+                AppHandler.TrackPageView(DataHandler.getData("currentList2Id", ""));
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -492,12 +437,14 @@ DataHandler.extend({
 });
 DataHandler.extend({
     OnReloadClick: function(appStateCallback, appDataCallback, currentList1Id) {
+        AppHandler.TrackEvent("reloadClick");
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
+        AppHandler.TrackDropdownChange("list1", list1Id);
         DataHandler.setData("currentList1Id", list1Id);
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
@@ -506,18 +453,21 @@ DataHandler.extend({
         if (!$S.isString(pages[list2Id])) {
             var currentList2Data = DataHandlerV2.getList2DataByName(list2Id);
             if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
-                AppHandler.LazyRedirect(currentList2Data.toUrl);
+                AppHandler.TrackPageView(list2Id);
+                AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
             }
             return;
         }
         if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
             DataHandler.applyResetFilter();
         }
+        AppHandler.TrackPageView(list2Id);
         DataHandler.setData("currentList2Id", list2Id);
         DataHandler.handleApiDataLoad();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList3Change: function(appStateCallback, appDataCallback, list3Id) {
+        AppHandler.TrackDropdownChange("list3", list3Id);
         DataHandler.setData("currentList3Id", list3Id);
         DataHandler.generateDateParameter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -525,6 +475,7 @@ DataHandler.extend({
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         if (oldList2Id !== list2Id) {
+            // AppHandler.TrackPageView(list2Id);
             if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
                 DataHandler.applyResetFilter();
             }
@@ -535,6 +486,7 @@ DataHandler.extend({
         }
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
+        AppHandler.TrackEvent("dateSelect:" + value);
         DataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
@@ -548,8 +500,9 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
     },
-    SortClick: function(appStateCallback, appDataCallback, name, value) {
+    SortClick: function(appStateCallback, appDataCallback, value) {
         // var sortableValue = DataHandler.getData("sortableValue", "");
+        AppHandler.TrackEvent("sort:" + value);
         var sortingFields = DataHandler.getData("sortingFields", []);
         var finalSortingField = [];
         var temp = {};
@@ -586,6 +539,7 @@ DataHandler.extend({
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
         var filterValues = DataHandler.getData("filterValues", {});
         var filterOptions = DataHandler.getData("filterOptions", []);
+        AppHandler.TrackEvent("filterChange:" + value);
         if (!$S.isObject(filterValues)) {
             filterValues = {};
         }
@@ -620,6 +574,7 @@ DataHandler.extend({
         }
     },
     OnResetClick: function(appStateCallback, appDataCallback, name, value) {
+        AppHandler.TrackEvent("resetClick");
         DataHandler.applyResetFilter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },

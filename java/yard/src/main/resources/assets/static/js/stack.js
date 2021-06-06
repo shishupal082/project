@@ -2305,6 +2305,31 @@ Stack.extend({
         return rows;
     }
 });
+Stack.extend({
+    getNavigatorData: function(uiNavigator, key) {
+        // uiNavigator = window.navigator
+        var result = key;
+        try {
+            if (!isObject(uiNavigator)) {
+                return result;
+            }
+            if (isString(uiNavigator[key])) {
+                result = uiNavigator[key];
+            }
+        } catch(err) {
+            result = "error in " + key;
+        }
+        return result;
+    },
+    getUserAgentTrackingData: function() {
+        var trackingData = [];
+        var trackingKey = ["platform","appVersion","appCodeName","appName"];
+        for(var i=0; i<trackingKey.length; i++) {
+            trackingData.push(this.getNavigatorData(trackingKey[i]));
+        }
+        return trackingData.join(",");
+    }
+})
 /*End of direct access of methods*/
 if (Platform === "Window") {
     window.$S = Stack;

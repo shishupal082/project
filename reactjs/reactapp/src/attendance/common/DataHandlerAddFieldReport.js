@@ -69,7 +69,7 @@ DataHandlerAddFieldReport.extend({
                 pattern = pattern.replaceAll("team", team);
             }
         } catch(e) {
-            DataHandler.TrackDebug("Error in generating filename from pattern");
+            AppHandler.TrackDebug("Error in generating filename from pattern");
             pattern = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
         }
         return pattern;
@@ -82,7 +82,7 @@ DataHandlerAddFieldReport.extend({
             pattern = pattern.replaceAll("{basepathname}", basepathname);
             pattern = pattern.replaceAll("{dbview}", dbview);
         } catch(e) {
-            DataHandler.TrackDebug("Error in generating final redirect link");
+            AppHandler.TrackDebug("Error in generating final redirect link");
             pattern = basepathname + "/" + dbview;
         }
         return pattern;
@@ -126,10 +126,10 @@ DataHandlerAddFieldReport.extend({
             $S.callMethod(callback);
             // console.log(response);
             if (status === "FAILURE") {
-                DataHandler.TrackApiRequest("uploadText", "FAILURE");
+                AppHandler.TrackApiRequest("uploadText", "FAILURE");
                 alert("Error in uploading data, Please Try again.");
             } else {
-                DataHandler.TrackApiRequest("uploadText", "SUCCESS");
+                AppHandler.TrackApiRequest("uploadText", "SUCCESS");
                 AppHandler.LazyRedirect(successRedirectUrl, 250);
             }
         });

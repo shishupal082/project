@@ -9,7 +9,7 @@ import AppComponent from "../common/app/components/AppComponent";
 import DataHandler from "./common/DataHandler";
 import Config from "./common/Config";
 
-
+AppHandler.setGtag(Config.gtag);
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -80,7 +80,6 @@ class App extends React.Component {
         if ($S.isString(pages[pageName])) {
             this.childAttribute["history"].push(pages[pageName]);
         }
-        // DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
@@ -96,11 +95,12 @@ class App extends React.Component {
         } else if (name === "date-select") {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "footer-filter-toggle") {
+            AppHandler.TrackEvent("ToggleClick");
             AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.disableFooterV2);
         }else if (value === "addentry.submit") {
             DataHandler.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "sortable") {
-            DataHandler.SortClick(this.appStateCallback, this.appDataCallback, name, value);
+            DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
         }
     }
     // for input and textarea

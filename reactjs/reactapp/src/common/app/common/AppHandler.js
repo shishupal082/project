@@ -8,6 +8,7 @@ var AppHandler;
 (function($S){
 var DT = $S.getDT();
 var requestId = $S.getRequestId();
+var configGtag = false;
 
 AppHandler = function(arg) {
     return new AppHandler.fn.init(arg);
@@ -22,6 +23,9 @@ AppHandler.fn = AppHandler.prototype = {
 };
 $S.extendObject(AppHandler);
 AppHandler.extend({
+    setGtag: function(gtag) {
+        configGtag = gtag;
+    },
     getPageUrl: function(pageName) {
         return window.location.pathname;
     },
@@ -404,7 +408,11 @@ var userDetails = {"username": "", "displayName": "", "login": false, "roles": {
 
 AppHandler.extend({
     GetUserDetails: function() {
-        return userDetails;
+        return $S.clone(userDetails);
+    },
+    SetUserDetails: function(tempUserDetails) {
+        userDetails = $S.clone(tempUserDetails);
+        return true;
     },
     GetUserData: function(key, defaultValue) {
         if ($S.isString(userDetails[key]) || key === "login") {
@@ -415,6 +423,13 @@ AppHandler.extend({
             return userDetails["roles"][key];
         }
         return defaultValue;
+    },
+    GetTrackUsername: function() {
+        var username = this.GetUserData("username", "");
+        if (!$S.isString(username) || username.length < 1) {
+            username = "empty-username";
+        }
+        return username;
     },
     LoadLoginUserDetails: function(url, callback) {
         if (!$S.isString(url)) {
@@ -438,15 +453,19 @@ var staticData = {"appVersion": "", "uploadFileApiVersion": "",
 
 AppHandler.extend({
     GetAllStaticDetails: function() {
-        return staticData;
+        return $S.clone(staticData);
+    },
+    SetStaticData: function(tempStaticData) {
+        staticData = $S.clone(tempStaticData);
+        return true;
     },
     GetStaticData: function(key, defaultValue) {
         if ($S.isString(staticData[key])) {
-            return staticData[key];
+            return $S.clone(staticData[key]);
         } else if ($S.isObject(staticData[key])) {
-            return staticData[key];
+            return $S.clone(staticData[key]);
         } else if ($S.isArray(staticData[key])) {
-            return staticData[key];
+            return $S.clone(staticData[key]);
         }
         return defaultValue;
     },
@@ -923,6 +942,46 @@ AppHandler.extend({
         }
         return defaultTemplate;
     },
+});
+
+AppHandler.extend({
+    send: function(trackingAction, eventCategory, eventLabel) {
+        if (configGtag) {
+            $S.pushGAEvent(configGtag, eventCategory, trackingAction, eventLabel);
+        }
+    },
+    TrackApiRequest: function(requestName, requestStatus) {
+        var username = this.GetTrackUsername();
+        this.send(username, requestName+":"+requestStatus, this.getPageUrl());
+    },
+    TrackDebug: function(content) {
+        if (!$S.isString(content) || content.length < 1) {
+            content = "empty-content";
+        }
+        var username = this.GetTrackUsername();
+        this.send(username, "Debug:"+content, $S.getUserAgentTrackingData());
+    },
+    TrackPageView: function(pageName) {
+        if (!$S.isString(pageName) || pageName.length < 1) {
+            pageName = "empty-pageName";
+        }
+        var username = this.GetTrackUsername();
+        this.send(username, "pageView:"+pageName, this.getPageUrl());
+    },
+    TrackDropdownChange: function(listName, value) {
+        if (!$S.isString(value) || value.length < 1) {
+            value = "empty-value";
+        }
+        if (!$S.isStringV2(listName)) {
+            listName = "emptyList"
+        }
+        var username = this.GetTrackUsername();
+        this.send(username, listName+"Change:"+value, this.getPageUrl());
+    },
+    TrackEvent: function(event) {
+        var username = this.GetTrackUsername();
+        this.send(username, event, this.getPageUrl());
+    }
 });
 })($S);
 
