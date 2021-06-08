@@ -2321,11 +2321,11 @@ Stack.extend({
         }
         return result;
     },
-    getUserAgentTrackingData: function() {
+    getUserAgentTrackingData: function(uiNavigator) {
         var trackingData = [];
         var trackingKey = ["platform","appVersion","appCodeName","appName"];
         for(var i=0; i<trackingKey.length; i++) {
-            trackingData.push(this.getNavigatorData(trackingKey[i]));
+            trackingData.push(this.getNavigatorData(uiNavigator, trackingKey[i]));
         }
         return trackingData.join(",");
     }

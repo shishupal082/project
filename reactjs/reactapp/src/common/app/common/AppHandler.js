@@ -945,28 +945,28 @@ AppHandler.extend({
 });
 
 AppHandler.extend({
-    send: function(trackingAction, eventCategory, eventLabel) {
+    Track: function(trackingAction, eventCategory, eventLabel) {
         if (configGtag) {
             $S.pushGAEvent(configGtag, eventCategory, trackingAction, eventLabel);
         }
     },
     TrackApiRequest: function(requestName, requestStatus) {
         var username = this.GetTrackUsername();
-        this.send(username, requestName+":"+requestStatus, this.getPageUrl());
+        this.Track(username, requestName+":"+requestStatus, this.getPageUrl());
     },
     TrackDebug: function(content) {
         if (!$S.isString(content) || content.length < 1) {
             content = "empty-content";
         }
         var username = this.GetTrackUsername();
-        this.send(username, "Debug:"+content, $S.getUserAgentTrackingData());
+        this.Track(username, "Debug:"+content, $S.getUserAgentTrackingData());
     },
     TrackPageView: function(pageName) {
         if (!$S.isString(pageName) || pageName.length < 1) {
             pageName = "empty-pageName";
         }
         var username = this.GetTrackUsername();
-        this.send(username, "pageView:"+pageName, this.getPageUrl());
+        this.Track(username, "pageView:"+pageName, this.getPageUrl());
     },
     TrackDropdownChange: function(listName, value) {
         if (!$S.isString(value) || value.length < 1) {
@@ -976,11 +976,11 @@ AppHandler.extend({
             listName = "emptyList"
         }
         var username = this.GetTrackUsername();
-        this.send(username, listName+"Change:"+value, this.getPageUrl());
+        this.Track(username, listName+"Change:"+value, this.getPageUrl());
     },
     TrackEvent: function(event) {
         var username = this.GetTrackUsername();
-        this.send(username, event, this.getPageUrl());
+        this.Track(username, event, this.getPageUrl());
     }
 });
 })($S);
