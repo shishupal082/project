@@ -49,7 +49,7 @@ DataHandlerV2.extend({
         }
         for(i=0; i<pageOrder.length; i++) {
             key = pageOrder[i];
-            if (key !== "home") {
+            if (key !== "home" && enabledPages.indexOf(key) >= 0) {
                 if ($S.isString(linkText[key])) {
                     temp = linkText[key];
                 } else {
