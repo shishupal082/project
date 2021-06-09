@@ -41,15 +41,15 @@ DataHandlerV2.extend({
         var list2Data = [];
         var temp, i, key;
         temp = Object.keys(pages);
-        var pageOrder = $S.clone(enabledPages);
-        for(i=0; i<temp.length; i++) {
-            if (pageOrder.indexOf(temp[i]) < 0) {
-                pageOrder.push(temp[i]);
+        var pageOrder = [];
+        for(i=0; i<enabledPages.length; i++) {
+            if (temp.indexOf(enabledPages[i]) >= 0) {
+                pageOrder.push(enabledPages[i]);
             }
         }
         for(i=0; i<pageOrder.length; i++) {
             key = pageOrder[i];
-            if (key !== "home" && enabledPages.indexOf(key) >= 0) {
+            if (key !== "home") {
                 if ($S.isString(linkText[key])) {
                     temp = linkText[key];
                 } else {
@@ -97,12 +97,13 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var name = "list3Data", i;
+        var allPages = Object.keys(Config.pages);
         if ([Config.home].indexOf(currentList2Id) >= 0) {
             var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages", []);
-            if ($S.isArray(enabledPages) && $S.isArray(Config.tempConfig.enabledPages)) {
+            if ($S.isArray(enabledPages)) {
                 for (i = 0; i<enabledPages.length; i++) {
-                    if ($S.isString(enabledPages[0]) && Config.tempConfig.enabledPages.indexOf(enabledPages[0]) >= 0) {
-                        currentList2Id = enabledPages[0];
+                    if ($S.isStringV2(enabledPages[i]) && allPages.indexOf(enabledPages[i]) >= 0) {
+                        currentList2Id = enabledPages[i];
                         break;
                     }
                 }
@@ -114,6 +115,8 @@ DataHandlerV2.extend({
             name = "list3Data_2";
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             name = "list3Data_3";
+        } else {
+            return [];
         }
         var list3Data = $S.findParam([currentAppData, metaData], name, []);
         if ($S.isArray(list3Data)) {
