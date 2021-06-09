@@ -2,94 +2,34 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css">
     <title>Compare Dashboard</title>
 </head>
 <body>
     <div class="container">
-        <div><center><h2>Compare Dashboard</h2></center></div>
-        <hr></hr>
-        <div id="tableHtml"></div>
+        <div><h2><center>Compare Dashboard</center></h2></div>
+        <div><select id="select-list-1" class="form-control">
+            <option>Select compare id ...</option>
+            <option value="list1">List1</option>
+        </select></div>
+        <div id="tableHtml"><center>Select compare id.</center></div>
     </div>
 <script type="text/javascript" src="/static/js/stack.js"></script>
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
-
+<script type="text/javascript" src="/app/monitor/static/js/compare-script.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-var comapresUsersName = ["Admin", "Username"];
-var comapresUsers = [];
-var i, j;
-for (i = 0; i < comapresUsersName.length; i++) {
-    comapresUsers.push({
-        "username": comapresUsersName[i],
-        "response": {},
-        "renderData": [],
-        "isLoaded": false
-    });
-}
-var tableData = [];
-function createData() {
-    var sequence = [];
-    var temp = {}, tempData, username, itemUsername;
-    for (i = 0; i < comapresUsers.length; i++) {
-        if ($S.isObject(comapresUsers[i].response)) {
-            username = comapresUsers[i].username;
-            sequence.push(username);
-            tempData = comapresUsers[i].response.data;
-            if ($S.isArray(tempData)) {
-                for(j=0; j<tempData.length; j++) {
-                    itemUsername = tempData[j].username;
-                    if ($S.isArray(temp[itemUsername])) {
-                        temp[itemUsername].push(username);
-                    } else {
-                        temp[itemUsername] = [username];
-                    }
-                    comapresUsers[i].renderData.push(tempData[j].username);
-                }
-            }
-        }
+var config = {
+    "baseApi": "http://localhost:8080"
+};
+$S.loadJsonData($, ["/pvt/app-data/monitor/compareJson.json"],
+function(response, apiName, ajax) {
+    if ($S.isObject(response) && $S.isArray(response.list1Data)) {
+        config["list1Data"] = response.list1Data;
     }
-    tableData.push(sequence);
-    var t;
-    for(var username in temp) {
-        t = [];
-        for (i = 0; i < sequence.length; i++) {
-            if (temp[username].indexOf(sequence[i]) >= 0) {
-                t.push(username);
-            } else {
-                t.push("");
-            }
-        }
-        tableData.push(t);
-    }
-}
-function renderData() {
-    for (i = 0; i < comapresUsers.length; i++) {
-        if (comapresUsers[i].isLoaded === false) {
-            return;
-        }
-    }
-    createData();
-    var tableHtml = "";
-    var table = $S.getTable(tableData, "dashboard");
-    table.addRowIndex(0);
-    table.updateTableContent(0,0,"");
-    tableHtml += table.getHtml();
-    $("#tableHtml").html(tableHtml);
-    $("#tableHtml table").addClass("table table-bordered");
-}
-for (i = 0; i < comapresUsers.length; i++) {
-    var dataUrl = "/api/get_related_users_data_by_username?username="+comapresUsers[i].username;
-    $S.loadJsonData($, [dataUrl], function(response, apiName, ajax) {
-        for (j = 0; j < comapresUsers.length; j++) {
-            if (apiName === comapresUsers[j].username) {
-                comapresUsers[j].response = response;
-                comapresUsers[j].isLoaded = true;
-            }
-        }
-        renderData();
-    }, null, comapresUsers[i].username);
-}
+    $Compare.setConfig(config);
+    $Compare.renderDropdown();
+}, null, "appControlData");
 });
 </script>
 </body>
