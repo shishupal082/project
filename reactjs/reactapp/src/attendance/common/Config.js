@@ -24,8 +24,7 @@ Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
     "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
-    "linkText": $$$.linkText,
-    "pageOrder": $$$.pageOrder
+    "linkText": $$$.linkText
 };
 
 
