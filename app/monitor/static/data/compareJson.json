@@ -1,0 +1,20 @@
+{
+    "list1Data": [
+        {
+            "value": "P1,P2,P3,P4,P5",
+            "text": "All Probationers"
+        },
+        {
+            "value": "Admin1,Admin2,P1,P2,P3,P4,P5",
+            "text": "All Users"
+        },
+        {
+            "value": "P1,P2,P3",
+            "text": "Probationers 1"
+        },
+        {
+            "value": "P4,P5",
+            "text": "Probationers 2"
+        }
+    ]
+}
