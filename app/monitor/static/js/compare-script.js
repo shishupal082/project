@@ -25,7 +25,7 @@ Compare.extend({
     },
     _getRenderList: function() {
         var list1Data = this.getConfigParam("list1Data", []);
-        var renderList = [{"value": "", "text": "Select comapre id ..."}];
+        var renderList = [{"value": "", "text": "Select compare id ..."}];
         if (!$S.isArray(list1Data)) {
             list1Data = [];
         }
