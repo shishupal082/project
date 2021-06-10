@@ -458,11 +458,17 @@ DataHandler.extend({
             }
             return;
         }
+        var oldList2Id = DataHandler.getData("currentList2Id", "");
+        DataHandler.setData("currentList2Id", list2Id);
+        if (DataHandlerV2.isPageDisabled(oldList2Id)) {
+            DataHandler.loadDataByAppId(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
         if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
             DataHandler.applyResetFilter();
         }
         AppHandler.TrackPageView(list2Id);
-        DataHandler.setData("currentList2Id", list2Id);
         DataHandler.handleApiDataLoad();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
