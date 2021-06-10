@@ -29,7 +29,7 @@
 var GLOBAL = {
     baseApi: "",
     basepathname: "/app/attendancev2",
-    loginUserDetailsApi: "/app/attendance/static/json/login_user_details.json",
+    loginUserDetailsApi: "/api/login_user_details.json",
     usernamesApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/pvt/app-data/attendance/",
     forceLogin: true
