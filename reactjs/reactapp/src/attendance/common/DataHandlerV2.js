@@ -338,7 +338,10 @@ DataHandlerV2.extend({
                     if (!$S.isObject(temp[i])) {
                         continue;
                     }
-                    if (dateAttr.dateStr === temp[i].date) {
+                    if ($S.isArray(dateAttr.dateRange) && dateAttr.dateRange.length === 2 && AppHandler.isDateLiesInRange(dateAttr.dateRange[0], dateAttr.dateRange[1], temp[i].date)) {
+                        text = temp[i].type;
+                        break;
+                    } else if (dateAttr.dateStr === temp[i].date) {
                         text = temp[i].type;
                         break;
                     }

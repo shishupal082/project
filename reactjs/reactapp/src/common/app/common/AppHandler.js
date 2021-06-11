@@ -73,6 +73,7 @@ AppHandler.extend({
     isValidDateStr: function(dateStr) {
         var p1Formate = "YYYY/-/MM/-/DD";
         var p2Formate = "YYYY/-/MM/-/DD/ /hh/:/mm";
+        var p4Formate = "YYYY/-/MM/-/DD/ /hh/:/mm/:/ss";
         var p3Formate = "YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms";
         //2020-05-31
         var p1 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9]/i;
@@ -80,11 +81,14 @@ AppHandler.extend({
         var p2 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]/i;
         //2021-05-26 00:00:09.987
         var p3 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]{3}/i;
+        var p4 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]/i;
         var dateObj;
-        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10 || dateStr.length === 23)) {
+        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10 || dateStr.length === 23 || dateStr.length === 19)) {
             dateObj = DT.getDateObj(dateStr);
             if (dateObj !== null) {
                 if (dateStr.search(p3) >= 0 && dateStr === DT.formateDateTime(p3Formate, "/", dateObj)) {
+                    return true;
+                } else if (dateStr.search(p4) >= 0 && dateStr === DT.formateDateTime(p4Formate, "/", dateObj)) {
                     return true;
                 } else if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
                     return true;
@@ -380,7 +384,7 @@ AppHandler.extend({
         if ($S.isString(endLimit) && endLimit.length === 10) {
             endLimit += " 23:59";
         }
-        var dateArr = [];
+        var dateArr = [], temp;
         var startDateObj = DT.getDateObj(startDateStr);
         var endDateObj = DT.getDateObj(endDateStr);
         var startLimitDateObj = DT.getDateObj(startLimit);
@@ -395,8 +399,10 @@ AppHandler.extend({
         }
         do {
             if (startLimitDateObj <= startDateObj && startDateObj <= endLimitDateObj) {
-                dateArr.push({"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
-                    "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
+                temp = {"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
+                    "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)};
+                temp["dateRange"] = [temp["dateStr"] + " 00:00", temp["dateStr"] + " 23:59"];
+                dateArr.push(temp);
             }
             startDateObj = DT.addDate(startDateObj, 1);
         } while(startDateObj <= endDateObj);
