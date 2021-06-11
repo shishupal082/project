@@ -100,8 +100,17 @@ AppHandler.extend({
         return false;
     },
     isDateLiesInRange: function(startDate, endDate, fieldDate) {
-        if ($S.isString(fieldDate) && fieldDate.length === 10) {
+        if (!$S.isString(startDate) || !$S.isString(endDate) || !$S.isString(fieldDate)) {
+            return false;
+        }
+        if (fieldDate.length === 10) {
             fieldDate += " 00:00";
+        }
+        if (startDate.length === 10) {
+            startDate += " 00:00";
+        }
+        if (endDate.length === 10) {
+            endDate += " 23:59";
         }
         startDate = DT.getDateObj(startDate);
         endDate = DT.getDateObj(endDate);
@@ -111,6 +120,20 @@ AppHandler.extend({
         }
         if (startDate.getTime() <= fieldDate.getTime() && endDate.getTime() >= fieldDate.getTime()) {
             return true;
+        }
+        return false;
+    },
+    isDateLiesInRangeV2: function(dateRange, fieldDate) {
+        if ($S.isArray(dateRange) && dateRange.length === 2) {
+            return this.isDateLiesInRange(dateRange[0], dateRange[1], fieldDate);
+        }
+        return false;
+    },
+    isDateLiesInRangeV3: function(dateStr, fieldDate) {
+        // dateStr = 2021-06-11
+        // fieldDate = 2021-06-11 09:19
+        if ($S.isString(dateStr)) {
+            return this.isDateLiesInRange(dateStr, dateStr, fieldDate);
         }
         return false;
     },
@@ -384,7 +407,7 @@ AppHandler.extend({
         if ($S.isString(endLimit) && endLimit.length === 10) {
             endLimit += " 23:59";
         }
-        var dateArr = [], temp;
+        var dateArr = [];
         var startDateObj = DT.getDateObj(startDateStr);
         var endDateObj = DT.getDateObj(endDateStr);
         var startLimitDateObj = DT.getDateObj(startLimit);
@@ -399,10 +422,8 @@ AppHandler.extend({
         }
         do {
             if (startLimitDateObj <= startDateObj && startDateObj <= endLimitDateObj) {
-                temp = {"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
-                    "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)};
-                temp["dateRange"] = [temp["dateStr"] + " 00:00", temp["dateStr"] + " 23:59"];
-                dateArr.push(temp);
+                dateArr.push({"dateStr": DT.formateDateTime("YYYY/-/MM/-/DD", "/", startDateObj),
+                    "date": DT.formateDateTime("DD", "/", startDateObj)*1, "day": DT.formateDateTime("DDD", "/", startDateObj)});
             }
             startDateObj = DT.addDate(startDateObj, 1);
         } while(startDateObj <= endDateObj);
