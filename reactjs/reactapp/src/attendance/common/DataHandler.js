@@ -301,6 +301,15 @@ DataHandler.extend({
             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
             $S.callMethod(callback);
         }
+    },
+    getAppData: function(key, defaultValue) {
+        if (!$S.isStringV2(key)) {
+            return defaultValue;
+        }
+        var currentAppData = this.getCurrentAppData();
+        var metaData = this.getData("metaData", {});
+        var tempConfig = Config.tempConfig;
+        return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
     }
 });
 
@@ -382,13 +391,28 @@ DataHandler.extend({
         });
     },
     loadAttendanceData: function(attendanceDataApis, callback) {
-        DataHandlerDBView.loadAttendanceData(attendanceDataApis, function(attendanceDbTable) {
+        var isAttendanceDataSameAsDbData = this.getAppData("isAttendanceDataSameAsDbData", false);
+        var attendanceDbTable;
+        if ($S.isBooleanTrue(isAttendanceDataSameAsDbData)) {
+            attendanceDbTable = DataHandler.getData("dbViewData", []);
             DataHandlerV2.handleAttendanceDataLoad(attendanceDbTable);
             $S.callMethod(callback);
-        });
+        } else {
+            DataHandlerDBView.loadAttendanceData(attendanceDataApis, function() {
+                attendanceDbTable = DataHandler.getData("attendanceData", []);
+                DataHandlerV2.handleAttendanceDataLoad(attendanceDbTable);
+                $S.callMethod(callback);
+            });
+        }
     },
     handleApiDataLoad: function() {
-        DataHandlerDBView.generateFinalTable();
+        var currentList2Id = this.getData("currentList2Id", "");
+        var resultCriteria = this.getAppData("resultCriteria", []);
+        var pageResultCriteria = this.getAppData("resultCriteria." + currentList2Id, null);
+        if ($S.isArray(pageResultCriteria)) {
+            resultCriteria = pageResultCriteria;
+        }
+        DataHandlerDBView.generateFinalTable(currentList2Id, resultCriteria);
         DataHandlerDBView.generateFilterOptions();
     },
     handlePageRouting: function(reason, callback) {
@@ -397,15 +421,12 @@ DataHandler.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
-        if ([Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             DataHandlerDBView.handlePageLoad(dbDataApis, function() {
-                DataHandler.handleApiDataLoad();
-                $S.callMethod(callback);
-            });
-        } else if ([Config.summary, Config.entry, Config.update].indexOf(currentList2Id) >= 0) {
-            DataHandlerDBView.handlePageLoad(dbDataApis, function() {
-                DataHandler.handleApiDataLoad();
-                DataHandler.loadAttendanceData(attendanceDataApis, callback);
+                DataHandler.loadAttendanceData(attendanceDataApis, function() {
+                    DataHandler.handleApiDataLoad();
+                    $S.callMethod(callback);
+                });
             });
         } else if (reason !== "pageComponentDidMount" || [Config.home].indexOf(currentList2Id) >= 0) {
             $S.callMethod(callback);

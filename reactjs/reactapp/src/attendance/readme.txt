@@ -1,3 +1,9 @@
+For display entry page
+--------------------------------------------------------------------
+Config.summary, Config.entry, Config.update result pattern table should contains: userId
+attendance table should contains: userId, type, date
+
+
 v1.0.0 (2021-04-16)
 ----------------------
 Data entry app combined with attendance app
@@ -57,3 +63,5 @@ Added support for adding text with flexible dateTime and userId based on config 
 New page added app: add_field_report
 
 Added concept of redirect on page change using redirectPages config
+
+

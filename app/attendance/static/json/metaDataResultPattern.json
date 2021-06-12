@@ -1,5 +1,4 @@
 {
-    "resultPatternKeys": ["resultPatternEntry", "resultPatternUpdate", "resultPatternSummary", "resultPatternTa", "resultPatternDbview"],
     "resultPatternDbview": [
         {
             "tableName": "table1",

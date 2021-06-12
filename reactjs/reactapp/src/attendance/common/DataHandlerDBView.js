@@ -115,24 +115,19 @@ DataHandlerDBView.extend({
             });
         }
     },
-    generateFinalTable: function() {
-        var currentList2IdOrg = DataHandler.getData("currentList2Id", "");
-        var dbViewData = DataHandler.getData("dbViewData", {});
+    generateFinalTable: function(currentList2Id, resultCriteria) {
+        var tempDbViewData = DataHandler.getData("dbViewData", {});
+        var attendanceData = DataHandler.getData("attendanceData", {});
+        var requiredDataTable = DataHandler.getAppData("requiredDataTable." + currentList2Id, []);
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
-        var currentList2Id = $S.capitalize(currentList2IdOrg);
-        var resultPatternKey = "resultPattern";
-        var validResultPatternKeys = $S.findParam([currentAppData, metaData], "resultPatternKeys", []);
-        if ($S.isArray(validResultPatternKeys) && validResultPatternKeys.indexOf("resultPattern"+currentList2Id) >= 0) {
-            resultPatternKey = "resultPattern"+currentList2Id;
-        }
+        var resultPatternKey = "resultPattern"+$S.capitalize(currentList2Id);
         var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
-        var resultCriteria = $S.findParam([currentAppData, metaData], "resultCriteria", []);
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
         var tempJoinResult = [];
         var force1stEntry, isNotMatching;
-        if ([Config.dbview_summary, Config.custom_dbview].indexOf(currentList2IdOrg) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+        if ([Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
             resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         }
@@ -141,6 +136,18 @@ DataHandlerDBView.extend({
         }
         if (!$S.isArray(resultCriteria)) {
             resultCriteria = [];
+        }
+        var dbViewData = {};
+        if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
+            tempDbViewData = Object.assign(tempDbViewData, attendanceData);
+            temp = Object.keys(tempDbViewData);
+            for (i=0; i<requiredDataTable.length; i++) {
+                if (temp.indexOf(requiredDataTable[i]) >= 0) {
+                    dbViewData[requiredDataTable[i]] = tempDbViewData[requiredDataTable[i]];
+                }
+            }
+        } else {
+            dbViewData = tempDbViewData;
         }
         if (resultCriteria.length === 0) {
             if ($S.isObject(dbViewData)) {
@@ -300,9 +307,8 @@ DataHandlerDBView.extend({
         var tableData;
         DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
             tableData = DataHandlerDBView._getTableData(request);
-            if ($S.isFunction(callback)) {
-                callback(tableData);
-            }
+            DataHandler.setData("attendanceData", tableData);
+            $S.callMethod(callback);
         });
     }
 });

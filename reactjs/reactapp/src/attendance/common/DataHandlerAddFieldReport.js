@@ -54,23 +54,43 @@ DataHandlerAddFieldReport.extend({
         if (!$S.isString(pattern)) {
             return pattern;
         }
+        var tempFilename = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
+        var isErrorFound = false;
         try {
             pattern = DT.getDateTimeV2(dateTimeStr, pattern, "/");
-            if ($S.isString(username)) {
+            if ($S.isStringV2(username)) {
                 pattern = pattern.replaceAll("username", username);
             }
-            if ($S.isString(station)) {
+        } catch(e) {
+            isErrorFound = true;
+            AppHandler.TrackDebug("Error in generating filename replacing username");
+        }
+        try {
+            if ($S.isStringV2(station)) {
                 pattern = pattern.replaceAll("station", station);
             }
-            if ($S.isString(device)) {
+        } catch(e) {
+            isErrorFound = true;
+            AppHandler.TrackDebug("Error in generating filename replacing station");
+        }
+        try {
+            if ($S.isStringV2(device)) {
                 pattern = pattern.replaceAll("device", device);
             }
-            if ($S.isString(team)) {
+        } catch(e) {
+            isErrorFound = true;
+            AppHandler.TrackDebug("Error in generating filename replacing device");
+        }
+        try {
+            if ($S.isStringV2(team)) {
                 pattern = pattern.replaceAll("team", team);
             }
         } catch(e) {
-            AppHandler.TrackDebug("Error in generating filename from pattern");
-            pattern = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
+            isErrorFound = true;
+            AppHandler.TrackDebug("Error in generating filename replacing team");
+        }
+        if (isErrorFound) {
+            pattern = tempFilename;
         }
         return pattern;
     },
@@ -80,7 +100,6 @@ DataHandlerAddFieldReport.extend({
         }
         try {
             pattern = pattern.replaceAll("{basepathname}", basepathname);
-            pattern = pattern.replaceAll("{dbview}", dbview);
         } catch(e) {
             AppHandler.TrackDebug("Error in generating final redirect link");
             pattern = basepathname + "/" + dbview;

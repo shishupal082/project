@@ -1,5 +1,6 @@
 {
     "filterKeys": ["station", "team", "designation", "username", "reset"],
+    "onlyPreFilterKeys": ["team"],
     "stationPrefilter": [
         {
             "value": "(stn1|stn2)",

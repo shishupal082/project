@@ -154,7 +154,8 @@ DataHandlerV2.extend({
         }
         return [];
     },
-    handleAttendanceDataLoad: function(attendanceDataTable) {
+    handleAttendanceDataLoad: function() {
+        var attendanceDataTable = DataHandler.getData("attendanceData", []);
         var finalAttendanceData = {};
         var latestAttendanceData = {};
         var i, userId, temp, temp2, attendanceData;
@@ -204,7 +205,6 @@ DataHandlerV2.extend({
                 }
             }
         }
-        DataHandler.setData("attendanceData", finalAttendanceData);
         DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
     handleMetaDataLoad: function(metaDataResponse) {

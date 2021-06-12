@@ -387,6 +387,25 @@
                 "apis": ["/app/attendance/static/csv/attendance.csv"]
             }
         ],
+        "resultCriteria": [
+            {
+                "op": "==",
+                "force1stEntry": true,
+                "values": [
+                    {
+                        "tableName": "table1",
+                        "col": "userIdV2"
+                    },
+                    {
+                        "tableName": "table2",
+                        "col": "userIdV2"
+                    }
+                ]
+            }
+        ],
+        "requiredDataTable.dbview": ["table3"],
+        "resultCriteria.dbview": [],
+        "isAttendanceDataSameAsDbData": true,
         "defaultSorting": [
             {
                 "table": "table1",
