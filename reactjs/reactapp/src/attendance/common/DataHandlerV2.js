@@ -318,7 +318,7 @@ DataHandlerV2.extend({
         return className;
     },
     _getAttendanceField: function(attendanceData, userData, dateAttr, attendanceOption, selectFieldName) {
-        var text = "", temp;
+        var text = [], temp;
         var userId = "", name = "";
         var i;
         if (!$S.isString(selectFieldName) || selectFieldName.length < 1) {
@@ -343,22 +343,23 @@ DataHandlerV2.extend({
                     if (!$S.isObject(temp[i])) {
                         continue;
                     }
+                    if (!$S.isStringV2(temp[i].type)) {
+                        continue;
+                    }
                     if (AppHandler.isDateLiesInRangeV3(dateAttr.dateStr, temp[i].date)) {
-                        text = temp[i].type;
-                        break;
+                        text.push(temp[i].type);
                     } else if (dateAttr.dateStr === temp[i].date) {
-                        text = temp[i].type;
-                        break;
+                        text.push(temp[i].type);
                     }
                 }
             }
         }
         if ($S.isObject(attendanceOption)) {
             attendanceOption = $S.clone(attendanceOption);
-            attendanceOption.value = text;
+            attendanceOption.value = text.join(",");
             attendanceOption.name = selectName;
         } else {
-            attendanceOption = text;
+            attendanceOption = text.join(",");
         }
         return attendanceOption;
     },

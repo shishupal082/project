@@ -219,7 +219,7 @@ DataHandler.extend({
         if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
             var currentAppData = this.getCurrentAppData();
             var metaData = this.getData("metaData", {});
-            var configList3Id = $S.findParam([currentAppData, metaData], "customDBView.list3Data_2.selected");
+            var configList3Id = $S.findParam([currentAppData, metaData], list2Id + ".list3Data_2.selected");
             if ($S.isString(configList3Id)) {
                 list3Id = configList3Id;
             } else {

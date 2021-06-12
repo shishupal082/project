@@ -13,7 +13,7 @@
         "addFieldReport.addTextFilenamePattern": "YYYY/-/MM/-/DD/-/hh/-/mm/-username-device-team-report.csv",
         "addFieldReport.successRedirectUrl": "{basepathname}/{dbview}",
         "addFieldReport.additionalDataRequired": ["addFieldReport.dateTime", "addFieldReport.userId"],
-        "customDBView.list3Data_2.selected": "list3Data_2-name-0",
+        "custom_dbview.list3Data_2.selected": "list3Data_2-name-0",
         "redirectPages": [
             {
                 "name": "upload_file",
