@@ -156,6 +156,7 @@ DataHandlerV2.extend({
     },
     handleAttendanceDataLoad: function() {
         var attendanceDataTable = DataHandler.getData("attendanceData", []);
+        var attendanceDataKey = DataHandler.getAppData("attendanceDataKey", "");
         var finalAttendanceData = {};
         var latestAttendanceData = {};
         var i, userId, temp, temp2, attendanceData;
@@ -171,6 +172,9 @@ DataHandlerV2.extend({
         }
         if (!$S.isArray(attendanceData)) {
             attendanceData = [];
+        }
+        if (!$S.isStringV2(attendanceDataKey)) {
+            attendanceDataKey = "type";
         }
         for(i=0; i<attendanceData.length; i++) {
             if (!$S.isObject(attendanceData[i])) {
@@ -198,6 +202,7 @@ DataHandlerV2.extend({
                     temp2 = finalAttendanceData[key].attendance[i];
                     if (temp.indexOf(temp2.date) < 0) {
                         temp.push(temp2.date);
+                        temp2.type = temp2[attendanceDataKey];
                         if (temp2.type !== "") {
                             latestAttendanceData[key].attendance.push(temp2);
                         }

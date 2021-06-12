@@ -387,6 +387,14 @@
                 "apis": ["/app/attendance/static/csv/attendance.csv"]
             }
         ],
+        "attendanceDataApis": [
+            {
+                "tableName": "table2",
+                "dataIndex": ["entryTime", "userId", "date", "username", "type", "updatedBy", "description"],
+                "apis": ["/app/attendance/static/csv/attendance-updated.csv"]
+            }
+        ],
+        "attendanceDataKey": "username",
         "resultCriteria": [
             {
                 "op": "==",

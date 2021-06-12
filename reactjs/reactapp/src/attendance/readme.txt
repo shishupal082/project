@@ -1,7 +1,7 @@
 For display entry page
 --------------------------------------------------------------------
-Config.summary, Config.entry, Config.update result pattern table should contains: userId
-attendance table should contains: userId, type, date
+resultPattern of summary, entry and update page should contains: userId
+attendance table should contains: userId, date
 
 
 v1.0.0 (2021-04-16)
