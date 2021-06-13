@@ -458,7 +458,7 @@ TemplateHandler.extend({
         var renderField;
         if (!dataLoadStatus) {
             renderField = this.getTemplate("loading");
-            TemplateHelper.updateTemplateText(renderField, {"loadingText": "Loading ..." + (loadingCount++)});
+            $S.log("loadingCount: " + (loadingCount++));
             return renderField;
         }
         if (DataHandlerV2.isPageDisabled(pageName)) {

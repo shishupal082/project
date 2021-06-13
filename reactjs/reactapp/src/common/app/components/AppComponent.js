@@ -14,15 +14,7 @@ class AppComponent extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
-        this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.getTabDisplayText = this.getTabDisplayText.bind(this);
-        // this.methods = {
-        //     onClick: this.onClick,
-        //     onChange: this.onChange,
-        //     dropDownChange: this.dropDownChange,
-        //     pageComponentDidMount: this.pageComponentDidMount,
-        //     getTabDisplayText: this.getTabDisplayText
-        // };
     }
     _callAppMethod(method, arg) {
         if ($S.isFunction(method)) {
@@ -42,9 +34,6 @@ class AppComponent extends React.Component {
     onFormSubmit(e) {
         this._callAppMethod(this.props.methods.onFormSubmit, e);
     }
-    pageComponentDidMount(pageName) {
-        this._callAppMethod(this.props.methods.pageComponentDidMount, pageName);
-    }
     getTabDisplayText(tabName) {
         return this._callAppMethod(this.props.methods.getTabDisplayText, tabName);
     }
@@ -52,6 +41,9 @@ class AppComponent extends React.Component {
         $S.log("AppComponent:componentDidMount");
         if ($S.isFunction(this.props.methods.registerChildAttribute)) {
             this.props.methods.registerChildAttribute("history", this.props.history);
+        }
+        if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
+            this.props.methods.pageComponentDidMount(this.props.currentPageName, this.props.match.params);
         }
     }
     render() {
