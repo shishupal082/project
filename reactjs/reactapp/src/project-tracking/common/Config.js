@@ -67,14 +67,12 @@ for(var key in pages) {
 Config.defaultDateSelect = "monthly";
 
 Config.fieldsKey = {
-    "DateKey": "new-work-status.date",
+    "DateKey": "date-entry-key",
+    "RemarksKey": "remark-entry-key",
     "DistanceKey": "new-work-status.distance",
-    "RemarksKey": "new-work-status.remark",
     "SectionKey": "new-work-status.section",
     "ProjectNameKey": "new-project.name",
-    "SupplyEntryDate": "new-supply.date",
-    "SupplyEntryApprovedBy": "new-supply.approved-by",
-    "SupplyEntryRemark": "new-supply.remark"
+    "SupplyEntryApprovedBy": "new-supply.approved-by"
 };
 
 var apiMapping = {};

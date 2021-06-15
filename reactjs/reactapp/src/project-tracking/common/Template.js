@@ -442,7 +442,7 @@ Template["newWorkStatus"] = [
                                 "text": {
                                     "tag": "input",
                                     "className": "form-control",
-                                    "name": "new-work-status.date",
+                                    "name": "date-entry-key",
                                     "value": ""
                                 }
                             },
@@ -515,7 +515,7 @@ Template["newWorkStatus"] = [
                                     {
                                         "tag": "textarea",
                                         "className": "form-control",
-                                        "name": "new-work-status.remark",
+                                        "name": "remark-entry-key",
                                         "value": ""
                                     }
                                 ]
@@ -578,7 +578,7 @@ Template["addSupplyStatus"] = [
                                 "text": {
                                     "tag": "input",
                                     "className": "form-control",
-                                    "name": "new-supply.date",
+                                    "name": "date-entry-key",
                                     "value": ""
                                 }
                             },
@@ -676,7 +676,7 @@ Template["addSupplyStatus"] = [
                                     {
                                         "tag": "textarea",
                                         "className": "form-control",
-                                        "name": "new-supply.remark",
+                                        "name": "remark-entry-key",
                                         "value": ""
                                     }
                                 ]

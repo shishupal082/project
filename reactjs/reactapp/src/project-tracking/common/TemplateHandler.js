@@ -76,8 +76,7 @@ TemplateHandler.extend({
     updateBtnStatus: function(template) {
         var status = DataHandler.getData("addentry.submitStatus", "");
         if (status === "in_progress") {
-            TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "disabled");
-            TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-secondary");
+            TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-secondary disabled");
             TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "btn-primary");
         } else {
             TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "disabled");
@@ -129,6 +128,22 @@ TemplateHandler.extend({
     },
     getAddNewSupplyTemplate: function() {
         var addSupplyStatus = this.getTemplate("addSupplyStatus");
+        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.SupplyEntryApprovedBy,
+                            Config.fieldsKey.RemarksKey];
+        var fieldsData = DataHandler.getData("fieldsData", {});
+        if (!$S.isObject(fieldsData)) {
+            fieldsData = {};
+        }
+        var formValues = {};
+        for (var i=0; i<requiredKeys.length; i++) {
+            formValues[requiredKeys[i]] = fieldsData[requiredKeys[i]];
+        }
+        if (!AppHandler.isValidDateStr(formValues[Config.fieldsKey.DateKey])) {
+            formValues[Config.fieldsKey.DateKey] = DT.getDateTime("YYYY/-/MM/-/DD","/");
+            DataHandler.setFieldsData(Config.fieldsKey.DateKey, formValues[Config.fieldsKey.DateKey]);
+        }
+        TemplateHelper.updateTemplateValue(addSupplyStatus, formValues);
+        this.updateBtnStatus(addSupplyStatus);
         return addSupplyStatus;
     },
     generateProjectWorkStatus: function(renderData) {
@@ -163,7 +178,7 @@ TemplateHandler.extend({
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
-        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, "resultPatternWorkStatus");
+        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, "resultPatternSupplyStatus");
         TemplateHelper.updateTemplateText(template, {"projectSupplyStatus.pName": pName});
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);

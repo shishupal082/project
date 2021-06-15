@@ -522,6 +522,10 @@ DataHandler.extend({
             FormHandler.submitNewProject(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else if (name === "add-supply-status") {
+            FormHandler.submitAddSupplyStatus(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         }
     },
     OnClick: function(appStateCallback, appDataCallback, value) {
