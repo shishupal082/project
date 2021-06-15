@@ -435,7 +435,7 @@ DataHandlerV2.extend({
     },
     getProjectData: function() {
         var currentPId = DataHandler.getPathParamsData("pid");
-        var projectTable = DataHandlerDBView.getTableDataByAttr("project_table", "pId", currentPId);
+        var projectTable = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
         var response = {"status": "SUCCESS"};
         if (projectTable.length !== 1) {
             response["status"] = "FAILURE";
@@ -448,14 +448,14 @@ DataHandlerV2.extend({
     getProjectWorkStatus: function() {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
-        var workStatus = DataHandlerDBView.getTableDataByAttr("project_work_status", "pId", currentPId);
+        var workStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectWorkStatus"), "pid", currentPId);
         response["workStatus"] = workStatus;
         return response;
     },
     getProjectSupplyStatus: function() {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
-        var supplyStatus = DataHandlerDBView.getTableDataByAttr("project_supply_status", "pId", currentPId);
+        var supplyStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("materialSupplyStatus"), "pid", currentPId);
         response["supplyStatus"] = supplyStatus;
         return response;
     }

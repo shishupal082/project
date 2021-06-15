@@ -118,12 +118,45 @@ Template["projectWorkStatus"] = [
             },
             {
                 "tag": "div",
-                "name": "projectWorkStatus.status",
+                "name": "projectWorkStatus.statusTable",
                 "text": []
             },
             {
                 "tag": "div",
                 "name": "projectWorkStatus.addNew",
+                "text": []
+            }
+        ]
+    }
+];
+Template["projectSupplyStatus"] = [
+    {
+        "tag": "div",
+        "className": "container",
+        "text": [
+            {
+                "tag": "div.h6",
+                "text": [
+                    {
+                        "tag": "span",
+                        "name": "projectSupplyStatus.pName",
+                        "text": ""
+                    },
+                    {
+                        "tag": "span",
+                        "className": "ml-10px badge badge-secondary",
+                        "text": "Supply Status"
+                    }
+                ]
+            },
+            {
+                "tag": "div",
+                "name": "projectSupplyStatus.statusTable",
+                "text": []
+            },
+            {
+                "tag": "div",
+                "name": "projectSupplyStatus.addNew",
                 "text": []
             }
         ]
@@ -146,19 +179,6 @@ Template["home"] = [
                 "text": []
             }
         ]
-    }
-];
-Template["home.link_old"] = [
-    {
-        "tag": "link",
-        "name": "home.link.toUrl",
-        "url": "",
-        "text": {
-            "tag": "button",
-            "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
-            "name": "home.link.toText",
-            "text": ""
-        }
     }
 ];
 Template["link-field"] = [
@@ -496,6 +516,167 @@ Template["newWorkStatus"] = [
                                         "tag": "textarea",
                                         "className": "form-control",
                                         "name": "new-work-status.remark",
+                                        "value": ""
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "tag": "tr",
+                        "text": [
+                            {
+                                "tag": "td",
+                                "colSpan": 4,
+                                "className": "text-center",
+                                "text": [
+                                    {
+                                        "tag": "button",
+                                        "name": "addentry.submitStatus",
+                                        "className": "btn btn-primary form-control",
+                                        "text": "Save"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+
+            }
+        ]
+    }
+];
+Template["addSupplyStatus"] = [
+    {
+        "tag": "form",
+        "name": "add-supply-status",
+        "value": "add-supply-status",
+        "text": [
+            {
+                "tag": "div",
+                "text": {
+                    "tag": "span",
+                    "className": "badge badge-secondary",
+                    "text": "Add Supply Status"
+                }
+            },
+            {
+                "tag": "div.table.tbody",
+                "text": [
+                    {
+                        "tag": "tr",
+                        "text": [
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "span",
+                                    "text": "Date"
+                                }
+                            },
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "input",
+                                    "className": "form-control",
+                                    "name": "new-supply.date",
+                                    "value": ""
+                                }
+                            },
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "span",
+                                    "text": "Approved By"
+                                }
+                            },
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "dropdown",
+                                    "className": "form-control",
+                                    "name": "new-supply.approved-by",
+                                    "text": [
+                                            {
+                                                "value": "",
+                                                "text": "Select ..."
+                                            },
+                                            {
+                                                "value": "Consignee",
+                                                "text": "Consignee"
+                                            },
+                                            {
+                                                "value": "DSTE",
+                                                "text": "DSTE"
+                                            },
+                                            {
+                                                "value": "Sr.DSTE",
+                                                "text": "Sr.DSTE"
+                                            },
+                                            {
+                                                "value": "ADRM",
+                                                "text": "ADRM"
+                                            },
+                                            {
+                                                "value": "Budget",
+                                                "text": "Budget"
+                                            },
+                                            {
+                                                "value": "Sr.DMM",
+                                                "text": "Sr.DMM"
+                                            },
+                                            {
+                                                "value": "Material Supply Date",
+                                                "text": "Material Supply Date"
+                                            },
+                                            {
+                                                "value": "Bill submitted to Sr.DSTE",
+                                                "text": "Bill submitted to Sr.DSTE"
+                                            },
+                                            {
+                                                "value": "Send for budget",
+                                                "text": "Send for budget"
+                                            },
+                                            {
+                                                "value": "Budget Date",
+                                                "text": "Budget Date"
+                                            },
+                                            {
+                                                "value": "Bill pushed to AIMS",
+                                                "text": "Bill pushed to AIMS"
+                                            },
+                                            {
+                                                "value": "CO6 number",
+                                                "text": "CO7 number"
+                                            },
+                                            {
+                                                "value": "Others",
+                                                "text": "Others"
+                                            }
+                                        ]
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "tag": "tr",
+                        "text": [
+                            {
+                                "tag": "td",
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "text": "Remarks"
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "td",
+                                "colSpan": 3,
+                                "text": [
+                                    {
+                                        "tag": "textarea",
+                                        "className": "form-control",
+                                        "name": "new-supply.remark",
                                         "value": ""
                                     }
                                 ]

@@ -330,14 +330,6 @@ DataHandlerDBView.extend({
                 $S.callMethod(callback);
             }
         }
-    },
-    loadAttendanceData: function(attendanceDataApis, callback) {
-        var tableData;
-        DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
-            tableData = DataHandlerDBView._getTableData(request);
-            DataHandler.setData("attendanceData", tableData);
-            $S.callMethod(callback);
-        });
     }
 });
 var GlobalArray = [];

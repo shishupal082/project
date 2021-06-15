@@ -175,16 +175,10 @@ DataHandler.extend({
 
         var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
         field.text = AppHandler.GetUserData("username", "");
-
-        var isAdmin = AppHandler.GetUserData("isAdminTextDisplayEnable", false);
-        if ($S.isBooleanTrue(isAdmin)) {
-            TemplateHelper.removeClassTemplate(Template["link"], "link.is-admin", "d-none");
-        } else {
-            TemplateHelper.addClassTemplate(Template["link"], "link.is-admin", "d-none");
-        }
         var userDetails = AppHandler.GetUserDetails();
         if ($S.isObject(userDetails) && $S.isObject(userDetails.roles)) {
             for(var key in userDetails.roles) {
+                TemplateHelper.removeClassTemplate(Template["link"], key, "d-none");
                 TemplateHelper.removeClassTemplate(Template["footerLinkJsonAfterLogin"], key, "d-none");
             }
         }

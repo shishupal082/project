@@ -29,7 +29,11 @@ FormHandler.extend({
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = "project_work_status";
+        formData["table_name"] = DataHandler.getTableName("projectWorkStatus");
+        if (!$S.isStringV2(formData["table_name"])) {
+            alert(this._getAleartMessage("tableName.invalid"))
+            return;
+        }
         formData["pid"] = DataHandler.getPathParamsData("pid");
         formData["username"] = AppHandler.GetUserData("username", "");
         var finalText = [], temp, i;
@@ -48,7 +52,7 @@ FormHandler.extend({
         postData["subject"] = formData[Config.fieldsKey.SectionKey];
         postData["heading"] = formData[Config.fieldsKey.DistanceKey] + "km";
         postData["text"] = [finalText.join(",")];
-        postData["filename"] = "project_work_status.csv";
+        postData["filename"] = formData["table_name"] + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
@@ -70,7 +74,11 @@ FormHandler.extend({
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = "project_table";
+        formData["table_name"] = DataHandler.getTableName("projectTable");
+        if (!$S.isStringV2(formData["table_name"])) {
+            alert(this._getAleartMessage("tableName.invalid"))
+            return;
+        }
         formData["pid"] = DT.getDateTime("YYYY/MM/DD/hh/mm/ss/./ms","/");
         formData["username"] = AppHandler.GetUserData("username", "");
         var finalText = [];
@@ -81,7 +89,7 @@ FormHandler.extend({
         postData["subject"] = formData[Config.fieldsKey.ProjectNameKey];
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
-        postData["filename"] = "project_table.csv";
+        postData["filename"] = formData["table_name"] + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
@@ -100,6 +108,7 @@ FormHandler.extend({
 FormHandler.extend({
     _getAleartMessage: function(key, value) {
         var messageMapping = {};
+        messageMapping["tableName.invalid"] = "Invalid table name";
         messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
         messageMapping[Config.fieldsKey.SectionKey] = "Please select section";
         messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";

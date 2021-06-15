@@ -33,7 +33,7 @@ TemplateHandler.extend({
                 if (!$S.isObject(renderData[i])) {
                     continue;
                 }
-                homeFields.push({"toUrl": this._getLink("projectId", renderData[i].pId),
+                homeFields.push({"toUrl": this._getLink("projectId", renderData[i].pid),
                         "toText": renderData[i].pName});
             }
         }
@@ -64,12 +64,12 @@ TemplateHandler.extend({
         TemplateHelper.updateTemplateText(linkTemplate, {"link-field.url": text});
         return linkTemplate;
     },
-    _getLink: function(pageName, pId, status) {
+    _getLink: function(pageName, pid, status) {
         var link;
         if (pageName === "projectStatus") {
-            link = Config.basepathname + "/pid/" + pId + "/" + status;
+            link = Config.basepathname + "/pid/" + pid + "/" + status;
         } else if (pageName === "projectId") {
-            link = Config.basepathname + "/pid/" + pId;
+            link = Config.basepathname + "/pid/" + pid;
         }
         return link;
     },
@@ -94,13 +94,13 @@ TemplateHandler.extend({
         }
         var template = this.getTemplate("projectId");
         var pName = renderData.pName, i;
-        var pId = DataHandler.getPathParamsData("pid");
+        var pid = DataHandler.getPathParamsData("pid");
         TemplateHelper.updateTemplateText(template, {"projectId.pName": pName});
         var projectSubLink = DataHandler.getAppData("projectSubLink", []);
         var linkTemplate, href;
         if ($S.isArray(projectSubLink)) {
             for(i=0; i<projectSubLink.length; i++) {
-                href = this._getLink("projectStatus", pId, projectSubLink[i].href);
+                href = this._getLink("projectStatus", pid, projectSubLink[i].href);
                 linkTemplate = this._getLinkTemplate(href, projectSubLink[i].text);
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
@@ -127,6 +127,10 @@ TemplateHandler.extend({
         this.updateBtnStatus(newWorkStatus);
         return newWorkStatus;
     },
+    getAddNewSupplyTemplate: function() {
+        var addSupplyStatus = this.getTemplate("addSupplyStatus");
+        return addSupplyStatus;
+    },
     generateProjectWorkStatus: function(renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -142,7 +146,7 @@ TemplateHandler.extend({
         }
         var projectWorkStatus = this._generateFieldTable(renderData.workStatus, "resultPatternWorkStatus");
         TemplateHelper.updateTemplateText(template, {"projectWorkStatus.pName": pName});
-        TemplateHelper.addItemInTextArray(template, "projectWorkStatus.status", projectWorkStatus);
+        TemplateHelper.addItemInTextArray(template, "projectWorkStatus.statusTable", projectWorkStatus);
         TemplateHelper.addItemInTextArray(template, "projectWorkStatus.addNew", newWorkStatus);
         return template;
     },
@@ -153,10 +157,16 @@ TemplateHandler.extend({
         if (renderData.status === "FAILURE") {
             return this._getInvalidField(renderData.reason);
         }
-        var template = this.getTemplate("projectId");
+        var template = this.getTemplate("projectSupplyStatus");
         var pName = renderData.pName;
-        // var pId = DataHandler.getPathParamsData("pid");
-        TemplateHelper.updateTemplateText(template, {"projectId.pName": pName});
+        var newSupplyStatus = this.getAddNewSupplyTemplate();
+        if (!$S.isArray(newSupplyStatus)) {
+            newSupplyStatus = [];
+        }
+        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, "resultPatternWorkStatus");
+        TemplateHelper.updateTemplateText(template, {"projectSupplyStatus.pName": pName});
+        TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
+        TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
         return template;
     }
 });

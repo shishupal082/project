@@ -55,7 +55,6 @@ Config.projectId = "projectId";
 Config.projectStatusWork = "projectStatusWork";
 Config.projectStatusSupply = "projectStatusSupply";
 
-Config.dateSelectionRequired = [];
 
 Config.defaultPageFields = [];
 
@@ -65,12 +64,6 @@ for(var key in pages) {
     }
 }
 
-Config.dateSelection = [
-    {"name": "Daily", "value": "daily"},
-    {"name": "Monthly", "value": "monthly"},
-    {"name": "Yearly", "value": "yearly"},
-    {"name": "All", "value": "all"}
-];
 Config.defaultDateSelect = "monthly";
 
 Config.fieldsKey = {
@@ -78,7 +71,10 @@ Config.fieldsKey = {
     "DistanceKey": "new-work-status.distance",
     "RemarksKey": "new-work-status.remark",
     "SectionKey": "new-work-status.section",
-    "ProjectNameKey": "new-project.name"
+    "ProjectNameKey": "new-project.name",
+    "SupplyEntryDate": "new-supply.date",
+    "SupplyEntryApprovedBy": "new-supply.approved-by",
+    "SupplyEntryRemark": "new-supply.remark"
 };
 
 var apiMapping = {};

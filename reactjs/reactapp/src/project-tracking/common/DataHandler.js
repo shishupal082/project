@@ -1,8 +1,6 @@
 import $S from "../../interface/stack.js";
-// import $$$ from '../../interface/global';
 import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
-import DataHandlerTA from "./DataHandlerTA";
 import DataHandlerDBView from "./DataHandlerDBView";
 import FormHandler from "./FormHandler";
 import TemplateHandler from "./TemplateHandler";
@@ -168,6 +166,13 @@ DataHandler.extend({
         }
         DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return true;
+    },
+    getTableName: function(key) {
+        var tableNames = this.getAppData("tableName", {});
+        if ($S.isObject(tableNames) && $S.isStringV2(tableNames[key])) {
+            return tableNames[key];
+        }
+        return null;
     }
 });
 DataHandler.extend({
@@ -508,11 +513,6 @@ DataHandler.extend({
         DataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    SubmitFormClick: function(appStateCallback, appDataCallback) {
-        DataHandlerTA.SubmitFormClick(function() {
-            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        });
-    },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         if (name === "new-work-status") {
             FormHandler.submitNewWorkStatus(function() {
@@ -602,7 +602,7 @@ DataHandler.extend({
         var renderData;
         switch(currentList2Id) {
             case "home":
-                renderData = DataHandlerDBView.getTableData("project_table");
+                renderData = DataHandlerDBView.getTableData(DataHandler.getTableName("projectTable"));
             break;
             case "projectId":
                 renderData = DataHandlerV2.getProjectData();

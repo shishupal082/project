@@ -33,88 +33,6 @@ Template["loading"] = [
         "text": "Loading..."
     }
 ];
-Template["heading"] = [
-    {
-        "tag": "div.center.table.tbody.tr",
-        "className": "heading",
-        "text": [
-            {
-                "tag": "td",
-                "className": "text-center pl-5px",
-                "text": [
-                    {
-                        "tag": "div",
-                        "text": "Heading Line 1"
-                    },
-                    {
-                        "tag": "div",
-                        "text": "Larger Heading Line 2 Row"
-                    }
-                ]
-            }
-        ]
-    }
-];
-Template["link"] = [
-    {
-        "tag": "div.center",
-        "text": [
-            {
-                "tag": "a",
-                "href": "/dashboard",
-                "name": "link.dashboard",
-                "className": "p-5px",
-                "text": "Dashboard"
-            },
-            {
-                "tag": "a",
-                "href": "/change_password",
-                "name": "link.change_password",
-                "className": "p-5px",
-                "text": "Change Password"
-            },
-            {
-                "tag": "a",
-                "href": "/upload_file",
-                "name": "link.upload_file",
-                "className": "p-5px",
-                "text": "Upload File"
-            },
-            {
-                "tag": "a",
-                "name": "link.logout",
-                "href": "/logout",
-                "className": "p-5px",
-                "text": "Logout"
-            }
-        ]
-    },
-    {
-        "tag": "div.center",
-        "text": [
-            {
-                "tag": "span",
-                "text": "Login as"
-            },
-            {
-                "tag": "span",
-                "className": "small",
-                "name": "link.is-admin",
-                "text": " (Admin)"
-            },
-            {
-                "tag": "span",
-                "className": "",
-                "text": ": "
-            },
-            {
-                "tag": "b",
-                "name": "link.loginAs",
-                "text": ""
-            }
-        ]
-    }
-];
 Template["upload_file"] = [
     {
         "tag": "div.div",
@@ -626,7 +544,8 @@ Template["usersControl.row"] = [
         ]
     }
 ];
-
+Template["heading"] = {};;
+Template["link"] = {};
 Template["footerLinkJson"] = {};
 Template["footerLinkJsonAfterLogin"] = {};
 
