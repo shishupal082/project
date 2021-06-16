@@ -212,6 +212,34 @@ DataHandlerV2.extend({
         }
         DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
+    _getCurrentList3Id: function() {
+        var currentList3Id = "";
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var list2Id = DataHandler.getData("currentList2Id", "");
+        var i, keys, list3Data, configList3Id;
+        if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
+            configList3Id = DataHandler.getAppData(list2Id + ".list3Data_2.selected", "");
+            if ($S.isString(configList3Id)) {
+                currentList3Id = configList3Id;
+            }
+        } else if ($S.isObject(currentList3Data)) {
+            keys = Object.keys(currentList3Data);
+            if (keys.length < 1) {
+                list3Data = this.getList3Data();
+                if ($S.isArray(list3Data)) {
+                    for (i = 0; i < list3Data.length; i++) {
+                        if ($S.isObject(list3Data[i])) {
+                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
+                                currentList3Id = list3Data[i].name;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return currentList3Id;
+    },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
         var appControlMetaData = DataHandler.getData("appControlMetaData", {});
@@ -235,25 +263,7 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("date-select", dateSelect);
-        var currentList3Data = DataHandler.getCurrentList3Data();
-        var keys, list3Data, currentList3Id = "";
-        if ($S.isObject(currentList3Data)) {
-            keys = Object.keys(currentList3Data);
-            if (keys.length < 1) {
-                list3Data = this.getList3Data();
-                if ($S.isArray(list3Data)) {
-                    for (i = 0; i < list3Data.length; i++) {
-                        if ($S.isObject(list3Data[i])) {
-                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
-                                currentList3Id = list3Data[i].name;
-                                DataHandler.setData("currentList3Id", currentList3Id);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        DataHandler.setData("currentList3Id", this._getCurrentList3Id());
     },
     generateFilterOptions: function() {
         var currentAppData = DataHandler.getCurrentAppData();

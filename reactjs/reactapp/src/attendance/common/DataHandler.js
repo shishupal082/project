@@ -215,17 +215,6 @@ DataHandler.extend({
     },
     getCurrentList3Data: function() {
         var list3Id = this.getData("currentList3Id", "");
-        var list2Id = this.getData("currentList2Id", "");
-        if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
-            var currentAppData = this.getCurrentAppData();
-            var metaData = this.getData("metaData", {});
-            var configList3Id = $S.findParam([currentAppData, metaData], list2Id + ".list3Data_2.selected");
-            if ($S.isString(configList3Id)) {
-                list3Id = configList3Id;
-            } else {
-                list3Id = "";
-            }
-        }
         var list3Data = DataHandlerV2.getList3Data();
         var currentList3Data = {};
         if ($S.isArray(list3Data)) {
