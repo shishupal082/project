@@ -107,18 +107,8 @@ FormHandler.extend({
 });
 FormHandler.extend({
     _getAleartMessage: function(key, value) {
-        var messageMapping = {};
-        messageMapping["tableName.invalid"] = "Invalid table name";
-        messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
-        messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";
-
-        messageMapping[Config.fieldsKey.SectionKey] = "Please select section";
-        messageMapping[Config.fieldsKey.ProjectNameKey] = "Project Name Required";
-        messageMapping[Config.fieldsKey.SupplyEntryApprovedBy] = "Select Approver";
-
-        messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
-        messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
-        if ($S.isString(messageMapping[key])) {
+        var messageMapping = Config.messageMapping;
+        if ($S.isObject(messageMapping) && $S.isString(messageMapping[key])) {
             return messageMapping[key];
         }
         return "Invalid " + key;
@@ -183,7 +173,7 @@ FormHandler.extend({
 });
 FormHandler.extend({
     saveAddSupplyStatus: function(formData, callback) {
-        var resultData = ["table_name", "pid", Config.fieldsKey.SupplyEntryApprovedBy,
+        var resultData = ["table_name", "pid", Config.fieldsKey.supplyDiscription,
                         Config.fieldsKey.DateKey, "username", Config.fieldsKey.RemarksKey];
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
@@ -209,7 +199,7 @@ FormHandler.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData[Config.fieldsKey.SupplyEntryApprovedBy];
+        postData["subject"] = formData[Config.fieldsKey.supplyDiscription];
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
@@ -228,7 +218,7 @@ FormHandler.extend({
         });
     },
     submitAddSupplyStatus: function(callback) {
-        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.SupplyEntryApprovedBy, Config.fieldsKey.RemarksKey];
+        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.supplyDiscription, Config.fieldsKey.RemarksKey];
         var fieldsData = DataHandler.getData("fieldsData", {});
         var i, isFormValid = true, temp, formData = {};
         if (!$S.isObject(fieldsData)) {

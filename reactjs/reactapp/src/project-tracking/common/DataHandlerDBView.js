@@ -303,7 +303,7 @@ DataHandlerDBView.extend({
                     }
                     temp = [];
                     if ($S.isArray(tableData[tableName].tableData)) {
-                        for(j=tableData[tableName].tableData.length-1; j>=0; j--) {
+                        for(j=0; j<tableData[tableName].tableData.length; j++) {
                             temp.push(tableData[tableName].tableData[j]);
                         }
                     }

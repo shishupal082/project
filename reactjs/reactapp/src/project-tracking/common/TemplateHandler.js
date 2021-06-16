@@ -128,13 +128,13 @@ TemplateHandler.extend({
     },
     getAddNewSupplyTemplate: function() {
         var addSupplyStatus = this.getTemplate("addSupplyStatus");
-        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.SupplyEntryApprovedBy,
+        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.supplyDiscription,
                             Config.fieldsKey.RemarksKey];
         var fieldsData = DataHandler.getData("fieldsData", {});
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
-        var formValues = {};
+        var formValues = {}, formText = {};
         for (var i=0; i<requiredKeys.length; i++) {
             formValues[requiredKeys[i]] = fieldsData[requiredKeys[i]];
         }
@@ -143,6 +143,12 @@ TemplateHandler.extend({
             DataHandler.setFieldsData(Config.fieldsKey.DateKey, formValues[Config.fieldsKey.DateKey]);
         }
         TemplateHelper.updateTemplateValue(addSupplyStatus, formValues);
+        var supplyDiscriptionTemplate = DataHandler.getAppData(Config.fieldsKey.supplyDiscription, []);
+        if (!$S.isArray(supplyDiscriptionTemplate)) {
+            supplyDiscriptionTemplate = [];
+        }
+        formText[Config.fieldsKey.supplyDiscription] = supplyDiscriptionTemplate;
+        TemplateHelper.updateTemplateText(addSupplyStatus, formText);
         this.updateBtnStatus(addSupplyStatus);
         return addSupplyStatus;
     },

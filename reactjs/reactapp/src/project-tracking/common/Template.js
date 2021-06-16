@@ -570,6 +570,22 @@ Template["addSupplyStatus"] = [
                                 "tag": "td",
                                 "text": {
                                     "tag": "span",
+                                    "text": "Discription"
+                                }
+                            },
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "dropdown",
+                                    "className": "form-control",
+                                    "name": "supplyDiscription",
+                                    "text": []
+                                }
+                            },
+                            {
+                                "tag": "td",
+                                "text": {
+                                    "tag": "span",
                                     "text": "Date"
                                 }
                             },
@@ -580,79 +596,6 @@ Template["addSupplyStatus"] = [
                                     "className": "form-control",
                                     "name": "date-entry-key",
                                     "value": ""
-                                }
-                            },
-                            {
-                                "tag": "td",
-                                "text": {
-                                    "tag": "span",
-                                    "text": "Approved By"
-                                }
-                            },
-                            {
-                                "tag": "td",
-                                "text": {
-                                    "tag": "dropdown",
-                                    "className": "form-control",
-                                    "name": "new-supply.approved-by",
-                                    "text": [
-                                            {
-                                                "value": "",
-                                                "text": "Select ..."
-                                            },
-                                            {
-                                                "value": "Consignee",
-                                                "text": "Consignee"
-                                            },
-                                            {
-                                                "value": "DSTE",
-                                                "text": "DSTE"
-                                            },
-                                            {
-                                                "value": "Sr.DSTE",
-                                                "text": "Sr.DSTE"
-                                            },
-                                            {
-                                                "value": "ADRM",
-                                                "text": "ADRM"
-                                            },
-                                            {
-                                                "value": "Budget",
-                                                "text": "Budget"
-                                            },
-                                            {
-                                                "value": "Sr.DMM",
-                                                "text": "Sr.DMM"
-                                            },
-                                            {
-                                                "value": "Material Supply Date",
-                                                "text": "Material Supply Date"
-                                            },
-                                            {
-                                                "value": "Bill submitted to Sr.DSTE",
-                                                "text": "Bill submitted to Sr.DSTE"
-                                            },
-                                            {
-                                                "value": "Send for budget",
-                                                "text": "Send for budget"
-                                            },
-                                            {
-                                                "value": "Budget Date",
-                                                "text": "Budget Date"
-                                            },
-                                            {
-                                                "value": "Bill pushed to AIMS",
-                                                "text": "Bill pushed to AIMS"
-                                            },
-                                            {
-                                                "value": "CO6 number",
-                                                "text": "CO7 number"
-                                            },
-                                            {
-                                                "value": "Others",
-                                                "text": "Others"
-                                            }
-                                        ]
                                 }
                             }
                         ]

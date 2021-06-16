@@ -44,7 +44,9 @@ var pages = {
     "home": basepathname+"/",
     "projectId": basepathname+"/pid/:pid",
     "projectStatusWork": basepathname+"/pid/:pid/work",
-    "projectStatusSupply": basepathname+"/pid/:pid/supply"
+    "projectStatusSupply": basepathname+"/pid/:pid/supply",
+    "addWorkStatus": basepathname+"/pid/:pid/add-work-status",
+    "updateSupplyStatus": basepathname+"/pid/:pid/update-supply-status"
 };
 
 Config.pages = pages;
@@ -54,15 +56,17 @@ Config.noMatch = "noMatch";
 Config.projectId = "projectId";
 Config.projectStatusWork = "projectStatusWork";
 Config.projectStatusSupply = "projectStatusSupply";
+Config.addWorkStatus = "addWorkStatus";
+Config.updateSupplyStatus = "updateSupplyStatus";
 
 
-Config.defaultPageFields = [];
+// Config.defaultPageFields = [];
 
-for(var key in pages) {
-    if (key !== "home") {
-        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
-    }
-}
+// for(var key in pages) {
+//     if (key !== "home") {
+//         Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
+//     }
+// }
 
 Config.defaultDateSelect = "monthly";
 
@@ -72,8 +76,22 @@ Config.fieldsKey = {
     "DistanceKey": "new-work-status.distance",
     "SectionKey": "new-work-status.section",
     "ProjectNameKey": "new-project.name",
-    "SupplyEntryApprovedBy": "new-supply.approved-by"
+    "supplyDiscription": "supplyDiscription"
 };
+
+var messageMapping = {};
+messageMapping["tableName.invalid"] = "Invalid table name";
+messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
+messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";
+
+messageMapping[Config.fieldsKey.SectionKey] = "Please select section";
+messageMapping[Config.fieldsKey.ProjectNameKey] = "Project Name Required";
+messageMapping[Config.fieldsKey.supplyDiscription] = "Select Discription";
+
+messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
+messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
+
+Config.messageMapping = messageMapping;
 
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
