@@ -70,6 +70,8 @@ TemplateHandler.extend({
             link = Config.basepathname + "/pid/" + pid + "/" + status;
         } else if (pageName === "projectId") {
             link = Config.basepathname + "/pid/" + pid;
+        } else {
+            link = Config.basepathname;
         }
         return link;
     },
@@ -199,6 +201,23 @@ TemplateHandler.extend({
         }
         return $S.clone(Template["templateNotFound"]);
     },
+    getGoBackLinkTemplate: function(pageName) {
+        var template = this.getTemplate("goBackLink");
+        var backUrl = "";
+        var pid = DataHandler.getPathParamsData("pid");
+        switch(pageName) {
+            case "projectStatusWork":
+            case "projectStatusSupply":
+                backUrl = this._getLink("projectId", pid);
+            break;
+            case "projectId":
+            default:
+                backUrl = this._getLink();
+            break;
+        }
+        TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
+        return template;
+    },
     SetHeadingUsername: function(username) {
         var heading = this.getTemplate("heading");
         if ($S.isString(username)) {
@@ -236,7 +255,10 @@ TemplateHandler.extend({
         var metaData = DataHandler.getData("metaData", {});
         var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
         var footerField = this.getTemplate("footerField");
+        var goBackLink = this.getGoBackLinkTemplate(pageName);
+
         TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
+        TemplateHelper.updateTemplateText(renderField, {"goBackLink": goBackLink});
         TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
         return renderField;
     },

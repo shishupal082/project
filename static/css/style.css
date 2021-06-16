@@ -5,6 +5,9 @@ body.theme-green {
 body.theme-grey {
     background-color: #eee;
 }
+.b-none {
+    border: none;
+}
 .b-1px {
     border: 1px solid;
 }

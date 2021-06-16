@@ -78,6 +78,20 @@ Template["invalid-data"] = [
         }
     }
 ];
+Template["goBackLink"] = [
+    {
+        "tag": "a",
+        "name": "goBackLink.a",
+        "href": "",
+        "text": {
+            "tag": "img",
+            "name": "goBackLink.img",
+            "className": "go-back-link-img pl-10px pr-10px",
+            "src": "/assets/static/img/svg/left-arrow.svg",
+            "alt": "Back"
+        }
+    }
+];
 Template["projectId"] = [
     {
         "tag": "div",
@@ -85,8 +99,18 @@ Template["projectId"] = [
         "text": [
             {
                 "tag": "div.h4",
-                "name": "projectId.pName",
-                "text": ""
+                "text": [
+                    {
+                        "tag": "span",
+                        "name": "goBackLink",
+                        "text": []
+                    },
+                    {
+                        "tag": "span",
+                        "name": "projectId.pName",
+                        "text": ""
+                    }
+                ]
             },
             {
                 "tag": "div",
@@ -104,6 +128,11 @@ Template["projectWorkStatus"] = [
             {
                 "tag": "div.h6",
                 "text": [
+                    {
+                        "tag": "span",
+                        "name": "goBackLink",
+                        "text": []
+                    },
                     {
                         "tag": "span",
                         "name": "projectWorkStatus.pName",
@@ -137,6 +166,11 @@ Template["projectSupplyStatus"] = [
             {
                 "tag": "div.h6",
                 "text": [
+                    {
+                        "tag": "span",
+                        "name": "goBackLink",
+                        "text": []
+                    },
                     {
                         "tag": "span",
                         "name": "projectSupplyStatus.pName",
