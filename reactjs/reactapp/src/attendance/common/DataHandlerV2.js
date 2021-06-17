@@ -213,9 +213,9 @@ DataHandlerV2.extend({
         DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
     _getCurrentList3Id: function() {
-        var currentList3Id = "";
-        var currentList3Data = DataHandler.getCurrentList3Data();
         var list2Id = DataHandler.getData("currentList2Id", "");
+        var currentList3Id = DataHandler.getData("currentList3Id", "");
+        var currentList3Data = DataHandler.getCurrentList3Data();
         var i, keys, list3Data, configList3Id;
         if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
             configList3Id = DataHandler.getAppData(list2Id + ".list3Data_2.selected", "");
@@ -224,6 +224,7 @@ DataHandlerV2.extend({
             }
         } else if ($S.isObject(currentList3Data)) {
             keys = Object.keys(currentList3Data);
+            // For first time, currentList3Data = {}
             if (keys.length < 1) {
                 list3Data = this.getList3Data();
                 if ($S.isArray(list3Data)) {
