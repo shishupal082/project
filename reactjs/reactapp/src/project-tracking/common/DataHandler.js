@@ -604,6 +604,7 @@ DataHandler.extend({
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
         var renderData;
+        var sortingFields = DataHandler.getData("sortingFields", []);
         switch(currentList2Id) {
             case "home":
                 renderData = DataHandlerDBView.getTableData(DataHandler.getTableName("projectTable"));
@@ -612,10 +613,10 @@ DataHandler.extend({
                 renderData = DataHandlerV2.getProjectData();
             break;
             case "projectStatusWork":
-                renderData = DataHandlerV2.getProjectWorkStatus();
+                renderData = DataHandlerV2.getProjectWorkStatus(sortingFields);
             break;
             case "projectStatusSupply":
-                renderData = DataHandlerV2.getProjectSupplyStatus();
+                renderData = DataHandlerV2.getProjectSupplyStatus(sortingFields);
             break;
             default:
                 renderData = [];

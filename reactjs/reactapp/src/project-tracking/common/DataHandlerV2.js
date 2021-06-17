@@ -445,17 +445,19 @@ DataHandlerV2.extend({
         }
         return response;
     },
-    getProjectWorkStatus: function() {
+    getProjectWorkStatus: function(sortingFields) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
         var workStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectWorkStatus"), "pid", currentPId);
+        workStatus = $S.sortResultV2(workStatus, sortingFields, "name");
         response["workStatus"] = workStatus;
         return response;
     },
-    getProjectSupplyStatus: function() {
+    getProjectSupplyStatus: function(sortingFields) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
         var supplyStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("materialSupplyStatus"), "pid", currentPId);
+        supplyStatus = $S.sortResultV2(supplyStatus, sortingFields, "name");
         response["supplyStatus"] = supplyStatus;
         return response;
     }

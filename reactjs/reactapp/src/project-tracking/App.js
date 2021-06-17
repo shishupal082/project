@@ -71,7 +71,11 @@ class App extends React.Component {
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
-        DataHandler.OnClick(this.appStateCallback, this.appDataCallback, name, value);
+        if (name === "sortable") {
+            DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
+        } else {
+            DataHandler.OnClick(this.appStateCallback, this.appDataCallback, name, value);
+        }
     }
     // for input and textarea
     onChange(e) {
