@@ -72,6 +72,9 @@ TemplateHandler.extend({
             link = Config.basepathname + "/pid/" + pid;
         } else {
             link = Config.basepathname;
+            if (link === "") {
+                link = "/";
+            }
         }
         return link;
     },
