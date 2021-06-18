@@ -1,0 +1,122 @@
+import $S from "../../interface/stack.js";
+import Template from "./Template";
+
+import TemplateHelper from "../../common/TemplateHelper";
+import AppHandler from "../../common/app/common/AppHandler";
+var DataHandler;
+
+(function($S){
+var CurrentData = $S.getDataObj();
+var keys = [];
+
+keys.push("renderData");
+keys.push("renderFieldRow");
+keys.push("pageName");
+
+CurrentData.setKeys(keys);
+
+DataHandler = function(arg) {
+    return new DataHandler.fn.init(arg);
+};
+DataHandler.fn = DataHandler.prototype = {
+    constructor: DataHandler,
+    init: function(arg) {
+        this.arg = arg;
+        return this;
+    }
+};
+
+$S.extendObject(DataHandler);
+
+DataHandler.extend({
+    setData: function(key, value, isDirect) {
+        return CurrentData.setData(key, value, isDirect);
+    },
+    getData: function(key, defaultValue, isDirect) {
+        return CurrentData.getData(key, defaultValue, isDirect);
+    }
+});
+DataHandler.extend({
+    getPages: function() {
+        var pages = {"home": "home", "page1": "page1", "page2": "page2", "noMatch": "noMatch"};
+        return pages;
+    },
+    getPageUrl: function() {
+        var pageUrl = {"home": "/", "page1": "/page-1", "page2": "/page-2"};
+        return pageUrl;
+    }
+});
+DataHandler.extend({
+    AppDidMount: function(appStateCallback, appDataCallback) {
+        $S.log("DataHandler: AppDidMount");
+        this.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    PageComponentDidMount: function(appStateCallback, appDataCallback, pageName) {
+        $S.log("DataHandler: PageComponentDidMount");
+        var oldPageName = DataHandler.getData("pageName", "");
+        if (oldPageName !== pageName) {
+            this.setData("pageName", pageName)
+        }
+    }
+});
+DataHandler.extend({
+    getRenderData: function() {
+        var pageName = this.getData("pageName", "");
+        var renderData, pageUrl, key;
+        switch(pageName) {
+            case "page-1":
+            break;
+            case "page-2":
+            break;
+            case "home":
+                pageUrl = this.getPageUrl();
+                renderData = [];
+                for (key in pageUrl) {
+                    if (key !== "home") {
+                        renderData.push({"href": pageUrl[key], "toText": key});
+                    }
+                }
+            break;
+            default:
+                renderData = [];
+            break;
+        }
+        return renderData;
+    },
+    getRenderTemplate: function(renderData) {
+        var pageName = this.getData("pageName", "");
+        var renderFieldRow = [], i, linkTemplate;
+        switch(pageName) {
+            case "page1":
+                renderFieldRow.push(AppHandler.getTemplate(Template, "page1"));
+            break;
+            case "page2":
+                renderFieldRow.push(AppHandler.getTemplate(Template, "page2"));
+            break;
+            case "home":
+                for (i=0; i<renderData.length; i++) {
+                    linkTemplate = AppHandler.getTemplate(Template, "home.link");
+                    TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "href", renderData[i].href);
+                    TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": renderData[i].toText});
+                    renderFieldRow.push(linkTemplate);
+                }
+            break;
+            default:
+                renderFieldRow = Template["noMatch"];
+            break;
+        }
+        return renderFieldRow;
+    },
+    handleDataLoadComplete: function(appStateCallback, appDataCallback) {
+        var renderData = this.getRenderData();
+        var renderFieldRow = this.getRenderTemplate(renderData);
+        appDataCallback("renderFieldRow", renderFieldRow);
+        appDataCallback("appHeading", Template["heading"]);
+        appDataCallback("firstTimeDataLoadStatus", "completed");
+        appStateCallback();
+    }
+});
+
+})($S);
+
+export default DataHandler;
