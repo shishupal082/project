@@ -30,6 +30,7 @@ Config.tempConfig = {
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
+var getUploadedFileApi = $$$.getUploadedFileApi;
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
 
@@ -97,7 +98,7 @@ var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
-apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
+apiMapping["getUploadedFileApi"] = getUploadedFileApi;
 apiMapping["addTextApi"] = "/api/add_text_v2";
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {

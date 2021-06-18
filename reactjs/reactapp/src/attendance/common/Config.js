@@ -24,7 +24,8 @@ Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
     "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
-    "linkText": $$$.linkText
+    "linkText": $$$.linkText,
+    "projectHeading": $$$.projectHeading
 };
 
 
@@ -39,21 +40,29 @@ try {
     Template["heading"][1].text = headingJson;
 } catch(e) {}
 
+var pageUrl = {
+    "projectHome": basepathname+"/",
+    "home": basepathname+"/:pid",
+    "page": basepathname+"/:pid/:pageName"
+};
 
 var pages = {
-    "home": basepathname+"/",
-    "entry": basepathname+"/entry",
-    "update": basepathname+"/update",
-    "summary": basepathname+"/summary",
-    "ta": basepathname+"/ta",
-    "dbview": basepathname+"/dbview",
-    "dbview_summary": basepathname+"/dbview_summary",
-    "custom_dbview": basepathname+"/custom_dbview",
-    "add_field_report": basepathname+"/add_field_report"
+    "projectHome": pageUrl["projectHome"],
+    "home": pageUrl["home"],
+    "entry": pageUrl["page"],
+    "update": pageUrl["page"],
+    "summary": pageUrl["page"],
+    "ta": pageUrl["page"],
+    "dbview": pageUrl["page"],
+    "dbview_summary": pageUrl["page"],
+    "custom_dbview": pageUrl["page"],
+    "add_field_report": pageUrl["page"]
 };
 
 Config.pages = pages;
+Config.pageUrl = pageUrl;
 
+Config.projectHome = "projectHome";
 Config.home = "home";
 Config.entry = "entry";
 Config.update = "update";
@@ -65,15 +74,9 @@ Config.custom_dbview = "custom_dbview";
 Config.add_field_report = "add_field_report";
 Config.noMatch = "noMatch";
 
-Config.dateSelectionRequired = ["entry", "summary", "dbview", "dbview_summary", "custom_dbview"];
+Config.validPages = [Config.entry, Config.update, Config.summary, Config.ta, Config.dbview, Config.dbview_summary, Config.custom_dbview, Config.add_field_report];
 
-Config.defaultPageFields = [];
-
-for(var key in pages) {
-    if (key !== "home") {
-        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
-    }
-}
+Config.dateSelectionRequired = [Config.entry, Config.summary, Config.dbview, Config.dbview_summary, Config.custom_dbview];
 
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},

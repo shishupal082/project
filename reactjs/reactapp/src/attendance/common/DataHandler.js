@@ -157,16 +157,6 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    setCurrentAppId: function(appId) {
-        var appControlData = this.getData("appControlData", []);
-        var currentList1Id = "";
-        if ($S.isArray(appControlData) && appControlData.length > 0) {
-            if ($S.isString(appControlData[0]["id"])) {
-                currentList1Id = appControlData[0]["id"];
-            }
-        }
-        DataHandler.setData("currentList1Id", currentList1Id);
-    },
     GetDataParameterFromDate: function(dateRange) {
         var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
         var i;
@@ -417,7 +407,7 @@ DataHandler.extend({
                     $S.callMethod(callback);
                 });
             });
-        } else if (reason !== "pageComponentDidMount" || [Config.home].indexOf(currentList2Id) >= 0) {
+        } else if (reason !== "pageComponentDidMount" || [Config.home, Config.projectHome].indexOf(currentList2Id) >= 0) {
             $S.callMethod(callback);
         }
     },
@@ -429,7 +419,6 @@ DataHandler.extend({
             DataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.setCurrentAppId();
             DataHandler.generateDateParameter();
             DataHandler.loadDataByAppId(function() {
                 $S.callMethod(callback);
@@ -625,7 +614,7 @@ DataHandler.extend({
     },
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
-        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home, Config.projectHome, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             return [];
         }
         var dateArray = [];
@@ -705,7 +694,7 @@ DataHandler.extend({
         var list2Data = [];
         var list3Data = [];
         var filterOptions = [];
-        if (dataLoadStatus && currentList2Id !== Config.home) {
+        if (dataLoadStatus && [Config.home, Config.projectHome].indexOf(currentList2Id) < 0) {
             list1Data = this.getData("appControlData", []);
             list2Data = DataHandlerV2.getList2Data();
             list3Data = DataHandlerV2.getList3Data();

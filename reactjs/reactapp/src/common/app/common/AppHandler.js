@@ -619,7 +619,7 @@ AppHandler.extend({
         }
         appControlData.map(function(el, i, arr) {
             if ($S.isObject(el)) {
-                el.id = "app-id-" + i;
+                el.id = i.toString();
             }
             return el;
         });

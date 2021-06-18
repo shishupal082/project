@@ -55,6 +55,7 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 keys.push("pathParams");
+keys.push("uploadedFileData");
 
 //TA page
 //Add Field Report Page
@@ -443,10 +444,21 @@ DataHandler.extend({
             });
         });
     },
+    getUploadedFileApi: function(callback) {
+        $S.loadJsonData(Config.JQ, [Config.getApiUrl("getUploadedFileApi", "", true)], function(response, apiName, ajax){
+            if ($S.isObject(response) && $S.isArray(response.data)) {
+                DataHandler.setData("uploadedFileData", response.data);
+            }
+        }, function() {
+        }, "uploadFileApi", null);
+    },
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
                 AppHandler.TrackPageView(DataHandler.getData("currentList2Id", ""));
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+            DataHandler.getUploadedFileApi(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });

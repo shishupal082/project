@@ -1,5 +1,5 @@
 import $S from "../../interface/stack.js";
-// import Config from "./Config";
+import Config from "./Config";
 import DataHandler from "./DataHandler";
 import DataHandlerV2 from "./DataHandlerV2";
 // import DataHandlerTA from "./DataHandlerTA";
@@ -27,13 +27,41 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 $S.extendObject(TemplateHandler);
 
 TemplateHandler.extend({
+    _getLinkTemplateV2: function(toUrl, toText) {
+        var linkTemplate = TemplateHandler.getTemplate("home.a");
+        TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "href", toUrl);
+        TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": toText});
+        return linkTemplate;
+    },
     generateHomeRenderField: function() {
         var homeFields = DataHandlerV2.getList2Data();
         var template = this.getTemplate("home");
+        var validPages = Config.validPages;
+        var linkTemplate, toUrl;
+        var currentAppId = DataHandler.getData("currentList1Id", "0");
+        if (homeFields.length === 0) {
+            return this.getTemplate("noDataFound");
+        }
         for (var i = 0; i< homeFields.length; i++) {
-            var linkTemplate = TemplateHandler.getTemplate("home.link");
-            TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "url", homeFields[i].toUrl);
-            TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": homeFields[i].toText});
+            if (validPages.indexOf(homeFields[i].toUrl) >= 0) {
+                toUrl = Config.basepathname + "/" + currentAppId + "/" + homeFields[i].toUrl;
+            } else {
+                toUrl = homeFields[i].toUrl;
+            }
+            linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText);
+            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+        }
+        return template;
+    },
+    generateProjectHomeRenderField: function() {
+        var homeFields = DataHandler.getData("appControlData", []);
+        var template = this.getTemplate("home");
+        var linkTemplate;
+        if (homeFields.length === 0) {
+            return this.getTemplate("noDataFound");
+        }
+        for (var i = 0; i< homeFields.length; i++) {
+            linkTemplate = this._getLinkTemplateV2(Config.basepathname + "/" + homeFields[i].id, homeFields[i].name);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         return template;
@@ -485,6 +513,9 @@ TemplateHandler.extend({
                 break;
                 case "home":
                     renderField = this.generateHomeRenderField();
+                break;
+                case Config.projectHome:
+                    renderField = this.generateProjectHomeRenderField();
                 break;
                 case "noMatch":
                 default:

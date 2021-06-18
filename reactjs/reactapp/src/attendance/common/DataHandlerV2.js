@@ -49,13 +49,13 @@ DataHandlerV2.extend({
         }
         for(i=0; i<pageOrder.length; i++) {
             key = pageOrder[i];
-            if (key !== "home") {
+            if ([Config.projectHome, Config.home].indexOf(key) < 0) {
                 if ($S.isString(linkText[key])) {
                     temp = linkText[key];
                 } else {
                     temp = $S.capitalize(key);
                 }
-                list2Data.push({"name": key, "toText": temp, "toUrl": pages[key]});
+                list2Data.push({"name": key, "toText": temp, "toUrl": key});
             }
         }
         if ($S.isArray(redirectPages)) {
@@ -131,7 +131,7 @@ DataHandlerV2.extend({
         return list3Data;
     },
     isPageDisabled: function(pageName) {
-        if (pageName === "home") {
+        if ([Config.projectHome, Config.home].indexOf(pageName) >= 0) {
             return false;
         }
         var metaData = DataHandler.getData("metaData", {});
@@ -224,7 +224,7 @@ DataHandlerV2.extend({
             }
         } else if ($S.isObject(currentList3Data)) {
             keys = Object.keys(currentList3Data);
-            // For first time, currentList3Data = {}
+            // If currentList3Data not found (Like in the first time loading) then search defaultSelected item in list3Data
             if (keys.length < 1) {
                 list3Data = this.getList3Data();
                 if ($S.isArray(list3Data)) {

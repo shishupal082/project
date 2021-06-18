@@ -442,6 +442,7 @@ DataHandlerV2.extend({
             response["reason"] = "Invalid Project Id: " + currentPId;
         } else {
             response["pName"] = projectTable[0].pName;
+            response["uploadedFileData"] = DataHandler.getData("uploadedFileData", []);
         }
         return response;
     },

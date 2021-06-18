@@ -63,7 +63,20 @@ Template["home.link"] = [
     {
         "tag": "link",
         "name": "home.link.toUrl",
-        "url": "",
+        "href": "",
+        "text": {
+            "tag": "button",
+            "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+            "name": "home.link.toText",
+            "text": ""
+        }
+    }
+];
+Template["home.a"] = [
+    {
+        "tag": "a",
+        "name": "home.link.toUrl",
+        "href": "",
         "text": {
             "tag": "button",
             "className": "list-group-item list-group-item-action list-group-item-primary text-center2",

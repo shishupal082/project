@@ -89,6 +89,18 @@ TemplateHandler.extend({
             TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
         }
     },
+    _getUploadFileTemplate: function(renderData) {
+        var uploadedFileData = [];
+        if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData)) {
+            uploadedFileData = renderData.uploadedFileData.map(function(el, i, arr){
+                return {
+                    "tag": "div.span",
+                    "text": el
+                };
+            });
+        }
+        return uploadedFileData;
+    },
     generateProjectDetailsPage: function(renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -109,6 +121,11 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }
+
+        var uploadFileTemplate = this.getTemplate("upload_file");
+        var uploadFileData = this._getUploadFileTemplate(renderData);
+        TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
+        TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         return template;
     },
     getAddNewWorkTemplate: function() {

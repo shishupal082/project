@@ -77,9 +77,14 @@ class App extends React.Component {
     }
     gotoPage(pageName) {
         var pages = Config.pages;
+        var currentAppId = DataHandler.getData("currentList1Id", "0");
         if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(pages[pageName]);
+            this.childAttribute["history"].push(Config.basepathname + "/" + currentAppId + "/" +  pageName);
         }
+    }
+    gotoPageV2(currentAppId) {
+        var currentPageName = DataHandler.getData("currentList2Id", "");
+        this.childAttribute["history"].push(Config.basepathname + "/" + currentAppId + "/" +  currentPageName);
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
@@ -127,8 +132,9 @@ class App extends React.Component {
             }
         }
         if (name === "list1-select") {
-            var sectionId = value;
-            DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, sectionId);
+            var currentAppId = value;
+            this.gotoPageV2(currentAppId);
+            DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, currentAppId);
         } else if (name === "list2-select") {
             this.gotoPage(value);
             DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
@@ -147,8 +153,18 @@ class App extends React.Component {
     appDataCallback(name, data) {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
-    pageComponentDidMount(pageName) {
-        this.addTab(pageName);
+    pageComponentDidMount(pageName, pathParams) {
+        var pid = "0";
+        if ([Config.projectHome, Config.noMatch].indexOf(pageName) < 0) {
+            pageName = Config.home;
+            if ($S.isStringV2(pathParams.pageName)) {
+                pageName = pathParams.pageName;
+            }
+            if ($S.isStringV2(pathParams.pid)) {
+                pid = pathParams.pid;
+            }
+        }
+        DataHandler.setData("currentList1Id", pid);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
@@ -177,53 +193,67 @@ class App extends React.Component {
     render() {
         var methods = this.methods;
         var commonData = this.appData;
-        var pages = Config.pages;
-        const entry = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.entry}/>);
-        const update = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.update}/>);
-        const summary = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.summary}/>);
-        const ta = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.ta}/>);
-        const dbview = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.dbview}/>);
-        const custom_dbview = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.custom_dbview}/>);
-        const dbview_summary = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.dbview_summary}/>);
-        const add_field_report = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.add_field_report}/>);
+        var pageUrl = Config.pageUrl;
+        // const entry = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.entry}/>);
+        // const update = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.update}/>);
+        // const summary = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.summary}/>);
+        // const ta = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.ta}/>);
+        // const dbview = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.dbview}/>);
+        // const custom_dbview = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.custom_dbview}/>);
+        // const dbview_summary = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.dbview_summary}/>);
+        // const add_field_report = (props) => (<AppComponent {...props}
+        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+        //                     currentPageName={Config.add_field_report}/>);
+        var pageName = DataHandler.getData("currentList2Id", "");
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
 
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pages.home}
+                <Route exact path={pageUrl.projectHome}
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>
                     )}
                 />
-                <Route path={pages.entry} component={entry}/>
-                <Route path={pages.update} component={update}/>
-                <Route path={pages.summary} component={summary}/>
-                <Route path={pages.ta} component={ta}/>
-                <Route path={pages.dbview} component={dbview}/>
-                <Route path={pages.dbview_summary} component={dbview_summary}/>
-                <Route path={pages.custom_dbview} component={custom_dbview}/>
-                <Route path={pages.add_field_report} component={add_field_report}/>
+                <Route exact path={pageUrl.home}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>
+                    )}
+                />
+                <Route exact path={pageUrl.page}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>
+                    )}
+                />
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
+
+
+                // <Route path={pages.entry} component={entry}/>
+                // <Route path={pages.update} component={update}/>
+                // <Route path={pages.summary} component={summary}/>
+                // <Route path={pages.ta} component={ta}/>
+                // <Route path={pages.dbview} component={dbview}/>
+                // <Route path={pages.dbview_summary} component={dbview_summary}/>
+                // <Route path={pages.custom_dbview} component={custom_dbview}/>
+                // <Route path={pages.add_field_report} component={add_field_report}/>
+
         // return (
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );

@@ -78,6 +78,66 @@ Template["invalid-data"] = [
         }
     }
 ];
+Template["upload_file"] = [
+    {
+        "tag": "div.div",
+        "className": "upload-form-div",
+        "text": {
+            "tag": "form",
+            "id": "upload_file",
+            "name": "upload_file",
+            "value": "upload_file",
+            "text": [
+                {
+                    "tag": "div.h1",
+                    "className": "p-10px",
+                    "text": "Upload File"
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "div",
+                            "text": [
+                                {
+                                    "tag": "input",
+                                    "type": "file",
+                                    "name": "upload_file.file",
+                                    "id": "file"
+                                },
+                                {
+                                    "tag": "div.span",
+                                    "name": "upload_file.message",
+                                    "className": "small",
+                                    "text": "(Only pdf less than 10MB)"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "div",
+                    "className": "form-group",
+                    "text": [
+                        {
+                            "tag": "button",
+                            "className": "btn btn-primary",
+                            "name": "addentry.submitStatus",
+                            "text": "Submit"
+                        },
+                        {
+                            "tag": "span",
+                            "className": "pl-10px text-success",
+                            "name": "upload_file.complete-status",
+                            "text": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+];
 Template["goBackLink"] = [
     {
         "tag": "a",
@@ -116,6 +176,24 @@ Template["projectId"] = [
                 "tag": "div",
                 "name": "projectId.sub-link",
                 "text": []
+            },
+            {
+                "tag": "div.table.tbody.tr",
+                "text": [
+                    {
+                        "tag": "td",
+                        "text": {
+                            "tag": "div",
+                            "name": "projectId.uploaded_files",
+                            "text": []
+                        }
+                    },
+                    {
+                        "tag": "td",
+                        "name": "projectId.upload_file",
+                        "text": []
+                    }
+                ]
             }
         ]
     }
