@@ -94,18 +94,6 @@ DataHandlerAddFieldReport.extend({
         }
         return pattern;
     },
-    _generateFinalRedirectUrl: function(pattern, basepathname, dbview) {
-        if (!$S.isString(pattern)) {
-            return pattern;
-        }
-        try {
-            pattern = pattern.replaceAll("{basepathname}", basepathname);
-        } catch(e) {
-            AppHandler.TrackDebug("Error in generating final redirect link");
-            pattern = basepathname + "/" + dbview;
-        }
-        return pattern;
-    },
     saveData: function(formData, callback) {
         var resultData = ["addFieldReport.dateTime.field", "team", "addFieldReport.station",
                         "addFieldReport.device", "addFieldReport.userId.field",
@@ -116,7 +104,8 @@ DataHandlerAddFieldReport.extend({
         }
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
-        var successRedirectUrl = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectUrl", "");
+        var successRedirectPage = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectPage", "");
+        var successRedirectUrl = DataHandler.getPageUrlByPageName(successRedirectPage);
         var addTextFilenamePattern = $S.findParam([currentAppData, metaData, Config.tempConfig], "addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
         var username = AppHandler.GetUserData("username", "");
         var finalText = [], temp, i;
@@ -137,7 +126,6 @@ DataHandlerAddFieldReport.extend({
         var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, formData["addFieldReport.dateTime.field"], username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
-        successRedirectUrl = this._generateFinalRedirectUrl(successRedirectUrl, Config.basepathname, Config.dbview);
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {

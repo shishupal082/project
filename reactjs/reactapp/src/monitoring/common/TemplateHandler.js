@@ -210,7 +210,7 @@ TemplateHandler.extend({
         var template = TemplateHandler.getTemplate(pageName);
         for (var i = 0; i< homeFields.length; i++) {
             var linkTemplate = TemplateHandler.getTemplate("home.link");
-            TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "url", homeFields[i].toUrl);
+            TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "href", homeFields[i].toUrl);
             TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": homeFields[i].toText});
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }

@@ -55,7 +55,7 @@ DataHandlerV2.extend({
                 } else {
                     temp = $S.capitalize(key);
                 }
-                list2Data.push({"name": key, "toText": temp, "toUrl": key});
+                list2Data.push({"name": key, "toText": temp, "pageName": key});
             }
         }
         if ($S.isArray(redirectPages)) {

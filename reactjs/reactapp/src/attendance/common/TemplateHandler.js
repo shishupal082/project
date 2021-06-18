@@ -38,30 +38,33 @@ TemplateHandler.extend({
         var template = this.getTemplate("home");
         var validPages = Config.validPages;
         var linkTemplate, toUrl;
-        var currentAppId = DataHandler.getData("currentList1Id", "0");
         if (homeFields.length === 0) {
             return this.getTemplate("noDataFound");
         }
         for (var i = 0; i< homeFields.length; i++) {
-            if (validPages.indexOf(homeFields[i].toUrl) >= 0) {
-                toUrl = Config.basepathname + "/" + currentAppId + "/" + homeFields[i].toUrl;
-            } else {
+            toUrl = "";
+            if (validPages.indexOf(homeFields[i].pageName) >= 0) {
+                toUrl = DataHandler.getPageUrlByPageName(homeFields[i].pageName);
+            } else if ($S.isStringV2(homeFields[i].toUrl)) {
                 toUrl = homeFields[i].toUrl;
             }
-            linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText);
-            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+            if ($S.isStringV2(toUrl)) {
+                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText);
+                TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+            }
         }
         return template;
     },
     generateProjectHomeRenderField: function() {
-        var homeFields = DataHandler.getData("appControlData", []);
+        var appControlData = DataHandler.getData("appControlData", []);
         var template = this.getTemplate("home");
-        var linkTemplate;
-        if (homeFields.length === 0) {
+        var linkTemplate, toUrl;
+        if (appControlData.length === 0) {
             return this.getTemplate("noDataFound");
         }
-        for (var i = 0; i< homeFields.length; i++) {
-            linkTemplate = this._getLinkTemplateV2(Config.basepathname + "/" + homeFields[i].id, homeFields[i].name);
+        for (var i = 0; i< appControlData.length; i++) {
+            toUrl = DataHandler.getPageUrl(appControlData[i].id);
+            linkTemplate = this._getLinkTemplateV2(toUrl, appControlData[i].name);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         return template;

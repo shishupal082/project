@@ -80,7 +80,7 @@ Config.goBackLinkData = [
         "className": "position-absolute",
         "text": {
             "tag": "link",
-            "url": pages.home,
+            "href": pages.home,
             "text": {
                 "tag": "h2",
                 "text": [

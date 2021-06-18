@@ -1258,7 +1258,7 @@ Template["homeLink"] = [
     {
         "tag": "link",
         "name": "homeLink.toUrl",
-        "url": "",
+        "href": "",
         "text": {
             "tag": "button",
             "className": "list-group-item list-group-item-action list-group-item-primary text-center2",

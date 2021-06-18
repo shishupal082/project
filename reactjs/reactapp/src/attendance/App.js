@@ -77,14 +77,12 @@ class App extends React.Component {
     }
     gotoPage(pageName) {
         var pages = Config.pages;
-        var currentAppId = DataHandler.getData("currentList1Id", "0");
         if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(Config.basepathname + "/" + currentAppId + "/" +  pageName);
+            this.childAttribute["history"].push(DataHandler.getPageUrlByPageName(pageName));
         }
     }
     gotoPageV2(currentAppId) {
-        var currentPageName = DataHandler.getData("currentList2Id", "");
-        this.childAttribute["history"].push(Config.basepathname + "/" + currentAppId + "/" +  currentPageName);
+        this.childAttribute["history"].push(DataHandler.getPageUrlByAppId(currentAppId));
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);

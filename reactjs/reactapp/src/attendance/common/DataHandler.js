@@ -154,6 +154,25 @@ DataHandler.extend({
         }
         DataHandler.setData("firstTimeDataLoadStatus", "completed");
         return true;
+    },
+    getPageUrlByPageName: function(pageName) {
+        var appId = this.getData("currentList1Id", "");
+        return this.getPageUrl(appId, pageName);
+    },
+    getPageUrlByAppId: function(appId) {
+        var pageName = this.getData("currentList2Id", "");
+        return this.getPageUrl(appId, pageName);
+    },
+    getPageUrl: function(appId, pageName) {
+        var url = Config.basepathname;
+        if (!$S.isStringV2(appId)) {
+            appId = "0";
+        }
+        url += "/" + appId;
+        if ($S.isStringV2(pageName)) {
+            url += "/" + pageName;
+        }
+        return url;
     }
 });
 DataHandler.extend({

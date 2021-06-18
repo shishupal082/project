@@ -1540,7 +1540,7 @@ Account.extend({
         var template = DataHandler.getTemplate(pageName);
         for (var i = 0; i< homeFields.length; i++) {
             var linkTemplate = DataHandler.getTemplate("homeLink");
-            TemplateHelper.setTemplateAttr(linkTemplate, "homeLink.toUrl", "url", homeFields[i].toUrl);
+            TemplateHelper.setTemplateAttr(linkTemplate, "homeLink.toUrl", "href", homeFields[i].toUrl);
             TemplateHelper.updateTemplateText(linkTemplate, {"homeLink.toText": homeFields[i].toText});
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
