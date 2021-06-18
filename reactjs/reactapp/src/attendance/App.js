@@ -59,7 +59,6 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -68,7 +67,6 @@ class App extends React.Component {
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
-            getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -171,51 +169,10 @@ class App extends React.Component {
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
     }
-    removeTab(pageName) {
-        this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
-            if (pageName === el) {
-                return false;
-            }
-            return true;
-        });
-    }
-    addTab(pageName) {
-        if (this.appData.pageTab.indexOf(pageName) >= 0) {
-            return;
-        }
-        this.appData.pageTab.push(pageName);
-    }
-    getTabDisplayText(tabName) {
-        // return DataHandler.GetTabDisplayText(tabName);
-    }
     render() {
         var methods = this.methods;
         var commonData = this.appData;
         var pageUrl = Config.pageUrl;
-        // const entry = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.entry}/>);
-        // const update = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.update}/>);
-        // const summary = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.summary}/>);
-        // const ta = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.ta}/>);
-        // const dbview = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.dbview}/>);
-        // const custom_dbview = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.custom_dbview}/>);
-        // const dbview_summary = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.dbview_summary}/>);
-        // const add_field_report = (props) => (<AppComponent {...props}
-        //                     data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-        //                     currentPageName={Config.add_field_report}/>);
         var pageName = DataHandler.getData("currentList2Id", "");
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
@@ -241,17 +198,6 @@ class App extends React.Component {
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
-
-
-                // <Route path={pages.entry} component={entry}/>
-                // <Route path={pages.update} component={update}/>
-                // <Route path={pages.summary} component={summary}/>
-                // <Route path={pages.ta} component={ta}/>
-                // <Route path={pages.dbview} component={dbview}/>
-                // <Route path={pages.dbview_summary} component={dbview_summary}/>
-                // <Route path={pages.custom_dbview} component={custom_dbview}/>
-                // <Route path={pages.add_field_report} component={add_field_report}/>
-
         // return (
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );
