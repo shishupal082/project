@@ -90,16 +90,24 @@ TemplateHandler.extend({
         }
     },
     _getUploadFileTemplate: function(renderData) {
+        var tableEntry = this.getTemplate("uploaded_files");
         var uploadedFileData = [];
-        if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData)) {
-            uploadedFileData = renderData.uploadedFileData.map(function(el, i, arr){
-                return {
-                    "tag": "div.span",
-                    "text": el
-                };
-            });
+        var fileTemplate, temp, i, j;
+        var textReplaceParam = ["s_no", "uploadedBy", "fileName"];
+        if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
+            uploadedFileData.push(this.getTemplate("uploaded_files.details.heading"));
+            for(i=0; i<renderData.uploadedFileData.length; i++) {
+                fileTemplate = this.getTemplate("uploaded_files.details.fileInfo");
+                temp = {"s_no": i+1};
+                for (j=1; j<textReplaceParam.length; j++) {
+                    temp[textReplaceParam[j]] = renderData.uploadedFileData[i][textReplaceParam[j]];
+                }
+                TemplateHelper.updateTemplateText(fileTemplate, temp);
+                uploadedFileData.push(fileTemplate);
+            }
         }
-        return uploadedFileData;
+        TemplateHelper.addItemInTextArray(tableEntry, "uploaded_files.entry", uploadedFileData);
+        return tableEntry;
     },
     generateProjectDetailsPage: function(renderData) {
         if (!$S.isObject(renderData)) {

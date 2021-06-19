@@ -433,6 +433,32 @@ DataHandlerV2.extend({
         }
         return {"count": count, "dateResult": dateResult};
     },
+    _getUploadFileInfo: function() {
+        var fileInfo = DataHandler.getData("uploadedFileData", []);
+        var loginUsername = AppHandler.GetUserData("username", "");
+        var result = [], userName, fileName, filePath, isOwner, temp;
+        var viewFileUrl, downloadFileUrl, deleteFileValue;
+        if ($S.isArray(fileInfo)) {
+            for(var i=0; i<fileInfo.length; i++) {
+                if (!$S.isString(fileInfo[i])) {
+                    continue;
+                }
+                temp = fileInfo[i].split("/");
+                if (temp.length !== 2) {
+                    continue;
+                }
+                userName = temp[0];
+                fileName = temp[1];
+                filePath = fileInfo[i];
+                isOwner = userName === loginUsername;
+                viewFileUrl = Config.basepathname + "/view/file/" + filePath + "?u=" + loginUsername;
+                downloadFileUrl = Config.basepathname + "/download/file/" + filePath + "?u=" + loginUsername;
+                deleteFileValue = filePath;
+                result.push({"uploadedBy": userName, "isOwner": isOwner, "fileName": fileName, "viewFileUrl": viewFileUrl, "downloadFileUrl": downloadFileUrl, "deleteFileValue": deleteFileValue});
+            }
+        }
+        return result;
+    },
     getProjectData: function() {
         var currentPId = DataHandler.getPathParamsData("pid");
         var projectTable = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
@@ -442,7 +468,7 @@ DataHandlerV2.extend({
             response["reason"] = "Invalid Project Id: " + currentPId;
         } else {
             response["pName"] = projectTable[0].pName;
-            response["uploadedFileData"] = DataHandler.getData("uploadedFileData", []);
+            response["uploadedFileData"] = this._getUploadFileInfo();
         }
         return response;
     },

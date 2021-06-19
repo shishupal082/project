@@ -78,6 +78,97 @@ Template["invalid-data"] = [
         }
     }
 ];
+Template["uploaded_files"] = [
+    {
+        "tag": "table.tbody",
+        "name": "uploaded_files.entry",
+        "className": "table-bordered table-bordered-dark table-striped table-padded-px-5",
+        "text": []
+    }
+];
+Template["uploaded_files.details.heading"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td.b",
+                "text": "S.No."
+            },
+            {
+                "tag": "td.b",
+                "text": "Uploaded By"
+            },
+            {
+                "tag": "td.b",
+                "text": "File Details"
+            }
+        ]
+    }
+];
+Template["uploaded_files.details.fileInfo"] = [
+    {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "s_no",
+                "text": "S.No."
+            },
+            {
+                "tag": "td",
+                "name": "uploadedBy",
+                "text": "Uploaded By"
+            },
+            {
+                "tag": "td",
+                "text": [
+                    {
+                        "tag": "div",
+                        "name": "fileName",
+                        "text": ""
+                    },
+                    {
+                        "tag": "div",
+                        "text": [
+                            {
+                                "tag": "button",
+                                "className": "btn btn-link pt-1px pl-0",
+                                "text": "View"
+                            },
+                            {
+                                "tag": "a",
+                                "target": "_blank",
+                                "href": "",
+                                "text": "Open in new tab"
+                            },
+                            {
+                                "tag": "span",
+                                "className": "pl-10px",
+                                "text": ""
+                            },
+                            {
+                                "tag": "a",
+                                "href": "",
+                                "text": "Download"
+                            },
+                            {
+                                "tag": "form",
+                                "name": "delete_file.form",
+                                "value": "delete_file.form",
+                                "className": "list-inline-item",
+                                "text": {
+                                    "tag": "button",
+                                    "className": "btn btn-link pt-1px",
+                                    "text": "Delete"
+                                }
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+];
 Template["upload_file"] = [
     {
         "tag": "div.div",
@@ -191,6 +282,7 @@ Template["projectId"] = [
                     {
                         "tag": "td",
                         "name": "projectId.upload_file",
+                        "className": "align-top",
                         "text": []
                     }
                 ]
