@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import $S from "../../../interface/stack.js";
+import $S from "../../interface/stack.js";
 
 class Page1 extends React.Component {
     constructor(props) {
@@ -24,6 +24,12 @@ class Page1 extends React.Component {
             </Link></div>
             <div><Link to="/page-2">
                 <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Page-2</button>
+            </Link></div>
+            <div><Link to="/page-3">
+                <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Page-3</button>
+            </Link></div>
+            <div><Link to="/page-4">
+                <button className="list-group-item list-group-item-action list-group-item-primary text-center2">Page-4</button>
             </Link></div>
         </div>);
     }

@@ -38,21 +38,21 @@ DataHandler.extend({
 });
 DataHandler.extend({
     getPages: function() {
-        var pages = {"home": "home", "page1": "page1", "page2": "page2", "noMatch": "noMatch"};
+        var pages = {"home": "home", "page1": "page1", "page2": "page2", "page3": "page3", "page4": "page4", "noMatch": "noMatch"};
         return pages;
     },
     getPageUrl: function() {
-        var pageUrl = {"home": "/", "page1": "/page-1", "page2": "/page-2"};
+        var pageUrl = {"home": "/", "page1": "/page-1", "page2": "/page-2", "page3": "/page-3", "page4": "/page-4"};
         return pageUrl;
     }
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
-        $S.log("DataHandler: AppDidMount");
+        $S.log("DataHandler:AppDidMount");
         this.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, pageName) {
-        $S.log("DataHandler: PageComponentDidMount");
+        $S.log("DataHandler:PageComponentDidMount");
         var oldPageName = DataHandler.getData("pageName", "");
         if (oldPageName !== pageName) {
             this.setData("pageName", pageName);
@@ -94,9 +94,9 @@ DataHandler.extend({
 
             break;
             case "page1":
-            break;
             case "page2":
-                renderFieldRow.push(AppHandler.getTemplate(Template, "page2"));
+            case "page3":
+            case "page4":
             break;
             default:
                 renderFieldRow = Template["noMatch"];

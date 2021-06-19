@@ -1,12 +1,12 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import $S from "../../interface/stack.js";
+import $S from "../interface/stack.js";
 
-import AppHandler from "../../common/app/common/AppHandler";
+import AppHandler from "../common/app/common/AppHandler";
 
-import AppComponent from "../../common/app/components/AppComponent";
+import AppComponent from "../common/app/components/AppComponent";
 
-import DataHandler from "../common/DataHandler";
+import DataHandler from "./common/DataHandler";
 
 import Page1 from "./components/Page1";
 
@@ -60,6 +60,7 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName) {
+        $S.log("App:pageComponentDidMount");
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
@@ -75,6 +76,15 @@ class App extends React.Component {
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={pages.noMatch}/>);
+        const page3 = (props) => (<Page1 {...props} heading="Page 3"/>);
+        const page4 = (props) => (<Page1 {...props} heading="Page 4"/>);
+        /**
+        When going from home to page-1 or page-2 --> page-1 componentDidMount will fire
+        When going from page-1 to page-2 --> page-1 componentDidMount will not fire
+            To force fire componentDidMount
+                - define each component seprately and pass as props.parameter in Route component like page-3
+        When going from page-1 or page-2 to page-3 or page-4 --> page-1 componentDidMount will fire
+        **/
         return (<BrowserRouter>
             <Switch>
                 <Route exact path="/"
@@ -92,12 +102,11 @@ class App extends React.Component {
                         <Page1 {...props} heading="Page 2"/>
                     )}
                 />
+                <Route exact path="/page-3" component={page3}/>
+                <Route exact path="/page-4" component={page4}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
-        // return (
-        //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
-        // );
     }
 }
 
