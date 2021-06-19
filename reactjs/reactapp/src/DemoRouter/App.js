@@ -84,6 +84,8 @@ class App extends React.Component {
             To force fire componentDidMount
                 - define each component seprately and pass as props.parameter in Route component like page-3
         When going from page-1 or page-2 to page-3 or page-4 --> page-1 componentDidMount will fire
+        When toggeling b/w page-1 and page-2 --> page-1 componentDidUpdate will fire
+        Note: At a time either componentDidMount or componentDidUpdate will fire but not both
         **/
         return (<BrowserRouter>
             <Switch>

@@ -13,6 +13,9 @@ class Page1 extends React.Component {
     componentDidMount() {
         $S.log("Page1:componentDidMount");
     }
+    componentDidUpdate() {
+        $S.log("Page1:componentDidUpdate");
+    }
     render() {
         return (<div className="container">
             <center>
