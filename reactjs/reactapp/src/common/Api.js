@@ -126,7 +126,7 @@ Api.extend({
 
 childGenerator = {
     "link": function(props, data, reactChildText, key) {
-        return <Link key={key} to={data.href}>{reactChildText}</Link>;
+        return <Link key={key} to={data.href} className={data.className}>{reactChildText}</Link>;
     },
     "a": function(props, data, reactChildText, key) {
         var target = "";

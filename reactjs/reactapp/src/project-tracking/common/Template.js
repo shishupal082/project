@@ -140,7 +140,7 @@ Template["upload_file"] = [
 ];
 Template["goBackLink"] = [
     {
-        "tag": "a",
+        "tag": "link",
         "name": "goBackLink.a",
         "href": "",
         "text": {
@@ -295,7 +295,7 @@ Template["home"] = [
 ];
 Template["link-field"] = [
     {
-        "tag": "a",
+        "tag": "link",
         "name": "link-field.url",
         "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
         "href": "",
