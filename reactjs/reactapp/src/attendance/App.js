@@ -152,7 +152,6 @@ class App extends React.Component {
     pageComponentDidMount(pageName, pathParams) {
         var pid = "0";
         if ([Config.projectHome, Config.noMatch].indexOf(pageName) < 0) {
-            pageName = Config.home;
             if ($S.isStringV2(pathParams.pageName)) {
                 pageName = pathParams.pageName;
             }
@@ -174,27 +173,21 @@ class App extends React.Component {
         var commonData = this.appData;
         var pageUrl = Config.pageUrl;
         var pageName = DataHandler.getData("currentList2Id", "");
+        const projectHome = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>);
+        const home = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>);
+        const otherPage = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+                        renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
 
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pageUrl.projectHome}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>
-                    )}
-                />
-                <Route exact path={pageUrl.home}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>
-                    )}
-                />
-                <Route exact path={pageUrl.page}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>
-                    )}
-                />
+                <Route exact path={pageUrl.projectHome} component={projectHome}/>
+                <Route exact path={pageUrl.home} component={home}/>
+                <Route exact path={pageUrl.page} component={otherPage}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

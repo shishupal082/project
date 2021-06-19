@@ -72,10 +72,54 @@ Template["page1"] = [
         "text": "Page 1"
     }
 ];
+Template["page2-bcp"] = [
+    {
+        "tag": "div",
+        "className": "container",
+        "text": [
+            {
+                "tag": "link",
+                "name": "home.link.toUrl",
+                "href": "/",
+                "text": {
+                    "tag": "button",
+                    "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+                    "name": "home.link.toText",
+                    "text": "Home"
+                }
+            },
+            {
+                "tag": "link",
+                "name": "home.link.toUrl",
+                "href": "/page-1",
+                "text": {
+                    "tag": "button",
+                    "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+                    "name": "home.link.toText",
+                    "text": "Page 1"
+                }
+            }
+        ]
+    }
+];
 Template["page2"] = [
     {
-        "tag": "center.h1",
-        "text": "Page 2"
+        "tag": "div",
+        "className": "container",
+        "text": [
+            {
+                "tag": "link",
+                "name": "home.link.toUrl",
+                "href": "/",
+                "text": "Home"
+            },
+            {
+                "tag": "link",
+                "name": "home.link.toUrl",
+                "href": "/page-1",
+                "text": "Page 1"
+            }
+        ]
     }
 ];
 export default Template;

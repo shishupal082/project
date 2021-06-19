@@ -17,6 +17,9 @@ class AppComponentWrapper extends React.Component {
             isLoaded: false
         };
     }
+    componentDidMount() {
+        $S.log("AppComponentWrapper:componentDidMount");
+    }
     render() {
         var pageData = Api.generateFields(this.props, this.props.renderFieldRow, 0);
         var appComponentClassName = this.props.currentPageName;

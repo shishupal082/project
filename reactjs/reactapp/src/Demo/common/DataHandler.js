@@ -55,7 +55,8 @@ DataHandler.extend({
         $S.log("DataHandler: PageComponentDidMount");
         var oldPageName = DataHandler.getData("pageName", "");
         if (oldPageName !== pageName) {
-            this.setData("pageName", pageName)
+            this.setData("pageName", pageName);
+            this.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     }
 });
@@ -64,16 +65,12 @@ DataHandler.extend({
         var pageName = this.getData("pageName", "");
         var renderData, pageUrl, key;
         switch(pageName) {
-            case "page-1":
-            break;
-            case "page-2":
-            break;
             case "home":
                 pageUrl = this.getPageUrl();
                 renderData = [];
                 for (key in pageUrl) {
                     if (key !== "home") {
-                        renderData.push({"href": pageUrl[key], "toText": key});
+                        renderData.push({"href": pageUrl[key], "toText": $S.capitalize(key)});
                     }
                 }
             break;
@@ -87,12 +84,6 @@ DataHandler.extend({
         var pageName = this.getData("pageName", "");
         var renderFieldRow = [], i, linkTemplate;
         switch(pageName) {
-            case "page1":
-                renderFieldRow.push(AppHandler.getTemplate(Template, "page1"));
-            break;
-            case "page2":
-                renderFieldRow.push(AppHandler.getTemplate(Template, "page2"));
-            break;
             case "home":
                 for (i=0; i<renderData.length; i++) {
                     linkTemplate = AppHandler.getTemplate(Template, "home.link");
@@ -100,6 +91,12 @@ DataHandler.extend({
                     TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": renderData[i].toText});
                     renderFieldRow.push(linkTemplate);
                 }
+
+            break;
+            case "page1":
+            break;
+            case "page2":
+                renderFieldRow.push(AppHandler.getTemplate(Template, "page2"));
             break;
             default:
                 renderFieldRow = Template["noMatch"];

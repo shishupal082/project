@@ -8,6 +8,8 @@ import AppComponent from "../../common/app/components/AppComponent";
 
 import DataHandler from "../common/DataHandler";
 
+import Page1 from "./components/Page1";
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -69,26 +71,25 @@ class App extends React.Component {
     render() {
         var methods = this.methods;
         var commonData = this.appData;
-        var pageUrl = DataHandler.getPageUrl();
         var pages = DataHandler.getPages();
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={pages.noMatch}/>);
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pageUrl.home}
+                <Route exact path="/"
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pages.home}/>
                     )}
                 />
-                <Route exact path={pageUrl.page1}
+                <Route exact path="/page-1"
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pages.page1}/>
+                        <Page1 {...props} heading="Page 1"/>
                     )}
                 />
-                <Route exact path={pageUrl.page2}
+                <Route exact path="/page-2"
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={pages.page2}/>
+                        <Page1 {...props} heading="Page 2"/>
                     )}
                 />
                 <Route component={noMatch}/>

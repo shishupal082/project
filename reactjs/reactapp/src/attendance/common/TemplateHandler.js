@@ -27,8 +27,8 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 $S.extendObject(TemplateHandler);
 
 TemplateHandler.extend({
-    _getLinkTemplateV2: function(toUrl, toText) {
-        var linkTemplate = TemplateHandler.getTemplate("home.a");
+    _getLinkTemplateV2: function(toUrl, toText, templateName) {
+        var linkTemplate = TemplateHandler.getTemplate(templateName);
         TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "href", toUrl);
         TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": toText});
         return linkTemplate;
@@ -49,7 +49,7 @@ TemplateHandler.extend({
                 toUrl = homeFields[i].toUrl;
             }
             if ($S.isStringV2(toUrl)) {
-                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText);
+                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText, "home.link");
                 TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
             }
         }
@@ -64,7 +64,7 @@ TemplateHandler.extend({
         }
         for (var i = 0; i< appControlData.length; i++) {
             toUrl = DataHandler.getPageUrl(appControlData[i].id);
-            linkTemplate = this._getLinkTemplateV2(toUrl, appControlData[i].name);
+            linkTemplate = this._getLinkTemplateV2(toUrl, appControlData[i].name, "home.a");
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         return template;
