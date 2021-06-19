@@ -150,16 +150,16 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName, pathParams) {
-        var pid = "0";
-        if ([Config.projectHome, Config.noMatch].indexOf(pageName) < 0) {
+        var appId = "";
+        if ([Config.projectHome].indexOf(pageName) < 0) {
             if ($S.isStringV2(pathParams.pageName)) {
                 pageName = pathParams.pageName;
             }
             if ($S.isStringV2(pathParams.pid)) {
-                pid = pathParams.pid;
+                appId = pathParams.pid;
             }
         }
-        DataHandler.setData("currentList1Id", pid);
+        DataHandler.SetAppId(this.appStateCallback, this.appDataCallback, appId);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {

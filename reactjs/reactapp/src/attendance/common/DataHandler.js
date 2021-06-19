@@ -443,7 +443,9 @@ DataHandler.extend({
                 $S.callMethod(callback);
             });
         });
-    },
+    }
+});
+DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
@@ -451,9 +453,7 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
-    }
-});
-DataHandler.extend({
+    },
     OnReloadClick: function(appStateCallback, appDataCallback, currentList1Id) {
         AppHandler.TrackEvent("reloadClick");
         DataHandler.loadDataByAppId(function() {
@@ -465,6 +465,15 @@ DataHandler.extend({
         AppHandler.TrackDropdownChange("list1", list1Id);
         DataHandler.setData("currentList1Id", list1Id);
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
+    },
+    SetAppId: function(appStateCallback, appDataCallback, appId) {
+        var oldAppId = this.getData("currentList1Id", "");
+        this.setData("currentList1Id", appId);
+        if (oldAppId !== appId) {
+            DataHandler.loadDataByAppId(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;

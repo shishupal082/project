@@ -64,7 +64,7 @@ TemplateHandler.extend({
         }
         for (var i = 0; i< appControlData.length; i++) {
             toUrl = DataHandler.getPageUrl(appControlData[i].id);
-            linkTemplate = this._getLinkTemplateV2(toUrl, appControlData[i].name, "home.a");
+            linkTemplate = this._getLinkTemplateV2(toUrl, appControlData[i].name, "home.link");
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         return template;
