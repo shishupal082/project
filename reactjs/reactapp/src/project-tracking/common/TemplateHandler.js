@@ -129,11 +129,10 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }
-
-        var uploadFileTemplate = this.getTemplate("upload_file");
-        var uploadFileData = this._getUploadFileTemplate(renderData);
-        TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
-        TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
+        // var uploadFileTemplate = this.getTemplate("upload_file");
+        // var uploadFileData = this._getUploadFileTemplate(renderData);
+        // TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
+        // TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         return template;
     },
     getAddNewWorkTemplate: function() {
