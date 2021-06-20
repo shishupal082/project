@@ -1,42 +1,42 @@
-import $S from "../../interface/stack.js";
-import DataHandler from "./DataHandler";
-import Config from "./Config";
+import $S from "../../../interface/stack.js";
+import AppHandler from "./AppHandler";
+import TemplateHelper from "../../TemplateHelper";
 
-
-import Api from "../../common/Api";
-import AppHandler from "../../common/app/common/AppHandler";
-import TemplateHelper from "../../common/TemplateHelper";
-
-var DataHandlerDBView;
+var DBViewDataHandler;
 
 (function($S){
-DataHandlerDBView = function(arg) {
-    return new DataHandlerDBView.fn.init(arg);
+
+var CurrentData = $S.getDataObj();
+var keys = ["tableData", "resultPattern"];
+CurrentData.setKeys(keys);
+
+DBViewDataHandler = function(arg) {
+    return new DBViewDataHandler.fn.init(arg);
 };
-DataHandlerDBView.fn = DataHandlerDBView.prototype = {
-    constructor: DataHandlerDBView,
+DBViewDataHandler.fn = DBViewDataHandler.prototype = {
+    constructor: DBViewDataHandler,
     init: function(arg) {
         this.arg = arg;
         return this;
     }
 };
 
-$S.extendObject(DataHandlerDBView);
+$S.extendObject(DBViewDataHandler);
 
-DataHandlerDBView.extend({
-    _isValidTableEntry: function(dbApi) {
-        if (!$S.isObject(dbApi)) {
-            return false;
-        }
-        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
-            return false;
-        }
-        if (!$S.isArray(dbApi.apis)) {
-            return false;
-        }
-        return true;
+DBViewDataHandler.extend({
+    setData: function(key, value, isDirect) {
+        return CurrentData.setData(key, value, isDirect);
     },
-    _getTableData: function(request) {
+    getData: function(key, defaultValue, isDirect) {
+        return CurrentData.getData(key, defaultValue, isDirect);
+    },
+    setResultPattern: function(resultPattern) {
+        return this.setData("resultPattern", resultPattern);
+    },
+    setTableData: function(resultPattern) {
+        return this.setData("tableData", resultPattern);
+    },
+    GenerateTableData: function(request) {
         var tableData = {}, i, temp;
         var wordBreak;
         if ($S.isArray(request)) {
@@ -68,91 +68,34 @@ DataHandlerDBView.extend({
             }
             tableData[key]["tableData"] = AppHandler.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
         }
-        DataHandlerDBView._handleDefaultSorting(tableData);
         return tableData;
     },
-    _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, temp, urls;
-        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
-            for(i=0; i<dbDataApis.length; i++) {
-                if (!this._isValidTableEntry(dbDataApis[i])) {
-                    continue;
-                }
-                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
-                    if ($S.isString(el) && el.length > 0) {
-                        return true;
-                    }
-                    return false;
-                });
-                urls = urls.map(function(el, j, arr) {
-                    if ($S.isString(el)) {
-                        if (el.split("?").length > 1) {
-                            return Config.baseApi + el + "&requestId=" + Config.requestId;
-                        }
-                    }
-                    return Config.baseApi + el + "?requestId=" + Config.requestId;
-                });
-                if (urls.length < 1) {
-                    continue;
-                }
-                temp = {};
-                temp.apis = dbDataApis[i].apis;
-                temp.dataIndex = dbDataApis[i].dataIndex;
-                temp.wordBreak = dbDataApis[i].wordBreak;
-                temp.apiName = dbDataApis[i].tableName.trim();
-                temp.requestMethod = Api.getAjaxApiCallMethodV2();
-                temp.url = urls;
-                request.push(temp);
-            }
-        }
-        if (request.length < 1) {
-            $S.callMethod(callback);
-        } else {
-            AppHandler.LoadDataFromRequestApi(request, function() {
-                if ($S.isFunction(callback)) {
-                    callback(request);
-                }
-            });
-        }
-    },
-    generateFinalTable: function(currentList2Id, resultCriteria) {
-        var tempDbViewData = DataHandler.getData("dbViewData", {});
-        var attendanceData = DataHandler.getData("attendanceData", {});
-        var requiredDataTable = DataHandler.getAppData("requiredDataTable." + currentList2Id, []);
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var resultPatternKey = "resultPattern"+$S.capitalize(currentList2Id);
-        var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
+    GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
         var tempJoinResult = [];
         var force1stEntry, isNotMatching;
-        if ([Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
-            resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
-            resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
-        }
         if (!$S.isArray(resultPattern)) {
             resultPattern = [];
         }
         if (!$S.isArray(resultCriteria)) {
             resultCriteria = [];
         }
-        var dbViewData = {};
+        var finalDbViewData = {};
         if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
-            tempDbViewData = Object.assign(tempDbViewData, attendanceData);
-            temp = Object.keys(tempDbViewData);
+            temp = Object.keys(dbViewData);
             for (i=0; i<requiredDataTable.length; i++) {
                 if (temp.indexOf(requiredDataTable[i]) >= 0) {
-                    dbViewData[requiredDataTable[i]] = tempDbViewData[requiredDataTable[i]];
+                    finalDbViewData[requiredDataTable[i]] = dbViewData[requiredDataTable[i]];
                 }
             }
         } else {
-            dbViewData = tempDbViewData;
+            finalDbViewData = dbViewData;
         }
         if (resultCriteria.length === 0) {
-            if ($S.isObject(dbViewData)) {
-                for(tableName in dbViewData) {
-                    t1 = dbViewData[tableName].tableData;
+            if ($S.isObject(finalDbViewData)) {
+                for(tableName in finalDbViewData) {
+                    t1 = finalDbViewData[tableName].tableData;
                     if ($S.isArray(t1)) {
                         for(i=0; i<t1.length; i++) {
                             temp = $S.clone(resultPattern);
@@ -178,11 +121,11 @@ DataHandlerDBView.extend({
                         t2Name = values[1].tableName;
                         t1 = null;
                         t2 = null;
-                        if ($S.isObject(dbViewData[t1Name])) {
-                            t1 = dbViewData[t1Name].tableData;
+                        if ($S.isObject(finalDbViewData[t1Name])) {
+                            t1 = finalDbViewData[t1Name].tableData;
                         }
-                        if ($S.isObject(dbViewData[t2Name])) {
-                            t2 = dbViewData[t2Name].tableData;
+                        if ($S.isObject(finalDbViewData[t2Name])) {
+                            t2 = finalDbViewData[t2Name].tableData;
                         }
                         if (!$S.isArray(t1)) {
                             continue;
@@ -247,26 +190,23 @@ DataHandlerDBView.extend({
                 finalTable.push(temp);
             }
         }
-        DataHandler.setData("dbViewDataTable", finalTable);
+        return finalTable;
     },
-    _handleDefaultSorting: function(tableData) {
+    SortTableData: function(tableData, sortingField) {
         if (!$S.isObject(tableData)) {
             return;
         }
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
-        var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         var i, j, tableName, temp;
-        if ($S.isArray(defaultSorting)) {
-            for(i=0; i<defaultSorting.length; i++) {
-                if ($S.isObject(defaultSorting[i]) && $S.isString(defaultSorting[i].table)) {
-                    if (defaultSorting[i].table.length === 0) {
+        if ($S.isArray(sortingField)) {
+            for(i=0; i<sortingField.length; i++) {
+                if ($S.isObject(sortingField[i]) && $S.isString(sortingField[i].table)) {
+                    if (sortingField[i].table.length === 0) {
                         continue;
                     }
-                    if (!$S.isString(defaultSorting[i].index)) {
+                    if (!$S.isString(sortingField[i].index)) {
                         continue;
                     }
-                    tableName = defaultSorting[i].table;
+                    tableName = sortingField[i].table;
                     if (!$S.isObject(tableData[tableName])) {
                         continue;
                     }
@@ -279,50 +219,15 @@ DataHandlerDBView.extend({
                             temp.push(tableData[tableName].tableData[j]);
                         }
                     }
-                    tableData[tableName].tableData = $S.sortResult(temp, defaultSorting[i].sortableValue, defaultSorting[i].index, "name");
+                    tableData[tableName].tableData = $S.sortResult(temp, sortingField[i].sortableValue, sortingField[i].index, "name");
                 }
             }
         }
-    },
-    handlePageLoad: function(dbDataApis, callback) {
-        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
-        var status = DataHandler.getDataLoadStatusByKey(keys);
-        var tableData;
-        if (status === "completed") {
-            status = DataHandler.getData("dbViewDataLoadStatus");
-            if (status === "not-started") {
-                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
-                this._loadDBViewData(dbDataApis, function(request) {
-                    DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    tableData = DataHandlerDBView._getTableData(request);
-                    DataHandler.setData("dbViewData", tableData);
-                    $S.callMethod(callback);
-                });
-            } else {
-                $S.callMethod(callback);
-            }
-        }
-    },
-    loadAttendanceData: function(attendanceDataApis, callback) {
-        var tableData;
-        DataHandlerDBView._loadDBViewData(attendanceDataApis, function(request) {
-            tableData = DataHandlerDBView._getTableData(request);
-            DataHandler.setData("attendanceData", tableData);
-            $S.callMethod(callback);
-        });
+        return tableData;
     }
 });
 var GlobalArray = [];
-DataHandlerDBView.extend({
-    generateFilterOptions: function() {
-        var currentAppData = DataHandler.getCurrentAppData();
-        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var metaData = DataHandler.getData("metaData", {});
-        var filterSelectedValues = DataHandler.getData("filterValues", {});
-        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
-        DataHandler.setData("filterOptions", filterOptions);
-        return dbViewDataTable;
-    },
+DBViewDataHandler.extend({
     _convertRenderToDbData: function(renderData) {
         if (!$S.isArray(renderData)) {
             return $S.clone(GlobalArray);
@@ -404,8 +309,7 @@ DataHandlerDBView.extend({
         }
         return renderData;
     },
-    _handleDateParameter: function(renderData, currentList3Data, dateParameterField) {
-        var dateSelect = DataHandler.getData("date-select");
+    _handleDateParameter: function(renderData, currentList3Data, dateParameterField, dateSelect) {
         if (!$S.isString(dateSelect) || dateSelect.length < 1) {
             return renderData;
         }
@@ -465,7 +369,7 @@ DataHandlerDBView.extend({
                 }
             }
         }
-        var dateParameters = DataHandler.GetDataParameterFromDate(dateRange);
+        var dateParameters = AppHandler.GetDataParameterFromDate(dateRange);
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateParameters = dateParameters[dateSelect];
             renderData = this._handleDateParameterV4(renderData, key, dateParameters);
@@ -492,7 +396,7 @@ DataHandlerDBView.extend({
         }
         return renderData;
     },
-    GenerateFinalDBViewData: function(dbViewData, currentList3Data, dateParameterField) {
+    GenerateFinalDBViewData: function(dbViewData, currentList3Data, dateParameterField, dateSelect) {
         var finalDataV2 = [], temp3, temp4;
         var list3Data = currentList3Data;
         var l3Data;
@@ -537,7 +441,7 @@ DataHandlerDBView.extend({
                 }
                 temp4 = null;
             }
-            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data, dateParameterField);
+            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data, dateParameterField, dateSelect);
             return finalDataV2;
         } else {
             return [{"text": dbViewData}];
@@ -547,4 +451,4 @@ DataHandlerDBView.extend({
 
 })($S);
 
-export default DataHandlerDBView;
+export default DBViewDataHandler;

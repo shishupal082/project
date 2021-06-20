@@ -214,6 +214,31 @@ AppHandler.extend({
         combinedDateSelectionParameter["yearly"] = yearlyDateSelection;
         combinedDateSelectionParameter["all"] = allDateSelection;
         return combinedDateSelectionParameter;
+    },
+    GetDataParameterFromDate: function(dateRange) {
+        var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
+        var i;
+        if ($S.isArray(dateRange) && dateRange.length === 2) {
+            allDate = this.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
+            startLimit = dateRange[0];
+            endLimit = dateRange[1];
+            tempAllDate = allDate.map(function(el, index, arr) {
+                return el.dateStr;
+            });
+            arrangedDate = this.generateDateSelectionParameter(tempAllDate);
+            if ($S.isObject(arrangedDate)) {
+                for(var key in arrangedDate) {
+                    if ($S.isArray(arrangedDate[key])) {
+                        for (i=0; i<arrangedDate[key].length; i++) {
+                            if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
+                                arrangedDate[key][i].allDate = this.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return arrangedDate;
     }
 });
 AppHandler.extend({

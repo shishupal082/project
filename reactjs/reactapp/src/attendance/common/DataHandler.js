@@ -1,14 +1,15 @@
 import $S from "../../interface/stack.js";
 // import $$$ from '../../interface/global';
 import Config from "./Config";
-import DataHandlerV2 from "./DataHandlerV2";
 import DataHandlerTA from "./DataHandlerTA";
-import DataHandlerDBView from "./DataHandlerDBView";
+import DataHandlerV2 from "./DataHandlerV2";
+import DataHandlerV3 from "./DataHandlerV3";
 import DataHandlerAddFieldReport from "./DataHandlerAddFieldReport";
 import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 
 var DataHandler;
 
@@ -176,37 +177,37 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    GetDataParameterFromDate: function(dateRange) {
-        var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
-        var i;
-        if ($S.isArray(dateRange) && dateRange.length === 2) {
-            allDate = AppHandler.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
-            startLimit = dateRange[0];
-            endLimit = dateRange[1];
-            tempAllDate = allDate.map(function(el, index, arr) {
-                return el.dateStr;
-            });
-            arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
-            if ($S.isObject(arrangedDate)) {
-                for(var key in arrangedDate) {
-                    if ($S.isArray(arrangedDate[key])) {
-                        for (i=0; i<arrangedDate[key].length; i++) {
-                            if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
-                                arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return arrangedDate;
-    },
+    // GetDataParameterFromDate: function(dateRange) {
+    //     var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
+    //     var i;
+    //     if ($S.isArray(dateRange) && dateRange.length === 2) {
+    //         allDate = AppHandler.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
+    //         startLimit = dateRange[0];
+    //         endLimit = dateRange[1];
+    //         tempAllDate = allDate.map(function(el, index, arr) {
+    //             return el.dateStr;
+    //         });
+    //         arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
+    //         if ($S.isObject(arrangedDate)) {
+    //             for(var key in arrangedDate) {
+    //                 if ($S.isArray(arrangedDate[key])) {
+    //                     for (i=0; i<arrangedDate[key].length; i++) {
+    //                         if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
+    //                             arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return arrangedDate;
+    // },
     generateDateParameter: function() {
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var selectedDateRange = this.getCurrentList3Data();
         var dateRange = $S.findParam([selectedDateRange, currentAppData, metaData], "dateRange", []);
-        DataHandler.setData("dateParameters", this.GetDataParameterFromDate(dateRange));
+        DataHandler.setData("dateParameters", AppHandler.GetDataParameterFromDate(dateRange));
     },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
@@ -224,7 +225,7 @@ DataHandler.extend({
     },
     getCurrentList3Data: function() {
         var list3Id = this.getData("currentList3Id", "");
-        var list3Data = DataHandlerV2.getList3Data();
+        var list3Data = DataHandlerV3.getList3Data();
         var currentList3Data = {};
         if ($S.isArray(list3Data)) {
             for(var i=0; i<list3Data.length; i++) {
@@ -379,7 +380,7 @@ DataHandler.extend({
         AppHandler.LoadDataFromRequestApi(request, function() {
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
-                    DataHandlerV2.handleMetaDataLoad(request[i].response);
+                    DataHandlerV3.handleMetaDataLoad(request[i].response);
                 }
             }
             DataHandler.generateDateParameter();
@@ -393,12 +394,12 @@ DataHandler.extend({
         var attendanceDbTable;
         if ($S.isBooleanTrue(isAttendanceDataSameAsDbData)) {
             attendanceDbTable = DataHandler.getData("dbViewData", []);
-            DataHandlerV2.handleAttendanceDataLoad(attendanceDbTable);
+            DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
             $S.callMethod(callback);
         } else {
-            DataHandlerDBView.loadAttendanceData(attendanceDataApis, function() {
+            DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
                 attendanceDbTable = DataHandler.getData("attendanceData", []);
-                DataHandlerV2.handleAttendanceDataLoad(attendanceDbTable);
+                DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
                 $S.callMethod(callback);
             });
         }
@@ -410,8 +411,8 @@ DataHandler.extend({
         if ($S.isArray(pageResultCriteria)) {
             resultCriteria = pageResultCriteria;
         }
-        DataHandlerDBView.generateFinalTable(currentList2Id, resultCriteria);
-        DataHandlerDBView.generateFilterOptions();
+        DataHandlerV3.generateFinalTable(currentList2Id, resultCriteria);
+        DataHandlerV3.generateFilterOptions();
     },
     handlePageRouting: function(reason, callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
@@ -420,7 +421,7 @@ DataHandler.extend({
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
         if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
-            DataHandlerDBView.handlePageLoad(dbDataApis, function() {
+            DataHandlerV3.handlePageLoad(dbDataApis, function() {
                 DataHandler.loadAttendanceData(attendanceDataApis, function() {
                     DataHandler.handleApiDataLoad();
                     $S.callMethod(callback);
@@ -478,7 +479,7 @@ DataHandler.extend({
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;
         if (!$S.isString(pages[list2Id])) {
-            var currentList2Data = DataHandlerV2.getList2DataByName(list2Id);
+            var currentList2Data = DataHandlerV3.getList2DataByName(list2Id);
             if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
                 AppHandler.TrackPageView(list2Id);
                 AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
@@ -487,7 +488,7 @@ DataHandler.extend({
         }
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         DataHandler.setData("currentList2Id", list2Id);
-        if (DataHandlerV2.isPageDisabled(oldList2Id)) {
+        if (DataHandlerV3.isPageDisabled(oldList2Id)) {
             DataHandler.loadDataByAppId(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
@@ -642,7 +643,7 @@ DataHandler.extend({
     },
     getRenderData: function() {
         var currentList2Id = this.getData("currentList2Id", "");
-        if (DataHandlerV2.isPageDisabled(currentList2Id) || [Config.home, Config.projectHome, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        if (DataHandlerV3.isPageDisabled(currentList2Id) || [Config.home, Config.projectHome, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             return [];
         }
         var dateArray = [];
@@ -660,7 +661,6 @@ DataHandler.extend({
         var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name");
-        DataHandler.setData("filteredUserData", filteredUserData);
         // var sortableValue = DataHandler.getData("sortableValue", "");
         // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
@@ -671,6 +671,8 @@ DataHandler.extend({
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
             filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
+        } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
+            DataHandler.setData("filteredUserData", filteredUserData);
         }
         switch(currentList2Id) {
             case "entry":
@@ -695,8 +697,8 @@ DataHandler.extend({
             case "dbview_summary":
             case "custom_dbview":
                 currentList3Data = this.getCurrentList3Data();
-                renderData = DataHandlerDBView.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField);
-                renderData = DataHandlerDBView.SortDbViewResult(renderData, sortingFields, dateParameterField);
+                renderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField, dateSelect);
+                renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             default:
                 renderData = [];
@@ -724,13 +726,13 @@ DataHandler.extend({
         var filterOptions = [];
         if (dataLoadStatus && [Config.home, Config.projectHome].indexOf(currentList2Id) < 0) {
             list1Data = this.getData("appControlData", []);
-            list2Data = DataHandlerV2.getList2Data();
-            list3Data = DataHandlerV2.getList3Data();
+            list2Data = DataHandlerV3.getList2Data();
+            list3Data = DataHandlerV3.getList3Data();
             filterOptions = DataHandler.getData("filterOptions", []);
             filterOptions = AppHandler.getFilterData(filterOptions);
         }
         var dateSelectionRequired = Config.dateSelectionRequired;
-        if (DataHandlerV2.isPageDisabled(currentList2Id)) {
+        if (DataHandlerV3.isPageDisabled(currentList2Id)) {
             filterOptions = [];
             dateSelectionRequired = null;
         }
