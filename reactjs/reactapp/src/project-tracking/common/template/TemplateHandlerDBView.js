@@ -38,12 +38,16 @@ TemplateHandlerDBView.extend({
         var resultCriteria = null;
         var requiredDataTable = null;
         var dbViewData = {};
-        dbViewData[tableName] = {"tableData": renderData};
-        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
-        renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
-        DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-        var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
-        TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
+        if (!$S.isArray(renderData) || renderData.length === 0) {
+            template = TemplateHandler.getTemplate("noDataFound");
+        } else {
+            dbViewData[tableName] = {"tableData": renderData};
+            var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
+            renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
+            DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+            var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+            TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
+        }
         return template;
     }
 });

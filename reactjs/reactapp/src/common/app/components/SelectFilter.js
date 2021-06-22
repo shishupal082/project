@@ -92,7 +92,7 @@ class SelectFilter extends React.Component {
                             {dateSelection}
                         </div></td>;
         }
-        if (dateSelectionRequiredPages.indexOf(this.props.data.currentList2Id) < 0) {
+        if (dateSelectionRequiredPages.indexOf(this.props.currentPageName) < 0) {
             dateSelection = null;
         }
         var reloadButton = <td><button className="btn btn-primary" name="filter-reload" value="reload" onClick={this.props.methods.onClick}>Reload</button></td>;
