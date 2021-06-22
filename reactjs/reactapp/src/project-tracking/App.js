@@ -21,10 +21,6 @@ class App extends React.Component {
             "firstTimeDataLoadStatus": "completed",
             "goBackLinkData": [], // Used for back url
 
-            "list2Text": "Select Page...",
-            "list2Data": [],
-            "currentList2Id": "", // same as pageName
-
             "list3Text": "Select...",
             "list3Data": [],
             "currentList3Id": "",

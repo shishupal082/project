@@ -101,13 +101,13 @@ DBViewDataHandler.extend({
         return tableData;
     },
     GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
+        if (!$S.isArray(resultPattern)) {
+            return [];
+        }
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
         var tempJoinResult = [];
         var force1stEntry, isNotMatching;
-        if (!$S.isArray(resultPattern)) {
-            resultPattern = [];
-        }
         if (!$S.isArray(resultCriteria)) {
             resultCriteria = [];
         }
@@ -429,17 +429,18 @@ DBViewDataHandler.extend({
         }
         return renderData;
     },
-    GenerateFinalDBViewData: function(dbViewData, currentList3Data, dateParameterField, dateSelect) {
+    GenerateFinalDBViewData: function(finalTableData, currentList3Data, dateParameterField, dateSelect) {
+        // finalTableData = data with result pattern
         var finalDataV2 = [], temp3, temp4;
         var list3Data = currentList3Data;
         var l3Data;
         var i, k, name, heading;
-        if (!$S.isArray(dbViewData) || dbViewData.length < 1) {
+        if (!$S.isArray(finalTableData) || finalTableData.length < 1) {
             return null;
         }
         if ($S.isObject(list3Data) && $S.isArray(list3Data.value) && list3Data.value.length > 0) {
-            for(i=0; i<dbViewData.length; i++) {
-                if (!$S.isArray(dbViewData[i])) {
+            for(i=0; i<finalTableData.length; i++) {
+                if (!$S.isArray(finalTableData[i])) {
                     continue;
                 }
                 temp3 = finalDataV2;
@@ -449,7 +450,7 @@ DBViewDataHandler.extend({
                         continue;
                     }
                     name = l3Data.key;
-                    heading = $S.findParam(dbViewData[i], name, "", "name", "value");
+                    heading = $S.findParam(finalTableData[i], name, "", "name", "value");
                     if (!$S.isString(heading) || heading.length < 1) {
                         heading = "Empty";
                     }
@@ -468,7 +469,7 @@ DBViewDataHandler.extend({
                 }
                 if ($S.isObject(temp4)) {
                     if ($S.isArray(temp4.text)) {
-                        TemplateHelper.addItemInTextArray(temp4, heading, dbViewData[i]);
+                        TemplateHelper.addItemInTextArray(temp4, heading, finalTableData[i]);
                         temp3 = temp4;
                     }
                 }
@@ -481,7 +482,7 @@ DBViewDataHandler.extend({
             finalDataV2 = this._handleDateParameter(finalDataV2, $S.clone(currentList3Data), dateParameterField, dateSelect);
             return finalDataV2;
         } else {
-            return [{"text": dbViewData}];
+            return [{"text": finalTableData}];
         }
     }
 });

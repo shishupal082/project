@@ -248,20 +248,31 @@ DataHandlerV2.extend({
         return response;
     },
     getDisplaySypplyStatus: function(sortingFields) {
-        var tableName = DataHandler.getTableName("materialSupplyStatus");
-        var tableData = this.getTableData(tableName);
-        var supplyItemTableName = DataHandler.getTableName("materialSupplyItems");
+        var requiredDataTable = DataHandler.getAppData("requiredDataTable");
+        var dbViewData = {}, i;
+        if ($S.isArray(requiredDataTable)) {
+            for (i=0; i<requiredDataTable.length; i++) {
+                if ($S.isStringV2(requiredDataTable[i])) {
+                    dbViewData[requiredDataTable[i]] = {"tableData": this.getTableData(requiredDataTable[i])};
+                }
+            }
+        }
         var projectTableName = DataHandler.getTableName("projectTable");
-        if ($S.isArray(tableData)) {
-            for(var i=0; i<tableData.length; i++) {
+        var supplyStatusTableName = DataHandler.getTableName("materialSupplyStatus");
+        var tableData;
+        if ($S.isObject(dbViewData[supplyStatusTableName]) && $S.isArray(dbViewData[supplyStatusTableName]["tableData"])) {
+            tableData = dbViewData[supplyStatusTableName]["tableData"];
+            for(i=0; i<tableData.length; i++) {
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                tableData[i]["supplyItemName"] = this.getDisplayName(supplyItemTableName, "sid", tableData[i]["sid"], "item_name");
                 tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
             }
         }
-        return tableData;
+        var resultPattern = DataHandler.getAppData("resultPatternDisplaySupplyStatus");
+        var resultCriteria = DataHandler.getAppData("resultCriteria");
+        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
+        return finalTable;
     }
 });
 

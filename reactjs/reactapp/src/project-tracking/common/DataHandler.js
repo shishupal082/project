@@ -519,6 +519,10 @@ DataHandler.extend({
         var pageName = this.getData("pageName", "");
         var renderData;
         var sortingFields = DataHandler.getData("sortingFields", []);
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var dateSelect = DataHandler.getData("date-select", "");
+        var dateParameterField = DataHandler.getAppData("dateParameterField", {});
+
         switch(pageName) {
             case "home":
                 renderData = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
@@ -537,6 +541,8 @@ DataHandler.extend({
             break;
             case "displaySupplyStatus":
                 renderData = DataHandlerV2.getDisplaySypplyStatus(sortingFields);
+                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
+                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             default:
                 renderData = [];
@@ -549,9 +555,7 @@ DataHandler.extend({
         var renderData = null;
         var footerData = null;
         var appHeading = null;
-        var list2Data = null;
         var list3Data = null;
-        var currentList2Id = null;
         var dateSelectionRequiredPages = null;
         var pageName= DataHandler.getData("pageName", "");
         if (dataLoadStatus) {
@@ -561,14 +565,10 @@ DataHandler.extend({
             dateSelectionRequiredPages = Config.dateSelectionRequiredPages
         }
         if (dataLoadStatus && [Config.displaySupplyStatus].indexOf(pageName) >= 0) {
-            list2Data = DataHandlerV2.getList2Data();
             list3Data = DataHandlerV2.getList3Data();
-            currentList2Id = pageName;
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
 
-        appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", currentList2Id);
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
 

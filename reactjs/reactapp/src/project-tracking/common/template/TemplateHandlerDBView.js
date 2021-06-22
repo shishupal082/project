@@ -7,7 +7,7 @@ import TemplateHandler from "./TemplateHandler";
 
 import TemplateHelper from "../../../common/TemplateHelper";
 // import AppHandler from "../../../common/app/common/AppHandler";
-import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
+// import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
 
 var TemplateHandlerDBView;
@@ -31,21 +31,11 @@ TemplateHandlerDBView.extend({
         var template = TemplateHandler.getTemplate("displaySupplyStatus");
         var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = DataHandler.getData("sortingFields", []);
-        var resultPattern = DataHandler.getAppData("resultPatternSupplyStatusDisplay");
-        var tableName = DataHandler.getTableName("materialSupplyStatus");
-        var dateSelect = DataHandler.getData("date-select", "");
-        var dateParameterField = DataHandler.getAppData("dateParameterField", {});
-        var resultCriteria = null;
-        var requiredDataTable = null;
-        var dbViewData = {};
+        var htmlFields;
         if (!$S.isArray(renderData) || renderData.length === 0) {
             template = TemplateHandler.getTemplate("noDataFound");
         } else {
-            dbViewData[tableName] = {"tableData": renderData};
-            var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
-            renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
-            DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+            htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
             TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
         }
         return template;
