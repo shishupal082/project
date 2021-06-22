@@ -1,16 +1,16 @@
 import $S from "../../interface/stack.js";
 import DataHandler from "./DataHandler";
 import Config from "./Config";
-import DataHandlerDBView from "./DataHandlerDBView";
 
 
-// import Api from "../../common/Api";
+import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 
 var DataHandlerV2;
 
 (function($S){
-var DT = $S.getDT();
+// var DT = $S.getDT();
 DataHandlerV2 = function(arg) {
     return new DataHandlerV2.fn.init(arg);
 };
@@ -93,34 +93,10 @@ DataHandlerV2.extend({
         return null;
     },
     getList3Data: function(pageName) {
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var name = "list3Data", i;
-        var allPages = Object.keys(Config.pages);
-        if ([Config.home].indexOf(currentList2Id) >= 0) {
-            var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages", []);
-            if ($S.isArray(enabledPages)) {
-                for (i = 0; i<enabledPages.length; i++) {
-                    if ($S.isStringV2(enabledPages[i]) && allPages.indexOf(enabledPages[i]) >= 0) {
-                        currentList2Id = enabledPages[i];
-                        break;
-                    }
-                }
-            }
-        }
-        if ([Config.entry, Config.update, Config.summary].indexOf(currentList2Id) >= 0) {
-            name = "list3Data_1";
-        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
-            name = "list3Data_2";
-        } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
-            name = "list3Data_3";
-        } else {
-            return [];
-        }
-        var list3Data = $S.findParam([currentAppData, metaData], name, []);
+        var name = "list3Data";
+        var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
-            for (i = 0; i < list3Data.length; i++) {
+            for (var i = 0; i < list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
                     if (!$S.isString(list3Data[i].name)) {
                         list3Data[i].name = name + "-name-" + i;
@@ -129,88 +105,6 @@ DataHandlerV2.extend({
             }
         }
         return list3Data;
-    },
-    isPageDisabled: function(pageName) {
-        if (pageName === "home") {
-            return false;
-        }
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
-        if ($S.isArray(enabledPages)) {
-            return enabledPages.indexOf(pageName) < 0;
-        }
-        return true;
-    },
-    getDBViewTableData: function(tableName) {
-        if (!$S.isString(tableName) || tableName.length < 1) {
-            return [];
-        }
-        var dbViewData = DataHandler.getData("dbViewData", {});
-        if ($S.isObject(dbViewData)) {
-            if ($S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
-                return dbViewData[tableName].tableData;
-            }
-        }
-        return [];
-    },
-    handleAttendanceDataLoad: function() {
-        var attendanceDataTable = DataHandler.getData("attendanceData", []);
-        var attendanceDataKey = DataHandler.getAppData("attendanceDataKey", "");
-        var finalAttendanceData = {};
-        var latestAttendanceData = {};
-        var i, userId, temp, temp2, attendanceData;
-        if ($S.isObject(attendanceDataTable)) {
-            for(var tableName in attendanceDataTable) {
-                if ($S.isObject(attendanceDataTable[tableName])) {
-                    if ($S.isArray(attendanceDataTable[tableName].tableData)) {
-                        attendanceData = attendanceDataTable[tableName].tableData;
-                        break;
-                    }
-               }
-            }
-        }
-        if (!$S.isArray(attendanceData)) {
-            attendanceData = [];
-        }
-        if (!$S.isStringV2(attendanceDataKey)) {
-            attendanceDataKey = "type";
-        }
-        for(i=0; i<attendanceData.length; i++) {
-            if (!$S.isObject(attendanceData[i])) {
-                continue;
-            }
-            if (!AppHandler.isValidDateStr(attendanceData[i]["date"])) {
-                continue;
-            }
-            userId = attendanceData[i]["userId"];
-            if (!$S.isString(userId) || userId.length < 1) {
-                continue;
-            }
-            if (!$S.isObject(finalAttendanceData[userId])) {
-                finalAttendanceData[userId] = {"attendance": []};
-            }
-            finalAttendanceData[userId].attendance.push(attendanceData[i]);
-        }
-        for(var key in finalAttendanceData) {
-            if (!$S.isObject(latestAttendanceData[key])) {
-                latestAttendanceData[key] = {"attendance": []};
-            }
-            if ($S.isArray(finalAttendanceData[key].attendance)) {
-                temp = [];
-                for(i=0; i<finalAttendanceData[key].attendance.length; i++) {
-                    temp2 = finalAttendanceData[key].attendance[i];
-                    if (temp.indexOf(temp2.date) < 0) {
-                        temp.push(temp2.date);
-                        temp2.type = temp2[attendanceDataKey];
-                        if (temp2.type !== "") {
-                            latestAttendanceData[key].attendance.push(temp2);
-                        }
-                    }
-                }
-            }
-        }
-        DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
@@ -254,185 +148,9 @@ DataHandlerV2.extend({
                 }
             }
         }
-    },
-    generateFilterOptions: function() {
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
-        var userData = DataHandler.getData("userData", []);
-        var filterDataValues = DataHandler.getData("filterValues", {});
-        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, userData, filterDataValues);
-        DataHandler.setData("filterOptions", filterOptions);
     }
 });
-
 DataHandlerV2.extend({
-    callAddTextApi: function(subject, heading, callBack) {
-        var url = Config.getApiUrl("addTextApi", null, true);
-        var currentAppData = DataHandler.getCurrentAppData();
-        if (!$S.isString(url)) {
-            return;
-        }
-        if (!$S.isObject(currentAppData)) {
-            return;
-        }
-        if (!$S.isString(currentAppData.saveDataFilename) || currentAppData.saveDataFilename.length < 1) {
-            alert("Invalid saveDataFilename.");
-            return;
-        }
-        var postData = {};
-        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
-        postData["subject"] = subject;
-        postData["heading"] = heading;
-        postData["text"] = [attr];
-        postData["filename"] = currentAppData.saveDataFilename;
-        var msg = "Error in saving data, Please Try again.";
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
-            if (status === "FAILURE" || ($S.isObject(response) && response.status === "FAILURE")) {
-                alert(msg);
-            }
-            $S.callMethod(callBack);
-        });
-    }
-});
-
-DataHandlerV2.extend({
-    _getTdClassNameFromDateAttr: function(dateAttr, nhList, phList) {
-        var className = "";
-        if (!$S.isArray(nhList)) {
-            nhList = [];
-        }
-        if (!$S.isArray(phList)) {
-            phList = [];
-        }
-        if ($S.isObject(dateAttr)) {
-            if ($S.isString(dateAttr.day)) {
-                className = "day-"+dateAttr.day;
-            }
-            if (nhList.indexOf(dateAttr.dateStr) >= 0) {
-                className += " day-nh";
-            }
-            if (phList.indexOf(dateAttr.dateStr) >= 0) {
-                className += " day-ph";
-            }
-        }
-        return className;
-    },
-    _getAttendanceField: function(attendanceData, userData, dateAttr, attendanceOption, selectFieldName) {
-        var text = [], temp;
-        var userId = "", name = "";
-        var i;
-        if (!$S.isString(selectFieldName) || selectFieldName.length < 1) {
-            selectFieldName = "name";
-        }
-        if ($S.isArray(userData)) {
-            for(i = 0; i<userData.length; i++) {
-                if ($S.isObject(userData[i])) {
-                    if (userData[i].name === "userId") {
-                        userId = userData[i].value;
-                    } else if (userData[i].name === selectFieldName) {
-                        name = userData[i].value;
-                    }
-                }
-            }
-        }
-        var selectName = userId + "," + dateAttr.dateStr + "," + name;
-        if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userId])) {
-            if ($S.isArray(attendanceData[userId].attendance)) {
-                temp = attendanceData[userId].attendance;
-                for(i=temp.length-1; i>=0; i--) {
-                    if (!$S.isObject(temp[i])) {
-                        continue;
-                    }
-                    if (!$S.isStringV2(temp[i].type)) {
-                        continue;
-                    }
-                    if (AppHandler.isDateLiesInRangeV3(dateAttr.dateStr, temp[i].date)) {
-                        text.push(temp[i].type);
-                    } else if (dateAttr.dateStr === temp[i].date) {
-                        text.push(temp[i].type);
-                    }
-                }
-            }
-        }
-        if ($S.isObject(attendanceOption)) {
-            attendanceOption = $S.clone(attendanceOption);
-            attendanceOption.value = text.join(",");
-            attendanceOption.name = selectName;
-        } else {
-            attendanceOption = text.join(",");
-        }
-        return attendanceOption;
-    },
-    GenerateEntryUpdateUserData: function(dateArray, userData, pageName) {
-        var renderData = [];
-        var i, j, k, temp, userDataV2;
-        var attendanceData = DataHandler.getData("latestAttendanceData", {});
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var nhList = $S.findParam([currentAppData, metaData], "nhList", []);
-        var phList = $S.findParam([currentAppData, metaData], "phList", []);
-        var attendanceOption = $S.findParam([currentAppData, metaData], "attendanceOption", {});
-        var selectFieldName = $S.findParam([currentAppData, metaData], "selectFieldName", {});
-        var textFilter = $S.getTextFilter(), className;
-        if (pageName === "entry") {
-            attendanceOption = "";
-        }
-        if ($S.isArray(dateArray)) {
-            for(i=dateArray.length-1; i>=0; i--) {
-                if (!$S.isObject(dateArray[i])) {
-                    continue;
-                }
-                userDataV2 = $S.clone(userData);
-                if ($S.isArray(userDataV2) && $S.isArray(dateArray[i].allDate)) {
-                    for(j=0; j<userDataV2.length; j++) {
-                        for (k=0; k<dateArray[i].allDate.length; k++) {
-                            temp = {};
-                            temp["name"] = dateArray[i].allDate[k].dateStr;
-                            temp["heading"] = dateArray[i].allDate[k].date.toString();
-                            className = this._getTdClassNameFromDateAttr(dateArray[i].allDate[k], nhList, phList);
-                            temp["className"] = textFilter(userDataV2[j].className).addClass(className).getClassName();
-                            temp["value"] = this._getAttendanceField(attendanceData, userDataV2[j], dateArray[i].allDate[k], attendanceOption, selectFieldName);
-                            userDataV2[j].push(temp);
-                        }
-                    }
-                }
-                temp = {"tableHeading": dateArray[i].dateHeading, "tableData": userDataV2};
-                renderData.push(temp);
-            }
-        }
-        return renderData;
-    },
-    _getAttendanceCount: function(attendanceData, dateAttr, userData, userId) {
-        var count = 0, temp, dateResult = [];
-        var attendance, startDate, endDate;
-        if ($S.isObject(attendanceData) && $S.isObject(attendanceData[userId])) {
-            if ($S.isArray(attendanceData[userId].attendance)) {
-                attendance = attendanceData[userId].attendance;
-                for (var i = 0; i < attendance.length; i++) {
-                    if (!$S.isObject(attendance[i])) {
-                        continue;
-                    }
-                    if (!$S.isString(attendance[i].type) || attendance[i].type.length < 1) {
-                        continue;
-                    }
-                    if ($S.isArray(userData.pattern)) {
-                        if ($S.isObject(dateAttr) && $S.isArray(dateAttr.dateRange) && dateAttr.dateRange.length === 2) {
-                            startDate = dateAttr.dateRange[0];
-                            endDate = dateAttr.dateRange[1];
-                        }
-                        if (AppHandler.isDateLiesInRange(startDate, endDate, attendance[i].date)) {
-                            temp = $S.searchItems(userData.pattern, [attendance[i].type], userData.searchByPattern);
-                            if (temp.length > 0) {
-                                dateResult.push(attendance[i].date);
-                            }
-                            count += temp.length;
-                        }
-                    }
-                }
-            }
-        }
-        return {"count": count, "dateResult": dateResult};
-    },
     _getUploadFileInfo: function() {
         var fileInfo = DataHandler.getData("uploadedFileData", []);
         var loginUsername = AppHandler.GetUserData("username", "");
@@ -459,9 +177,18 @@ DataHandlerV2.extend({
         }
         return result;
     },
+    _getUpdateSupplyItemLink: function(pid, entry) {
+        var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
+        var sid = "";
+        if ($S.isObject(entry) && $S.isString(entry.sid)) {
+            sid = entry.sid;
+        }
+        tdFieldText["href"] = DataHandler.getLink(pid, sid, "supply");
+        return tdFieldText;
+    },
     getProjectData: function() {
         var currentPId = DataHandler.getPathParamsData("pid");
-        var projectTable = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
+        var projectTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
         var response = {"status": "SUCCESS"};
         if (projectTable.length !== 1) {
             response["status"] = "FAILURE";
@@ -475,21 +202,226 @@ DataHandlerV2.extend({
     getProjectWorkStatus: function(sortingFields) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
-        var workStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("projectWorkStatus"), "pid", currentPId);
-        workStatus = $S.sortResultV2(workStatus, sortingFields, "name");
+        var tableName = DataHandler.getTableName("projectWorkStatus");
+        var workStatus = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
         response["workStatus"] = workStatus;
+        response["tableName"] = tableName;
+        return response;
+    },
+    getProjectSupplyItems: function(sortingFields) {
+        var currentPId = DataHandler.getPathParamsData("pid");
+        var response = this.getProjectData();
+        var tableName = DataHandler.getTableName("materialSupplyItems");
+        var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
+        if ($S.isArray(supplyItem)) {
+            for(var i=0; i<supplyItem.length; i++) {
+                if (!$S.isObject(supplyItem[i])) {
+                    continue;
+                }
+                supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(currentPId, supplyItem[i]);
+            }
+        }
+        response["supplyItem"] = supplyItem;
+        response["tableName"] = tableName;
         return response;
     },
     getProjectSupplyStatus: function(sortingFields) {
-        var currentPId = DataHandler.getPathParamsData("pid");
+        // var currentPId = DataHandler.getPathParamsData("pid");
+        var supplyItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
-        var supplyStatus = DataHandlerDBView.getTableDataByAttr(DataHandler.getTableName("materialSupplyStatus"), "pid", currentPId);
-        supplyStatus = $S.sortResultV2(supplyStatus, sortingFields, "name");
+        var tableName = DataHandler.getTableName("materialSupplyStatus");
+        var supplyStatus = DataHandlerV2.getTableDataByAttr(tableName, "sid", supplyItemId);
+        var supplyItemName = this.getDisplayName(DataHandler.getTableName("materialSupplyItems"), "sid", supplyItemId, "item_name");
+        // var projectName = this.getDisplayName(DataHandler.getTableName("projectTable"), "pid", currentPId, "pName");
+        // if ($S.isArray(supplyStatus)) {
+        //     for(var i=0; i<supplyStatus.length; i++) {
+        //         if (!$S.isObject(supplyStatus[i])) {
+        //             continue;
+        //         }
+        //         supplyStatus[i]["supplyItemName"] = supplyItemName;
+        //         supplyStatus[i]["projectName"] = projectName;
+        //     }
+        // }
         response["supplyStatus"] = supplyStatus;
+        response["supplyItemName"] = supplyItemName;
+        response["tableName"] = tableName;
         return response;
+    },
+    getDisplaySypplyStatus: function(sortingFields) {
+        var tableName = DataHandler.getTableName("materialSupplyStatus");
+        var tableData = this.getTableData(tableName);
+        var supplyItemTableName = DataHandler.getTableName("materialSupplyItems");
+        var projectTableName = DataHandler.getTableName("projectTable");
+        if ($S.isArray(tableData)) {
+            for(var i=0; i<tableData.length; i++) {
+                if (!$S.isObject(tableData[i])) {
+                    continue;
+                }
+                tableData[i]["supplyItemName"] = this.getDisplayName(supplyItemTableName, "sid", tableData[i]["sid"], "item_name");
+                tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
+            }
+        }
+        return tableData;
     }
 });
 
+DataHandlerV2.extend({
+    _isValidTableEntry: function(dbApi) {
+        if (!$S.isObject(dbApi)) {
+            return false;
+        }
+        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
+            return false;
+        }
+        if (!$S.isArray(dbApi.apis)) {
+            return false;
+        }
+        return true;
+    },
+    _getTableData: function(request) {
+        var tableData = {}, i, temp;
+        var wordBreak;
+        if ($S.isArray(request)) {
+            for(i=0; i<request.length; i++) {
+                if (!$S.isObject(request[i])) {
+                    continue;
+                }
+                if (!$S.isString(request[i].apiName) || request[i].apiName.length < 1) {
+                    continue;
+                }
+                if ($S.isUndefined(tableData[request[i].apiName])) {
+                    tableData[request[i].apiName] = {};
+                }
+                tableData[request[i].apiName]["tableName"] = request[i].apiName;
+                tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
+                tableData[request[i].apiName]["apis"] = request[i].apis;
+                tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
+                tableData[request[i].apiName]["response"] = request[i].response;
+            }
+        }
+        for(var key in tableData) {
+            tableData[key]["responseJson"] = [];
+            wordBreak = tableData[key].wordBreak;
+            if ($S.isArray(tableData[key]["response"])) {
+                for(i=0; i<tableData[key]["response"].length; i++) {
+                    temp = AppHandler.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
+                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
+                }
+            }
+            tableData[key]["tableData"] = AppHandler.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
+        }
+        DataHandlerV2._handleDefaultSorting(tableData);
+        return tableData;
+    },
+    _loadDBViewData: function(dbDataApis, callback) {
+        var request = [], i, j, el, temp, urls;
+        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
+            for(i=0; i<dbDataApis.length; i++) {
+                if (!this._isValidTableEntry(dbDataApis[i])) {
+                    continue;
+                }
+                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
+                    if ($S.isString(el) && el.length > 0) {
+                        return true;
+                    }
+                    return false;
+                });
+                for (j=0; j<urls.length; j++) {
+                    el = urls[j];
+                    if ($S.isString(el) && el.split("?").length > 1) {
+                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&temp_file_name=" + i;
+                    } else {
+                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&temp_file_name=" + i;
+                    }
+                }
+                if (urls.length < 1) {
+                    continue;
+                }
+                temp = {};
+                temp.apis = dbDataApis[i].apis;
+                temp.dataIndex = dbDataApis[i].dataIndex;
+                temp.wordBreak = dbDataApis[i].wordBreak;
+                temp.apiName = dbDataApis[i].tableName.trim();
+                temp.requestMethod = Api.getAjaxApiCallMethodV2();
+                temp.url = urls;
+                request.push(temp);
+            }
+        }
+        if (request.length < 1) {
+            $S.callMethod(callback);
+        } else {
+            AppHandler.LoadDataFromRequestApi(request, function() {
+                if ($S.isFunction(callback)) {
+                    callback(request);
+                }
+            });
+        }
+    },
+    getTableData: function(tableName) {
+        if (!$S.isStringV2(tableName)) {
+            return [];
+        }
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        var tableData = [];
+        if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName])) {
+            if ($S.isArray(dbViewData[tableName].tableData)) {
+                tableData = dbViewData[tableName].tableData;
+            }
+        }
+        return tableData;
+    },
+    getTableDataByAttr: function(tableName, attrName, attrValue) {
+        var tableData = this.getTableData(tableName);
+        if (!$S.isArray(tableData) || !$S.isStringV2(attrName)) {
+            return [];
+        }
+        var result = $S.searchItems([attrName], tableData, false, false, "i",
+            function(searchingPattern, el, i, arr) {
+                if (!$S.isObject(el)) {
+                    return false;
+                }
+                return el[attrName] === attrValue;
+            }
+        );
+        return result;
+    },
+    getDisplayName: function(tableName, searchKey, searchRef, requiredKey, defaultValue) {
+        var tableData = this.getTableData(tableName);
+        if (!$S.isArray(tableData) || !$S.isStringV2(searchKey) || !$S.isStringV2(requiredKey)) {
+            return defaultValue;
+        }
+        var displayText = $S.findParam(tableData, searchRef, defaultValue, searchKey, requiredKey);
+        return displayText;
+    },
+    _handleDefaultSorting: function(tableData) {
+        if (!$S.isObject(tableData)) {
+            return;
+        }
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
+        return DBViewDataHandler.SortTableData(tableData, defaultSorting);
+    },
+    handlePageLoad: function(dbDataApis, callback) {
+        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
+        var status = DataHandler.getDataLoadStatusByKey(keys);
+        var tableData;
+        if (status === "completed") {
+            status = DataHandler.getData("dbViewDataLoadStatus");
+            if (status === "not-started") {
+                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                this._loadDBViewData(dbDataApis, function(request) {
+                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    tableData = DataHandlerV2._getTableData(request);
+                    DataHandler.setData("dbViewData", tableData);
+                    $S.callMethod(callback);
+                });
+            } else {
+                $S.callMethod(callback);
+            }
+        }
+    }
+});
 })($S);
 
 export default DataHandlerV2;

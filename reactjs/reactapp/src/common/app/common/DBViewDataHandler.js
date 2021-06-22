@@ -36,6 +36,36 @@ DBViewDataHandler.extend({
     setTableData: function(resultPattern) {
         return this.setData("tableData", resultPattern);
     },
+    UpdateSortingFields: function(sortingFields, value) {
+        var finalSortingField = [];
+        var temp = {};
+        if (!$S.isArray(sortingFields)) {
+            sortingFields = [];
+        }
+        for(var i=0; i<sortingFields.length; i++) {
+            if (!$S.isObject(sortingFields[i])) {
+                continue;
+            }
+            if (sortingFields[i].name === value) {
+                temp = sortingFields[i];
+                continue;
+            }
+            if (["descending", "ascending"].indexOf(sortingFields[i].value) >= 0) {
+                finalSortingField.push(sortingFields[i]);
+            }
+        }
+        if (temp.value === "descending") {
+            temp.value = "ascending";
+            finalSortingField.push(temp);
+        } else if (temp.value === "ascending") {
+            // Do nothing
+        } else {
+            temp.name = value;
+            temp.value = "descending";
+            finalSortingField.push(temp);
+        }
+        return finalSortingField;
+    },
     GenerateTableData: function(request) {
         var tableData = {}, i, temp;
         var wordBreak;
@@ -100,6 +130,9 @@ DBViewDataHandler.extend({
                         for(i=0; i<t1.length; i++) {
                             temp = $S.clone(resultPattern);
                             for (j=0; j<temp.length; j++) {
+                                if (!$S.isStringV2(temp[j].name)) {
+                                    continue;
+                                }
                                 t1Name = temp[j].tableName;
                                 if (tableName === t1Name) {
                                     temp[j].value = t1[i][temp[j].name];
@@ -441,7 +474,11 @@ DBViewDataHandler.extend({
                 }
                 temp4 = null;
             }
-            finalDataV2 = this._handleDateParameter(finalDataV2, currentList3Data, dateParameterField, dateSelect);
+            /**
+                Cloned value of currentList3Data is passed because
+                this method again will be called with different currentList3Data and it will be changed
+            **/
+            finalDataV2 = this._handleDateParameter(finalDataV2, $S.clone(currentList3Data), dateParameterField, dateSelect);
             return finalDataV2;
         } else {
             return [{"text": dbViewData}];

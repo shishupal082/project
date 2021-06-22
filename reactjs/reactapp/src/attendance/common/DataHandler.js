@@ -205,8 +205,8 @@ DataHandler.extend({
     generateDateParameter: function() {
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
-        var selectedDateRange = this.getCurrentList3Data();
-        var dateRange = $S.findParam([selectedDateRange, currentAppData, metaData], "dateRange", []);
+        var currentList3Data = this.getCurrentList3Data();
+        var dateRange = $S.findParam([currentList3Data, currentAppData, metaData], "dateRange", []);
         DataHandler.setData("dateParameters", AppHandler.GetDataParameterFromDate(dateRange));
     },
     getCurrentAppData: function() {
@@ -535,40 +535,11 @@ DataHandler.extend({
         });
     },
     SortClick: function(appStateCallback, appDataCallback, value) {
-        // var sortableValue = DataHandler.getData("sortableValue", "");
         AppHandler.TrackEvent("sort:" + value);
         var sortingFields = DataHandler.getData("sortingFields", []);
-        var finalSortingField = [];
-        var temp = {};
-        if (!$S.isArray(sortingFields)) {
-            sortingFields = [];
-        }
-        for(var i=0; i<sortingFields.length; i++) {
-            if (!$S.isObject(sortingFields[i])) {
-                continue;
-            }
-            if (sortingFields[i].name === value) {
-                temp = sortingFields[i];
-                continue;
-            }
-            if (["descending", "ascending"].indexOf(sortingFields[i].value) >= 0) {
-                finalSortingField.push(sortingFields[i]);
-            }
-        }
-        if (temp.value === "descending") {
-            temp.value = "ascending";
-            finalSortingField.push(temp);
-        } else if (temp.value === "ascending") {
-            // Do nothing
-        } else {
-            temp.name = value;
-            temp.value = "descending";
-            finalSortingField.push(temp);
-        }
-        // DataHandler.setData("sortable", value);
-        // DataHandler.setData("sortableValue", sortableValue);
+        var finalSortingField = DBViewDataHandler.UpdateSortingFields(sortingFields, value);
         DataHandler.setData("sortingFields", finalSortingField);
-        return DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
         var filterValues = DataHandler.getData("filterValues", {});

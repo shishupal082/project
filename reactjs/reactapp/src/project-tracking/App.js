@@ -17,9 +17,17 @@ class App extends React.Component {
             isLoaded: false
         };
         this.appData = {
-            "addContainerClass": false,
+            "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
             "goBackLinkData": [], // Used for back url
+
+            "list2Text": "Select Page...",
+            "list2Data": [],
+            "currentList2Id": "", // same as pageName
+
+            "list3Text": "Select...",
+            "list3Data": [],
+            "currentList3Id": "",
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "pageHeading": "",
@@ -71,7 +79,13 @@ class App extends React.Component {
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
-        if (name === "sortable") {
+        if (value === "reload") {
+            DataHandler.OnReloadClick(this.appStateCallback, this.appDataCallback);
+        } else if (name === "reset-filter") {
+            DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
+        } else if (name === "date-select") {
+            DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
+        } else if (name === "sortable") {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
         } else {
             DataHandler.OnClick(this.appStateCallback, this.appDataCallback, name, value);
@@ -87,12 +101,19 @@ class App extends React.Component {
         e.preventDefault();
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
+
         DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback, name, value);
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+        if (name === "list2-select") {
+            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
+        } else if (name === "list3-select") {
+            DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, value);
+        } else {
+            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+        }
     }
     appStateCallback() {
         $S.log("App:appStateCallback");
@@ -141,10 +162,15 @@ class App extends React.Component {
         const projectStatusSupply = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.projectStatusSupply}/>);
+        const updateSupplyStatus = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.updateSupplyStatus}/>);
+        const displaySupplyStatus = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.displaySupplyStatus}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
-
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home}
@@ -155,6 +181,8 @@ class App extends React.Component {
                 <Route exact path={pages.projectId} component={projectId}/>
                 <Route exact path={pages.projectStatusWork} component={projectStatusWork}/>
                 <Route exact path={pages.projectStatusSupply} component={projectStatusSupply}/>
+                <Route exact path={pages.updateSupplyStatus} component={updateSupplyStatus}/>
+                <Route exact path={pages.displaySupplyStatus} component={displaySupplyStatus}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

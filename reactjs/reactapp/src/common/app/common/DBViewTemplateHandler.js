@@ -3,7 +3,6 @@ import $S from "../../../interface/stack.js";
 import TemplateHelper from "../../TemplateHelper";
 
 import DBViewTemplate from "./DBViewTemplate";
-import AppHandler from "./AppHandler";
 
 var DBViewTemplateHandler;
 (function($S){
@@ -21,7 +20,13 @@ DBViewTemplateHandler.fn = DBViewTemplateHandler.prototype = {
 };
 
 $S.extendObject(DBViewTemplateHandler);
-
+DBViewTemplateHandler.extend({
+    UpdateTemplate: function(key, value) {
+        if ($S.isStringV2(key)) {
+            DBViewTemplate[key] = value;
+        }
+    }
+});
 DBViewTemplateHandler.extend({
     _getTdText: function(tdData) {
         if (!$S.isObject(tdData)) {
@@ -33,18 +38,15 @@ DBViewTemplateHandler.extend({
         var wordBreak = $S.findParam([tdData], "wordBreak", "");
         var wordBreakTag = $S.findParam([tdData], "wordBreakTag", "");
         var temp = {};
-        if ($S.isString(wordBreak) && wordBreak.length > 0) {
-            if (!$S.isString(wordBreakTag) || wordBreakTag.length === 0) {
+        if ($S.isStringV2(wordBreak) && $S.isString(value)) {
+            if (!$S.isStringV2(wordBreakTag)) {
                 wordBreakTag = "li";
             }
-            if (!$S.isString(value)) {
-                value = "";
-            }
-            value = value.split(";").map(function(el,i, arr) {
+            value = value.split(wordBreak).map(function(el,i, arr) {
                 return {"tag": wordBreakTag, "text": el.trim()};
             });
         }
-        if ($S.isObject(text) || $S.isArray(text)) {
+        if (($S.isObject(text) || $S.isArray(text)) && $S.isStringV2(fieldName)) {
             temp[fieldName] = value;
             TemplateHelper.updateTemplateText(text, temp);
             return text;
@@ -75,6 +77,18 @@ DBViewTemplateHandler.extend({
             renderFieldTr = [];
         }
         return renderFieldTr;
+    },
+    _getHeadingText: function(tdData, defaultHeading) {
+        if (!$S.isObject(tdData)) {
+            return defaultHeading;
+        }
+        if (!$S.isUndefined(tdData["heading"])) {
+            return tdData["heading"];
+        }
+        if (!$S.isUndefined(tdData["name"])) {
+            return tdData["name"];
+        }
+        return defaultHeading;
     },
     _generateFirstTr: function(trData, isSortableFieldRequired, sortingFields) {
         var renderFieldTr = this.getTemplate("dbviewField.tr");
@@ -120,9 +134,9 @@ DBViewTemplateHandler.extend({
                     additionalClassName = " btn-light";
                 }
                 className = defaultClassName + additionalClassName;
-                tdText = [{"tag": "button.b", "className": className, "name": "sortable", "value": trData[i].name, "text": AppHandler.getHeadingText(trData[i])}];
+                tdText = [{"tag": "button.b", "className": className, "name": "sortable", "value": trData[i].name, "text": this._getHeadingText(trData[i], "")}];
             } else {
-                tdText = [{"tag": "b", "text": AppHandler.getHeadingText(trData[i])}];
+                tdText = [{"tag": "b", "text": this._getHeadingText(trData[i], "")}];
             }
             tdClassName = $S.findParam([trData[i]], "className", "");
             tdField = {"tag": "td", "text": tdText, "className": tdClassName};
@@ -150,35 +164,6 @@ DBViewTemplateHandler.extend({
             }
         } else {
             renderField = null;
-        }
-        return renderField;
-    },
-    generateDbViewRenderFieldV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {
-        var renderField = this.getTemplate("dbviewField");
-        var tableView, tableField, i, tableHeading;
-        var isTableAdded = false;
-        if ($S.isArray(renderData) && renderData.length > 0) {
-            for (i = 0; i < renderData.length; i++) {
-                if (!$S.isObject(renderData[i])) {
-                    continue;
-                }
-                tableView = this.getTemplate("tableView", []);
-                tableHeading = renderData[i].tableHeading;
-                if ($S.isString(tableHeading) && tableHeading.length > 0) {
-                    TemplateHelper.updateTemplateText(tableView, {"tableHeading": renderData[i].tableHeading});
-                } else {
-                    TemplateHelper.addClassTemplate(tableView, "reload", "d-none");
-                }
-                tableField = this.generateIndividualTableV2(renderData[i].tableData, isSortableFieldRequired, tableTemplateName, sortingFields);
-                if (tableField !== null) {
-                    isTableAdded = true;
-                    TemplateHelper.addItemInTextArray(tableView, "tableData", tableField);
-                    TemplateHelper.addItemInTextArray(renderField, "tableView", tableView);
-                }
-            }
-        }
-        if (!isTableAdded) {
-            renderField = this.getTemplate("noDataFound");
         }
         return renderField;
     },
@@ -239,15 +224,6 @@ DBViewTemplateHandler.extend({
             }
         }
     },
-    GenerateDbViewRenderField: function(renderData, currentList3Data, sortingFields) {
-        var renderField = [];
-        if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeading(renderField, renderData, currentList3Data, sortingFields);
-        } else {
-            renderField = this.getTemplate("noDataFound");
-        }
-        return renderField;
-    },
     _generateDbViewSummaryTr: function(trsData) {
         var field = this.getTemplate("dbviewSummaryField");
         var trField, temp;
@@ -306,6 +282,44 @@ DBViewTemplateHandler.extend({
             renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
             renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data));
         }
+    },
+    generateDbViewRenderFieldV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {
+        var renderField = this.getTemplate("dbviewField");
+        var tableView, tableField, i, tableHeading;
+        var isTableAdded = false;
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            for (i = 0; i < renderData.length; i++) {
+                if (!$S.isObject(renderData[i])) {
+                    continue;
+                }
+                tableView = this.getTemplate("tableView", []);
+                tableHeading = renderData[i].tableHeading;
+                if ($S.isString(tableHeading) && tableHeading.length > 0) {
+                    TemplateHelper.updateTemplateText(tableView, {"tableHeading": renderData[i].tableHeading});
+                } else {
+                    TemplateHelper.addClassTemplate(tableView, "reload", "d-none");
+                }
+                tableField = this.generateIndividualTableV2(renderData[i].tableData, isSortableFieldRequired, tableTemplateName, sortingFields);
+                if (tableField !== null) {
+                    isTableAdded = true;
+                    TemplateHelper.addItemInTextArray(tableView, "tableData", tableField);
+                    TemplateHelper.addItemInTextArray(renderField, "tableView", tableView);
+                }
+            }
+        }
+        if (!isTableAdded) {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
+    },
+    GenerateDbViewRenderField: function(renderData, currentList3Data, sortingFields) {
+        var renderField = [];
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            this._recursiveGenerateHeading(renderField, renderData, currentList3Data, sortingFields);
+        } else {
+            renderField = this.getTemplate("noDataFound");
+        }
+        return renderField;
     },
     GenerateDbViewSummaryRenderField: function(renderData, currentList3Data) {
         var renderField = [];

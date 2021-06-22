@@ -1,7 +1,7 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
-import Template from "./Template";
+import Template from "./template/Template";
 
 var Config = {requestId: $S.getRequestId()};
 
@@ -20,12 +20,7 @@ Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
 
 
-Config.tempConfig = {
-    "enabledPages": $$$.enabledPages,
-    "redirectPages": $$$.redirectPages,
-    "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
-    "linkText": $$$.linkText
-};
+Config.tempConfig = {};
 
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
@@ -41,13 +36,22 @@ try {
 } catch(e) {}
 
 
+// Config.defaultPageFields = [];
+
+// for(var key in pages) {
+//     if (key !== "home") {
+//         Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
+//     }
+// }
+
+
 var pages = {
     "home": basepathname+"/",
     "projectId": basepathname+"/pid/:pid",
     "projectStatusWork": basepathname+"/pid/:pid/work",
     "projectStatusSupply": basepathname+"/pid/:pid/supply",
-    "addWorkStatus": basepathname+"/pid/:pid/add-work-status",
-    "updateSupplyStatus": basepathname+"/pid/:pid/update-supply-status"
+    "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
+    "displaySupplyStatus": basepathname+"/display_supply_status"
 };
 
 Config.pages = pages;
@@ -57,31 +61,35 @@ Config.noMatch = "noMatch";
 Config.projectId = "projectId";
 Config.projectStatusWork = "projectStatusWork";
 Config.projectStatusSupply = "projectStatusSupply";
-Config.addWorkStatus = "addWorkStatus";
 Config.updateSupplyStatus = "updateSupplyStatus";
+Config.displaySupplyStatus = "displaySupplyStatus";
 
 
-// Config.defaultPageFields = [];
-
-// for(var key in pages) {
-//     if (key !== "home") {
-//         Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
-//     }
-// }
-
+Config.dateSelection = [
+    {"name": "Daily", "value": "daily"},
+    {"name": "Monthly", "value": "monthly"},
+    {"name": "Yearly", "value": "yearly"},
+    {"name": "All", "value": "all"}
+];
 Config.defaultDateSelect = "monthly";
+Config.dateSelectionRequiredPages = [Config.displaySupplyStatus];
 
 Config.fieldsKey = {
+    "Value": "common-value",
     "DateKey": "date-entry-key",
     "RemarksKey": "remark-entry-key",
     "DistanceKey": "new-work-status.distance",
     "SectionKey": "new-work-status.section",
     "ProjectNameKey": "new-project.name",
-    "supplyDiscription": "supplyDiscription"
+    "supplyDiscription": "supplyDiscription",
+    "NewSupplyItemName": "add-supply-item.name",
+    "NewSupplyItemDetails": "add-supply-item.details"
 };
+
 
 var messageMapping = {};
 messageMapping["tableName.invalid"] = "Invalid table name";
+messageMapping[Config.fieldsKey.Value] = "Value Required";
 messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
 messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";
 
@@ -91,7 +99,8 @@ messageMapping[Config.fieldsKey.supplyDiscription] = "Select Discription";
 
 messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
 messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
-
+messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required";
+messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
 Config.messageMapping = messageMapping;
 
 var apiMapping = {};

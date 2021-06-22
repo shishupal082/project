@@ -1,16 +1,21 @@
-import $S from "../../interface/stack.js";
-import Config from "./Config";
-import DataHandler from "./DataHandler";
-// import DataHandlerV2 from "./DataHandlerV2";
-import TemplateHandlerV2 from "./TemplateHandlerV2";
-
+import $S from "../../../interface/stack.js";
+import TemplateHandlerDBView from "./TemplateHandlerDBView";
 import Template from "./Template";
-import TemplateHelper from "../../common/TemplateHelper";
-import AppHandler from "../../common/app/common/AppHandler";
+
+import Config from "../Config";
+import DataHandler from "../DataHandler";
+import FormHandler from "../forms/FormHandler";
+
+
+import TemplateHelper from "../../../common/TemplateHelper";
+import AppHandler from "../../../common/app/common/AppHandler";
+import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
+import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
+
 
 var TemplateHandler;
 (function($S){
-var DT = $S.getDT();
+// var DT = $S.getDT();
 var loadingCount = 0;
 TemplateHandler = function(arg) {
     return new TemplateHandler.fn.init(arg);
@@ -24,7 +29,7 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 };
 
 $S.extendObject(TemplateHandler);
-
+DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
     generateHomeRenderField: function(renderData) {
         var homeFields = [], i, linkTemplate;
@@ -42,14 +47,21 @@ TemplateHandler.extend({
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
-        var newProjectTemplate = this.getTemplate("home.addNewProject");
+        var newProjectTemplate = FormHandler.getAddNewProjectTemplate();
         TemplateHelper.addItemInTextArray(template, "home.addNewProject", newProjectTemplate);
         return template;
     }
 });
 TemplateHandler.extend({
-    _generateFieldTable: function(tableData, fieldPattenrName) {
-        return TemplateHandlerV2.generateTableHtml(tableData, fieldPattenrName);
+    _generateFieldTable: function(tableData, tableName, resultPatternName, currentList3Data) {
+        var resultPattern = DataHandler.getAppData(resultPatternName);
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        var dbViewData = {};
+        dbViewData[tableName] = {"tableData": tableData};
+        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern);
+        finalTable = $S.sortResultV2(finalTable, sortingFields, "name");
+        var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(finalTable, currentList3Data, sortingFields);
+        return htmlFields;
     }
 });
 TemplateHandler.extend({
@@ -77,17 +89,6 @@ TemplateHandler.extend({
             }
         }
         return link;
-    },
-    updateBtnStatus: function(template) {
-        var status = DataHandler.getData("addentry.submitStatus", "");
-        if (status === "in_progress") {
-            TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-secondary disabled");
-            TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "btn-primary");
-        } else {
-            TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "disabled");
-            TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "btn-secondary");
-            TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
-        }
     },
     _getUploadFileTemplate: function(renderData) {
         var tableEntry = this.getTemplate("uploaded_files");
@@ -135,52 +136,6 @@ TemplateHandler.extend({
         // TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         return template;
     },
-    getAddNewWorkTemplate: function() {
-        var newWorkStatus = this.getTemplate("newWorkStatus");
-        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.DistanceKey,
-                            Config.fieldsKey.RemarksKey, Config.fieldsKey.SectionKey];
-        var fieldsData = DataHandler.getData("fieldsData", {});
-        if (!$S.isObject(fieldsData)) {
-            fieldsData = {};
-        }
-        var formValues = {};
-        for (var i=0; i<requiredKeys.length; i++) {
-            formValues[requiredKeys[i]] = fieldsData[requiredKeys[i]];
-        }
-        if (!AppHandler.isValidDateStr(formValues[Config.fieldsKey.DateKey])) {
-            formValues[Config.fieldsKey.DateKey] = DT.getDateTime("YYYY/-/MM/-/DD","/");
-            DataHandler.setFieldsData(Config.fieldsKey.DateKey, formValues[Config.fieldsKey.DateKey]);
-        }
-        TemplateHelper.updateTemplateValue(newWorkStatus, formValues);
-        this.updateBtnStatus(newWorkStatus);
-        return newWorkStatus;
-    },
-    getAddNewSupplyTemplate: function() {
-        var addSupplyStatus = this.getTemplate("addSupplyStatus");
-        var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.supplyDiscription,
-                            Config.fieldsKey.RemarksKey];
-        var fieldsData = DataHandler.getData("fieldsData", {});
-        if (!$S.isObject(fieldsData)) {
-            fieldsData = {};
-        }
-        var formValues = {}, formText = {};
-        for (var i=0; i<requiredKeys.length; i++) {
-            formValues[requiredKeys[i]] = fieldsData[requiredKeys[i]];
-        }
-        if (!AppHandler.isValidDateStr(formValues[Config.fieldsKey.DateKey])) {
-            formValues[Config.fieldsKey.DateKey] = DT.getDateTime("YYYY/-/MM/-/DD","/");
-            DataHandler.setFieldsData(Config.fieldsKey.DateKey, formValues[Config.fieldsKey.DateKey]);
-        }
-        TemplateHelper.updateTemplateValue(addSupplyStatus, formValues);
-        var supplyDiscriptionTemplate = DataHandler.getAppData(Config.fieldsKey.supplyDiscription, []);
-        if (!$S.isArray(supplyDiscriptionTemplate)) {
-            supplyDiscriptionTemplate = [];
-        }
-        formText[Config.fieldsKey.supplyDiscription] = supplyDiscriptionTemplate;
-        TemplateHelper.updateTemplateText(addSupplyStatus, formText);
-        this.updateBtnStatus(addSupplyStatus);
-        return addSupplyStatus;
-    },
     generateProjectWorkStatus: function(renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -190,11 +145,11 @@ TemplateHandler.extend({
         }
         var template = this.getTemplate("projectWorkStatus");
         var pName = renderData.pName;
-        var newWorkStatus = this.getAddNewWorkTemplate();
+        var newWorkStatus = FormHandler.getAddNewWorkTemplate();
         if (!$S.isArray(newWorkStatus)) {
             newWorkStatus = [];
         }
-        var projectWorkStatus = this._generateFieldTable(renderData.workStatus, "resultPatternWorkStatus");
+        var projectWorkStatus = this._generateFieldTable(renderData.workStatus, renderData.tableName, "resultPatternWorkStatus");
         TemplateHelper.updateTemplateText(template, {"projectWorkStatus.pName": pName});
         TemplateHelper.addItemInTextArray(template, "projectWorkStatus.statusTable", projectWorkStatus);
         TemplateHelper.addItemInTextArray(template, "projectWorkStatus.addNew", newWorkStatus);
@@ -208,15 +163,31 @@ TemplateHandler.extend({
             return this._getInvalidField(renderData.reason);
         }
         var template = this.getTemplate("projectSupplyStatus");
-        var pName = renderData.pName;
-        var newSupplyStatus = this.getAddNewSupplyTemplate();
+        var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
+        var newSupplyStatus = FormHandler.getAddNewSupplyTemplate();
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
-        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, "resultPatternSupplyStatus");
-        TemplateHelper.updateTemplateText(template, {"projectSupplyStatus.pName": pName});
+        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "resultPatternSupplyStatus");
+        TemplateHelper.updateTemplateText(template, displayText);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
+        return template;
+    },
+    generateProjectSupplyItemList: function(renderData) {
+        if (!$S.isObject(renderData)) {
+            renderData = {};
+        }
+        if (renderData.status === "FAILURE") {
+            return this._getInvalidField(renderData.reason);
+        }
+        var template = this.getTemplate("projectSupplyItems");
+        var pName = renderData.pName;
+        var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
+        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "resultPatternSupplyItems");
+        TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
+        TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
+        TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
         return template;
     }
 });
@@ -236,6 +207,9 @@ TemplateHandler.extend({
             case "projectStatusWork":
             case "projectStatusSupply":
                 backUrl = this._getLink("projectId", pid);
+            break;
+            case "updateSupplyStatus":
+                backUrl = this._getLink("projectStatus", pid, "supply");
             break;
             case "projectId":
             default:
@@ -272,7 +246,13 @@ TemplateHandler.extend({
                 renderField = this.generateProjectWorkStatus(renderData);
             break;
             case "projectStatusSupply":
+                renderField = this.generateProjectSupplyItemList(renderData);
+            break;
+            case "updateSupplyStatus":
                 renderField = this.generateProjectSupplyStatus(renderData);
+            break;
+            case "displaySupplyStatus":
+                renderField = TemplateHandlerDBView.getDbViewFields(renderData);
             break;
             case "noMatch":
             default:
