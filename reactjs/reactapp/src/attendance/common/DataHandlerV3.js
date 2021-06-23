@@ -86,8 +86,8 @@ DataHandlerV3.extend({
         if (!$S.isObject(tableData)) {
             return;
         }
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
@@ -95,8 +95,8 @@ DataHandlerV3.extend({
         var tempDbViewData = DataHandler.getData("dbViewData", {});
         var attendanceData = DataHandler.getData("attendanceData", {});
         var requiredDataTable = DataHandler.getAppData("requiredDataTable." + currentList2Id, []);
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
         var resultPatternKey = "resultPattern"+$S.capitalize(currentList2Id);
         var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         var finalTable = [];
@@ -143,9 +143,9 @@ DataHandlerV3.extend({
         });
     },
     generateFilterOptions: function() {
-        var currentAppData = DataHandler.getCurrentAppData();
+        var currentAppData = DataHandler.getCurrentAppData({});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = DataHandler.getMetaData({});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
@@ -155,11 +155,9 @@ DataHandlerV3.extend({
 
 DataHandlerV3.extend({
     getList2Data: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
-        var redirectPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "redirectPages");
-        var linkText = $S.findParam([currentAppData, metaData, Config.tempConfig], "linkText");
+        var enabledPages = DataHandler.getAppData("enabledPages");
+        var redirectPages = DataHandler.getAppData("redirectPages");
+        var linkText = DataHandler.getAppData("linkText");
         if (!$S.isArray(enabledPages)) {
             enabledPages = [];
         }
@@ -222,13 +220,13 @@ DataHandlerV3.extend({
         return null;
     },
     getList3Data: function(pageName) {
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var name = "list3Data", i;
         var allPages = Object.keys(Config.pages);
         if ([Config.home].indexOf(currentList2Id) >= 0) {
-            var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages", []);
+            var enabledPages = DataHandler.getAppData("enabledPages", []);
             if ($S.isArray(enabledPages)) {
                 for (i = 0; i<enabledPages.length; i++) {
                     if ($S.isStringV2(enabledPages[i]) && allPages.indexOf(enabledPages[i]) >= 0) {
@@ -263,9 +261,7 @@ DataHandlerV3.extend({
         if ([Config.projectHome, Config.home].indexOf(pageName) >= 0) {
             return false;
         }
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
+        var enabledPages = DataHandler.getAppData("enabledPages");
         if ($S.isArray(enabledPages)) {
             return enabledPages.indexOf(pageName) < 0;
         }

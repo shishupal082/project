@@ -334,8 +334,8 @@ TemplateHandler.extend({
     // },
     generateDbViewRenderFieldV5: function(renderData) {
         var renderField = this.getTemplate("addFieldReport");
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var additionalDataRequired = $S.findParam([currentAppData, metaData], "addFieldReport.additionalDataRequired", []);
         var stations = $S.findParam([currentAppData, metaData], "addFieldReport.stations", []);
         var devices = $S.findParam([currentAppData, metaData], "addFieldReport.devices", []);
@@ -493,7 +493,7 @@ TemplateHandler.extend({
                 break;
             }
         }
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = DataHandler.getMetaData({});
         var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
         var footerField = this.getTemplate("footerField");
         TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});

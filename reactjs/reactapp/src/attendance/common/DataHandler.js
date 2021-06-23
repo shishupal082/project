@@ -203,16 +203,16 @@ DataHandler.extend({
     //     return arrangedDate;
     // },
     generateDateParameter: function() {
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var currentList3Data = this.getCurrentList3Data();
         var dateRange = $S.findParam([currentList3Data, currentAppData, metaData], "dateRange", []);
         DataHandler.setData("dateParameters", AppHandler.GetDataParameterFromDate(dateRange));
     },
-    getCurrentAppData: function() {
+    getCurrentAppData: function(defaultCurrentAppData) {
         var appControlData = this.getData("appControlData", []);
         var currentAppId = this.getData("currentList1Id", "");
-        var currentAppData = {};
+        var currentAppData = defaultCurrentAppData;
         if ($S.isArray(appControlData)) {
             for (var i = 0; i < appControlData.length; i++) {
                 if (appControlData[i]["id"] === currentAppId) {
@@ -222,6 +222,15 @@ DataHandler.extend({
             }
         }
         return currentAppData;
+    },
+    getMetaData: function(defaultMetaData) {
+        var currentAppData = this.getCurrentAppData({});
+        var currentAppId = this.getData("currentList1Id", "");
+        var metaData = defaultMetaData;
+        if ($S.isObject(currentAppData) && currentAppData.id === currentAppId) {
+            metaData = this.getData("metaData", {});
+        }
+        return metaData;
     },
     getCurrentList3Data: function() {
         var list3Id = this.getData("currentList3Id", "");
@@ -240,8 +249,8 @@ DataHandler.extend({
         return currentList3Data;
     },
     getBooleanParam: function(name, defaultValue) {
-        var currentAppData = this.getCurrentAppData();
-        var metaData = this.getData("metaData", {});
+        var currentAppData = this.getCurrentAppData({});
+        var metaData = this.getMetaData({});
         var booleanVal = $S.findParam([currentAppData, metaData], name);
         if ($S.isBoolean(booleanVal)) {
             return booleanVal;
@@ -249,7 +258,7 @@ DataHandler.extend({
         return defaultValue;
     },
     getHeadingText: function() {
-        var currentAppData = this.getCurrentAppData();
+        var currentAppData = this.getCurrentAppData({});
         return AppHandler.getHeadingText(currentAppData, "App Heading");
     },
     getUserInfoById: function(userId) {
@@ -305,9 +314,12 @@ DataHandler.extend({
         if (!$S.isStringV2(key)) {
             return defaultValue;
         }
-        var currentAppData = this.getCurrentAppData();
-        var metaData = this.getData("metaData", {});
-        var tempConfig = Config.tempConfig;
+        var currentAppData = this.getCurrentAppData(null);
+        var metaData = this.getMetaData(null);
+        var tempConfig = null;
+        if ($S.isObject(currentAppData) || $S.isObject(metaData)) {
+            tempConfig = Config.tempConfig;
+        }
         return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
     }
 });
@@ -318,7 +330,7 @@ DataHandler.extend({
         if ($S.isString(currentFileId) && currentFileId.length > 0) {
             return [Config.baseApi + DataHandler.generateApi(currentFileId)];
         }
-        var currentAppData = this.getCurrentAppData();
+        var currentAppData = this.getCurrentAppData({});
         var api = [];
         if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
             for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
@@ -331,14 +343,14 @@ DataHandler.extend({
         return api;
     },
     generateApi: function(path) {
-        var currentAppData = this.getCurrentAppData();
+        var currentAppData = this.getCurrentAppData({});
         if ($S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
             return "/view/file/" + path + "?u=" + AppHandler.GetUserData("username", "") + "&iframe=false";
         }
         return path;
     },
     getAllReportDataApi: function() {
-        var currentAppData = this.getCurrentAppData();
+        var currentAppData = this.getCurrentAppData({});
         var api = [];
         if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
             for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
@@ -350,7 +362,7 @@ DataHandler.extend({
         return api;
     },
     getAllReportDataApiV2: function() {
-        var currentAppData = this.getCurrentAppData();
+        var currentAppData = this.getCurrentAppData({});
         var api = [];
         if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
             for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
@@ -362,7 +374,7 @@ DataHandler.extend({
         return api;
     },
     loadDataByAppId: function(callback) {
-        var appControlData = DataHandler.getCurrentAppData();//{}
+        var appControlData = DataHandler.getCurrentAppData({});//{}
         var request = [], metaDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
@@ -416,8 +428,8 @@ DataHandler.extend({
     },
     handlePageRouting: function(reason, callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
         if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
@@ -565,8 +577,8 @@ DataHandler.extend({
             return;
         }
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
         if ([Config.update].indexOf(currentList2Id) >= 0) {
             var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
             DataHandlerV2.callAddTextApi(name, value, function() {
@@ -627,8 +639,8 @@ DataHandler.extend({
             dateArray = dateParameters[dateSelect];
         }
         var renderData = [], i, currentList3Data;
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
         var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name");
@@ -685,7 +697,7 @@ DataHandler.extend({
         var dateSelection = null;
         if (dataLoadStatus) {
             renderData = this.getRenderData();
-            footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
+            footerData = AppHandler.GetFooterData(this.getMetaData({}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelection = Config.dateSelection;
         }

@@ -47,8 +47,8 @@ DataHandlerTA.extend({
     },
     SubmitFormClick: function(callback) {
         var fieldsData = DataHandler.getData("fieldsData", {});
-        var appData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var appData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var filename = $S.findParam([appData, metaData], "filename", "");
         var dateField = DataHandler.getCurrentList3Data();
         if (!$S.isString(filename) || filename.length === 0) {

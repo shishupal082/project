@@ -126,8 +126,8 @@ DataHandlerV2.extend({
         var renderData = [];
         var i, j, k, temp, userDataV2;
         var attendanceData = DataHandler.getData("latestAttendanceData", {});
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
         var nhList = $S.findParam([currentAppData, metaData], "nhList", []);
         var phList = $S.findParam([currentAppData, metaData], "phList", []);
         var attendanceOption = $S.findParam([currentAppData, metaData], "attendanceOption", {});
@@ -299,8 +299,8 @@ DataHandlerV2.extend({
             return;
         }
         var i, lastRow;
-        var appControlData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var appControlData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var defaultCount = $S.findParam([appControlData, metaData], "defaultCount", "");
         for(i=0; i<renderData.length; i++) {
             if ($S.isObject(renderData[i]) && $S.isArray(renderData[i].tableData)) {

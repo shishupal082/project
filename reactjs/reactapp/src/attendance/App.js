@@ -22,7 +22,7 @@ class App extends React.Component {
             "goBackLinkData": [], // Used for back url
 
             "selectFilterComponentClass": "",
-            "list1Text": "",
+            "list1Text": "Select...",
             "list1Data": [],
             "currentList1Id": "",
 

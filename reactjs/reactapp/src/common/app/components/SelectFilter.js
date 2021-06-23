@@ -20,7 +20,7 @@ class SelectFilter extends React.Component {
         var dateSelection = this.props.data.dateSelection;
         var dateSelectionRequiredPages = this.props.data.dateSelectionRequiredPages;
 
-        var list1Text = null;
+        var list1ItemNotFound = true;
         var list2ItemNotFound = true;
         var list3ItemNotFound = true;
 
@@ -39,10 +39,10 @@ class SelectFilter extends React.Component {
         if (!$S.isArray(dateSelectionRequiredPages)) {
             dateSelectionRequiredPages = [];
         }
-        if ($S.isString(this.props.data.list1Text) && this.props.data.list1Text.length > 0) {
-            list1Text = <td className="pr-5px">{this.props.data.list1Text}</td>;
-        }
         var list1Dropdown = list1Data.map(function(el, i, arr) {
+            if (el.id === self.props.data.currentList1Id) {
+                list1ItemNotFound = false;
+            }
             return <option key={i} value={el.id}>{el.name}</option>
         });
         var list2Dropdown = list2Data.map(function(el, i, arr) {
@@ -66,10 +66,13 @@ class SelectFilter extends React.Component {
             }
             return <button key={i} type="button" className={className} name="date-select" onClick={self.props.methods.onClick} value={el.value}>{el.name}</button>;
         });
-        if (list1Dropdown.length >= 1) {
+        if (list1Dropdown.length > 0) {
+            if (list1ItemNotFound) {
+                $S.addElAt(list1Dropdown, 0, <option key={list1Dropdown.length}>{this.props.data.list1Text}</option>);
+            }
             list1Dropdown = <td><select className="form-control" name="list1-select" onChange={this.props.methods.dropDownChange} value={this.props.data.currentList1Id}>{list1Dropdown}</select></td>;
         } else {
-            list1Text = null;
+            list1Dropdown = null;
         }
         if (list2Dropdown.length > 0) {
             if (list2ItemNotFound) {
@@ -102,7 +105,6 @@ class SelectFilter extends React.Component {
         }
         if (this.props.data.firstTimeDataLoadStatus === "completed") {
             if (list1Data.length < 1) {
-                list1Text = null;
                 list1Dropdown = null;
             }
             if (list2Data.length < 1) {
@@ -116,17 +118,15 @@ class SelectFilter extends React.Component {
                 toggleButton = null;
             }
         } else {
-            dateSelection = null;
-            list1Text = null;
             list1Dropdown = null;
             list2Dropdown = null;
             list3Dropdown = null;
+            dateSelection = null;
             reloadButton = null;
             toggleButton = null;
         }
         return (<div className="SELECT-FILTER">
                 <div><table><tbody><tr>
-                    {list1Text}
                     {list1Dropdown}
                     {list2Dropdown}
                     {list3Dropdown}

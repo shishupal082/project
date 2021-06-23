@@ -102,11 +102,11 @@ DataHandlerAddFieldReport.extend({
         if (!$S.isString(url)) {
             return;
         }
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var successRedirectPage = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectPage", "");
         var successRedirectUrl = DataHandler.getPageUrlByPageName(successRedirectPage);
-        var addTextFilenamePattern = $S.findParam([currentAppData, metaData, Config.tempConfig], "addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
+        var addTextFilenamePattern = DataHandler.getAppData("addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
         var username = AppHandler.GetUserData("username", "");
         var finalText = [], temp, i;
         temp = formData["addFieldReport.comment"].split("\n");
@@ -157,8 +157,8 @@ DataHandlerAddFieldReport.extend({
         return "Invalid " + key;
     },
     SubmitForm: function(callback) {
-        var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
         var formData = {}, i;
         var formDataKey = ["addFieldReport.station", "addFieldReport.device", "addFieldReport.comment"];
         var fieldsData = DataHandler.getData("fieldsData", {});
