@@ -3,3 +3,7 @@
     padding: 10px;
     width: 420px;
 }
+.APP-COMPONENT.displaySupplyStatus1 .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
+    display: none;
+}

@@ -231,7 +231,7 @@ DataHandlerV2.extend({
         var response = this.getProjectData();
         var tableName = DataHandler.getTableName("materialSupplyStatus");
         var supplyStatus = DataHandlerV2.getTableDataByAttr(tableName, "sid", supplyItemId);
-        var supplyItemName = this.getDisplayName(DataHandler.getTableName("materialSupplyItems"), "sid", supplyItemId, "item_name");
+        var supplyItemName = this.getDisplayName(DataHandler.getTableName("materialSupplyItems"), "sid", supplyItemId, "supply_item_name");
         // var projectName = this.getDisplayName(DataHandler.getTableName("projectTable"), "pid", currentPId, "pName");
         // if ($S.isArray(supplyStatus)) {
         //     for(var i=0; i<supplyStatus.length; i++) {

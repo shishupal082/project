@@ -100,13 +100,27 @@ DBViewDataHandler.extend({
         }
         return tableData;
     },
-    GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
-        if (!$S.isArray(resultPattern)) {
+    ApplyResultPattern: function(dbViewTableData, resultPattern) {
+        if (!$S.isArray(resultPattern) || !$S.isArray(dbViewTableData)) {
             return [];
         }
+        var i, j, temp, t1Name, finalTable = [];
+        for (i = 0; i < dbViewTableData.length; i++) {
+            temp = $S.clone(resultPattern);
+            for (j=0; j<temp.length; j++) {
+                t1Name = temp[j].tableName;
+                if (!$S.isObject(dbViewTableData[i][t1Name])) {
+                    continue;
+                }
+                temp[j].value = $S.findParam([dbViewTableData[i][t1Name]], temp[j].name);
+            }
+            finalTable.push(temp);
+        }
+        return finalTable;
+    },
+    GetFinalTableV2: function(dbViewData, resultCriteria, requiredDataTable) {
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
-        var tempJoinResult = [];
         var force1stEntry, isNotMatching;
         if (!$S.isArray(resultCriteria)) {
             resultCriteria = [];
@@ -128,16 +142,8 @@ DBViewDataHandler.extend({
                     t1 = finalDbViewData[tableName].tableData;
                     if ($S.isArray(t1)) {
                         for(i=0; i<t1.length; i++) {
-                            temp = $S.clone(resultPattern);
-                            for (j=0; j<temp.length; j++) {
-                                if (!$S.isStringV2(temp[j].name)) {
-                                    continue;
-                                }
-                                t1Name = temp[j].tableName;
-                                if (tableName === t1Name) {
-                                    temp[j].value = t1[i][temp[j].name];
-                                }
-                            }
+                            temp = {};
+                            temp[tableName] = t1[i];
                             finalTable.push(temp);
                         }
                     }
@@ -175,12 +181,12 @@ DBViewDataHandler.extend({
                                                 temp2 = $S.clone(temp);
                                                 temp2[t2Name] = t2[k];
                                                 isNotMatching = false;
-                                                tempJoinResult.push(temp2);
+                                                finalTable.push(temp2);
                                             }
                                         }
                                     }
                                     if (isNotMatching) {
-                                        tempJoinResult.push(temp);
+                                        finalTable.push(temp);
                                     }
                                 } else {
                                     if ($S.isArray(t2)) {
@@ -189,7 +195,7 @@ DBViewDataHandler.extend({
                                                 temp = {};
                                                 temp[t1Name] = t1[j];
                                                 temp[t2Name] = t2[k];
-                                                tempJoinResult.push(temp);
+                                                finalTable.push(temp);
                                             }
                                         }
                                     }
@@ -207,24 +213,145 @@ DBViewDataHandler.extend({
                                 if (isNotMatching) {
                                     temp = {};
                                     temp[t1Name] = t1[j];
-                                    tempJoinResult.push(temp);
+                                    finalTable.push(temp);
                                 }
                             }
                         }
                     }
                 }
             }
-            for (i = 0; i < tempJoinResult.length; i++) {
-                temp = $S.clone(resultPattern);
-                for (j=0; j<temp.length; j++) {
-                    t1Name = temp[j].tableName;
-                    temp[j].value = $S.findParam([tempJoinResult[i][t1Name]], temp[j].name);
-                }
-                finalTable.push(temp);
-            }
         }
         return finalTable;
     },
+    GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
+        var finalTable = this.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
+        return this.ApplyResultPattern(finalTable, resultPattern);
+    },
+    // GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
+    //     if (!$S.isArray(resultPattern)) {
+    //         return [];
+    //     }
+    //     var i, j, k, op, values, t1, t1Name, t2, t2Name;
+    //     var finalTable = [], temp, temp2, tableName;
+    //     var tempJoinResult = [];
+    //     var force1stEntry, isNotMatching;
+    //     if (!$S.isArray(resultCriteria)) {
+    //         resultCriteria = [];
+    //     }
+    //     var finalDbViewData = {};
+    //     if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
+    //         temp = Object.keys(dbViewData);
+    //         for (i=0; i<requiredDataTable.length; i++) {
+    //             if (temp.indexOf(requiredDataTable[i]) >= 0) {
+    //                 finalDbViewData[requiredDataTable[i]] = dbViewData[requiredDataTable[i]];
+    //             }
+    //         }
+    //     } else {
+    //         finalDbViewData = dbViewData;
+    //     }
+    //     if (resultCriteria.length === 0) {
+    //         if ($S.isObject(finalDbViewData)) {
+    //             for(tableName in finalDbViewData) {
+    //                 t1 = finalDbViewData[tableName].tableData;
+    //                 if ($S.isArray(t1)) {
+    //                     for(i=0; i<t1.length; i++) {
+    //                         temp = $S.clone(resultPattern);
+    //                         for (j=0; j<temp.length; j++) {
+    //                             if (!$S.isStringV2(temp[j].name)) {
+    //                                 continue;
+    //                             }
+    //                             t1Name = temp[j].tableName;
+    //                             if (tableName === t1Name) {
+    //                                 temp[j].value = t1[i][temp[j].name];
+    //                             }
+    //                         }
+    //                         finalTable.push(temp);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         for(i=0; i<resultCriteria.length; i++) {
+    //             op = $S.findParam([resultCriteria[i]], "op");
+    //             if ($S.isString(op)) {
+    //                 values = $S.findParam([resultCriteria[i]], "values");
+    //                 if ($S.isArray(values) && values.length === 2) {
+    //                     force1stEntry = $S.findParam([resultCriteria[i]], "force1stEntry");
+    //                     t1Name = values[0].tableName;
+    //                     t2Name = values[1].tableName;
+    //                     t1 = null;
+    //                     t2 = null;
+    //                     if ($S.isObject(finalDbViewData[t1Name])) {
+    //                         t1 = finalDbViewData[t1Name].tableData;
+    //                     }
+    //                     if ($S.isObject(finalDbViewData[t2Name])) {
+    //                         t2 = finalDbViewData[t2Name].tableData;
+    //                     }
+    //                     if (!$S.isArray(t1)) {
+    //                         continue;
+    //                     }
+    //                     for(j=0; j<t1.length; j++) {
+    //                         if (op === "==") {
+    //                             if ($S.isBooleanTrue(force1stEntry)) {
+    //                                 temp = {};
+    //                                 temp[t1Name] = t1[j];
+    //                                 isNotMatching = true;
+    //                                 if ($S.isArray(t2)) {
+    //                                     for(k=0; k<t2.length; k++) {
+    //                                         if (t1[j][values[0].col] === t2[k][values[1].col]) {
+    //                                             temp2 = $S.clone(temp);
+    //                                             temp2[t2Name] = t2[k];
+    //                                             isNotMatching = false;
+    //                                             tempJoinResult.push(temp2);
+    //                                         }
+    //                                     }
+    //                                 }
+    //                                 if (isNotMatching) {
+    //                                     tempJoinResult.push(temp);
+    //                                 }
+    //                             } else {
+    //                                 if ($S.isArray(t2)) {
+    //                                     for(k=0; k<t2.length; k++) {
+    //                                         if (t1[j][values[0].col] === t2[k][values[1].col]) {
+    //                                             temp = {};
+    //                                             temp[t1Name] = t1[j];
+    //                                             temp[t2Name] = t2[k];
+    //                                             tempJoinResult.push(temp);
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }
+    //                         } else if (op === "!=") {
+    //                             isNotMatching = true;
+    //                             if ($S.isArray(t2)) {
+    //                                 for(k=0; k<t2.length; k++) {
+    //                                     if (t1[j][values[0].col] === t2[k][values[1].col]) {
+    //                                         isNotMatching = false;
+    //                                         break;
+    //                                     }
+    //                                 }
+    //                             }
+    //                             if (isNotMatching) {
+    //                                 temp = {};
+    //                                 temp[t1Name] = t1[j];
+    //                                 tempJoinResult.push(temp);
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         for (i = 0; i < tempJoinResult.length; i++) {
+    //             temp = $S.clone(resultPattern);
+    //             for (j=0; j<temp.length; j++) {
+    //                 t1Name = temp[j].tableName;
+    //                 temp[j].value = $S.findParam([tempJoinResult[i][t1Name]], temp[j].name);
+    //             }
+    //             finalTable.push(temp);
+    //         }
+    //     }
+    //     return finalTable;
+    // },
     SortTableData: function(tableData, sortingField) {
         if (!$S.isObject(tableData)) {
             return;

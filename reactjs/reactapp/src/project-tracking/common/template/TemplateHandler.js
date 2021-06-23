@@ -58,7 +58,7 @@ TemplateHandler.extend({
         var sortingFields = DataHandler.getData("sortingFields", []);
         var dbViewData = {};
         dbViewData[tableName] = {"tableData": tableData};
-        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern);
+        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, null, null);
         finalTable = $S.sortResultV2(finalTable, sortingFields, "name");
         var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(finalTable, currentList3Data, sortingFields);
         return htmlFields;
