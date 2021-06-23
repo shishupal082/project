@@ -22,8 +22,10 @@ class PageFilter extends React.Component {
             if ($S.isObject(el)) {
                 if ($S.isArray(el.text) && el.type === "dropdown") {
                     tdComponent = el.text.map(function(el1, i1, arr1) {
-                        if ($S.isBooleanTrue(el1.selected)) {
-                            selectedValue = el1.value;
+                        if ($S.isObject(el1)) {
+                            if ($S.isBooleanTrue(el1.selected) || el1.value === el.selectedValue) {
+                                selectedValue = el1.value;
+                            }
                         }
                         return <option key={i1} value={el1.value}>{el1.option}</option>;
                     });

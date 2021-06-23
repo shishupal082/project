@@ -861,6 +861,9 @@ AppHandler.extend({
         if (!$S.isArray(reportData)) {
             reportData = [];
         }
+        if (!$S.isArray(filterOptions)) {
+            filterOptions = [];
+        }
         for(k=0; k<filterOptions.length; k++) {
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;

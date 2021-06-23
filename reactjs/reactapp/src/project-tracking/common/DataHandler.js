@@ -516,16 +516,18 @@ DataHandler.extend({
 });
 DataHandler.extend({
     getRenderData: function() {
-        var pageName = this.getData("pageName", "");
         var renderData;
-        var sortingFields = DataHandler.getData("sortingFields", []);
-        var currentList3Data = DataHandler.getCurrentList3Data();
-        var dateSelect = DataHandler.getData("date-select", "");
-        var dateParameterField = DataHandler.getAppData("dateParameterField", {});
-
+        var currentAppData = this.getCurrentAppData();
+        var currentList3Data = this.getCurrentList3Data();
+        var pageName = this.getData("pageName", "");
+        var sortingFields = this.getData("sortingFields", []);
+        var dateSelect = this.getData("date-select", "");
+        var dateParameterField = this.getAppData("dateParameterField", {});
+        var metaData = this.getData("metaData");
+        var filterOptions = this.getData("filterOptions");
         switch(pageName) {
             case "home":
-                renderData = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
+                renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
             break;
             case "projectId":
                 renderData = DataHandlerV2.getProjectData();
@@ -541,6 +543,7 @@ DataHandler.extend({
             break;
             case "displaySupplyStatus":
                 renderData = DataHandlerV2.getDisplaySypplyStatus(sortingFields);
+                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
@@ -556,16 +559,18 @@ DataHandler.extend({
         var footerData = null;
         var appHeading = null;
         var list3Data = null;
+        var filterOptions = null;
         var dateSelectionRequiredPages = null;
         var pageName= DataHandler.getData("pageName", "");
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-            dateSelectionRequiredPages = Config.dateSelectionRequiredPages
+            dateSelectionRequiredPages = Config.dateSelectionRequiredPages;
         }
         if (dataLoadStatus && [Config.displaySupplyStatus].indexOf(pageName) >= 0) {
             list3Data = DataHandlerV2.getList3Data();
+            filterOptions = DataHandler.getData("filterOptions");
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
 
@@ -578,6 +583,7 @@ DataHandler.extend({
         appDataCallback("dateSelectionRequiredPages", dateSelectionRequiredPages);
         appDataCallback("dateSelection", Config.dateSelection);
         appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
+        appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
         appStateCallback();
     }
 });

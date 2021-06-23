@@ -106,6 +106,14 @@ DataHandlerV2.extend({
         }
         return list3Data;
     },
+    generateFilterOptions: function(dbViewData) {
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var filterSelectedValues = DataHandler.getData("filterValues", {});
+        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewData, filterSelectedValues, "name");
+        DataHandler.setData("filterOptions", filterOptions);
+        return dbViewData;
+    },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
         var appControlMetaData = DataHandler.getData("appControlMetaData", {});
@@ -269,6 +277,7 @@ DataHandlerV2.extend({
                 tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
             }
         }
+        this.generateFilterOptions(tableData);
         var resultPattern = DataHandler.getAppData("resultPatternDisplaySupplyStatus");
         var resultCriteria = DataHandler.getAppData("resultCriteria");
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);

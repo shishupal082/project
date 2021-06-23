@@ -19,19 +19,14 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
-            "goBackLinkData": [], // Used for back url
 
             "list3Text": "Select...",
             "list3Data": [],
             "currentList3Id": "",
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
-            "pageHeading": "",
-            "pageTab": [],
-            "hidePageTab": true,
 
             "renderFieldRow": [],
-            "errorsData": [],
 
             "selectedDateType": "",
             "dateSelection": [],
@@ -97,16 +92,24 @@ class App extends React.Component {
         e.preventDefault();
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
-
         DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback, name, value);
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filterNames = [];
+        for(var i=0; i<filterOptions.length; i++) {
+            if ($S.isString(filterOptions[i].selectName)) {
+                filterNames.push(filterOptions[i].selectName);
+            }
+        }
         if (name === "list2-select") {
             DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "list3-select") {
             DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, value);
+        } else if (filterNames.indexOf(name) >= 0) {
+            DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         } else {
             DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
