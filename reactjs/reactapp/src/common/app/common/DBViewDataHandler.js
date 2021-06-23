@@ -109,10 +109,10 @@ DBViewDataHandler.extend({
             temp = $S.clone(resultPattern);
             for (j=0; j<temp.length; j++) {
                 t1Name = temp[j].tableName;
-                if (!$S.isObject(dbViewTableData[i][t1Name])) {
+                if (!$S.isObject(dbViewTableData[i][t1Name]) || !$S.isStringV2(temp[j].name)) {
                     continue;
                 }
-                temp[j].value = $S.findParam([dbViewTableData[i][t1Name]], temp[j].name);
+                temp[j].value = dbViewTableData[i][t1Name][temp[j].name];
             }
             finalTable.push(temp);
         }
