@@ -466,10 +466,10 @@ TemplateHandler.extend({
                 case "entry":
                 case "update":
                 case "summary":
-                    renderField = DBViewTemplateHandler.generateDbViewRenderFieldV2(renderData, true, "tableDataV2");
+                    renderField = DBViewTemplateHandler.generateDbViewRenderFieldV2(renderData, true, "tableDataV2", sortingFields);
                 break;
                 case "ta":
-                    renderField = DBViewTemplateHandler.generateDbViewRenderFieldV2(renderData, true, "tableData");
+                    renderField = DBViewTemplateHandler.generateDbViewRenderFieldV2(renderData, true, "tableData", sortingFields);
                 break;
                 case "dbview":
                 case "custom_dbview":
