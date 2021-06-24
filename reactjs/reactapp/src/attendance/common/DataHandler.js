@@ -232,8 +232,7 @@ DataHandler.extend({
         }
         return metaData;
     },
-    getCurrentList3Data: function() {
-        var list3Id = this.getData("currentList3Id", "");
+    getList3DataById: function(list3Id) {
         var list3Data = DataHandlerV3.getList3Data();
         var currentList3Data = {};
         if ($S.isArray(list3Data)) {
@@ -247,6 +246,10 @@ DataHandler.extend({
             }
         }
         return currentList3Data;
+    },
+    getCurrentList3Data: function() {
+        var currentList3Id = DataHandlerV3.getCurrentList3Id();
+        return this.getList3DataById(currentList3Id);
     },
     getBooleanParam: function(name, defaultValue) {
         var currentAppData = this.getCurrentAppData({});
@@ -449,7 +452,6 @@ DataHandler.extend({
             DataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.generateDateParameter();
             DataHandler.loadDataByAppId(function() {
                 $S.callMethod(callback);
             });
@@ -508,6 +510,7 @@ DataHandler.extend({
         }
         AppHandler.TrackPageView(list2Id);
         DataHandler.handleApiDataLoad();
+        DataHandler.generateDateParameter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList3Change: function(appStateCallback, appDataCallback, list3Id) {
@@ -726,7 +729,7 @@ DataHandler.extend({
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", DataHandler.getData("currentList2Id", ""));
         appDataCallback("list3Data", list3Data);
-        appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
+        appDataCallback("currentList3Id", DataHandlerV3.getCurrentList3Id());
 
         appDataCallback("dateSelectionRequiredPages", dateSelectionRequired);
         appDataCallback("dateSelection", dateSelection);
