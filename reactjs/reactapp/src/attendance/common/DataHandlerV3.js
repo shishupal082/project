@@ -39,7 +39,7 @@ DataHandlerV3.extend({
         return true;
     },
     _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, temp, urls;
+        var request = [], i, j, el, temp, urls;
         if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
             for(i=0; i<dbDataApis.length; i++) {
                 if (!this._isValidTableEntry(dbDataApis[i])) {
@@ -51,14 +51,14 @@ DataHandlerV3.extend({
                     }
                     return false;
                 });
-                urls = urls.map(function(el, j, arr) {
-                    if ($S.isString(el)) {
-                        if (el.split("?").length > 1) {
-                            return Config.baseApi + el + "&requestId=" + Config.requestId;
-                        }
+                for (j=0; j<urls.length; j++) {
+                    el = urls[j];
+                    if ($S.isString(el) && el.split("?").length > 1) {
+                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&temp_file_name=" + i;
+                    } else {
+                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&temp_file_name=" + i;
                     }
-                    return Config.baseApi + el + "?requestId=" + Config.requestId;
-                });
+                }
                 if (urls.length < 1) {
                     continue;
                 }

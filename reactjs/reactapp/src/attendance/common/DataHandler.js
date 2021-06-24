@@ -428,10 +428,8 @@ DataHandler.extend({
     },
     handlePageRouting: function(reason, callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var metaData = DataHandler.getMetaData({});
-        var currentAppData = DataHandler.getCurrentAppData({});
-        var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
-        var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
+        var dbDataApis = this.getAppData("dbDataApis", []);
+        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             DataHandlerV3.handlePageLoad(dbDataApis, function() {
                 DataHandler.loadAttendanceData(attendanceDataApis, function() {
@@ -577,10 +575,8 @@ DataHandler.extend({
             return;
         }
         var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var metaData = DataHandler.getMetaData({});
-        var currentAppData = DataHandler.getCurrentAppData({});
         if ([Config.update].indexOf(currentList2Id) >= 0) {
-            var attendanceDataApis = $S.findParam([currentAppData, metaData], "attendanceDataApis", []);
+            var attendanceDataApis = this.getAppData("attendanceDataApis", []);
             DataHandlerV2.callAddTextApi(name, value, function() {
                 DataHandler.loadAttendanceData(attendanceDataApis, function() {
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
