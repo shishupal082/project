@@ -362,7 +362,7 @@ DataHandlerV3.extend({
         return currentList3Id;
     },
     handleMetaDataLoad: function(metaDataResponse) {
-        var finalMetaData = {}, i;
+        var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = DataHandler.getData("appControlMetaData", {});
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = appControlMetaData;
@@ -370,7 +370,15 @@ DataHandlerV3.extend({
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
                 if ($S.isObject(metaDataResponse[i])) {
-                    finalMetaData = Object.assign(finalMetaData, metaDataResponse[i]);
+                    tempMetaData = metaDataResponse[i];
+                    temp = tempMetaData.metaData;
+                    if ($S.isObject(temp)) {
+                        temp = Object.keys(temp);
+                        if (temp.length > 0) {
+                            tempMetaData = tempMetaData.metaData;
+                        }
+                    }
+                    finalMetaData = Object.assign(finalMetaData, tempMetaData);
                 }
             }
         }

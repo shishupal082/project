@@ -377,7 +377,7 @@ DataHandler.extend({
         return api;
     },
     loadDataByAppId: function(callback) {
-        var appControlData = DataHandler.getCurrentAppData({});//{}
+        var appControlData = DataHandler.getCurrentAppData({});
         var request = [], metaDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
