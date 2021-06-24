@@ -20,7 +20,7 @@
 </head>
 <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""}]'></div>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.monitoringLink","href":"/app/attendancev2","text":"View Data"}}]'></div>
     <div id="root"><center>Loading...</center></div>
 
 <script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
