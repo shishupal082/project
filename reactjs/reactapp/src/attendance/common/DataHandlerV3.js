@@ -137,6 +137,13 @@ DataHandlerV3.extend({
         var tableData;
         DataHandlerV3._loadDBViewData(attendanceDataApis, function(request) {
             tableData = DBViewDataHandler.GenerateTableData(request);
+            if ($S.isObject(tableData)) {
+                for(var key in tableData) {
+                    if ($S.isArray(tableData[key].tableData)) {
+                        tableData[key].tableData = tableData[key].tableData.reverse();
+                    }
+                }
+            }
             DataHandlerV3._handleDefaultSorting(tableData);
             DataHandler.setData("attendanceData", tableData);
             $S.callMethod(callback);

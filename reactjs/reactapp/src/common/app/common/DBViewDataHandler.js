@@ -356,7 +356,7 @@ DBViewDataHandler.extend({
         if (!$S.isObject(tableData)) {
             return;
         }
-        var i, j, tableName, temp;
+        var i, tableName;
         if ($S.isArray(sortingField)) {
             for(i=0; i<sortingField.length; i++) {
                 if ($S.isObject(sortingField[i]) && $S.isString(sortingField[i].table)) {
@@ -373,13 +373,7 @@ DBViewDataHandler.extend({
                     if (!$S.isArray(tableData[tableName].tableData)) {
                         continue;
                     }
-                    temp = [];
-                    if ($S.isArray(tableData[tableName].tableData)) {
-                        for(j=tableData[tableName].tableData.length-1; j>=0; j--) {
-                            temp.push(tableData[tableName].tableData[j]);
-                        }
-                    }
-                    tableData[tableName].tableData = $S.sortResult(temp, sortingField[i].sortableValue, sortingField[i].index, "name");
+                    tableData[tableName].tableData = $S.sortResult(tableData[tableName].tableData, sortingField[i].sortableValue, sortingField[i].index, "name");
                 }
             }
         }
