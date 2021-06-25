@@ -812,8 +812,10 @@ AppHandler.extend({
         }
         var selectionOptions = [];
         var selectedValue;
+        var isResetBtn = false;
         for(i=0; i<filterKeys.length; i++) {
             if (filterKeys[i] === "reset") {
+                isResetBtn = true;
                 selectionOptions.push({"type": "buttons", "buttons": resetButton, "selectedValue": ""});
                 continue;
             }
@@ -833,6 +835,9 @@ AppHandler.extend({
                     "selectedValue": selectedValue
                 });
             }
+        }
+        if (isResetBtn && selectionOptions.length === 1) {
+            selectionOptions = [];
         }
         return selectionOptions;
     },
