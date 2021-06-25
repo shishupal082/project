@@ -8,7 +8,7 @@ import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
 import FormHandlerAddSupplyItem from "./FormHandlerAddSupplyItem";
 import FormHandlerCreateNewProject from "./FormHandlerCreateNewProject";
 import FormHandlerAddWorkStatus from "./FormHandlerAddWorkStatus";
-
+import FormHandlerUploadFile from "./FormHandlerUploadFile";
 
 var FormHandler;
 
@@ -62,6 +62,9 @@ FormHandler.extend({
     },
     submitNewWorkStatus: function(callback) {
         FormHandlerAddWorkStatus.submit(callback);
+    },
+    submitUploadFile: function(callback) {
+        FormHandlerUploadFile.submit(callback);
     }
 });
 FormHandler.extend({
@@ -95,6 +98,11 @@ FormHandler.extend({
         var formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
         this.updateBtnStatus(formTemplate);
         return formTemplate;
+    },
+    updateUploadFileTemplate: function(renderData, pageTemplate) {
+        FormHandlerUploadFile.updateUploadFileTemplate(renderData, pageTemplate);
+        this.updateBtnStatus(pageTemplate);
+        return pageTemplate;
     }
 });
 })($S);

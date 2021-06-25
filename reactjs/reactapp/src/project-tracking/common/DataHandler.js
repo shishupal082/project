@@ -469,6 +469,10 @@ DataHandler.extend({
             FormHandler.submitNewSupplyItem(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else if (name === "upload_file") {
+            FormHandler.submitUploadFile(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         }
     },
     OnClick: function(appStateCallback, appDataCallback, value) {

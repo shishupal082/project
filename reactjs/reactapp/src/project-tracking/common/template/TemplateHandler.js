@@ -90,26 +90,6 @@ TemplateHandler.extend({
         }
         return link;
     },
-    _getUploadFileTemplate: function(renderData) {
-        var tableEntry = this.getTemplate("uploaded_files");
-        var uploadedFileData = [];
-        var fileTemplate, temp, i, j;
-        var textReplaceParam = ["s_no", "uploadedBy", "fileName"];
-        if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
-            uploadedFileData.push(this.getTemplate("uploaded_files.details.heading"));
-            for(i=0; i<renderData.uploadedFileData.length; i++) {
-                fileTemplate = this.getTemplate("uploaded_files.details.fileInfo");
-                temp = {"s_no": i+1};
-                for (j=1; j<textReplaceParam.length; j++) {
-                    temp[textReplaceParam[j]] = renderData.uploadedFileData[i][textReplaceParam[j]];
-                }
-                TemplateHelper.updateTemplateText(fileTemplate, temp);
-                uploadedFileData.push(fileTemplate);
-            }
-        }
-        TemplateHelper.addItemInTextArray(tableEntry, "uploaded_files.entry", uploadedFileData);
-        return tableEntry;
-    },
     generateProjectDetailsPage: function(renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -130,10 +110,7 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }
-        // var uploadFileTemplate = this.getTemplate("upload_file");
-        // var uploadFileData = this._getUploadFileTemplate(renderData);
-        // TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
-        // TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
+        FormHandler.updateUploadFileTemplate(renderData, template);
         return template;
     },
     generateProjectWorkStatus: function(renderData) {
