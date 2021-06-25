@@ -114,6 +114,7 @@ class SelectFilter extends React.Component {
                 list3Dropdown = null;
             }
             if (list1Data.length < 1 && list2Data.length < 1 && list3Data.length < 1) {
+                dateSelection = null;
                 reloadButton = null;
                 toggleButton = null;
             }
