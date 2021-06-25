@@ -46,9 +46,11 @@ DBViewTemplateHandler.extend({
                 return {"tag": wordBreakTag, "text": el.trim()};
             });
         }
-        if (($S.isObject(text) || $S.isArray(text)) && $S.isStringV2(fieldName)) {
-            temp[fieldName] = value;
-            TemplateHelper.updateTemplateText(text, temp);
+        if (($S.isObject(text) || $S.isArray(text))) {
+            if ($S.isStringV2(fieldName)) {
+                temp[fieldName] = value;
+                TemplateHelper.updateTemplateText(text, temp);
+            }
             return text;
         }
         return value;

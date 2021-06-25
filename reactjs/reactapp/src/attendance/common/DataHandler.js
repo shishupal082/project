@@ -651,10 +651,11 @@ DataHandler.extend({
 
         if ([Config.summary].indexOf(currentList2Id) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
-        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
-            filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
         } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
             DataHandler.setData("filteredUserData", filteredUserData);
+            filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
+        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
+            filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
         }
         switch(currentList2Id) {
             case "entry":
