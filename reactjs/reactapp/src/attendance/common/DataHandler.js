@@ -472,7 +472,7 @@ DataHandler.extend({
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         AppHandler.TrackDropdownChange("list1", list1Id);
