@@ -7,11 +7,16 @@ class Page1 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false
+            isLoaded: false,
+            currentPageName: ""
         };
     }
-    componentDidMount() {
+    componentDidMount(prevProps, prevState) {
         $S.log("Page1:componentDidMount");
+        if (this.props.currentPageName !== this.state.currentPageName) {
+            this.setState({currentPageName: this.props.currentPageName});
+            $S.log("Change detected");
+        }
     }
     componentDidUpdate() {
         $S.log("Page1:componentDidUpdate");

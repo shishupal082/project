@@ -45,6 +45,7 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
+        this.pageComponentDidUpdate =  this.pageComponentDidUpdate.bind(this);
         this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
@@ -54,6 +55,7 @@ class App extends React.Component {
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
+            pageComponentDidUpdate: this.pageComponentDidUpdate,
             getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
@@ -86,7 +88,11 @@ class App extends React.Component {
     onChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
+        if (name === Config.fieldsKey.UploadFile) {
+            DataHandler.OnFileUploadChange(this.appStateCallback, this.appDataCallback, name, e.currentTarget.files[0]);
+        } else {
+            DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
+        }
     }
     onFormSubmit(e) {
         e.preventDefault();
@@ -122,7 +128,10 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName, pathParams) {
-        // this.addTab(pageName);
+        DataHandler.setData("pathParams", pathParams);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
+    }
+    pageComponentDidUpdate(pageName, pathParams) {
         DataHandler.setData("pathParams", pathParams);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
@@ -152,24 +161,6 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
         var pages = Config.pages;
-        const projectId = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.projectId}/>);
-        const projectStatusWork = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.projectStatusWork}/>);
-        const projectStatusSupply = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.projectStatusSupply}/>);
-        const updateSupplyStatus = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.updateSupplyStatus}/>);
-        const displaySupplyStatus = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.displaySupplyStatus}/>);
-        const noMatch = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.noMatch}/>);
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pages.home}
@@ -177,12 +168,36 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
                     )}
                 />
-                <Route exact path={pages.projectId} component={projectId}/>
-                <Route exact path={pages.projectStatusWork} component={projectStatusWork}/>
-                <Route exact path={pages.projectStatusSupply} component={projectStatusSupply}/>
-                <Route exact path={pages.updateSupplyStatus} component={updateSupplyStatus}/>
-                <Route exact path={pages.displaySupplyStatus} component={displaySupplyStatus}/>
-                <Route component={noMatch}/>
+                <Route exact path={pages.projectId}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectId}/>
+                    )}
+                />
+                <Route exact path={pages.projectStatusWork}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusWork}/>
+                    )}
+                />
+                <Route exact path={pages.projectStatusSupply}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusSupply}/>
+                    )}
+                />
+                <Route exact path={pages.updateSupplyStatus}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateSupplyStatus}/>
+                    )}
+                />
+                <Route exact path={pages.displaySupplyStatus}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displaySupplyStatus}/>
+                    )}
+                />
+                <Route
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>
+                    )}
+                />
             </Switch>
         </BrowserRouter>);
         // return (

@@ -8,7 +8,7 @@ class AppComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false
+            currentPageName: ""
         };
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -36,6 +36,15 @@ class AppComponent extends React.Component {
     }
     getTabDisplayText(tabName) {
         return this._callAppMethod(this.props.methods.getTabDisplayText, tabName);
+    }
+    componentDidUpdate(prevProps, prevState) {
+        $S.log("AppComponent:componentDidUpdate");
+        if (this.props.currentPageName !== this.state.currentPageName) {
+            this.setState({currentPageName: this.props.currentPageName});
+            if ($S.isFunction(this.props.methods.pageComponentDidUpdate)) {
+                this.props.methods.pageComponentDidUpdate(this.props.currentPageName, this.props.match.params);
+            }
+        }
     }
     componentDidMount() {
         $S.log("AppComponent:componentDidMount");

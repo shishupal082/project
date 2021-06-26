@@ -83,7 +83,8 @@ Config.fieldsKey = {
     "ProjectNameKey": "new-project.name",
     "supplyDiscription": "supplyDiscription",
     "NewSupplyItemName": "add-supply-item.name",
-    "NewSupplyItemDetails": "add-supply-item.details"
+    "NewSupplyItemDetails": "add-supply-item.details",
+    "UploadFile": "upload_file.file"
 };
 
 
@@ -101,6 +102,7 @@ messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
 messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
 messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required";
 messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
+messageMapping[Config.fieldsKey.UploadFile] = "File Required";
 Config.messageMapping = messageMapping;
 
 var apiMapping = {};
@@ -109,6 +111,8 @@ apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
 apiMapping["getUploadedFileApi"] = getUploadedFileApi;
 apiMapping["addTextApi"] = "/api/add_text_v2";
+apiMapping["upload_file"] = "/api/upload_file";
+apiMapping["delete_file"] = "/api/delete_file";
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {

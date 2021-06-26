@@ -76,8 +76,8 @@ class App extends React.Component {
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={pages.noMatch}/>);
-        const page3 = (props) => (<Page1 {...props} heading="Page 3"/>);
-        const page4 = (props) => (<Page1 {...props} heading="Page 4"/>);
+        const page3 = (props) => (<Page1 {...props} heading="Page 3" currentPageName="page3"/>);
+        const page4 = (props) => (<Page1 {...props} heading="Page 4" currentPageName="page4"/>);
         /**
         When going from home to page-1 or page-2 --> page-1 componentDidMount will fire
         When going from page-1 to page-2 --> page-1 componentDidMount will not fire
@@ -96,12 +96,12 @@ class App extends React.Component {
                 />
                 <Route exact path="/page-1"
                     render={props => (
-                        <Page1 {...props} heading="Page 1"/>
+                        <Page1 {...props} heading="Page 1" currentPageName="page1"/>
                     )}
                 />
                 <Route exact path="/page-2"
                     render={props => (
-                        <Page1 {...props} heading="Page 2"/>
+                        <Page1 {...props} heading="Page 2" currentPageName="page2"/>
                     )}
                 />
                 <Route exact path="/page-3" component={page3}/>

@@ -59,6 +59,8 @@ keys.push("fieldsData");
 keys.push("pathParams");
 keys.push("uploadedFileData");
 
+keys.push(Config.fieldsKey.UploadFile);
+
 //TA page
 //Add Field Report Page
 keys.push("addentry.submitStatus");
@@ -404,7 +406,7 @@ DataHandler.extend({
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         // AppHandler.TrackDropdownChange("list1", list1Id);
@@ -513,6 +515,9 @@ DataHandler.extend({
         AppHandler.TrackEvent("resetClick");
         DataHandler.applyResetFilter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    OnFileUploadChange: function(appStateCallback, appDataCallback, name, value) {
+        this.setData(name, value, true);
     },
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
         this.setFieldsData(name, value);

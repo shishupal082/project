@@ -273,6 +273,7 @@ Template["projectId"] = [
                 "text": [
                     {
                         "tag": "td",
+                        "className": "align-top",
                         "text": {
                             "tag": "div",
                             "name": "projectId.uploaded_files",
