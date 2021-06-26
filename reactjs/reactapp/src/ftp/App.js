@@ -97,25 +97,28 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
         var pages = Config.pages;
-        const dashboard = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.dashboard}/>);
-        const upload_file = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.upload_file}/>);
-        const users_control = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.users_control}/>);
-        const noMatch = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.noMatch}/>);
-
         return (<BrowserRouter>
             <Switch>
-                <Route path={pages.dashboard} component={dashboard}/>
-                <Route path={pages.upload_file} component={upload_file}/>
-                <Route path={pages.users_control} component={users_control}/>
-                <Route component={noMatch}/>
+                <Route path={pages.dashboard}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.dashboard}/>
+                    )}
+                />
+                <Route path={pages.upload_file}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.upload_file}/>
+                    )}
+                />
+                <Route path={pages.users_control}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.users_control}/>
+                    )}
+                />
+                <Route
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>
+                    )}
+                />
             </Switch>
         </BrowserRouter>);
         // return (

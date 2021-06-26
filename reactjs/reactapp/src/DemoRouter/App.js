@@ -109,6 +109,9 @@ class App extends React.Component {
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
+        // return (
+        //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
+        // );
     }
 }
 
