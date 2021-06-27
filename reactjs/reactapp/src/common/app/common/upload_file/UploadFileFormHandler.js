@@ -22,6 +22,9 @@ UploadFileFormHandler.fn = UploadFileFormHandler.prototype = {
 $S.extendObject(UploadFileFormHandler);
 
 UploadFileFormHandler.extend({
+    updateTemplate: function(key, attr, value) {
+        TemplateHelper.setTemplateAttr(UploadFileTemplate["upload_file"], key, attr, value);
+    },
     getUploadFileTemplate: function(formSubmitStatus, percentComplete, subject, heading) {
         var template = AppHandler.getTemplate(UploadFileTemplate, "upload_file", []);
         var uploadFileApiVersion = AppHandler.GetStaticData("uploadFileApiVersion", "v1");

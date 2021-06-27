@@ -156,7 +156,7 @@ Dashboard.extend({
         var i, j, count;
         var parentTemplateName = "dashboardRowDataByDate";
         var currentPdfLink = DataHandler.getData("dashboard.currentPdfLink", "");
-        var currentUserName = DataHandler.getData("userName", "");
+        var currentUserName = AppHandler.GetUserData("username", "");
         for(i=0; i<apiData.length; i++) {
             if ($S.isArray(apiData[i].fieldData) && apiData[i].fieldData.length > 0) {
                 template2 = AppHandler.getTemplate(Template, "dashboardRowHeading", {});

@@ -91,11 +91,10 @@
 .dashboard .pdf-embed-td .display-img {
     max-width: 780px;
 }
-.form-div > div {
+.upload-file-form-div > div {
     max-width: 450px;
     margin-left: auto;
     margin-right: auto;
-    padding: 10px;
     border: 2px solid #ddd;
     border-radius: 5px;
 }

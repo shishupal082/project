@@ -2,6 +2,7 @@ import $S from "../../interface/stack.js";
 
 import AppHandler from "../../common/app/common/AppHandler";
 import TemplateHelper from "../../common/TemplateHelper";
+import UploadFileFormHandler from "../../common/app/common/upload_file/UploadFileFormHandler";
 
 import Config from "./Config";
 import GATracking from "./GATracking";
@@ -169,7 +170,7 @@ DataHandler.extend({
         if ($S.isObject(jsonFileData) && $S.isObject(jsonFileData.config)) {
             if ($S.isString(jsonFileData.config.uploadFileInstruction)) {
                 uploadFileInstruction = jsonFileData.config.uploadFileInstruction;
-                TemplateHelper.setTemplateAttr(Template["upload_file"], "upload_file.message", "text", uploadFileInstruction);
+                UploadFileFormHandler.updateTemplate("upload_file.message", "text", uploadFileInstruction);
             }
         }
 
