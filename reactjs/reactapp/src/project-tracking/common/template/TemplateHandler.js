@@ -231,6 +231,9 @@ TemplateHandler.extend({
             case "displaySupplyStatus":
                 renderField = TemplateHandlerDBView.getDbViewFields(renderData);
             break;
+            case "displayUploadedFiles":
+                renderField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
+            break;
             case "noMatch":
             default:
                 renderField = this.getTemplate("noMatch");

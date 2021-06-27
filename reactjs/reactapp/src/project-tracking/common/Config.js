@@ -50,7 +50,8 @@ var pages = {
     "projectStatusWork": basepathname+"/pid/:pid/work",
     "projectStatusSupply": basepathname+"/pid/:pid/supply",
     "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
-    "displaySupplyStatus": basepathname+"/display_supply_status"
+    "displaySupplyStatus": basepathname+"/display_supply_status",
+    "displayUploadedFiles": basepathname+"/display_uploaded_files"
 };
 
 Config.pages = pages;
@@ -62,7 +63,7 @@ Config.projectStatusWork = "projectStatusWork";
 Config.projectStatusSupply = "projectStatusSupply";
 Config.updateSupplyStatus = "updateSupplyStatus";
 Config.displaySupplyStatus = "displaySupplyStatus";
-
+Config.displayUploadedFiles = "displayUploadedFiles";
 
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},
@@ -71,7 +72,7 @@ Config.dateSelection = [
     {"name": "All", "value": "all"}
 ];
 Config.defaultDateSelect = "monthly";
-Config.dateSelectionRequiredPages = [Config.displaySupplyStatus];
+Config.dateSelectionRequiredPages = [Config.displaySupplyStatus, Config.displayUploadedFiles];
 
 Config.fieldsKey = {
     "Value": "common-value",

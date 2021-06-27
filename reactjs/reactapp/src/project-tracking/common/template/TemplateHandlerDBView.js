@@ -39,6 +39,19 @@ TemplateHandlerDBView.extend({
             TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
         }
         return template;
+    },
+    getDbViewFieldsV2: function(renderData) {
+        var template = TemplateHandler.getTemplate("displaySupplyStatus");
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        var htmlFields;
+        if (!$S.isArray(renderData) || renderData.length === 0) {
+            template = TemplateHandler.getTemplate("noDataFound");
+        } else {
+            htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+            TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
+        }
+        return template;
     }
 });
 

@@ -92,8 +92,9 @@ DataHandlerV2.extend({
         }
         return null;
     },
-    getList3Data: function(pageName) {
-        var name = "list3Data";
+    getList3Data: function() {
+        var pageName = DataHandler.getData("pageName", "");
+        var name = pageName + ".list3Data";
         var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
@@ -113,6 +114,28 @@ DataHandlerV2.extend({
         var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewData, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewData;
+    },
+    findCurrentList3Id: function() {
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var currentList3Id = DataHandler.getData("currentList3Id", "");
+        var keys, list3Data;
+        if ($S.isObject(currentList3Data)) {
+            keys = Object.keys(currentList3Data);
+            if (keys.length < 1) {
+                list3Data = this.getList3Data();
+                if ($S.isArray(list3Data)) {
+                    for (var i = 0; i < list3Data.length; i++) {
+                        if ($S.isObject(list3Data[i])) {
+                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
+                                currentList3Id = list3Data[i].name;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        DataHandler.setData("currentList3Id", currentList3Id);
     },
     handleMetaDataLoad: function(metaDataResponse) {
         var finalMetaData = {}, i;
@@ -137,52 +160,31 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("date-select", dateSelect);
-        var currentList3Data = DataHandler.getCurrentList3Data();
-        var keys, list3Data, currentList3Id = "";
-        if ($S.isObject(currentList3Data)) {
-            keys = Object.keys(currentList3Data);
-            if (keys.length < 1) {
-                list3Data = this.getList3Data();
-                if ($S.isArray(list3Data)) {
-                    for (i = 0; i < list3Data.length; i++) {
-                        if ($S.isObject(list3Data[i])) {
-                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
-                                currentList3Id = list3Data[i].name;
-                                DataHandler.setData("currentList3Id", currentList3Id);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        this.findCurrentList3Id();
     }
 });
 DataHandlerV2.extend({
     _getUploadFileInfo: function(pid, pName) {
-        var fileInfo = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("fileTable"), "pid", pid);
-        var loginUsername = AppHandler.GetUserData("username", "");
-        var result = [], filePath, userName, fileName, isOwner, temp;
-        var viewFileUrl, downloadFileUrl, deleteFileValue;
-        if ($S.isArray(fileInfo)) {
-            for(var i=0; i<fileInfo.length; i++) {
-                if (!$S.isObject(fileInfo[i]) && $S.isStringV2(fileInfo[i].filename)) {
+        var fileInfoTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("fileTable"), "pid", pid);
+        var filePath, temp;
+        if ($S.isArray(fileInfoTable)) {
+            for(var i=0; i<fileInfoTable.length; i++) {
+                if (!$S.isObject(fileInfoTable[i])) {
+                    continue;
                 }
-                filePath = fileInfo[i].filename;
+                fileInfoTable[i].pName = pName;
+                filePath = fileInfoTable[i].filename;
+                if (!$S.isString(filePath)) {
+                    filePath = "";
+                }
                 temp = filePath.split("/");
                 if (temp.length !== 2) {
                     continue;
                 }
-                userName = temp[0];
-                fileName = temp[1];
-                isOwner = userName === loginUsername;
-                viewFileUrl = Config.basepathname + "/view/file/" + filePath + "?u=" + loginUsername;
-                downloadFileUrl = Config.basepathname + "/download/file/" + filePath + "?u=" + loginUsername;
-                deleteFileValue = filePath;
-                result.push({"uploadedBy": userName, "isOwner": isOwner, "pid": pid, "pName": pName, "fileName": fileName, "viewFileUrl": viewFileUrl, "downloadFileUrl": downloadFileUrl, "deleteFileValue": deleteFileValue});
+                fileInfoTable[i].uploadedBy = temp[0];
             }
         }
-        return result;
+        return fileInfoTable;
     },
     _getUpdateSupplyItemLink: function(pid, entry) {
         var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
@@ -254,8 +256,8 @@ DataHandlerV2.extend({
         response["tableName"] = tableName;
         return response;
     },
-    getDisplaySypplyStatus: function(sortingFields) {
-        var requiredDataTable = DataHandler.getAppData("requiredDataTable");
+    getDisplaySypplyStatus: function(pageName, sortingFields) {
+        var requiredDataTable = DataHandler.getAppData(pageName + ".requiredDataTable");
         var dbViewData = {}, i;
         if ($S.isArray(requiredDataTable)) {
             for (i=0; i<requiredDataTable.length; i++) {
@@ -277,8 +279,8 @@ DataHandlerV2.extend({
             }
         }
         this.generateFilterOptions(tableData);
-        var resultPattern = DataHandler.getAppData("resultPatternDisplaySupplyStatus");
-        var resultCriteria = DataHandler.getAppData("resultCriteria");
+        var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");
+        var resultCriteria = DataHandler.getAppData(pageName + ".resultCriteria");
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
         return finalTable;
     }

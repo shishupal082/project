@@ -65,6 +65,9 @@ FormHandler.extend({
     },
     submitUploadFile: function(callback) {
         FormHandlerUploadFile.submit(callback);
+    },
+    submitDeleteFile: function(filePath, callback) {
+        console.log(filePath);
     }
 });
 FormHandler.extend({

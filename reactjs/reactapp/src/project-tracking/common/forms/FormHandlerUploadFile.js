@@ -7,11 +7,12 @@ import UploadFileFormHandler from "../../../common/app/common/upload_file/Upload
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
 import FormHandler from "./FormHandler";
-
+import DisplayUploadedFiles from "../pages/DisplayUploadedFiles";
 
 var FormHandlerUploadFile;
 
 AppHandler.SetStaticDataAttr("uploadFileApiVersion", "v2");
+UploadFileFormHandler.updateTemplate("upload_file.message", "text", "(Only pdf less than 10MB)");
 
 (function($S){
 // var DT = $S.getDT();
@@ -32,7 +33,8 @@ FormHandlerUploadFile.extend({
         var tableEntry = TemplateHandler.getTemplate("uploaded_files");
         var uploadedFileData = [];
         var fileTemplate, temp, i, j;
-        var textReplaceParam = ["s_no", "uploadedBy", "fileName"];
+        var textReplaceParam = ["s_no", "uploadedBy", "subject"];
+        var loginUsername = AppHandler.GetUserData("username", "");
         if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
             uploadedFileData.push(TemplateHandler.getTemplate("uploaded_files.details.heading"));
             for(i=0; i<renderData.uploadedFileData.length; i++) {
@@ -41,6 +43,7 @@ FormHandlerUploadFile.extend({
                 for (j=1; j<textReplaceParam.length; j++) {
                     temp[textReplaceParam[j]] = renderData.uploadedFileData[i][textReplaceParam[j]];
                 }
+                temp["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(renderData.uploadedFileData[i], loginUsername);
                 TemplateHelper.updateTemplateText(fileTemplate, temp);
                 uploadedFileData.push(fileTemplate);
             }
@@ -102,10 +105,14 @@ FormHandlerUploadFile.extend({
             } else {
                 DataHandler.setData("addentry.submitStatus", "completed");
                 $S.callMethod(callback);
-                if ($S.isObject(response) && response.status === "SUCCESS") {
-                    FormHandlerUploadFile.addInFileTable(response.data.path, subject, function() {
+                if ($S.isObject(response)) {
+                    if (response.status === "SUCCESS") {
+                        FormHandlerUploadFile.addInFileTable(response.data.path, subject, function() {
+                            AppHandler.LazyReload(250);
+                        });
+                    } else if (response.failureCode === "UNAUTHORIZED_USER") {
                         AppHandler.LazyReload(250);
-                    });
+                    }
                 }
             }
         }, file, subject, heading);

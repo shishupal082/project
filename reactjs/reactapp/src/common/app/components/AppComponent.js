@@ -38,8 +38,8 @@ class AppComponent extends React.Component {
         return this._callAppMethod(this.props.methods.getTabDisplayText, tabName);
     }
     componentDidUpdate(prevProps, prevState) {
-        $S.log("AppComponent:componentDidUpdate");
         if (this.props.currentPageName !== this.state.currentPageName) {
+            $S.log("AppComponent:componentDidUpdate");
             this.setState({currentPageName: this.props.currentPageName});
             if ($S.isFunction(this.props.methods.pageComponentDidUpdate)) {
                 this.props.methods.pageComponentDidUpdate(this.props.currentPageName, this.props.match.params);

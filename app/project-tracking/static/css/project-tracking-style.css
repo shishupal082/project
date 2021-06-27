@@ -1,12 +1,21 @@
-.upload-form-div {
-    border: 1px solid #777;
-    padding: 10px;
-    width: 420px;
+.upload_file.heading_field {
+    display: none;
+}
+.upload-file-form-div > div {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 400px;
+}
+.APP-COMPONENT.projectId td.pName {
+    display: none;
 }
 .APP-COMPONENT.displaySupplyStatus1 .SELECT-FILTER [name="filter-reload"],
 .APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
     display: none;
 }
-.upload_file.heading_field {
+form[name="delete_file.form"] {
+    display: none;
+}
+button[name="view_file.unique_id"] {
     display: none;
 }

@@ -80,6 +80,8 @@ class App extends React.Component {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "sortable") {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
+        } else if (name === "view_file.unique_id") {
+            DataHandler.ViewFileClick(this.appStateCallback, this.appDataCallback, name, value);
         } else {
             DataHandler.OnClick(this.appStateCallback, this.appDataCallback, name, value);
         }
@@ -191,6 +193,11 @@ class App extends React.Component {
                 <Route exact path={pages.displaySupplyStatus}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displaySupplyStatus}/>
+                    )}
+                />
+                <Route exact path={pages.displayUploadedFiles}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayUploadedFiles}/>
                     )}
                 />
                 <Route

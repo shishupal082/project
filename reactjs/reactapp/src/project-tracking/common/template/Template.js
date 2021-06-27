@@ -100,6 +100,17 @@ Template["uploaded_files.details.heading"] = [
             },
             {
                 "tag": "td.b",
+                "className": "pName",
+                "text": "Project Name"
+            },
+            {
+                "tag": "td.b",
+                "className": "subject",
+                "name": "subject",
+                "text": "Subject"
+            },
+            {
+                "tag": "td.b",
                 "text": "File Details"
             }
         ]
@@ -121,112 +132,69 @@ Template["uploaded_files.details.fileInfo"] = [
             },
             {
                 "tag": "td",
-                "text": [
-                    {
-                        "tag": "div",
-                        "name": "fileName",
-                        "text": ""
-                    },
-                    {
-                        "tag": "div",
-                        "text": [
-                            {
-                                "tag": "button",
-                                "className": "btn btn-link pt-1px pl-0",
-                                "text": "View"
-                            },
-                            {
-                                "tag": "a",
-                                "target": "_blank",
-                                "href": "",
-                                "text": "Open in new tab"
-                            },
-                            {
-                                "tag": "span",
-                                "className": "pl-10px",
-                                "text": ""
-                            },
-                            {
-                                "tag": "a",
-                                "href": "",
-                                "text": "Download"
-                            },
-                            {
-                                "tag": "form",
-                                "name": "delete_file.form",
-                                "value": "delete_file.form",
-                                "className": "list-inline-item",
-                                "text": {
-                                    "tag": "button",
-                                    "className": "btn btn-link pt-1px",
-                                    "text": "Delete"
-                                }
-                            },
-                        ]
-                    }
-                ]
+                "className": "pName",
+                "name": "pName",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "className": "subject",
+                "name": "subject",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "name": "file_details",
+                "text": ""
             }
         ]
     }
 ];
-Template["upload_file"] = [
+Template["file_details"] = [
     {
-        "tag": "div.div",
-        "className": "upload-form-div",
-        "text": {
-            "tag": "form",
-            "id": "upload_file",
-            "name": "upload_file",
-            "value": "upload_file",
-            "text": [
-                {
-                    "tag": "div.h1",
-                    "className": "p-10px",
-                    "text": "Upload File"
-                },
-                {
-                    "tag": "div",
-                    "className": "form-group",
-                    "text": [
-                        {
-                            "tag": "div",
-                            "text": [
-                                {
-                                    "tag": "input",
-                                    "type": "file",
-                                    "name": "upload_file.file",
-                                    "id": "file"
-                                },
-                                {
-                                    "tag": "div.span",
-                                    "name": "upload_file.message",
-                                    "className": "small",
-                                    "text": "(Only pdf less than 10MB)"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "tag": "div",
-                    "className": "form-group",
-                    "text": [
-                        {
-                            "tag": "button",
-                            "className": "btn btn-primary",
-                            "name": "addentry.submitStatus",
-                            "text": "Submit"
-                        },
-                        {
-                            "tag": "span",
-                            "className": "pl-10px text-success",
-                            "name": "upload_file.complete-status",
-                            "text": ""
-                        }
-                    ]
+        "tag": "div",
+        "name": "fileName",
+        "text": ""
+    },
+    {
+        "tag": "div",
+        "text": [
+            {
+                "tag": "button",
+                "className": "btn btn-link pt-1px pl-0",
+                "name": "view_file.unique_id",
+                "text": "View"
+            },
+            {
+                "tag": "a",
+                "isTargetBlank": true,
+                "name": "open_in_new_tab.href",
+                "href": "",
+                "text": "Open in new tab"
+            },
+            {
+                "tag": "span",
+                "className": "pl-10px",
+                "text": ""
+            },
+            {
+                "tag": "a",
+                "name": "download.href",
+                "href": "",
+                "text": "Download"
+            },
+            {
+                "tag": "form",
+                "name": "delete_file.form",
+                "value": "delete_file.form",
+                "className": "list-inline-item",
+                "text": {
+                    "tag": "button",
+                    "className": "btn btn-link pt-1px",
+                    "text": "Delete"
                 }
-            ]
-        }
+            },
+        ]
     }
 ];
 Template["goBackLink"] = [
