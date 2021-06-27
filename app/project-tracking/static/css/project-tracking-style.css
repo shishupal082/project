@@ -6,9 +6,6 @@
     border-radius: 5px;
     width: 400px;
 }
-.APP-COMPONENT.projectId td.pName {
-    display: none;
-}
 .APP-COMPONENT.displaySupplyStatus1 .SELECT-FILTER [name="filter-reload"],
 .APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
     display: none;

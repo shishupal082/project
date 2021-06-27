@@ -100,11 +100,6 @@ Template["uploaded_files.details.heading"] = [
             },
             {
                 "tag": "td.b",
-                "className": "pName",
-                "text": "Project Name"
-            },
-            {
-                "tag": "td.b",
                 "className": "subject",
                 "name": "subject",
                 "text": "Subject"
@@ -129,12 +124,6 @@ Template["uploaded_files.details.fileInfo"] = [
                 "tag": "td",
                 "name": "uploadedBy",
                 "text": "Uploaded By"
-            },
-            {
-                "tag": "td",
-                "className": "pName",
-                "name": "pName",
-                "text": ""
             },
             {
                 "tag": "td",
