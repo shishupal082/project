@@ -57,7 +57,6 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 keys.push("pathParams");
-keys.push("uploadedFileData");
 
 keys.push(Config.fieldsKey.UploadFile);
 
@@ -379,14 +378,6 @@ DataHandler.extend({
                 $S.callMethod(callback);
             });
         });
-    },
-    getUploadedFileApi: function(callback) {
-        $S.loadJsonData(Config.JQ, [Config.getApiUrl("getUploadedFileApi", "", true)], function(response, apiName, ajax){
-            if ($S.isObject(response) && $S.isArray(response.data)) {
-                DataHandler.setData("uploadedFileData", response.data);
-            }
-        }, function() {
-        }, "uploadFileApi", null);
     }
 });
 DataHandler.extend({
@@ -394,9 +385,6 @@ DataHandler.extend({
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
                 AppHandler.TrackPageView(DataHandler.getData("pageName", ""));
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-            DataHandler.getUploadedFileApi(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -471,7 +459,7 @@ DataHandler.extend({
             FormHandler.submitNewSupplyItem(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        } else if (name === "upload_file") {
+        } else if (name === "upload_file_form") {
             FormHandler.submitUploadFile(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });

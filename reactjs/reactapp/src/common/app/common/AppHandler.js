@@ -215,6 +215,12 @@ AppHandler.extend({
         combinedDateSelectionParameter["all"] = allDateSelection;
         return combinedDateSelectionParameter;
     },
+    ReplaceComma: function(str) {
+        if ($S.isStringV2(str)) {
+            return str.replaceAll("," , "...");
+        }
+        return str;
+    },
     GetDataParameterFromDate: function(dateRange) {
         var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
         var i;
@@ -508,7 +514,21 @@ AppHandler.extend({
         return $S.clone(staticData);
     },
     SetStaticData: function(tempStaticData) {
+        if (!$S.isObject(tempStaticData)) {
+            return false;
+        }
         staticData = $S.clone(tempStaticData);
+        return true;
+    },
+    SetStaticDataAttr: function(key, value) {
+        if (!$S.isStringV2(key)) {
+            return false;
+        }
+        var keys = Object.keys(staticData);
+        if (keys.indexOf(key) < 0) {
+            return false
+        }
+        staticData[key] = $S.clone(value);
         return true;
     },
     GetStaticData: function(key, defaultValue) {

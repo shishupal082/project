@@ -7,3 +7,6 @@
 .APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
     display: none;
 }
+.upload_file.heading_field {
+    display: none;
+}

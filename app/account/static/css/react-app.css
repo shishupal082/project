@@ -13,3 +13,8 @@
 .table-bordered-dark td {
     border: 1px solid #676671;
 }
+.upload-file-form-div {
+    padding: 10px;
+    border: 1px solid;
+    width: 400px;
+}

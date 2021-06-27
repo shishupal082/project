@@ -3,28 +3,31 @@ import DataHandler from "../DataHandler";
 import TemplateHandler from "../template/TemplateHandler";
 import Config from "../Config";
 
+import UploadFileFormHandler from "../../../common/app/common/upload_file/UploadFileFormHandler";
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
 import FormHandler from "./FormHandler";
 
 
-var FormHandlerAddSupplyItem;
+var FormHandlerUploadFile;
+
+AppHandler.SetStaticDataAttr("uploadFileApiVersion", "v2");
 
 (function($S){
 // var DT = $S.getDT();
 
-FormHandlerAddSupplyItem = function(arg) {
-    return new FormHandlerAddSupplyItem.fn.init(arg);
+FormHandlerUploadFile = function(arg) {
+    return new FormHandlerUploadFile.fn.init(arg);
 };
-FormHandlerAddSupplyItem.fn = FormHandlerAddSupplyItem.prototype = {
-    constructor: FormHandlerAddSupplyItem,
+FormHandlerUploadFile.fn = FormHandlerUploadFile.prototype = {
+    constructor: FormHandlerUploadFile,
     init: function(arg) {
         this.arg = arg;
         return this;
     }
 };
-$S.extendObject(FormHandlerAddSupplyItem);
-FormHandlerAddSupplyItem.extend({
+$S.extendObject(FormHandlerUploadFile);
+FormHandlerUploadFile.extend({
     _getUploadFileTemplate: function(renderData) {
         var tableEntry = TemplateHandler.getTemplate("uploaded_files");
         var uploadedFileData = [];
@@ -47,57 +50,78 @@ FormHandlerAddSupplyItem.extend({
     },
     updateUploadFileTemplate: function(renderData, pageTemplate) {
         var uploadFileData = this._getUploadFileTemplate(renderData);
-        var uploadFileTemplate = TemplateHandler.getTemplate("upload_file");
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var percentComplete = DataHandler.getFieldsData("upload_file.percentComplete", 0);
-        if (formSubmitStatus === "in_progress" && $S.isNumber(percentComplete) && percentComplete > 0) {
-            percentComplete = "Uploaded "+percentComplete+"%";
-            TemplateHelper.setTemplateAttr(uploadFileTemplate, "upload_file.complete-status", "text", percentComplete);
-        } else {
-            TemplateHelper.setTemplateAttr(uploadFileTemplate, "upload_file.complete-status", "text", "");
-        }
+        var subject = DataHandler.getFieldsData("upload_file.subject", "");
+        var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate(formSubmitStatus, percentComplete, subject);
         TemplateHelper.addItemInTextArray(pageTemplate, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(pageTemplate, "projectId.upload_file", uploadFileTemplate);
         return pageTemplate;
     },
-    uploadFile: function(formData, callback) {
+    addInFileTable: function(filename, subject, callback) {
+        var url = Config.getApiUrl("addTextApi", null, true);
+        if (!$S.isString(url)) {
+            return;
+        }
+        var resultData = ["table_name", "unique_id", "pid", "username", "subject", "filename"];
+        var formData = {};
+        formData["table_name"] = DataHandler.getTableName("fileTable");
+        formData["unique_id"] = FormHandler.GetUniqueId();
+        formData["pid"] = DataHandler.getPathParamsData("pid", "");
+        formData["username"] = AppHandler.GetUserData("username", "");
+        formData["subject"] = AppHandler.ReplaceComma(subject);
+        formData["filename"] = filename;
+        var finalText = [];
+        for(var i=0; i<resultData.length; i++) {
+            finalText.push(formData[resultData[i]]);
+        }
+        var postData = {};
+        postData["subject"] = formData["subject"];
+        postData["heading"] = formData["pid"];
+        postData["text"] = [finalText.join(",")];
+        postData["filename"] = formData["table_name"] + ".csv";
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            if (status === "FAILURE") {
+                AppHandler.TrackApiRequest("addInFileTable", "FAILURE");
+            } else {
+                AppHandler.TrackApiRequest("addInFileTable", "SUCCESS");
+            }
+            $S.callMethod(callback);
+        });
+    },
+    uploadFile: function(file, subject, heading, callback) {
         var url = Config.getApiUrl("upload_file", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        DataHandler.setData("addentry.submitStatus", "in_progress");
-        DataHandler.setFieldsData("upload_file.percentComplete", 0);
-        $S.callMethod(callback);
-        $S.uploadFile(Config.JQ, url, formData, function(ajax, status, response) {
-            DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callback);
-            if (status === "FAILURE" || !$S.isObject(response)) {
-                AppHandler.TrackApiRequest("upload_file", "FAILURE");
-                alert("Error in uploading file, Please Try again.");
-            } else if (response.status === "FAILURE") {
-                AppHandler.TrackApiRequest("upload_file", "FAILURE");
-                alert(response.error);
+        UploadFileFormHandler.uploadFile(Config.JQ, url, function(formSubmitStatus, percentComplete, ajax, response) {
+            if (formSubmitStatus === "in_progress") {
+                DataHandler.setData("addentry.submitStatus", "in_progress");
+                DataHandler.setFieldsData("upload_file.percentComplete", percentComplete);
+                $S.callMethod(callback);
             } else {
-                AppHandler.TrackApiRequest("upload_file", "SUCCESS");
-                AppHandler.LazyReload(250);
+                DataHandler.setData("addentry.submitStatus", "completed");
+                $S.callMethod(callback);
+                if ($S.isObject(response) && response.status === "SUCCESS") {
+                    FormHandlerUploadFile.addInFileTable(response.data.path, subject, function() {
+                        AppHandler.LazyReload(250);
+                    });
+                }
             }
-        }, function(percentComplete) {
-            DataHandler.setFieldsData("upload_file.percentComplete", percentComplete);
-            $S.callMethod(callback);
-        });
+        }, file, subject, heading);
     },
     submit: function(callback) {
         var key = Config.fieldsKey.UploadFile;
         var file = DataHandler.getData(key, false, true);
+        var subject = DataHandler.getFieldsData("upload_file.subject", "");
+        var heading = DataHandler.getPathParamsData("pid", "");
         if ($S.isBooleanFalse(file)) {
             alert(FormHandler.GetAleartMessage(key));
             return;
         }
-        var formData = new FormData();
-        formData.append("file", file);
-        this.uploadFile(formData, callback);
+        this.uploadFile(file, subject, heading, callback);
     }
 });
 })($S);
 
-export default FormHandlerAddSupplyItem;
+export default FormHandlerUploadFile;

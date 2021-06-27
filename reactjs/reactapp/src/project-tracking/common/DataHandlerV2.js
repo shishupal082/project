@@ -159,28 +159,27 @@ DataHandlerV2.extend({
     }
 });
 DataHandlerV2.extend({
-    _getUploadFileInfo: function() {
-        var fileInfo = DataHandler.getData("uploadedFileData", []);
+    _getUploadFileInfo: function(pid, pName) {
+        var fileInfo = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("fileTable"), "pid", pid);
         var loginUsername = AppHandler.GetUserData("username", "");
-        var result = [], userName, fileName, filePath, isOwner, temp;
+        var result = [], filePath, userName, fileName, isOwner, temp;
         var viewFileUrl, downloadFileUrl, deleteFileValue;
         if ($S.isArray(fileInfo)) {
             for(var i=0; i<fileInfo.length; i++) {
-                if (!$S.isString(fileInfo[i])) {
-                    continue;
+                if (!$S.isObject(fileInfo[i]) && $S.isStringV2(fileInfo[i].filename)) {
                 }
-                temp = fileInfo[i].split("/");
+                filePath = fileInfo[i].filename;
+                temp = filePath.split("/");
                 if (temp.length !== 2) {
                     continue;
                 }
                 userName = temp[0];
                 fileName = temp[1];
-                filePath = fileInfo[i];
                 isOwner = userName === loginUsername;
                 viewFileUrl = Config.basepathname + "/view/file/" + filePath + "?u=" + loginUsername;
                 downloadFileUrl = Config.basepathname + "/download/file/" + filePath + "?u=" + loginUsername;
                 deleteFileValue = filePath;
-                result.push({"uploadedBy": userName, "isOwner": isOwner, "fileName": fileName, "viewFileUrl": viewFileUrl, "downloadFileUrl": downloadFileUrl, "deleteFileValue": deleteFileValue});
+                result.push({"uploadedBy": userName, "isOwner": isOwner, "pid": pid, "pName": pName, "fileName": fileName, "viewFileUrl": viewFileUrl, "downloadFileUrl": downloadFileUrl, "deleteFileValue": deleteFileValue});
             }
         }
         return result;
@@ -203,7 +202,7 @@ DataHandlerV2.extend({
             response["reason"] = "Invalid Project Id: " + currentPId;
         } else {
             response["pName"] = projectTable[0].pName;
-            response["uploadedFileData"] = this._getUploadFileInfo();
+            response["uploadedFileData"] = this._getUploadFileInfo(currentPId, response["pName"]);
         }
         return response;
     },

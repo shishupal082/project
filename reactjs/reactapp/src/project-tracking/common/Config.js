@@ -25,7 +25,6 @@ Config.tempConfig = {};
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
-var getUploadedFileApi = $$$.getUploadedFileApi;
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
 
@@ -109,7 +108,6 @@ var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
-apiMapping["getUploadedFileApi"] = getUploadedFileApi;
 apiMapping["addTextApi"] = "/api/add_text_v2";
 apiMapping["upload_file"] = "/api/upload_file";
 apiMapping["delete_file"] = "/api/delete_file";
