@@ -92,7 +92,7 @@ FormHandlerAddSupplyItem.extend({
                 alert(FormHandler.GetAleartMessage(requiredKeys[i]));
                 break;
             }
-            formData[requiredKeys[i]] = temp;
+            formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
             this.saveNewSupplyItem(formData, callback);

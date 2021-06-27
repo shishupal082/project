@@ -113,7 +113,7 @@ FormHandlerAddSupplyItem.extend({
                     break;
                 }
             }
-            formData[requiredKeys[i]] = temp;
+            formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
             this.saveWorkStatus(formData, callback);

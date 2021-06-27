@@ -89,7 +89,7 @@ FormHandlerCreateNewProject.extend({
                 alert(FormHandler.GetAleartMessage(requiredKeys[i]));
                 break;
             }
-            formData[requiredKeys[i]] = temp;
+            formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
             this.saveNewProject(formData, callback);
