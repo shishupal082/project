@@ -74,10 +74,10 @@ DisplayUploadedFiles.extend({
                 tableData[i]["fileLinks"] = this.getFileDisplayTemplate(tableData[i], loginUsername);//this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
             }
         }
-        DataHandlerV2.generateFilterOptions(tableData);
         var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");
         var resultCriteria = DataHandler.getAppData(pageName + ".resultCriteria");
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
+        DataHandlerV2.generateFilterOptions(finalTable);
         return finalTable;
     }
 });
