@@ -574,12 +574,8 @@ Template["addSupplyStatus"] = [
                             },
                             {
                                 "tag": "td",
-                                "text": {
-                                    "tag": "dropdown",
-                                    "className": "form-control",
-                                    "name": "supplyDiscription",
-                                    "text": []
-                                }
+                                "name": "supplyDiscription",
+                                "text": []
                             },
                             {
                                 "tag": "td",
