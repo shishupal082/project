@@ -127,60 +127,64 @@ Template["uploaded_files.details.fileInfo"] = [
         ]
     }
 ];
-Template["file_details"] = [
-    {
-        "tag": "div",
-        "name": "subject",
-        "text": ""
-    },
-    {
-        "tag": "div",
-        "name": "fileName",
-        "text": ""
-    },
-    {
-        "tag": "div",
-        "name": "file-action-field",
-        "text": [
-            {
-                "tag": "button",
-                "className": "btn btn-link pt-1px pl-0",
-                "name": "view_file.unique_id",
-                "text": "View"
-            },
-            {
-                "tag": "a",
-                "isTargetBlank": true,
-                "name": "open_in_new_tab.href",
-                "href": "",
-                "text": "Open in new tab"
-            },
-            {
-                "tag": "span",
-                "className": "pl-10px",
-                "text": ""
-            },
-            {
-                "tag": "a",
-                "name": "download.href",
-                "href": "",
-                "text": "Download"
-            },
-            {
-                "tag": "form",
-                "name": "delete_file.form",
-                "value": "delete_file.form",
-                "className": "list-inline-item",
-                "text": {
+Template["file_details"] = {
+    "tag": "div",
+    "className": "file_details",
+    "text": [
+        {
+            "tag": "div",
+            "name": "subject",
+            "text": ""
+        },
+        {
+            "tag": "div",
+            "name": "fileName",
+            "text": ""
+        },
+        {
+            "tag": "div",
+            "name": "file-action-field",
+            "text": [
+                {
                     "tag": "button",
-                    "name": "delete_file.form.button",
-                    "className": "btn btn-link pt-1px disabled",
-                    "text": "Delete"
-                }
-            },
-        ]
-    }
-];
+                    "className": "btn btn-link pt-1px pl-0",
+                    "name": "view_file.unique_id",
+                    "text": "View"
+                },
+                {
+                    "tag": "a",
+                    "isTargetBlank": true,
+                    "name": "open_in_new_tab.href",
+                    "href": "",
+                    "text": "Open in new tab"
+                },
+                {
+                    "tag": "span",
+                    "className": "pl-10px",
+                    "text": ""
+                },
+                {
+                    "tag": "a",
+                    "name": "download.href",
+                    "href": "",
+                    "text": "Download"
+                },
+                {
+                    "tag": "form",
+                    "name": "delete_file.form",
+                    "value": "delete_file.form",
+                    "className": "list-inline-item",
+                    "text": {
+                        "tag": "button",
+                        "name": "delete_file.form.button",
+                        "className": "btn btn-link pt-1px disabled",
+                        "text": "Delete"
+                    }
+                },
+            ]
+        }
+    ]
+};
 Template["goBackLink"] = [
     {
         "tag": "link",

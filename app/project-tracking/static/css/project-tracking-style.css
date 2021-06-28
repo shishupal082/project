@@ -13,3 +13,6 @@
 button[name="view_file.unique_id"] {
     display: none;
 }
+div.file_details {
+    min-width: 300px;
+}
