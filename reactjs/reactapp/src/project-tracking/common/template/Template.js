@@ -122,7 +122,7 @@ Template["uploaded_files.details.fileInfo"] = [
             },
             {
                 "tag": "td",
-                "name": "uploadedBy",
+                "name": "updatedBy",
                 "text": "Uploaded By"
             },
             {

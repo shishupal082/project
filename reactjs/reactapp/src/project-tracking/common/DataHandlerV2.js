@@ -174,22 +174,12 @@ DataHandlerV2.extend({
 DataHandlerV2.extend({
     _getUploadFileInfo: function(pid, pName) {
         var fileInfoTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("fileTable"), "pid", pid);
-        var filePath, temp;
         if ($S.isArray(fileInfoTable)) {
             for(var i=0; i<fileInfoTable.length; i++) {
                 if (!$S.isObject(fileInfoTable[i])) {
                     continue;
                 }
                 fileInfoTable[i].pName = pName;
-                filePath = fileInfoTable[i].filename;
-                if (!$S.isString(filePath)) {
-                    filePath = "";
-                }
-                temp = filePath.split("/");
-                if (temp.length !== 2) {
-                    continue;
-                }
-                fileInfoTable[i].uploadedBy = temp[0];
             }
         }
         return fileInfoTable;

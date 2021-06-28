@@ -33,7 +33,7 @@ FormHandlerUploadFile.extend({
         var tableEntry = TemplateHandler.getTemplate("uploaded_files");
         var uploadedFileData = [];
         var fileTemplate, temp, i, j;
-        var textReplaceParam = ["s_no", "uploadedBy", "subject"];
+        var textReplaceParam = ["s_no", "updatedBy", "subject"];
         var loginUsername = AppHandler.GetUserData("username", "");
         if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
             uploadedFileData.push(TemplateHandler.getTemplate("uploaded_files.details.heading"));
