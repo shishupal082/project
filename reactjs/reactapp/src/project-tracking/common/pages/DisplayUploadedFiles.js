@@ -32,12 +32,14 @@ DisplayUploadedFiles.extend({
             data = {};
         }
         var fileTemplate = TemplateHandler.getTemplate("file_details");
-        var fileName = "";
+        var fileName = data.filename;
         var fileUsername = "";
-        var filePath = data.filename, temp;
+        var filePath = data.filename, temp, key;
+        var isValidFileData = false;
         if ($S.isStringV2(filePath)) {
             temp = filePath.split("/");
             if (temp.length === 2) {
+                isValidFileData = true;
                 fileUsername = temp[0];
                 fileName = temp[1];
             }
@@ -53,9 +55,13 @@ DisplayUploadedFiles.extend({
         hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
         hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
-        TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
-        for(var key in hrefReplaceParam) {
-            TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
+        if (isValidFileData) {
+            TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+            for(key in hrefReplaceParam) {
+                TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
+            }
+        } else {
+            TemplateHelper.addClassTemplate(fileTemplate, "file-action-field", "d-none");
         }
         return fileTemplate;
     },

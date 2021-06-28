@@ -147,6 +147,7 @@ Template["file_details"] = [
     },
     {
         "tag": "div",
+        "name": "file-action-field",
         "text": [
             {
                 "tag": "button",
