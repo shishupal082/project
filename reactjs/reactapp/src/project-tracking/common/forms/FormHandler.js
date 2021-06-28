@@ -1,8 +1,11 @@
 import $S from "../../../interface/stack.js";
 import DataHandler from "../DataHandler";
+import DataHandlerV2 from "../DataHandlerV2";
 import Config from "../Config";
 
 import TemplateHelper from "../../../common/TemplateHelper";
+import AppHandler from "../../../common/app/common/AppHandler";
+
 
 import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
 import FormHandlerAddSupplyItem from "./FormHandlerAddSupplyItem";
@@ -48,6 +51,23 @@ FormHandler.extend({
     },
     GetUniqueId: function() {
         return DT.getDateTime("YYYY/MM/DD/hh/mm/ss/./ms","/");
+    },
+    IsResponseFailure: function(response, dafaultMessage) {
+        if (!$S.isObject(response)) {
+            alert(dafaultMessage);
+            return true;
+        }
+        if (response.status === "FAILURE") {
+            if (response.failureCode === "UNAUTHORIZED_USER") {
+                alert(response.error);
+                AppHandler.LazyReload(250);
+                return true;
+            } else {
+                alert(response.error);
+                return true;
+            }
+        }
+        return false;
     }
 });
 FormHandler.extend({
@@ -66,8 +86,57 @@ FormHandler.extend({
     submitUploadFile: function(callback) {
         FormHandlerUploadFile.submit(callback);
     },
-    submitDeleteFile: function(filePath, callback) {
-        console.log(filePath);
+    submitDeleteFile: function(uniqueId, callback) {
+        if (!$S.isStringV2(uniqueId)) {
+            return;
+        }
+        var fileTableName = DataHandler.getTableName("fileTable");
+        var filePath = DataHandlerV2.getDisplayName(fileTableName, "unique_id", uniqueId, "filename");
+        var deleting = window.confirm("Are you sure? You want to delete file: " + filePath);
+        if (deleting) {
+            FormHandlerUploadFile.deleteFile(uniqueId, filePath, callback);
+        }
+    },
+    addInDeleteTable: function(deleteId, delete_key, delete_value, callback) {
+        if (!$S.isStringV2(deleteId)) {
+            deleteId = "";
+        }
+        if (!$S.isStringV2(delete_key)) {
+            delete_key = "";
+        }
+        if (!$S.isStringV2(delete_value)) {
+            delete_value = "";
+        }
+        var url = Config.getApiUrl("addTextApi", null, true);
+        if (!$S.isString(url)) {
+            return;
+        }
+        var resultData = ["table_name", "unique_id", "deleteId", "username", "isDeleted", "delete_key", "delete_value"];
+        var formData = {};
+        formData["table_name"] = DataHandler.getTableName("deleteTable");
+        formData["unique_id"] = this.GetUniqueId();
+        formData["deleteId"] = AppHandler.ReplaceComma(deleteId);
+        formData["username"] = AppHandler.GetUserData("username", "");
+        formData["isDeleted"] = "true";
+        formData["delete_key"] = AppHandler.ReplaceComma(delete_key);;
+        formData["delete_value"] = AppHandler.ReplaceComma(delete_value);;
+        var finalText = [];
+        for(var i=0; i<resultData.length; i++) {
+            finalText.push(formData[resultData[i]]);
+        }
+        var postData = {};
+        postData["subject"] = formData["username"];
+        postData["heading"] = formData["delete_value"];
+        postData["text"] = [finalText.join(",")];
+        postData["filename"] = formData["table_name"] + ".csv";
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            if (status === "FAILURE" || !$S.isObject(response) || response.status === "FAILURE") {
+                AppHandler.TrackApiRequest("addInDeleteTable", "FAILURE");
+            } else {
+                AppHandler.TrackApiRequest("addInDeleteTable", "SUCCESS");
+            }
+            $S.callMethod(callback);
+        });
     }
 });
 FormHandler.extend({

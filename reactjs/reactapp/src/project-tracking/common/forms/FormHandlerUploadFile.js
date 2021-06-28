@@ -127,6 +127,24 @@ FormHandlerUploadFile.extend({
             return;
         }
         this.uploadFile(file, subject, heading, callback);
+    },
+    deleteFile: function(uniqueId, filePath, callback) {
+        var url = Config.getApiUrl("delete_file", "", true);
+        var postData = {};
+        postData["filename"] = filePath;
+        var delete_key = "File Deleted";
+        var delete_value = filePath;
+        var message = "Error in delete file, Please Try again.";
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            if (FormHandler.IsResponseFailure(response, message)) {
+                AppHandler.TrackApiRequest("deleteFile", "FAILURE");
+            } else {
+                AppHandler.TrackApiRequest("deleteFile", "SUCCESS");
+                FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
+                    AppHandler.LazyReload(250);
+                });
+            }
+        });
     }
 });
 })($S);

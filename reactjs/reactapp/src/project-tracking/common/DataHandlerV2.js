@@ -138,7 +138,7 @@ DataHandlerV2.extend({
         DataHandler.setData("currentList3Id", currentList3Id);
     },
     handleMetaDataLoad: function(metaDataResponse) {
-        var finalMetaData = {}, i;
+        var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = DataHandler.getData("appControlMetaData", {});
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = appControlMetaData;
@@ -146,7 +146,15 @@ DataHandlerV2.extend({
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
                 if ($S.isObject(metaDataResponse[i])) {
-                    finalMetaData = Object.assign(finalMetaData, metaDataResponse[i]);
+                    tempMetaData = metaDataResponse[i];
+                    temp = tempMetaData.metaData;
+                    if ($S.isObject(temp)) {
+                        temp = Object.keys(temp);
+                        if (temp.length > 0) {
+                            tempMetaData = tempMetaData.metaData;
+                        }
+                    }
+                    finalMetaData = Object.assign(finalMetaData, tempMetaData);
                 }
             }
         }
@@ -414,7 +422,26 @@ DataHandlerV2.extend({
         var displayText = $S.findParam(tableData, searchRef, defaultValue, searchKey, requiredKey);
         return displayText;
     },
+    _removeDeletedItem: function(dbViewData) {
+        if (!$S.isObject(dbViewData)) {
+            return;
+        }
+        var deleteTableName = DataHandler.getTableName("deleteTable");
+        var deleteTableData = [], deletedIds = [], i;
+        if ($S.isObject(dbViewData[deleteTableName])) {
+            if ($S.isArray(dbViewData[deleteTableName].tableData)) {
+                deleteTableData = dbViewData[deleteTableName].tableData;
+            }
+        }
+        for(i=0; i<deleteTableData.length; i++) {
+            if ($S.isStringV2(deleteTableData[i].deleteId)) {
+                deletedIds.push(deleteTableData[i].deleteId);
+            }
+        }
+        DBViewDataHandler.RemoveDeletedItem(dbViewData, deletedIds, deleteTableName, "unique_id");
+    },
     _handleDefaultSorting: function(tableData) {
+        this._removeDeletedItem(tableData);
         if (!$S.isObject(tableData)) {
             return;
         }

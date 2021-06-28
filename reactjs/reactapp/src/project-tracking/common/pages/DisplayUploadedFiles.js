@@ -41,7 +41,7 @@ DisplayUploadedFiles.extend({
             }
         }
         var textReplaceParam = {"fileName": fileName};
-        var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": filePath};
+        var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
         var hrefReplaceParam = {};
         hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
         hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;

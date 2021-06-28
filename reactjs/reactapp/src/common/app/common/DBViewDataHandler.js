@@ -352,8 +352,8 @@ DBViewDataHandler.extend({
     //     }
     //     return finalTable;
     // },
-    SortTableData: function(tableData, sortingField) {
-        if (!$S.isObject(tableData)) {
+    SortTableData: function(dbViewData, sortingField) {
+        if (!$S.isObject(dbViewData)) {
             return;
         }
         var i, tableName;
@@ -367,17 +367,49 @@ DBViewDataHandler.extend({
                         continue;
                     }
                     tableName = sortingField[i].table;
-                    if (!$S.isObject(tableData[tableName])) {
+                    if (!$S.isObject(dbViewData[tableName])) {
                         continue;
                     }
-                    if (!$S.isArray(tableData[tableName].tableData)) {
+                    if (!$S.isArray(dbViewData[tableName].tableData)) {
                         continue;
                     }
-                    tableData[tableName].tableData = $S.sortResult(tableData[tableName].tableData, sortingField[i].sortableValue, sortingField[i].index, "name");
+                    dbViewData[tableName].tableData = $S.sortResult(dbViewData[tableName].tableData, sortingField[i].sortableValue, sortingField[i].index, "name");
                 }
             }
         }
-        return tableData;
+        return dbViewData;
+    },
+    RemoveDeletedItem: function(dbViewData, deleteIds, deleteTableName, searchName) {
+        if (!$S.isObject(dbViewData)) {
+            return dbViewData;
+        }
+        if (!$S.isArray(deleteIds) || !$S.isStringV2(deleteTableName) || !$S.isStringV2(searchName)) {
+            return dbViewData;
+        }
+        var i, tempTableData;
+        for(var tableName in dbViewData) {
+            if (tableName === deleteTableName) {
+                continue;
+            }
+            tempTableData = [];
+            if (!$S.isArray(dbViewData[tableName].tableData)) {
+                continue;
+            }
+            for(i=0; i<dbViewData[tableName].tableData.length; i++) {
+                if (!$S.isObject(dbViewData[tableName].tableData[i])) {
+                    tempTableData.push(dbViewData[tableName].tableData[i]);
+                    continue;
+                }
+                if ($S.isString(dbViewData[tableName].tableData[i][searchName])) {
+                    if (deleteIds.indexOf(dbViewData[tableName].tableData[i][searchName]) >= 0) {
+                        continue;
+                    }
+                }
+                tempTableData.push(dbViewData[tableName].tableData[i]);
+            }
+            dbViewData[tableName].tableData = tempTableData;
+        }
+        return dbViewData;
     }
 });
 var GlobalArray = [];
