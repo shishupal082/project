@@ -10,9 +10,6 @@
 .APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
     display: none;
 }
-form1[name="delete_file.form"] {
-    display: none;
-}
 button[name="view_file.unique_id"] {
     display: none;
 }

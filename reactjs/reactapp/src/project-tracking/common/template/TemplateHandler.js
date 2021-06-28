@@ -90,7 +90,7 @@ TemplateHandler.extend({
         }
         return link;
     },
-    generateProjectDetailsPage: function(renderData) {
+    generateProjectDetailsPage: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -110,7 +110,7 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }
-        FormHandler.updateUploadFileTemplate(renderData, template);
+        FormHandler.updateUploadFileTemplate(pageName, renderData, template);
         return template;
     },
     generateProjectWorkStatus: function(renderData) {
@@ -217,7 +217,7 @@ TemplateHandler.extend({
                 renderField = this.generateHomeRenderField(renderData);
             break;
             case "projectId":
-                renderField = this.generateProjectDetailsPage(renderData);
+                renderField = this.generateProjectDetailsPage(pageName, renderData);
             break;
             case "projectStatusWork":
                 renderField = this.generateProjectWorkStatus(renderData);

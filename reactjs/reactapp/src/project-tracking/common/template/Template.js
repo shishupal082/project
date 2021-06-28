@@ -179,7 +179,8 @@ Template["file_details"] = [
                 "className": "list-inline-item",
                 "text": {
                     "tag": "button",
-                    "className": "btn btn-link pt-1px",
+                    "name": "delete_file.form.button",
+                    "className": "btn btn-link pt-1px disabled",
                     "text": "Delete"
                 }
             },

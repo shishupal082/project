@@ -29,7 +29,7 @@ FormHandlerUploadFile.fn = FormHandlerUploadFile.prototype = {
 };
 $S.extendObject(FormHandlerUploadFile);
 FormHandlerUploadFile.extend({
-    _getUploadFileTemplate: function(renderData) {
+    _getUploadFileTemplate: function(pageName, renderData) {
         var tableEntry = TemplateHandler.getTemplate("uploaded_files");
         var uploadedFileData = [];
         var fileTemplate, temp, i, j;
@@ -43,7 +43,7 @@ FormHandlerUploadFile.extend({
                 for (j=1; j<textReplaceParam.length; j++) {
                     temp[textReplaceParam[j]] = renderData.uploadedFileData[i][textReplaceParam[j]];
                 }
-                temp["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(renderData.uploadedFileData[i], loginUsername);
+                temp["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, renderData.uploadedFileData[i], loginUsername);
                 TemplateHelper.updateTemplateText(fileTemplate, temp);
                 uploadedFileData.push(fileTemplate);
             }
@@ -51,8 +51,8 @@ FormHandlerUploadFile.extend({
         TemplateHelper.addItemInTextArray(tableEntry, "uploaded_files.entry", uploadedFileData);
         return tableEntry;
     },
-    updateUploadFileTemplate: function(renderData, pageTemplate) {
-        var uploadFileData = this._getUploadFileTemplate(renderData);
+    updateUploadFileTemplate: function(pageName, renderData, pageTemplate) {
+        var uploadFileData = this._getUploadFileTemplate(pageName, renderData);
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var percentComplete = DataHandler.getFieldsData("upload_file.percentComplete", 0);
         var subject = DataHandler.getFieldsData("upload_file.subject", "");

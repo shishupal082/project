@@ -27,18 +27,25 @@ DisplayUploadedFiles.fn = DisplayUploadedFiles.prototype = {
 };
 $S.extendObject(DisplayUploadedFiles);
 DisplayUploadedFiles.extend({
-    getFileDisplayTemplate: function(data, loginUsername) {
+    getFileDisplayTemplate: function(pageName, data, loginUsername) {
         if (!$S.isObject(data)) {
             data = {};
         }
         var fileTemplate = TemplateHandler.getTemplate("file_details");
         var fileName = "";
+        var fileUsername = "";
         var filePath = data.filename, temp;
         if ($S.isStringV2(filePath)) {
             temp = filePath.split("/");
             if (temp.length === 2) {
+                fileUsername = temp[0];
                 fileName = temp[1];
             }
+        }
+        var buttonName = "delete_file.form.button";
+        if (loginUsername === fileUsername && pageName === Config.projectId) {
+            TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
+            TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
         }
         var textReplaceParam = {"fileName": fileName};
         var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
@@ -71,7 +78,7 @@ DisplayUploadedFiles.extend({
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                tableData[i]["fileLinks"] = this.getFileDisplayTemplate(tableData[i], loginUsername);//this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
+                tableData[i]["fileLinks"] = this.getFileDisplayTemplate(pageName, tableData[i], loginUsername);//this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
             }
         }
         var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");

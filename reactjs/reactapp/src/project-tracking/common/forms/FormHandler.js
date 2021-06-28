@@ -171,8 +171,8 @@ FormHandler.extend({
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },
-    updateUploadFileTemplate: function(renderData, pageTemplate) {
-        FormHandlerUploadFile.updateUploadFileTemplate(renderData, pageTemplate);
+    updateUploadFileTemplate: function(pageName, renderData, pageTemplate) {
+        FormHandlerUploadFile.updateUploadFileTemplate(pageName, renderData, pageTemplate);
         this.updateBtnStatus(pageTemplate);
         return pageTemplate;
     }
