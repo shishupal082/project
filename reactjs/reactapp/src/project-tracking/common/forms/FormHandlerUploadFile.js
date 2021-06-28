@@ -12,7 +12,7 @@ import DisplayUploadedFiles from "../pages/DisplayUploadedFiles";
 var FormHandlerUploadFile;
 
 AppHandler.SetStaticDataAttr("uploadFileApiVersion", "v2");
-UploadFileFormHandler.updateTemplate("upload_file.message", "text", "(Only pdf less than 10MB)");
+UploadFileFormHandler.updateTemplate("upload_file.message", "text", Config.uploadFileInstruction);
 
 (function($S){
 // var DT = $S.getDT();
