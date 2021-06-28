@@ -45,11 +45,14 @@ DisplayUploadedFiles.extend({
             }
         }
         var buttonName = "delete_file.form.button";
-        if (loginUsername === fileUsername && pageName === Config.projectId) {
-            TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
-            TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
-        }
         var textReplaceParam = {"fileName": fileName};
+        if (pageName === Config.projectId) {
+            textReplaceParam["subject"] = data["subject"];
+            if (loginUsername === fileUsername) {
+                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
+                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
+            }
+        }
         var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
         var hrefReplaceParam = {};
         hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
@@ -84,7 +87,7 @@ DisplayUploadedFiles.extend({
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                tableData[i]["fileLinks"] = this.getFileDisplayTemplate(pageName, tableData[i], loginUsername);//this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
+                tableData[i]["file_details"] = this.getFileDisplayTemplate(pageName, tableData[i], loginUsername);
             }
         }
         var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");

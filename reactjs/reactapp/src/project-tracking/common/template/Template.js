@@ -96,13 +96,7 @@ Template["uploaded_files.details.heading"] = [
             },
             {
                 "tag": "td.b",
-                "text": "Uploaded By"
-            },
-            {
-                "tag": "td.b",
-                "className": "subject",
-                "name": "subject",
-                "text": "Subject"
+                "text": "Updated By"
             },
             {
                 "tag": "td.b",
@@ -127,12 +121,6 @@ Template["uploaded_files.details.fileInfo"] = [
             },
             {
                 "tag": "td",
-                "className": "subject",
-                "name": "subject",
-                "text": ""
-            },
-            {
-                "tag": "td",
                 "name": "file_details",
                 "text": ""
             }
@@ -140,6 +128,11 @@ Template["uploaded_files.details.fileInfo"] = [
     }
 ];
 Template["file_details"] = [
+    {
+        "tag": "div",
+        "name": "subject",
+        "text": ""
+    },
     {
         "tag": "div",
         "name": "fileName",

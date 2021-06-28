@@ -33,11 +33,14 @@ FormHandlerUploadFile.extend({
         var tableEntry = TemplateHandler.getTemplate("uploaded_files");
         var uploadedFileData = [];
         var fileTemplate, temp, i, j;
-        var textReplaceParam = ["s_no", "updatedBy", "subject"];
+        var textReplaceParam = ["s_no", "updatedBy"];
         var loginUsername = AppHandler.GetUserData("username", "");
         if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
             uploadedFileData.push(TemplateHandler.getTemplate("uploaded_files.details.heading"));
             for(i=0; i<renderData.uploadedFileData.length; i++) {
+                if (!$S.isObject(renderData.uploadedFileData[i])) {
+                    continue;
+                }
                 fileTemplate = TemplateHandler.getTemplate("uploaded_files.details.fileInfo");
                 temp = {"s_no": i+1};
                 for (j=1; j<textReplaceParam.length; j++) {
