@@ -46,7 +46,6 @@ class App extends React.Component {
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.pageComponentDidUpdate =  this.pageComponentDidUpdate.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -56,7 +55,6 @@ class App extends React.Component {
             onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
             pageComponentDidUpdate: this.pageComponentDidUpdate,
-            getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -142,22 +140,6 @@ class App extends React.Component {
         var appDataCallback = this.appDataCallback;
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
-    }
-    removeTab(pageName) {
-        this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
-            if (pageName === el) {
-                return false;
-            }
-            return true;
-        });
-    }
-    addTab(pageName) {
-        if (this.appData.pageTab.indexOf(pageName) >= 0) {
-            return;
-        }
-        this.appData.pageTab.push(pageName);
-    }
-    getTabDisplayText(tabName) {
     }
     render() {
         var methods = this.methods;
