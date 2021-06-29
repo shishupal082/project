@@ -262,7 +262,7 @@ DataHandler.extend({
     },
     getHeadingText: function() {
         var currentAppData = this.getCurrentAppData({});
-        return AppHandler.getHeadingText(currentAppData, "App Heading");
+        return AppHandler.getHeadingText(currentAppData, Config.projectHeading);
     },
     getUserInfoById: function(userId) {
         var userData = DataHandler.getData("filteredUserData", []);

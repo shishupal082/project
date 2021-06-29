@@ -18,14 +18,13 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
-
+Config.projectHeading = $$$.projectHeading;
 
 Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
     "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
-    "linkText": $$$.linkText,
-    "projectHeading": $$$.projectHeading
+    "linkText": $$$.linkText
 };
 
 
