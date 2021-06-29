@@ -1,13 +1,10 @@
 import $S from "../../../interface/stack.js";
 import DataHandler from "../DataHandler";
-import TemplateHandler from "../template/TemplateHandler";
 import Config from "../Config";
 
 import UploadFileFormHandler from "../../../common/app/common/upload_file/UploadFileFormHandler";
 import AppHandler from "../../../common/app/common/AppHandler";
-import TemplateHelper from "../../../common/TemplateHelper";
 import FormHandler from "./FormHandler";
-import DisplayUploadedFiles from "../pages/DisplayUploadedFiles";
 
 var FormHandlerUploadFile;
 
@@ -29,40 +26,12 @@ FormHandlerUploadFile.fn = FormHandlerUploadFile.prototype = {
 };
 $S.extendObject(FormHandlerUploadFile);
 FormHandlerUploadFile.extend({
-    _getUploadFileTemplate: function(pageName, renderData) {
-        var tableEntry = TemplateHandler.getTemplate("uploaded_files");
-        var uploadedFileData = [];
-        var fileTemplate, temp, i, j;
-        var textReplaceParam = ["s_no", "updatedBy"];
-        var loginUsername = AppHandler.GetUserData("username", "");
-        if ($S.isObject(renderData) && $S.isArray(renderData.uploadedFileData) && renderData.uploadedFileData.length > 0) {
-            uploadedFileData.push(TemplateHandler.getTemplate("uploaded_files.details.heading"));
-            for(i=0; i<renderData.uploadedFileData.length; i++) {
-                if (!$S.isObject(renderData.uploadedFileData[i])) {
-                    continue;
-                }
-                fileTemplate = TemplateHandler.getTemplate("uploaded_files.details.fileInfo");
-                temp = {"s_no": i+1};
-                for (j=1; j<textReplaceParam.length; j++) {
-                    temp[textReplaceParam[j]] = renderData.uploadedFileData[i][textReplaceParam[j]];
-                }
-                temp["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, renderData.uploadedFileData[i], loginUsername);
-                TemplateHelper.updateTemplateText(fileTemplate, temp);
-                uploadedFileData.push(fileTemplate);
-            }
-        }
-        TemplateHelper.addItemInTextArray(tableEntry, "uploaded_files.entry", uploadedFileData);
-        return tableEntry;
-    },
-    updateUploadFileTemplate: function(pageName, renderData, pageTemplate) {
-        var uploadFileData = this._getUploadFileTemplate(pageName, renderData);
+    getUploadFileTemplate: function() {
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var percentComplete = DataHandler.getFieldsData("upload_file.percentComplete", 0);
         var subject = DataHandler.getFieldsData("upload_file.subject", "");
         var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate(formSubmitStatus, percentComplete, subject);
-        TemplateHelper.addItemInTextArray(pageTemplate, "projectId.uploaded_files", uploadFileData);
-        TemplateHelper.addItemInTextArray(pageTemplate, "projectId.upload_file", uploadFileTemplate);
-        return pageTemplate;
+        return uploadFileTemplate;
     },
     addInFileTable: function(filename, subject, callback) {
         var url = Config.getApiUrl("addTextApi", null, true);

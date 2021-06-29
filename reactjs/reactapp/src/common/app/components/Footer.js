@@ -22,7 +22,7 @@ class Footer extends React.Component {
         } else {
             footerWithNoContent += " d-none";
         }
-        return (<div className="FOOTER">
+        return (<div className="SELECT-FILTER-FOOTER">
                 <div className={footerWithContent}></div>
                 <div className={footerWithNoContent}></div>
                 <div className={footerClass}><SelectFilter data={this.props.data} methods={this.props.methods} history={this.props.history} currentPageName={this.props.currentPageName}/></div>

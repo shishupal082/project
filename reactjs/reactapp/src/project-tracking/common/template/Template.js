@@ -43,14 +43,20 @@ Template["templateNotFound"] = [{
 }];
 Template["heading"] = [
     {
-        "tag": "center.h2",
-        "name": "heading-text",
-        "text": ""
-    },
-    {
-        "tag": "center",
-        "name": "heading-link",
-        "text": []
+        "tag": "div",
+        "className": "container",
+        "text": [
+            {
+                "tag": "center.h2",
+                "name": "heading-text",
+                "text": ""
+            },
+            {
+                "tag": "center",
+                "name": "heading-link",
+                "text": []
+            },
+        ]
     },
     {
         "tag": "hr"
@@ -76,55 +82,6 @@ Template["invalid-data"] = [
             "href": "/",
             "text": "Go To Home"
         }
-    }
-];
-Template["uploaded_files"] = [
-    {
-        "tag": "table.tbody",
-        "name": "uploaded_files.entry",
-        "className": "table-bordered table-bordered-dark table-striped table-padded-px-5",
-        "text": []
-    }
-];
-Template["uploaded_files.details.heading"] = [
-    {
-        "tag": "tr",
-        "text": [
-            {
-                "tag": "td.b",
-                "text": "S.No."
-            },
-            {
-                "tag": "td.b",
-                "text": "Updated By"
-            },
-            {
-                "tag": "td.b",
-                "text": "File Details"
-            }
-        ]
-    }
-];
-Template["uploaded_files.details.fileInfo"] = [
-    {
-        "tag": "tr",
-        "text": [
-            {
-                "tag": "td",
-                "name": "s_no",
-                "text": "S.No."
-            },
-            {
-                "tag": "td",
-                "name": "updatedBy",
-                "text": "Uploaded By"
-            },
-            {
-                "tag": "td",
-                "name": "file_details",
-                "text": ""
-            }
-        ]
     }
 ];
 Template["file_details"] = {
@@ -202,7 +159,7 @@ Template["goBackLink"] = [
 Template["projectId"] = [
     {
         "tag": "div",
-        "className": "container",
+        "className": "page-data",
         "text": [
             {
                 "tag": "div.h4",
@@ -251,7 +208,6 @@ Template["projectId"] = [
 Template["projectWorkStatus"] = [
     {
         "tag": "div",
-        "className": "container",
         "text": [
             {
                 "tag": "div.h6",
@@ -289,7 +245,6 @@ Template["projectWorkStatus"] = [
 Template["projectSupplyStatus"] = [
     {
         "tag": "div",
-        "className": "container",
         "text": [
             {
                 "tag": "div.h6",
@@ -344,7 +299,6 @@ Template["displaySupplyStatus"] = [
 Template["home"] = [
     {
         "tag": "div",
-        "className": "container",
         "text": [
             {
                 "tag": "div",
@@ -647,7 +601,6 @@ Template["addSupplyStatus"] = [
 Template["projectSupplyItems"] = [
     {
         "tag": "div",
-        "className": "container",
         "text": [
             {
                 "tag": "div.h6",

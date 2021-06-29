@@ -532,7 +532,7 @@ DataHandler.extend({
                 renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
             break;
             case "projectId":
-                renderData = DataHandlerV2.getProjectData();
+                renderData = DataHandlerV2.getProjectData(pageName);
             break;
             case "projectStatusWork":
                 renderData = DataHandlerV2.getProjectWorkStatus(sortingFields);

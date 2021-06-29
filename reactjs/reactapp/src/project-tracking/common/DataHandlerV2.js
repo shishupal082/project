@@ -1,7 +1,7 @@
 import $S from "../../interface/stack.js";
-import DataHandler from "./DataHandler";
 import Config from "./Config";
-
+import DataHandler from "./DataHandler";
+import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -172,17 +172,17 @@ DataHandlerV2.extend({
     }
 });
 DataHandlerV2.extend({
-    _getUploadFileInfo: function(pid, pName) {
-        var fileInfoTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("fileTable"), "pid", pid);
-        if ($S.isArray(fileInfoTable)) {
-            for(var i=0; i<fileInfoTable.length; i++) {
-                if (!$S.isObject(fileInfoTable[i])) {
+    _getUploadFileInfo: function(pageName, uploadedFileData) {
+        var loginUsername = AppHandler.GetUserData("username", "");
+        if ($S.isArray(uploadedFileData)) {
+            for(var i=0; i<uploadedFileData.length; i++) {
+                if (!$S.isObject(uploadedFileData[i])) {
                     continue;
                 }
-                fileInfoTable[i].pName = pName;
+                uploadedFileData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, uploadedFileData[i], loginUsername);
             }
         }
-        return fileInfoTable;
+        return uploadedFileData;
     },
     _getUpdateSupplyItemLink: function(pid, entry) {
         var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
@@ -193,16 +193,20 @@ DataHandlerV2.extend({
         tdFieldText["href"] = DataHandler.getLink(pid, sid, "supply");
         return tdFieldText;
     },
-    getProjectData: function() {
+    getProjectData: function(pageName) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var projectTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
+        var tableName = DataHandler.getTableName("fileTable");
         var response = {"status": "SUCCESS"};
+        var uploadedFileData;
         if (projectTable.length !== 1) {
             response["status"] = "FAILURE";
             response["reason"] = "Invalid Project Id: " + currentPId;
         } else {
             response["pName"] = projectTable[0].pName;
-            response["uploadedFileData"] = this._getUploadFileInfo(currentPId, response["pName"]);
+            response["tableName"] = tableName;
+            uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
+            response["uploadedFileData"] = this._getUploadFileInfo(pageName, uploadedFileData);
         }
         return response;
     },

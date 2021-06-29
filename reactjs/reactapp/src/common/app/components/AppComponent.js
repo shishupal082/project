@@ -14,7 +14,6 @@ class AppComponent extends React.Component {
         this.onChange = this.onChange.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
     }
     _callAppMethod(method, arg) {
         if ($S.isFunction(method)) {
@@ -33,9 +32,6 @@ class AppComponent extends React.Component {
     }
     onFormSubmit(e) {
         this._callAppMethod(this.props.methods.onFormSubmit, e);
-    }
-    getTabDisplayText(tabName) {
-        return this._callAppMethod(this.props.methods.getTabDisplayText, tabName);
     }
     componentDidUpdate(prevProps, prevState) {
         if (this.props.currentPageName !== this.state.currentPageName) {

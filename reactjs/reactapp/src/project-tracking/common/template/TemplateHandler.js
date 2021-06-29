@@ -90,7 +90,7 @@ TemplateHandler.extend({
         }
         return link;
     },
-    generateProjectDetailsPage: function(pageName, renderData) {
+    generateProjectDetailsPage: function(renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -110,7 +110,10 @@ TemplateHandler.extend({
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }
-        FormHandler.updateUploadFileTemplate(pageName, renderData, template);
+        var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
+        var uploadFileTemplate = FormHandler.getUploadFileTemplate();
+        TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
+        TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
         return template;
     },
     generateProjectWorkStatus: function(renderData) {
@@ -197,10 +200,9 @@ TemplateHandler.extend({
         return template;
     },
     SetHeadingUsername: function(username) {
-        var heading = this.getTemplate("heading");
+        var heading = Config.headingJson;
         if ($S.isString(username)) {
             TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
-            Template["heading"] = heading;
             return true;
         }
         return false;
@@ -217,7 +219,7 @@ TemplateHandler.extend({
                 renderField = this.generateHomeRenderField(renderData);
             break;
             case "projectId":
-                renderField = this.generateProjectDetailsPage(pageName, renderData);
+                renderField = this.generateProjectDetailsPage(renderData);
             break;
             case "projectStatusWork":
                 renderField = this.generateProjectWorkStatus(renderData);
@@ -251,7 +253,7 @@ TemplateHandler.extend({
     },
     GetHeadingField: function(headingText) {
         var renderField = this.getTemplate("heading");
-        TemplateHelper.updateTemplateText(renderField, {"heading-text": headingText});
+        TemplateHelper.updateTemplateText(renderField, {"heading-text": headingText, "heading-link": Config.headingJson});
         return renderField;
     }
 });

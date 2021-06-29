@@ -1,8 +1,6 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
-import Template from "./template/Template";
-
 var Config = {requestId: $S.getRequestId()};
 
 Config.navigator = $$$.navigator;
@@ -31,7 +29,7 @@ var appControlDataApi = $$$.appControlApi;
 
 try {
     headingJson = JSON.parse(headingJson);
-    Template["heading"][1].text = headingJson;
+    Config.headingJson = headingJson;
 } catch(e) {}
 
 
