@@ -48,7 +48,10 @@ var pages = {
     "projectStatusWork": basepathname+"/pid/:pid/work",
     "projectStatusSupply": basepathname+"/pid/:pid/supply",
     "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
+    "projectContingency": basepathname+"/pid/:pid/contingency",
+    "updateContingencyStatus": basepathname+"/pid/:pid/sid/:sid/contingency",
     "displaySupplyStatus": basepathname+"/display_supply_status",
+    "displayContingencyStatus": basepathname+"/display_contingency_status",
     "displayUploadedFiles": basepathname+"/display_uploaded_files"
 };
 
@@ -63,6 +66,11 @@ Config.updateSupplyStatus = "updateSupplyStatus";
 Config.displaySupplyStatus = "displaySupplyStatus";
 Config.displayUploadedFiles = "displayUploadedFiles";
 
+
+Config.projectContingency = "projectContingency";
+Config.updateContingencyStatus = "updateContingencyStatus";
+Config.displayContingencyStatus = "displayContingencyStatus";
+
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},
     {"name": "Monthly", "value": "monthly"},
@@ -70,7 +78,7 @@ Config.dateSelection = [
     {"name": "All", "value": "all"}
 ];
 Config.defaultDateSelect = "monthly";
-Config.dateSelectionRequiredPages = [Config.displaySupplyStatus, Config.displayUploadedFiles];
+Config.dateSelectionRequiredPages = [Config.displaySupplyStatus, Config.displayUploadedFiles, Config.displayContingencyStatus];
 
 Config.fieldsKey = {
     "Value": "common-value",

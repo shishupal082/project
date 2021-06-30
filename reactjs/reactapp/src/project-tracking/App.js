@@ -172,9 +172,24 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateSupplyStatus}/>
                     )}
                 />
+                <Route exact path={pages.projectContingency}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectContingency}/>
+                    )}
+                />
+                <Route exact path={pages.updateContingencyStatus}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
+                    )}
+                />
                 <Route exact path={pages.displaySupplyStatus}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displaySupplyStatus}/>
+                    )}
+                />
+                <Route exact path={pages.displayContingencyStatus}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayContingencyStatus}/>
                     )}
                 />
                 <Route exact path={pages.displayUploadedFiles}

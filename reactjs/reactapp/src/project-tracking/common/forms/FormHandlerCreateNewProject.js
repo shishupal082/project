@@ -47,7 +47,7 @@ FormHandlerCreateNewProject.extend({
         }
         formData["table_name"] = DataHandler.getTableName("projectTable");
         if (!$S.isStringV2(formData["table_name"])) {
-            alert(this._getAleartMessage("tableName.invalid"))
+            alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
         }
         formData["unique_id"] = FormHandler.GetUniqueId();

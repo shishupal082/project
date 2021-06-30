@@ -135,7 +135,7 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(template, "projectWorkStatus.addNew", newWorkStatus);
         return template;
     },
-    generateProjectSupplyStatus: function(renderData) {
+    generateProjectSupplyStatus: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -148,13 +148,13 @@ TemplateHandler.extend({
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
-        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "resultPatternSupplyStatus");
+        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, pageName + ".resultPatternSupplyStatus");
         TemplateHelper.updateTemplateText(template, displayText);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
         return template;
     },
-    generateProjectSupplyItemList: function(renderData) {
+    generateProjectSupplyItemList: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -164,7 +164,7 @@ TemplateHandler.extend({
         var template = this.getTemplate("projectSupplyItems");
         var pName = renderData.pName;
         var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
-        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "resultPatternSupplyItems");
+        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, pageName + ".resultPatternSupplyItems");
         TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
@@ -186,10 +186,14 @@ TemplateHandler.extend({
         switch(pageName) {
             case "projectStatusWork":
             case "projectStatusSupply":
+            case "projectContingency":
                 backUrl = this._getLink("projectId", pid);
             break;
             case "updateSupplyStatus":
                 backUrl = this._getLink("projectStatus", pid, "supply");
+            break;
+            case "updateContingencyStatus":
+                backUrl = this._getLink("projectStatus", pid, "contingency");
             break;
             case "projectId":
             default:
@@ -225,12 +229,15 @@ TemplateHandler.extend({
                 renderField = this.generateProjectWorkStatus(renderData);
             break;
             case "projectStatusSupply":
-                renderField = this.generateProjectSupplyItemList(renderData);
+            case "projectContingency":
+                renderField = this.generateProjectSupplyItemList(pageName, renderData);
             break;
             case "updateSupplyStatus":
-                renderField = this.generateProjectSupplyStatus(renderData);
+            case "updateContingencyStatus":
+                renderField = this.generateProjectSupplyStatus(pageName, renderData);
             break;
             case "displaySupplyStatus":
+            case "displayContingencyStatus":
                 renderField = TemplateHandlerDBView.getDbViewFields(renderData);
             break;
             case "displayUploadedFiles":

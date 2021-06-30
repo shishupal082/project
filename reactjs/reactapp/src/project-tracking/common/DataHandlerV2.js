@@ -94,7 +94,8 @@ DataHandlerV2.extend({
     },
     getList3Data: function() {
         var pageName = DataHandler.getData("pageName", "");
-        var name = pageName + ".list3Data";
+        var key = pageName + ".list3DataKey";
+        var name = DataHandler.getAppData(key, false);
         var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
@@ -184,13 +185,16 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
-    _getUpdateSupplyItemLink: function(pid, entry) {
+    _getUpdateSupplyItemLink: function(pageName, pid, entry) {
         var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
-        var sid = "";
+        var sid = "", linkRef = "supply";
         if ($S.isObject(entry) && $S.isString(entry.sid)) {
             sid = entry.sid;
         }
-        tdFieldText["href"] = DataHandler.getLink(pid, sid, "supply");
+        if (pageName === "projectContingency") {
+            linkRef = "contingency";
+        }
+        tdFieldText["href"] = DataHandler.getLink(pid, sid, linkRef);
         return tdFieldText;
     },
     getProjectData: function(pageName) {
@@ -219,30 +223,30 @@ DataHandlerV2.extend({
         response["tableName"] = tableName;
         return response;
     },
-    getProjectSupplyItems: function(sortingFields) {
+    getProjectSupplyItems: function(pageName, sortingFields) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
-        var tableName = DataHandler.getTableName("materialSupplyItems");
+        var tableName = DataHandler.getTableName(pageName + ".materialSupplyItems");
         var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
         if ($S.isArray(supplyItem)) {
             for(var i=0; i<supplyItem.length; i++) {
                 if (!$S.isObject(supplyItem[i])) {
                     continue;
                 }
-                supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(currentPId, supplyItem[i]);
+                supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(pageName, currentPId, supplyItem[i]);
             }
         }
         response["supplyItem"] = supplyItem;
         response["tableName"] = tableName;
         return response;
     },
-    getProjectSupplyStatus: function(sortingFields) {
+    getProjectSupplyStatus: function(pageName, sortingFields) {
         // var currentPId = DataHandler.getPathParamsData("pid");
         var supplyItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
-        var tableName = DataHandler.getTableName("materialSupplyStatus");
+        var tableName = DataHandler.getTableName(pageName + ".materialSupplyStatus");
         var supplyStatus = DataHandlerV2.getTableDataByAttr(tableName, "sid", supplyItemId);
-        var supplyItemName = this.getDisplayName(DataHandler.getTableName("materialSupplyItems"), "sid", supplyItemId, "supply_item_name");
+        var supplyItemName = this.getDisplayName(DataHandler.getTableName(pageName + ".materialSupplyItems"), "sid", supplyItemId, "supply_item_name");
         // var projectName = this.getDisplayName(DataHandler.getTableName("projectTable"), "pid", currentPId, "pName");
         // if ($S.isArray(supplyStatus)) {
         //     for(var i=0; i<supplyStatus.length; i++) {
@@ -269,7 +273,7 @@ DataHandlerV2.extend({
             }
         }
         var projectTableName = DataHandler.getTableName("projectTable");
-        var supplyStatusTableName = DataHandler.getTableName("materialSupplyStatus");
+        var supplyStatusTableName = DataHandler.getTableName(pageName + ".materialSupplyStatus");
         var tableData;
         if ($S.isObject(dbViewData[supplyStatusTableName]) && $S.isArray(dbViewData[supplyStatusTableName]["tableData"])) {
             tableData = dbViewData[supplyStatusTableName]["tableData"];

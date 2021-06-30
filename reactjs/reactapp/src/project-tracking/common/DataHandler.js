@@ -441,6 +441,7 @@ DataHandler.extend({
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
+        var pageName = DataHandler.getData("pageName", "");
         if (name === "new-work-status") {
             FormHandler.submitNewWorkStatus(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -450,11 +451,11 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-supply-status") {
-            FormHandler.submitAddSupplyStatus(function() {
+            FormHandler.submitAddSupplyStatus(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-supply-item") {
-            FormHandler.submitNewSupplyItem(function() {
+            FormHandler.submitNewSupplyItem(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "upload_file_form") {
@@ -538,12 +539,15 @@ DataHandler.extend({
                 renderData = DataHandlerV2.getProjectWorkStatus(sortingFields);
             break;
             case "projectStatusSupply":
-                renderData = DataHandlerV2.getProjectSupplyItems(sortingFields);
+            case "projectContingency":
+                renderData = DataHandlerV2.getProjectSupplyItems(pageName, sortingFields);
             break;
             case "updateSupplyStatus":
-                renderData = DataHandlerV2.getProjectSupplyStatus(sortingFields);
+            case "updateContingencyStatus":
+                renderData = DataHandlerV2.getProjectSupplyStatus(pageName, sortingFields);
             break;
             case "displaySupplyStatus":
+            case "displayContingencyStatus":
                 renderData = DataHandlerV2.getDisplaySypplyStatus(pageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
@@ -576,7 +580,7 @@ DataHandler.extend({
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelectionRequiredPages = Config.dateSelectionRequiredPages;
         }
-        if (dataLoadStatus && [Config.displaySupplyStatus, Config.displayUploadedFiles].indexOf(pageName) >= 0) {
+        if (dataLoadStatus && [Config.displaySupplyStatus, Config.displayContingencyStatus, Config.displayUploadedFiles].indexOf(pageName) >= 0) {
             list3Data = DataHandlerV2.getList3Data();
             filterOptions = DataHandler.getData("filterOptions");
         }

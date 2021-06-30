@@ -46,16 +46,16 @@ FormHandlerAddSupplyStatus.extend({
         TemplateHelper.updateTemplateText(addSupplyStatus, formText);
         return addSupplyStatus;
     },
-    saveAddSupplyStatus: function(formData, callback) {
+    saveAddSupplyStatus: function(pageName, formData, callback) {
         var resultData = ["table_name", "unique_id", "pid", "sid", "username", Config.fieldsKey.supplyDiscription,
                         Config.fieldsKey.Value, Config.fieldsKey.RemarksKey];
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = DataHandler.getTableName("materialSupplyStatus");
+        formData["table_name"] = DataHandler.getTableName(pageName + ".materialSupplyStatus");
         if (!$S.isStringV2(formData["table_name"])) {
-            alert(this._getAleartMessage("tableName.invalid"))
+            alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
         }
         formData["unique_id"] = FormHandler.GetUniqueId();
@@ -86,7 +86,7 @@ FormHandlerAddSupplyStatus.extend({
             }
         });
     },
-    submit: function(callback) {
+    submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.Value, Config.fieldsKey.supplyDiscription, Config.fieldsKey.RemarksKey];
         var fieldsData = DataHandler.getData("fieldsData", {});
         var i, isFormValid = true, temp, formData = {};
@@ -103,7 +103,7 @@ FormHandlerAddSupplyStatus.extend({
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
-            this.saveAddSupplyStatus(formData, callback);
+            this.saveAddSupplyStatus(pageName, formData, callback);
         }
     }
 });

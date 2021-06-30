@@ -74,11 +74,11 @@ FormHandler.extend({
     submitNewProject: function(callback) {
         FormHandlerCreateNewProject.submit(callback);
     },
-    submitNewSupplyItem: function(callback) {
-        FormHandlerAddSupplyItem.submit(callback);
+    submitNewSupplyItem: function(pageName, callback) {
+        FormHandlerAddSupplyItem.submit(pageName, callback);
     },
-    submitAddSupplyStatus: function(callback) {
-        FormHandlerAddSupplyStatus.submit(callback);
+    submitAddSupplyStatus: function(pageName, callback) {
+        FormHandlerAddSupplyStatus.submit(pageName, callback);
     },
     submitNewWorkStatus: function(callback) {
         FormHandlerAddWorkStatus.submit(callback);

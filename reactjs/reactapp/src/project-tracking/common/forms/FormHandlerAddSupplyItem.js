@@ -39,14 +39,14 @@ FormHandlerAddSupplyItem.extend({
         TemplateHelper.updateTemplateValue(addSupplyItem, formValue);
         return addSupplyItem;
     },
-    saveNewSupplyItem: function(formData, callback) {
+    saveNewSupplyItem: function(pageName, formData, callback) {
         var resultData = ["table_name", "unique_id", "pid", "username",
                         Config.fieldsKey.NewSupplyItemName, Config.fieldsKey.NewSupplyItemDetails];
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = DataHandler.getTableName("materialSupplyItems");
+        formData["table_name"] = DataHandler.getTableName(pageName + ".materialSupplyItems");
         if (!$S.isStringV2(formData["table_name"])) {
             alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
@@ -78,7 +78,7 @@ FormHandlerAddSupplyItem.extend({
             }
         });
     },
-    submit: function(callback) {
+    submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.NewSupplyItemName, Config.fieldsKey.NewSupplyItemDetails];
         var fieldsData = DataHandler.getData("fieldsData", {});
         var i, isFormValid = true, temp, formData = {};
@@ -95,7 +95,7 @@ FormHandlerAddSupplyItem.extend({
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
-            this.saveNewSupplyItem(formData, callback);
+            this.saveNewSupplyItem(pageName, formData, callback);
         }
     }
 });
