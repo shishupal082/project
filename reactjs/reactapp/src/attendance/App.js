@@ -59,7 +59,6 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.pageComponentDidUpdate = this.pageComponentDidUpdate.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -68,7 +67,6 @@ class App extends React.Component {
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
-            pageComponentDidUpdate: this.pageComponentDidUpdate,
             registerChildAttribute: this.registerChildAttribute
         };
     }
