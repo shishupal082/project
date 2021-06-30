@@ -456,6 +456,15 @@ DataHandler.extend({
                 $S.callMethod(callback);
             });
         });
+    },
+    checkForRedirect: function(ref) {
+        var currentList2Data = DataHandlerV3.getList2DataByName(ref);
+        if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
+            AppHandler.TrackPageView(ref);
+            AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
+            return true;
+        }
+        return false;
     }
 });
 DataHandler.extend({
@@ -481,22 +490,24 @@ DataHandler.extend({
     },
     SetAppId: function(appStateCallback, appDataCallback, appId) {
         var oldAppId = this.getData("currentList1Id", "");
-        this.setData("currentList1Id", appId);
         if (oldAppId !== appId) {
+            if (this.checkForRedirect(appId)) {
+                return;
+            }
+            this.setData("currentList1Id", appId);
             DataHandler.loadDataByAppId(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else {
+            this.setData("currentList1Id", appId);
         }
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;
         if (!$S.isString(pages[list2Id])) {
-            var currentList2Data = DataHandlerV3.getList2DataByName(list2Id);
-            if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
-                AppHandler.TrackPageView(list2Id);
-                AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
+            if (this.checkForRedirect(list2Id)) {
+                return;
             }
-            return;
         }
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         DataHandler.setData("currentList2Id", list2Id);
