@@ -90,8 +90,11 @@ Template["file_details"] = {
     "text": [
         {
             "tag": "div",
-            "name": "subject",
-            "text": ""
+            "text": {
+                "tag": "b",
+                "name": "subject",
+                "text": ""
+            }
         },
         {
             "tag": "div",

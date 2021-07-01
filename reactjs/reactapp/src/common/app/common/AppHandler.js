@@ -861,6 +861,24 @@ AppHandler.extend({
         }
         return selectionOptions;
     },
+    generateFilterDataV2: function(keyMapping, currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
+        if (!$S.isObject(keyMapping)) {
+            keyMapping = {};
+        }
+        if (!$S.isObject(currentAppData)) {
+            currentAppData = {};
+        }
+        if (!$S.isObject(metaData)) {
+            metaData = {};
+        }
+        var value;
+        for(var key in keyMapping) {
+            value = keyMapping[key];
+            currentAppData[value] = currentAppData[key];
+            metaData[value] = metaData[key];
+        }
+        return this.generateFilterData(currentAppData, metaData, csvData, filterSelectedValues, searchParam);
+    },
     getFilteredData: function(currentAppData, metaData, csvData, filterOptions, searchParam) {
         var reportData = csvData;
         var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);

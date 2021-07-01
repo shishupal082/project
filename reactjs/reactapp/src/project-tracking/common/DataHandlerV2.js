@@ -93,8 +93,8 @@ DataHandlerV2.extend({
         return null;
     },
     getList3Data: function() {
-        var pageName = DataHandler.getData("pageName", "");
-        var key = pageName + ".list3DataKey";
+        var pageId = DataHandler.getPathParamsData("pageId", "");
+        var key = pageId + ".list3DataKey";
         var name = DataHandler.getAppData(key, false);
         var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
@@ -112,7 +112,9 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
-        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewData, filterSelectedValues, "name");
+        var pageId = DataHandler.getPathParamsData("pageId", "");
+        var keyMapping = DataHandler.getAppData(pageId + ".filterKeyMapping", {});
+        var filterOptions = AppHandler.generateFilterDataV2(keyMapping, currentAppData, metaData, dbViewData, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewData;
     },
@@ -262,33 +264,40 @@ DataHandlerV2.extend({
         response["tableName"] = tableName;
         return response;
     },
-    getDisplaySypplyStatus: function(pageName, sortingFields) {
-        var requiredDataTable = DataHandler.getAppData(pageName + ".requiredDataTable");
-        var dbViewData = {}, i;
-        if ($S.isArray(requiredDataTable)) {
-            for (i=0; i<requiredDataTable.length; i++) {
-                if ($S.isStringV2(requiredDataTable[i])) {
-                    dbViewData[requiredDataTable[i]] = {"tableData": this.getTableData(requiredDataTable[i])};
+    handlePageByPageId: function(pageId, dbViewData) {
+        var i, tableData;
+        switch(pageId) {
+            case "displaySupplyStatus":
+            case "contingencyStatus":
+                var projectTableName = DataHandler.getTableName("projectTable");
+                var supplyStatusTableName = DataHandler.getTableName(pageId + ".materialSupplyStatus");
+                if ($S.isObject(dbViewData[supplyStatusTableName]) && $S.isArray(dbViewData[supplyStatusTableName]["tableData"])) {
+                    tableData = dbViewData[supplyStatusTableName]["tableData"];
+                    for(i=0; i<tableData.length; i++) {
+                        if (!$S.isObject(tableData[i])) {
+                            continue;
+                        }
+                        tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
+                    }
                 }
-            }
-        }
-        var projectTableName = DataHandler.getTableName("projectTable");
-        var supplyStatusTableName = DataHandler.getTableName(pageName + ".materialSupplyStatus");
-        var tableData;
-        if ($S.isObject(dbViewData[supplyStatusTableName]) && $S.isArray(dbViewData[supplyStatusTableName]["tableData"])) {
-            tableData = dbViewData[supplyStatusTableName]["tableData"];
-            for(i=0; i<tableData.length; i++) {
-                if (!$S.isObject(tableData[i])) {
-                    continue;
+                this.generateFilterOptions(tableData);
+            break;
+            case "displayUploadedFiles":
+                var fileTableName = DataHandler.getTableName("fileTable");
+                if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
+                    tableData = dbViewData[fileTableName]["tableData"];
+                    for(i=0; i<tableData.length; i++) {
+                        if (!$S.isObject(tableData[i])) {
+                            continue;
+                        }
+                        tableData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, tableData[i], null);
+                    }
                 }
-                tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
-            }
+                this.generateFilterOptions(tableData);
+            break;
+            default:
+            break;
         }
-        this.generateFilterOptions(tableData);
-        var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");
-        var resultCriteria = DataHandler.getAppData(pageName + ".resultCriteria");
-        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
-        return finalTable;
     }
 });
 

@@ -132,8 +132,7 @@ class App extends React.Component {
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     pageComponentDidUpdate(pageName, pathParams) {
-        DataHandler.setData("pathParams", pathParams);
-        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
+        this.pageComponentDidMount(pageName, pathParams);
     }
     componentDidMount() {
         $S.log("App:componentDidMount");
@@ -182,19 +181,9 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
                     )}
                 />
-                <Route exact path={pages.displaySupplyStatus}
+                <Route exact path={pages.displayPage}
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displaySupplyStatus}/>
-                    )}
-                />
-                <Route exact path={pages.displayContingencyStatus}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayContingencyStatus}/>
-                    )}
-                />
-                <Route exact path={pages.displayUploadedFiles}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayUploadedFiles}/>
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayPage}/>
                     )}
                 />
                 <Route

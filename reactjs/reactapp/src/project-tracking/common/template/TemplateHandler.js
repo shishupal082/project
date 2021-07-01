@@ -236,11 +236,7 @@ TemplateHandler.extend({
             case "updateContingencyStatus":
                 renderField = this.generateProjectSupplyStatus(pageName, renderData);
             break;
-            case "displaySupplyStatus":
-            case "displayContingencyStatus":
-                renderField = TemplateHandlerDBView.getDbViewFields(renderData);
-            break;
-            case "displayUploadedFiles":
+            case "displayPage":
                 renderField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
             break;
             case "noMatch":
