@@ -468,6 +468,10 @@ DataHandler.extend({
             FormHandler.submitDeleteFile(value, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else if (name === "add-project-comment-form") {
+            FormHandler.submitAddProjectComment(pageName, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         }
     },
     ViewFileClick: function(appStateCallback, appDataCallback, name, value) {
@@ -530,7 +534,7 @@ DataHandler.extend({
         var dateSelect = this.getData("date-select", "");
         var metaData = this.getData("metaData");
         var filterOptions = this.getData("filterOptions");
-        var dateParameterField = this.getAppData(pageId + ".dateParameterField", {});
+        var dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
         switch(pageName) {
             case "home":
                 renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
@@ -576,11 +580,11 @@ DataHandler.extend({
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-            if ($S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf(pageId) >= 0) {
+            if ($S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf("pageId:"+pageId) >= 0) {
                 dateSelectionRequiredPages.push(pageName);
             }
         }
-        if (dataLoadStatus && $S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf(pageId) >= 0) {
+        if (dataLoadStatus && $S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf("pageId:"+pageId) >= 0) {
             list3Data = DataHandlerV2.getList3Data();
             filterOptions = DataHandler.getData("filterOptions");
         }

@@ -46,7 +46,7 @@ FormHandlerAddSupplyItem.extend({
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = DataHandler.getTableName(pageName + ".materialSupplyItems");
+        formData["table_name"] = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
         if (!$S.isStringV2(formData["table_name"])) {
             alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;

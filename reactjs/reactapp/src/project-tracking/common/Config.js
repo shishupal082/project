@@ -59,11 +59,11 @@ Config.home = "home";
 Config.noMatch = "noMatch";
 Config.projectId = "projectId";
 Config.displayPage = "displayPage";
+
 Config.projectStatusWork = "projectStatusWork";
+
 Config.projectStatusSupply = "projectStatusSupply";
 Config.updateSupplyStatus = "updateSupplyStatus";
-
-
 Config.projectContingency = "projectContingency";
 Config.updateContingencyStatus = "updateContingencyStatus";
 
@@ -87,7 +87,8 @@ Config.fieldsKey = {
     "supplyDiscription": "supplyDiscription",
     "NewSupplyItemName": "add-supply-item.name",
     "NewSupplyItemDetails": "add-supply-item.details",
-    "UploadFile": "upload_file.file"
+    "UploadFile": "upload_file.file",
+    "AddProjectComment": "add-project-comment-form.comment"
 };
 
 
@@ -106,6 +107,7 @@ messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distanc
 messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required";
 messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
 messageMapping[Config.fieldsKey.UploadFile] = "File Required";
+messageMapping[Config.fieldsKey.AddProjectComment] = "Comment Required";
 Config.messageMapping = messageMapping;
 
 var apiMapping = {};

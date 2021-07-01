@@ -186,7 +186,6 @@ Template["projectId"] = [
             },
             {
                 "tag": "div.table.tbody.tr",
-                "className": "projectId-uploadFileDetails",
                 "text": [
                     {
                         "tag": "td",
@@ -204,6 +203,11 @@ Template["projectId"] = [
                         "text": []
                     }
                 ]
+            },
+            {
+                "tag": "div",
+                "name": "pageName:projectId.addCommentTemplate",
+                "text": []
             }
         ]
     }

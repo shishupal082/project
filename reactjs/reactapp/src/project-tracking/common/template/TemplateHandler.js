@@ -90,7 +90,7 @@ TemplateHandler.extend({
         }
         return link;
     },
-    generateProjectDetailsPage: function(renderData) {
+    generateProjectDetailsPage: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -112,8 +112,10 @@ TemplateHandler.extend({
         }
         var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
         var uploadFileTemplate = FormHandler.getUploadFileTemplate();
+        var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
+        TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);
         return template;
     },
     generateProjectWorkStatus: function(renderData) {
@@ -148,7 +150,7 @@ TemplateHandler.extend({
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
-        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, pageName + ".resultPatternSupplyStatus");
+        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyStatus");
         TemplateHelper.updateTemplateText(template, displayText);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
         TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
@@ -164,7 +166,7 @@ TemplateHandler.extend({
         var template = this.getTemplate("projectSupplyItems");
         var pName = renderData.pName;
         var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
-        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, pageName + ".resultPatternSupplyItems");
+        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyItems");
         TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
@@ -223,7 +225,7 @@ TemplateHandler.extend({
                 renderField = this.generateHomeRenderField(renderData);
             break;
             case "projectId":
-                renderField = this.generateProjectDetailsPage(renderData);
+                renderField = this.generateProjectDetailsPage(pageName, renderData);
             break;
             case "projectStatusWork":
                 renderField = this.generateProjectWorkStatus(renderData);
