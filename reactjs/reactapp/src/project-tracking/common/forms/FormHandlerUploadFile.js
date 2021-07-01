@@ -26,7 +26,7 @@ FormHandlerUploadFile.fn = FormHandlerUploadFile.prototype = {
 };
 $S.extendObject(FormHandlerUploadFile);
 FormHandlerUploadFile.extend({
-    getUploadFileTemplate: function() {
+    getUploadFileTemplate: function(pageName) {
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var percentComplete = DataHandler.getFieldsData("upload_file.percentComplete", 0);
         var subject = DataHandler.getFieldsData("upload_file.subject", "");

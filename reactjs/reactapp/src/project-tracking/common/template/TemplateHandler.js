@@ -111,8 +111,16 @@ TemplateHandler.extend({
             }
         }
         var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
-        var uploadFileTemplate = FormHandler.getUploadFileTemplate();
-        var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
+        var uploadFileTemplate = null;
+        var addCommentTemplate = null;
+        var enableProjectFileUpload = DataHandler.getAppData("enableProjectFileUpload", false);
+        var enableAddProjectComment = DataHandler.getAppData("enableAddProjectComment", false);
+        if ($S.isBooleanTrue(enableProjectFileUpload)) {
+            uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
+        }
+        if ($S.isBooleanTrue(enableAddProjectComment)) {
+            addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
+        }
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
         TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);

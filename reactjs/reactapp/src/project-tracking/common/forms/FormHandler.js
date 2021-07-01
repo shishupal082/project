@@ -175,7 +175,7 @@ FormHandler.extend({
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },
-    getUploadFileTemplate: function() {
+    getUploadFileTemplate: function(pageName) {
         var uploadFileTemplate = FormHandlerUploadFile.getUploadFileTemplate();
         this.updateBtnStatus(uploadFileTemplate);
         return uploadFileTemplate;

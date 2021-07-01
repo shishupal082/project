@@ -1,6 +1,6 @@
 import $S from "../../../interface/stack.js";
 import DataHandler from "../DataHandler";
-// import TemplateHandler from "../template/TemplateHandler";
+import TemplateHandler from "../template/TemplateHandler";
 import Config from "../Config";
 
 import AppHandler from "../../../common/app/common/AppHandler";
@@ -26,8 +26,7 @@ FormHandlerAddProjectComment.fn = FormHandlerAddProjectComment.prototype = {
 $S.extendObject(FormHandlerAddProjectComment);
 FormHandlerAddProjectComment.extend({
     getFormTemplate: function(pageName) {
-        var templateKey = DataHandler.getAppData("pageName:"+pageName+".addCommentTemplate.key");
-        var template = DataHandler.getAppData(templateKey);
+        var template = TemplateHandler.getTemplate("addCommentProjectTemplate");
         var requiredKeys = [Config.fieldsKey.AddProjectComment];
         var formValue = {};
         var fieldsData = DataHandler.getData("fieldsData", {});

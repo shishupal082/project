@@ -145,6 +145,45 @@ Template["file_details"] = {
         }
     ]
 };
+Template["addCommentProjectTemplate"] = [
+    {
+        "tag": "form",
+        "name": "add-project-comment-form",
+        "value": "add-project-comment-form",
+        "text": [
+            {
+                "tag": "div",
+                "text": {
+                    "tag": "span",
+                    "className": "badge badge-secondary",
+                    "text": "Add Project Comment"
+                }
+            },
+            {
+                "tag": "div",
+                "text": [
+                    {
+                        "tag": "span",
+                        "text": "Comment"
+                    },
+                    {
+                        "tag": "input",
+                        "className": "form-control",
+                        "name": "add-project-comment-form.comment",
+                        "value": ""
+                    },
+                    {
+                        "tag": "button",
+                        "name": "addentry.submitStatus",
+                        "className": "btn btn-primary form-control",
+                        "text": "Save"
+                    }
+                ]
+
+            }
+        ]
+    }
+];
 Template["goBackLink"] = [
     {
         "tag": "link",
