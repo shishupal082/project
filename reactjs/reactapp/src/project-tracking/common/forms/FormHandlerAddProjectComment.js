@@ -41,7 +41,7 @@ FormHandlerAddProjectComment.extend({
         return template;
     },
     save: function(pageName, formData, callback) {
-        var resultData = ["table_name", "unique_id", "pid", "username",
+        var resultData = ["table_name", "unique_id", "pid", "username", "subject",
                         Config.fieldsKey.AddProjectComment];
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
@@ -55,6 +55,7 @@ FormHandlerAddProjectComment.extend({
         formData["unique_id"] = FormHandler.GetUniqueId();
         formData["pid"] = DataHandler.getPathParamsData("pid");
         formData["username"] = AppHandler.GetUserData("username", "");
+        formData["subject"] = "Comment";
         formData[Config.fieldsKey.AddProjectComment] = FormHandler.FormateString(formData[Config.fieldsKey.AddProjectComment]);
         var finalText = [];
         for(var i=0; i<resultData.length; i++) {
@@ -93,6 +94,7 @@ FormHandlerAddProjectComment.extend({
                 alert(FormHandler.GetAleartMessage(requiredKeys[i]));
                 break;
             }
+            temp = temp.replaceAll("/", "...");
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
