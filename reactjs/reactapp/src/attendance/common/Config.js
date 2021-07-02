@@ -89,7 +89,6 @@ var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
-apiMapping["dataPathApi"] = "/api/get_files_info_by_filename_pattern?";
 apiMapping["addTextApi"] = "/api/add_text";
 apiMapping["loginRedirectUrl"] = "/login";
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
