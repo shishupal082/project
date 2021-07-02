@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+// import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 
 import AppHandler from "../common/app/common/AppHandler";
@@ -7,8 +7,7 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
-// import DataHandlerV2 from "./common/DataHandlerV2";
-// import Config from "./common/Config";
+import Config from "./common/Config";
 
 
 // var pages = Config.pages;
@@ -55,7 +54,6 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -63,7 +61,6 @@ class App extends React.Component {
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
             pageComponentDidMount: this.pageComponentDidMount,
-            getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -137,7 +134,6 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName) {
-        this.addTab(pageName);
         // DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
@@ -146,35 +142,10 @@ class App extends React.Component {
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
     }
-    removeTab(pageName) {
-        this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
-            if (pageName === el) {
-                return false;
-            }
-            return true;
-        });
-    }
-    addTab(pageName) {
-        if (this.appData.pageTab.indexOf(pageName) >= 0) {
-            return;
-        }
-        this.appData.pageTab.push(pageName);
-    }
-    getTabDisplayText(tabName) {
-        // return DataHandler.GetTabDisplayText(tabName);
-    }
     render() {
         var methods = this.methods;
         var commonData = this.appData;
-        return (<BrowserRouter>
-            <Switch>
-                <Route
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
-                    )}
-                />
-            </Switch>
-        </BrowserRouter>);
+        return (<AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.dataDisplay}/>);
         // return (
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );

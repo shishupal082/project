@@ -47,8 +47,12 @@ class AppComponent extends React.Component {
         if ($S.isFunction(this.props.methods.registerChildAttribute)) {
             this.props.methods.registerChildAttribute("history", this.props.history);
         }
+        var params;
         if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
-            this.props.methods.pageComponentDidMount(this.props.currentPageName, this.props.match.params);
+            if (this.props.match) {
+                params = this.props.match.params;
+            }
+            this.props.methods.pageComponentDidMount(this.props.currentPageName, params);
         }
     }
     render() {

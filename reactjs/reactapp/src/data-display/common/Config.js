@@ -31,43 +31,18 @@ try {
 var pageData = {};
 
 var pages = {
-    "home": basepathname+"/",
-    "entry": basepathname+"/entry",
-    "entrybydate": basepathname+"/entrybydate",
-    "entrybytype": basepathname+"/entrybytype",
-    "entrybystation": basepathname+"/entrybystation",
-    "entrybydevice": basepathname+"/entrybydevice",
-    "summary": basepathname+"/summary",
-    "entrybydatefilter": basepathname+"/entrybydatefilter",
-    "addentry": basepathname+"/addentry",
-    "uploadfile": basepathname+"/uploadfile"
+    "dataDisplay": basepathname+"/"
 };
 
 Config.pages = pages;
+Config.dataDisplay = "dataDisplay";
+
+
 Template["heading"][1].text = headingJson;
 
-Config.home = "home";
-Config.entry = "entry";
-Config.entrybydate = "entrybydate";
-Config.entrybytype = "entrybytype";
-Config.entrybystation = "entrybystation";
-Config.entrybydevice = "entrybydevice";
-Config.summary = "summary";
-Config.entrybydatefilter = "entrybydatefilter";
-Config.addentry = "addentry";
-Config.uploadfile = "uploadfile";
-Config.noMatch = "noMatch";
-
-
-Config.dateSelectionRequired = ["entrybydate", "entrybytype", "entrybystation", "entrybydevice", "summary", "entrybydatefilter"];
+Config.dateSelectionRequired = ["dataDisplay"];
 
 Config.defaultPageFields = [];
-
-for(var key in pages) {
-    if (key !== "home") {
-        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
-    }
-}
 
 Config.dateSelection = [
     {"name": "Single file", "value": "single-file"},
