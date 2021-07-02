@@ -190,7 +190,7 @@ Template["dashboard1stRowByDate"] = [
             },
             {
                 "tag": "th",
-                "className": "dashboard1stRowByDate-fileinfo",
+                "className": "dashboard1stRowByDate-fileinfo fileinfo-col",
                 "text": "Fileinfo"
             }
         ]
@@ -209,6 +209,7 @@ Template["dashboardRowData"] = [
             {
                 "tag": "td",
                 "name": "dashboardRowData.fileinfo",
+                "className": "fileinfo-col",
                 "text": ""
             }
         ]
@@ -232,6 +233,7 @@ Template["dashboardRowDataByDate"] = [
             },
             {
                 "tag": "td",
+                "className": "fileinfo-col",
                 "name": "dashboardRowDataByDate.fileinfo",
                 "text": ""
             }
@@ -242,6 +244,7 @@ Template["dashboard.fileinfo"] = [
     {
         "tag": "div",
         "name": "dashboard.fileinfo.filename",
+        "className": "fileinfo-col-filename",
         "text": "Filename"
     },
     {

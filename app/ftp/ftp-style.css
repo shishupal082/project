@@ -76,6 +76,10 @@
     min-width: 350px;
     width: 350px;
 }
+.dashboard .fileinfo-col-filename {
+    max-width: 350px;
+    word-wrap: break-word;
+}
 .dashboard .dashboard-s-no {
     width: 50px;
     padding: 2px;
