@@ -299,37 +299,6 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    generateApi: function(path) {
-        var currentAppData = this.getCurrentAppData();
-        if ($S.isBooleanTrue(currentAppData.loadReportDataFromApi)) {
-            return "/view/file/" + path + "?u=" + AppHandler.GetUserData("username", "") + "&iframe=false";
-        }
-        return path;
-    },
-    getAllReportDataApi: function() {
-        var currentAppData = this.getCurrentAppData();
-        var api = [];
-        if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
-            for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
-                if ($S.isString(currentAppData.dataPathApi[i]) && currentAppData.dataPathApi[i].length > 0) {
-                    api.push(Config.baseApi + DataHandler.generateApi(currentAppData.dataPathApi[i]));
-                }
-            }
-        }
-        return api;
-    },
-    getAllReportDataApiV2: function() {
-        var currentAppData = this.getCurrentAppData();
-        var api = [];
-        if ($S.isObject(currentAppData) && $S.isArray(currentAppData.dataPathApi)) {
-            for (var i = 0; i < currentAppData.dataPathApi.length; i++) {
-                if ($S.isString(currentAppData.dataPathApi[i]) && currentAppData.dataPathApi[i].length > 0) {
-                    api.push(currentAppData.dataPathApi[i]);
-                }
-            }
-        }
-        return api;
-    },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
         var request = [], metaDataApi = [];
