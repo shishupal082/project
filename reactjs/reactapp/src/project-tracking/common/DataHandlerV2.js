@@ -242,6 +242,7 @@ DataHandlerV2.extend({
         return response;
     },
     getItemUpdatePageData: function(pageName, sortingFields) {
+        var projectId = DataHandler.getPathParamsData("pid");
         var secondaryItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
         if (response.status !== "SUCCESS") {
@@ -249,9 +250,13 @@ DataHandlerV2.extend({
         }
         var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
         var secondaryItemList = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
-        if (secondaryItemList.length !== 1) {
+        if (secondaryItemList.length !== 1 || !$S.isObject(secondaryItemList[0])) {
             response["status"] = "FAILURE";
             response["reason"] = "Invalid Item Id: " + secondaryItemId;
+            return response;
+        } else if (secondaryItemList[0].pid !== projectId) {
+            response["status"] = "FAILURE";
+            response["reason"] = "projectId: " + projectId + ", and Item Id: " + secondaryItemId + " mismatch";
             return response;
         }
         tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
