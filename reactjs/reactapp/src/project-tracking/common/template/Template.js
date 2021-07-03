@@ -271,7 +271,8 @@ Template["projectWorkStatus"] = [
                     {
                         "tag": "span",
                         "className": "ml-10px badge badge-primary",
-                        "text": "Work Progress"
+                        "name": "pageName:badgeText",
+                        "text": ""
                     }
                 ]
             },
@@ -318,7 +319,8 @@ Template["projectSupplyStatus"] = [
                     {
                         "tag": "span",
                         "className": "ml-10px badge badge-primary",
-                        "text": "Supply Status"
+                        "name": "pageName:badgeText",
+                        "text": ""
                     }
                 ]
             },
@@ -664,7 +666,8 @@ Template["projectSupplyItems"] = [
                     {
                         "tag": "span",
                         "className": "ml-10px badge badge-primary",
-                        "text": "Supply Items"
+                        "name": "pageName:badgeText",
+                        "text": ""
                     }
                 ]
             },

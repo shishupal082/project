@@ -271,6 +271,30 @@ TemplateHandler.extend({
     }
 });
 
+TemplateHandler.extend({
+    _updatePermenentTemplateText: function(templateName, formValues) {
+        var template = Template[templateName];
+        TemplateHelper.updateTemplateText(template, formValues);
+    },
+    handlePageNameChange: function(newPageName, oldPageName) {
+        var badgeText = DataHandler.getAppData("pageBadgeText");
+        var key = "pageName:" + newPageName + ":badgeText";
+        var temp = {};
+        if ($S.isObject(badgeText)) {
+            if ($S.isStringV2(badgeText[key])) {
+                temp["pageName:badgeText"] = badgeText[key];
+                if ([Config.projectStatusSupply, Config.projectContingency].indexOf(newPageName) >= 0) {
+                    this._updatePermenentTemplateText("projectSupplyItems", temp);
+                } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus].indexOf(newPageName) >= 0) {
+                    this._updatePermenentTemplateText("projectSupplyStatus", temp);
+                } else if ([Config.projectStatusWork].indexOf(newPageName) >= 0) {
+                    this._updatePermenentTemplateText("projectWorkStatus", temp);
+                }
+            }
+        }
+    }
+});
+
 })($S);
 
 export default TemplateHandler;

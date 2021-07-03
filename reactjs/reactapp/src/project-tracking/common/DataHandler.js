@@ -353,9 +353,12 @@ DataHandler.extend({
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
+        var pageName;
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
-                AppHandler.TrackPageView(DataHandler.getData("pageName", ""));
+                pageName = DataHandler.getData("pageName", "");
+                AppHandler.TrackPageView(pageName);
+                TemplateHandler.handlePageNameChange(pageName, "");
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         });
@@ -402,6 +405,7 @@ DataHandler.extend({
             DataHandler.setData("pageName", pageName);
             DataHandlerV2.findCurrentList3Id();
             this.handlePageRouting("pageComponentDidMount", function() {
+                TemplateHandler.handlePageNameChange(pageName, oldPageName);
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         }
