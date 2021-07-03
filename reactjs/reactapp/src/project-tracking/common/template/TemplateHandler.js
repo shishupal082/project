@@ -259,6 +259,7 @@ TemplateHandler.extend({
     },
     handlePageNameChange: function(newPageName, oldPageName) {
         var pageDisplayText = DataHandler.getAppData("pageDisplayText");
+        var formFieldText = DataHandler.getAppData("formFieldText");
         var key = "pageName:" + newPageName + ":badgeText";
         var key2 = "pageName:" + newPageName + ":formBadgeText";
         var temp = {};
@@ -266,13 +267,16 @@ TemplateHandler.extend({
             temp["pageName:badgeText"] = pageDisplayText[key];
             temp["pageName:formBadgeText"] = pageDisplayText[key2];
             if ([Config.projectStatusSupply, Config.projectContingency, Config.projectStatusWork].indexOf(newPageName) >= 0) {
-                this._updatePermenentTemplateText("addNewSupplyItem", temp);
-            }
-            if ([Config.projectStatusSupply, Config.projectContingency, Config.projectStatusWork].indexOf(newPageName) >= 0) {
                 this._updatePermenentTemplateText("projectSupplyItems", temp);
-            } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus, Config.updateWorkStatus].indexOf(newPageName) >= 0) {
+                this._updatePermenentTemplateText("addNewSupplyItem", temp);
+            } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus].indexOf(newPageName) >= 0) {
                 this._updatePermenentTemplateText("projectSupplyStatus", temp);
                 this._updatePermenentTemplateText("addSupplyStatus", temp);
+            } else if ([Config.updateWorkStatus].indexOf(newPageName) >= 0) {
+                this._updatePermenentTemplateText("projectSupplyStatus", temp);
+                this._updatePermenentTemplateText("newWorkStatus", temp);
+                temp = formFieldText["pageName:" + newPageName];
+                this._updatePermenentTemplateText("newWorkStatus", temp);
             }
         }
     }

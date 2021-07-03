@@ -210,6 +210,9 @@ childGenerator = {
     "span": function(props, data, reactChildText, key) {
         return <span key={key} className={data.className}>{reactChildText}</span>;
     },
+    "small": function(props, data, reactChildText, key) {
+        return <small key={key} className={data.className}>{reactChildText}</small>;
+    },
     "label": function(props, data, reactChildText, key) {
         return <label htmlFor={data.htmlFor} key={key} className={data.className}>{reactChildText}</label>;
     },

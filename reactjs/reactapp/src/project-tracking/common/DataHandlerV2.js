@@ -242,13 +242,23 @@ DataHandlerV2.extend({
         return response;
     },
     getItemUpdatePageData: function(pageName, sortingFields) {
-        var supplyItemId = DataHandler.getPathParamsData("sid");
+        var secondaryItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
-        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
-        var supplyStatus = DataHandlerV2.getTableDataByAttr(tableName, "sid", supplyItemId);
-        var supplyItemName = this.getDisplayName(DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems"), "sid", supplyItemId, "supply_item_name");
-        response["supplyStatus"] = supplyStatus;
-        response["supplyItemName"] = supplyItemName;
+        if (response.status !== "SUCCESS") {
+            return response;
+        }
+        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
+        var secondaryItemList = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
+        if (secondaryItemList.length !== 1) {
+            response["status"] = "FAILURE";
+            response["reason"] = "Invalid Item Id: " + secondaryItemId;
+            return response;
+        }
+        tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
+        var itemName = this.getDisplayName(DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems"), "sid", secondaryItemId, "supply_item_name");
+        var updatedItemData = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
+        response["supplyStatus"] = updatedItemData;
+        response["supplyItemName"] = itemName;
         response["tableName"] = tableName;
         return response;
     },

@@ -383,6 +383,7 @@ Template["newWorkStatus"] = [
                 "text": {
                     "tag": "span",
                     "className": "badge badge-secondary",
+                    "name": "pageName:formBadgeText",
                     "text": "Add Work Status"
                 }
             },
@@ -394,10 +395,8 @@ Template["newWorkStatus"] = [
                         "text": [
                             {
                                 "tag": "td",
-                                "text": {
-                                    "tag": "span",
-                                    "text": "Date"
-                                }
+                                "name": "new-work-status.date.text",
+                                "text": "Date"
                             },
                             {
                                 "tag": "td",
@@ -410,10 +409,8 @@ Template["newWorkStatus"] = [
                             },
                             {
                                 "tag": "td",
-                                "text": {
-                                    "tag": "span",
-                                    "text": "Distance"
-                                }
+                                "name": "new-work-status.distance.text",
+                                "text": "Distance"
                             },
                             {
                                 "tag": "td",
@@ -431,10 +428,8 @@ Template["newWorkStatus"] = [
                         "text": [
                             {
                                 "tag": "td",
-                                "text": {
-                                    "tag": "span",
-                                    "text": "Section"
-                                }
+                                "name": "new-work-status.section.text",
+                                "text": "Section"
                             },
                             {
                                 "tag": "td",
@@ -443,12 +438,8 @@ Template["newWorkStatus"] = [
                             },
                             {
                                 "tag": "td",
-                                "text": [
-                                    {
-                                        "tag": "span",
-                                        "text": "Remarks"
-                                    }
-                                ]
+                                "name": "new-work-status.remarks.text",
+                                "text": "Remarks"
                             },
                             {
                                 "tag": "td",
