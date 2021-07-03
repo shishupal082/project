@@ -161,6 +161,11 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusWork}/>
                     )}
                 />
+                <Route exact path={pages.updateWorkStatus}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateWorkStatus}/>
+                    )}
+                />
                 <Route exact path={pages.projectStatusSupply}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusSupply}/>

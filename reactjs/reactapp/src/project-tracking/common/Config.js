@@ -46,6 +46,7 @@ var pages = {
     "home": basepathname+"/",
     "projectId": basepathname+"/pid/:pid",
     "projectStatusWork": basepathname+"/pid/:pid/work",
+    "updateWorkStatus": basepathname+"/pid/:pid/sid/:sid/work",
     "projectStatusSupply": basepathname+"/pid/:pid/supply",
     "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
     "projectContingency": basepathname+"/pid/:pid/contingency",
@@ -61,6 +62,7 @@ Config.projectId = "projectId";
 Config.displayPage = "displayPage";
 
 Config.projectStatusWork = "projectStatusWork";
+Config.updateWorkStatus = "updateWorkStatus";
 
 Config.projectStatusSupply = "projectStatusSupply";
 Config.updateSupplyStatus = "updateSupplyStatus";

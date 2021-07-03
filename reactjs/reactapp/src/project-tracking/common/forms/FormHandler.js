@@ -72,7 +72,7 @@ FormHandler.extend({
     }
 });
 FormHandler.extend({
-    submitNewProject: function(callback) {
+    submitNewProject: function(pageName, callback) {
         FormHandlerCreateNewProject.submit(callback);
     },
     submitAddProjectComment: function(pageName, callback) {
@@ -84,13 +84,13 @@ FormHandler.extend({
     submitAddSupplyStatus: function(pageName, callback) {
         FormHandlerAddSupplyStatus.submit(pageName, callback);
     },
-    submitNewWorkStatus: function(callback) {
-        FormHandlerAddWorkStatus.submit(callback);
+    submitNewWorkStatus: function(pageName, callback) {
+        FormHandlerAddWorkStatus.submit(pageName, callback);
     },
-    submitUploadFile: function(callback) {
+    submitUploadFile: function(pageName, callback) {
         FormHandlerUploadFile.submit(callback);
     },
-    submitDeleteFile: function(uniqueId, callback) {
+    submitDeleteFile: function(pageName, uniqueId, callback) {
         if (!$S.isStringV2(uniqueId)) {
             return;
         }
@@ -165,13 +165,13 @@ FormHandler.extend({
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },
-    getAddNewWorkTemplate: function() {
-        var formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
-        this.updateBtnStatus(formTemplate);
-        return formTemplate;
-    },
-    getAddNewSupplyTemplate: function() {
-        var formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
+    getAddNewSupplyTemplate: function(pageName) {
+        var formTemplate;
+        if ([Config.updateWorkStatus].indexOf(pageName) >= 0) {
+            formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
+        } else {
+            formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
+        }
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },

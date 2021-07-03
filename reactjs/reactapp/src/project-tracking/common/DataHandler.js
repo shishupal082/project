@@ -418,11 +418,11 @@ DataHandler.extend({
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var pageName = DataHandler.getData("pageName", "");
         if (name === "new-work-status") {
-            FormHandler.submitNewWorkStatus(function() {
+            FormHandler.submitNewWorkStatus(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "new-project") {
-            FormHandler.submitNewProject(function() {
+            FormHandler.submitNewProject(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-supply-status") {
@@ -434,11 +434,11 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "upload_file_form") {
-            FormHandler.submitUploadFile(function() {
+            FormHandler.submitUploadFile(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "delete_file.form") {
-            FormHandler.submitDeleteFile(value, function() {
+            FormHandler.submitDeleteFile(pageName, value, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-project-comment-form") {
@@ -513,18 +513,17 @@ DataHandler.extend({
                 renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
             break;
             case "projectId":
-                renderData = DataHandlerV2.getProjectData(pageName);
-            break;
-            case "projectStatusWork":
-                renderData = DataHandlerV2.getProjectWorkStatus(sortingFields);
+                renderData = DataHandlerV2.getProjectDataV2(pageName);
             break;
             case "projectStatusSupply":
+            case "projectStatusWork":
             case "projectContingency":
-                renderData = DataHandlerV2.getProjectSupplyItems(pageName, sortingFields);
+                renderData = DataHandlerV2.getAddItemPageData(pageName, sortingFields);
             break;
             case "updateSupplyStatus":
             case "updateContingencyStatus":
-                renderData = DataHandlerV2.getProjectSupplyStatus(pageName, sortingFields);
+            case "updateWorkStatus":
+                renderData = DataHandlerV2.getItemUpdatePageData(pageName, sortingFields);
             break;
             case "displayPage":
                 renderData = DisplayPage.getRenderData(pageName, sortingFields);

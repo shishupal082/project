@@ -187,45 +187,44 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
+    _getLinkRef: function(pageName) {
+        var linkRef = DataHandler.getAppData("linkRef");
+        if (!$S.isObject(linkRef)) {
+            linkRef = {};
+        }
+        return linkRef["pageName:" + pageName + ":linkRef"];
+    },
     _getUpdateSupplyItemLink: function(pageName, pid, entry) {
         var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
-        var sid = "", linkRef = "supply";
+        var sid = "";
         if ($S.isObject(entry) && $S.isString(entry.sid)) {
             sid = entry.sid;
         }
-        if (pageName === "projectContingency") {
-            linkRef = "contingency";
-        }
-        tdFieldText["href"] = DataHandler.getLink(pid, sid, linkRef);
+        tdFieldText["href"] = DataHandler.getLink(pid, sid, this._getLinkRef(pageName));
         return tdFieldText;
     },
     getProjectData: function(pageName) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var projectTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
-        var tableName = DataHandler.getTableName("fileTable");
         var response = {"status": "SUCCESS"};
-        var uploadedFileData;
         if (projectTable.length !== 1) {
             response["status"] = "FAILURE";
             response["reason"] = "Invalid Project Id: " + currentPId;
         } else {
             response["pName"] = projectTable[0].pName;
-            response["tableName"] = tableName;
-            uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-            response["uploadedFileData"] = this._getUploadFileInfo(pageName, uploadedFileData);
         }
         return response;
     },
-    getProjectWorkStatus: function(sortingFields) {
-        var currentPId = DataHandler.getPathParamsData("pid");
+    getProjectDataV2: function(pageName) {
         var response = this.getProjectData();
-        var tableName = DataHandler.getTableName("projectWorkStatus");
-        var workStatus = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-        response["workStatus"] = workStatus;
+        var currentPId = DataHandler.getPathParamsData("pid");
+        var tableName = DataHandler.getTableName("fileTable");
+        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
+        response["uploadedFileData"] = this._getUploadFileInfo(pageName, uploadedFileData);
         response["tableName"] = tableName;
         return response;
     },
-    getProjectSupplyItems: function(pageName, sortingFields) {
+    getAddItemPageData: function(pageName, sortingFields) {
         var currentPId = DataHandler.getPathParamsData("pid");
         var response = this.getProjectData();
         var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
@@ -242,7 +241,7 @@ DataHandlerV2.extend({
         response["tableName"] = tableName;
         return response;
     },
-    getProjectSupplyStatus: function(pageName, sortingFields) {
+    getItemUpdatePageData: function(pageName, sortingFields) {
         var supplyItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
         var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");

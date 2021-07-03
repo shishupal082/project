@@ -4,6 +4,7 @@ import Template from "./Template";
 
 import Config from "../Config";
 import DataHandler from "../DataHandler";
+import DataHandlerV2 from "../DataHandlerV2";
 import FormHandler from "../forms/FormHandler";
 
 
@@ -126,25 +127,6 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);
         return template;
     },
-    generateProjectWorkStatus: function(renderData) {
-        if (!$S.isObject(renderData)) {
-            renderData = {};
-        }
-        if (renderData.status === "FAILURE") {
-            return this._getInvalidField(renderData.reason);
-        }
-        var template = this.getTemplate("projectWorkStatus");
-        var pName = renderData.pName;
-        var newWorkStatus = FormHandler.getAddNewWorkTemplate();
-        if (!$S.isArray(newWorkStatus)) {
-            newWorkStatus = [];
-        }
-        var projectWorkStatus = this._generateFieldTable(renderData.workStatus, renderData.tableName, "resultPatternWorkStatus");
-        TemplateHelper.updateTemplateText(template, {"projectWorkStatus.pName": pName});
-        TemplateHelper.addItemInTextArray(template, "projectWorkStatus.statusTable", projectWorkStatus);
-        TemplateHelper.addItemInTextArray(template, "projectWorkStatus.addNew", newWorkStatus);
-        return template;
-    },
     generateProjectSupplyStatus: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -154,7 +136,7 @@ TemplateHandler.extend({
         }
         var template = this.getTemplate("projectSupplyStatus");
         var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
-        var newSupplyStatus = FormHandler.getAddNewSupplyTemplate();
+        var newSupplyStatus = FormHandler.getAddNewSupplyTemplate(pageName);
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
@@ -193,6 +175,7 @@ TemplateHandler.extend({
         var template = this.getTemplate("goBackLink");
         var backUrl = "";
         var pid = DataHandler.getPathParamsData("pid");
+        var linkRef = DataHandlerV2._getLinkRef(pageName)
         switch(pageName) {
             case "projectStatusWork":
             case "projectStatusSupply":
@@ -200,10 +183,9 @@ TemplateHandler.extend({
                 backUrl = this._getLink("projectId", pid);
             break;
             case "updateSupplyStatus":
-                backUrl = this._getLink("projectStatus", pid, "supply");
-            break;
             case "updateContingencyStatus":
-                backUrl = this._getLink("projectStatus", pid, "contingency");
+            case "updateWorkStatus":
+                backUrl = this._getLink("projectStatus", pid, linkRef);
             break;
             case "projectId":
             default:
@@ -236,14 +218,13 @@ TemplateHandler.extend({
                 renderField = this.generateProjectDetailsPage(pageName, renderData);
             break;
             case "projectStatusWork":
-                renderField = this.generateProjectWorkStatus(renderData);
-            break;
             case "projectStatusSupply":
             case "projectContingency":
                 renderField = this.generateProjectSupplyItemList(pageName, renderData);
             break;
             case "updateSupplyStatus":
             case "updateContingencyStatus":
+            case "updateWorkStatus":
                 renderField = this.generateProjectSupplyStatus(pageName, renderData);
             break;
             case "displayPage":
@@ -277,19 +258,21 @@ TemplateHandler.extend({
         TemplateHelper.updateTemplateText(template, formValues);
     },
     handlePageNameChange: function(newPageName, oldPageName) {
-        var badgeText = DataHandler.getAppData("pageBadgeText");
+        var pageDisplayText = DataHandler.getAppData("pageDisplayText");
         var key = "pageName:" + newPageName + ":badgeText";
+        var key2 = "pageName:" + newPageName + ":formBadgeText";
         var temp = {};
-        if ($S.isObject(badgeText)) {
-            if ($S.isStringV2(badgeText[key])) {
-                temp["pageName:badgeText"] = badgeText[key];
-                if ([Config.projectStatusSupply, Config.projectContingency].indexOf(newPageName) >= 0) {
-                    this._updatePermenentTemplateText("projectSupplyItems", temp);
-                } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus].indexOf(newPageName) >= 0) {
-                    this._updatePermenentTemplateText("projectSupplyStatus", temp);
-                } else if ([Config.projectStatusWork].indexOf(newPageName) >= 0) {
-                    this._updatePermenentTemplateText("projectWorkStatus", temp);
-                }
+        if ($S.isObject(pageDisplayText)) {
+            temp["pageName:badgeText"] = pageDisplayText[key];
+            temp["pageName:formBadgeText"] = pageDisplayText[key2];
+            if ([Config.projectStatusSupply, Config.projectContingency, Config.projectStatusWork].indexOf(newPageName) >= 0) {
+                this._updatePermenentTemplateText("addNewSupplyItem", temp);
+            }
+            if ([Config.projectStatusSupply, Config.projectContingency, Config.projectStatusWork].indexOf(newPageName) >= 0) {
+                this._updatePermenentTemplateText("projectSupplyItems", temp);
+            } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus, Config.updateWorkStatus].indexOf(newPageName) >= 0) {
+                this._updatePermenentTemplateText("projectSupplyStatus", temp);
+                this._updatePermenentTemplateText("addSupplyStatus", temp);
             }
         }
     }

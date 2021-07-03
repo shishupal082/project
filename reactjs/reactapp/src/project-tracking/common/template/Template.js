@@ -251,44 +251,6 @@ Template["projectId"] = [
         ]
     }
 ];
-Template["projectWorkStatus"] = [
-    {
-        "tag": "div",
-        "text": [
-            {
-                "tag": "div.h6",
-                "text": [
-                    {
-                        "tag": "span",
-                        "name": "goBackLink",
-                        "text": []
-                    },
-                    {
-                        "tag": "span",
-                        "name": "projectWorkStatus.pName",
-                        "text": ""
-                    },
-                    {
-                        "tag": "span",
-                        "className": "ml-10px badge badge-primary",
-                        "name": "pageName:badgeText",
-                        "text": ""
-                    }
-                ]
-            },
-            {
-                "tag": "div",
-                "name": "projectWorkStatus.statusTable",
-                "text": []
-            },
-            {
-                "tag": "div",
-                "name": "projectWorkStatus.addNew",
-                "text": []
-            }
-        ]
-    }
-];
 Template["projectSupplyStatus"] = [
     {
         "tag": "div",
@@ -476,29 +438,8 @@ Template["newWorkStatus"] = [
                             },
                             {
                                 "tag": "td",
-                                "text": {
-                                    "tag": "dropdown",
-                                    "className": "form-control",
-                                    "name": "new-work-status.section",
-                                    "text": [
-                                        {
-                                            "value": "",
-                                            "text": "Select section..."
-                                        },
-                                        {
-                                            "value": "MURI-CNI",
-                                            "text": "MURI-CNI"
-                                        },
-                                        {
-                                            "value": "HTE-BRGA",
-                                            "text": "HTE-BRGA"
-                                        },
-                                        {
-                                            "value": "Others",
-                                            "text": "Others"
-                                        }
-                                    ]
-                                }
+                                "name": "new-work-status.section",
+                                "text": []
                             },
                             {
                                 "tag": "td",
@@ -557,6 +498,7 @@ Template["addSupplyStatus"] = [
                 "text": {
                     "tag": "span",
                     "className": "badge badge-secondary",
+                    "name": "pageName:formBadgeText",
                     "text": "Add Supply Status"
                 }
             },
@@ -695,7 +637,8 @@ Template["addNewSupplyItem"] = [
                 "text": {
                     "tag": "span",
                     "className": "badge badge-secondary",
-                    "text": "Add Supply Item"
+                    "name": "pageName:formBadgeText",
+                    "text": ""
                 }
             },
             {

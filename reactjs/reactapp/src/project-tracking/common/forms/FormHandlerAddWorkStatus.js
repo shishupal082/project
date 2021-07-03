@@ -33,7 +33,7 @@ FormHandlerAddSupplyItem.extend({
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
-        var formValues = {};
+        var formValues = {}, formText = {};
         for (var i=0; i<requiredKeys.length; i++) {
             formValues[requiredKeys[i]] = fieldsData[requiredKeys[i]];
         }
@@ -42,23 +42,30 @@ FormHandlerAddSupplyItem.extend({
             DataHandler.setFieldsData(Config.fieldsKey.DateKey, formValues[Config.fieldsKey.DateKey]);
         }
         TemplateHelper.updateTemplateValue(newWorkStatus, formValues);
+        var availableSectionTemplate = DataHandler.getAppData(Config.fieldsKey.SectionKey, []);
+        if (!$S.isArray(availableSectionTemplate)) {
+            availableSectionTemplate = [];
+        }
+        formText[Config.fieldsKey.SectionKey] = availableSectionTemplate;
+        TemplateHelper.updateTemplateText(newWorkStatus, formText);
         return newWorkStatus;
     },
-    saveWorkStatus: function(formData, callback) {
-        var resultData = ["table_name", "unique_id", "pid", "username", Config.fieldsKey.SectionKey,
+    saveWorkStatus: function(pageName, formData, callback) {
+        var resultData = ["table_name", "unique_id", "pid", "sid", "username", Config.fieldsKey.SectionKey,
                         Config.fieldsKey.DistanceKey, Config.fieldsKey.DateKey,
                         Config.fieldsKey.RemarksKey];
         var url = Config.getApiUrl("addTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = DataHandler.getTableName("projectWorkStatus");
+        formData["table_name"] = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
         if (!$S.isStringV2(formData["table_name"])) {
             alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
         }
         formData["unique_id"] = FormHandler.GetUniqueId();
         formData["pid"] = DataHandler.getPathParamsData("pid");
+        formData["sid"] = DataHandler.getPathParamsData("sid");
         formData["username"] = AppHandler.GetUserData("username", "");
         formData[Config.fieldsKey.RemarksKey] = FormHandler.FormateString(formData[Config.fieldsKey.RemarksKey]);
         var finalText = [];
@@ -84,7 +91,7 @@ FormHandlerAddSupplyItem.extend({
             }
         });
     },
-    submit: function(callback) {
+    submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.DateKey, Config.fieldsKey.DistanceKey,
                             Config.fieldsKey.RemarksKey, Config.fieldsKey.SectionKey];
         var fieldsData = DataHandler.getData("fieldsData", {});
@@ -116,7 +123,7 @@ FormHandlerAddSupplyItem.extend({
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
-            this.saveWorkStatus(formData, callback);
+            this.saveWorkStatus(pageName, formData, callback);
         }
     }
 });
