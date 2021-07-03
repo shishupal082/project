@@ -268,17 +268,18 @@ DataHandlerV2.extend({
         return response;
     },
     handlePageByPageId: function(pageId, dbViewData) {
-        var i, tableData;
+        var i, tableData, loginUsername, fileTableName;
         switch(pageId) {
             case "displayUploadedFiles":
-                var fileTableName = DataHandler.getTableName("fileTable");
+                loginUsername = AppHandler.GetUserData("username", "");
+                fileTableName = DataHandler.getTableName("fileTable");
                 if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
                     tableData = dbViewData[fileTableName]["tableData"];
                     for(i=0; i<tableData.length; i++) {
                         if (!$S.isObject(tableData[i])) {
                             continue;
                         }
-                        tableData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, tableData[i], null);
+                        tableData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, tableData[i], loginUsername);
                     }
                 }
             break;
