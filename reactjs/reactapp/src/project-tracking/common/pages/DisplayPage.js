@@ -42,6 +42,7 @@ DisplayPage.extend({
         var resultPattern = DataHandler.getAppData("pageId:" + pageId + ".resultPattern");
         var resultCriteria = DataHandler.getAppData("pageId:" + pageId + ".resultCriteria");
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
+        DataHandlerV2.generateFilterOptions(finalTable);
         return finalTable;
     }
 });

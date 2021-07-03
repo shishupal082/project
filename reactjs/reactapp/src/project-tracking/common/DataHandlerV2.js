@@ -270,21 +270,6 @@ DataHandlerV2.extend({
     handlePageByPageId: function(pageId, dbViewData) {
         var i, tableData;
         switch(pageId) {
-            case "displaySupplyStatus":
-            case "contingencyStatus":
-                var projectTableName = DataHandler.getTableName("projectTable");
-                var supplyStatusTableName = DataHandler.getTableName("pageId:" + pageId + ".materialSupplyStatus");
-                if ($S.isObject(dbViewData[supplyStatusTableName]) && $S.isArray(dbViewData[supplyStatusTableName]["tableData"])) {
-                    tableData = dbViewData[supplyStatusTableName]["tableData"];
-                    for(i=0; i<tableData.length; i++) {
-                        if (!$S.isObject(tableData[i])) {
-                            continue;
-                        }
-                        tableData[i]["projectName"] = this.getDisplayName(projectTableName, "pid", tableData[i]["pid"], "pName");
-                    }
-                }
-                this.generateFilterOptions(tableData);
-            break;
             case "displayUploadedFiles":
                 var fileTableName = DataHandler.getTableName("fileTable");
                 if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
@@ -296,7 +281,6 @@ DataHandlerV2.extend({
                         tableData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, tableData[i], null);
                     }
                 }
-                this.generateFilterOptions(tableData);
             break;
             default:
             break;
