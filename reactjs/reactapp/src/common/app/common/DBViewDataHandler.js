@@ -119,6 +119,9 @@ DBViewDataHandler.extend({
         return finalTable;
     },
     _generateTempDbViewData: function(dbViewData, tempTableData, resultCriteria) {
+        if (!$S.isObject(dbViewData)) {
+            dbViewData = {};
+        }
         if (!$S.isArray(tempTableData) || tempTableData.length === 0) {
             return dbViewData;
         }
@@ -131,7 +134,6 @@ DBViewDataHandler.extend({
         }
         tableName = result.tableName;
         if ($S.isStringV2(tableName)) {
-            tempDbViewData = {};
             tempDbViewData[tableName] = {};
             tempDbViewData[tableName]["tableData"] = [];
             for(i=0; i<tempTableData.length; i++) {
@@ -139,6 +141,9 @@ DBViewDataHandler.extend({
                     continue;
                 }
                 tableEntry = {};
+                if ($S.isObject(tempTableData[i][tableName])) {
+                    tableEntry = tempTableData[i][tableName];
+                }
                 tableEntry["tableName"] = tableName;
                 for (j=0; j<result.requiredData.length; j++) {
                     if (!$S.isObject(result.requiredData[j])) {
@@ -170,6 +175,8 @@ DBViewDataHandler.extend({
                     tempDbViewData[key] = dbViewData[key];
                 }
             }
+        } else {
+            tempDbViewData = dbViewData;
         }
         return tempDbViewData;
     },
