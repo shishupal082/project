@@ -507,7 +507,7 @@ DataHandler.extend({
         var metaData = this.getData("metaData");
         var filterOptions = this.getData("filterOptions");
         var dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
-        if (DataHandlerV2.isDisabled("page", pageName)) {
+        if (DataHandlerV2.isDisabled("pageName", pageName)) {
             return {"status": "FAILURE", "reason": "Requested page disabled"};
         }
         switch(pageName) {

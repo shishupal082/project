@@ -198,6 +198,23 @@ Template["goBackLink"] = [
         }
     }
 ];
+Template["projectSubLink"] = [
+    {
+        "enablePageName": "projectStatusWork",
+        "href": "work",
+        "text": "Work Status"
+    },
+    {
+        "enablePageName": "projectStatusSupply",
+        "href": "supply",
+        "text": "Supply Progress"
+    },
+    {
+        "enablePageName": "projectContingency",
+        "href": "contingency",
+        "text": "Contingency"
+    }
+];
 Template["projectId"] = [
     {
         "tag": "div",

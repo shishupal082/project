@@ -102,12 +102,19 @@ TemplateHandler.extend({
         var pName = renderData.pName, i;
         var pid = DataHandler.getPathParamsData("pid");
         TemplateHelper.updateTemplateText(template, {"projectId.pName": pName});
-        var projectSubLink = DataHandler.getAppData("projectSubLink", []);
-        var linkTemplate, href;
+        var projectSubLink = this.getTemplate("projectSubLink", []);
+        var linkTemplate, href, linkText;
         if ($S.isArray(projectSubLink)) {
             for(i=0; i<projectSubLink.length; i++) {
+                if (DataHandlerV2.isDisabled("pageName", projectSubLink[i].enablePageName)) {
+                    continue;
+                }
+                linkText = DataHandler.getAppData("pageName:" + projectSubLink[i].enablePageName + ":projectSubLinkText");
+                if (!$S.isStringV2(linkText)) {
+                    linkText = projectSubLink[i].text;
+                }
                 href = this._getLink("projectStatus", pid, projectSubLink[i].href);
-                linkTemplate = this._getLinkTemplate(href, projectSubLink[i].text);
+                linkTemplate = this._getLinkTemplate(href, linkText);
                 TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
             }
         }

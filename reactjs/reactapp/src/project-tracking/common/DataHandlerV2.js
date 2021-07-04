@@ -504,7 +504,7 @@ DataHandlerV2.extend({
                 enabledForms = dynamicEnablingData["enabledForms"];
             }
         }
-        if (type === "page") {
+        if (type === "pageName") {
             return enabledPages.indexOf(value) < 0;
         }
         if (type === "pageId") {
