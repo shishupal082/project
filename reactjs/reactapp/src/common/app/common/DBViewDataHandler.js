@@ -180,7 +180,7 @@ DBViewDataHandler.extend({
         }
         return tempDbViewData;
     },
-    GetFinalTableV2: function(dbViewData, resultCriteria, requiredDataTable) {
+    _generateFinalTable: function(dbViewData, resultCriteria, requiredDataTable) {
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
         var force1stEntry, isNotMatching;
@@ -285,16 +285,20 @@ DBViewDataHandler.extend({
         }
         return finalTable;
     },
-    GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
+    GetFinalTableV2: function(dbViewData, resultCriteria, requiredDataTable) {
         var finalTable = [];
         if ($S.isArray(resultCriteria) && resultCriteria.length > 1) {
             for(var i=0; i<resultCriteria.length; i++) {
-                finalTable = this.GetFinalTableV2(dbViewData, [resultCriteria[i]], requiredDataTable);
+                finalTable = this._generateFinalTable(dbViewData, [resultCriteria[i]], requiredDataTable);
                 dbViewData = this._generateTempDbViewData(dbViewData, finalTable, resultCriteria[i]);
             }
         } else {
-            finalTable = this.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
+            finalTable = this._generateFinalTable(dbViewData, resultCriteria, requiredDataTable);
         }
+        return finalTable;
+    },
+    GetFinalTable: function(dbViewData, resultPattern, resultCriteria, requiredDataTable) {
+        var finalTable = this.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
         return this.ApplyResultPattern(finalTable, resultPattern);
     },
     SortTableData: function(dbViewData, sortingField) {
