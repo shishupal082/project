@@ -278,7 +278,6 @@ DataHandler.extend({
                     AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
                     return;
                 }
-                TemplateHandler.SetHeadingUsername(AppHandler.GetUserData("username", ""));
                 DataHandler.setData("loginUserDetailsLoadStatus", "completed");
                 $S.callMethod(callback);
             });
@@ -508,6 +507,9 @@ DataHandler.extend({
         var metaData = this.getData("metaData");
         var filterOptions = this.getData("filterOptions");
         var dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
+        if (DataHandlerV2.isDisabled("page", pageName)) {
+            return {"status": "FAILURE", "reason": "Requested page disabled"};
+        }
         switch(pageName) {
             case "home":
                 renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
@@ -526,6 +528,9 @@ DataHandler.extend({
                 renderData = DataHandlerV2.getItemUpdatePageData(pageName, sortingFields);
             break;
             case "displayPage":
+                if (DataHandlerV2.isDisabled("pageId", pageId)) {
+                    return {"status": "FAILURE", "reason": "Requested page disabled"};
+                }
                 renderData = DisplayPage.getRenderData(pageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
@@ -547,18 +552,15 @@ DataHandler.extend({
         var dateSelectionRequiredPages = [];
         var pageName= DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
-        var filterOptionRequiredPages = DataHandler.getAppData("filterOptionRequiredPageIds", []);
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-            if ($S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf("pageId:"+pageId) >= 0) {
-                dateSelectionRequiredPages.push(pageName);
-            }
         }
-        if (dataLoadStatus && $S.isArray(filterOptionRequiredPages) && filterOptionRequiredPages.indexOf("pageId:"+pageId) >= 0) {
+        if (dataLoadStatus && !DataHandlerV2.isDisabled("pageId", pageId)) {
             list3Data = DataHandlerV2.getList3Data();
             filterOptions = DataHandler.getData("filterOptions");
+            dateSelectionRequiredPages.push(pageName);
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
 

@@ -38,7 +38,7 @@
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"link","name":"pageHeading.dashboardLink","href":"/","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.displaySupplyStatusLink","href":"/display/displaySupplyStatus","text":"Supply Status"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.displaySupplyStatusLink","href":"/display/contingencyStatus","text":"Supply Contingency"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.displayUploadedFiles","href":"/display/displayUploadedFiles","text":"Uploaded Files"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.displayWorkStatus","href":"/display/displayWorkStatus","text":"Work Status"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
     <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
@@ -69,7 +69,76 @@ GLOBAL.validAppControl = ["appControlDataTeam01","appControlDataTeam02","appCont
 
 GLOBAL.appControlDataPath = "/project-tracking/";
 GLOBAL.appControlApi = "/project-tracking/appControlData.json";
-GLOBAL.headingJson = document.getElementById("headingJson").value;
+GLOBAL.headingJson = [
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span","text":"Login as: "},
+            {"tag":"span.b","name":"pageHeading.username","text":""}
+        ]
+    },
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.dashboardLink","href":"/","text":"Dashboard"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displaySupplyStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"a","name":"pageHeading.displaySupplyStatusLink","href":"/display/displaySupplyStatus","text":"Supply Status"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:contingencyStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"a","name":"pageHeading.displaySupplyStatusLink","href":"/display/contingencyStatus","text":"Supply Contingency"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displayWorkStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"a","name":"pageHeading.displayWorkStatus","href":"/display/displayWorkStatus","text":"Work Status"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displayUploadedFiles",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"a","name":"pageHeading.displayUploadedFiles","href":"/display/displayUploadedFiles","text":"Uploaded Files"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:projectComment",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"a","name":"pageHeading.projectComment","href":"/display/projectComment","text":"Project Comment"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span", "text":" |  "},
+            {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+        ]
+    }
+];
+// GLOBAL.headingJson = document.getElementById("headingJson").value;
+GLOBAL.headingJson = JSON.stringify(GLOBAL.headingJson);
 GLOBAL.uploadFileInstruction = "(Only PDF less than 10MB)";
 GLOBAL.enabledPages = ["pid"];
 GLOBAL.gtag = gtag;

@@ -156,16 +156,22 @@ FormHandler.extend({
         }
     },
     getAddNewProjectTemplate: function() {
+        if (DataHandlerV2.isDisabled("form", "addNewProjectForm")) {
+            return null;
+        }
         var formTemplate = FormHandlerCreateNewProject.getFormTemplate();
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },
     getAddNewSupplyItemTemplate: function() {
+        if (DataHandlerV2.isDisabled("form", "addNewItemForm")) {
+            return null;
+        }
         var formTemplate = FormHandlerAddSupplyItem.getFormTemplate();
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },
-    getAddNewSupplyTemplate: function(pageName) {
+    getUpdateSupplyTemplate: function(pageName) {
         var formTemplate;
         if ([Config.updateWorkStatus].indexOf(pageName) >= 0) {
             formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
@@ -176,11 +182,17 @@ FormHandler.extend({
         return formTemplate;
     },
     getUploadFileTemplate: function(pageName) {
+        if (DataHandlerV2.isDisabled("form", "fileUploadForm")) {
+            return null;
+        }
         var uploadFileTemplate = FormHandlerUploadFile.getUploadFileTemplate();
         this.updateBtnStatus(uploadFileTemplate);
         return uploadFileTemplate;
     },
     getAddProjectCommentTemplate: function(pageName) {
+        if (DataHandlerV2.isDisabled("form", "projectCommentForm")) {
+            return null;
+        }
         var template = FormHandlerAddProjectComment.getFormTemplate(pageName);
         this.updateBtnStatus(template);
         return template;

@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
+import TemplateHandler from "./template/TemplateHandler";
 import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
 import Api from "../../common/Api";
@@ -172,6 +173,7 @@ DataHandlerV2.extend({
         }
         DataHandler.setData("date-select", dateSelect);
         this.findCurrentList3Id();
+        TemplateHandler.SetUserRealtedData();
     }
 });
 DataHandlerV2.extend({
@@ -463,6 +465,55 @@ DataHandlerV2.extend({
                 $S.callMethod(callback);
             }
         }
+    }
+});
+DataHandlerV2.extend({
+    _getDynamicEnabledData: function() {
+        var dynamicEnabling = DataHandler.getAppData("dynamicEnabling");
+        if (!$S.isObject(dynamicEnabling)) {
+            return true;
+        }
+        var dynamicEnablingData;
+        for(var key in dynamicEnabling) {
+            if (AppHandler.GetUserData(key)) {
+                dynamicEnablingData = dynamicEnabling[key];
+                break;
+            }
+        }
+        return dynamicEnablingData;
+    },
+    getEnabledPageId: function() {
+        var dynamicEnablingData = this._getDynamicEnabledData();
+        var enabledPageId = [];
+        if ($S.isObject(dynamicEnablingData)) {
+            enabledPageId = dynamicEnablingData["enabledPageId"];
+        }
+        return enabledPageId;
+    },
+    isDisabled: function(type, value) {
+        var dynamicEnablingData = this._getDynamicEnabledData();
+        var enabledPages = [], enabledPageId = [], enabledForms = [];
+        if ($S.isObject(dynamicEnablingData)) {
+            if ($S.isArray(dynamicEnablingData["enabledPages"])) {
+                enabledPages = dynamicEnablingData["enabledPages"];
+            }
+            if ($S.isArray(dynamicEnablingData["enabledPageId"])) {
+                enabledPageId = dynamicEnablingData["enabledPageId"];
+            }
+            if ($S.isArray(dynamicEnablingData["enabledForms"])) {
+                enabledForms = dynamicEnablingData["enabledForms"];
+            }
+        }
+        if (type === "page") {
+            return enabledPages.indexOf(value) < 0;
+        }
+        if (type === "pageId") {
+            return enabledPageId.indexOf(value) < 0;
+        }
+        if (type === "form") {
+            return enabledForms.indexOf(value) < 0;
+        }
+        return true;
     }
 });
 })($S);

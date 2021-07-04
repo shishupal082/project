@@ -112,16 +112,8 @@ TemplateHandler.extend({
             }
         }
         var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
-        var uploadFileTemplate = null;
-        var addCommentTemplate = null;
-        var enableProjectFileUpload = DataHandler.getAppData("enableProjectFileUpload", false);
-        var enableAddProjectComment = DataHandler.getAppData("enableAddProjectComment", false);
-        if ($S.isBooleanTrue(enableProjectFileUpload)) {
-            uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
-        }
-        if ($S.isBooleanTrue(enableAddProjectComment)) {
-            addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
-        }
+        var uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
+        var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
         TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);
@@ -136,7 +128,7 @@ TemplateHandler.extend({
         }
         var template = this.getTemplate("projectSupplyStatus");
         var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
-        var newSupplyStatus = FormHandler.getAddNewSupplyTemplate(pageName);
+        var newSupplyStatus = FormHandler.getUpdateSupplyTemplate(pageName);
         if (!$S.isArray(newSupplyStatus)) {
             newSupplyStatus = [];
         }
@@ -195,13 +187,18 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
         return template;
     },
-    SetHeadingUsername: function(username) {
-        var heading = Config.headingJson;
+    SetUserRealtedData: function() {
+        var headingJson = Config.headingJson;
+        var username = AppHandler.GetUserData("username", "");
+        var enabledPageId = DataHandlerV2.getEnabledPageId();
         if ($S.isString(username)) {
-            TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
-            return true;
+            TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
         }
-        return false;
+        if ($S.isArray(enabledPageId)) {
+            for(var i=0; i<enabledPageId.length; i++) {
+                TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
+            }
+        }
     },
     GetPageRenderField: function(dataLoadStatus, renderData, footerData, pageName) {
         var renderField;
@@ -209,6 +206,9 @@ TemplateHandler.extend({
             renderField = this.getTemplate("loading");
             $S.log("loadingCount: " + (loadingCount++));
             return renderField;
+        }
+        if ($S.isObject(renderData) && renderData.status === "FAILURE") {
+            return this._getInvalidField(renderData.reason);
         }
         switch(pageName) {
             case "home":
@@ -247,7 +247,7 @@ TemplateHandler.extend({
     },
     GetHeadingField: function(headingText) {
         var renderField = this.getTemplate("heading");
-        TemplateHelper.updateTemplateText(renderField, {"heading-text": headingText, "heading-link": Config.headingJson});
+        TemplateHelper.updateTemplateText(renderField, {"heading-text": headingText, "heading-link": $S.clone(Config.headingJson)});
         return renderField;
     }
 });
