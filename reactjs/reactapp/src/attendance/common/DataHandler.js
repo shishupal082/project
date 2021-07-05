@@ -676,6 +676,8 @@ DataHandler.extend({
         if (DataHandlerV3.isPageDisabled(currentList2Id)) {
             filterOptions = [];
             dateSelectionRequired = null;
+        } else if(dateSelectionRequired.indexOf(currentList2Id) >= 0) {
+            dateSelectionRequired = [Config.otherPages];
         }
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
