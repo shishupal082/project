@@ -332,10 +332,10 @@ DataHandlerV3.extend({
         }
         DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
-    getCurrentList3Id: function() {
+    setCurrentList3Id: function() {
         var list2Id = DataHandler.getData("currentList2Id", "");
         var currentList3Id = DataHandler.getData("currentList3Id", "");
-        var currentList3Data = DataHandler.getList3DataById(currentList3Id);
+        var currentList3Data = DataHandler.getCurrentList3Data();
         var i, keys, list3Data, configList3Id;
         if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
             configList3Id = DataHandler.getAppData(list2Id + ".list3Data_2.selected", "");
@@ -359,6 +359,7 @@ DataHandlerV3.extend({
                 }
             }
         }
+        DataHandler.setData("currentList3Id", currentList3Id);
         return currentList3Id;
     },
     handleMetaDataLoad: function(metaDataResponse) {
@@ -392,7 +393,7 @@ DataHandlerV3.extend({
             }
         }
         DataHandler.setData("date-select", dateSelect);
-        DataHandler.setData("currentList3Id", this.getCurrentList3Id());
+        this.setCurrentList3Id();
     }
 });
 })($S);

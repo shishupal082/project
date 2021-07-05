@@ -248,7 +248,7 @@ DataHandler.extend({
         return currentList3Data;
     },
     getCurrentList3Data: function() {
-        var currentList3Id = DataHandlerV3.getCurrentList3Id();
+        var currentList3Id = DataHandler.getData("currentList3Id", "");
         return this.getList3DataById(currentList3Id);
     },
     getBooleanParam: function(name, defaultValue) {
@@ -461,6 +461,7 @@ DataHandler.extend({
             DataHandler.applyResetFilter();
         }
         AppHandler.TrackPageView(list2Id);
+        DataHandlerV3.setCurrentList3Id();
         DataHandler.handleApiDataLoad();
         DataHandler.generateDateParameter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -479,6 +480,7 @@ DataHandler.extend({
                 DataHandler.applyResetFilter();
             }
             DataHandler.setData("currentList2Id", list2Id);
+            DataHandlerV3.setCurrentList3Id();
             this.handlePageRouting("pageComponentDidMount", function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
@@ -680,9 +682,9 @@ DataHandler.extend({
         appDataCallback("enableToggleButton", this.getBooleanParam("enableToggleButton", true));
 
         appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", DataHandler.getData("currentList2Id", ""));
+        appDataCallback("currentList2Id", this.getData("currentList2Id", ""));
         appDataCallback("list3Data", list3Data);
-        appDataCallback("currentList3Id", DataHandlerV3.getCurrentList3Id());
+        appDataCallback("currentList3Id", this.getData("currentList3Id", ""));
 
         appDataCallback("dateSelectionRequiredPages", dateSelectionRequired);
         appDataCallback("dateSelection", dateSelection);
