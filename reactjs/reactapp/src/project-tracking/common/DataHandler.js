@@ -22,6 +22,7 @@ keys.push("renderData");
 keys.push("renderFieldRow");
 
 keys.push("pageName");
+keys.push("componentChangeType");
 
 
 
@@ -388,11 +389,12 @@ DataHandler.extend({
         DataHandler.setData("currentList3Id", list3Id);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    PageComponentDidUpdate: function(appStateCallback, appDataCallback) {
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    HandleComponentChange: function(type) {
+        DataHandler.setData("componentChangeType", type);
     },
-    PageComponentDidMount: function(appStateCallback, appDataCallback, pageName) {
+    PageComponentDidMount: function(appStateCallback, appDataCallback, pageName, changeType) {
         var oldPageName = DataHandler.getData("pageName", "");
+        var componentChangeType = DataHandler.getData("componentChangeType", "");
         if (oldPageName !== pageName) {
             AppHandler.TrackPageView(pageName);
             DataHandler.setData("pageName", pageName);
@@ -402,7 +404,11 @@ DataHandler.extend({
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else {
-            this.PageComponentDidUpdate(appStateCallback, appDataCallback);
+            if (componentChangeType === "pageId") {
+                DataHandlerV2.findCurrentList3Id();
+                DataHandler.setData("componentChangeType", "");
+            }
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {

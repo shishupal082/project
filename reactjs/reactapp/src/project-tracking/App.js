@@ -140,12 +140,15 @@ class App extends React.Component {
         var oldPageId = DataHandler.getPathParamsData("pageId");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
+            DataHandler.HandleComponentChange("pageName");
         } else {
             if ($S.isObject(params)) {
                 if ($S.isStringV2(oldSid) && $S.isStringV2(params.sid) && oldSid !== params.sid) {
                     isComponentUpdate = true;
+                    DataHandler.HandleComponentChange("sid");
                 } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
                     isComponentUpdate = true;
+                    DataHandler.HandleComponentChange("pageId");
                 }
             }
         }
