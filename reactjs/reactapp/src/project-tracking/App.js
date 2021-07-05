@@ -136,6 +136,7 @@ class App extends React.Component {
         var prevPageName = arg["prevPageName"];
         var params = arg["params"];
         var isComponentUpdate = false;
+        var oldPid = DataHandler.getPathParamsData("pid");
         var oldSid = DataHandler.getPathParamsData("sid");
         var oldPageId = DataHandler.getPathParamsData("pageId");
         if (currentPageName !== prevPageName) {
@@ -143,7 +144,10 @@ class App extends React.Component {
             DataHandler.HandleComponentChange("pageName");
         } else {
             if ($S.isObject(params)) {
-                if ($S.isStringV2(oldSid) && $S.isStringV2(params.sid) && oldSid !== params.sid) {
+                if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
+                    isComponentUpdate = true;
+                    DataHandler.HandleComponentChange("pid");
+                } if ($S.isStringV2(oldSid) && $S.isStringV2(params.sid) && oldSid !== params.sid) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("sid");
                 } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
@@ -155,12 +159,13 @@ class App extends React.Component {
         return isComponentUpdate;
     }
     pageComponentDidMount(pageName, pathParams) {
+        DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
-        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     pageComponentDidUpdate(pageName, pathParams) {
+        DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
-        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
+        DataHandler.PageComponentDidUpdate(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
         $S.log("App:componentDidMount");

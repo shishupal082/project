@@ -330,10 +330,10 @@ DataHandler.extend({
             // DataHandler.generateDateParameter();
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            DataHandler.handlePageRouting(null, callback);
+            DataHandler.loadDbTableData(callback);
         });
     },
-    handlePageRouting: function(reason, callback) {
+    loadDbTableData: function(callback) {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
@@ -392,24 +392,11 @@ DataHandler.extend({
     HandleComponentChange: function(type) {
         DataHandler.setData("componentChangeType", type);
     },
-    PageComponentDidMount: function(appStateCallback, appDataCallback, pageName, changeType) {
-        var oldPageName = DataHandler.getData("pageName", "");
-        var componentChangeType = DataHandler.getData("componentChangeType", "");
-        if (oldPageName !== pageName) {
-            AppHandler.TrackPageView(pageName);
-            DataHandler.setData("pageName", pageName);
+    PageComponentDidUpdate: function(appStateCallback, appDataCallback, pageName, changeType) {
+        if (pageName === Config.displayPage) {
             DataHandlerV2.findCurrentList3Id();
-            this.handlePageRouting("pageComponentDidMount", function() {
-                TemplateHandler.handlePageNameChange(pageName, oldPageName);
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else {
-            if (componentChangeType === "pageId") {
-                DataHandlerV2.findCurrentList3Id();
-                DataHandler.setData("componentChangeType", "");
-            }
-            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("dateSelect:" + value);
