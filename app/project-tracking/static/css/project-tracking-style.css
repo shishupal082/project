@@ -7,6 +7,9 @@
     width: 400px;
 }
 .APP-COMPONENT.displaySupplyStatus1 .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.updateWorkStatus .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.updateSupplyStatus .SELECT-FILTER [name="filter-reload"],
+.APP-COMPONENT.updateContingencyStatus .SELECT-FILTER [name="filter-reload"],
 .APP-COMPONENT.displaySupplyStatus1 button[name="reload"] {
     display: none;
 }

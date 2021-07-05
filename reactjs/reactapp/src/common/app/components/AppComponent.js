@@ -34,7 +34,13 @@ class AppComponent extends React.Component {
         this._callAppMethod(this.props.methods.onFormSubmit, e);
     }
     componentDidUpdate(prevProps, prevState) {
-        if (this.props.currentPageName !== this.state.currentPageName) {
+        var arg = {"currentPageName": this.props.currentPageName};
+        arg["prevPageName"] = this.state.currentPageName;
+        if (this.props.match) {
+            arg["params"] = this.props.match.params;
+        }
+        var isComponentUpdate = this._callAppMethod(this.props.methods.isComponentUpdate, arg);
+        if ($S.isBooleanTrue(isComponentUpdate)) {
             $S.log("AppComponent:componentDidUpdate");
             this.setState({currentPageName: this.props.currentPageName});
             if ($S.isFunction(this.props.methods.pageComponentDidUpdate)) {
@@ -48,10 +54,10 @@ class AppComponent extends React.Component {
             this.props.methods.registerChildAttribute("history", this.props.history);
         }
         var params;
+        if (this.props.match) {
+            params = this.props.match.params;
+        }
         if ($S.isFunction(this.props.methods.pageComponentDidMount)) {
-            if (this.props.match) {
-                params = this.props.match.params;
-            }
             this.props.methods.pageComponentDidMount(this.props.currentPageName, params);
         }
     }

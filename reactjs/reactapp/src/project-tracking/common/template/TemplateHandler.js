@@ -174,7 +174,7 @@ TemplateHandler.extend({
         var template = this.getTemplate("goBackLink");
         var backUrl = "";
         var pid = DataHandler.getPathParamsData("pid");
-        var linkRef = DataHandlerV2._getLinkRef(pageName)
+        var linkRef = DataHandlerV2.getLinkRef(pageName);
         switch(pageName) {
             case "projectStatusWork":
             case "projectStatusSupply":

@@ -26,55 +26,23 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
-    getList2Data: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var enabledPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "enabledPages");
-        var redirectPages = $S.findParam([currentAppData, metaData, Config.tempConfig], "redirectPages");
-        var linkText = $S.findParam([currentAppData, metaData, Config.tempConfig], "linkText");
-        if (!$S.isArray(enabledPages)) {
-            enabledPages = [];
+    getList2Data: function(pageName) {
+        if ([Config.updateSupplyStatus, Config.updateContingencyStatus, Config.updateWorkStatus].indexOf(pageName) < 0) {
+            return null;
         }
-        if (!$S.isObject(linkText)) {
-            linkText = {};
+        if (this.isDisabled("pageName", pageName)) {
+            return null;
         }
-        var pages = Config.pages;
         var list2Data = [];
-        var temp, i, key;
-        temp = Object.keys(pages);
-        var pageOrder = [];
-        for(i=0; i<enabledPages.length; i++) {
-            if (temp.indexOf(enabledPages[i]) >= 0) {
-                pageOrder.push(enabledPages[i]);
-            }
-        }
-        for(i=0; i<pageOrder.length; i++) {
-            key = pageOrder[i];
-            if (key !== "home") {
-                if ($S.isString(linkText[key])) {
-                    temp = linkText[key];
-                } else {
-                    temp = $S.capitalize(key);
-                }
-                list2Data.push({"name": key, "toText": temp, "toUrl": pages[key]});
-            }
-        }
-        if ($S.isArray(redirectPages)) {
-            for(i=0; i<redirectPages.length; i++) {
-                temp = redirectPages[i];
-                if (!$S.isObject(temp)) {
+        var currentPId = DataHandler.getPathParamsData("pid");
+        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
+        var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
+        if ($S.isArray(supplyItem)) {
+            for(var i=0; i<supplyItem.length; i++) {
+                if (!$S.isObject(supplyItem[i])) {
                     continue;
                 }
-                if (!$S.isStringV2(temp.name)) {
-                    continue;
-                }
-                if (!$S.isStringV2(temp.toText)) {
-                    continue;
-                }
-                if (!$S.isStringV2(temp.toUrl)) {
-                    continue;
-                }
-                list2Data.push({"name": temp.name, "toText": temp.toText, "toUrl": temp.toUrl});
+                list2Data.push({"name": supplyItem[i]["sid"], "toText": supplyItem[i]["supply_item_name"]})
             }
         }
         return list2Data;
@@ -189,7 +157,7 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
-    _getLinkRef: function(pageName) {
+    getLinkRef: function(pageName) {
         var linkRef = DataHandler.getAppData("linkRef");
         if (!$S.isObject(linkRef)) {
             linkRef = {};
@@ -202,7 +170,7 @@ DataHandlerV2.extend({
         if ($S.isObject(entry) && $S.isString(entry.sid)) {
             sid = entry.sid;
         }
-        tdFieldText["href"] = DataHandler.getLink(pid, sid, this._getLinkRef(pageName));
+        tdFieldText["href"] = DataHandler.getLink(pid, sid, this.getLinkRef(pageName));
         return tdFieldText;
     },
     getProjectData: function(pageName) {
@@ -244,7 +212,7 @@ DataHandlerV2.extend({
         return response;
     },
     getItemUpdatePageData: function(pageName, sortingFields) {
-        var projectId = DataHandler.getPathParamsData("pid");
+        var currentPId = DataHandler.getPathParamsData("pid");
         var secondaryItemId = DataHandler.getPathParamsData("sid");
         var response = this.getProjectData();
         if (response.status !== "SUCCESS") {
@@ -256,9 +224,9 @@ DataHandlerV2.extend({
             response["status"] = "FAILURE";
             response["reason"] = "Invalid Item Id: " + secondaryItemId;
             return response;
-        } else if (secondaryItemList[0].pid !== projectId) {
+        } else if (secondaryItemList[0].pid !== currentPId) {
             response["status"] = "FAILURE";
-            response["reason"] = "projectId: " + projectId + ", and Item Id: " + secondaryItemId + " mismatch";
+            response["reason"] = "projectId: " + currentPId + ", and Item Id: " + secondaryItemId + " mismatch";
             return response;
         }
         tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");

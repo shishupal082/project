@@ -20,6 +20,10 @@ class App extends React.Component {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
 
+            "list2Text": "Select...",
+            "list2Data": [],
+            "currentList2Id": "",
+
             "list3Text": "Select...",
             "list3Data": [],
             "currentList3Id": "",
@@ -44,6 +48,7 @@ class App extends React.Component {
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
+        this.isComponentUpdate = this.isComponentUpdate.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.pageComponentDidUpdate =  this.pageComponentDidUpdate.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
@@ -53,6 +58,7 @@ class App extends React.Component {
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
+            isComponentUpdate: this.isComponentUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
             pageComponentDidUpdate: this.pageComponentDidUpdate,
             registerChildAttribute: this.registerChildAttribute
@@ -61,11 +67,8 @@ class App extends React.Component {
     registerChildAttribute(name, method) {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
-    gotoPage(pageName) {
-        var pages = Config.pages;
-        if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(pages[pageName]);
-        }
+    gotoPage(value) {
+        this.childAttribute["history"].push(DataHandler.getLinkV2(value));
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
@@ -111,9 +114,10 @@ class App extends React.Component {
             }
         }
         if (name === "list2-select") {
-            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, value);
+            this.gotoPage(value);
+            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (name === "list3-select") {
-            DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, value);
+            DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (filterNames.indexOf(name) >= 0) {
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         } else {
@@ -127,12 +131,33 @@ class App extends React.Component {
     appDataCallback(name, data) {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
+    isComponentUpdate(arg) {
+        var currentPageName = arg["currentPageName"];
+        var prevPageName = arg["prevPageName"];
+        var params = arg["params"];
+        var isComponentUpdate = false;
+        var oldSid = DataHandler.getPathParamsData("sid");
+        var oldPageId = DataHandler.getPathParamsData("pageId");
+        if (currentPageName !== prevPageName) {
+            isComponentUpdate = true;
+        } else {
+            if ($S.isObject(params)) {
+                if ($S.isStringV2(oldSid) && $S.isStringV2(params.sid) && oldSid !== params.sid) {
+                    isComponentUpdate = true;
+                } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
+                    isComponentUpdate = true;
+                }
+            }
+        }
+        return isComponentUpdate;
+    }
     pageComponentDidMount(pageName, pathParams) {
         DataHandler.setData("pathParams", pathParams);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     pageComponentDidUpdate(pageName, pathParams) {
-        this.pageComponentDidMount(pageName, pathParams);
+        DataHandler.setData("pathParams", pathParams);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
         $S.log("App:componentDidMount");
