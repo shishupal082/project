@@ -451,7 +451,6 @@ DataHandler.extend({
             return;
         }
         var oldList2Id = DataHandler.getData("currentList2Id", "");
-        DataHandler.setData("currentList2Id", list2Id);
         if (DataHandlerV3.isPageDisabled(oldList2Id)) {
             DataHandler.loadDataByAppId(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -461,6 +460,7 @@ DataHandler.extend({
             DataHandler.applyResetFilter();
         }
         AppHandler.TrackPageView(list2Id);
+        DataHandler.setData("currentList2Id", list2Id);
         DataHandlerV3.setCurrentList3Id();
         DataHandler.handleApiDataLoad();
         DataHandler.generateDateParameter();
@@ -474,6 +474,10 @@ DataHandler.extend({
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
         var oldList2Id = DataHandler.getData("currentList2Id", "");
+        /**
+            Used for first time or when changes from home to otherPages
+            At that instance OnList2Change will not fired
+        */
         if (oldList2Id !== list2Id) {
             // AppHandler.TrackPageView(list2Id);
             if ([Config.custom_dbview].indexOf(list2Id) >= 0) {

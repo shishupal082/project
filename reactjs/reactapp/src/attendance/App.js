@@ -56,6 +56,7 @@ class App extends React.Component {
         this.dropDownChange = this.dropDownChange.bind(this);
         this.onFormSubmit = this.onFormSubmit.bind(this);
         /* methods used in selectFilter end */
+        this.isComponentUpdate = this.isComponentUpdate.bind(this);
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
@@ -66,6 +67,7 @@ class App extends React.Component {
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
+            isComponentUpdate: this.isComponentUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
             registerChildAttribute: this.registerChildAttribute
         };
@@ -149,6 +151,18 @@ class App extends React.Component {
     appDataCallback(name, data) {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
+    isComponentUpdate(arg) {
+        var currentPageName = arg["currentPageName"];
+        var params = arg["params"];
+        var pageNameArg = "";
+        if ($S.isObject(params)) {
+            pageNameArg = params["pageName"];
+            if (Config.otherPages === currentPageName && $S.isStringV2(pageNameArg)) {
+                DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, pageNameArg);
+            }
+        }
+        return false;
+    }
     pageComponentDidMount(pageName, pathParams) {
         var appId = "";
         if ([Config.projectHome].indexOf(pageName) < 0) {
@@ -162,9 +176,6 @@ class App extends React.Component {
         DataHandler.SetAppId(this.appStateCallback, this.appDataCallback, appId);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
-    pageComponentDidUpdate(pageName, pathParams) {
-        this.pageComponentDidMount(pageName, pathParams);
-    }
     componentDidMount() {
         $S.log("App:componentDidMount");
         var appDataCallback = this.appDataCallback;
@@ -175,13 +186,13 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
         var pageUrl = Config.pageUrl;
-        var pageName = DataHandler.getData("currentList2Id", "");
+        commonData.appComponentClassName = DataHandler.getData("currentList2Id", "");
         const projectHome = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                         renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>);
         const home = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                         renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>);
-        const otherPage = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                        renderFieldRow={this.appData.renderFieldRow} currentPageName={pageName}/>);
+        const otherPages = (props) => (<AppComponent {...props} data={commonData} methods={methods}
+                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.otherPages}/>);
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
@@ -190,7 +201,7 @@ class App extends React.Component {
             <Switch>
                 <Route exact path={pageUrl.projectHome} component={projectHome}/>
                 <Route exact path={pageUrl.home} component={home}/>
-                <Route exact path={pageUrl.page} component={otherPage}/>
+                <Route exact path={pageUrl.otherPages} component={otherPages}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

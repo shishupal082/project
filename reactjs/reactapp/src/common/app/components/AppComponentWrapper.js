@@ -30,6 +30,9 @@ class AppComponentWrapper extends React.Component {
         } else {
             appComponentClassName = "APP-COMPONENT";
         }
+        if ($S.isObject(this.props.data) && $S.isString(this.props.data.appComponentClassName)) {
+            appComponentClassName += " " + this.props.data.appComponentClassName;
+        }
         if ($S.isBooleanTrue(addContainerClass)) {
             pageComponentClass += " container";
         }

@@ -42,20 +42,20 @@ try {
 var pageUrl = {
     "projectHome": basepathname+"/",
     "home": basepathname+"/:pid",
-    "page": basepathname+"/:pid/:pageName"
+    "otherPages": basepathname+"/:pid/:pageName"
 };
 
 var pages = {
     "projectHome": pageUrl["projectHome"],
     "home": pageUrl["home"],
-    "entry": pageUrl["page"],
-    "update": pageUrl["page"],
-    "summary": pageUrl["page"],
-    "ta": pageUrl["page"],
-    "dbview": pageUrl["page"],
-    "dbview_summary": pageUrl["page"],
-    "custom_dbview": pageUrl["page"],
-    "add_field_report": pageUrl["page"]
+    "entry": pageUrl["otherPages"],
+    "update": pageUrl["otherPages"],
+    "summary": pageUrl["otherPages"],
+    "ta": pageUrl["otherPages"],
+    "dbview": pageUrl["otherPages"],
+    "dbview_summary": pageUrl["otherPages"],
+    "custom_dbview": pageUrl["otherPages"],
+    "add_field_report": pageUrl["otherPages"]
 };
 
 Config.pages = pages;
@@ -63,6 +63,7 @@ Config.pageUrl = pageUrl;
 
 Config.projectHome = "projectHome";
 Config.home = "home";
+Config.otherPages = "otherPages";
 Config.entry = "entry";
 Config.update = "update";
 Config.summary = "summary";
