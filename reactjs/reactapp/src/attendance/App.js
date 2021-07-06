@@ -153,13 +153,13 @@ class App extends React.Component {
     }
     isComponentUpdate(arg) {
         var currentPageName = arg["currentPageName"];
-        var params = arg["params"];
-        var pageNameArg = "";
-        if ($S.isObject(params)) {
-            pageNameArg = params["pageName"];
-            if (Config.otherPages === currentPageName && $S.isStringV2(pageNameArg)) {
-                DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, pageNameArg);
-            }
+        DataHandler.setData("pageName", currentPageName);
+        DataHandler.setData("pathParams", arg["params"]);
+        if (currentPageName === Config.otherPages) {
+            DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
+            DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
+        } else if (currentPageName === Config.home) {
+            DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
         }
         return false;
     }
