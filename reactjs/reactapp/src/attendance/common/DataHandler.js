@@ -27,6 +27,8 @@ keys.push("renderFieldRow");
 keys.push("currentList1Id");
 keys.push("currentList2Id");
 keys.push("currentList3Id");
+keys.push("pageName");
+keys.push("pathParams");
 keys.push("date-select");
 
 keys.push("filterValues");
@@ -174,34 +176,13 @@ DataHandler.extend({
             url += "/" + pageName;
         }
         return url;
+    },
+    getPathParamsData: function(key, defaultValue) {
+        var pathParams = this.getData("pathParams", {});
+        return AppHandler.getPathParamsData(pathParams, key, defaultValue);
     }
 });
 DataHandler.extend({
-    // GetDataParameterFromDate: function(dateRange) {
-    //     var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
-    //     var i;
-    //     if ($S.isArray(dateRange) && dateRange.length === 2) {
-    //         allDate = AppHandler.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
-    //         startLimit = dateRange[0];
-    //         endLimit = dateRange[1];
-    //         tempAllDate = allDate.map(function(el, index, arr) {
-    //             return el.dateStr;
-    //         });
-    //         arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
-    //         if ($S.isObject(arrangedDate)) {
-    //             for(var key in arrangedDate) {
-    //                 if ($S.isArray(arrangedDate[key])) {
-    //                     for (i=0; i<arrangedDate[key].length; i++) {
-    //                         if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
-    //                             arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return arrangedDate;
-    // },
     generateDateParameter: function() {
         var currentAppData = DataHandler.getCurrentAppData({});
         var metaData = DataHandler.getMetaData({});
@@ -431,15 +412,6 @@ DataHandler.extend({
         DataHandler.setData("currentList1Id", list1Id);
         this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
     },
-    SetAppId: function(appStateCallback, appDataCallback, appId) {
-        var oldAppId = this.getData("currentList1Id", "");
-        this.setData("currentList1Id", appId);
-        if (oldAppId !== appId) {
-            DataHandler.loadDataByAppId(function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        }
-    },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;
         if (!$S.isString(pages[list2Id])) {
@@ -447,8 +419,8 @@ DataHandler.extend({
             if ($S.isObject(currentList2Data) && $S.isStringV2(currentList2Data.toUrl)) {
                 AppHandler.TrackPageView(list2Id);
                 AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
+                return;
             }
-            return;
         }
         var oldList2Id = DataHandler.getData("currentList2Id", "");
         if (DataHandlerV3.isPageDisabled(oldList2Id)) {
@@ -472,19 +444,28 @@ DataHandler.extend({
         DataHandler.generateDateParameter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    PageComponentDidMount: function(appStateCallback, appDataCallback, list2Id) {
-        var oldList2Id = DataHandler.getData("currentList2Id", "");
-        /**
-            Used for first time or when changes from home to otherPages
-            At that instance OnList2Change will not fired
-        */
-        if (oldList2Id !== list2Id) {
-            // AppHandler.TrackPageView(list2Id);
-            if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
-                DataHandler.applyResetFilter();
-            }
-            DataHandler.setData("currentList2Id", list2Id);
-            DataHandlerV3.setCurrentList3Id();
+    SetAppId: function(appStateCallback, appDataCallback) {
+        var oldAppId = this.getData("currentList1Id", "");
+        var appId = this.getPathParamsData("pid", "");
+        if (oldAppId !== appId) {
+            this.setData("currentList1Id", appId);
+            DataHandler.loadDataByAppId(function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
+    },
+    PageComponentDidMount: function(appStateCallback, appDataCallback) {
+        var pageName = this.getData("pageName", "");
+        var pageNameArg = this.getPathParamsData("pageName", "");
+        var oldCurrentListList2Id = this.getData("currentList2Id", "");
+        var newCurrentListList2Id;
+        if ([Config.projectHome, Config.home, Config.noMatch].indexOf(pageName) >= 0) {
+            newCurrentListList2Id = pageName;
+        } else {
+            newCurrentListList2Id = pageNameArg;
+        }
+        if (oldCurrentListList2Id !== newCurrentListList2Id) {
+            this.setData("currentList2Id", newCurrentListList2Id);
             this.handlePageRouting("pageComponentDidMount", function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });

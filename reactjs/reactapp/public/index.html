@@ -21,12 +21,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App Project Tracking</title>
+    <title>React App Attendance</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/project-tracking/static/css/project-tracking-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/attendance/static/css/attendance-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -35,10 +35,11 @@
     gtag('js', new Date());
     gtag('config', 'UA-75647007-1');
 </script>
+
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
+    <div class="d-none"><input type="hidden" id="headingJson" name="headingJson" value='[{"tag":"span","text":"Login as: "},{"tag":"span.b","name":"pageHeading.username","text":""},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.monitoringLink","href":"/","text":"View Data"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.dashboardLink","href":"/dashboard","text":"Dashboard"}},{"tag":"span","text":" |  "},{"tag":"span","text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}]'></div>
     <div id="root"><center>Loading...</center></div>
     <!--
       This HTML file is a template.
@@ -59,92 +60,47 @@ var GLOBAL = {
     basepathname: "",
     loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
-    appControlDataPath: "/project-tracking/",
+    appControlDataPath: "/secondAppData/attendance/json/meta-data/",
     addTextFilenamePattern: "YYYY/-/MM/-/DD/-/hh/-/mm/-user-field-report-device.csv",
     forceLogin: false
 };
 
 
-GLOBAL.validAppControl = ["appControlDataTeam01","appControlDataTeam02","appControlDataTeam03"];
+GLOBAL.validAppControl = [
+    "appControlDataTeam01","appControlDataTeam02",
+    "appControlDataTeam03","appControlDataTeam04",
+    "appControlDataTeam05","appControlDataTeam06","appControlDataTeam07",
+    "appControlTeam11", "appControlTeam12",
+    "appControlTeam13", "appControlTeam14"];
+// GLOBAL.linkText = {
+//     "add_field_report": "Add Entry",
+//     "dbview": "Entry By Date Filter",
+//     "dbview_summary": "DBView Summary",
+//     "custom_dbview": "Entry By Date"
+// };
 
-GLOBAL.appControlDataPath = "/project-tracking/";
-GLOBAL.appControlApi = "/project-tracking/appControlData.json";
-GLOBAL.headingJson = [
-    {
-        "tag": "span",
-        "text": [
-            {"tag":"span","text":"Login as: "},
-            {"tag":"span.b","name":"pageHeading.username","text":""}
-        ]
-    },
-    {
-        "tag": "span",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.dashboardLink","href":"/","text":"Dashboard"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "className": "d-none",
-        "name": "pageId:displaySupplyStatus",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/display/displaySupplyStatus","text":"Supply Status"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "className": "d-none",
-        "name": "pageId:contingencyStatus",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/display/contingencyStatus","text":"Supply Contingency"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "className": "d-none",
-        "name": "pageId:displayWorkStatus",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.displayWorkStatus","href":"/display/displayWorkStatus","text":"Work Status"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "className": "d-none",
-        "name": "pageId:displayUploadedFiles",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.displayUploadedFiles","href":"/display/displayUploadedFiles","text":"Uploaded Files"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "className": "d-none",
-        "name": "pageId:projectComment",
-        "text": [
-            {"tag":"span","text":" |  "},
-            {"tag":"span","text":{"tag":"link","name":"pageHeading.projectComment","href":"/display/projectComment","text":"Project Comment"}}
-        ]
-    },
-    {
-        "tag": "span",
-        "text": [
-            {"tag":"span", "text":" |  "},
-            {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
-        ]
-    }
-];
-// GLOBAL.headingJson = document.getElementById("headingJson").value;
-GLOBAL.headingJson = JSON.stringify(GLOBAL.headingJson);
-GLOBAL.uploadFileInstruction = "(Only PDF less than 10MB)";
-GLOBAL.enabledPages = ["pid"];
+GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
+// GLOBAL.appControlDataPath = "/roleAttendanceUser/json/covid19/";
+
+GLOBAL.appControlApi = "/roleAttendanceUser/json/attendance/appControlData.json";
+// GLOBAL.appControlApi = "/pvt/app-data/assetsv2/appControlData.json";
+// GLOBAL.appControlApi = "/secondAppData/attendance/json/meta-data-ta/appControlData.json";
+// GLOBAL.appControlApi = "/pvt/app-data/attendance/appControlTeam14.json";
+GLOBAL.headingJson = document.getElementById("headingJson").value;
+GLOBAL.projectHeading = "App Heading";
+// GLOBAL.enabledPages = ["entry", "update", "ta", "summary", "dbview", "dbview_summary", "custom_dbview", "add_field_report"];
+// GLOBAL.redirectPages = [
+//     {
+//         "name": "upload_file",
+//         "toText": "Upload File",
+//         "toUrl": "/upload_file"
+//     }
+// ];
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>
 </body>
+
 </html>

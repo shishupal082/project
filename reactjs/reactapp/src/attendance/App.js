@@ -164,17 +164,14 @@ class App extends React.Component {
         return false;
     }
     pageComponentDidMount(pageName, pathParams) {
-        var appId = "";
-        if ([Config.projectHome].indexOf(pageName) < 0) {
-            if ($S.isStringV2(pathParams.pageName)) {
-                pageName = pathParams.pageName;
-            }
-            if ($S.isStringV2(pathParams.pid)) {
-                appId = pathParams.pid;
-            }
-        }
-        DataHandler.SetAppId(this.appStateCallback, this.appDataCallback, appId);
-        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
+        /* Used when pageName changes from
+            - projectHome or home or noMatch or otherPages (only once)
+            - vice versa
+        */
+        DataHandler.setData("pageName", pageName);
+        DataHandler.setData("pathParams", pathParams);
+        DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
     }
     componentDidMount() {
         $S.log("App:componentDidMount");
