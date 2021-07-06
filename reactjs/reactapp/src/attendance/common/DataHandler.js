@@ -340,8 +340,20 @@ DataHandler.extend({
             DataHandler.generateDateParameter();
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            DataHandler.handlePageRouting(null, callback);
+            DataHandler.handlePageRouting(callback);
         });
+    },
+    loadDataByAppIdV2: function(oldCurrentList2Id, newCurrentList2Id, callback) {
+        if (DataHandlerV3.isPageDisabled(oldCurrentList2Id)) {
+            this.loadDataByAppId(callback);
+        } else {
+            var dataLoadStatus = this.getData("dbViewDataLoadStatus", "");
+            if (dataLoadStatus === "not-started") {
+                this.handlePageRouting(callback);
+            } else {
+                $S.callMethod(callback);
+            }
+        }
     },
     loadAttendanceData: function(attendanceDataApis, callback) {
         var isAttendanceDataSameAsDbData = this.getAppData("isAttendanceDataSameAsDbData", false);
@@ -368,24 +380,18 @@ DataHandler.extend({
         DataHandlerV3.generateFinalTable(currentList2Id, resultCriteria);
         DataHandlerV3.generateFilterOptions();
     },
-    handlePageRouting: function(reason, callback) {
+    handlePageRouting: function(callback) {
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var dbDataApis = this.getAppData("dbDataApis", []);
         var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
             DataHandlerV3.handlePageLoad(dbDataApis, function() {
-                var attendanceDataLoadStatus = DataHandler.getData("attendanceDataLoadStatus", "");
-                if (["not-started"].indexOf(attendanceDataLoadStatus) >= 0) {
-                    DataHandler.loadAttendanceData(attendanceDataApis, function() {
-                        DataHandler.handleApiDataLoad();
-                        $S.callMethod(callback);
-                    });
-                } else {
+                DataHandler.loadAttendanceData(attendanceDataApis, function() {
                     DataHandler.handleApiDataLoad();
                     $S.callMethod(callback);
-                }
+                });
             });
-        } else if (reason !== "pageComponentDidMount" || [Config.home, Config.projectHome, Config.noMatch].indexOf(currentList2Id) >= 0) {
+        } else {
             $S.callMethod(callback);
         }
     },
@@ -467,31 +473,24 @@ DataHandler.extend({
     PageComponentDidMount: function(appStateCallback, appDataCallback) {
         var pageName = this.getData("pageName", "");
         var pageNameArg = this.getPathParamsData("pageName", "");
-        var oldCurrentListList2Id = this.getData("currentList2Id", "");
-        var newCurrentListList2Id;
+        var oldCurrentList2Id = this.getData("currentList2Id", "");
+        var newCurrentList2Id;
         if ([Config.projectHome, Config.home, Config.noMatch].indexOf(pageName) >= 0) {
-            newCurrentListList2Id = pageName;
+            newCurrentList2Id = pageName;
         } else {
-            newCurrentListList2Id = pageNameArg;
+            newCurrentList2Id = pageNameArg;
         }
-        if (oldCurrentListList2Id !== newCurrentListList2Id) {
-            this.setData("currentList2Id", newCurrentListList2Id);
+        if (oldCurrentList2Id !== newCurrentList2Id) {
+            this.setData("currentList2Id", newCurrentList2Id);
             DataHandlerV3.setCurrentList3Id();
             DataHandler.handleApiDataLoad();
             DataHandler.generateDateParameter();
-            if ([Config.custom_dbview].indexOf(newCurrentListList2Id) >= 0) {
+            if ([Config.custom_dbview].indexOf(newCurrentList2Id) >= 0) {
                 DataHandler.applyResetFilter();
             }
-            if (DataHandlerV3.isPageDisabled(oldCurrentListList2Id)) {
-                DataHandler.loadDataByAppId(function() {
-                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                });
-            } else {
+            DataHandler.loadDataByAppIdV2(oldCurrentList2Id, newCurrentList2Id, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                // this.handlePageRouting("pageComponentDidMount", function() {
-                //     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                // });
-            }
+            });
         }
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
