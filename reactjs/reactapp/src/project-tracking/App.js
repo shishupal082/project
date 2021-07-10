@@ -139,6 +139,7 @@ class App extends React.Component {
         var oldPid = DataHandler.getPathParamsData("pid");
         var oldSid = DataHandler.getPathParamsData("sid");
         var oldPageId = DataHandler.getPathParamsData("pageId");
+        var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
             DataHandler.HandleComponentChange("pageName");
@@ -153,6 +154,9 @@ class App extends React.Component {
                 } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("pageId");
+                } else if ($S.isStringV2(oldViewPageName) && $S.isStringV2(params.viewPageName) && oldViewPageName !== params.viewPageName) {
+                    isComponentUpdate = true;
+                    DataHandler.HandleComponentChange("viewPageName");
                 }
             }
         }
@@ -217,6 +221,11 @@ class App extends React.Component {
                 <Route exact path={pages.updateContingencyStatus}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
+                    )}
+                />
+                <Route exact path={pages.viewPage}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.viewPage}/>
                     )}
                 />
                 <Route exact path={pages.displayPage}

@@ -26,11 +26,6 @@ Template["noDataFound"] = [
             "className": "badge badge-primary",
             "text": "No Data Found"
         }
-    },
-    {
-        "tag": "div",
-        "name": "footer",
-        "text": []
     }
 ];
 Template["templateNotFound"] = [{
@@ -140,11 +135,25 @@ Template["file_details"] = {
                         "className": "btn btn-link pt-1px disabled",
                         "text": "Delete"
                     }
-                },
+                }
             ]
         }
     ]
 };
+Template["deleteFileTemplate"] = [
+    {
+        "tag": "form",
+        "name": "delete_file.form",
+        "value": "delete_file.form",
+        "className": "list-inline-item",
+        "text": {
+            "tag": "button",
+            "name": "delete_file.form.button",
+            "className": "btn btn-link pt-1px disabled",
+            "text": "Remove"
+        }
+    }
+];
 Template["addCommentProjectTemplate"] = [
     {
         "tag": "form",
@@ -171,6 +180,41 @@ Template["addCommentProjectTemplate"] = [
                         "className": "form-control",
                         "name": "add-project-comment-form.comment",
                         "value": ""
+                    },
+                    {
+                        "tag": "button",
+                        "name": "addentry.submitStatus",
+                        "className": "btn btn-primary form-control",
+                        "text": "Save"
+                    }
+                ]
+
+            }
+        ]
+    }
+];
+Template["addProjectFilesTemplate"] = [
+    {
+        "tag": "form",
+        "name": "add-project-files-form",
+        "value": "add-project-files-form",
+        "text": [
+            {
+                "tag": "div",
+                "text": {
+                    "tag": "span",
+                    "className": "badge badge-secondary",
+                    "text": "Add Files to Project"
+                }
+            },
+            {
+                "tag": "div",
+                "text": [
+                    {
+                        "tag": "dropdown",
+                        "className": "form-control",
+                        "name": "add-project-files-form.project",
+                        "text": []
                     },
                     {
                         "tag": "button",
@@ -720,6 +764,28 @@ Template["addNewSupplyItem"] = [
 
             }
         ]
+    }
+];
+Template["displayPage"] = [
+    {
+        "tag": "div",
+        "name": "displayPage.field",
+        "text": []
+    }
+];
+Template["viewPage"] = [
+    {
+        "tag": "div",
+        "name": "viewPage.field",
+        "text": []
+    }
+];
+Template["footerField2"] = [
+    {
+        "tag": "div",
+        "name": "footer",
+        "className": "text-center",
+        "text": []
     }
 ];
 Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];

@@ -23,7 +23,9 @@ Config.tempConfig = {};
 
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
+var filesInfoApi = $$$.filesInfoApi;
 var headingJson = $$$.headingJson;
+var footerJson = $$$.footerJson;
 var appControlDataApi = $$$.appControlApi;
 
 
@@ -31,6 +33,12 @@ try {
     headingJson = JSON.parse(headingJson);
     Config.headingJson = headingJson;
 } catch(e) {}
+
+try {
+    footerJson = JSON.parse(footerJson);
+    Config.footerJson = footerJson;
+} catch(e) {}
+
 
 
 // Config.defaultPageFields = [];
@@ -51,7 +59,8 @@ var pages = {
     "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
     "projectContingency": basepathname+"/pid/:pid/contingency",
     "updateContingencyStatus": basepathname+"/pid/:pid/sid/:sid/contingency",
-    "displayPage": basepathname+"/display/:pageId"
+    "displayPage": basepathname+"/display/:pageId",
+    "viewPage": basepathname+"/view/:viewPageName"
 };
 
 Config.pages = pages;
@@ -60,6 +69,7 @@ Config.home = "home";
 Config.noMatch = "noMatch";
 Config.projectId = "projectId";
 Config.displayPage = "displayPage";
+Config.viewPage = "viewPage";
 
 Config.projectStatusWork = "projectStatusWork";
 Config.updateWorkStatus = "updateWorkStatus";
@@ -90,7 +100,8 @@ Config.fieldsKey = {
     "NewSupplyItemName": "add-supply-item.name",
     "NewSupplyItemDetails": "add-supply-item.details",
     "UploadFile": "upload_file.file",
-    "AddProjectComment": "add-project-comment-form.comment"
+    "AddProjectComment": "add-project-comment-form.comment",
+    "ProjectFileKey": "add-project-files-form.project"
 };
 
 
@@ -110,11 +121,13 @@ messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required"
 messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
 messageMapping[Config.fieldsKey.UploadFile] = "File Required";
 messageMapping[Config.fieldsKey.AddProjectComment] = "Comment Required";
+messageMapping[Config.fieldsKey.ProjectFileKey] = "Select Project Name";
 Config.messageMapping = messageMapping;
 
 var apiMapping = {};
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
+apiMapping["getFilesInfoApi"] = filesInfoApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
 apiMapping["addTextApi"] = "/api/add_text_v2";
 apiMapping["upload_file"] = "/api/upload_file";

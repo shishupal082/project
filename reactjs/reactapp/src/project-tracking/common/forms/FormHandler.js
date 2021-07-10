@@ -13,6 +13,7 @@ import FormHandlerCreateNewProject from "./FormHandlerCreateNewProject";
 import FormHandlerAddWorkStatus from "./FormHandlerAddWorkStatus";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 import FormHandlerAddProjectComment from "./FormHandlerAddProjectComment";
+import FormHandlerAddProjectFiles from "./FormHandlerAddProjectFiles";
 
 var FormHandler;
 
@@ -89,6 +90,9 @@ FormHandler.extend({
     },
     submitUploadFile: function(pageName, callback) {
         FormHandlerUploadFile.submit(callback);
+    },
+    submitAddProjectFiles: function(pageName, callback) {
+        FormHandlerAddProjectFiles.submit(pageName, callback);
     },
     submitDeleteFile: function(pageName, uniqueId, callback) {
         if (!$S.isStringV2(uniqueId)) {
@@ -194,6 +198,11 @@ FormHandler.extend({
             return null;
         }
         var template = FormHandlerAddProjectComment.getFormTemplate(pageName);
+        this.updateBtnStatus(template);
+        return template;
+    },
+    getAddProjectFilesTemplate: function(pageName, fileInfoData, allProjects) {
+        var template = FormHandlerAddProjectFiles.getFormTemplate(pageName, fileInfoData, allProjects);
         this.updateBtnStatus(template);
         return template;
     }

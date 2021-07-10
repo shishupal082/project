@@ -3,6 +3,7 @@ import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
 import FormHandler from "./forms/FormHandler";
 import TemplateHandler from "./template/TemplateHandler";
+import ApiHandler from "./api/ApiHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -46,13 +47,15 @@ keys.push("latestAttendanceData");
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
+keys.push("dbViewDataLoadStatus");
+keys.push("filesInfoLoadStatus");
 
 // keys.push("sortable");
 // keys.push("sortableValue");
 keys.push("sortingFields");
 keys.push("dbViewData");
+keys.push("filesInfoData");
 // keys.push("dbViewDataTable");
-keys.push("dbViewDataLoadStatus");
 
 keys.push("firstTimeDataLoadStatus");
 
@@ -74,6 +77,7 @@ CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("appRelatedDataLoadStatus", "not-started");
 CurrentData.setData("dbViewDataLoadStatus", "not-started");
+CurrentData.setData("filesInfoLoadStatus", "not-started");
 
 CurrentData.setData("addentry.submitStatus", "not-started");
 
@@ -171,6 +175,11 @@ DataHandler.extend({
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
         dataLoadStatusKey.push("appRelatedDataLoadStatus");
+        dataLoadStatusKey.push("dbViewDataLoadStatus");
+        var pageName = this.getData("pageName", "");
+        if (pageName === "viewPage") {
+            dataLoadStatusKey.push("filesInfoLoadStatus");
+        }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
         }
@@ -331,6 +340,7 @@ DataHandler.extend({
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
             DataHandler.loadDbTableData(callback);
+            ApiHandler.loadDataByParams(callback);
         });
     },
     loadDbTableData: function(callback) {
@@ -433,6 +443,10 @@ DataHandler.extend({
             FormHandler.submitAddProjectComment(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else if (name === "add-project-files-form") {
+            FormHandler.submitAddProjectFiles(pageName, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         }
     },
     ViewFileClick: function(appStateCallback, appDataCallback, name, value) {
@@ -491,6 +505,7 @@ DataHandler.extend({
         var currentList3Data = this.getCurrentList3Data();
         var pageName = this.getData("pageName", "");
         var pageId = this.getPathParamsData("pageId", "");
+        var viewPageName = this.getPathParamsData("viewPageName", "");
         var sortingFields = this.getData("sortingFields", []);
         var dateSelect = this.getData("date-select", "");
         var metaData = this.getData("metaData");
@@ -521,6 +536,15 @@ DataHandler.extend({
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
                 renderData = DisplayPage.getRenderData(pageName, sortingFields);
+                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
+                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
+                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+            break;
+            case "viewPage":
+                if (DataHandlerV2.isDisabled("viewPage", viewPageName)) {
+                    return {"status": "FAILURE", "reason": "Requested page disabled"};
+                }
+                renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);

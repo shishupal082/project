@@ -160,6 +160,18 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
         TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
         return template;
+    },
+    getDisplayPageTemplate: function(renderData) {
+        var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
+        var template = this.getTemplate("displayPage");
+        TemplateHelper.addItemInTextArray(template, "displayPage.field", pageField);
+        return template;
+    },
+    getViewPageTemplate: function(renderData) {
+        var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
+        var template = this.getTemplate("viewPage");
+        TemplateHelper.addItemInTextArray(template, "viewPage.field", pageField);
+        return template;
     }
 });
 
@@ -196,14 +208,23 @@ TemplateHandler.extend({
     },
     SetUserRealtedData: function() {
         var headingJson = Config.headingJson;
+        var footerJson = Config.footerJson, i;
         var username = AppHandler.GetUserData("username", "");
         var enabledPageId = DataHandlerV2.getEnabledPageId();
+        var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         if ($S.isString(username)) {
             TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
         }
         if ($S.isArray(enabledPageId)) {
-            for(var i=0; i<enabledPageId.length; i++) {
+            for(i=0; i<enabledPageId.length; i++) {
                 TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerJson, "pageId:" + enabledPageId[i], "d-none");
+            }
+        }
+        if ($S.isArray(enabledViewPage)) {
+            for(i=0; i<enabledViewPage.length; i++) {
+                TemplateHelper.removeClassTemplate(headingJson, "viewPage:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerJson, "viewPage:" + enabledViewPage[i], "d-none");
             }
         }
     },
@@ -216,40 +237,47 @@ TemplateHandler.extend({
         }
         if ($S.isObject(renderData) && renderData.status === "FAILURE") {
             return this._getInvalidField(renderData.reason);
+        } else {
+            switch(pageName) {
+                case "home":
+                    renderField = this.generateHomeRenderField(renderData);
+                break;
+                case "projectId":
+                    renderField = this.generateProjectDetailsPage(pageName, renderData);
+                break;
+                case "projectStatusWork":
+                case "projectStatusSupply":
+                case "projectContingency":
+                    renderField = this.generateProjectSupplyItemList(pageName, renderData);
+                break;
+                case "updateSupplyStatus":
+                case "updateContingencyStatus":
+                case "updateWorkStatus":
+                    renderField = this.generateProjectSupplyStatus(pageName, renderData);
+                break;
+                case "displayPage":
+                    renderField = this.getDisplayPageTemplate(renderData);
+                break;
+                case "viewPage":
+                    renderField = this.getViewPageTemplate(renderData);
+                break;
+                case "noMatch":
+                default:
+                    renderField = this.getTemplate("noMatch");
+                break;
+            }
         }
-        switch(pageName) {
-            case "home":
-                renderField = this.generateHomeRenderField(renderData);
-            break;
-            case "projectId":
-                renderField = this.generateProjectDetailsPage(pageName, renderData);
-            break;
-            case "projectStatusWork":
-            case "projectStatusSupply":
-            case "projectContingency":
-                renderField = this.generateProjectSupplyItemList(pageName, renderData);
-            break;
-            case "updateSupplyStatus":
-            case "updateContingencyStatus":
-            case "updateWorkStatus":
-                renderField = this.generateProjectSupplyStatus(pageName, renderData);
-            break;
-            case "displayPage":
-                renderField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
-            break;
-            case "noMatch":
-            default:
-                renderField = this.getTemplate("noMatch");
-            break;
-        }
-        var metaData = DataHandler.getData("metaData", {});
-        var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
-        var footerField = this.getTemplate("footerField");
+        // var metaData = DataHandler.getData("metaData", {});
+        // var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
+        var footerField = this.getTemplate("footerField2");
         var goBackLink = this.getGoBackLinkTemplate(pageName);
-
-        TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
+        if ($S.isArray(renderField)) {
+            TemplateHelper.addItemInTextArray(footerField, "footer", $S.clone(Config.footerJson));
+            renderField.push(footerField);
+        }
+        // TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
         TemplateHelper.updateTemplateText(renderField, {"goBackLink": goBackLink});
-        TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
+        // TemplateHelper.addItemInTextArray(renderField, "footer", $S.clone(Config.footerJson));
         return renderField;
     },
     GetHeadingField: function(headingText) {

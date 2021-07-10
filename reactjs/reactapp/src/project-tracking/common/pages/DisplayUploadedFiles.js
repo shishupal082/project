@@ -46,7 +46,7 @@ DisplayUploadedFiles.extend({
         }
         var buttonName = "delete_file.form.button";
         var textReplaceParam = {"fileName": fileName};
-        if (pageName === Config.projectId) {
+        if ([Config.projectId].indexOf(pageName) >= 0) {
             textReplaceParam["subject"] = data["subject"];
             if (loginUsername === fileUsername) {
                 TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
@@ -60,6 +60,32 @@ DisplayUploadedFiles.extend({
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
         if (isValidFileData) {
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+            for(key in hrefReplaceParam) {
+                TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
+            }
+        } else {
+            TemplateHelper.addClassTemplate(fileTemplate, "file-action-field", "d-none");
+        }
+        return fileTemplate;
+    },
+    getFileDisplayTemplateV2: function(pageName, filePath, loginUsername) {
+        var fileTemplate = TemplateHandler.getTemplate("file_details");
+        var fileName = "";
+        var temp, key;
+        var isValidFileData = false;
+        if ($S.isStringV2(filePath)) {
+            temp = filePath.split("/");
+            if (temp.length === 2) {
+                isValidFileData = true;
+                fileName = temp[1];
+            }
+        }
+        var textReplaceParam = {"fileName": fileName};
+        var hrefReplaceParam = {};
+        hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
+        hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
+        TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
+        if (isValidFileData) {
             for(key in hrefReplaceParam) {
                 TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
             }

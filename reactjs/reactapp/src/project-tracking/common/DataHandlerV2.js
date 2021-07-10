@@ -2,6 +2,7 @@ import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
 import TemplateHandler from "./template/TemplateHandler";
+import DisplayPage from "./pages/DisplayPage";
 import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
 import Api from "../../common/Api";
@@ -256,6 +257,83 @@ DataHandlerV2.extend({
             default:
             break;
         }
+    },
+    handlePageByViewPageName: function(pageName, viewPageName, dbViewData) {
+        if (!$S.isObject(dbViewData)) {
+            dbViewData = {};
+        }
+        var i, fileInfoTableName, loginUsername, fileTableName, filepath;
+        var fileInfoData, tableData;
+        var tempData = {};
+        switch(viewPageName) {
+            case "manageFiles":
+                loginUsername = AppHandler.GetUserData("username", "");
+                fileTableName = DataHandler.getTableName("fileTable");
+                fileInfoData = DataHandler.getData("filesInfoData");
+                fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
+                if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
+                    tableData = dbViewData[fileTableName]["tableData"];
+                    for(i=0; i<tableData.length; i++) {
+                        if (!$S.isObject(tableData[i])) {
+                            continue;
+                        }
+                        if (tableData[i]["table_name"] === fileTableName) {
+                            tableData[i]["pName"] = this.getDisplayName(DataHandler.getTableName("projectTable"), "pid", tableData[i]["pid"], "pName")
+                            if ($S.isArray(tempData[tableData[i]["filename"]])) {
+                                tempData[tableData[i]["filename"]].push(tableData[i]);
+                            } else {
+                                tempData[tableData[i]["filename"]] = [tableData[i]];
+                            }
+                        }
+                    }
+                }
+                if ($S.isStringV2(fileInfoTableName)) {
+                    dbViewData[fileInfoTableName] = {"tableData": []};
+                    if ($S.isArray(fileInfoData)) {
+                        for(i=0; i<fileInfoData.length; i++) {
+                            if (!$S.isObject(fileInfoData[i])) {
+                                continue;
+                            }
+                            filepath = fileInfoData[i].filepath;
+                            fileInfoData[i].table_name = fileInfoTableName;
+                            fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, filepath, loginUsername);
+                            if ($S.isArray(tempData[filepath])) {
+                                fileInfoData[i].relatedProjectsFiles = tempData[filepath];
+                            }
+                            dbViewData[fileInfoTableName]["tableData"].push(fileInfoData[i]);
+                        }
+                    }
+                }
+            break;
+            default:
+            break;
+        }
+    },
+    handlePageByViewPageNameV2: function(pageName, viewPageName, finalTable) {
+        if (!$S.isArray(finalTable)) {
+            finalTable = [];
+        }
+        var i, fileInfoTableName, loginUsername;
+        switch(viewPageName) {
+            case "manageFiles":
+                fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
+                loginUsername = AppHandler.GetUserData("username", "");
+                if ($S.isStringV2(fileInfoTableName)) {
+                    if ($S.isArray(finalTable)) {
+                        for(i=0; i<finalTable.length; i++) {
+                            if ($S.isObject(finalTable[i])) {
+                                if ($S.isObject(finalTable[i][fileInfoTableName])) {
+                                    finalTable[i][fileInfoTableName]["available_on"] = DisplayPage.getFileAvailableProjects(finalTable[i], loginUsername);
+                                    finalTable[i][fileInfoTableName]["add_projects"] = DisplayPage.getAddProjectForm(finalTable[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+            break;
+            default:
+            break;
+        }
     }
 });
 
@@ -458,9 +536,17 @@ DataHandlerV2.extend({
         }
         return enabledPageId;
     },
+    getEnabledViewPageName: function() {
+        var dynamicEnablingData = this._getDynamicEnabledData();
+        var enabledViewPage = [];
+        if ($S.isObject(dynamicEnablingData)) {
+            enabledViewPage = dynamicEnablingData["enabledViewPage"];
+        }
+        return enabledViewPage;
+    },
     isDisabled: function(type, value) {
         var dynamicEnablingData = this._getDynamicEnabledData();
-        var enabledPages = [], enabledPageId = [], enabledForms = [];
+        var enabledPages = [], enabledPageId = [], enabledForms = [], enabledViewPage = [];
         if ($S.isObject(dynamicEnablingData)) {
             if ($S.isArray(dynamicEnablingData["enabledPages"])) {
                 enabledPages = dynamicEnablingData["enabledPages"];
@@ -471,6 +557,9 @@ DataHandlerV2.extend({
             if ($S.isArray(dynamicEnablingData["enabledForms"])) {
                 enabledForms = dynamicEnablingData["enabledForms"];
             }
+            if ($S.isArray(dynamicEnablingData["enabledViewPage"])) {
+                enabledViewPage = dynamicEnablingData["enabledViewPage"];
+            }
         }
         if (type === "pageName") {
             return enabledPages.indexOf(value) < 0;
@@ -480,6 +569,9 @@ DataHandlerV2.extend({
         }
         if (type === "form") {
             return enabledForms.indexOf(value) < 0;
+        }
+        if (type === "viewPage") {
+            return enabledViewPage.indexOf(value) < 0;
         }
         return true;
     }

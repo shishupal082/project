@@ -60,6 +60,7 @@ var GLOBAL = {
     loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/project-tracking/",
+    filesInfoApi: "/api/get_files_info",
     addTextFilenamePattern: "YYYY/-/MM/-/DD/-/hh/-/mm/-user-field-report-device.csv",
     forceLogin: false
 };
@@ -137,10 +138,21 @@ GLOBAL.headingJson = [
         ]
     }
 ];
+GLOBAL.footerJson = [
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "viewPage:manageFiles",
+        "text": [
+            {"tag":"span","text":"  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/view/manageFiles","text":"Manage Files"}}
+        ]
+    }
+];
 // GLOBAL.headingJson = document.getElementById("headingJson").value;
 GLOBAL.headingJson = JSON.stringify(GLOBAL.headingJson);
+GLOBAL.footerJson = JSON.stringify(GLOBAL.footerJson);
 GLOBAL.uploadFileInstruction = "(Only PDF less than 10MB)";
-GLOBAL.enabledPages = ["pid"];
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
