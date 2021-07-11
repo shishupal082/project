@@ -25,7 +25,7 @@
 .APP-COMPONENT.add_field_report .SELECT-FILTER [name="list3-select"],
 .APP-COMPONENT.add_field_report .SELECT-FILTER [name="filter-reload"],
 .APP-COMPONENT.add_field_report .SELECT-FILTER [name="footer-filter-toggle"],
-.APP-COMPONENT.add_field_report .FOOTER,
+.APP-COMPONENT.add_field_report .SELECT-FILTER-FOOTER,
 .APP-COMPONENT.add_field_report .PAGE-FILTER,
 .APP-COMPONENT.custom_dbview .SELECT-FILTER [name="list3-select"],
 .APP-COMPONENT.custom_dbview .PAGE-FILTER {

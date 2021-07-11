@@ -60,6 +60,7 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
+        this.pageComponentDidUpdate = this.pageComponentDidUpdate.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -69,6 +70,7 @@ class App extends React.Component {
             onFormSubmit: this.onFormSubmit,
             isComponentUpdate: this.isComponentUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
+            pageComponentDidUpdate: this.pageComponentDidUpdate,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -153,53 +155,68 @@ class App extends React.Component {
     }
     isComponentUpdate(arg) {
         var currentPageName = arg["currentPageName"];
-        DataHandler.setData("pageName", currentPageName);
-        DataHandler.setData("pathParams", arg["params"]);
-        if (currentPageName === Config.otherPages) {
-            DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
-            DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
-        } else if (currentPageName === Config.home) {
-            DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
+        var prevPageName = arg["prevPageName"];
+        var params = arg["params"];
+        var isComponentUpdate = false;
+        var oldAppId = DataHandler.getPathParamsData("pid", "");
+        var oldPageName = DataHandler.getPathParamsData("pageName");
+        if (currentPageName !== prevPageName) {
+            isComponentUpdate = true;
+        } else if ($S.isObject(params)) {
+            if ($S.isStringV2(params.pid) && params.pid !== oldAppId) {
+                isComponentUpdate = true;
+                DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, params.pid);
+            } else if ($S.isStringV2(params.pageName) && params.pageName !== oldPageName) {
+                isComponentUpdate = true;
+            }
         }
-        return false;
+        return isComponentUpdate;
     }
     pageComponentDidMount(pageName, pathParams) {
-        /* Used when pageName changes from
-            - projectHome or home or noMatch or otherPages (only once)
-            - vice versa
-        */
+        $S.log("App:pageComponentDidMount"); //#1
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
-        DataHandler.SetAppId(this.appStateCallback, this.appDataCallback);
-        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
+        // DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
     }
     componentDidMount() {
-        $S.log("App:componentDidMount");
+        $S.log("App:componentDidMount"); //#2
         var appDataCallback = this.appDataCallback;
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
+    }
+    pageComponentDidUpdate(pageName, pathParams) {
+        $S.log("App:pageComponentDidUpdate"); //#3
+        DataHandler.setData("pageName", pageName);
+        DataHandler.setData("pathParams", pathParams);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
     }
     render() {
         var methods = this.methods;
         var commonData = this.appData;
         var pageUrl = Config.pageUrl;
-        commonData.appComponentClassName = DataHandler.getData("currentList2Id", "");
-        const projectHome = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>);
-        const home = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>);
-        const otherPages = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.otherPages}/>);
-        const noMatch = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.noMatch}/>);
-
+        commonData.appComponentClassName = DataHandler.getAppComponentClassName();
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pageUrl.projectHome} component={projectHome}/>
-                <Route exact path={pageUrl.home} component={home}/>
-                <Route exact path={pageUrl.otherPages} component={otherPages}/>
-                <Route component={noMatch}/>
+                <Route exact path={pageUrl.projectHome}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectHome}/>
+                    )}
+                />
+                <Route exact path={pageUrl.home}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
+                    )}
+                />
+                <Route exact path={pageUrl.otherPages}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.otherPages}/>
+                    )}
+                />
+                <Route
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>
+                    )}
+                />
             </Switch>
         </BrowserRouter>);
         // return (

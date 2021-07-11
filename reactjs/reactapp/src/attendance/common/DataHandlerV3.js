@@ -91,16 +91,17 @@ DataHandlerV3.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
-    generateFinalTable: function(currentList2Id, resultCriteria) {
+    generateFinalTable: function(resultCriteria) {
+        var pageName = DataHandler.getPathParamsData("pageName", "");
         var tempDbViewData = DataHandler.getData("dbViewData", {});
         var attendanceData = DataHandler.getData("attendanceData", {});
-        var requiredDataTable = DataHandler.getAppData("requiredDataTable." + currentList2Id, []);
+        var requiredDataTable = DataHandler.getAppData("requiredDataTable." + pageName, []);
         var metaData = DataHandler.getMetaData({});
         var currentAppData = DataHandler.getCurrentAppData({});
-        var resultPatternKey = "resultPattern"+$S.capitalize(currentList2Id);
+        var resultPatternKey = "resultPattern"+$S.capitalize(pageName);
         var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         var finalTable = [];
-        if ([Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+        if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
             resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         }
@@ -114,15 +115,15 @@ DataHandlerV3.extend({
         DataHandler.setData("dbViewDataTable", finalTable);
     },
     handlePageLoad: function(dbDataApis, callback) {
-        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
+        var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
         var tableData;
         if (status === "completed") {
-            status = DataHandler.getData("dbViewDataLoadStatus");
+            status = DataHandler.getData("dbDataLoadStatus");
             if (status === "not-started") {
-                DataHandler.setData("dbViewDataLoadStatus", "in_progress");
+                DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
-                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    DataHandler.setData("dbDataLoadStatus", "completed");
                     tableData = DBViewDataHandler.GenerateTableData(request);
                     DataHandlerV3._handleDefaultSorting(tableData);
                     DataHandler.setData("dbViewData", tableData);
@@ -228,28 +229,16 @@ DataHandlerV3.extend({
         }
         return null;
     },
-    getList3Data: function(pageName) {
+    getList3Data: function() {
         var metaData = DataHandler.getMetaData({});
         var currentAppData = DataHandler.getCurrentAppData({});
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
+        var pageName = DataHandler.getPathParamsData("pageName", "");
         var name = "list3Data", i;
-        var allPages = Object.keys(Config.pages);
-        if ([Config.home].indexOf(currentList2Id) >= 0) {
-            var enabledPages = DataHandler.getAppData("enabledPages", []);
-            if ($S.isArray(enabledPages)) {
-                for (i = 0; i<enabledPages.length; i++) {
-                    if ($S.isStringV2(enabledPages[i]) && allPages.indexOf(enabledPages[i]) >= 0) {
-                        currentList2Id = enabledPages[i];
-                        break;
-                    }
-                }
-            }
-        }
-        if ([Config.entry, Config.update, Config.summary].indexOf(currentList2Id) >= 0) {
+        if ([Config.entry, Config.update, Config.summary].indexOf(pageName) >= 0) {
             name = "list3Data_1";
-        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(pageName) >= 0) {
             name = "list3Data_2";
-        } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
+        } else if ([Config.ta].indexOf(pageName) >= 0) {
             name = "list3Data_3";
         } else {
             return [];
@@ -335,12 +324,12 @@ DataHandlerV3.extend({
         DataHandler.setData("latestAttendanceData", latestAttendanceData);
     },
     setCurrentList3Id: function() {
-        var list2Id = DataHandler.getData("currentList2Id", "");
+        var pageName = DataHandler.getPathParamsData("pageName", "");
         var currentList3Id = DataHandler.getData("currentList3Id", "");
         var currentList3Data = DataHandler.getCurrentList3Data();
         var i, keys, list3Data, configList3Id;
-        if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
-            configList3Id = DataHandler.getAppData(list2Id + ".list3Data_2.selected", "");
+        if ([Config.custom_dbview].indexOf(pageName) >= 0) {
+            configList3Id = DataHandler.getAppData(pageName + ".list3Data_2.selected", "");
             if ($S.isString(configList3Id)) {
                 currentList3Id = configList3Id;
             }

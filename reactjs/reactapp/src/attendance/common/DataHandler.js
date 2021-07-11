@@ -23,9 +23,8 @@ keys.push("renderData");
 keys.push("renderFieldRow");
 
 
-
-keys.push("currentList1Id");
-keys.push("currentList2Id");
+// keys.push("currentList1Id");
+// keys.push("currentList2Id");
 keys.push("currentList3Id");
 keys.push("pageName");
 keys.push("pathParams");
@@ -45,7 +44,7 @@ keys.push("latestAttendanceData");
 
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
-keys.push("appRelatedDataLoadStatus");
+keys.push("metaDataLoadStatus");
 keys.push("attendanceDataLoadStatus");
 
 // keys.push("sortable");
@@ -53,7 +52,7 @@ keys.push("attendanceDataLoadStatus");
 keys.push("sortingFields");
 keys.push("dbViewData");
 keys.push("dbViewDataTable");
-keys.push("dbViewDataLoadStatus");
+keys.push("dbDataLoadStatus");
 
 keys.push("firstTimeDataLoadStatus");
 
@@ -70,8 +69,8 @@ CurrentData.setKeys(keys);
 
 CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
-CurrentData.setData("appRelatedDataLoadStatus", "not-started");
-CurrentData.setData("dbViewDataLoadStatus", "not-started");
+CurrentData.setData("metaDataLoadStatus", "not-started");
+CurrentData.setData("dbDataLoadStatus", "not-started");
 CurrentData.setData("attendanceDataLoadStatus", "not-started");
 
 CurrentData.setData("addentry.submitStatus", "not-started");
@@ -146,13 +145,17 @@ DataHandler.extend({
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        dataLoadStatusKey.push("appRelatedDataLoadStatus");
-        var currentList2Id = this.getData("currentList2Id", "");
-        var pageRequiredDataLoadStatus = [Config.entry, Config.update,
+        var pageName2 = this.getPathParamsData("pageName", "");
+        var pageName1 = this.getData("pageName", "");
+        if ([Config.home].indexOf(pageName1) >= 0) {
+            dataLoadStatusKey.push("metaDataLoadStatus");
+        }
+        var pageRequiredDbDataLoadStatus = [Config.entry, Config.update,
                     Config.summary, Config.ta, Config.dbview,
-                    Config.dbview_summary, Config.custom_dbview];
-        if (pageRequiredDataLoadStatus.indexOf(currentList2Id) >= 0) {
-            dataLoadStatusKey.push("dbViewDataLoadStatus");
+                    Config.dbview_summary, Config.custom_dbview, Config.add_field_report];
+        if (pageRequiredDbDataLoadStatus.indexOf(pageName2) >= 0) {
+            dataLoadStatusKey.push("metaDataLoadStatus");
+            dataLoadStatusKey.push("dbDataLoadStatus");
         }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
@@ -161,11 +164,11 @@ DataHandler.extend({
         return true;
     },
     getPageUrlByPageName: function(pageName) {
-        var appId = this.getData("currentList1Id", "");
+        var appId = this.getPathParamsData("pid", "");
         return this.getPageUrl(appId, pageName);
     },
     getPageUrlByAppId: function(appId) {
-        var pageName = this.getData("currentList2Id", "");
+        var pageName = this.getPathParamsData("pageName", "");
         return this.getPageUrl(appId, pageName);
     },
     getPageUrl: function(appId, pageName) {
@@ -182,6 +185,24 @@ DataHandler.extend({
     getPathParamsData: function(key, defaultValue) {
         var pathParams = this.getData("pathParams", {});
         return AppHandler.getPathParamsData(pathParams, key, defaultValue);
+    },
+    getAppComponentClassName: function() {
+        var pageName = this.getPathParamsData("pageName", "");
+        if ($S.isStringV2(pageName)) {
+            return pageName;
+        }
+        return this.getData("pageName", "");
+    },
+    setAppData: function(appStateCallback, appDataCallback) {
+        var pageName = this.getData("pageName", "");
+        if ([Config.projectHome, Config.noMatch].indexOf(pageName) >= 0) {
+            this.setData("metaDataLoadStatus", "not-started");
+            this.setData("dbDataLoadStatus", "not-started");
+            this.setData("attendanceDataLoadStatus", "not-started");
+        } else if ([Config.home].indexOf(pageName) >= 0) {
+            this.setData("dbDataLoadStatus", "not-started");
+            this.setData("attendanceDataLoadStatus", "not-started");
+        }
     }
 });
 DataHandler.extend({
@@ -194,7 +215,7 @@ DataHandler.extend({
     },
     getCurrentAppData: function(defaultCurrentAppData) {
         var appControlData = this.getData("appControlData", []);
-        var currentAppId = this.getData("currentList1Id", "");
+        var currentAppId = this.getPathParamsData("pid", "");
         var currentAppData = defaultCurrentAppData;
         if ($S.isArray(appControlData)) {
             for (var i = 0; i < appControlData.length; i++) {
@@ -208,7 +229,7 @@ DataHandler.extend({
     },
     getMetaData: function(defaultMetaData) {
         var currentAppData = this.getCurrentAppData({});
-        var currentAppId = this.getData("currentList1Id", "");
+        var currentAppId = this.getPathParamsData("pid", "");
         var metaData = defaultMetaData;
         if ($S.isObject(currentAppData) && currentAppData.id === currentAppId) {
             metaData = this.getData("metaData", {});
@@ -312,8 +333,14 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadDataByAppId: function(callback) {
-        var appRelatedDataLoadStatus = this.getData("appRelatedDataLoadStatus", "");
-        if (["in_progress"].indexOf(appRelatedDataLoadStatus) >= 0) {
+        var metaDataLoadStatus = this.getData("metaDataLoadStatus", "");
+        var pageName = this.getData("pageName", "");
+        if ([Config.projectHome].indexOf(pageName) >= 0) {
+            return DataHandler.loadDbData(callback);
+        }
+        if (["completed"].indexOf(metaDataLoadStatus) >= 0) {
+            return DataHandler.loadDbData(callback);
+        } else if (["in_progress"].indexOf(metaDataLoadStatus) >= 0) {
             return;
         }
         var appControlData = DataHandler.getCurrentAppData({});
@@ -329,71 +356,72 @@ DataHandler.extend({
                             "apiName": "metaData",
                             "requestMethod": Api.getAjaxApiCallMethod()};
         request.push(metaDataRequest);
-        DataHandler.setData("appRelatedDataLoadStatus", "in_progress");
-        DataHandler.setData("dbViewDataLoadStatus", "not-started");
+        DataHandler.setData("metaDataLoadStatus", "in_progress");
         AppHandler.LoadDataFromRequestApi(request, function() {
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
                     DataHandlerV3.handleMetaDataLoad(request[i].response);
                 }
             }
-            DataHandler.generateDateParameter();
-            DataHandler.setData("appRelatedDataLoadStatus", "completed");
+            DataHandler.setData("metaDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            DataHandler.handlePageRouting(callback);
+            DataHandler.loadDbData(callback);
         });
     },
-    loadDataByAppIdV2: function(oldCurrentList2Id, newCurrentList2Id, callback) {
-        if (DataHandlerV3.isPageDisabled(oldCurrentList2Id)) {
-            this.loadDataByAppId(callback);
-        } else {
-            var dataLoadStatus = this.getData("dbViewDataLoadStatus", "");
-            if (dataLoadStatus === "not-started") {
-                this.handlePageRouting(callback);
+    loadDbData: function(callback) {
+        var dbDataLoadStatus = this.getData("dbDataLoadStatus", "");
+        var pageName = this.getPathParamsData("pageName", "");
+        var pageRequiredDbDataLoadStatus = [Config.entry, Config.update,
+                    Config.summary, Config.ta, Config.dbview,
+                    Config.dbview_summary, Config.custom_dbview, Config.add_field_report];
+        if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
+            if (dbDataLoadStatus === "in_progress") {
+                return;
+            } else if (dbDataLoadStatus === "completed") {
+                this.loadAttendanceData(callback);
             } else {
-                $S.callMethod(callback);
+                var dbDataApis = this.getAppData("dbDataApis", []);
+                DataHandlerV3.handlePageLoad(dbDataApis, function() {
+                    DataHandler.loadAttendanceData(callback);
+                });
             }
+        } else {
+            $S.callMethod(callback);
         }
     },
-    loadAttendanceData: function(attendanceDataApis, callback) {
-        var isAttendanceDataSameAsDbData = this.getAppData("isAttendanceDataSameAsDbData", false);
+    loadAttendanceData: function(callback) {
         var attendanceDbTable;
-        if ($S.isBooleanTrue(isAttendanceDataSameAsDbData)) {
-            attendanceDbTable = DataHandler.getData("dbViewData", []);
-            DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
-            $S.callMethod(callback);
-        } else {
-            DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
-                attendanceDbTable = DataHandler.getData("attendanceData", []);
-                DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
+        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
+        var pageName = this.getPathParamsData("pageName", "");
+        var attendanceDataLoadStatus = this.getData("attendanceDataLoadStatus", "");
+        var pageRequiredAttendanceDataLoadStatus = [Config.entry, Config.update, Config.summary, Config.dbview, Config.dbview_summary];
+        if (pageRequiredAttendanceDataLoadStatus.indexOf(pageName) >= 0) {
+            if (attendanceDataLoadStatus === "completed") {
                 $S.callMethod(callback);
-            });
+            } else if (attendanceDataLoadStatus === "in_progress") {
+                return;
+            } else {
+                DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
+                    attendanceDbTable = DataHandler.getData("attendanceData", []);
+                    DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
+                    $S.callMethod(callback);
+                });
+            }
+        } else {
+            $S.callMethod(callback);
         }
     },
     handleApiDataLoad: function() {
-        var currentList2Id = this.getData("currentList2Id", "");
+        var pageName = this.getPathParamsData("pageName", "");
         var resultCriteria = this.getAppData("resultCriteria", []);
-        var pageResultCriteria = this.getAppData("resultCriteria." + currentList2Id, null);
+        var pageResultCriteria = this.getAppData("resultCriteria." + pageName, null);
         if ($S.isArray(pageResultCriteria)) {
             resultCriteria = pageResultCriteria;
         }
-        DataHandlerV3.generateFinalTable(currentList2Id, resultCriteria);
+        DataHandlerV3.setCurrentList3Id();
+        DataHandler.generateDateParameter();
+        DataHandlerV3.generateFinalTable(resultCriteria);
         DataHandlerV3.generateFilterOptions();
-    },
-    handlePageRouting: function(callback) {
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var dbDataApis = this.getAppData("dbDataApis", []);
-        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
-        if ([Config.summary, Config.entry, Config.update, Config.dbview, Config.ta, Config.dbview_summary, Config.custom_dbview, Config.add_field_report].indexOf(currentList2Id) >= 0) {
-            DataHandlerV3.handlePageLoad(dbDataApis, function() {
-                DataHandler.loadAttendanceData(attendanceDataApis, function() {
-                    DataHandler.handleApiDataLoad();
-                    $S.callMethod(callback);
-                });
-            });
-        } else {
-            $S.callMethod(callback);
-        }
     },
     loadAppControlData: function(callback) {
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
@@ -403,30 +431,38 @@ DataHandler.extend({
             DataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");
             DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.loadDataByAppId(function() {
-                $S.callMethod(callback);
-            });
+            $S.callMethod(callback);
         });
     }
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
+        this.setAppData();
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
-                AppHandler.TrackPageView(DataHandler.getData("currentList2Id", ""));
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                DataHandler.loadDataByAppId(function() {
+                    AppHandler.TrackPageView(DataHandler.getData("pageName", ""));
+                    DataHandler.handleApiDataLoad();
+                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                });
             });
         });
     },
     OnReloadClick: function(appStateCallback, appDataCallback, currentList1Id) {
         AppHandler.TrackEvent("reloadClick");
+        DataHandler.setData("metaDataLoadStatus", "not-started");
+        DataHandler.setData("dbDataLoadStatus", "not-started");
+        DataHandler.setData("attendanceDataLoadStatus", "not-started");
         DataHandler.loadDataByAppId(function() {
+            DataHandler.handleApiDataLoad();
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
-        // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         AppHandler.TrackDropdownChange("list1", list1Id);
+        DataHandler.setData("metaDataLoadStatus", "not-started");
+        DataHandler.setData("dbDataLoadStatus", "not-started");
+        DataHandler.setData("attendanceDataLoadStatus", "not-started");
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;
@@ -439,20 +475,6 @@ DataHandler.extend({
                 return;
             }
         }
-        // var oldList2Id = DataHandler.getData("currentList2Id", "");
-        // if (DataHandlerV3.isPageDisabled(oldList2Id)) {
-        //     DataHandler.loadDataByAppId(function() {
-        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        //     });
-        // }
-        // if ([Config.custom_dbview].indexOf(list2Id) >= 0) {
-        //     DataHandler.applyResetFilter();
-        // }
-        // DataHandler.setData("currentList2Id", list2Id);
-        // DataHandlerV3.setCurrentList3Id();
-        // DataHandler.handleApiDataLoad();
-        // DataHandler.generateDateParameter();
-        // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnList3Change: function(appStateCallback, appDataCallback, list3Id) {
         AppHandler.TrackDropdownChange("list3", list3Id);
@@ -460,38 +482,16 @@ DataHandler.extend({
         DataHandler.generateDateParameter();
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    SetAppId: function(appStateCallback, appDataCallback) {
-        var oldAppId = this.getData("currentList1Id", "");
-        var appId = this.getPathParamsData("pid", "");
-        if (oldAppId !== appId) {
-            this.setData("currentList1Id", appId);
-            DataHandler.loadDataByAppId(function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        }
-    },
     PageComponentDidMount: function(appStateCallback, appDataCallback) {
-        var pageName = this.getData("pageName", "");
-        var pageNameArg = this.getPathParamsData("pageName", "");
-        var oldCurrentList2Id = this.getData("currentList2Id", "");
-        var newCurrentList2Id;
-        if ([Config.projectHome, Config.home, Config.noMatch].indexOf(pageName) >= 0) {
-            newCurrentList2Id = pageName;
-        } else {
-            newCurrentList2Id = pageNameArg;
+        this.setAppData();
+        var pageName = DataHandler.getPathParamsData("pageName", "");
+        if ([Config.custom_dbview].indexOf(pageName) >= 0) {
+            DataHandler.applyResetFilter();
         }
-        if (oldCurrentList2Id !== newCurrentList2Id) {
-            this.setData("currentList2Id", newCurrentList2Id);
-            DataHandlerV3.setCurrentList3Id();
+        DataHandler.loadDataByAppId(function() {
             DataHandler.handleApiDataLoad();
-            DataHandler.generateDateParameter();
-            if ([Config.custom_dbview].indexOf(newCurrentList2Id) >= 0) {
-                DataHandler.applyResetFilter();
-            }
-            DataHandler.loadDataByAppIdV2(oldCurrentList2Id, newCurrentList2Id, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        }
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("dateSelect:" + value);
@@ -538,11 +538,11 @@ DataHandler.extend({
         if (name === "") {
             return;
         }
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        if ([Config.update].indexOf(currentList2Id) >= 0) {
-            var attendanceDataApis = this.getAppData("attendanceDataApis", []);
+        var pageName = DataHandler.getPathParamsData("pageName", "");
+        if ([Config.update].indexOf(pageName) >= 0) {
             DataHandlerV2.callAddTextApi(name, value, function() {
-                DataHandler.loadAttendanceData(attendanceDataApis, function() {
+                DataHandler.setData("attendanceDataLoadStatus", "not-started");
+                DataHandler.loadAttendanceData(function() {
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                 });
             });
@@ -585,14 +585,18 @@ DataHandler.extend({
         return userDataV2;
     },
     getRenderData: function() {
-        var currentList2Id = this.getData("currentList2Id", "");
-        if (DataHandlerV3.isPageDisabled(currentList2Id) || [Config.home, Config.projectHome, Config.add_field_report].indexOf(currentList2Id) >= 0) {
+        var pageName = this.getData("pageName", "");
+        if ([Config.home, Config.projectHome, Config.add_field_report].indexOf(pageName) >= 0) {
+            return [];
+        }
+        pageName = this.getPathParamsData("pageName", "");
+        if (DataHandlerV3.isPageDisabled(pageName)) {
             return [];
         }
         var dateArray = [];
         var dateParameters = this.getData("dateParameters", {});
         var dateSelect = this.getData("date-select", "");
-        if ([Config.update].indexOf(currentList2Id) >= 0) {
+        if ([Config.update].indexOf(pageName) >= 0) {
             dateSelect = "monthly";
         }
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
@@ -610,18 +614,18 @@ DataHandler.extend({
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
         var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
 
-        if ([Config.summary].indexOf(currentList2Id) >= 0) {
+        if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
-        } else if ([Config.ta].indexOf(currentList2Id) >= 0) {
+        } else if ([Config.ta].indexOf(pageName) >= 0) {
             DataHandler.setData("filteredUserData", filteredUserData);
             filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
-        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(currentList2Id) < 0) {
+        } else if ([Config.dbview, Config.dbview_summary, Config.custom_dbview].indexOf(pageName) < 0) {
             filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
         }
-        switch(currentList2Id) {
+        switch(pageName) {
             case "entry":
             case "update":
-                renderData = DataHandlerV2.GenerateEntryUpdateUserData(dateArray, filteredUserData, currentList2Id);
+                renderData = DataHandlerV2.GenerateEntryUpdateUserData(dateArray, filteredUserData, pageName);
             break;
             case "summary":
                 renderData = DataHandlerV2.GenerateSummaryUserData(dateArray, filteredUserData);
@@ -662,13 +666,14 @@ DataHandler.extend({
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelection = Config.dateSelection;
         }
-        var currentList2Id = DataHandler.getData("currentList2Id", "");
-        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, currentList2Id);
+        var pageName1 = DataHandler.getData("pageName", "");
+        var pageName2 = DataHandler.getPathParamsData("pageName", "");
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName2);
         var list1Data = [];
         var list2Data = [];
         var list3Data = [];
         var filterOptions = [];
-        if (dataLoadStatus && [Config.home, Config.projectHome].indexOf(currentList2Id) < 0) {
+        if (dataLoadStatus && [Config.home, Config.projectHome].indexOf(pageName1) < 0) {
             list1Data = this.getData("appControlData", []);
             list2Data = DataHandlerV3.getList2Data();
             list3Data = DataHandlerV3.getList3Data();
@@ -676,22 +681,22 @@ DataHandler.extend({
             filterOptions = AppHandler.getFilterData(filterOptions);
         }
         var dateSelectionRequired = Config.dateSelectionRequired;
-        if (DataHandlerV3.isPageDisabled(currentList2Id)) {
+        if (DataHandlerV3.isPageDisabled(pageName2)) {
             filterOptions = [];
             dateSelectionRequired = null;
-        } else if(dateSelectionRequired.indexOf(currentList2Id) >= 0) {
-            dateSelectionRequired = [Config.otherPages];
+        } else if(dateSelectionRequired.indexOf(pageName2) >= 0) {
+            dateSelectionRequired = [pageName1];
         }
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("list1Data", list1Data);
-        appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
+        appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);
         appDataCallback("disableFooter", this.getBooleanParam("disableFooter", false));
         appDataCallback("enableToggleButton", this.getBooleanParam("enableToggleButton", true));
 
         appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", this.getData("currentList2Id", ""));
+        appDataCallback("currentList2Id", this.getPathParamsData("pageName", ""));
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", this.getData("currentList3Id", ""));
 
