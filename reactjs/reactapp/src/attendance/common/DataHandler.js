@@ -23,11 +23,10 @@ keys.push("renderData");
 keys.push("renderFieldRow");
 
 
-// keys.push("currentList1Id");
-// keys.push("currentList2Id");
 keys.push("currentList3Id");
 keys.push("pageName");
 keys.push("pathParams");
+keys.push("displayLoading");
 keys.push("date-select");
 
 keys.push("filterValues");
@@ -437,7 +436,6 @@ DataHandler.extend({
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
-        this.setAppData();
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
                 DataHandler.loadDataByAppId(function() {
@@ -448,7 +446,7 @@ DataHandler.extend({
             });
         });
     },
-    OnReloadClick: function(appStateCallback, appDataCallback, currentList1Id) {
+    OnReloadClick: function(appStateCallback, appDataCallback) {
         AppHandler.TrackEvent("reloadClick");
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("dbDataLoadStatus", "not-started");
@@ -484,7 +482,8 @@ DataHandler.extend({
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback) {
         this.setAppData();
-        var pageName = DataHandler.getPathParamsData("pageName", "");
+        var pageName = this.getPathParamsData("pageName", "");
+        var displayLoading = this.getData("displayLoading");
         if ([Config.custom_dbview].indexOf(pageName) >= 0) {
             DataHandler.applyResetFilter();
         }
@@ -492,6 +491,9 @@ DataHandler.extend({
             DataHandler.handleApiDataLoad();
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
+        if ($S.isBooleanTrue(displayLoading)) {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        }
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("dateSelect:" + value);

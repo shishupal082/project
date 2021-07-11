@@ -93,8 +93,7 @@ class App extends React.Component {
             e.preventDefault();
         }
         if (value === "reload") {
-            DataHandler.OnReloadClick(this.appStateCallback,
-                this.appDataCallback, this.appData.currentList1Id);
+            DataHandler.OnReloadClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "reset-filter") {
             DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "date-select") {
@@ -160,16 +159,29 @@ class App extends React.Component {
         var isComponentUpdate = false;
         var oldAppId = DataHandler.getPathParamsData("pid", "");
         var oldPageName = DataHandler.getPathParamsData("pageName");
+        var displayLoading = false;
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
+            if (prevPageName === Config.home && currentPageName === Config.otherPages) {
+                displayLoading = true;
+            }
         } else if ($S.isObject(params)) {
             if ($S.isStringV2(params.pid) && params.pid !== oldAppId) {
                 isComponentUpdate = true;
-                DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, params.pid);
+                if ($S.isStringV2(params.pageName)) {
+                    displayLoading = true;
+                }
+                /**
+                    DataHandler.OnList1Change is required, because
+                    When user is on specific page of one pid and went back to different pid of same page or other page, then
+                    If this is not used then, metaData reload will not happen
+                */
+                DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
             } else if ($S.isStringV2(params.pageName) && params.pageName !== oldPageName) {
                 isComponentUpdate = true;
             }
         }
+        DataHandler.setData("displayLoading", displayLoading);
         return isComponentUpdate;
     }
     pageComponentDidMount(pageName, pathParams) {

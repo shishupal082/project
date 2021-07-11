@@ -46,11 +46,12 @@ TemplateHandler.extend({
             toUrl = "";
             if (validPages.indexOf(homeFields[i].pageName) >= 0) {
                 toUrl = DataHandler.getPageUrlByPageName(homeFields[i].pageName);
+                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText, "home.link");
             } else if ($S.isStringV2(homeFields[i].toUrl)) {
                 toUrl = homeFields[i].toUrl;
+                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText, "home.a");
             }
             if ($S.isStringV2(toUrl)) {
-                linkTemplate = this._getLinkTemplateV2(toUrl, homeFields[i].toText, "home.link");
                 TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
             }
         }
