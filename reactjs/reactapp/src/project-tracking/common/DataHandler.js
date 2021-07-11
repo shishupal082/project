@@ -314,6 +314,10 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
+    loadDataByPage: function(callback) {
+        DataHandler.loadDbTableData(callback);
+        ApiHandler.loadDataByParams(callback);
+    },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
         var request = [], metaDataApi = [];
@@ -339,15 +343,14 @@ DataHandler.extend({
             // DataHandler.generateDateParameter();
             DataHandler.setData("appRelatedDataLoadStatus", "completed");
             $S.log("currentAppData load complete");
-            DataHandler.loadDbTableData(callback);
-            ApiHandler.loadDataByParams(callback);
+            DataHandler.loadDataByPage(callback);
         });
     },
     loadDbTableData: function(callback) {
         var metaData = DataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
-        DataHandlerV2.handlePageLoad(dbDataApis, function() {
+        ApiHandler.handlePageLoad(dbDataApis, function() {
             $S.callMethod(callback);
         });
     },
@@ -381,6 +384,7 @@ DataHandler.extend({
     },
     OnReloadClick: function(appStateCallback, appDataCallback) {
         AppHandler.TrackEvent("reloadClick");
+        DataHandler.setData("filesInfoLoadStatus", "not-started");
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
@@ -406,7 +410,9 @@ DataHandler.extend({
         if (pageName === Config.displayPage) {
             DataHandlerV2.findCurrentList3Id();
         }
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        this.loadDataByPage(function() {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        });
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("dateSelect:" + value);
