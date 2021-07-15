@@ -61,7 +61,7 @@ Template["loading"] = [
     {
         "tag": "center.h2",
         "name": "loadingText",
-        "text": "Loading ..."
+        "text": "Loading..."
     }
 ];
 Template["invalid-data"] = [

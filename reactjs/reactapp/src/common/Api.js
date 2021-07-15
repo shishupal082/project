@@ -224,10 +224,21 @@ childGenerator = {
         return <button onClick={props.onClick} name={data.name} className={btnClassName} key={key} value={data.value}>{reactChildText}</button>;
     },
     "input": function(props, data, reactChildText, key) {
+        // Uncontrolled value
+        // When ever value changes, forms need not to be re-render
         var inputField = <input key={key} type={data.type} name={data.name}
                             placeholder={data.placeholder} className={data.className}
                             id={data.id} onChange={props.onChange}
                             defaultValue={data.value}/>;
+        return inputField;
+    },
+    "inputV2": function(props, data, reactChildText, key) {
+        // Controlled value
+        // When ever value changes, forms needs to be re-render
+        var inputField = <input key={key} type={data.type} name={data.name}
+                            placeholder={data.placeholder} className={data.className}
+                            id={data.id} onChange={props.onChange}
+                            value={data.value}/>;
         return inputField;
     },
     "inputRequired": function(props, data, reactChildText, key) {
@@ -238,17 +249,31 @@ childGenerator = {
         return inputField;
     },
     "select": function(props, data, reactChildText, key) {
+        // Here data.value is optional i.e. forms need not to re-render when it change
+        // It is creating problem for attendance use case when we change section i.e. user list
+        // There previous update field remain same
+        // For example: user1 has value LAP on 01.07.2021 now when we change filter then user1Id will change but this LAP will remain same
         return <select key={key} name={data.name} className={data.className} defaultValue={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
+    },
+    "selectV2": function(props, data, reactChildText, key) {
+        // Here data.value must be required i.e. forms needs to be re-render when it change
+        return <select key={key} name={data.name} className={data.className} value={data.value} onChange={props.dropDownChange}>{reactChildText}</select>;
     },
     "textarea": function(props, data, reactChildText, key) {
         return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} defaultValue={data.value} onChange={props.onChange}></textarea>;
     },
+    "textareaV2": function(props, data, reactChildText, key) {
+        return <textarea key={key} name={data.name} className={data.className} rows={data.rows} cols={data.cols} value={data.value} onChange={props.onChange}></textarea>;
+    },
     "option": function(props, data, reactChildText, key) {
         return <option key={key} value={data.value}>{reactChildText}</option>;
     },
-    "dropdown": function(props, data, reactChildText, key) {
+    "dropdown": function(props, data, reactChildText, key, selectTagName) {
         if ($S.isObject(data)) {
             data.tag = "select"; //Other select parameters will be as it is (value, className, name)
+            if (selectTagName === "selectV2") {
+                data.tag = "selectV2";
+            }
             var tempText = [];
             if ($S.isArray(data.text)) {
                 var value, text;
@@ -261,6 +286,9 @@ childGenerator = {
             data.text = tempText;
         }
         return generateReactChild(props, data, key);
+    },
+    "dropdownV2": function(props, data, reactChildText, key) {
+        return childGenerator["dropdown"](props, data, reactChildText, key, "selectV2");
     }
 };
 
