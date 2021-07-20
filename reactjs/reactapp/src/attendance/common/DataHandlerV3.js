@@ -377,11 +377,7 @@ DataHandlerV3.extend({
         DataHandler.setData("metaData", finalMetaData);
         var dateSelect = DataHandler.getData("date-select", "");
         if (dateSelect === "") {
-            if ($S.isString(finalMetaData.dateSelect) && finalMetaData.dateSelect.length > 0) {
-                dateSelect = finalMetaData.dateSelect;
-            } else {
-                dateSelect = Config.defaultDateSelect;
-            }
+            dateSelect = DataHandler.getAppData("dateSelect", Config.defaultDateSelect);
         }
         DataHandler.setData("date-select", dateSelect);
         this.setCurrentList3Id();
