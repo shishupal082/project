@@ -54,9 +54,9 @@ DataHandlerV3.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&temp_file_name=" + i;
+                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId;
                     } else {
-                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&temp_file_name=" + i;
+                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId;
                     }
                 }
                 if (urls.length < 1) {
@@ -91,6 +91,45 @@ DataHandlerV3.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
+    _getResultPatternFromData: function(pageName, currentAppData, metaData, attendanceData) {
+        var resultPattern = $S.findParam([currentAppData, metaData], "resultPatternEntry" , []);
+        var attendanceDataKey = $S.findParam([currentAppData, metaData], "attendanceDataKey" , "");
+        var tables, attendanceTableData, i, summaryKey = [];
+        if (!$S.isStringV2(attendanceDataKey)) {
+            attendanceDataKey = "type";
+        }
+        if ($S.isObject(attendanceData)) {
+            tables = Object.keys(attendanceData);
+            if (tables.length === 1) {
+                for(var tableName in attendanceData) {
+                    if ($S.isObject(attendanceData) && $S.isArray(attendanceData[tableName]["tableData"])) {
+                        attendanceTableData = attendanceData[tableName]["tableData"];
+                        for (i=0; i<attendanceTableData.length; i++) {
+                            if (!$S.isObject(attendanceTableData[i])) {
+                                continue;
+                            }
+                            if ($S.isStringV2(attendanceTableData[i][attendanceDataKey])) {
+                                if (summaryKey.indexOf(attendanceTableData[i][attendanceDataKey]) < 0) {
+                                    summaryKey.push(attendanceTableData[i][attendanceDataKey]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($S.isArray(resultPattern) && resultPattern.length > 0) {
+            summaryKey = summaryKey.sort();
+            for (i=0; i<summaryKey.length; i++) {
+                resultPattern.push({
+                    "name": summaryKey[i],
+                    "isSortable": true,
+                    "pattern": [summaryKey[i]]
+                });
+            }
+        }
+        return resultPattern;
+    },
     generateFinalTable: function(resultCriteria) {
         var pageName = DataHandler.getPathParamsData("pageName", "");
         var tempDbViewData = DataHandler.getData("dbViewData", {});
@@ -104,6 +143,9 @@ DataHandlerV3.extend({
         if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
             resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
+        }
+        if ([Config.summary].indexOf(pageName) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+            resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData, attendanceData);
         }
         var dbViewData = {};
         if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
