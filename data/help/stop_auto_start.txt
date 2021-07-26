@@ -1,0 +1,12 @@
+Open below folder
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+
+Click on widnows icons --> select app to stop --> Right click and open file location --> Then check near by Startup folder
+Rename shortcut available file
+
+Deleted sortcut list from:
+
+1) C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+- AnyDesk.Ink
+- Digital Signer Service 4.1.Ink
+

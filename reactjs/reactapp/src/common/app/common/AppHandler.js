@@ -133,7 +133,7 @@ AppHandler.extend({
         // dateStr = 2021-06-11
         // fieldDate = 2021-06-11 09:19
         if ($S.isString(dateStr)) {
-            return this.isDateLiesInRange(dateStr, dateStr, fieldDate);
+            return this.isDateLiesInRange(dateStr.substring(0, 10), dateStr, fieldDate);
         }
         return false;
     },
@@ -366,6 +366,87 @@ AppHandler.extend({
             }
         }
         return finalArr;
+    },
+    ParseTextDataOnEqualWidth: function(dataStr, wordSplitingChar) {
+        if (!$S.isString(dataStr)) {
+            dataStr = "";
+        }
+        if (!$S.isArray(wordSplitingChar)) {
+            wordSplitingChar = [];
+        }
+        if (wordSplitingChar.length === 0) {
+            wordSplitingChar.push(" ");
+        }
+        var temp, i, j, maxLength = 0, arr = [], finalArr = [], startIndex = 0, lastIndex = 0;
+        var wordBreakChar, isFound;
+        var tempArr = dataStr.split("\n");
+        for (i = 0; i < tempArr.length; i++) {
+            if (tempArr[i].trim().length !== 0) {
+                arr.push(tempArr[i]);
+                if (tempArr[i].length > maxLength) {
+                    maxLength = tempArr[i].length;
+                }
+            }
+        }
+        for(i=0; i<arr.length; i++) {
+            for(j=arr[i].length; j<maxLength; j++) {
+                arr[i] += " ";
+            }
+        }
+        while(startIndex < maxLength && lastIndex < maxLength) {
+            for(i=startIndex; i<maxLength; i++) {
+                isFound = true;
+                lastIndex = i;
+                if (arr[0].length <= lastIndex) {
+                    isFound = false;
+                    lastIndex = maxLength;
+                    break;
+                }
+                wordBreakChar = arr[0][lastIndex];
+                if (wordSplitingChar.indexOf(wordBreakChar) < 0) {
+                    continue;
+                }
+                for(j=1; j<arr.length; j++) {
+                    if (wordBreakChar !== arr[j][lastIndex]) {
+                        isFound = false;
+                    }
+                }
+                if (isFound) {
+                    break;
+                }
+            }
+            for(i=0; i<arr.length; i++) {
+                temp = arr[i].substring(startIndex, lastIndex);
+                if (!$S.isArray(finalArr[i])) {
+                    finalArr[i] = [];
+                }
+                finalArr[i].push(temp);
+            }
+            startIndex = lastIndex + 1;
+        }
+        var finalResult = [];
+        var validDataIndex = [];
+        if (finalArr.length > 0) {
+            for(i=0; i<finalArr[0].length; i++) {
+                isFound = false;
+                for(j=0; j<finalArr.length; j++) {
+                    if (finalArr[j][i].trim().length > 0) {
+                        isFound = true;
+                    }
+                }
+                if (isFound) {
+                    validDataIndex.push(i);
+                }
+            }
+        }
+        for(i=0; i<finalArr.length; i++) {
+            temp = [];
+            for(j=0; j<validDataIndex.length; j++) {
+                temp.push(finalArr[i][validDataIndex[j]]);
+            }
+            finalResult.push(temp);
+        }
+        return finalResult;
     }
 });
 AppHandler.extend({

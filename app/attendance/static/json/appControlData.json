@@ -373,6 +373,11 @@
                 "value": "mar2021"
             }
         ],
+        "dateSelect": "monthly",
+        "dateParameterField": {
+            "table": "table1",
+            "fieldName": "date"
+        },
         "metaDataApi": ["/app/attendance/static/json/metaData.json"],
         "dbDataApis": [
             {
@@ -395,6 +400,22 @@
             }
         ],
         "attendanceDataKey": "username",
+        "resultCriteria2": [
+            {
+                "op": "==",
+                "force1stEntry": true,
+                "values": [
+                    {
+                        "tableName": "table1",
+                        "col": "userIdV2"
+                    },
+                    {
+                        "tableName": "table2",
+                        "col": "userIdV2"
+                    }
+                ]
+            }
+        ],
         "resultCriteria": [
             {
                 "op": "==",
@@ -407,6 +428,68 @@
                     {
                         "tableName": "table2",
                         "col": "userIdV2"
+                    }
+                ],
+                "result": {
+                    "tableName": "table1",
+                    "requiredData": [
+                        {
+                            "tableName": "table2",
+                            "fieldName": "userId"
+                        }
+                    ]
+                }
+            },
+            {
+                "op": "==",
+                "force1stEntry": true,
+                "values": [
+                    {
+                        "tableName": "table1",
+                        "col": "userId"
+                    },
+                    {
+                        "tableName": "table3",
+                        "col": "userId"
+                    }
+                ],
+                "result": {
+                    "tableName": "table1",
+                    "requiredData": [
+                        {
+                            "tableName": "table3",
+                            "fieldName": "date"
+                        },
+                        {
+                            "tableName": "table3",
+                            "fieldName": "team"
+                        },
+                        {
+                            "tableName": "table3",
+                            "fieldName": "station"
+                        },
+                        {
+                            "tableName": "table3",
+                            "fieldName": "device"
+                        },
+                        {
+                            "tableName": "table3",
+                            "fieldName": "description"
+                        }
+                    ]
+                }
+            },
+            {
+                "op": "date==",
+                "force1stEntry": true,
+                "values": [
+                    {
+                        "tableName": "table1",
+                        "col": "date"
+                    },
+                    {
+                        "tableName": "table4",
+                        "col": "date"
                     }
                 ]
             }

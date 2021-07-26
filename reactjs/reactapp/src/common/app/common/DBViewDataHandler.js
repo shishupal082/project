@@ -180,6 +180,13 @@ DBViewDataHandler.extend({
         }
         return tempDbViewData;
     },
+    _isDateEqual: function(date1, date2) {
+        if (!AppHandler.isValidDateStr(date1) || !AppHandler.isValidDateStr(date2)) {
+            return false;
+        }
+        var isDateEqual = AppHandler.isDateLiesInRangeV3(date1, date2);
+        return isDateEqual;
+    },
     _generateFinalTable: function(dbViewData, resultCriteria, requiredDataTable) {
         var i, j, k, op, values, t1, t1Name, t2, t2Name;
         var finalTable = [], temp, temp2, tableName;
@@ -254,6 +261,36 @@ DBViewDataHandler.extend({
                                     if ($S.isArray(t2)) {
                                         for(k=0; k<t2.length; k++) {
                                             if (t1[j][values[0].col] === t2[k][values[1].col]) {
+                                                temp = {};
+                                                temp[t1Name] = t1[j];
+                                                temp[t2Name] = t2[k];
+                                                finalTable.push(temp);
+                                            }
+                                        }
+                                    }
+                                }
+                            } if (op === "date==") {
+                                if ($S.isBooleanTrue(force1stEntry)) {
+                                    temp = {};
+                                    temp[t1Name] = t1[j];
+                                    isNotMatching = true;
+                                    if ($S.isArray(t2)) {
+                                        for(k=0; k<t2.length; k++) {
+                                            if (this._isDateEqual(t1[j][values[0].col], t2[k][values[1].col])) {
+                                                temp2 = $S.clone(temp);
+                                                temp2[t2Name] = t2[k];
+                                                isNotMatching = false;
+                                                finalTable.push(temp2);
+                                            }
+                                        }
+                                    }
+                                    if (isNotMatching) {
+                                        finalTable.push(temp);
+                                    }
+                                } else {
+                                    if ($S.isArray(t2)) {
+                                        for(k=0; k<t2.length; k++) {
+                                            if (this._isDateEqual(t1[j][values[0].col], t2[k][values[1].col])) {
                                                 temp = {};
                                                 temp[t1Name] = t1[j];
                                                 temp[t2Name] = t2[k];

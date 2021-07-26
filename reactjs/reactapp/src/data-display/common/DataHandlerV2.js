@@ -27,10 +27,18 @@ DataHandlerV2.extend({
     HandleReportTextLoad: function(finalResponse) {
         var workBreak = DataHandler.getWordBreak();
         var skipEmpty = DataHandler.isSkipEmpty();
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = DataHandler.getData("metaData", {});
+        var splitOnEqualWidth = $S.findParam([currentAppData, metaData], "splitOnEqualWidth", false);
+        var wordSplitingChar = $S.findParam([currentAppData, metaData], "wordSplitingChar", false);
         var responseArr = [], result = [];
         var i,j, temp;
         for(i=0; i<finalResponse.length; i++) {
-            responseArr = responseArr.concat(AppHandler.ParseTextData(finalResponse[i], workBreak, skipEmpty, true));
+            if ($S.isBooleanTrue(splitOnEqualWidth)) {
+                responseArr = responseArr.concat(AppHandler.ParseTextDataOnEqualWidth(finalResponse[i], wordSplitingChar));
+            } else {
+                responseArr = responseArr.concat(AppHandler.ParseTextData(finalResponse[i], workBreak, skipEmpty, true));
+            }
         }
         for (i = 0; i < responseArr.length; i++) {
             if ($S.isArray(responseArr[i])) {

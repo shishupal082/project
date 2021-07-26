@@ -35,11 +35,6 @@
             }
         ]
     },
-    "dateParameterField": {
-        "table": "table1",
-        "fieldName": "date"
-    },
-    "dateSelect": "monthly",
     "sortableFields": ["name", "lap"],
     "summaryFields": [
         {

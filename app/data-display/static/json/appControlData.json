@@ -8,6 +8,8 @@
         "enableLoadAllFile": true,
         "loadReportDataFromApi": true,
         "currentFileLoadType": "single-file",
+        "splitOnEqualWidth": true,
+        "wordSplitingChar": [" "],
         "filenameUsername": ".",
         "fileType": "[.]txt",
         "metaDataApi": [
