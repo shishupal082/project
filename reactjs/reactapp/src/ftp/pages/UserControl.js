@@ -1,12 +1,14 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-import TemplateHelper from "../../common/TemplateHelper";
-import AppHandler from "../../common/app/common/AppHandler";
+// import TemplateHelper from "../../common/TemplateHelper";
+// import AppHandler from "../../common/app/common/AppHandler";
 
 import Config from "../common/Config";
-import Template from "../common/Template";
+// import Template from "../common/Template";
 import DataHandler from "../common/DataHandler";
+import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 
 
 var UserControl;
@@ -46,25 +48,23 @@ UserControl.extend({
 });
 
 UserControl.extend({
+    getFinalTableUserControl: function(response) {
+        var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
+        var userControlPattern = Config.userControlPattern;
+        if (!$S.isArray(response)) {
+            response = [];
+        }
+        var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": response}}, userControlPattern, resultCriteria, requiredDataTable);
+        var renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
+        return renderData;
+    },
     getRenderFieldRow: function() {
-        var data = DataHandler.getData("users_control.response", []);
-        if (!$S.isArray(data) || data.length < 1) {
-            return AppHandler.getTemplate(Template, "noDataFound", []);
-        }
-        var renderFieldRow = AppHandler.getTemplate(Template, "usersControl", []);
-        var rowTemplate;
-        for (var i=0; i<data.length; i++) {
-            rowTemplate = AppHandler.getTemplate(Template, "usersControl.row", []);
-            if (data[i]["valid"]) {
-                data[i]["valid"] = "True";
-            } else {
-                data[i]["valid"] = "False";
-            }
-            data[i]["s.no."] = i+1;
-            TemplateHelper.updateTemplateText(rowTemplate, data[i]);
-            TemplateHelper.addItemInTextArray(renderFieldRow, "usersControl.data", rowTemplate);
-        }
-        return renderFieldRow;
+        var currentList3Data = null, dateParameterField = null;
+        var renderData = DataHandler.getData("users_control.response", []);
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+        var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+        return {"tag": "div", "className": "container", "text": renderFieldRow};
     }
 });
 })($S);

@@ -1580,7 +1580,7 @@ Stack.extend({
                 } else {
                     aName = a;
                 }
-                if (isUndefined(aName)) {
+                if (isUndefined(aName) || aName === null) {
                     aName = defaultValue;
                 }
                 if (isArray(b)) {
@@ -1595,7 +1595,7 @@ Stack.extend({
                 } else {
                     bName = b;
                 }
-                if (isUndefined(bName)) {
+                if (isUndefined(bName) || bName === null) {
                     bName = defaultValue;
                 }
                 if (isNumericData) {

@@ -45,6 +45,11 @@ function generateReactChild(props, data, key) {
                     return generateReactChild(props, item, index);
                 });
             }
+            if ($S.isBooleanTrue(reactChildText)) {
+                reactChildText = "true";
+            } else if ($S.isBooleanFalse(reactChildText)) {
+                reactChildText = "false";
+            }
             reactChild = childGenerator[data.tag](props, data, reactChildText, key);
         } else if ($S.isString(data.text)) {
             reactChild = data.text;

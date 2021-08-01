@@ -550,6 +550,7 @@ DBViewDataHandler.extend({
         return renderData;
     },
     SortDbViewResult: function(renderData, sortingFields, dateParameterField) {
+        // sortingFields is required for apply actual sorting
         if (!$S.isArray(renderData)) {
             return renderData;
         }

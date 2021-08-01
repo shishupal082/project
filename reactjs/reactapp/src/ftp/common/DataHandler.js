@@ -1,6 +1,7 @@
 import $S from "../../interface/stack.js";
 
 import AppHandler from "../../common/app/common/AppHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 import TemplateHelper from "../../common/TemplateHelper";
 import UploadFileFormHandler from "../../common/app/common/upload_file/UploadFileFormHandler";
 
@@ -36,6 +37,9 @@ keys.push("dashboard.orderBy"); // date or users
 
 keys.push("users_control.response");
 keys.push("formSubmitStatus"); // in_progress, completed
+
+keys.push("sortingFields");
+
 CurrentFormData.setKeys(keys);
 
 CurrentFormData.setData("formSubmitStatus", "not_started");
@@ -191,7 +195,7 @@ DataHandler.extend({
             if (isLogin) {
                 if (pageName === Config.users_control) {
                     UserControl.loadPageData(function(response) {
-                        DataHandler.setData("users_control.response", response);
+                        DataHandler.setData("users_control.response", UserControl.getFinalTableUserControl(response));
                         $S.callMethod(callBack);
                     });
                 } else if (pageName === Config.dashboard) {
@@ -266,6 +270,11 @@ DataHandler.extend({
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                 }); 
             }
+        } else if (name === "sortable") {
+            var sortingFields = DataHandler.getData("sortingFields", []);
+            var finalSortingField = DBViewDataHandler.UpdateSortingFields(sortingFields, value);
+            DataHandler.setData("sortingFields", finalSortingField);
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     }
 });

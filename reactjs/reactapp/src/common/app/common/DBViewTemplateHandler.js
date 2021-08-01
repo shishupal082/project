@@ -315,6 +315,8 @@ DBViewTemplateHandler.extend({
         return renderField;
     },
     GenerateDbViewRenderField: function(renderData, currentList3Data, sortingFields) {
+        // currentList3Data is required for generate heading
+        // sortingFields is required for highlight button (primary / secondary)
         var renderField = [];
         if ($S.isArray(renderData) && renderData.length > 0) {
             this._recursiveGenerateHeading(renderField, renderData, currentList3Data, sortingFields);

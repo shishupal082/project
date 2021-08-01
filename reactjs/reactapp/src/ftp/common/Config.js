@@ -16,6 +16,56 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
+Config.userControlPattern = [
+    {
+        "tableName": "table1",
+        "name": "username",
+        "heading": "Username",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "valid",
+        "heading": "Valid?",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "name",
+        "heading": "Name",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "email",
+        "heading": "Email",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "mobile",
+        "heading": "Mobile",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "createPasswordOtp",
+        "heading": "Create password otp",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "methodRequestCount",
+        "heading": "Request count",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "method",
+        "heading": "Method",
+        "isSortable": true
+    }
+];
 
 
 var staticDataApi = $$$.staticDataApi;
