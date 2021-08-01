@@ -364,10 +364,13 @@ DataHandler.extend({
         finalResponse.push(renderFieldRow);
         finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
 
+        var pageName = DataHandler.getData("pageName", "");
+        if (pageName === Config.permission_control) {
+            appDataCallback("list1Data", DataHandler.getData("list1Data", []));
+            appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
+        }
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", finalResponse);
-        appDataCallback("list1Data", DataHandler.getData("list1Data", []));
-        appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
         appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }
