@@ -16,6 +16,7 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
+Config.permissionMonitoringList = $$$.permissionMonitoringList;
 Config.userControlPattern = [
     {
         "tableName": "table1",
@@ -50,13 +51,13 @@ Config.userControlPattern = [
     {
         "tableName": "table1",
         "name": "createPasswordOtp",
-        "heading": "Create password otp",
+        "heading": "OTP",
         "isSortable": true
     },
     {
         "tableName": "table1",
         "name": "methodRequestCount",
-        "heading": "Request count",
+        "heading": "Count",
         "isSortable": true
     },
     {
@@ -68,14 +69,17 @@ Config.userControlPattern = [
 ];
 
 
+
 var staticDataApi = $$$.staticDataApi;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
+var rolesConfigDataApi = $$$.rolesConfigDataApi;
 
 var pages = {
     "dashboard": basepathname+"/dashboard",
     "upload_file": basepathname+"/upload_file",
-    "users_control": basepathname+"/users_control"
+    "users_control": basepathname+"/users_control",
+    "permission_control": basepathname+"/permission_control"
 };
 
 Config.pages = pages;
@@ -83,6 +87,7 @@ Config.pages = pages;
 Config.dashboard = "dashboard";
 Config.upload_file = "upload_file";
 Config.users_control = "users_control";
+Config.permission_control = "permission_control";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = [];
@@ -93,11 +98,11 @@ var apiMapping = {};
 apiMapping["getStaticDataApi"] = staticDataApi;
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
+apiMapping["getRolesConfig"] = rolesConfigDataApi;
 apiMapping["upload_file"] = "/api/upload_file";
 apiMapping["delete_file"] = "/api/delete_file";
 apiMapping["track_event"] = "/api/track_event";
 apiMapping["get_files"] = "/api/get_files_info?v=" + RequestId;
-apiMapping["get_related_users_data"] = "/api/get_related_users_data?v=" + RequestId;
 apiMapping["loginRedirectUrl"] = "/login";
 
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {

@@ -10,6 +10,7 @@ import GATracking from "./GATracking";
 import Template from "./Template";
 
 import UserControl from "../pages/UserControl";
+import PermissionControl from "../pages/PermissionControl";
 import UploadFile from "../pages/UploadFile";
 import Dashboard from "../pages/Dashboard";
 
@@ -36,6 +37,10 @@ keys.push("dashboard.orderBy"); // date or users
 
 
 keys.push("users_control.response");
+keys.push("permission_control.response");
+keys.push("permission_control.validPermissionList");
+keys.push("list1Data");
+keys.push("currentList1Id");
 keys.push("formSubmitStatus"); // in_progress, completed
 
 keys.push("sortingFields");
@@ -115,6 +120,23 @@ DataHandler.extend({
         }
         this.trackUIEvent(event, status, reason, comment);
         return false;
+    },
+    getCurrentList1Data: function() {
+        var currentList1Id = DataHandler.getData("currentList1Id", "");
+        var list1Data = DataHandler.getData("list1Data", "");
+        var currentList1Data = null;
+        if ($S.isArray(list1Data)) {
+            for(var i=0; i<list1Data.length; i++) {
+                if (!$S.isObject(list1Data[i])) {
+                    continue;
+                }
+                if (list1Data[i].id === currentList1Id) {
+                    currentList1Data = list1Data[i];
+                    break;
+                }
+            }
+        }
+        return currentList1Data;
     }
 });
 DataHandler.extend({
@@ -140,6 +162,7 @@ DataHandler.extend({
         var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
         var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
         var isAdminTextDisplayEnable = AppHandler.GetUserData("isAdminTextDisplayEnable", false);
+        var permissionControlList = [];
         if (!isAdminTextDisplayEnable) {
             this.setData("dashboard.orderBy", "orderByUsername");
         } else {
@@ -171,13 +194,15 @@ DataHandler.extend({
             Template["footerLinkJsonAfterLogin"] = footerLinkJsonAfterLogin;
         }
 
-        if ($S.isObject(jsonFileData) && $S.isObject(jsonFileData.config)) {
-            if ($S.isString(jsonFileData.config.uploadFileInstruction)) {
-                uploadFileInstruction = jsonFileData.config.uploadFileInstruction;
-                UploadFileFormHandler.updateTemplate("upload_file.message", "text", uploadFileInstruction);
+        if ($S.isObject(jsonFileData)) {
+            if ($S.isObject(jsonFileData.config)) {
+                if ($S.isString(jsonFileData.config.uploadFileInstruction)) {
+                    uploadFileInstruction = jsonFileData.config.uploadFileInstruction;
+                    UploadFileFormHandler.updateTemplate("upload_file.message", "text", uploadFileInstruction);
+                }
             }
+            permissionControlList = jsonFileData.permissionControlList;
         }
-
         var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
         field.text = AppHandler.GetUserData("username", "");
         var userDetails = AppHandler.GetUserDetails();
@@ -187,6 +212,18 @@ DataHandler.extend({
                 TemplateHelper.removeClassTemplate(Template["footerLinkJsonAfterLogin"], key, "d-none");
             }
         }
+        if ($S.isArray(permissionControlList)) {
+            permissionControlList.map(function(el, i, arr) {
+                if ($S.isObject(el)) {
+                    el.id = i.toString();
+                }
+                return el;
+            });
+            if (permissionControlList.length > 0) {
+                DataHandler.setData("currentList1Id", "0");
+            }
+        }
+        DataHandler.setData("list1Data", permissionControlList);
     },
     loadPageData: function(callBack) {
         var isLogin = AppHandler.GetUserData("login", false);
@@ -195,7 +232,12 @@ DataHandler.extend({
             if (isLogin) {
                 if (pageName === Config.users_control) {
                     UserControl.loadPageData(function(response) {
-                        DataHandler.setData("users_control.response", UserControl.getFinalTableUserControl(response));
+                        DataHandler.setData("users_control.response", UserControl.getFinalTableData(response));
+                        $S.callMethod(callBack);
+                    });
+                } else if (pageName === Config.permission_control) {
+                    PermissionControl.loadPageData(function(response) {
+                        PermissionControl.setFinalTableData(response);
                         $S.callMethod(callBack);
                     });
                 } else if (pageName === Config.dashboard) {
@@ -255,6 +297,9 @@ DataHandler.extend({
         if (pageName === Config.dashboard) {
             DataHandler.setData("dashboard.orderBy", value);
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        } else if (name === "list1-select") {
+            DataHandler.setData("currentList1Id", value);
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     },
     OnButtonClick: function(appStateCallback, appDataCallback, name, value) {
@@ -299,6 +344,8 @@ DataHandler.extend({
         var renderFieldRow = [];
         if (pageName === Config.users_control) {
             renderFieldRow = UserControl.getRenderFieldRow();
+        } else if (pageName === Config.permission_control) {
+            renderFieldRow = PermissionControl.getRenderFieldRow();
         } else if (pageName === Config.upload_file) {
             renderFieldRow = UploadFile.getRenderFieldRow(file);
         } else if (pageName === Config.dashboard) {
@@ -319,6 +366,9 @@ DataHandler.extend({
 
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", finalResponse);
+        appDataCallback("list1Data", DataHandler.getData("list1Data", []));
+        appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
+        appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }
 });

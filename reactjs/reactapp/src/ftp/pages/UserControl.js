@@ -48,7 +48,7 @@ UserControl.extend({
 });
 
 UserControl.extend({
-    getFinalTableUserControl: function(response) {
+    getFinalTableData: function(response) {
         var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
         var userControlPattern = Config.userControlPattern;
         if (!$S.isArray(response)) {
@@ -64,7 +64,7 @@ UserControl.extend({
         var sortingFields = DataHandler.getData("sortingFields", []);
         renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
         var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
-        return {"tag": "div", "className": "container", "text": renderFieldRow};
+        return {"tag": "div", "className": "", "text": renderFieldRow};
     }
 });
 })($S);

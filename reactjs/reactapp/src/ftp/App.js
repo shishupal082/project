@@ -16,6 +16,10 @@ class App extends React.Component {
         this.appData = {
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "renderFieldRow": [],
+            "list1Data": [],
+            "currentList1Id": "",
+            "firstTimeDataLoadStatus": "",
+            "addContainerClass": true,
             "disableFooter": true
         };
         this.onClick = this.onClick.bind(this);
@@ -107,6 +111,11 @@ class App extends React.Component {
                 <Route path={pages.users_control}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.users_control}/>
+                    )}
+                />
+                <Route path={pages.permission_control}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.permission_control}/>
                     )}
                 />
                 <Route
