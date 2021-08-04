@@ -17,6 +17,7 @@ Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
 Config.permissionMonitoringList = $$$.permissionMonitoringList;
+
 Config.userControlPattern = [
     {
         "tableName": "table1",
@@ -74,12 +75,14 @@ var staticDataApi = $$$.staticDataApi;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var relatedUsersDataApi = $$$.relatedUsersDataApi;
 var rolesConfigDataApi = $$$.rolesConfigDataApi;
+var appControlDataApi = $$$.appControlDataApi;
 
 var pages = {
     "dashboard": basepathname+"/dashboard",
     "upload_file": basepathname+"/upload_file",
     "users_control": basepathname+"/users_control",
-    "permission_control": basepathname+"/permission_control"
+    "permission_control": basepathname+"/permission_control",
+    "compare_control": basepathname+"/compare_control"
 };
 
 Config.pages = pages;
@@ -88,6 +91,7 @@ Config.dashboard = "dashboard";
 Config.upload_file = "upload_file";
 Config.users_control = "users_control";
 Config.permission_control = "permission_control";
+Config.compare_control = "compare_control";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = [];
@@ -99,6 +103,7 @@ apiMapping["getStaticDataApi"] = staticDataApi;
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
 apiMapping["getRolesConfig"] = rolesConfigDataApi;
+apiMapping["getAppControlData"] = appControlDataApi;
 apiMapping["upload_file"] = "/api/upload_file";
 apiMapping["delete_file"] = "/api/delete_file";
 apiMapping["track_event"] = "/api/track_event";

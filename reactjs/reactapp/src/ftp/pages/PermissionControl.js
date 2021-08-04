@@ -30,20 +30,27 @@ $S.extendObject(PermissionControl);
 PermissionControl.extend({
     loadPageData: function(callback) {
         var url = Config.getApiUrl("getRolesConfig", false, true);
+        var appControlDataApi = Config.getApiUrl("getAppControlData", false, true);
         if (!$S.isString(url)) {
             $S.callMethod(callback);
         }
         var finalResponse = {};
-        $S.loadJsonData(null, [url], function(response, apiName, ajax){
-            if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"]) && $S.isObject(response["data"]["userRolesMapping"])) {
-                finalResponse = response["data"]["userRolesMapping"];
-            }
-        }, function() {
-            $S.log("Load relatedUserData complete.");
-            if ($S.isFunction(callback)) {
-                callback(finalResponse);
-            }
-        }, null, Api.getAjaxApiCallMethod());
+        $S.loadJsonData(null, [appControlDataApi], function(response, apiName, ajax) {
+            DataHandler.setData("appControlData", response);
+            $S.loadJsonData(null, [url], function(response, apiName, ajax){
+                if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
+                    DataHandler.setData("rolesConfig", response["data"]);
+                    if ($S.isObject(response["data"]["userRolesMapping"])) {
+                        finalResponse = response["data"]["userRolesMapping"];
+                    }
+                }
+            }, function() {
+                $S.log("Load relatedUserData complete.");
+                if ($S.isFunction(callback)) {
+                    callback(finalResponse);
+                }
+            }, null, Api.getAjaxApiCallMethod());
+        }, null, "appControlData", Api.getAjaxApiCallMethod());
     }
 });
 

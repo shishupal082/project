@@ -11,6 +11,7 @@ import Template from "./Template";
 
 import UserControl from "../pages/UserControl";
 import PermissionControl from "../pages/PermissionControl";
+import CompareControl from "../pages/CompareControl";
 import UploadFile from "../pages/UploadFile";
 import Dashboard from "../pages/Dashboard";
 
@@ -39,6 +40,10 @@ keys.push("dashboard.orderBy"); // date or users
 keys.push("users_control.response");
 keys.push("permission_control.response");
 keys.push("permission_control.validPermissionList");
+keys.push("compare_control.allUsername");
+
+keys.push("rolesConfig");
+keys.push("appControlData");
 keys.push("list1Data");
 keys.push("currentList1Id");
 keys.push("formSubmitStatus"); // in_progress, completed
@@ -155,6 +160,30 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
+    _handleAppControlDataLoad: function() {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var pageName = DataHandler.getData("pageName", "");
+        var list1Data = [];
+        if ($S.isObject(appControlData)) {
+            if (pageName === Config.permission_control) {
+                list1Data = appControlData.permissionControlList;
+            } else if (pageName === Config.compare_control) {
+                list1Data = appControlData.compareControlList;
+            }
+            if ($S.isArray(list1Data) && list1Data.length > 0) {
+                list1Data.map(function(el, i, arr) {
+                    if ($S.isObject(el)) {
+                        el.id = i.toString();
+                    }
+                    return el;
+                });
+                if (list1Data.length > 0) {
+                    DataHandler.setData("currentList1Id", "0");
+                }
+            }
+        }
+        DataHandler.setData("list1Data", list1Data);
+    },
     _handleStaticDataLoad: function() {
         var appHeading = AppHandler.GetStaticData("headingJson", []);
         var pageNotFound = AppHandler.GetStaticData("pageNotFoundJson", []);
@@ -162,7 +191,6 @@ DataHandler.extend({
         var footerLinkJsonAfterLogin = AppHandler.GetStaticData("footerLinkJsonAfterLogin", []);
         var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
         var isAdminTextDisplayEnable = AppHandler.GetUserData("isAdminTextDisplayEnable", false);
-        var permissionControlList = [];
         if (!isAdminTextDisplayEnable) {
             this.setData("dashboard.orderBy", "orderByUsername");
         } else {
@@ -201,7 +229,6 @@ DataHandler.extend({
                     UploadFileFormHandler.updateTemplate("upload_file.message", "text", uploadFileInstruction);
                 }
             }
-            permissionControlList = jsonFileData.permissionControlList;
         }
         var field = TemplateHelper(Template["link"]).searchField("link.loginAs");
         field.text = AppHandler.GetUserData("username", "");
@@ -212,18 +239,6 @@ DataHandler.extend({
                 TemplateHelper.removeClassTemplate(Template["footerLinkJsonAfterLogin"], key, "d-none");
             }
         }
-        if ($S.isArray(permissionControlList)) {
-            permissionControlList.map(function(el, i, arr) {
-                if ($S.isObject(el)) {
-                    el.id = i.toString();
-                }
-                return el;
-            });
-            if (permissionControlList.length > 0) {
-                DataHandler.setData("currentList1Id", "0");
-            }
-        }
-        DataHandler.setData("list1Data", permissionControlList);
     },
     loadPageData: function(callBack) {
         var isLogin = AppHandler.GetUserData("login", false);
@@ -237,7 +252,14 @@ DataHandler.extend({
                     });
                 } else if (pageName === Config.permission_control) {
                     PermissionControl.loadPageData(function(response) {
+                        DataHandler._handleAppControlDataLoad();
                         PermissionControl.setFinalTableData(response);
+                        $S.callMethod(callBack);
+                    });
+                } else if (pageName === Config.compare_control) {
+                    PermissionControl.loadPageData(function() {
+                        DataHandler._handleAppControlDataLoad();
+                        CompareControl.setFinalTableData();
                         $S.callMethod(callBack);
                     });
                 } else if (pageName === Config.dashboard) {
@@ -346,6 +368,8 @@ DataHandler.extend({
             renderFieldRow = UserControl.getRenderFieldRow();
         } else if (pageName === Config.permission_control) {
             renderFieldRow = PermissionControl.getRenderFieldRow();
+        } else if (pageName === Config.compare_control) {
+            renderFieldRow = CompareControl.getRenderFieldRow();
         } else if (pageName === Config.upload_file) {
             renderFieldRow = UploadFile.getRenderFieldRow(file);
         } else if (pageName === Config.dashboard) {
@@ -357,15 +381,15 @@ DataHandler.extend({
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var renderFieldRow = this._getRenderFieldRow();
-        var appHeading = AppHandler.getTemplate(Template, "heading", []);
+        var appHeading = [AppHandler.getTemplate(Template, "heading", [])];
+        appHeading.push(AppHandler.getTemplate(Template, "link", []));
 
         var finalResponse = [];
-        finalResponse.push(AppHandler.getTemplate(Template, "link", []));
         finalResponse.push(renderFieldRow);
         finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
 
         var pageName = DataHandler.getData("pageName", "");
-        if (pageName === Config.permission_control) {
+        if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
             appDataCallback("list1Data", DataHandler.getData("list1Data", []));
             appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
         }

@@ -118,6 +118,11 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.permission_control}/>
                     )}
                 />
+                <Route path={pages.compare_control}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.compare_control}/>
+                    )}
+                />
                 <Route
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>
