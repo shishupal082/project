@@ -530,6 +530,20 @@
             },
             {
                 "tableName": "table2",
+                "name": "xyz",
+                "heading": "XYZ",
+                "isSortable": true,
+                "totalRowText": {"tag": "b", "text": "Total"}
+            },
+            {
+                "tableName": "table2",
+                "name": "count",
+                "heading": "Countable param",
+                "isSortable": true,
+                "isTotalRow": true
+            },
+            {
+                "tableName": "table2",
                 "name": "description",
                 "heading": "Description",
                 "wordBreak": ";",

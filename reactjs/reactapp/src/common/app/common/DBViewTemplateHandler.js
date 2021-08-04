@@ -152,9 +152,58 @@ DBViewTemplateHandler.extend({
 });
 
 DBViewTemplateHandler.extend({
+    _getTotalValue: function(renderData, name) {
+        var total = 0, i, j;
+        if ($S.isArray(renderData) && renderData.length > 0 && $S.isStringV2(name)) {
+            for (i=0; i<renderData.length; i++) {
+                if ($S.isArray(renderData[i])) {
+                    for(j=0; j<renderData[i].length; j++) {
+                        if (!$S.isObject(renderData[i][j])) {
+                            continue;
+                        }
+                        if (renderData[i][j].name !== name) {
+                            continue;
+                        }
+                        if ($S.isNumeric(renderData[i][j]["value"])) {
+                            total = total + (1* renderData[i][j]["value"])
+                        }
+                    }
+                }
+            }
+        }
+        return total;
+    },
+    checkTotalRow: function(renderData) {
+        var resultPattern = null;
+        if ($S.isArray(renderData) && renderData.length > 0) {
+            resultPattern = $S.clone(renderData[0]);
+        }
+        var i, temp, isTotalRow = false;
+        if ($S.isArray(resultPattern) && resultPattern.length > 0) {
+            for (i=0; i<resultPattern.length; i++) {
+                temp = resultPattern[i];
+                if (!$S.isObject(temp)) {
+                    continue;
+                }
+                if ($S.isBooleanTrue(temp.isTotalRow)) {
+                    isTotalRow = temp.isTotalRow;
+                    temp.value = this._getTotalValue(renderData, temp.name);
+                } else {
+                    temp.value = temp.totalRowText;
+                }
+            }
+            if (isTotalRow) {
+                renderData.push(resultPattern);
+            }
+        }
+        return renderData;
+    }
+});
+DBViewTemplateHandler.extend({
     generateIndividualTableV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {
         var renderField = this.getTemplate(tableTemplateName);
         var renderFieldTr, i;
+        this.checkTotalRow(renderData);
         if ($S.isArray(renderData) && renderData.length > 0) {
             for (i = 0; i < renderData.length; i++) {
                 if (i===0) {
