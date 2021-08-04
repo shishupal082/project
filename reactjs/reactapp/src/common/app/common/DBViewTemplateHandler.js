@@ -165,7 +165,7 @@ DBViewTemplateHandler.extend({
                             continue;
                         }
                         if ($S.isNumeric(renderData[i][j]["value"])) {
-                            total = total + (1* renderData[i][j]["value"])
+                            total = $S.numberToFixed(total + (1* renderData[i][j]["value"]), 3);
                         }
                     }
                 }

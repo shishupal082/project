@@ -2248,7 +2248,10 @@ Stack.extend({
     },
     numberToFixed: function(num, decimal) {
         if (isNumeric(num) && isNumber(decimal)) {
-            num = num.toFixed(2)*1;
+            if ([0,1,2,3,4].indexOf(decimal) < 0) {
+                decimal = 2;
+            }
+            num = num.toFixed(decimal)*1;
         }
         return num;
     }
