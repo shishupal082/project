@@ -140,12 +140,16 @@ DataHandlerV3.extend({
         var resultPatternKey = "resultPattern"+$S.capitalize(pageName);
         var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         var finalTable = [];
-        if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
-            resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
-            resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
-        }
-        if ([Config.summary].indexOf(pageName) >= 0 && (!$S.isArray(resultPattern) || resultPattern.length < 1)) {
-            resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData, attendanceData);
+        if ((!$S.isArray(resultPattern) || resultPattern.length < 1)) {
+            if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0) {
+                resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
+                resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
+            } else if ([Config.update].indexOf(pageName) >= 0) {
+                resultPatternKey =  "resultPattern" + $S.capitalize(Config.entry);
+                resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
+            } else if ([Config.summary].indexOf(pageName) >= 0) {
+                resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData, attendanceData);
+            }
         }
         var dbViewData = {};
         if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
