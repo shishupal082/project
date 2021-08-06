@@ -47,15 +47,17 @@ TemplateHandler.extend({
         var relatedUsersData = DataHandler.getData("relatedUsersData", []);
         var dropDownOption = [{"value": "", "text": "Select User..."}];
         var currentUsername = AppHandler.GetUserData("username", "");
-        var otherUsername;
+        var otherUsername, count = 1;
         if ($S.isArray(relatedUsersData)) {
+            relatedUsersData = $S.sortResult(relatedUsersData, "ascending", "username");
             for(var i=0; i<relatedUsersData.length; i++) {
                 if (!$S.isObject(relatedUsersData[i])) {
                     continue;
                 }
                 otherUsername = relatedUsersData[i].username;
                 if ($S.isStringV2(currentUsername) && currentUsername !== otherUsername) {
-                    dropDownOption.push({"value": otherUsername, "text": otherUsername});
+                    dropDownOption.push({"value": otherUsername, "text": count + ": " + otherUsername});
+                    count++;
                 }
             }
             TemplateHelper.updateTemplateText(template, {"login_other_user.username": dropDownOption});
