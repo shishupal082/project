@@ -7,8 +7,7 @@ var syncData = {
             "../java/yard/src/main/resources/assets/static/libs/",
             "../java/pdf/src/main/resources/assets/static/libs/",
             "../java/WebApp/src/main/resources/assets/static/libs/",
-            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
-            "../../ftp-application/reactjs/reactapp/public/assets/static/libs/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/"
         ]
     },
     "bootstrap-v3.1.1": {
@@ -27,45 +26,12 @@ var syncData = {
             "../static/libs/bootstrap-v4.4.1.css"
         ],
         "destinationDir": [
-            "../../ftp-application/FTP/src/main/resources/assets/static/libs/",
-            "../../ftp-application/reactjs/reactapp/public/assets/static/libs/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/libs/"
         ]
     },
     "react": {
         "src": "../static/libs/bootstrap-react-v3.1.1.css",
         "destinationDir": "../reactjs/reactapp/src/libs/"
-    },
-    "react2_ftp": {
-        "src": [
-            "../reactjs/reactapp/src/common/app/common/AppHandler.js"
-        ],
-        "destinationDir": [
-            "../../ftp-application/reactjs/reactapp/src/common/app/common/"
-        ]
-    },
-    "react3_ftp": {
-        "src": [
-            "../reactjs/reactapp/src/common/app/components/AppComponent.js",
-            "../reactjs/reactapp/src/common/app/components/AppComponentWrapper.js",
-            "../reactjs/reactapp/src/common/app/components/Errors.js",
-            "../reactjs/reactapp/src/common/app/components/Footer.js",
-            "../reactjs/reactapp/src/common/app/components/Heading.js",
-            "../reactjs/reactapp/src/common/app/components/PageFilter.js",
-            "../reactjs/reactapp/src/common/app/components/PageTab.js",
-            "../reactjs/reactapp/src/common/app/components/SelectFilter.js"
-        ],
-        "destinationDir": [
-            "../../ftp-application/reactjs/reactapp/src/common/app/components/"
-        ]
-    },
-    "react4_ftp": {
-        "src": [
-            "../reactjs/reactapp/src/common/Api.js",
-            "../reactjs/reactapp/src/common/TemplateHelper.js"
-        ],
-        "destinationDir": [
-            "../../ftp-application/reactjs/reactapp/src/common/"
-        ]
     },
     "yardCss": {
         "src": "../app/yard1/static/css/style.css",
@@ -82,8 +48,7 @@ var syncData = {
             "../java/pdf/src/main/resources/assets/static/js/",
             "../java/WebApp/src/main/resources/assets/static/js/",
             "../reactjs/reactapp/src/libs/",
-            "../../ftp-application/FTP/src/main/resources/assets/static/js/",
-            "../../ftp-application/reactjs/reactapp/src/libs/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/js/"
         ]
     },
     "model": {
@@ -153,11 +118,50 @@ var syncData = {
         "src": "../app/yard1/static/json/yard.json",
         "destinationDir": "../java/yard/src/main/resources/assets/yard1/json/"
     },
-    "railwayslogo-128.png": {
-        "src": "../static/img/icons/railwayslogo-128.png",
+    "img-to-ftp-application": {
+        "src": [
+            "../static/img/icons/railwayslogo-128.png",
+            "../static/img/icons/railwayslogo-64.png",
+            "../static/img/icons/railwayslogo-32.png"
+        ],
         "destinationDir": [
-            "../../ftp-application/FTP/src/main/resources/assets/static/img/",
-            "../../ftp-application/reactjs/reactapp/public/assets/static/img/"
+            "../../ftp-application/FTP/src/main/resources/assets/static/img/"
+        ]
+    },
+    "icons-to-ftp-application": {
+        "src": [
+            "../static/img/icons/back-32.png"
+        ],
+        "destinationDir": [
+            "../../ftp-application/FTP/src/main/resources/assets/static/img/icons/"
+        ]
+    },
+    "svg-to-ftp-application": {
+        "src": [
+            "../static/img/icons/svg/back.svg",
+            "../static/img/icons/svg/left-arrow.svg"
+        ],
+        "destinationDir": [
+            "../../ftp-application/FTP/src/main/resources/assets/static/img/svg/"
+        ]
+    },
+    "dist-auth-app-to-ftp-application": {
+        "src": [
+            "../app/auth/auth-style.css",
+            "../reactjs/reactapp/dist-auth-app/script1.js",
+            "../reactjs/reactapp/dist-auth-app/script2.js",
+            "../reactjs/reactapp/dist-auth-app/script3.js"
+        ],
+        "destinationDir": [
+            "../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/"
+        ]
+    },
+    "css-to-ftp-application": {
+        "src": [
+            "../static/css/style.css",
+        ],
+        "destinationDir": [
+            "../../ftp-application/FTP/src/main/resources/assets/static/css/"
         ]
     }
 };

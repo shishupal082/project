@@ -1,0 +1,14 @@
+.heading {
+    border-bottom: 1.5px solid #ddd;
+    padding-bottom: 5px;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.form-div > div {
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}

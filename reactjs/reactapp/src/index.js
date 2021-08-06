@@ -8,15 +8,16 @@ import ReactDOM from 'react-dom';
 // import App from './hooks/App';
 // import App from './account/App';
 // import App from './search/App';
-// import App from './auth/App';
+// import App from './auth-demo/App';
 // import App from './monitoring/App';
 // import App from './assets/App';
 // import App from './data-entry/App';
 // import App from './data-display/App';
-import App from './attendance/App';
+// import App from './attendance/App';
 // import App from './ml2/App';
 // import App from './ftp/App';
 // import App from './project-tracking/App';
+import App from './auth/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

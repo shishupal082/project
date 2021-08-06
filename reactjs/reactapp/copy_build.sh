@@ -20,7 +20,7 @@ distDir=dist-index-app
 distDir=dist-yard-app
 distDir=dist-management-app
 distDir=dist-search-app
-distDir=dist-auth-app
+distDir=dist-auth-demo-app
 distDir=dist-account-app
 distDir=dist-data-entry-app
 distDir=dist-assets-app
@@ -30,6 +30,7 @@ distDir=dist-data-display-app
 distDir=dist-ftp-app
 distDir=dist-project-tracking-app
 distDir=dist-attendance-app
+distDir=dist-auth-app
 
 addLog "Dist directory : ${distDir}"
 
@@ -44,6 +45,14 @@ mv ${distDir}/*.chunk.js ${distDir}/script3.js
 sed -i "2s/.*//" ${distDir}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
 sed -i "3s/.*//" ${distDir}/script3.js
+
+
+if [[ $distDir == "dist-auth-app" ]]; then
+  cp ${distDir}/script1.js ../../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/
+  cp ${distDir}/script2.js ../../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/
+  cp ${distDir}/script3.js ../../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/
+fi
+
 
 # sed -i  ''  '2s/.*//' ${distDir}/script1.js
 # sed -i  ''  '2s/.*//' ${distDir}/script2.js
