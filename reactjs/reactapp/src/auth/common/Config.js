@@ -98,28 +98,6 @@ if ($S.isString(currentPageData)) {
     }
 }
 
-if ($S.isBooleanTrue($$$.isReactEnv)) {
-    var hrefPath = $S.getUrlAttribute(Config.location.href, "hrefPath", "");
-    var hrefPathMapping = {};
-    hrefPathMapping[basepathname + "/login"] = "login";
-    hrefPathMapping[basepathname + "/login_other_user"] = "login_other_user";
-    hrefPathMapping[basepathname + "/logout"] = "logout";
-    hrefPathMapping[basepathname + "/register"] = "register";
-    hrefPathMapping[basepathname + "/forgot_password"] = "forgot_password";
-    hrefPathMapping[basepathname + "/create_password"] = "create_password";
-    hrefPathMapping[basepathname + "/change_password"] = "change_password";
-
-    var origin = Config.location.origin;
-    var hrefPathArr = hrefPath.split(origin);
-
-    if (hrefPathArr.length === 2) {
-        hrefPath = hrefPathArr[1];
-    }
-    if ($S.isString(hrefPathMapping[hrefPath])) {
-        PageData["page"] = hrefPathMapping[hrefPath];
-    }
-}
-
 Config.UserData = UserData;
 Config.PageData = PageData;
 Config.apiMapping = {};
