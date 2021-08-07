@@ -43,6 +43,10 @@ TemplateHandler.extend({
 });
 TemplateHandler.extend({
     getLoginOtherUserTemplate: function() {
+        var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
+        if (!$S.isBooleanTrue(isLoginOtherUserEnable)) {
+            return null;
+        }
         var template = AppHandler.getTemplate(Template, "login_other_user", "Page Not Found");
         var relatedUsersData = DataHandler.getData("relatedUsersData", []);
         var dropDownOption = [{"value": "", "text": "Select User..."}];

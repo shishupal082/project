@@ -20,7 +20,6 @@ class App extends React.Component {
             "addContainerClass": false,
             "firstTimeDataLoadStatus": "",
             "appHeading": [{"tag": "div", "text": ""}],
-            "hidePageTab": true,
             "renderFieldRow": []
         };
         this.onClick = this.onClick.bind(this);

@@ -977,11 +977,9 @@ DataHandler.extend({
             var sectionsData = DataHandler.getData("appControlData", []);
             var pageDropdown = DataHandler.getData("dropdownFields", []);
             var filterOptions = [];
-            var hidePageTab = false;
             if (["home","addentry","uploadfile"].indexOf(currentPageName) >= 0) {
                 goBackLinkData = [];
                 sectionsData = [];
-                hidePageTab = true;
             } else if (["entrybydatefilter", "summary"].indexOf(currentPageName) >= 0) {
                 filterOptions = DataHandler.getData("filterOptions", []);
             }
@@ -993,7 +991,6 @@ DataHandler.extend({
             var renderFieldRow = DataHandler.getPageRenderField(currentPageName);
             DataHandler.setData("availableDataPageName", currentPageName);
 
-            appDataCallback("hidePageTab", hidePageTab);
             appDataCallback("selectFilterComponentClass", currentPageName);
             appDataCallback("list1Data", sectionsData);
             appDataCallback("list2Data", pageDropdown);

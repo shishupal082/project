@@ -34,8 +34,6 @@ class App extends React.Component {
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "pageHeading": "",
-            "pageTab": [],
-            "hidePageTab": true,
 
             "renderFieldRow": [],
             "errorsData": [],
