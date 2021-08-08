@@ -255,7 +255,7 @@ FormHandler.extend({
         var url = Config.apiMapping["login_other_user"];
         var orgUsername = AppHandler.GetUserData("orgUsername", "");
         var postData = {};
-        if ($S.isStringV2(orgUsername)) {
+        if (!$S.isStringV2(orgUsername)) {
             orgUsername = "";
         }
         DataHandler.setData("formSubmitStatus", "in_progress");
