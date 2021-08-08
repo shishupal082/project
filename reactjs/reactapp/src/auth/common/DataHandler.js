@@ -129,13 +129,13 @@ DataHandler.extend({
         AppHandler.setGtag(Config.gtag);
         var userData = Config.UserData;
         var pageData = Config.PageData;
-        var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
+        var userDetails = {"username": "", "orgUsername": "", "displayName": "", "login": false, "roles": {}};
         var key;
         if ($S.isObject(userData)) {
             for (key in userData) {
-                if (["username", "displayName"].indexOf(key) >= 0) {
+                if (["username", "orgUsername", "displayName"].indexOf(key) >= 0) {
                     userDetails[key] = userData[key];
-                } else if (["isLogin"].indexOf(key) >= 0) {
+                } else if (["login"].indexOf(key) >= 0) {
                     userDetails["login"] = userData[key] === "true";
                 } else {
                     userDetails.roles[key] = userData[key] === "true";
