@@ -129,23 +129,22 @@ DataHandler.extend({
         AppHandler.setGtag(Config.gtag);
         var userData = Config.UserData;
         var pageData = Config.PageData;
-        var userDetails = {"username": "", "orgUsername": "", "displayName": "", "login": false, "roles": {}};
-        var key;
         if ($S.isObject(userData)) {
-            for (key in userData) {
-                if (["username", "orgUsername", "displayName"].indexOf(key) >= 0) {
-                    userDetails[key] = userData[key];
-                } else if (["login"].indexOf(key) >= 0) {
-                    userDetails["login"] = userData[key] === "true";
-                } else {
-                    userDetails.roles[key] = userData[key] === "true";
+            if (userData["login"] === "true") {
+                userData["login"] = true;
+            } else {
+                userData["login"] = false;
+            }
+            if ($S.isObject(userData["roles"])) {
+                for (var key in userData["roles"]) {
+                    userData["roles"][key] = userData["roles"][key] === "true";
                 }
             }
+            AppHandler.SetUserDetails(userData);
         }
         if ($S.isObject(pageData)) {
             AppHandler.SetStaticData(pageData);
         }
-        AppHandler.SetUserDetails(userDetails);
     }
 });
 DataHandler.extend({

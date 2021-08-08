@@ -543,22 +543,28 @@ AppHandler.extend({
     }
 });
 
-var userDetails = {"username": "", "displayName": "", "login": false, "roles": {}};
+var userDetails = {"username": "", "displayName": "", "orgUsername": "", "login": false, "roles": {}};
 
 AppHandler.extend({
     GetUserDetails: function() {
         return $S.clone(userDetails);
     },
     SetUserDetails: function(tempUserDetails) {
+        if (!$S.isObject(tempUserDetails)) {
+            return false;
+        }
         userDetails = $S.clone(tempUserDetails);
         return true;
     },
     GetUserData: function(key, defaultValue) {
+        if (!$S.isStringV2(key) || !$S.isObject(userDetails)) {
+            return defaultValue;
+        }
         if ($S.isString(userDetails[key]) || key === "login") {
             return userDetails[key];
         }
-        // valid roles key: isDevUser, isAdminUser, isLogin, isAddTextEnable, isUploadFileEnable
-        if ($S.isBooleanTrue(userDetails["roles"][key])) {
+        // valid roles key: isAdminUser, isAddTextEnable, isUploadFileEnable
+        if ($S.isObject(userDetails["roles"]) && $S.isBooleanTrue(userDetails["roles"][key])) {
             return userDetails["roles"][key];
         }
         return defaultValue;
@@ -597,7 +603,7 @@ AppHandler.extend({
     }
 });
 
-var staticData = {"appVersion": "", "uploadFileApiVersion": "",
+var staticData = {"page": "", "appVersion": "", "uploadFileApiVersion": "",
                 "headingJson": "", "afterLoginLinkJson": "",
                 "footerLinkJson": "", "footerLinkJsonAfterLogin": "",
                 "jsonFileData": {}};
