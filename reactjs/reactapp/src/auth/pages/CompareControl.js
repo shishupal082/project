@@ -1,11 +1,5 @@
 import $S from "../../interface/stack.js";
 
-import Api from '../../common/Api.js';
-// import TemplateHelper from "../../common/TemplateHelper";
-// import AppHandler from "../../common/app/common/AppHandler";
-
-import Config from "../common/Config";
-// import Template from "../common/Template";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
@@ -26,33 +20,6 @@ CompareControl.fn = CompareControl.prototype = {
     }
 };
 $S.extendObject(CompareControl);
-
-CompareControl.extend({
-    loadPageData: function(callback) {
-        var url = Config.getApiUrl("getRolesConfig", false, true);
-        var appControlDataApi = Config.getApiUrl("getAppControlData", false, true);
-        if (!$S.isString(url)) {
-            $S.callMethod(callback);
-        }
-        var finalResponse = {};
-        $S.loadJsonData(null, [appControlDataApi], function(response, apiName, ajax) {
-            DataHandler.setData("appControlData", response);
-            $S.loadJsonData(null, [url], function(response, apiName, ajax){
-                if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
-                    DataHandler.setData("rolesConfig", response["data"]);
-                    if ($S.isObject(response["data"]["userRolesMapping"])) {
-                        finalResponse = response["data"]["userRolesMapping"];
-                    }
-                }
-            }, function() {
-                $S.log("Load relatedUserData complete.");
-                if ($S.isFunction(callback)) {
-                    callback(finalResponse);
-                }
-            }, null, Api.getAjaxApiCallMethod());
-        }, null, "appControlData", Api.getAjaxApiCallMethod());
-    }
-});
 
 CompareControl.extend({
     setFinalTableData: function() {
@@ -122,42 +89,39 @@ CompareControl.extend({
             });
         }
         var tableData = [];
-        function createData() {
-            var sequence = [];
-            var temp = {}, tempData, username, itemUsername;
-            for (i = 0; i < comapresUsers.length; i++) {
-                username = comapresUsers[i].username;
-                sequence.push(username);
-                if ($S.isArray(comapresUsers[i].response)) {
-                    tempData = comapresUsers[i].response;
-                    if ($S.isArray(tempData)) {
-                        for(j=0; j<tempData.length; j++) {
-                            itemUsername = tempData[j];
-                            if ($S.isArray(temp[itemUsername])) {
-                                temp[itemUsername].push(username);
-                            } else {
-                                temp[itemUsername] = [username];
-                            }
-                            comapresUsers[i].renderData.push(tempData[j]);
+        var sequence = [];
+        var temp = {}, tempData, username, itemUsername;
+        for (i = 0; i < comapresUsers.length; i++) {
+            username = comapresUsers[i].username;
+            sequence.push(username);
+            if ($S.isArray(comapresUsers[i].response)) {
+                tempData = comapresUsers[i].response;
+                if ($S.isArray(tempData)) {
+                    for(j=0; j<tempData.length; j++) {
+                        itemUsername = tempData[j];
+                        if ($S.isArray(temp[itemUsername])) {
+                            temp[itemUsername].push(username);
+                        } else {
+                            temp[itemUsername] = [username];
                         }
+                        comapresUsers[i].renderData.push(tempData[j]);
                     }
                 }
-            }
-            tableData.push(sequence);
-            var t;
-            for(username in temp) {
-                t = [];
-                for (i = 0; i < sequence.length; i++) {
-                    if (temp[username].indexOf(sequence[i]) >= 0) {
-                        t.push(username);
-                    } else {
-                        t.push("");
-                    }
-                }
-                tableData.push(t);
             }
         }
-        createData();
+        tableData.push(sequence);
+        var t;
+        for(username in temp) {
+            t = [];
+            for (i = 0; i < sequence.length; i++) {
+                if (temp[username].indexOf(sequence[i]) >= 0) {
+                    t.push(username);
+                } else {
+                    t.push("");
+                }
+            }
+            tableData.push(t);
+        }
         var compareControlPattern = [], data = [];
         for(i=0; i<firstRow.length; i++) {
             compareControlPattern.push({"name": "item-"+i, "heading": firstRow[i], "isSortable": true, "tableName": "table1"});

@@ -42,7 +42,7 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
-            "disableFooter": true
+            "enableFooter": false
         };
         this.onClick = this.onClick.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);

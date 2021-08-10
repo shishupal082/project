@@ -19,8 +19,7 @@ class App extends React.Component {
             "list1Data": [],
             "currentList1Id": "",
             "firstTimeDataLoadStatus": "",
-            "addContainerClass": true,
-            "disableFooter": true
+            "addContainerClass": true
         };
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -106,21 +105,6 @@ class App extends React.Component {
                 <Route path={pages.upload_file}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.upload_file}/>
-                    )}
-                />
-                <Route path={pages.users_control}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.users_control}/>
-                    )}
-                />
-                <Route path={pages.permission_control}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.permission_control}/>
-                    )}
-                />
-                <Route path={pages.compare_control}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.compare_control}/>
                     )}
                 />
                 <Route

@@ -240,12 +240,12 @@ DataHandler.extend({
         }
         return api;
     },
-    isFooterDisabled: function() {
+    isFooterEnable: function() {
         var currentAppData = this.getCurrentAppData();
-        if ($S.isObject(currentAppData) && $S.isBooleanFalse(currentAppData.disableFooter)) {
-            return false;
+        if ($S.isObject(currentAppData) && $S.isBooleanFalse(currentAppData.enableFooter)) {
+            return true;
         }
-        return true;
+        return false;
     },
     getFooterData: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -430,7 +430,7 @@ DataHandler.extend({
         appDataCallback("appHeading", appHeading);
         appDataCallback("currentList1Id", this.getData("list1Id", ""));
         appDataCallback("currentList2Id", this.getData("list2Id", ""));
-        appDataCallback("disableFooter", this.isFooterDisabled());
+        appDataCallback("enableFooter", this.isFooterEnable());
         appDataCallback("list1Data", this.getData("appControlData", []));
         appDataCallback("list2Data", this.getList2Data());
         appDataCallback("filterOptions", filterOptions);

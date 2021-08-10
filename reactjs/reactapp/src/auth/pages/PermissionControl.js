@@ -1,11 +1,8 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-// import TemplateHelper from "../../common/TemplateHelper";
-// import AppHandler from "../../common/app/common/AppHandler";
-
+import AppHandler from '../../common/app/common/AppHandler.js';
 import Config from "../common/Config";
-// import Template from "../common/Template";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
@@ -28,34 +25,33 @@ PermissionControl.fn = PermissionControl.prototype = {
 $S.extendObject(PermissionControl);
 
 PermissionControl.extend({
-    loadPageData: function(callback) {
-        var url = Config.getApiUrl("getRolesConfig", false, true);
-        var appControlDataApi = Config.getApiUrl("getAppControlData", false, true);
+    loadRolesConfig: function(callback) {
+        var url = Config.getApiUrl("getRolesConfig", null, true);
+        var appControlApi = Config.getApiUrl("appControlDataApi", null, true);
         if (!$S.isString(url)) {
-            $S.callMethod(callback);
+            return $S.callMethod(callback);
         }
-        var finalResponse = {};
-        $S.loadJsonData(null, [appControlDataApi], function(response, apiName, ajax) {
-            DataHandler.setData("appControlData", response);
-            $S.loadJsonData(null, [url], function(response, apiName, ajax){
-                if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
-                    DataHandler.setData("rolesConfig", response["data"]);
-                    if ($S.isObject(response["data"]["userRolesMapping"])) {
-                        finalResponse = response["data"]["userRolesMapping"];
-                    }
-                }
-            }, function() {
-                $S.log("Load relatedUserData complete.");
-                if ($S.isFunction(callback)) {
-                    callback(finalResponse);
-                }
-            }, null, Api.getAjaxApiCallMethod());
-        }, null, "appControlData", Api.getAjaxApiCallMethod());
+        $S.loadJsonData(null, [url], function(response, apiName, ajax){
+            if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
+                DataHandler.setData("rolesConfig", response["data"]);
+            }
+            AppHandler.loadAppControlData(appControlApi, null, null, null, function(list1Data, metaData) {
+                DataHandler.setData("appControlData", metaData);
+                $S.callMethod(callback);
+            });
+        }, function() {
+            $S.log("Load rolesConfig complete.");
+        }, "rolesConfig", Api.getAjaxApiCallMethod());
     }
 });
 
 PermissionControl.extend({
-    setFinalTableData: function(response) {
+    setFinalTableData: function() {
+        var rolesConfig = DataHandler.getData("rolesConfig", {});
+        var response = {};
+        if ($S.isObject(rolesConfig) && $S.isObject(rolesConfig["userRolesMapping"])) {
+            response = rolesConfig["userRolesMapping"];
+        }
         DataHandler.setData("permission_control.response", response);
         if (!$S.isObject(response)) {
             response = {};

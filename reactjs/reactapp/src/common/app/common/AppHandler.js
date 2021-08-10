@@ -253,7 +253,7 @@ AppHandler.extend({
         if ($S.isBooleanTrue(oldValue)) {
             newValue = false;
         }
-        appDataCallback("disableFooterV2", newValue);
+        appDataCallback("enableFooterV2", newValue);
         appStateCallback();
     }
 });

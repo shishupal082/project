@@ -1,7 +1,7 @@
 [
     {
         "name": "DB view",
-        "disableFooter": false,
+        "enableFooter": true,
         "metaDataApi": ["/app/attendance/db-view/json/metaData.json"]
     }
 ]

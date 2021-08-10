@@ -1,0 +1,26 @@
+{
+    "metaData": {
+        "permissionControlList": [
+            {
+                "name": "All"
+            },
+            {
+                "name": "List1",
+                "value": ["isUsersControlEnable", "isDevUser", "isAdminUser"]
+            },
+            {
+                "name": "List2",
+                "value": ["isAdminOrDevUser", "isAdminAndDevUser", "isAdminUser", "isDevUser", "isLoginOtherUserEnable", "isUsersControlEnable"]
+            }
+        ],
+        "compareControlList": [
+            {
+                "name": "All"
+            },
+            {
+                "name": "List1",
+                "value": ["U1", "U2", "Group1Login", "U_without_role_access", "Admin", "Not_valid_user"]
+            }
+        ]
+    }
+}

@@ -103,6 +103,9 @@ class SelectFilter extends React.Component {
         if (!$S.isBooleanTrue(this.props.data.enableToggleButton)) {
             toggleButton = null;
         }
+        if (!$S.isBooleanTrue(this.props.data.enableReloadButton)) {
+            reloadButton = null;
+        }
         if (this.props.data.firstTimeDataLoadStatus === "completed") {
             if (list1Data.length < 1) {
                 list1Dropdown = null;

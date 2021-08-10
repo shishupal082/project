@@ -172,12 +172,12 @@ DataHandler.extend({
         var currentUserName = DataHandler.getData("currentUserName", "");
         return currentUserName;
     },
-    getDisableFooterStatus: function() {
+    getEnableFooterStatus: function() {
         var currentUserControlData = DataHandler.getData("currentUserControlData", {});
-        if ($S.isBoolean(currentUserControlData.disableFooter)) {
-            return currentUserControlData.disableFooter;
+        if ($S.isBoolean(currentUserControlData.enableFooter)) {
+            return currentUserControlData.enableFooter;
         }
-        return true;
+        return false;
     },
     getMetaDataAccounts: function() {
         var metaData = DataHandler.getData("metaData", {});
@@ -326,7 +326,7 @@ DataHandler.extend({
             // appDataCallback("dataLoadStatus", dataLoadStatus);
             appDataCallback("firstTimeDataLoadStatus", DataHandler.getData("firstTimeDataLoadStatus"));
             appDataCallback("renderFieldRow", AccountHelper.getRenderTemplate());
-            appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
+            appDataCallback("enableFooter", DataHandler.getEnableFooterStatus());
             appStateCallback();
         }
     }

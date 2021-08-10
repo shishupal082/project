@@ -9,9 +9,6 @@ import Config from "./Config";
 import GATracking from "./GATracking";
 import Template from "./Template";
 
-import UserControl from "../pages/UserControl";
-import PermissionControl from "../pages/PermissionControl";
-import CompareControl from "../pages/CompareControl";
 import UploadFile from "../pages/UploadFile";
 import Dashboard from "../pages/Dashboard";
 
@@ -37,23 +34,11 @@ keys.push("dashboard.currentPdfLink");
 keys.push("dashboard.orderBy"); // date or users
 
 
-keys.push("users_control.response");
-keys.push("permission_control.response");
-keys.push("permission_control.validPermissionList");
-keys.push("compare_control.allUsername");
-
-keys.push("rolesConfig");
-keys.push("appControlData");
-keys.push("list1Data");
-keys.push("currentList1Id");
 keys.push("formSubmitStatus"); // in_progress, completed
-
-keys.push("sortingFields");
 
 CurrentFormData.setKeys(keys);
 
 CurrentFormData.setData("formSubmitStatus", "not_started");
-CurrentFormData.setData("users_control.response", []);
 
 
 DataHandler = function(arg) {
@@ -160,30 +145,6 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    _handleAppControlDataLoad: function() {
-        var appControlData = DataHandler.getData("appControlData", {});
-        var pageName = DataHandler.getData("pageName", "");
-        var list1Data = [];
-        if ($S.isObject(appControlData)) {
-            if (pageName === Config.permission_control) {
-                list1Data = appControlData.permissionControlList;
-            } else if (pageName === Config.compare_control) {
-                list1Data = appControlData.compareControlList;
-            }
-            if ($S.isArray(list1Data) && list1Data.length > 0) {
-                list1Data.map(function(el, i, arr) {
-                    if ($S.isObject(el)) {
-                        el.id = i.toString();
-                    }
-                    return el;
-                });
-                if (list1Data.length > 0) {
-                    DataHandler.setData("currentList1Id", "0");
-                }
-            }
-        }
-        DataHandler.setData("list1Data", list1Data);
-    },
     _handleStaticDataLoad: function() {
         var appHeading = AppHandler.GetStaticData("headingJson", []);
         var pageNotFound = AppHandler.GetStaticData("pageNotFoundJson", []);
@@ -245,24 +206,7 @@ DataHandler.extend({
         var pageName = DataHandler.getData("pageName", "");
         if ($S.isBooleanTrue(Config.forceLogin)) {
             if (isLogin) {
-                if (pageName === Config.users_control) {
-                    UserControl.loadPageData(function(response) {
-                        DataHandler.setData("users_control.response", UserControl.getFinalTableData(response));
-                        $S.callMethod(callBack);
-                    });
-                } else if (pageName === Config.permission_control) {
-                    PermissionControl.loadPageData(function(response) {
-                        DataHandler._handleAppControlDataLoad();
-                        PermissionControl.setFinalTableData(response);
-                        $S.callMethod(callBack);
-                    });
-                } else if (pageName === Config.compare_control) {
-                    PermissionControl.loadPageData(function() {
-                        DataHandler._handleAppControlDataLoad();
-                        CompareControl.setFinalTableData();
-                        $S.callMethod(callBack);
-                    });
-                } else if (pageName === Config.dashboard) {
+                if (pageName === Config.dashboard) {
                     Dashboard.loadPageData(function(response) {
                         $S.callMethod(callBack);
                     });
@@ -364,13 +308,7 @@ DataHandler.extend({
         var pageName = DataHandler.getData("pageName", "");
         var file = CurrentFormData.getData("upload_file.file", {}, true);
         var renderFieldRow = [];
-        if (pageName === Config.users_control) {
-            renderFieldRow = UserControl.getRenderFieldRow();
-        } else if (pageName === Config.permission_control) {
-            renderFieldRow = PermissionControl.getRenderFieldRow();
-        } else if (pageName === Config.compare_control) {
-            renderFieldRow = CompareControl.getRenderFieldRow();
-        } else if (pageName === Config.upload_file) {
+        if (pageName === Config.upload_file) {
             renderFieldRow = UploadFile.getRenderFieldRow(file);
         } else if (pageName === Config.dashboard) {
             renderFieldRow = Dashboard.getRenderFieldRow();
@@ -388,11 +326,6 @@ DataHandler.extend({
         finalResponse.push(renderFieldRow);
         finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
 
-        var pageName = DataHandler.getData("pageName", "");
-        if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
-            appDataCallback("list1Data", DataHandler.getData("list1Data", []));
-            appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
-        }
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", finalResponse);
         appDataCallback("firstTimeDataLoadStatus", "completed");

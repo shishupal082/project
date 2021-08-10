@@ -16,11 +16,16 @@ class Footer extends React.Component {
         var footerClass = "footer-div";
         var footerWithContent = "footer-wrap h-45px";
         var footerWithNoContent = "footer-wrap h-15px";
-        if ($S.isBooleanTrue(this.props.data.disableFooter) || $S.isBooleanTrue(this.props.data.disableFooterV2)) {
-            footerClass += " d-none";
-            footerWithContent += " d-none";
-        } else {
+        //enableFooterV2 is used for toggle button
+        var enableFooterV2 = true;
+        if ($S.isBoolean(this.props.data.enableFooterV2)) {
+            enableFooterV2 = this.props.data.enableFooterV2;
+        }
+        if ($S.isBooleanTrue(this.props.data.enableFooter) && $S.isBooleanTrue(enableFooterV2)) {
             footerWithNoContent += " d-none";
+        } else {
+            footerWithContent += " d-none";
+            footerClass += " d-none";
         }
         return (<div className="SELECT-FILTER-FOOTER">
                 <div className={footerWithContent}></div>

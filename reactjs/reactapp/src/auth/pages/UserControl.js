@@ -1,11 +1,7 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-// import TemplateHelper from "../../common/TemplateHelper";
-// import AppHandler from "../../common/app/common/AppHandler";
-
 import Config from "../common/Config";
-// import Template from "../common/Template";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
@@ -28,7 +24,7 @@ UserControl.fn = UserControl.prototype = {
 $S.extendObject(UserControl);
 
 UserControl.extend({
-    loadPageData: function(callback) {
+    loadRelatedUsersData: function(callback) {
         var url = Config.getApiUrl("getRelatedUsersData", false, true);
         if (!$S.isString(url)) {
             $S.callMethod(callback);
@@ -37,12 +33,11 @@ UserControl.extend({
         $S.loadJsonData(null, [url], function(response, apiName, ajax){
             if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isArray(response["data"])) {
                 finalResponse = $S.sortResult(response["data"], "ascending", "username");
+                DataHandler.setData("users_control.response", UserControl.getFinalTableData(finalResponse));
             }
         }, function() {
             $S.log("Load relatedUserData complete.");
-            if ($S.isFunction(callback)) {
-                callback(finalResponse);
-            }
+            $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     }
 });

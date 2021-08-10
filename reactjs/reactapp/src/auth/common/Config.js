@@ -3,13 +3,15 @@ import $S from "../../interface/stack.js";
 import TemplateHelper from "../../common/TemplateHelper.js";
 import Template from "./Template";
 
-var RequestId = $S.getRequestId();
 
 var Config = {"name": "Config", "imgExt": ["jpg", "jpeg", "png"]};
+
+Config.RequestId = $S.getRequestId();
+
 var PageData = {};
 var UserData = {};
 
-var baseapi = $$$.baseapi;
+var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
 var headingJson = $$$.headingJson;
 var afterLoginLinkJson = $$$.afterLoginLinkJson;
@@ -18,8 +20,21 @@ var footerLinkJsonAfterLogin = $$$.footerLinkJsonAfterLogin;
 var loginUserDetails = $$$.loginUserDetails;
 var createPasswordOtpInstruction = $$$.createPasswordOtpInstruction;
 var loginRedirectUrl = $$$.loginRedirectUrl;
+
 Config.gtag = $$$.gtag;
 Config.navigator = $$$.navigator;
+Config.JQ = $$$.JQ;
+Config.location = $$$.location;
+
+
+Config.baseApi = baseApi;
+Config.basepathname = basepathname;
+
+var staticDataApi = $$$.staticDataApi;
+var relatedUsersDataApi = $$$.relatedUsersDataApi;
+var relatedUsersDataV2Api = $$$.relatedUsersDataV2Api;
+var rolesConfigDataApi = $$$.rolesConfigDataApi;
+
 
 if (!$S.isString(loginRedirectUrl) || loginRedirectUrl.length < 1) {
     loginRedirectUrl = "/view/resource";
@@ -53,18 +68,24 @@ try {
 
 var pages = {
     "login": basepathname+"/login",
-    "login_other_user": basepathname+"/login_other_user",
     "logout": basepathname+"/logout",
     "register": basepathname+"/register",
     "change_password": basepathname+"/change_password",
     "forgot_password": basepathname+"/forgot_password",
-    "create_password": basepathname+"/create_password"
+    "create_password": basepathname+"/create_password",
+    "login_other_user": basepathname+"/login_other_user",
+    "users_control": basepathname+"/users_control",
+    "permission_control": basepathname+"/permission_control",
+    "compare_control": basepathname+"/compare_control"
 };
 
 Config.pages = pages;
 
-Config.login = "login";
 Config.login_other_user = "login_other_user";
+Config.users_control = "users_control";
+Config.compare_control = "compare_control";
+Config.permission_control = "permission_control";
+Config.login = "login";
 Config.logout = "logout";
 Config.register = "register";
 Config.change_password = "change_password";
@@ -73,23 +94,17 @@ Config.create_password = "create_password";
 Config.noMatch = "noMatch";
 
 
-
-
 var template;
 
 if ($S.isString(createPasswordOtpInstruction) && createPasswordOtpInstruction.length > 0) {
     template = Template["create_password"];
     TemplateHelper.setTemplateAttr(template, "create_password.otp-instruction", "text", createPasswordOtpInstruction);
 }
-Config.JQ = $$$.JQ;
-Config.location = $$$.location;
-Config.baseapi = baseapi;
-Config.basepathname = basepathname;
 
-var currentPageData = $$$.currentPageData;
-if ($S.isString(currentPageData)) {
+var tempPageData = $$$.pageData;
+if ($S.isString(tempPageData)) {
     var i, dataArr;
-    var strArr = currentPageData.split(",");
+    var strArr = tempPageData.split(",");
     for(i=0; i<strArr.length; i++) {
         dataArr = strArr[i].split("=");
         if (dataArr.length === 2) {
@@ -97,18 +112,94 @@ if ($S.isString(currentPageData)) {
         }
     }
 }
-
 Config.UserData = UserData;
 Config.PageData = PageData;
-Config.apiMapping = {};
-Config.apiMapping["login"] = baseapi + "/api/login_user";
-Config.apiMapping["login_other_user"] = baseapi + "/api/login_other_user";
-Config.apiMapping["register"] = baseapi + "/api/register_user";
-Config.apiMapping["forgot_password"] = baseapi + "/api/forgot_password";
-Config.apiMapping["create_password"] = baseapi + "/api/create_password";
-Config.apiMapping["change_password"] = baseapi + "/api/change_password";
-Config.apiMapping["track_event"] = baseapi + "/api/track_event";
-Config.apiMapping["get_related_users_data_v2"] = baseapi + "/api/get_related_users_data_v2?v=" + RequestId;
 
+Config.userControlPattern = [
+    {
+        "tableName": "table1",
+        "name": "username",
+        "heading": "Username",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "valid",
+        "heading": "Valid?",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "name",
+        "heading": "Name",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "email",
+        "heading": "Email",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "mobile",
+        "heading": "Mobile",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "createPasswordOtp",
+        "heading": "OTP",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "methodRequestCount",
+        "heading": "Count",
+        "isSortable": true
+    },
+    {
+        "tableName": "table1",
+        "name": "method",
+        "heading": "Method",
+        "isSortable": true
+    }
+];
+
+var apiMapping = {};
+
+apiMapping["login"] = "/api/login_user";
+apiMapping["login_other_user"] = "/api/login_other_user";
+apiMapping["register"] = "/api/register_user";
+apiMapping["forgot_password"] = "/api/forgot_password";
+apiMapping["create_password"] = "/api/create_password";
+apiMapping["change_password"] = "/api/change_password";
+apiMapping["track_event"] = "/api/track_event";
+
+apiMapping["getStaticDataApi"] = staticDataApi;
+apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
+apiMapping["relatedUsersDataV2Api"] = relatedUsersDataV2Api;
+apiMapping["getRolesConfig"] = rolesConfigDataApi;
+
+
+Config.setApiUrl = function(key, value) {
+    if ($S.isStringV2(key) && $S.isStringV2(value)) {
+        if (!$S.isStringV2(apiMapping[key])) {
+            apiMapping[key] = value;
+        }
+    }
+};
+
+Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
+    if ($S.isString(apiMapping[key])) {
+        if ($S.isBooleanTrue(addBaseUrl)) {
+            return baseApi + apiMapping[key];
+        } else {
+            // used for redirect
+            return apiMapping[key];
+        }
+    }
+    return defaultValue;
+};
 
 export default Config;

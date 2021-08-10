@@ -41,8 +41,8 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
-            "disableFooter": true,
-
+            "enableFooter": false,
+            "enableReloadButton": true,
             "filterOptions": []
         };
         this.onClick = this.onClick.bind(this);

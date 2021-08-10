@@ -694,7 +694,7 @@ DataHandler.extend({
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);
-        appDataCallback("disableFooter", this.getBooleanParam("disableFooter", false));
+        appDataCallback("enableFooter", this.getBooleanParam("enableFooter", false));
         appDataCallback("enableToggleButton", this.getBooleanParam("enableToggleButton", true));
 
         appDataCallback("list2Data", list2Data);

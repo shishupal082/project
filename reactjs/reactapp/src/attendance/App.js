@@ -43,10 +43,10 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
-            "disableFooter": true,
-            "disableFooterV2": false,
+            "enableReloadButton": true,
+            "enableFooter": false,
+            "enableFooterV2": true,
             "enableToggleButton": true,
-
             "filterOptions": []
         };
         this.onClick = this.onClick.bind(this);
@@ -98,7 +98,7 @@ class App extends React.Component {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "footer-filter-toggle") {
             AppHandler.TrackEvent("ToggleClick");
-            AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.disableFooterV2);
+            AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.enableFooterV2);
         }else if (value === "addentry.submit") {
             DataHandler.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "sortable") {

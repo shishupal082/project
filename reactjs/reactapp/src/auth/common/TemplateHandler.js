@@ -1,11 +1,17 @@
 import $S from "../../interface/stack.js";
+
 import TemplateHelper from "../../common/TemplateHelper";
 import AppHandler from "../../common/app/common/AppHandler";
 import DataHandler from "./DataHandler";
 import Template from "./Template";
 // import Config from "./Config";
 
-var TemplateHandler
+
+import UserControl from "../pages/UserControl";
+import PermissionControl from "../pages/PermissionControl";
+import CompareControl from "../pages/CompareControl";
+
+var TemplateHandler;
 
 (function($S){
 TemplateHandler = function(arg) {
@@ -39,6 +45,14 @@ TemplateHandler.extend({
         field.text = AppHandler.GetUserData("username", "");
         linkTemplate = this.checkUserDependentLink(linkTemplate);
         return linkTemplate;
+    },
+    setFooterTemplate: function() {
+        var isLogin = AppHandler.GetUserData("login", false);
+        if (isLogin) {
+            var footerLinkJsonAfterLogin = AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []);
+            this.checkUserDependentLink(footerLinkJsonAfterLogin);
+            Template["footerLinkJson"] = footerLinkJsonAfterLogin;
+        }
     }
 });
 TemplateHandler.extend({
@@ -70,6 +84,9 @@ TemplateHandler.extend({
     }
 });
 TemplateHandler.extend({
+    _generateRenderField: function() {
+
+    },
     getRenderField: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
@@ -100,6 +117,15 @@ TemplateHandler.extend({
             case "login_other_user":
                 renderFieldRow = this.getLoginOtherUserTemplate();
             break;
+            case "users_control":
+                renderFieldRow = UserControl.getRenderFieldRow();
+            break;
+            case "permission_control":
+                renderFieldRow = PermissionControl.getRenderFieldRow();
+            break;
+            case "compare_control":
+                renderFieldRow = CompareControl.getRenderFieldRow();
+            break;
             case "noMatch":
             default:
                 renderFieldRow = AppHandler.getTemplate(Template, "noPageFound", "Page Not Found");
@@ -118,17 +144,8 @@ TemplateHandler.extend({
                 TemplateHelper.removeClassTemplate(renderFieldRow, submitBtnName, "btn-link disabled");
             }
         }
-        var footerTemplate = AppHandler.getTemplate(Template, "footerLinkJson", {});
-        var footerTemplateAfterLogin = AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", {});
-        var isLogin = AppHandler.GetUserData("login", false);
-        if (isLogin) {
-            footerTemplate = footerTemplateAfterLogin;
-        }
-        footerTemplate = TemplateHandler.checkUserDependentLink(footerTemplate);
+        var footerTemplate = AppHandler.getTemplate(Template, "footerLinkJson", []);
         var renderField = [];
-        if ($S.isBooleanTrue(isLogin)) {
-            renderField.push(this.getLinkTemplate());
-        }
         renderField.push(renderFieldRow);
         renderField.push(footerTemplate);
         return renderField;

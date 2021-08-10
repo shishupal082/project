@@ -123,7 +123,7 @@ FormHandler.extend({
         AppHandler.TrackApiRequest(apiName, status);
     },
     handleRegisterForm: function(pageName, callback) {
-        var url = Config.apiMapping[pageName];
+        var url = Config.getApiUrl(pageName, null, true);
         var postData = {};
         DataHandler.setData("formSubmitStatus", "in_progress");
         $S.callMethod(callback);
@@ -150,7 +150,7 @@ FormHandler.extend({
         });
     },
     handleLoginForm: function(pageName, callback) {
-        var url = Config.apiMapping[pageName];
+        var url = Config.getApiUrl(pageName, null, true);
         var postData = {};
         DataHandler.setData("formSubmitStatus", "in_progress");
         $S.callMethod(callback);
@@ -182,7 +182,7 @@ FormHandler.extend({
     },
     handleChangePasswordForm: function(pageName, callback) {
         var username = AppHandler.GetUserData("username", "");
-        var url = Config.apiMapping[pageName] + "?u=" + username;
+        var url = Config.getApiUrl(pageName, null, true) + "?u=" + username;
         var postData = {};
         DataHandler.setData("formSubmitStatus", "in_progress");
         $S.callMethod(callback);
@@ -203,7 +203,7 @@ FormHandler.extend({
         });
     },
     handleForgotPasswordForm: function(pageName, callback) {
-        var url = Config.apiMapping[pageName];
+        var url = Config.getApiUrl(pageName, null, true);
         var postData = {};
         DataHandler.setData("formSubmitStatus", "in_progress");
         $S.callMethod(callback);
@@ -227,7 +227,7 @@ FormHandler.extend({
         });
     },
     handleCreatePasswordForm: function(pageName, callback) {
-        var url = Config.apiMapping[pageName];
+        var url = Config.getApiUrl(pageName, null, true);
         var postData = {};
         DataHandler.setData("formSubmitStatus", "in_progress");
         $S.callMethod(callback);
@@ -252,7 +252,7 @@ FormHandler.extend({
         });
     },
     handleLoginOtherUser: function(pageName, callback, formName) {
-        var url = Config.apiMapping["login_other_user"];
+        var url = Config.getApiUrl("login_other_user", null, true);
         var orgUsername = AppHandler.GetUserData("orgUsername", "");
         var postData = {};
         if (!$S.isStringV2(orgUsername)) {

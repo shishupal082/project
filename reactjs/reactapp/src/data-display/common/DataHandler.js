@@ -175,13 +175,13 @@ DataHandler.extend({
         }
         this.setData("appControlData", appControlData);
     },
-    getDisableFooterStatus: function() {
+    getEnableFooterStatus: function() {
         var currentAppData = this.getCurrentAppData();
-        var disableFooter = true;
-        if ($S.isBooleanFalse(currentAppData.disableFooter)) {
-            disableFooter = false;
+        var enableFooter = false;
+        if ($S.isBooleanFalse(currentAppData.enableFooter)) {
+            enableFooter = true;
         }
-        return disableFooter;
+        return enableFooter;
     },
     getWordBreak: function() {
         var currentAppData = this.getCurrentAppData();
@@ -504,7 +504,7 @@ DataHandler.extend({
         appDataCallback("currentList1Id", this.getData("currentList1Id", ""));
         appDataCallback("list1Data", this.getData("appControlData", []));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
-        appDataCallback("disableFooter", this.getDisableFooterStatus());
+        appDataCallback("enableFooter", this.getEnableFooterStatus());
 
         var currentList2Id = DataHandler.getData("currentList2Id", "");
         var dateSelect = DataHandler.getData("date-select");

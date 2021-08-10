@@ -4,7 +4,13 @@ import Template from "./Template";
 import TemplateHandler from "./TemplateHandler";
 import FormHandler from "./FormHandler";
 import AppHandler from "../../common/app/common/AppHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 import Api from "../../common/Api";
+
+
+import UserControl from "../pages/UserControl";
+import PermissionControl from "../pages/PermissionControl";
+import CompareControl from "../pages/CompareControl";
 // import GATracking from "./GATracking";
 
 var DataHandler;
@@ -42,6 +48,18 @@ keys.push("register.email");
 keys.push("login_other_user.username");
 keys.push("relatedUsersData");
 
+keys.push("users_control.response");
+keys.push("permission_control.response");
+keys.push("permission_control.validPermissionList"); // Use for marshaling permission data
+keys.push("compare_control.allUsername");
+
+keys.push("rolesConfig");
+keys.push("appControlDataApi");
+keys.push("appControlData");
+keys.push("list1Data");
+keys.push("currentList1Id");
+
+keys.push("sortingFields");
 keys.push("formSubmitStatus"); // in_progress, completed
 
 CurrentFormData.setKeys(keys);
@@ -70,7 +88,7 @@ DataHandler.extend({
     trackUIEvent: function(event, status, reason, comment) {
         var postData = {"event": event, "status": status, "reason": reason};
         postData["comment"] = comment;
-        var url = Config.apiMapping["track_event"]+"?u=" + AppHandler.GetUserData("username", "");
+        var url = Config.getApiUrl("track_event", null, true)+"?u=" + AppHandler.GetUserData("username", "");
         $S.sendPostRequest(Config.JQ, url, postData);
     },
     isAndroid: function(username) {
@@ -112,7 +130,7 @@ DataHandler.extend({
         var pageName = DataHandler.getData("pageName", "");
         var isLogin = AppHandler.GetUserData("login", false);
         var redirectStatus = false;
-        if ([Config.change_password, Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
+        if ([Config.change_password, Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
             if (!isLogin) {
                 AppHandler.LazyRedirect("/login", 250);
                 redirectStatus = true;
@@ -145,23 +163,95 @@ DataHandler.extend({
         if ($S.isObject(pageData)) {
             AppHandler.SetStaticData(pageData);
         }
+        TemplateHandler.setFooterTemplate();
+    },
+    handleAppControlDataLoad: function(pageName) {
+        var appControlData = DataHandler.getData("appControlData", {});
+        var list1Data = [];
+        if ($S.isObject(appControlData)) {
+            if (pageName === Config.permission_control) {
+                list1Data = appControlData.permissionControlList;
+            } else if (pageName === Config.compare_control) {
+                list1Data = appControlData.compareControlList;
+            }
+            if ($S.isArray(list1Data) && list1Data.length > 0) {
+                list1Data.map(function(el, i, arr) {
+                    if ($S.isObject(el)) {
+                        el.id = i.toString();
+                    }
+                    return el;
+                });
+                if (list1Data.length > 0) {
+                    DataHandler.setData("currentList1Id", "0");
+                }
+            }
+        }
+        DataHandler.setData("list1Data", list1Data);
+    },
+    handleStaticDataLoad: function(pageName) {
+        var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
+        var appControlDataApi = null;
+        if ($S.isObject(jsonFileData)) {
+            if (pageName === Config.permission_control) {
+                appControlDataApi = jsonFileData.permissionControlApi;
+            } else if (pageName === Config.compare_control) {
+                appControlDataApi = jsonFileData.compareControlApi;
+            }
+        }
+        Config.setApiUrl("appControlDataApi", appControlDataApi);
+    },
+    getCurrentList1Data: function() {
+        var currentList1Id = DataHandler.getData("currentList1Id", "");
+        var list1Data = DataHandler.getData("list1Data", "");
+        var currentList1Data = null;
+        if ($S.isArray(list1Data)) {
+            for(var i=0; i<list1Data.length; i++) {
+                if (!$S.isObject(list1Data[i])) {
+                    continue;
+                }
+                if (list1Data[i].id === currentList1Id) {
+                    currentList1Data = list1Data[i];
+                    break;
+                }
+            }
+        }
+        return currentList1Data;
     }
 });
 DataHandler.extend({
-    loadPageData: function(callback) {
-        var url = Config.apiMapping["get_related_users_data_v2"];
-        var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
-        if ($S.isBooleanTrue(isLoginOtherUserEnable)) {
-            $S.loadJsonData(null, [url], function(response, apiName, ajax) {
-                if ($S.isObject(response)) {
-                    DataHandler.setData("relatedUsersData", response.data);
-                }
+    loadPageData: function(pageName, callback) {
+        var staticDataUrl = Config.getApiUrl("getStaticDataApi", null, true);
+        if ([Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
+            var url = Config.getApiUrl("relatedUsersDataV2Api", null, true);
+            var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
+            if ($S.isBooleanTrue(isLoginOtherUserEnable)) {
+                $S.loadJsonData(null, [url], function(response, apiName, ajax) {
+                    if ($S.isObject(response)) {
+                        DataHandler.setData("relatedUsersData", response.data);
+                    }
+                    $S.callMethod(callback);
+                }, null, "relatedUsersDataV2", Api.getAjaxApiCallMethod());
+            } else {
                 $S.callMethod(callback);
-            }, null, "relatedUsersDataV2", Api.getAjaxApiCallMethod());
-        } else {
-            $S.callMethod(callback);
+            }
+        } else if (pageName === Config.users_control) {
+            UserControl.loadRelatedUsersData(function() {
+                $S.callMethod(callback);
+            });
+        } else if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+            AppHandler.LoadStaticData(staticDataUrl, function() {
+                DataHandler.handleStaticDataLoad(pageName);
+                PermissionControl.loadRolesConfig(function() {
+                    DataHandler.handleAppControlDataLoad(pageName);
+                    if (pageName === Config.permission_control) {
+                        PermissionControl.setFinalTableData();
+                    } else if (pageName === Config.compare_control) {
+                        CompareControl.setFinalTableData();
+                    }
+                    $S.callMethod(callback);
+                });
+            });
         }
-
     }
 });
 DataHandler.extend({
@@ -170,8 +260,8 @@ DataHandler.extend({
         AppHandler.TrackPageView(pageName);
         var redirectStatus = this.checkForRedirect();
         if (!redirectStatus) {
-            if ([Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
-                DataHandler.loadPageData(function() {
+            if ([Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+                DataHandler.loadPageData(pageName, function() {
                     DataHandler.reRenderApp(appStateCallback, appDataCallback);
                 });
             } else {
@@ -186,11 +276,21 @@ DataHandler.extend({
         DataHandler.setData(name, value);
     },
     OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
-        DataHandler.setData(name, value);
+        if (name === "list1-select") {
+            DataHandler.setData("currentList1Id", value);
+            DataHandler.reRenderApp(appStateCallback, appDataCallback);
+        } else {
+            DataHandler.setData(name, value);
+        }
     },
     OnButtonClick: function(appStateCallback, appDataCallback, name, value) {
         if (name === "login.submit-guest") {
             DataHandler.setData("guest-login-status", true);
+        } else if (name === "sortable") {
+            var sortingFields = DataHandler.getData("sortingFields", []);
+            var finalSortingField = DBViewDataHandler.UpdateSortingFields(sortingFields, value);
+            DataHandler.setData("sortingFields", finalSortingField);
+            DataHandler.reRenderApp(appStateCallback, appDataCallback);
         }
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
@@ -224,7 +324,11 @@ DataHandler.extend({
 });
 DataHandler.extend({
     getRenderData: function(pageName) {
-        var renderData = {"guest-login-status": false, "is_guest_enable": false,
+        var renderData = {};
+        if ([Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+            return renderData;
+        }
+        renderData = {"guest-login-status": false, "is_guest_enable": false,
                 "fieldsValue": {},
                 "submitBtnName": "", "formSubmitStatus": ""};
         var fieldsName = [];
@@ -271,12 +375,21 @@ DataHandler.extend({
 });
 DataHandler.extend({
     reRenderApp: function(appStateCallback, appDataCallback) {
-        var appHeading = AppHandler.getTemplate(Template, "heading", "App Heading");
+        var appHeading =[AppHandler.getTemplate(Template, "heading", "App Heading")];
         var pageName = DataHandler.getData("pageName", "");
         var renderData = this.getRenderData(pageName);
         var renderFieldRow = TemplateHandler.getRenderField(pageName, renderData);
-        appDataCallback("renderFieldRow", renderFieldRow);
+        var isLogin = AppHandler.GetUserData("login", false);
+        if ($S.isBooleanTrue(isLogin)) {
+            appHeading.push(TemplateHandler.getLinkTemplate());
+        }
+        if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+            appDataCallback("list1Data", DataHandler.getData("list1Data", []));
+            appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
+        }
         appDataCallback("appHeading", appHeading);
+        appDataCallback("renderFieldRow", renderFieldRow);
+        appDataCallback("firstTimeDataLoadStatus", "completed");
         appStateCallback();
     }
 });

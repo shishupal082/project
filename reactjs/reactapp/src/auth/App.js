@@ -17,7 +17,9 @@ class App extends React.Component {
             isLoaded: false
         };
         this.appData = {
-            "addContainerClass": false,
+            "list1Data": [],
+            "currentList1Id": "",
+            "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
             "appHeading": [{"tag": "div", "text": ""}],
             "renderFieldRow": []
@@ -96,12 +98,21 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
         var pages = Config.pages;
-        const login = (props) => (<AppComponent {...props}
-                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
-                            currentPageName={Config.login}/>);
         const login_other_user = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.login_other_user}/>);
+        const users_control = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.users_control}/>);
+        const permission_control = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.permission_control}/>);
+        const compare_control = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.compare_control}/>);
+        const login = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.login}/>);
         const logout = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.logout}/>);
@@ -120,16 +131,18 @@ class App extends React.Component {
         const noMatch = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.noMatch}/>);
-
         return (<BrowserRouter>
             <Switch>
                 <Route path={pages.login} component={login}/>
-                <Route path={pages.login_other_user} component={login_other_user}/>
                 <Route path={pages.logout} component={logout}/>
                 <Route path={pages.register} component={register}/>
                 <Route path={pages.change_password} component={change_password}/>
                 <Route path={pages.forgot_password} component={forgot_password}/>
                 <Route path={pages.create_password} component={create_password}/>
+                <Route path={pages.login_other_user} component={login_other_user}/>
+                <Route path={pages.users_control} component={users_control}/>
+                <Route path={pages.permission_control} component={permission_control}/>
+                <Route path={pages.compare_control} component={compare_control}/>
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);

@@ -338,16 +338,16 @@ DataHandler.extend({
         }
         return sectionId;
     },
-    getDisableFooterStatus: function() {
+    getEnableFooterStatus: function() {
         var currentPageName = DataHandler.getData("currentPageName", "");
         var section = DataHandler.getCurrentAppData({});
         if (["addentry", "uploadfile"].indexOf(currentPageName) >= 0) {
-            return true;
+            return false;
         }
-        if ($S.isObject(section) && $S.isBoolean(section.disableFooter)) {
-            return section.disableFooter;
+        if ($S.isObject(section) && $S.isBoolean(section.enableFooter)) {
+            return section.enableFooter;
         }
-        return true;
+        return false;
     },
     getDefaultDateSelectionType: function() {
         var appControlData = DataHandler.getData("appControlData", []);
@@ -1007,7 +1007,7 @@ DataHandler.extend({
             appDataCallback("goBackLinkData", goBackLinkData);
             appDataCallback("dateSelection", Config.dateSelection);
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
-            appDataCallback("disableFooter", DataHandler.getDisableFooterStatus());
+            appDataCallback("enableFooter", DataHandler.getEnableFooterStatus());
 
             appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
             appStateCallback();

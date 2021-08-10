@@ -35,8 +35,7 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
-            "disableFooter": true,
-            "disableFooterV2": false,
+            "enableFooter": false,
             "enableToggleButton": false,
 
             "filterOptions": []
