@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# receive distDir as argument
+
+distDir=$1
+
 key=$(($RANDOM%99999+10000))
 logFile=/var/log/project/shell_log/cmdlog.log
 
@@ -15,26 +19,13 @@ addLog() {
 }
 
 addLog "Copying file to desired location"
+addLog "Dist directory: ${distDir}"
 
-distDir=dist-index-app
-distDir=dist-yard-app
-distDir=dist-management-app
-distDir=dist-search-app
-distDir=dist-auth-demo-app
-distDir=dist-account-app
-distDir=dist-data-entry-app
-distDir=dist-assets-app
-distDir=dist-ml2-app
-distDir=dist-monitoring-app
-distDir=dist-ftp-app
-distDir=dist-feedback-status-app
-distDir=dist-auth-app
-distDir=dist-attendance-app
-distDir=dist-project-tracking-app
-distDir=dist-data-display-app
-distDir=dist-ftp-app
-
-addLog "Dist directory : ${distDir}"
+if [[ ! (-d "${distDir}") ]]; then
+  echo "Dist dir: ${distDir}, is missing.";
+  echo "Copying file failed.";
+  exit;
+fi
 
 rm -rf ${distDir}/*
 

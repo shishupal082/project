@@ -213,8 +213,10 @@ DataHandler.extend({
                 } else {
                     $S.callMethod(callBack);
                 }
-            } else {
+            } else if ([Config.dashboard, Config.upload_file].indexOf(pageName) >= 0) {
                 AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", false));
+            } else {
+                $S.callMethod(callBack);
             }
         } else {
             $S.callMethod(callBack);
