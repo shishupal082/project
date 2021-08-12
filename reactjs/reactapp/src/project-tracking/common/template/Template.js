@@ -140,7 +140,7 @@ Template["file_details"] = {
         }
     ]
 };
-Template["file_details_as_comment"] = {
+Template["file_details_as_comment_or_link"] = {
     "tag": "div",
     "className": "file_details",
     "text": [
@@ -163,43 +163,11 @@ Template["file_details_as_comment"] = {
             "name": "file-action-field",
             "text": [
                 {
-                    "tag": "form",
-                    "name": "delete_file.form",
-                    "value": "delete_file.form",
-                    "className": "list-inline-item",
-                    "text": {
-                        "tag": "button",
-                        "name": "delete_file.form.button",
-                        "className": "btn btn-link pt-1px disabled",
-                        "text": "Delete"
-                    }
-                }
-            ]
-        }
-    ]
-};
-Template["file_details_as_link"] = {
-    "tag": "div",
-    "className": "file_details",
-    "text": [
-        {
-            "tag": "div",
-            "text": {
-                "tag": "b",
-                "name": "subject",
-                "text": ""
-            }
-        },
-        {
-            "tag": "div",
-            "name": "heading",
-            "text": [
-                {
                     "tag": "a",
                     "isTargetBlank": true,
                     "name": "open_in_new_tab.href",
                     "href": "",
-                    "text": "Open in new tab"
+                    "text": "Open Link in new tab"
                 },
                 {
                     "tag": "form",

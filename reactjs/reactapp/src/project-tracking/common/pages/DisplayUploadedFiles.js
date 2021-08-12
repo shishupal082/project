@@ -27,34 +27,22 @@ DisplayUploadedFiles.fn = DisplayUploadedFiles.prototype = {
 };
 $S.extendObject(DisplayUploadedFiles);
 DisplayUploadedFiles.extend({
-    getFileDisplayAsComment: function(pageName, data, loginUsername, subject, heading) {
-        var fileTemplate = TemplateHandler.getTemplate("file_details_as_comment");
+    _getFileDisplayAsCommentOrLink: function(pageName, data, loginUsername, subject, heading) {
+        var fileTemplate = TemplateHandler.getTemplate("file_details_as_comment_or_link");
         var buttonName = "delete_file.form.button";
+        // We could not implement delete because
+        // delete will only work when file exist
+        var updatedBy = "";//data.updatedBy;
+        if ([Config.projectId].indexOf(pageName) >= 0) {
+            if (loginUsername === updatedBy) {
+                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
+                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
+            }
+        }
         var textReplaceParam = {"subject": subject, "heading": heading};
-        var fileUsername = "";
-        if ([Config.projectId].indexOf(pageName) >= 0) {
-            if (loginUsername === fileUsername) {
-                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
-                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
-            }
-        }
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
-        return fileTemplate;
-    },
-    getFileDisplayAsLink: function(pageName, data, loginUsername, linkText, linkUrl) {
-        var fileTemplate = TemplateHandler.getTemplate("file_details_as_link");
-        var buttonName = "delete_file.form.button";
-        var fileUsername = "";
         var hrefReplaceParam = {};
-        hrefReplaceParam["open_in_new_tab.href"] = linkUrl;
-        var textReplaceParam = {"subject": linkText};
-        if ([Config.projectId].indexOf(pageName) >= 0) {
-            if (loginUsername === fileUsername) {
-                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
-                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
-            }
-        }
-        TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
+        hrefReplaceParam["open_in_new_tab.href"] = heading;
         for(var key in hrefReplaceParam) {
             TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
         }
@@ -75,10 +63,11 @@ DisplayUploadedFiles.extend({
             fileTemplate = this.getFileDisplayTemplateV2(pageName, filename, loginUsername, subject);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
         } else if (data["table_name"] === linkTableName) {
-            fileTemplate = this.getFileDisplayAsLink(pageName, data, loginUsername, subject, filename);
+            fileTemplate = this._getFileDisplayAsCommentOrLink(pageName, data, loginUsername, subject, filename);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+            TemplateHelper.removeClassTemplate(fileTemplate, "file-action-field", "d-none");
         } else if (data["table_name"] === commentTableName) {
-            fileTemplate = this.getFileDisplayAsComment(pageName, data, loginUsername, subject, filename);
+            fileTemplate = this._getFileDisplayAsCommentOrLink(pageName, data, loginUsername, subject, filename);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
         }
         return fileTemplate;
