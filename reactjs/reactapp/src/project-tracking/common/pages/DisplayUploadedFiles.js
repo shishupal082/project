@@ -33,13 +33,16 @@ DisplayUploadedFiles.extend({
         // We could not implement delete because
         // delete will only work when file exist
         var updatedBy = "";//data.updatedBy;
+        var textReplaceParam = {"heading": heading};
         if ([Config.projectId].indexOf(pageName) >= 0) {
+            if ($S.isStringV2(subject)) {
+                textReplaceParam["subject"] = subject;
+            }
             if (loginUsername === updatedBy) {
                 TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
                 TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
             }
         }
-        var textReplaceParam = {"subject": subject, "heading": heading};
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
         var hrefReplaceParam = {};
         hrefReplaceParam["open_in_new_tab.href"] = heading;
