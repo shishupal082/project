@@ -18,7 +18,7 @@ import FormHandlerAddProjectFiles from "./FormHandlerAddProjectFiles";
 var FormHandler;
 
 (function($S){
-var DT = $S.getDT();
+// var DT = $S.getDT();
 
 FormHandler = function(arg) {
     return new FormHandler.fn.init(arg);
@@ -40,36 +40,13 @@ FormHandler.extend({
         return "Invalid " + key;
     },
     FormateString: function(str) {
-        if (!$S.isStringV2(str)) {
-            return str;
-        }
-        var temp = str.split("\n"), finalText = [];
-        for (var i = 0; i < temp.length; i++) {
-            if (temp[i].trim() !== "") {
-                finalText.push(temp[i]);
-            }
-        }
-        return finalText.join("; ");
+        return AppHandler.FormateString(str);
     },
     GetUniqueId: function() {
-        return DT.getDateTime("YYYY/MM/DD/hh/mm/ss/./ms","/");
+        return AppHandler.GetUniqueId();
     },
     IsResponseFailure: function(response, dafaultMessage) {
-        if (!$S.isObject(response)) {
-            alert(dafaultMessage);
-            return true;
-        }
-        if (response.status === "FAILURE") {
-            if (response.failureCode === "UNAUTHORIZED_USER") {
-                alert(response.error);
-                AppHandler.LazyReload(250);
-                return true;
-            } else {
-                alert(response.error);
-                return true;
-            }
-        }
-        return false;
+        return AppHandler.IsResponseFailure(response, dafaultMessage);
     }
 });
 FormHandler.extend({

@@ -32,6 +32,9 @@ distDir=dist-ftp-app
 distDir=dist-feedback-status-app
 distDir=dist-project-tracking-app
 
+
+
+
 sh sync.sh
 
 addLog "Dist directory: ${distDir}"

@@ -221,6 +221,38 @@ AppHandler.extend({
         }
         return str;
     },
+    FormateString: function(str) {
+        if (!$S.isStringV2(str)) {
+            return str;
+        }
+        var temp = str.split("\n"), finalText = [];
+        for (var i = 0; i < temp.length; i++) {
+            if (temp[i].trim() !== "") {
+                finalText.push(temp[i]);
+            }
+        }
+        return finalText.join("; ");
+    },
+    GetUniqueId: function() {
+        return DT.getDateTime("YYYY/MM/DD/hh/mm/ss/./ms","/");
+    },
+    IsResponseFailure: function(response, dafaultMessage) {
+        if (!$S.isObject(response)) {
+            alert(dafaultMessage);
+            return true;
+        }
+        if (response.status === "FAILURE") {
+            if (response.failureCode === "UNAUTHORIZED_USER") {
+                alert(response.error);
+                this.LazyReload(250);
+                return true;
+            } else {
+                alert(response.error);
+                return true;
+            }
+        }
+        return false;
+    },
     GetDataParameterFromDate: function(dateRange) {
         var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
         var i;
