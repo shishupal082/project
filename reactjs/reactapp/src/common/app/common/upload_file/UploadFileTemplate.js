@@ -33,6 +33,7 @@ UploadFileTemplate["upload_file"] = [
                     {
                         "tag": "div.h1",
                         "className": "p-10px",
+                        "name": "upload_file.form_heading",
                         "text": "Upload File"
                     },
                     {
@@ -46,6 +47,7 @@ UploadFileTemplate["upload_file"] = [
                                 "text": [
                                     {
                                         "tag": "label",
+                                        "name": "upload_file.subject_label",
                                         "text": "Subject"
                                     },
                                     {
@@ -65,6 +67,7 @@ UploadFileTemplate["upload_file"] = [
                                 "text": [
                                     {
                                         "tag": "label",
+                                        "name": "upload_file.heading_label",
                                         "text": "Heading"
                                     },
                                     {
@@ -85,6 +88,8 @@ UploadFileTemplate["upload_file"] = [
                         "text": [
                             {
                                 "tag": "div",
+                                "className": "upload_file file_field",
+                                "name": "upload_file.file_field.div",
                                 "text": [
                                     {
                                         "tag": "input",

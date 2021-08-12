@@ -153,3 +153,14 @@ Solutions
 ----------
 >> npm cache clean --force
 
+11.08.2021
+--------------------------
+Error in >> npm start
+events.js:292
+      throw er; // Unhandled 'error' event
+
+Rename node_modules folder as temp_node_modules and try
+>> npm install
+
+Restart system --> it should be working now
+

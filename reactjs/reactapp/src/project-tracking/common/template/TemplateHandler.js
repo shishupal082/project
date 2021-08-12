@@ -121,8 +121,10 @@ TemplateHandler.extend({
         var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
         var uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
         var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
+        var addLinkTemplate = FormHandler.getAddLinkTemplate(pageName);
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
+        TemplateHelper.addItemInTextArray(template, "projectId.upload_file", addLinkTemplate);
         TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);
         return template;
     },

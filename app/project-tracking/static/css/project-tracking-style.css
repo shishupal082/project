@@ -1,10 +1,8 @@
-.upload_file.heading_field {
-    display: none;
-}
 .upload-file-form-div > div {
     border: 2px solid #ddd;
     border-radius: 5px;
     width: 400px;
+    margin-bottom: 20px;
 }
 .APP-COMPONENT.displaySupplyStatus1 .SELECT-FILTER [name="filter-reload"],
 .APP-COMPONENT.updateWorkStatus .SELECT-FILTER [name="filter-reload"],

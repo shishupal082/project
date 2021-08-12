@@ -91,6 +91,9 @@ FormHandler.extend({
     submitUploadFile: function(pageName, callback) {
         FormHandlerUploadFile.submit(callback);
     },
+    submitAddLink: function(pageName, callback) {
+        FormHandlerUploadFile.submitAddLink(pageName, callback);
+    },
     submitAddProjectFiles: function(pageName, callback) {
         FormHandlerAddProjectFiles.submit(pageName, callback);
     },
@@ -190,7 +193,13 @@ FormHandler.extend({
             return null;
         }
         var uploadFileTemplate = FormHandlerUploadFile.getUploadFileTemplate();
-        this.updateBtnStatus(uploadFileTemplate);
+        return uploadFileTemplate;
+    },
+    getAddLinkTemplate: function(pageName) {
+        if (DataHandlerV2.isDisabled("form", "projectLinkForm")) {
+            return null;
+        }
+        var uploadFileTemplate = FormHandlerUploadFile.getAddLinkTemplate(pageName);
         return uploadFileTemplate;
     },
     getAddProjectCommentTemplate: function(pageName) {

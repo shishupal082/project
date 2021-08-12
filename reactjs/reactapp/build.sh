@@ -25,12 +25,12 @@ distDir=dist-assets-app
 distDir=dist-ml2-app
 distDir=dist-monitoring-app
 distDir=dist-ftp-app
-distDir=dist-feedback-status-app
 distDir=dist-auth-app
 distDir=dist-attendance-app
-distDir=dist-project-tracking-app
 distDir=dist-data-display-app
 distDir=dist-ftp-app
+distDir=dist-feedback-status-app
+distDir=dist-project-tracking-app
 
 sh sync.sh
 

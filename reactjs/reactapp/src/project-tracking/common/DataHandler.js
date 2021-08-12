@@ -205,38 +205,6 @@ DataHandler.extend({
         }
         DataHandler.setData("currentList1Id", currentList1Id);
     },
-    // GetDataParameterFromDate: function(dateRange) {
-    //     var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
-    //     var i;
-    //     if ($S.isArray(dateRange) && dateRange.length === 2) {
-    //         allDate = AppHandler.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
-    //         startLimit = dateRange[0];
-    //         endLimit = dateRange[1];
-    //         tempAllDate = allDate.map(function(el, index, arr) {
-    //             return el.dateStr;
-    //         });
-    //         arrangedDate = AppHandler.generateDateSelectionParameter(tempAllDate);
-    //         if ($S.isObject(arrangedDate)) {
-    //             for(var key in arrangedDate) {
-    //                 if ($S.isArray(arrangedDate[key])) {
-    //                     for (i=0; i<arrangedDate[key].length; i++) {
-    //                         if ($S.isArray(arrangedDate[key][i].dateRange) && arrangedDate[key][i].dateRange.length === 2) {
-    //                             arrangedDate[key][i].allDate = AppHandler.GenerateDateBetween2Date(arrangedDate[key][i].dateRange[0], arrangedDate[key][i].dateRange[1], startLimit, endLimit);
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return arrangedDate;
-    // },
-    // generateDateParameter: function() {
-    //     var currentAppData = DataHandler.getCurrentAppData();
-    //     var metaData = DataHandler.getData("metaData", {});
-    //     var selectedDateRange = this.getCurrentList3Data();
-    //     var dateRange = $S.findParam([selectedDateRange, currentAppData, metaData], "dateRange", []);
-    //     DataHandler.setData("dateParameters", this.GetDataParameterFromDate(dateRange));
-    // },
     getCurrentAppData: function() {
         var appControlData = this.getData("appControlData", []);
         var currentAppId = this.getData("currentList1Id", "");
@@ -439,6 +407,10 @@ DataHandler.extend({
             });
         } else if (name === "upload_file_form") {
             FormHandler.submitUploadFile(pageName, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        } else if (name === "upload_file_form_link") {
+            FormHandler.submitAddLink(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "delete_file.form") {

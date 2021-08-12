@@ -93,7 +93,6 @@ FormHandlerAddProjectComment.extend({
                 alert(FormHandler.GetAleartMessage(requiredKeys[i]));
                 break;
             }
-            temp = temp.replaceAll("/", "...");
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {

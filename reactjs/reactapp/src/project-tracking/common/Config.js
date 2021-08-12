@@ -101,7 +101,9 @@ Config.fieldsKey = {
     "NewSupplyItemDetails": "add-supply-item.details",
     "UploadFile": "upload_file.file",
     "AddProjectComment": "add-project-comment-form.comment",
-    "ProjectFileKey": "add-project-files-form.project"
+    "ProjectFileKey": "add-project-files-form.project",
+    "AddLinkText": "upload_file_link.subject",
+    "AddLinkUrl": "upload_file_link.heading"
 };
 
 
@@ -122,6 +124,8 @@ messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Req
 messageMapping[Config.fieldsKey.UploadFile] = "File Required";
 messageMapping[Config.fieldsKey.AddProjectComment] = "Comment Required";
 messageMapping[Config.fieldsKey.ProjectFileKey] = "Select Project Name";
+messageMapping[Config.fieldsKey.AddLinkText] = "Link Heading required";
+messageMapping[Config.fieldsKey.AddLinkUrl] = "Link required";
 Config.messageMapping = messageMapping;
 
 var apiMapping = {};

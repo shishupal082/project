@@ -1,5 +1,5 @@
 import $S from "../../../interface/stack.js";
-// import DataHandler from "../DataHandler";
+import DataHandler from "../DataHandler";
 // import DataHandlerV2 from "../DataHandlerV2";
 import TemplateHandler from "../template/TemplateHandler";
 import Config from "../Config";
@@ -27,14 +27,66 @@ DisplayUploadedFiles.fn = DisplayUploadedFiles.prototype = {
 };
 $S.extendObject(DisplayUploadedFiles);
 DisplayUploadedFiles.extend({
+    getFileDisplayAsComment: function(pageName, data, loginUsername, subject, heading) {
+        var fileTemplate = TemplateHandler.getTemplate("file_details_as_comment");
+        var buttonName = "delete_file.form.button";
+        var textReplaceParam = {"subject": subject, "heading": heading};
+        var fileUsername = "";
+        if ([Config.projectId].indexOf(pageName) >= 0) {
+            if (loginUsername === fileUsername) {
+                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
+                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
+            }
+        }
+        TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
+        return fileTemplate;
+    },
+    getFileDisplayAsLink: function(pageName, data, loginUsername, linkText, linkUrl) {
+        var fileTemplate = TemplateHandler.getTemplate("file_details_as_link");
+        var buttonName = "delete_file.form.button";
+        var fileUsername = "";
+        var hrefReplaceParam = {};
+        hrefReplaceParam["open_in_new_tab.href"] = linkUrl;
+        var textReplaceParam = {"subject": linkText};
+        if ([Config.projectId].indexOf(pageName) >= 0) {
+            if (loginUsername === fileUsername) {
+                TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
+                TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
+            }
+        }
+        TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
+        for(var key in hrefReplaceParam) {
+            TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
+        }
+        return fileTemplate;
+    },
     getFileDisplayTemplate: function(pageName, data, loginUsername) {
         if (!$S.isObject(data)) {
             data = {};
         }
+        var fileTemplate = null;
+        var fileTableName = DataHandler.getTableName("fileTable");
+        var linkTableName = DataHandler.getTableName("projectLink");
+        var commentTableName = DataHandler.getTableName("projectComment");
+        var subject = data["subject"];
+        var filename = data["filename"];
+        var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
+        if (data["table_name"] === fileTableName) {
+            fileTemplate = this.getFileDisplayTemplateV2(pageName, filename, loginUsername, subject);
+            TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+        } else if (data["table_name"] === linkTableName) {
+            fileTemplate = this.getFileDisplayAsLink(pageName, data, loginUsername, subject, filename);
+            TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+        } else if (data["table_name"] === commentTableName) {
+            fileTemplate = this.getFileDisplayAsComment(pageName, data, loginUsername, subject, filename);
+            TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
+        }
+        return fileTemplate;
+    },
+    getFileDisplayTemplateV2: function(pageName, filePath, loginUsername, subject) {
         var fileTemplate = TemplateHandler.getTemplate("file_details");
-        var fileName = data.filename;
-        var fileUsername = "";
-        var filePath = data.filename, temp, key;
+        var fileName = "";
+        var temp, key, fileUsername;
         var isValidFileData = false;
         if ($S.isStringV2(filePath)) {
             temp = filePath.split("/");
@@ -44,44 +96,18 @@ DisplayUploadedFiles.extend({
                 fileName = temp[1];
             }
         }
+        var textReplaceParam = {"heading": fileName};
+        var hrefReplaceParam = {};
         var buttonName = "delete_file.form.button";
-        var textReplaceParam = {"fileName": fileName};
         if ([Config.projectId].indexOf(pageName) >= 0) {
-            textReplaceParam["subject"] = data["subject"];
+            if ($S.isStringV2(subject)) {
+                textReplaceParam["subject"] = subject;
+            }
             if (loginUsername === fileUsername) {
                 TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
                 TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
             }
         }
-        var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
-        var hrefReplaceParam = {};
-        hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
-        hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
-        TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
-        if (isValidFileData) {
-            TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
-            for(key in hrefReplaceParam) {
-                TemplateHelper.setTemplateAttr(fileTemplate, key, "href", hrefReplaceParam[key]);
-            }
-        } else {
-            TemplateHelper.addClassTemplate(fileTemplate, "file-action-field", "d-none");
-        }
-        return fileTemplate;
-    },
-    getFileDisplayTemplateV2: function(pageName, filePath, loginUsername) {
-        var fileTemplate = TemplateHandler.getTemplate("file_details");
-        var fileName = "";
-        var temp, key;
-        var isValidFileData = false;
-        if ($S.isStringV2(filePath)) {
-            temp = filePath.split("/");
-            if (temp.length === 2) {
-                isValidFileData = true;
-                fileName = temp[1];
-            }
-        }
-        var textReplaceParam = {"fileName": fileName};
-        var hrefReplaceParam = {};
         hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
         hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);

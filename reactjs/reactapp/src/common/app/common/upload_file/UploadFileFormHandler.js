@@ -25,7 +25,7 @@ UploadFileFormHandler.extend({
     updateTemplate: function(key, attr, value) {
         TemplateHelper.setTemplateAttr(UploadFileTemplate["upload_file"], key, attr, value);
     },
-    getUploadFileTemplate: function(formSubmitStatus, percentComplete, subject, heading) {
+    getUploadFileTemplate: function(formSubmitStatus, percentComplete, subject, heading, uploadFileInspection) {
         var template = AppHandler.getTemplate(UploadFileTemplate, "upload_file", []);
         var uploadFileApiVersion = AppHandler.GetStaticData("uploadFileApiVersion", "v1");
         if (uploadFileApiVersion === "v2") {
@@ -46,6 +46,9 @@ UploadFileFormHandler.extend({
             TemplateHelper.setTemplateAttr(template, "upload_file.complete-status", "text", percentComplete);
         } else {
             TemplateHelper.setTemplateAttr(template, "upload_file.complete-status", "text", "");
+        }
+        if ($S.isStringV2(uploadFileInspection)) {
+            TemplateHelper.setTemplateAttr(template, "upload_file.message", "text", uploadFileInspection);
         }
         return template;
     },
