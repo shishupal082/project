@@ -221,7 +221,7 @@ Template["addCommentProjectTemplate"] = [
                         "text": "Comment"
                     },
                     {
-                        "tag": "input",
+                        "tag": "textarea",
                         "className": "form-control",
                         "name": "add-project-comment-form.comment",
                         "value": ""
