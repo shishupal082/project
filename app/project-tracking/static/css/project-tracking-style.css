@@ -16,4 +16,5 @@ button[name="view_file.unique_id"] {
 }
 div.file_details {
     min-width: 300px;
+    word-break: break-all;
 }

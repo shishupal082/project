@@ -6,6 +6,8 @@ import AppHandler from "../common/app/common/AppHandler";
 
 import AppComponent from "../common/app/components/AppComponent";
 
+import CommonDataHandler from "../common/app/common/CommonDataHandler";
+
 import DataHandler from "./common/DataHandler";
 import Config from "./common/Config";
 
@@ -87,6 +89,7 @@ class App extends React.Component {
         // if (name === Config.fieldsKey.UploadFile) {
         //     DataHandler.OnFileUploadChange(this.appStateCallback, this.appDataCallback, name, e.currentTarget.files[0]);
         // } else {
+        // name = new-project.name
             DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
         // }
     }
@@ -127,16 +130,20 @@ class App extends React.Component {
         var prevPageName = arg["prevPageName"];
         var params = arg["params"];
         var isComponentUpdate = false;
-        var oldId1 = DataHandler.getPathParamsData("id1");
-        var oldId2 = DataHandler.getPathParamsData("id2");
-        var oldPageId = DataHandler.getPathParamsData("pageId");
-        var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
+        var oldPid = CommonDataHandler.getPathParamsData("pid");
+        var oldId1 = CommonDataHandler.getPathParamsData("id1");
+        var oldId2 = CommonDataHandler.getPathParamsData("id2");
+        var oldPageId = CommonDataHandler.getPathParamsData("pageId");
+        var oldViewPageName = CommonDataHandler.getPathParamsData("viewPageName");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
             DataHandler.HandleComponentChange("pageName");
         } else {
             if ($S.isObject(params)) {
-                if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
+                if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
+                    isComponentUpdate = true;
+                    DataHandler.HandleComponentChange("pid");
+                } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("id1");
                 } if ($S.isStringV2(oldId2) && $S.isStringV2(params.id2) && oldId2 !== params.id2) {
@@ -177,6 +184,11 @@ class App extends React.Component {
                 <Route exact path={pages.home}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
+                    )}
+                />
+                <Route exact path={pages.pidPage}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.pidPage}/>
                     )}
                 />
                 <Route exact path={pages.id1Page}

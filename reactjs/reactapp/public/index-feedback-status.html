@@ -26,6 +26,7 @@
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/feedback-status/static/css/feedback-status-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
@@ -56,19 +57,94 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    loginUserDetailsApi: "/api/get_login_user_details",
-    relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/feedback-status/json/",
-    filesInfoApi: "/api/get_files_info",
     forceLogin: false
 };
 
 GLOBAL.validAppControl = [];
-
 GLOBAL.appControlApi = "/feedback-status/appControlData.json";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
+GLOBAL.afterLoginLinkJson = [
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span","text":"Login as: "},
+            {"tag":"span.b","name":"pageHeading.username","text":""}
+        ]
+    },
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.dashboardLink","href":"/","text":"Dashboard"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displaySupplyStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/display/displaySupplyStatus","text":"Supply Status"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:contingencyStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/display/contingencyStatus","text":"Supply Contingency"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displayWorkStatus",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displayWorkStatus","href":"/display/displayWorkStatus","text":"Work Status"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:displayUploadedFiles",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displayUploadedFiles","href":"/display/displayUploadedFiles","text":"Uploaded Files"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "pageId:projectComment",
+        "text": [
+            {"tag":"span","text":" |  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.projectComment","href":"/display/projectComment","text":"Project Comment"}}
+        ]
+    },
+    {
+        "tag": "span",
+        "text": [
+            {"tag":"span", "text":" |  "},
+            {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+        ]
+    }
+];
+GLOBAL.footerLinkJsonAfterLogin = [
+    {
+        "tag": "span",
+        "className": "d-none",
+        "name": "viewPage:manageFiles",
+        "text": [
+            {"tag":"span","text":"  "},
+            {"tag":"span","text":{"tag":"link","name":"pageHeading.displaySupplyStatusLink","href":"/view/manageFiles","text":"Manage Files"}}
+        ]
+    }
+];
 window.GLOBAL = GLOBAL;
 </script>
 </body>

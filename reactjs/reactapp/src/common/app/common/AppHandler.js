@@ -662,13 +662,35 @@ AppHandler.extend({
         staticData[key] = $S.clone(value);
         return true;
     },
-    GetStaticData: function(key, defaultValue) {
+    GetStaticData: function(key, defaultValue, type) {
+        var result = defaultValue;
         if ($S.isString(staticData[key])) {
-            return $S.clone(staticData[key]);
+            result = $S.clone(staticData[key]);
         } else if ($S.isObject(staticData[key])) {
-            return $S.clone(staticData[key]);
+            result = $S.clone(staticData[key]);
         } else if ($S.isArray(staticData[key])) {
-            return $S.clone(staticData[key]);
+            result = $S.clone(staticData[key]);
+        }
+        if (type === "json" && $S.isStringV2(result)) {
+            try {
+                result = JSON.parse(result);
+            } catch(e) {
+                result = defaultValue;
+            }
+        }
+        return result;
+    },
+    GetStaticDataJsonFile: function(key, defaultValue) {
+        var jsonFileData = staticData["jsonFileData"];
+        if (!$S.isObject(jsonFileData)) {
+            return defaultValue;
+        }
+        if ($S.isString(jsonFileData[key])) {
+            return $S.clone(jsonFileData[key]);
+        } else if ($S.isObject(jsonFileData[key])) {
+            return $S.clone(jsonFileData[key]);
+        } else if ($S.isArray(jsonFileData[key])) {
+            return $S.clone(jsonFileData[key]);
         }
         return defaultValue;
     },
