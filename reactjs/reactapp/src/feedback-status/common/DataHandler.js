@@ -13,6 +13,11 @@ import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
 // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 import HomePage from "../pages/HomePage";
+import PidPage from "../pages/PidPage";
+import Id1Page from "../pages/Id1Page";
+import Id2Page from "../pages/Id2Page";
+import ViewPage from "../pages/ViewPage";
+import DisplayPage from "../pages/DisplayPage";
 
 var DataHandler;
 
@@ -359,19 +364,19 @@ DataHandler.extend({
                 renderData = HomePage.getRenderField(pageName);
             break;
             case "pidPage":
-                renderData = HomePage.getRenderField(pageName);
+                renderData = PidPage.getRenderField(pageName);
             break;
             case "id1Page":
-                renderData = HomePage.getRenderField(pageName);
+                renderData = Id1Page.getRenderField(pageName);
             break;
             case "id2Page":
-                renderData = HomePage.getRenderField(pageName);
+                renderData = Id2Page.getRenderField(pageName);
             break;
             case "displayPage":
-                renderData = HomePage.getRenderField(pageName);
+                renderData = DisplayPage.getRenderField(pageName);
             break;
             case "viewPage":
-                renderData = HomePage.getRenderField(pageName);
+                renderData = ViewPage.getRenderField(pageName);
             break;
             case "noMatch":
             default:
@@ -411,7 +416,7 @@ DataHandler.extend({
         appDataCallback("renderFieldRow", renderFieldRow);
 
         appDataCallback("dateSelectionRequiredPages", dateSelectionRequiredPages);
-        appDataCallback("dateSelection", Config.dateSelection);
+        appDataCallback("dateSelection", CommonConfig.dateSelection);
         appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
         appStateCallback();

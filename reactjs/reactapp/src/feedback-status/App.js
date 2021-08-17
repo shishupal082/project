@@ -36,7 +36,8 @@ class App extends React.Component {
 
             "selectedDateType": "",
             "dateSelection": [],
-            "dateSelectionRequiredPages": []
+            "dateSelectionRequiredPages": [],
+            "filterOptions": []
         };
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);

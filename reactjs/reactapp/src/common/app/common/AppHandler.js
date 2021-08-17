@@ -365,7 +365,7 @@ AppHandler.extend({
             trimEntry = true;
         }
         var finalArr = [], temp, i, j;
-        if (!$S.isString(dataStr)) {
+        if (!$S.isString(dataStr) || $S.isJsonString(dataStr)) {
             return finalArr;
         }
         var arr = dataStr.split("\n");

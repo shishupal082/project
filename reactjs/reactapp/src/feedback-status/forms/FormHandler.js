@@ -3,6 +3,9 @@ import DataHandler from "../common/DataHandler";
 import DataHandlerV2 from "../common/DataHandlerV2";
 import Config from "../common/Config";
 
+import PidPage from "../pages/PidPage";
+
+
 import TemplateHelper from "../../common/TemplateHelper";
 import AppHandler from "../../common/app/common/AppHandler";
 
@@ -139,11 +142,19 @@ FormHandler.extend({
             TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
         }
     },
-    getAddNewProjectTemplate: function() {
+    getAddNewProjectTemplate: function(pageName) {
         if (!DataHandlerV2.isEnabled("form", "addNewProjectForm")) {
             return null;
         }
         var formTemplate = FormHandlerCreateNewProject.getFormTemplate();
+        this.updateBtnStatus(formTemplate);
+        return formTemplate;
+    },
+    getId1DataFormTemplate: function(pageName) {
+        if (!DataHandlerV2.isEnabled("form", "addNewProjectForm")) {
+            return null;
+        }
+        var formTemplate = PidPage.getId1DataFormTemplate();
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },

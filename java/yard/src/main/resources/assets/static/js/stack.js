@@ -1515,6 +1515,15 @@ Stack.extend({
     isBooleanFalse: function(value) {
         return isBoolean(value) && value === false;
     },
+    isJsonString: function(str) {
+        if (isString(str)) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch(e) {}
+        }
+        return false;
+    },
     addElAt: function(arr, index, el) {
         return addElAt(arr, index, el);
     },
