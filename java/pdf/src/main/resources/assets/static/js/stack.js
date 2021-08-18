@@ -1781,6 +1781,24 @@ Stack.extend({
             Stack.log("dataObj is invalid: " + key);
         }
         return dataObj;
+    },
+    updateListItemAsIndex: function(listItems, key, preSyntax) {
+        if (!Stack.isStringV2(key)) {
+            return listItems;
+        }
+        if (!isArray(listItems)) {
+            return listItems;
+        }
+        if (isUndefined(preSyntax)) {
+            preSyntax = "";
+        }
+        for (var i=0; i<listItems.length; i++) {
+            if (!isObject(listItems[i])) {
+                continue;
+            }
+            listItems[i][key] = preSyntax + i;
+        }
+        return listItems;
     }
 });
 

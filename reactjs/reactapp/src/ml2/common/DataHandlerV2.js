@@ -2,7 +2,6 @@ import $S from "../../interface/stack.js";
 import $M from "../../interface/model.js";
 import $ML2 from "../../interface/ML2.js";
 import DataHandler from "./DataHandler";
-import Config from "./Config";
 
 
 // import AppHandler from "../../common/app/common/AppHandler";
@@ -99,46 +98,46 @@ DataHandlerV2.extend({
         }
         return result;
     },
-    _searchItems: function(searchingPattern, allData, searchByPattern) {
-        if (!$S.isArray(searchingPattern) || !$S.isArray(allData)) {
-            return [];
+    _getFinalMonitorKey: function(selectedMonitorKey) {
+        if (!$S.isArray(selectedMonitorKey)) {
+            return selectedMonitorKey;
         }
-        var result = [];
-        var i, j, temp1, temp2;
-        for(i=0; i<searchingPattern.length; i++) {
-            temp1 = searchingPattern[i];
-            if (searchByPattern) {
-                temp1 = Config.patternMatching[searchingPattern[i]];
-                if ($S.isUndefined(temp1)) {
-                    temp1 = new RegExp(searchingPattern[i], 'i');
-                }
-                for(j=0; j<allData.length; j++) {
-                    temp2 = allData[j];
-                    if (temp2.search(temp1) >= 0) {
-                        result.push(temp2);
-                    }
-                }
-            } else if (allData.indexOf(temp1) >= 0) {
-                result.push(temp1);
+        var monitorKeyMapping = DataHandler.getAppData("monitorKeyMapping", {});
+        if (!$S.isObject(monitorKeyMapping)) {
+            return selectedMonitorKey;
+        }
+        var finalData = [];
+        for(var i=0; i<selectedMonitorKey.length; i++) {
+            if (!$S.isStringV2(selectedMonitorKey[i])) {
+                continue;
             }
+            if (!$S.isArray(monitorKeyMapping[selectedMonitorKey[i]])) {
+                finalData.push(selectedMonitorKey[i]);
+                continue;
+            }
+            finalData = finalData.concat(monitorKeyMapping[selectedMonitorKey[i]]);
         }
-        return result;
+        return finalData;
     },
     getReourceUtilities: function() {
         var possibleKeys = $M.getPossibleValues();
         var displayData = {};
         var tableData = [], temp, i;
-        var currentData = DataHandler.getCurrentMetaData("filter1", "value");
-        var monitorKey = $S.isArray(currentData["values"]) ? currentData["values"] : [];
-        var searchByPattern = $S.isBooleanTrue(currentData["searchByPattern"]) ? true : false;
-        var finalMonitorKey = this._searchItems(monitorKey, possibleKeys, searchByPattern);
-        var resultPattern = $S.isArray(currentData["resultPattern"]) ? currentData["resultPattern"] : ["all"];
-
+        var selectedFilterData = DataHandler.getCurrentMetaData("filter1", "value");
+        if (!$S.isObject(selectedFilterData)) {
+            selectedFilterData = {};
+        }
+        var searchByPattern = $S.isBooleanTrue(selectedFilterData["searchByPattern"]) ? true : false;
+        var monitorKey = selectedFilterData["values"];
+        var resultPattern = selectedFilterData["resultPattern"];
+        monitorKey = this._getFinalMonitorKey(monitorKey);
+        resultPattern = this._getFinalMonitorKey(resultPattern);
+        var finalMonitorKey = $S.searchItems(monitorKey, possibleKeys, searchByPattern);
         for (i = 0; i < finalMonitorKey.length; i++) {
             temp = $M.getVariableDependenciesByKey(finalMonitorKey[i]);
             displayData[finalMonitorKey[i]] = temp;
-            temp = this._searchItems(resultPattern, temp, true);
-            tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp, currentData)]);
+            temp = $S.searchItems(resultPattern, temp, true);
+            tableData.push([i+1, finalMonitorKey[i], this._generateDependent(temp, selectedFilterData)]);
         }
         console.log(tableData);
         var filter2 = DataHandler.getData("filter2", "");

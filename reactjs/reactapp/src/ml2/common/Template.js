@@ -1,5 +1,3 @@
-// import Config from "./Config";
-
 var Template = {};
 Template["noMatch"] = [{
     "tag": "center.h5",

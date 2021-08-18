@@ -207,7 +207,7 @@ CommonDataHandler.extend({
         }
     },
     loadAppControlData: function(callback) {
-        var appControlApi = CommonConfig.getApiUrl("getAppControlDataApi", null, true);
+        var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
         this.setData("appControlDataLoadStatus", "in_progress");
         AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
             CommonDataHandler.setData("appControlData", appControlData);

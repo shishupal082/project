@@ -50,13 +50,10 @@
     -->
 <script type="text/javascript">
 var GLOBAL = {
-  baseapi: "http://localhost:8080",
+  baseApi: "http://localhost:8080",
   basepathname: ""
 };
-GLOBAL.appControlDataApi = "http://localhost:8080/pvt/app-data/ei/appControlData.json";
-
-GLOBAL.patternMatching = {};
-GLOBAL.patternMatching["all"] = /[0-9|A-Z]{1,}/i;
+GLOBAL.appControlApi = "/pvt/app-data/ml2/appControlData.json";
 
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";

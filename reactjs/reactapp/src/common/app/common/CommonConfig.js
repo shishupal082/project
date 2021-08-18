@@ -23,7 +23,7 @@ CommonConfig.basepathname = basepathname;
 CommonConfig.appVersion = appVersion;
 
 
-var appControlDataApi = $$$.appControlApi;
+var appControlApi = $$$.appControlApi;
 
 
 
@@ -39,7 +39,7 @@ CommonConfig.dateSelectionRequiredPages = [];
 
 
 var apiMapping = {};
-apiMapping["getAppControlDataApi"] = appControlDataApi + "?v=" + appVersion;
+apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion;
 apiMapping["getStaticDataApi"] = "/api/get_static_data";
 apiMapping["getLoginUserDetailsApi"] = "/api/get_login_user_details";
 apiMapping["getRelatedUsersDataApi"] = "/api/get_related_users_data";

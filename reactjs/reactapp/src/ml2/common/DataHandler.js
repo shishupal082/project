@@ -1,11 +1,11 @@
 import $S from "../../interface/stack.js";
-// import $$$ from '../../interface/global';
-import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
 import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 var DataHandler;
 
@@ -179,6 +179,11 @@ DataHandler.extend({
         }
         return result;
     },
+    getAppData: function(key, defaultValue) {
+        var currentAppData = this.getCurrentAppData();
+        var metaData = this.getData("metaData", {});
+        return $S.findParam([currentAppData, metaData], key, defaultValue);
+    },
     getList2Data: function() {
         var metaData = this.getData("metaData", {});
         var result = [];
@@ -215,26 +220,13 @@ DataHandler.extend({
         }
         return currentAppData;
     },
-    getBaseApi: function() {
-        var currentAppData = this.getCurrentAppData();
-        if ($S.isObject(currentAppData)) {
-            if ($S.isString(currentAppData.baseapi) && currentAppData.baseapi.length > 0) {
-                return currentAppData.baseapi;
-            }
-        }
-        if ($S.isString(Config.baseapi) && Config.baseapi.length > 0) {
-            return Config.baseapi;
-        }
-        return "";
-    },
     getRawDataApi: function() {
-        var baseapi = this.getBaseApi();
         var currentAppData = this.getCurrentAppData();
         var api = [];
         if ($S.isObject(currentAppData) && $S.isArray(currentAppData.rawDataApi)) {
             for (var i = 0; i < currentAppData.rawDataApi.length; i++) {
                 if ($S.isString(currentAppData.rawDataApi[i]) && currentAppData.rawDataApi[i].length > 0) {
-                    api.push(baseapi + currentAppData.rawDataApi[i]);
+                    api.push(CommonConfig.baseApi + currentAppData.rawDataApi[i]);
                 }
             }
         }
@@ -242,7 +234,7 @@ DataHandler.extend({
     },
     isFooterEnable: function() {
         var currentAppData = this.getCurrentAppData();
-        if ($S.isObject(currentAppData) && $S.isBooleanFalse(currentAppData.enableFooter)) {
+        if ($S.isObject(currentAppData) && $S.isBooleanTrue(currentAppData.enableFooter)) {
             return true;
         }
         return false;
@@ -307,11 +299,10 @@ DataHandler.extend({
     },
     loadDataByAppId: function(callback) {
         var appControlData = DataHandler.getCurrentAppData();//{}
-        var baseapi = this.getBaseApi();
         var metaDataApi = [], i;
         if ($S.isArray(appControlData["metaDataApi"])) {
             for (i = 0; i < appControlData["metaDataApi"].length; i++) {
-                metaDataApi.push(baseapi + appControlData["metaDataApi"][i]);
+                metaDataApi.push(CommonConfig.baseApi + appControlData["metaDataApi"][i]);
             }
         }
         var metaData = {};
@@ -321,6 +312,9 @@ DataHandler.extend({
                 metaData = Object.assign(metaData, response);
             }
         }, function() {
+            if ($S.isObject(metaData["filter1"])) {
+                $S.updateListItemAsIndex(metaData["filter1"]["text"], "value", "value-");
+            }
             DataHandler.setData("metaData", metaData);
             DataHandler.setData("metaDataLoadStatus", "completed");
             DataHandler.metaDataInit();
@@ -329,20 +323,14 @@ DataHandler.extend({
         }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
-        $S.loadJsonData(null, [Config.getApiUrl("app-control-data", null, true)], function(response, apiName, ajax){
-            if ($S.isArray(response)) {
-                DataHandler.setData("appControlData", response);
-            } else {
-                DataHandler.setData("appControlData", []);
-            }
+        CommonDataHandler.loadAppControlData(function() {
             DataHandler.setData("appControlDataLoadStatus", "completed");
+            DataHandler.setData("appControlData", CommonDataHandler.getData("appControlData"));
             DataHandler.setCurrentAppId();
-        }, function() {
-            $S.log("appControlData load complete");
             DataHandler.loadDataByAppId(function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        }, null, Api.getAjaxApiCallMethod());
+        });
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });

@@ -1,5 +1,4 @@
 import $S from "../../interface/stack.js";
-// import Config from "./Config";
 import DataHandler from "./DataHandler";
 
 import Template from "./Template";

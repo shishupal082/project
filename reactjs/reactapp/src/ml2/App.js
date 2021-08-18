@@ -7,10 +7,7 @@ import AppHandler from "../common/app/common/AppHandler";
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
-import Config from "./common/Config";;
 
-
-// var pages = Config.pages;
 
 class App extends React.Component {
     constructor(props) {
@@ -21,28 +18,20 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
-            "goBackLinkData": [], // Used for back url
 
-            "selectFilterComponentClass": "",
             "list1Text": "",
             "list1Data": [],
             "currentList1Id": "",
 
             "list2Text": "",
             "list2Data": [],
-            "currentList2Id": "", // same as pageName
+            "currentList2Id": "",
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
-            "pageHeading": "",
 
             "renderFieldRow": [],
-            "errorsData": [],
-
-            "selectedDateType": "",
-            "dateSelection": [],
-            "dateSelectionRequiredPages": [],
             "filterOptions": [],
-            "enableFooter": false
+            "enableFooter": true
         };
         this.onClick = this.onClick.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -50,30 +39,17 @@ class App extends React.Component {
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
-        this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
             onClick: this.onClick,
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
-            pageComponentDidMount: this.pageComponentDidMount,
-            getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
     }
     registerChildAttribute(name, method) {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
-    }
-    gotoPage(pageName) {
-        var pages = Config.pages;
-        if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(pages[pageName])
-        } else {
-            alert("page '" + pageName + "' not found");
-        }
-        DataHandler.TrackPageView(pageName);
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
@@ -90,11 +66,6 @@ class App extends React.Component {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
         DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
-    }
-    // not working ?
-    onFormSubmit(e) {
-        alert("onFormSubmit");
-        e.preventDefault();
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;
@@ -115,32 +86,11 @@ class App extends React.Component {
     appDataCallback(name, data) {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
-    pageComponentDidMount(pageName) {
-        this.addTab(pageName);
-        // DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
-    }
     componentDidMount() {
         $S.log("App:componentDidMount");
         var appDataCallback = this.appDataCallback;
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
-    }
-    removeTab(pageName) {
-        this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
-            if (pageName === el) {
-                return false;
-            }
-            return true;
-        });
-    }
-    addTab(pageName) {
-        if (this.appData.pageTab.indexOf(pageName) >= 0) {
-            return;
-        }
-        this.appData.pageTab.push(pageName);
-    }
-    getTabDisplayText(tabName) {
-        // return DataHandler.GetTabDisplayText(tabName);
     }
     render() {
         var methods = this.methods;
@@ -148,7 +98,7 @@ class App extends React.Component {
         return (<BrowserRouter>
             <Switch>
                 <Route
-                    render={props => (
+                    render = {props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
                     )}
                 />
