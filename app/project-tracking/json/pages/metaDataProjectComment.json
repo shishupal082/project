@@ -1,0 +1,50 @@
+{
+    "pageId:projectComment.list3DataKey": "list3Data_2",
+    "pageId:projectComment.dateParameterField": {
+        "table": "project_comment",
+        "fieldName": "entryTime"
+    },
+    "pageId:projectComment.requiredDataTable": ["project_comment", "project_table"],
+    "pageId:projectComment.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "project_comment",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ]
+        }
+    ],
+    "pageId:projectComment.resultPattern": [
+        {
+            "tableName": "project_comment",
+            "name": "updatedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "project_table",
+            "name": "pName",
+            "heading": "Project Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_comment",
+            "name": "entryTime",
+            "heading": "Uploaded On",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_comment",
+            "name": "comment",
+            "heading": "Comment",
+            "isSortable": false
+        }
+    ]
+}

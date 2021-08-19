@@ -1,0 +1,56 @@
+{
+    "pageId:displayUploadedFiles.list3DataKey": "list3Data_2",
+    "pageId:displayUploadedFiles.dateParameterField": {
+        "table": "file_table",
+        "fieldName": "entryTime"
+    },
+    "pageId:displayUploadedFiles.requiredDataTable": ["file_table", "project_table"],
+    "pageId:displayUploadedFiles.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "file_table",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ]
+        }
+    ],
+    "pageId:displayUploadedFiles.resultPattern": [
+        {
+            "tableName": "file_table",
+            "name": "updatedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "project_table",
+            "name": "pName",
+            "heading": "Project Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "file_table",
+            "name": "subject",
+            "heading": "Subject",
+            "isSortable": true
+        },
+        {
+            "tableName": "file_table",
+            "name": "file_details",
+            "heading": "File Details",
+            "isSortable": false
+        },
+        {
+            "tableName": "file_table",
+            "name": "entryTime",
+            "heading": "Uploaded On",
+            "isSortable": true
+        }
+    ]
+}

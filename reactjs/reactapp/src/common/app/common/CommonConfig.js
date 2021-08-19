@@ -37,6 +37,8 @@ CommonConfig.dateSelection = [
 CommonConfig.defaultDateSelect = "monthly";
 CommonConfig.dateSelectionRequiredPages = [];
 
+CommonConfig.IN_PROGRESS = "in_progress";
+CommonConfig.COMPLETED = "completed";
 
 var apiMapping = {};
 apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion;

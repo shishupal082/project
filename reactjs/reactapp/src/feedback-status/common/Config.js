@@ -34,43 +34,43 @@ Config.noMatch = "noMatch";
 
 
 
-Config.fieldsKey = {
-    "ProjectNameKey": "new-project.name",
-    "Value": "common-value",
-    "DateKey": "date-entry-key",
-    "RemarksKey": "remark-entry-key",
-    "DistanceKey": "new-work-status.distance",
-    "SectionKey": "new-work-status.section",
-    "supplyDiscription": "supplyDiscription",
-    "NewSupplyItemName": "add-supply-item.name",
-    "NewSupplyItemDetails": "add-supply-item.details",
-    "UploadFile": "upload_file.file",
-    "AddProjectComment": "add-project-comment-form.comment",
-    "ProjectFileKey": "add-project-files-form.project",
-    "AddLinkText": "upload_file_link.subject",
-    "AddLinkUrl": "upload_file_link.heading"
-};
+// Config.fieldsKey = {
+//     "ProjectNameKey": "new-project.name",
+//     "Value": "common-value",
+//     "DateKey": "date-entry-key",
+//     "RemarksKey": "remark-entry-key",
+//     "DistanceKey": "new-work-status.distance",
+//     "SectionKey": "new-work-status.section",
+//     "supplyDiscription": "supplyDiscription",
+//     "NewSupplyItemName": "add-supply-item.name",
+//     "NewSupplyItemDetails": "add-supply-item.details",
+//     "UploadFile": "upload_file.file",
+//     "AddProjectComment": "add-project-comment-form.comment",
+//     "ProjectFileKey": "add-project-files-form.project",
+//     "AddLinkText": "upload_file_link.subject",
+//     "AddLinkUrl": "upload_file_link.heading"
+// };
 
 
-var messageMapping = {};
-messageMapping["tableName.invalid"] = "Invalid table name";
-messageMapping[Config.fieldsKey.Value] = "Value Required";
-messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
-messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";
+// var messageMapping = {};
+// messageMapping["tableName.invalid"] = "Invalid table name";
+// messageMapping[Config.fieldsKey.Value] = "Value Required";
+// messageMapping[Config.fieldsKey.DateKey] = "Please enter valid date";
+// messageMapping[Config.fieldsKey.RemarksKey] = "Remarks Required";
 
-messageMapping[Config.fieldsKey.SectionKey] = "Please select section";
-messageMapping[Config.fieldsKey.ProjectNameKey] = "Project Name Required";
-messageMapping[Config.fieldsKey.supplyDiscription] = "Select Discription";
+// messageMapping[Config.fieldsKey.SectionKey] = "Please select section";
+// messageMapping[Config.fieldsKey.ProjectNameKey] = "Project Name Required";
+// messageMapping[Config.fieldsKey.supplyDiscription] = "Select Discription";
 
-messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
-messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
-messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required";
-messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
-messageMapping[Config.fieldsKey.UploadFile] = "File Required";
-messageMapping[Config.fieldsKey.AddProjectComment] = "Comment Required";
-messageMapping[Config.fieldsKey.ProjectFileKey] = "Select Project Name";
-messageMapping[Config.fieldsKey.AddLinkText] = "Link Heading required";
-messageMapping[Config.fieldsKey.AddLinkUrl] = "Link required";
-Config.messageMapping = messageMapping;
+// messageMapping[Config.fieldsKey.DistanceKey] = "Distance Required";
+// messageMapping[Config.fieldsKey.DistanceKey + ".invalid"] = "Enter Valid Distance";
+// messageMapping[Config.fieldsKey.NewSupplyItemName] = "Supply Item Name Required";
+// messageMapping[Config.fieldsKey.NewSupplyItemDetails] = "Supply Item Details Required";
+// messageMapping[Config.fieldsKey.UploadFile] = "File Required";
+// messageMapping[Config.fieldsKey.AddProjectComment] = "Comment Required";
+// messageMapping[Config.fieldsKey.ProjectFileKey] = "Select Project Name";
+// messageMapping[Config.fieldsKey.AddLinkText] = "Link Heading required";
+// messageMapping[Config.fieldsKey.AddLinkUrl] = "Link required";
+// Config.messageMapping = messageMapping;
 
 export default Config;

@@ -9,7 +9,9 @@ import FormHandler from "../forms/FormHandler";
 
 
 import TemplateHelper from "../../common/TemplateHelper";
+// import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
+// import CommonConfig from "../../common/app/common/CommonConfig";
 // import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 
@@ -30,13 +32,6 @@ PidPage.fn = PidPage.prototype = {
 };
 
 $S.extendObject(PidPage);
-
-PidPage.extend({
-    getId1DataFormTemplate: function(pageName) {
-        var id1FormTemplate = DataHandler.getAppData("PidPage.formTemplate");
-        return id1FormTemplate;
-    }
-});
 
 PidPage.extend({
     _getRenderTable: function(pageName, pid) {
@@ -60,7 +55,7 @@ PidPage.extend({
     getRenderField: function(pageName) {
         var template = TemplateHandler.getTemplate("home");
         var pid = CommonDataHandler.getPathParamsData("pid");
-        var newFormField = FormHandler.getId1DataFormTemplate();
+        var newFormField = FormHandler.getFeedbackFormTemplate();
         var homeFields = this._getRenderTable(pageName, pid);
         if (homeFields.length === 0 && newFormField === null) {
             template = TemplateHandler.getTemplate("noDataFound");

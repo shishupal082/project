@@ -265,14 +265,14 @@ DataHandler.extend({
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var pageName = DataHandler.getData("pageName", "");
-        if (name === "new-project") {
+        if (pageName === Config.home) {
             FormHandler.submitNewProject(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        // } else if (name === "add-supply-status") {
-        //     FormHandler.submitAddSupplyStatus(pageName, function() {
-        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        //     });
+        } else if (pageName === Config.pidPage) {
+            FormHandler.submitFeedbackStatus(pageName, name, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         // } else if (name === "add-supply-item") {
         //     FormHandler.submitNewSupplyItem(pageName, function() {
         //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);

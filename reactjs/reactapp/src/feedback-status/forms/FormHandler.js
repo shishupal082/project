@@ -3,11 +3,13 @@ import DataHandler from "../common/DataHandler";
 import DataHandlerV2 from "../common/DataHandlerV2";
 import Config from "../common/Config";
 
-import PidPage from "../pages/PidPage";
+// import PidPage from "../pages/PidPage";
 
 
 import TemplateHelper from "../../common/TemplateHelper";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 
 
 // import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
@@ -36,13 +38,14 @@ FormHandler.fn = FormHandler.prototype = {
 $S.extendObject(FormHandler);
 FormHandler.extend({
     GetAleartMessage: function(key, value) {
-        var messageMapping = Config.messageMapping;
-        if ($S.isObject(messageMapping) && $S.isString(messageMapping[key])) {
+        var messageMapping = DataHandler.getAppData("messageMapping", {});
+        if ($S.isObject(messageMapping) && $S.isStringV2(messageMapping[key])) {
             return messageMapping[key];
         }
         return "Invalid " + key;
     },
     FormateString: function(str) {
+        // Break string on /n and join on ;
         return AppHandler.FormateString(str);
     },
     GetUniqueId: function() {
@@ -55,6 +58,33 @@ FormHandler.extend({
 FormHandler.extend({
     submitNewProject: function(pageName, callback) {
         FormHandlerCreateNewProject.submit(callback);
+    },
+    submitFeedbackStatus: function(pageName, formName, callback) {
+        if (!DataHandlerV2.isEnabled("form", "addFeedbackForm")) {
+            return null;
+        }
+        var status = DataHandler.getData("addentry.submitStatus", "");
+        if (status === CommonConfig.IN_PROGRESS) {
+            return null;
+        }
+        var requiredKeys = DataHandler.getAppData(formName + ".requiredKeys");
+        var validationData = DataHandler.getAppData(formName + ".validationData");
+        var messageMapping = DataHandler.getAppData("messageMapping", {});
+        var tableName = DataHandler.getTableName(formName + ".tableName");
+        CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
+            DataHandler.setData("addentry.submitStatus", status);
+            $S.callMethod(callback);
+        });
+    },
+    getFeedbackFormTemplate: function(pageName) {
+        if (!DataHandlerV2.isEnabled("form", "addFeedbackForm")) {
+            return null;
+        }
+        var validationData = DataHandler.getAppData("form.level-1-entry.validationData");
+        var formTemplate = DataHandler.getAppData("pidPage.formTemplate");
+        var status = DataHandler.getData("addentry.submitStatus", "");
+        formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, "addentry.submitStatus", status);
+        return formTemplate;
     },
     // submitAddProjectComment: function(pageName, callback) {
     //     FormHandlerAddProjectComment.submit(pageName, callback);
@@ -147,14 +177,6 @@ FormHandler.extend({
             return null;
         }
         var formTemplate = FormHandlerCreateNewProject.getFormTemplate();
-        this.updateBtnStatus(formTemplate);
-        return formTemplate;
-    },
-    getId1DataFormTemplate: function(pageName) {
-        if (!DataHandlerV2.isEnabled("form", "addNewProjectForm")) {
-            return null;
-        }
-        var formTemplate = PidPage.getId1DataFormTemplate();
         this.updateBtnStatus(formTemplate);
         return formTemplate;
     },

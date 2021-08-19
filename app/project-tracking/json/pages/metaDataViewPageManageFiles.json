@@ -1,0 +1,95 @@
+{
+    "viewPage:manageFiles.list3DataKey": "list3Data_1",
+    "viewPage:manageFiles.dateParameterField": {
+        "table": "file_table",
+        "fieldName": "entryTime"
+    },
+    "viewPage:manageFiles.filterKeyMapping": {
+        "viewPage:manageFiles.filterKeys": "filterKeys"
+    },
+    "viewPage:manageFiles.filterKeys": ["updatedBy", "pName", "supply_status_key", "reset"],
+    "viewPage:manageFiles.requiredDataTable": ["file_info_table", "file_table", "project_table"],
+    "viewPage:manageFiles.resultCriteria1": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "file_info_table",
+                    "col": "filepath"
+                },
+                {
+                    "tableName": "file_table",
+                    "col": "filename"
+                }
+            ],
+            "result": {
+                "tableName": "file_info_table",
+                "requiredData": [
+                    {
+                        "tableName": "file_table",
+                        "fieldName": "pid"
+                    },
+                    {
+                        "tableName": "file_table",
+                        "fieldName": "unique_id"
+                    },
+                    {
+                        "tableName": "file_table",
+                        "fieldName": "file_details"
+                    }
+                ]
+            }
+        },
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "file_info_table",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ],
+            "result": {
+                "tableName": "file_info_table",
+                "requiredData": [
+                    {
+                        "tableName": "project_table",
+                        "fieldName": "pName"
+                    }
+                ]
+            }
+        }
+    ],
+    "viewPage:manageFiles.resultPattern": [
+        {
+            "tableName": "file_info_table",
+            "name": "fileUsername",
+            "heading": {"tag": "div", "text":"Uploaded By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "file_details",
+            "heading": "File Details",
+            "isSortable": false
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "available_on",
+            "heading": "Files available",
+            "isSortable": false
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "add_projects",
+            "heading": "Add files to",
+            "className": "align-top",
+            "isSortable": false
+        }
+    ]
+}

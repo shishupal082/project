@@ -1,0 +1,126 @@
+{
+    "dateSelect": "daily",
+    "filterKeys": ["updatedBy", "pName", "reset"],
+    "supplyDiscription": [
+        {
+            "tag": "dropdown",
+            "className": "form-control",
+            "name": "supplyDiscription",
+            "text": [
+                {
+                    "value": "",
+                    "text": "Select ..."
+                },
+                {
+                    "value": "Indent Number",
+                    "text": "Indent Number"
+                },
+                {
+                    "value": "Indent Date",
+                    "text": "Indent Date"
+                },
+                {
+                    "value": "Indent Amount",
+                    "text": "Indent Amount"
+                },
+                {
+                    "value": "Tender Date",
+                    "text": "Tender Date"
+                },
+                {
+                    "value": "Tender Amount",
+                    "text": "Tender Amount"
+                },
+                {
+                    "value": "Approved by Consignee",
+                    "text": "Approved by Consignee"
+                },
+                {
+                    "value": "Approved by DSTE",
+                    "text": "Approved by DSTE"
+                },
+                {
+                    "value": "Approved by Sr.DSTE",
+                    "text": "Approved by Sr.DSTE"
+                },
+                {
+                    "value": "Approved by ADRM",
+                    "text": "Approved by ADRM"
+                },
+                {
+                    "value": "Send for Budget",
+                    "text": "Send for Budget"
+                },
+                {
+                    "value": "Approved by HQ office 2",
+                    "text": "Approved by HQ office 2"
+                },
+                {
+                    "value": "Material Supply Date",
+                    "text": "Material Supply Date"
+                },
+                {
+                    "value": "Bill submitted to HQ office",
+                    "text": "Bill submitted to HQ office"
+                },
+                {
+                    "value": "Send for budget",
+                    "text": "Send for budget"
+                },
+                {
+                    "value": "Budget Date",
+                    "text": "Budget Date"
+                },
+                {
+                    "value": "Bill pushed to AIMS",
+                    "text": "Bill pushed to AIMS"
+                },
+                {
+                    "value": "CO6 number",
+                    "text": "CO6 number"
+                },
+                {
+                    "value": "CO7 number",
+                    "text": "CO7 number"
+                },
+                {
+                    "value": "Others",
+                    "text": "Others"
+                }
+            ]
+        }
+    ],
+    "new-work-status.section": [
+        {
+            "tag": "dropdown",
+            "className": "form-control",
+            "name": "new-work-status.section",
+            "text": [
+                {
+                    "value": "",
+                    "text": "Select section..."
+                },
+                {
+                    "value": "MURI-CNI",
+                    "text": "MURI-CNI"
+                },
+                {
+                    "value": "MURI-BRKA",
+                    "text": "MURI-BRKA"
+                },
+                {
+                    "value": "MURI-KSX",
+                    "text": "MURI-KSX"
+                },
+                {
+                    "value": "HTE-ORGA",
+                    "text": "HTE-ORGA"
+                },
+                {
+                    "value": "Others",
+                    "text": "Others"
+                }
+            ]
+        }
+    ]
+}

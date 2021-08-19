@@ -117,6 +117,8 @@ class App extends React.Component {
             DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (filterNames.indexOf(name) >= 0) {
             DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
+        } else {
+            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
     }
     appStateCallback() {

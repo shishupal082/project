@@ -1,0 +1,119 @@
+{
+    "pageId:contingencyStatus.list3DataKey": "list3Data_1",
+    "pageId:contingencyStatus.dateParameterField": {
+        "table": "contingency_supply_status",
+        "fieldName": "entryTime"
+    },
+    "pageId:contingencyStatus.requiredDataTable": ["contingency_supply_status", "contingency_supply_item", "project_table"],
+    "pageId:contingencyStatus.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": false,
+            "values": [
+                {
+                    "tableName": "contingency_supply_status",
+                    "col": "sid"
+                },
+                {
+                    "tableName": "contingency_supply_item",
+                    "col": "sid"
+                }
+            ],
+            "result": {
+                "tableName": "contingency_supply_status",
+                "requiredData": [
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "updatedBy"
+                    },
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "supply_status_key"
+                    },
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "pid"
+                    },
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "supply_status_value"
+                    },
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "entryTime"
+                    },
+                    {
+                        "tableName": "contingency_supply_status",
+                        "fieldName": "discription"
+                    },
+                    {
+                        "tableName": "contingency_supply_item",
+                        "fieldName": "supply_item_name"
+                    }
+                ]
+            }
+        },
+        {
+            "op": "==",
+            "force1stEntry": false,
+            "values": [
+                {
+                    "tableName": "contingency_supply_status",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ]
+        }
+    ],
+    "pageId:contingencyStatus.filterKeyMapping": {
+        "pageId:contingencyStatus.filterKeys": "filterKeys"
+    },
+    "pageId:contingencyStatus.filterKeys": ["updatedBy", "pName", "supply_status_key", "reset"],
+    "pageId:contingencyStatus.resultPattern": [
+        {
+            "tableName": "contingency_supply_status",
+            "name": "updatedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "contingency_supply_status",
+            "name": "supply_status_key",
+            "heading": "Key",
+            "isSortable": true
+        },
+        {
+            "tableName": "contingency_supply_status",
+            "name": "supply_status_value",
+            "heading": "Value",
+            "isSortable": true
+        },
+        {
+            "tableName": "contingency_supply_status",
+            "name": "discription",
+            "heading": "Discription",
+            "isSortable": true
+        },
+        {
+            "tableName": "contingency_supply_status",
+            "name": "entryTime",
+            "heading": "Updated On",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_table",
+            "name": "pName",
+            "heading": "Project Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "contingency_supply_status",
+            "name": "supply_item_name",
+            "heading": "Supply Item Name",
+            "isSortable": true
+        }
+    ]
+}

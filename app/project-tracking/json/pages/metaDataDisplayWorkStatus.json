@@ -1,0 +1,178 @@
+{
+    "pageId:displayWorkStatus.list3DataKey": "list3Data_3",
+    "list3Data_3": [
+        {
+            "text": "Show All"
+        },
+        {
+            "defaultSelected": true,
+            "value": [{"key": "date"}],
+            "text": "Order by Date"
+        },
+        {
+            "text": "Order by Project Name -- Work Item Name",
+            "value": [{"key": "pName"}, {"key": "supply_item_name"}]
+        },
+        {
+            "text": "Order by Date -- Project -- Work Item Name",
+            "value": [{"key": "date"}, {"key": "pName"}, {"key": "supply_item_name"}]
+        },
+        {
+            "text": "Order by Project Name",
+            "value": [{"key": "pName"}]
+        },
+        {
+            "text": "Order by Section",
+            "value": [{"key": "section"}]
+        },
+        {
+            "text": "Order by Work Item Name",
+            "value": [{"key": "supply_item_name"}]
+        },
+        {
+            "text": "Order by Updated By -- Date",
+            "value": [{"key": "updatedBy"}, {"key": "date"}]
+        },
+        {
+            "text": "Order by Project Name -- Date",
+            "value": [{"key": "pName"}, {"key": "date"}]
+        },
+        {
+            "text": "Order by Supply Item Name -- Date",
+            "value": [{"key": "supply_item_name"}, {"key": "date"}]
+        },
+        {
+            "text": "Order by Project Name -- Supply Item Name -- Date",
+            "value": [{"key": "pName"}, {"key": "supply_item_name"}, {"key": "date"}]
+        }
+    ],
+    "pageId:displayWorkStatus.dateParameterField": {
+        "table": "project_work_status",
+        "fieldName": "date"
+    },
+    "pageId:displayWorkStatus.filterKeyMapping": {
+        "pageId:displayWorkStatus.filterKeys": "filterKeys"
+    },
+    "pageId:displayWorkStatus.filterKeys": ["updatedBy", "pName", "supply_item_name", "reset"],
+    "pageId:displayWorkStatus.requiredDataTable": ["project_work_status", "work_item", "project_table"],
+    "pageId:displayWorkStatus.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "project_work_status",
+                    "col": "sid"
+                },
+                {
+                    "tableName": "work_item",
+                    "col": "sid"
+                }
+            ],
+            "result": {
+                "tableName": "project_work_status",
+                "requiredData": [
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "updatedBy"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "section"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "pid"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "distance"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "date"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "entryTime"
+                    },
+                    {
+                        "tableName": "project_work_status",
+                        "fieldName": "discription"
+                    },
+                    {
+                        "tableName": "work_item",
+                        "fieldName": "supply_item_name"
+                    }
+                ]
+            }
+        },
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "project_work_status",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ]
+        }
+    ],
+    "pageId:displayWorkStatus.resultPattern": [
+        {
+            "tableName": "project_work_status",
+            "name": "updatedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "section",
+            "heading": "Section",
+            "isSortable": true,
+            "totalRowText": {"tag": "b", "text": "Total"}
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "distance",
+            "heading": "Distance",
+            "className": "text-center",
+            "isSortable": true,
+            "isTotalRow": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "date",
+            "heading": "Date",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "entryTime",
+            "heading": "Updated On",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "discription",
+            "heading": "Remarks",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_table",
+            "name": "pName",
+            "heading": "Project Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "supply_item_name",
+            "heading": "Work Item Name",
+            "isSortable": true
+        }
+    ]
+}

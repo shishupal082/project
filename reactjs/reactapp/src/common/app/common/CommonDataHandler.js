@@ -1,6 +1,7 @@
 import $S from "../../../interface/stack.js";
 
 import Api from "../../Api";
+import TemplateHelper from "../../TemplateHelper";
 import AppHandler from "../../app/common/AppHandler";
 
 import CommonConfig from "./CommonConfig";
@@ -9,7 +10,7 @@ import CommonConfig from "./CommonConfig";
 var CommonDataHandler;
 
 (function($S){
-
+var DT = $S.getDT();
 var CurrentData = $S.getDataObj();
 var keys = [];
 
@@ -285,6 +286,157 @@ CommonDataHandler.extend({
         this.setFieldsData(name, value);
     }
 });
+CommonDataHandler.extend({
+    _updateBtnStatus: function(template, submitBtnName, formSubmitStatus) {
+        if (!$S.isStringV2(submitBtnName)) {
+            return;
+        }
+        if (formSubmitStatus === "in_progress") {
+            TemplateHelper.addClassTemplate(template, submitBtnName, "btn-secondary disabled");
+            TemplateHelper.removeClassTemplate(template, submitBtnName, "btn-primary");
+        } else {
+            TemplateHelper.removeClassTemplate(template, submitBtnName, "disabled");
+            TemplateHelper.removeClassTemplate(template, submitBtnName, "btn-secondary");
+            TemplateHelper.addClassTemplate(template, submitBtnName, "btn-primary");
+        }
+    },
+    _getCurrentValue: function(dataAttr, key, fieldData) {
+        if ($S.isStringV2(fieldData)) {
+            return fieldData;
+        }
+        if (!$S.isObject(dataAttr)) {
+            return fieldData;
+        }
+        if (dataAttr.type === "date") {
+            fieldData = DT.getDateTime(dataAttr["default"], "/");
+        } else {
+            fieldData = dataAttr["default"];
+        }
+        this.setFieldsData(key, fieldData);
+        return fieldData;
+    },
+    getFormTemplate: function(pageName, formTemplate, validationData, submitBtnName, formSubmitStatus) {
+        if (!$S.isObject(validationData)) {
+            return formTemplate;
+        }
+        var fieldsData = this.getData("fieldsData", {});
+        if (!$S.isObject(fieldsData)) {
+            return formTemplate;
+        }
+        var formText = {};
+        for(var key in validationData) {
+            formText[key] = this._getCurrentValue(validationData[key], key, fieldsData[key]);
+        }
+        TemplateHelper.updateTemplateValue(formTemplate, formText);
+        this._updateBtnStatus(formTemplate, submitBtnName, formSubmitStatus);
+        return formTemplate;
+    }
+});
+
+CommonDataHandler.extend({
+    _getAleartMessage: function(messageMapping, key, value) {
+        if ($S.isObject(messageMapping) && $S.isStringV2(messageMapping[key])) {
+            return messageMapping[key];
+        }
+        return "Invalid " + key;
+    },
+    _saveData: function(pageName, formName, tableName, formData, requiredKeys, callback) {
+        var resultData = ["table_name", "unique_id", "username"];
+        resultData = resultData.concat(requiredKeys);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
+        if (!$S.isString(url)) {
+            return;
+        }
+        formData["table_name"] = tableName;
+        if (!$S.isStringV2(formData["table_name"])) {
+            alert("Invalid table_name");
+            return;
+        }
+        formData["unique_id"] = AppHandler.GetUniqueId();
+        formData["username"] = AppHandler.GetUserData("username", "");
+        var finalText = [];
+        for(var i=0; i<resultData.length; i++) {
+            finalText.push(AppHandler.ReplaceComma(formData[resultData[i]]));
+        }
+        var postData = {};
+        postData["subject"] = "SUbject";
+        postData["heading"] = "Heading";
+        postData["text"] = [finalText.join(",")];
+        postData["filename"] = formData["table_name"] + ".csv";
+        if ($S.isFunction(callback)) {
+            callback(CommonConfig.IN_PROGRESS);
+        }
+        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
+            if ($S.isFunction(callback)) {
+                callback(CommonConfig.COMPLETED);
+            }
+            if (status === "FAILURE") {
+                AppHandler.TrackApiRequest("addNewProject", "FAILURE");
+                alert("Error in uploading data, Please Try again.");
+            } else {
+                AppHandler.TrackApiRequest("addNewProject", "SUCCESS");
+                AppHandler.LazyReload(250);
+            }
+        });
+    },
+    _isValidField: function(messageMapping, validationData, fieldsData, key) {
+        if (!$S.isStringV2(key)) {
+            alert("Invalid key");
+            return false;
+        }
+        if (!$S.isObject(validationData[key])) {
+            alert("Invalid validation config data");
+            return false;
+        }
+        var fieldAttr = validationData[key];
+        var fieldData = fieldsData[key];
+        var isValid = false;
+        if ($S.isBooleanTrue(fieldAttr.isRequired)) {
+            isValid = $S.isStringV2(fieldData);
+            if (!isValid) {
+                alert(this._getAleartMessage(messageMapping, key));
+            }
+        }
+        if (isValid && fieldAttr.type === "date") {
+            isValid = AppHandler.isValidDateStr(fieldData);
+            if (!isValid) {
+                alert(this._getAleartMessage(messageMapping, key));
+            }
+        }
+        if (isValid && fieldAttr.type === "numeric") {
+            isValid = $S.isNumeric(fieldData);
+            if (!isValid) {
+                alert(this._getAleartMessage(messageMapping, key));
+            }
+        }
+        return isValid;
+    },
+    submitForm: function(pageName, formName, tableName, messageMapping, requiredKeys, validationData, callback) {
+        var fieldsData = CommonDataHandler.getData("fieldsData", {});
+        var i, isFormValid = true, formData = {};
+        if (!$S.isObject(fieldsData)) {
+            fieldsData = {};
+        }
+        if (!$S.isObject(validationData)) {
+            validationData = {};
+        }
+        if (!$S.isArray(requiredKeys)) {
+            alert("Required keys not found in config.");
+            requiredKeys = [];
+        }
+        for (i=0; i<requiredKeys.length; i++) {
+            if (!this._isValidField(messageMapping, validationData, fieldsData, requiredKeys[i])) {
+                isFormValid = false;
+                break;
+            }
+            formData[requiredKeys[i]] = fieldsData[requiredKeys[i]];
+        }
+        if (isFormValid) {
+            this._saveData(pageName, formName, tableName, formData, requiredKeys, callback);
+        }
+    }
+});
+
 CommonDataHandler.extend({
     _getDynamicEnabledData: function(allDynamicEnabledData) {
         if (!$S.isObject(allDynamicEnabledData)) {

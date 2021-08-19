@@ -1,7 +1,7 @@
 import $S from "../../interface/stack.js";
 import DataHandler from "../common/DataHandler";
 import TemplateHandler from "../common/TemplateHandler";
-import Config from "../common/Config";
+// import Config from "../common/Config";
 
 import CommonConfig from "../../common/app/common/CommonConfig";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -32,7 +32,7 @@ FormHandlerCreateNewProject.extend({
         return newProjectTemplate;
     },
     saveNewProject: function(formData, callback) {
-        var resultData = ["table_name", "unique_id", "username", Config.fieldsKey.ProjectNameKey];
+        var resultData = ["table_name", "unique_id", "username", "new-project.name"];
         var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
@@ -49,7 +49,7 @@ FormHandlerCreateNewProject.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData[Config.fieldsKey.ProjectNameKey];
+        postData["subject"] = formData["new-project.name"];
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
@@ -68,7 +68,7 @@ FormHandlerCreateNewProject.extend({
         });
     },
     submit: function(callback) {
-        var requiredKeys = [Config.fieldsKey.ProjectNameKey];
+        var requiredKeys = ["new-project.name"];
         var fieldsData = CommonDataHandler.getData("fieldsData", {});
         var i, isFormValid = true, temp, formData = {};
         if (!$S.isObject(fieldsData)) {

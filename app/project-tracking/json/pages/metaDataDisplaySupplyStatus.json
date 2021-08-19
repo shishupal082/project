@@ -1,0 +1,95 @@
+{
+    "pageId:displaySupplyStatus.list3DataKey": "list3Data_1",
+    "pageId:displaySupplyStatus.dateParameterField": {
+        "table": "supply_status",
+        "fieldName": "entryTime"
+    },
+    "pageId:displaySupplyStatus.filterKeyMapping": {
+        "pageId:displaySupplyStatus.filterKeys": "filterKeys"
+    },
+    "pageId:displaySupplyStatus.filterKeys": ["updatedBy", "pName", "supply_status_key", "reset"],
+    "pageId:displaySupplyStatus.requiredDataTable": ["supply_status", "supply_item", "project_table"],
+    "pageId:displaySupplyStatus.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "supply_status",
+                    "col": "sid"
+                },
+                {
+                    "tableName": "supply_item",
+                    "col": "sid"
+                }
+            ],
+            "result": {
+                "tableName": "supply_status",
+                "requiredData": [
+                    {
+                        "tableName": "supply_item",
+                        "fieldName": "supply_item_name"
+                    }
+                ]
+            }
+        },
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "supply_status",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "pid"
+                }
+            ]
+        }
+    ],
+    "pageId:displaySupplyStatus.resultPattern": [
+        {
+            "tableName": "supply_status",
+            "name": "updatedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "supply_status",
+            "name": "supply_status_key",
+            "heading": "Key",
+            "isSortable": true
+        },
+        {
+            "tableName": "supply_status",
+            "name": "supply_status_value",
+            "heading": "Value",
+            "isSortable": true
+        },
+        {
+            "tableName": "supply_status",
+            "name": "discription",
+            "heading": "Discription",
+            "isSortable": true
+        },
+        {
+            "tableName": "supply_status",
+            "name": "entryTime",
+            "heading": "Updated On",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_table",
+            "name": "pName",
+            "heading": "Project Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "supply_status",
+            "name": "supply_item_name",
+            "heading": "Supply Item Name",
+            "isSortable": true
+        }
+    ]
+}
