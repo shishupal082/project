@@ -69,8 +69,8 @@ FormHandler.extend({
         }
         var requiredKeys = DataHandler.getAppData(formName + ".requiredKeys");
         var validationData = DataHandler.getAppData(formName + ".validationData");
-        var messageMapping = DataHandler.getAppData("messageMapping", {});
         var tableName = DataHandler.getTableName(formName + ".tableName");
+        var messageMapping = DataHandler.getAppData("messageMapping", {});
         CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
             DataHandler.setData("addentry.submitStatus", status);
             $S.callMethod(callback);

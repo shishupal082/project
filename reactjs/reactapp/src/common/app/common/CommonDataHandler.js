@@ -393,23 +393,40 @@ CommonDataHandler.extend({
         var isValid = false;
         if ($S.isBooleanTrue(fieldAttr.isRequired)) {
             isValid = $S.isStringV2(fieldData);
-            if (!isValid) {
-                alert(this._getAleartMessage(messageMapping, key));
+            if (isValid) {
+                switch(fieldAttr.type) {
+                    case "date":
+                        isValid = AppHandler.isValidDateStr(fieldData);
+                    break;
+                    case "numeric":
+                        isValid = $S.isNumeric(fieldData);
+                    break;
+                    case "string":
+                    break;
+                    default:
+                    break;
+                }
             }
+        } else {
+            isValid = true;
         }
-        if (isValid && fieldAttr.type === "date") {
-            isValid = AppHandler.isValidDateStr(fieldData);
-            if (!isValid) {
-                alert(this._getAleartMessage(messageMapping, key));
-            }
-        }
-        if (isValid && fieldAttr.type === "numeric") {
-            isValid = $S.isNumeric(fieldData);
-            if (!isValid) {
-                alert(this._getAleartMessage(messageMapping, key));
-            }
+        if (!isValid) {
+            alert(this._getAleartMessage(messageMapping, key));
         }
         return isValid;
+    },
+    _getFinalFieldData: function(validationData, fieldsData, key) {
+        if (!$S.isObject(validationData)) {
+            validationData = {};
+        }
+        if (!$S.isObject(fieldsData)) {
+            fieldsData = {};
+        }
+        var fieldAttr = validationData[key];
+        if ($S.isObject(fieldAttr) && $S.isBooleanTrue(fieldAttr.readPathParam)) {
+            return this.getPathParamsData(key);
+        }
+        return AppHandler.FormateString(fieldsData[key]);
     },
     submitForm: function(pageName, formName, tableName, messageMapping, requiredKeys, validationData, callback) {
         var fieldsData = CommonDataHandler.getData("fieldsData", {});
@@ -429,7 +446,7 @@ CommonDataHandler.extend({
                 isFormValid = false;
                 break;
             }
-            formData[requiredKeys[i]] = fieldsData[requiredKeys[i]];
+            formData[requiredKeys[i]] = this._getFinalFieldData(validationData, fieldsData, requiredKeys[i]);
         }
         if (isFormValid) {
             this._saveData(pageName, formName, tableName, formData, requiredKeys, callback);

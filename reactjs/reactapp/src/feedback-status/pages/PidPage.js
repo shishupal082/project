@@ -12,8 +12,8 @@ import TemplateHelper from "../../common/TemplateHelper";
 // import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 // import CommonConfig from "../../common/app/common/CommonConfig";
-// import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
-// import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
+import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 
 
 var PidPage;
@@ -35,22 +35,18 @@ $S.extendObject(PidPage);
 
 PidPage.extend({
     _getRenderTable: function(pageName, pid) {
-        var tableData = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
-        var tableTemplate = [], homeFields = [], i, linkTemplate;
-        if ($S.isArray(tableData)) {
-            for (i=0; i<tableData.length; i++) {
-                if (!$S.isObject(tableData[i])) {
-                    continue;
-                }
-                homeFields.push({"toUrl": TemplateHandler.getLink(pageName, tableData[i].pid),
-                        "toText": tableData[i].pName});
-            }
-        }
-        for (i = 0; i< homeFields.length; i++) {
-            linkTemplate = TemplateHandler.getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
-            tableTemplate.push(linkTemplate);
-        }
-        return tableTemplate;
+        var tableName = DataHandler.getTableName("feedbackTable");
+        var tableData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
+        var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");
+        var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
+        var finalTable = DBViewDataHandler.GetFinalTable({"feedback_table": {"tableData": tableData}}, resultPattern, resultCriteria, requiredDataTable);
+        var renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
+
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+        var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+
+        return renderFieldRow;
     },
     getRenderField: function(pageName) {
         var template = TemplateHandler.getTemplate("home");
