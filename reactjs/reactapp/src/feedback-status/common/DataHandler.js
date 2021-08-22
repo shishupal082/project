@@ -208,7 +208,6 @@ DataHandler.extend({
     handleStaticDataLoad: function() {
         var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.headingJson = headingJson;
-        TemplateHandler.SetUserRealtedData();
         this.setCurrentAppId();
     }
 });
@@ -224,6 +223,7 @@ DataHandler.extend({
                     CommonDataHandler.loadAppControlData(function() {
                         DataHandler.handleStaticDataLoad();
                         DataHandler.loadDataByAppId(function() {
+                            TemplateHandler.SetUserRealtedData();
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });
                     });
@@ -418,7 +418,7 @@ DataHandler.extend({
             filterOptions = DataHandler.getData("filterOptions");
             dateSelectionRequiredPages.push(pageName);
         }
-        var renderFieldRow = this.getRenderField(pageName, dataLoadStatus);
+        var renderFieldRow = [this.getRenderField(pageName, dataLoadStatus), {"tag": "div.center", "text": Config.footerLinkJsonAfterLogin}];
 
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", CommonDataHandler.getPathParamsData("sid", ""));

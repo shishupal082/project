@@ -601,6 +601,15 @@ AppHandler.extend({
         }
         return defaultValue;
     },
+    GetUserActiveRoles: function() {
+        if (!$S.isObject(userDetails)) {
+            return [];
+        }
+        if ($S.isObject(userDetails["roles"])) {
+            return Object.keys(userDetails["roles"]);
+        }
+        return [];
+    },
     GetTrackUsername: function() {
         var username = this.GetUserData("username", "");
         if (!$S.isString(username) || username.length < 1) {

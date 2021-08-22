@@ -121,6 +121,7 @@ TemplateHandler.extend({
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         var username = AppHandler.GetUserData("username", "");
+        var activeUserRole = AppHandler.GetUserActiveRoles();
         if ($S.isStringV2(username)) {
             TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
         }
@@ -134,6 +135,12 @@ TemplateHandler.extend({
             for(i=0; i<enabledViewPage.length; i++) {
                 TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPage:" + enabledViewPage[i], "d-none");
                 TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPage:" + enabledViewPage[i], "d-none");
+            }
+        }
+        if ($S.isArray(activeUserRole)) {
+            for(i=0; i<activeUserRole.length; i++) {
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "roleId:" + activeUserRole[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "roleId:" + activeUserRole[i], "d-none");
             }
         }
     },
