@@ -52,14 +52,14 @@ Id1Page.extend({
         return tableTemplate;
     },
     getRenderField: function(pageName) {
-        var template = TemplateHandler.getTemplate("home");
-        var newFormField = FormHandler.getAddNewProjectTemplate();
+        var template = TemplateHandler.getTemplate("id1Page");
+        var newFormField = FormHandler.getFormTemplate(pageName, "updateFeedbackForm");
         var homeFields = this._getProjectTable(pageName);
         if (homeFields.length === 0 && newFormField === null) {
             template = TemplateHandler.getTemplate("noDataFound");
         } else {
-            TemplateHelper.addItemInTextArray(template, "home.link", homeFields);
-            TemplateHelper.addItemInTextArray(template, "home.addNewProject", newFormField);
+            TemplateHelper.addItemInTextArray(template, "id1Page.details", homeFields);
+            TemplateHelper.addItemInTextArray(template, "id1Page.updateFeedback", newFormField);
         }
         return template;
     },

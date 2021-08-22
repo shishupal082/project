@@ -21,7 +21,7 @@ import FormHandlerCreateNewProject from "./FormHandlerCreateNewProject";
 // import FormHandlerAddProjectFiles from "./FormHandlerAddProjectFiles";
 
 var FormHandler;
-
+var SUBMIT_BTN_NAME = "addentry.submitStatus";
 (function($S){
 // var DT = $S.getDT();
 
@@ -60,10 +60,7 @@ FormHandler.extend({
         FormHandlerCreateNewProject.submit(callback);
     },
     submitFeedbackStatus: function(pageName, formName, callback) {
-        if (!DataHandlerV2.isEnabled("form", "addFeedbackForm")) {
-            return null;
-        }
-        var status = DataHandler.getData("addentry.submitStatus", "");
+        var status = DataHandler.getData(SUBMIT_BTN_NAME, "");
         if (status === CommonConfig.IN_PROGRESS) {
             return null;
         }
@@ -72,18 +69,42 @@ FormHandler.extend({
         var tableName = DataHandler.getTableName(formName + ".tableName");
         var messageMapping = DataHandler.getAppData("messageMapping", {});
         CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
-            DataHandler.setData("addentry.submitStatus", status);
+            DataHandler.setData(SUBMIT_BTN_NAME, status);
             $S.callMethod(callback);
         });
     },
-    getFeedbackFormTemplate: function(pageName) {
-        if (!DataHandlerV2.isEnabled("form", "addFeedbackForm")) {
+    // getFeedbackFormTemplate: function(pageName) {
+    //     if (!DataHandlerV2.isEnabled("form", "addFeedbackForm")) {
+    //         return null;
+    //     }
+    //     var validationData = DataHandler.getAppData(pageName + ".validationData");
+    //     var formName = DataHandler.getAppData(pageName + ".formName");
+    //     var formTemplate = DataHandler.getAppData(pageName + ".formTemplate");
+    //     var status = DataHandler.getData("addentry.submitStatus", "");
+    //     formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, "addentry.submitStatus", status);
+    //     return formTemplate;
+    // },
+    _getFormTemplateName: function(pageName) {
+        var formTemplateName = "formTemplate";
+        var isFeedbackCloseAllowed = AppHandler.GetUserData("isFeedbackCloseAllowed", false);
+        if ($S.isBooleanTrue(isFeedbackCloseAllowed)) {
+            formTemplateName = "type2." + formTemplateName;
+        }
+        return formTemplateName;
+    },
+    getFormTemplate: function(pageName, formIdentifier) {
+        if (!DataHandlerV2.isEnabled("form", formIdentifier)) {
             return null;
         }
-        var validationData = DataHandler.getAppData("form.level-1-entry.validationData");
-        var formTemplate = DataHandler.getAppData("pidPage.formTemplate");
-        var status = DataHandler.getData("addentry.submitStatus", "");
-        formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, "addentry.submitStatus", status);
+        var formTemplateName = this._getFormTemplateName(pageName);
+        var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName);
+        var formName = DataHandler.getAppData(pageName + ".formName");
+        var validationData = null, status = null;
+        if ($S.isStringV2(formName)) {
+            validationData = DataHandler.getAppData(formName + ".validationData");
+            status = DataHandler.getData(SUBMIT_BTN_NAME, "");
+        }
+        formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, SUBMIT_BTN_NAME, status);
         return formTemplate;
     },
     // submitAddProjectComment: function(pageName, callback) {

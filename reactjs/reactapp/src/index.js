@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom';
 // import App from './management/App';
 // import App from './hooks/App';
 // import App from './account/App';
-// import App from './search/App';
 // import App from './auth-demo/App';
 // import App from './monitoring/App';
 // import App from './assets/App';

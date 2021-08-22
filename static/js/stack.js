@@ -1645,8 +1645,11 @@ Stack.extend({
         return requestedArray;
     },
     searchItems: function(searchingPattern, allData, searchByPattern, isRevert, modifier, isTrue) {
-        if (!isArray(searchingPattern) || !isArray(allData)) {
+        if (!isArray(allData)) {
             return [];
+        }
+        if (!isArray(searchingPattern)) {
+            searchingPattern = [];
         }
         if (Stack.isBooleanTrue(searchByPattern)) {
             searchByPattern = true;

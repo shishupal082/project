@@ -84,7 +84,7 @@ DataHandler.extend({
         return CommonDataHandler.getData(key, defaultValue, isDirect);
     },
     getLink: function(pid, sid, page) {
-        var link = Config.basepathname + "/pid/" + pid + "/sid/" + sid + "/" + page;
+        var link = CommonConfig.basepathname + "/pid/" + pid + "/sid/" + sid + "/" + page;
         return link;
     },
     getLinkV2: function(sid) {
@@ -92,6 +92,13 @@ DataHandler.extend({
         var pageName = this.getData("pageName", "");
         var linkRef = DataHandlerV2.getLinkRef(pageName);
         return this.getLink(pid, sid, linkRef);
+    },
+    getLinkV3: function(pid, id1) {
+        var link = CommonConfig.basepathname + "/pid/" + pid;
+        if ($S.isStringV2(id1)) {
+            link += "/id1/" + id1;
+        }
+        return link;
     },
     isDataLoadComplete: function() {
         var dataLoadStatusKey = [];
@@ -273,10 +280,10 @@ DataHandler.extend({
             FormHandler.submitFeedbackStatus(pageName, name, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        // } else if (name === "add-supply-item") {
-        //     FormHandler.submitNewSupplyItem(pageName, function() {
-        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        //     });
+        } else if (pageName === Config.id1Page) {
+            FormHandler.submitFeedbackStatus(pageName, name, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
         // } else if (name === "upload_file_form") {
         //     FormHandler.submitUploadFile(pageName, function() {
         //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);

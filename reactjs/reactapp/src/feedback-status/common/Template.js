@@ -430,6 +430,23 @@ Template["home"] = [
         ]
     }
 ];
+Template["id1Page"] = [
+    {
+        "tag": "div",
+        "text": [
+            {
+                "tag": "div",
+                "name": "id1Page.details",
+                "text": []
+            },
+            {
+                "tag": "div",
+                "name": "id1Page.updateFeedback",
+                "text": []
+            }
+        ]
+    }
+];
 Template["link-field"] = [
     {
         "tag": "link",
