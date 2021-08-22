@@ -6,7 +6,6 @@ import com.pdf.constants.AppConstant;
 import com.pdf.file.ScanDir;
 import com.pdf.file.ScanResult;
 import com.pdf.service.PdfService;
-import com.pdf.view.IndexView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,28 +21,27 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PdfResource {
-    private static Logger logger = LoggerFactory.getLogger(PdfResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(PdfResource.class);
     @Context
     private HttpServletRequest httpServletRequest;
     private final PdfConfiguration pdfConfiguration;
-    private PdfService pdfService;
-    private String pdfDir;
+    private final PdfService pdfService;
+    private final String pdfDir;
     public PdfResource(PdfConfiguration pdfConfiguration) {
         this.pdfConfiguration = pdfConfiguration;
         pdfService = new PdfService(pdfConfiguration);
         pdfDir = pdfConfiguration.getPdfSaveDir();
     }
     @GET
-    @Produces(MediaType.TEXT_HTML)
-    public IndexView indexPage() {
+    public Map<String, String> indexPage() {
         logger.info("IndexView: in");
-        IndexView indexView = new IndexView(httpServletRequest);
+        Map<String, String> response = new HashMap<String, String>();
+        response.put("appVersion", AppConstant.AppVersion);
         logger.info("IndexView: out");
-        return indexView;
+        return response;
     }
     @GET
     @Path("check-utilities")
-    @Produces(MediaType.APPLICATION_JSON)
     public Map<String, String> checkUtilities() {
         logger.info("checkUtilities: in");
         Map<String, String> response = new HashMap<String, String>();

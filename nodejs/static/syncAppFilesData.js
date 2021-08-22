@@ -4,7 +4,6 @@ var syncData = {
             "../static/libs/jquery-2.1.3.js"
         ],
         "destinationDir": [
-            "../java/pdf/src/main/resources/assets/static/libs/",
             "../../ftp-application/FTP/src/main/resources/assets/static/libs/"
         ]
     },
@@ -13,7 +12,6 @@ var syncData = {
             "../static/libs/bootstrap-v3.1.1.css"
         ],
         "destinationDir": [
-            "../java/pdf/src/main/resources/assets/static/libs/",
             "../../ftp-application/FTP/src/main/resources/assets/static/libs/"
         ]
     },
@@ -34,7 +32,6 @@ var syncData = {
             "../static/js/stack.js",
         ],
         "destinationDir": [
-            "../java/pdf/src/main/resources/assets/static/js/",
             "../reactjs/reactapp/src/libs/",
             "../../ftp-application/FTP/src/main/resources/assets/static/js/"
         ]
