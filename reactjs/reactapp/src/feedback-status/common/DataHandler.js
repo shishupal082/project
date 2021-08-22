@@ -6,7 +6,7 @@ import TemplateHandler from "./TemplateHandler";
 import ApiHandler from "../api/ApiHandler";
 
 // import Api from "../../common/Api";
-import TemplateHelper from "../../common/TemplateHelper";
+// import TemplateHelper from "../../common/TemplateHelper";
 import AppHandler from "../../common/app/common/AppHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
@@ -168,7 +168,7 @@ DataHandler.extend({
     checkForRedirect: function(callback) {
         var isLogin = AppHandler.GetUserData("login", false);
         if ($S.isBooleanTrue(CommonConfig.forceLogin) && isLogin === false) {
-            AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+            AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
             return;
         }
         $S.callMethod(callback);
