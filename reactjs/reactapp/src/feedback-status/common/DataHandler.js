@@ -88,7 +88,7 @@ DataHandler.extend({
         return link;
     },
     getLinkV2: function(sid) {
-        var pid = this.getPathParamsData("pid");
+        var pid = CommonDataHandler.getPathParamsData("pid");
         var pageName = this.getData("pageName", "");
         var linkRef = DataHandlerV2.getLinkRef(pageName);
         return this.getLink(pid, sid, linkRef);
@@ -364,6 +364,14 @@ DataHandler.extend({
         var isPageEnabled = DataHandlerV2.isEnabled("pageName", pageName);
         if (!isPageEnabled) {
             renderData = {"status": "FAILURE", "reason": "Requested page disabled"};
+            return TemplateHandler.getInvalidField(renderData);
+        }
+        var isValidPid = true;
+        if ([Config.pidPage, Config.id1Page].indexOf(pageName) >= 0) {
+            isValidPid = DataHandlerV2.isValidPid();
+        }
+        if (!isValidPid) {
+            renderData = {"status": "FAILURE", "reason": "Invalid path parameter"};
             return TemplateHandler.getInvalidField(renderData);
         }
         switch(pageName) {

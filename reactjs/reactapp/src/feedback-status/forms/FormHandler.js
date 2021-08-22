@@ -86,8 +86,7 @@ FormHandler.extend({
     // },
     _getFormTemplateName: function(pageName) {
         var formTemplateName = "formTemplate";
-        var isFeedbackCloseAllowed = AppHandler.GetUserData("isFeedbackCloseAllowed", false);
-        if ($S.isBooleanTrue(isFeedbackCloseAllowed)) {
+        if (DataHandlerV2.isEnabled("form", pageName + ".type2.updateFeedbackForm")) {
             formTemplateName = "type2." + formTemplateName;
         }
         return formTemplateName;

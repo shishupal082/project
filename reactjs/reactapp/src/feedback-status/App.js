@@ -199,11 +199,6 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id1Page}/>
                     )}
                 />
-                <Route exact path={pages.id2Page}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id2Page}/>
-                    )}
-                />
                 <Route exact path={pages.viewPage}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.viewPage}/>
@@ -221,6 +216,11 @@ class App extends React.Component {
                 />
             </Switch>
         </BrowserRouter>);
+                // <Route exact path={pages.id2Page}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id2Page}/>
+                //     )}
+                // />
         // return (
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );

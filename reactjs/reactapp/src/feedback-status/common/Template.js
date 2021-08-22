@@ -79,112 +79,6 @@ Template["invalid-data"] = [
         }
     }
 ];
-Template["file_details"] = {
-    "tag": "div",
-    "className": "file_details",
-    "text": [
-        {
-            "tag": "div",
-            "text": {
-                "tag": "b",
-                "name": "subject",
-                "text": ""
-            }
-        },
-        {
-            "tag": "div",
-            "name": "heading",
-            "text": ""
-        },
-        {
-            "tag": "div",
-            "name": "file-action-field",
-            "text": [
-                {
-                    "tag": "button",
-                    "className": "btn btn-link pt-1px pl-0",
-                    "name": "view_file.unique_id",
-                    "text": "View"
-                },
-                {
-                    "tag": "a",
-                    "isTargetBlank": true,
-                    "name": "open_in_new_tab.href",
-                    "href": "",
-                    "text": "Open in new tab"
-                },
-                {
-                    "tag": "span",
-                    "className": "pl-10px",
-                    "text": ""
-                },
-                {
-                    "tag": "a",
-                    "name": "download.href",
-                    "href": "",
-                    "text": "Download"
-                },
-                {
-                    "tag": "form",
-                    "name": "delete_file.form",
-                    "value": "delete_file.form",
-                    "className": "list-inline-item",
-                    "text": {
-                        "tag": "button",
-                        "name": "delete_file.form.button",
-                        "className": "btn btn-link pt-1px disabled",
-                        "text": "Delete"
-                    }
-                }
-            ]
-        }
-    ]
-};
-Template["file_details_as_comment_or_link"] = {
-    "tag": "div",
-    "className": "file_details",
-    "text": [
-        {
-            "tag": "div",
-            "text": {
-                "tag": "b",
-                "name": "subject",
-                "text": ""
-            }
-        },
-        {
-            "tag": "div",
-            "name": "heading",
-            "text": ""
-        },
-        {
-            "tag": "div",
-            "className": "d-none",
-            "name": "file-action-field",
-            "text": [
-                {
-                    "tag": "a",
-                    "isTargetBlank": true,
-                    "name": "open_in_new_tab.href",
-                    "href": "",
-                    "text": "Open Link in new tab"
-                },
-                {
-                    "tag": "form",
-                    "name": "delete_file.form",
-                    "value": "delete_file.form",
-                    "className": "list-inline-item",
-                    "text": {
-                        "tag": "button",
-                        "name": "delete_file.form.button",
-                        "className": "btn btn-link pt-1px disabled",
-                        "text": "Delete"
-                    }
-                }
-            ]
-        }
-    ]
-};
 Template["deleteFileTemplate"] = [
     {
         "tag": "form",
@@ -437,6 +331,11 @@ Template["id1Page"] = [
             {
                 "tag": "div",
                 "name": "id1Page.details",
+                "text": []
+            },
+            {
+                "tag": "div",
+                "name": "id1Page.comments",
                 "text": []
             },
             {

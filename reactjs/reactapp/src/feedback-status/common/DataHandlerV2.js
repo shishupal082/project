@@ -339,6 +339,34 @@ DataHandlerV2.extend({
 });
 
 DataHandlerV2.extend({
+    getFeedbackCurrentStatus: function(pid, id1) {
+        var status = "Pending";
+        if (!$S.isStringV2(pid) && !$S.isStringV2(id1)) {
+            return status;
+        }
+        var tableName = DataHandler.getTableName("feedbackComment");
+        var attr = {"pid": pid, "id1": id1};
+        var commentData = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
+        if ($S.isArray(commentData) && commentData.length > 0 && $S.isObject(commentData[0]) && $S.isStringV2(commentData[0]["status"])) {
+            status = commentData[0]["status"];
+        }
+        return status;
+    },
+    updateFeedbackStatus: function(feedbackData) {
+        if (!$S.isArray(feedbackData)) {
+            return feedbackData;
+        }
+        for (var i=0; i<feedbackData.length; i++) {
+            if (!$S.isObject(feedbackData[i])) {
+                continue;
+            }
+            feedbackData[i]["status"] = this.getFeedbackCurrentStatus(feedbackData[i].pid, feedbackData[i].unique_id);
+        }
+        return feedbackData;
+    }
+});
+
+DataHandlerV2.extend({
     getTableData: function(tableName) {
         if (!$S.isStringV2(tableName)) {
             return [];
@@ -353,16 +381,26 @@ DataHandlerV2.extend({
         return tableData;
     },
     getTableDataByAttr: function(tableName, attrName, attrValue) {
+        var attr = {};
+        attr[attrName] = attrValue;
+        return this.getTableDataByAttrV2(tableName, attr);
+    },
+    getTableDataByAttrV2: function(tableName, attr) {
         var tableData = this.getTableData(tableName);
-        if (!$S.isArray(tableData) || !$S.isStringV2(attrName)) {
+        if (!$S.isArray(tableData) || !$S.isObject(attr)) {
             return [];
         }
-        var result = $S.searchItems([attrName], tableData, false, false, "i",
+        var result = $S.searchItems(null, tableData, false, false, "i",
             function(searchingPattern, el, i, arr) {
                 if (!$S.isObject(el)) {
                     return false;
                 }
-                return el[attrName] === attrValue;
+                for (var key in attr) {
+                    if (el[key] !== attr[key]) {
+                        return false;
+                    }
+                }
+                return true;
             }
         );
         return result;
@@ -374,6 +412,17 @@ DataHandlerV2.extend({
         }
         var displayText = $S.findParam(tableData, searchRef, defaultValue, searchKey, requiredKey);
         return displayText;
+    }
+});
+DataHandlerV2.extend({
+    isValidPid: function() {
+        var pid = CommonDataHandler.getPathParamsData("pid", "");
+        var tableName = DataHandler.getTableName("projectTable", "");
+        var tableData = this.getTableDataByAttr(tableName, "pid", pid);
+        if ($S.isArray(tableData) && tableData.length === 1) {
+            return true;
+        }
+        return false;
     }
 });
 DataHandlerV2.extend({

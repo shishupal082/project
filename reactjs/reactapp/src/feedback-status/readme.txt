@@ -56,9 +56,6 @@ TelecomTeam
 AdminTeam
 	- TrainingSection
 
-Special role based on user (Used for showing closed option in dropdown i.e. loading type2.formTemplate)
-DG_ADG
-	- isFeedbackCloseAllowed
 
 *************************************************************************************
 
