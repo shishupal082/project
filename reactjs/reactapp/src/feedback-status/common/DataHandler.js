@@ -167,7 +167,7 @@ DataHandler.extend({
 DataHandler.extend({
     checkForRedirect: function(callback) {
         var isLogin = AppHandler.GetUserData("login", false);
-        if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+        if ($S.isBooleanTrue(CommonConfig.forceLogin) && isLogin === false) {
             AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
             return;
         }
@@ -208,9 +208,7 @@ DataHandler.extend({
     handleStaticDataLoad: function() {
         var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.headingJson = headingJson;
-        var afterLoginLinkJson = Config.afterLoginLinkJson;
-        var username = AppHandler.GetUserData("username", "");
-        TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
+        TemplateHandler.SetUserRealtedData();
         this.setCurrentAppId();
     }
 });

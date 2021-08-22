@@ -143,7 +143,6 @@ DataHandlerV2.extend({
         }
         DataHandler.setData("date-select", dateSelect);
         this.findCurrentList3Id();
-        // TemplateHandler.SetUserRealtedData();
     }
 });
 DataHandlerV2.extend({

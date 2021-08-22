@@ -4,7 +4,7 @@ import Template from "./Template";
 
 import Config from "./Config";
 import DataHandler from "./DataHandler";
-// import DataHandlerV2 from "../DataHandlerV2";
+import DataHandlerV2 from "./DataHandlerV2";
 // import FormHandler from "../forms/FormHandler";
 
 
@@ -115,24 +115,25 @@ TemplateHandler.extend({
         return template;
     },
     SetUserRealtedData: function() {
-        var headingJson = Config.headingJson;
-        var footerJson = Config.footerJson, i;
+        var i;
+        var afterLoginLinkJson = Config.afterLoginLinkJson;
+        var footerLinkJsonAfterLogin = Config.footerLinkJsonAfterLogin;
+        var enabledPageId = DataHandlerV2.getEnabledPageId();
+        var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         var username = AppHandler.GetUserData("username", "");
-        var enabledPageId;// = DataHandlerV2.getEnabledPageId();
-        var enabledViewPage;// = DataHandlerV2.getEnabledViewPageName();
-        if ($S.isString(username)) {
-            TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
+        if ($S.isStringV2(username)) {
+            TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
         }
         if ($S.isArray(enabledPageId)) {
             for(i=0; i<enabledPageId.length; i++) {
-                TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
-                TemplateHelper.removeClassTemplate(footerJson, "pageId:" + enabledPageId[i], "d-none");
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "pageId:" + enabledPageId[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "pageId:" + enabledPageId[i], "d-none");
             }
         }
         if ($S.isArray(enabledViewPage)) {
             for(i=0; i<enabledViewPage.length; i++) {
-                TemplateHelper.removeClassTemplate(headingJson, "viewPage:" + enabledViewPage[i], "d-none");
-                TemplateHelper.removeClassTemplate(footerJson, "viewPage:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPage:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPage:" + enabledViewPage[i], "d-none");
             }
         }
     },
