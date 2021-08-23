@@ -414,7 +414,7 @@ DataHandlerV2.extend({
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                if (visibleFeedbackSection.indexOf(tableData[i]["section"]) >= 0) {
+                if (visibleFeedbackSection.length === 0 || visibleFeedbackSection.indexOf(tableData[i]["section"]) >= 0) {
                     finalTableData.push(tableData[i]);
                 }
             }

@@ -21,6 +21,7 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
+            "appComponentClassName": "",
 
             "list2Text": "Select...",
             "list2Data": [],

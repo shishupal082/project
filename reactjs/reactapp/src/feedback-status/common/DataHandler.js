@@ -193,6 +193,9 @@ DataHandler.extend({
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getData("currentList1Id", "");
         CommonDataHandler.loadMetaDataByAppId(currentList1Id, function() {
+            // set headingJson from staticData
+            // headerLink and footerLink from UserControl and metaData
+            TemplateHandler.SetUserRealtedData();
             DataHandler.loadDataByPage(callback);
         });
     },
@@ -234,10 +237,11 @@ DataHandler.extend({
                 AppHandler.LoadStaticData(staticDataUrl, function() {
                     CommonDataHandler.loadAppControlData(function() {
                         DataHandler.setCurrentAppId();
+                        var title = DataHandler.getAppData("title", "");
+                        if ($S.isStringV2(title)) {
+                            CommonConfig.JQ("title").html(title);
+                        }
                         DataHandler.loadDataByAppId(function() {
-                            // set headingJson from staticData
-                            // headerLink and footerLink from UserControl and metaData
-                            TemplateHandler.SetUserRealtedData();
                             DataHandler.handleStaticDataLoad();
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });
@@ -447,6 +451,7 @@ DataHandler.extend({
         appDataCallback("dateSelection", CommonConfig.dateSelection);
         appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
+        appDataCallback("appComponentClassName", DataHandler.getAppData("appComponentClassName", ""));
         appStateCallback();
     }
 });

@@ -1,4 +1,4 @@
-import $$$ from '../../interface/global';
+// import $$$ from '../../interface/global';
 // import $S from "../../interface/stack.js";
 import CommonConfig from "../../common/app/common/CommonConfig";
 
