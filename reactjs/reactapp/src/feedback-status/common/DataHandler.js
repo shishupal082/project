@@ -212,7 +212,11 @@ DataHandler.extend({
         if ($S.isArray(roles) && $S.isObject(feedbackSectionMapping)) {
             for (var key in feedbackSectionMapping) {
                 if (roles.indexOf(key) >= 0) {
-                    visibleFeedbackSection.push(feedbackSectionMapping[key]);
+                    if ($S.isStringV2(feedbackSectionMapping[key])) {
+                        visibleFeedbackSection.push(feedbackSectionMapping[key]);
+                    } else if ($S.isArray(feedbackSectionMapping[key])) {
+                        visibleFeedbackSection = visibleFeedbackSection.concat(feedbackSectionMapping[key]);
+                    }
                 }
             }
         }
