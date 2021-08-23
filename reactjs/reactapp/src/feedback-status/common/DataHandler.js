@@ -32,7 +32,7 @@ keys.push("renderFieldRow");
 keys.push("pageName");
 keys.push("componentChangeType");
 
-
+keys.push("visibleFeedbackSection");
 
 keys.push("currentList1Id");
 keys.push("currentList3Id");
@@ -208,7 +208,17 @@ DataHandler.extend({
     handleStaticDataLoad: function() {
         var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.headingJson = headingJson;
-        this.setCurrentAppId();
+        var feedbackSectionMapping = this.getAppData("feedbackSectionMapping", {});
+        var roles = AppHandler.GetUserActiveRoles();
+        var visibleFeedbackSection = [];
+        if ($S.isArray(roles) && $S.isObject(feedbackSectionMapping)) {
+            for (var key in feedbackSectionMapping) {
+                if (roles.indexOf(key) >= 0) {
+                    visibleFeedbackSection.push(feedbackSectionMapping[key]);
+                }
+            }
+        }
+        this.setData("visibleFeedbackSection", visibleFeedbackSection);
     }
 });
 DataHandler.extend({
@@ -221,8 +231,9 @@ DataHandler.extend({
             DataHandler.checkForRedirect(function() {
                 AppHandler.LoadStaticData(staticDataUrl, function() {
                     CommonDataHandler.loadAppControlData(function() {
-                        DataHandler.handleStaticDataLoad();
+                        DataHandler.setCurrentAppId();
                         DataHandler.loadDataByAppId(function() {
+                            DataHandler.handleStaticDataLoad();
                             TemplateHandler.SetUserRealtedData();
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });

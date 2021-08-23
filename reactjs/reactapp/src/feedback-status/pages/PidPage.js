@@ -113,8 +113,7 @@ PidPage.extend({
         return data;
     },
     _getRenderTable: function(pageName, pid) {
-        var tableName = DataHandler.getTableName("feedbackTable");
-        var tableData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
+        var tableData = DataHandlerV2.getFeedbackTableDataByAttr({"pid": pid});
         DataHandlerV2.updateFeedbackStatus(tableData);
         this._updateFieldAttr(pageName, pid, tableData);
         var resultPattern = DataHandler.getAppData(pageName + ".resultPattern");

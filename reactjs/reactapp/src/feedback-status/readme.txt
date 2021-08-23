@@ -70,6 +70,13 @@ Form-3
 - enable only for DG_ADG (after entry by respective department)
 
 
+Update form to be visible for
+- DG_ADG or TraineeSection or Status of the form is not Complied
+- Add feedback form is visible for Trainee section only
+
+To implement relevent view of feedback
+- mapping required: feedbackSectionMapping
+
 *************************************************************************************
 
 csv_filename

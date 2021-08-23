@@ -86,9 +86,6 @@ FormHandler.extend({
     // },
     _getFormTemplateName: function(pageName) {
         var formTemplateName = "formTemplate";
-        if (DataHandlerV2.isEnabled("form", pageName + ".type2.updateFeedbackForm")) {
-            formTemplateName = "type2." + formTemplateName;
-        }
         return formTemplateName;
     },
     getFormTemplate: function(pageName, formIdentifier) {
@@ -96,7 +93,7 @@ FormHandler.extend({
             return null;
         }
         var formTemplateName = this._getFormTemplateName(pageName);
-        var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName);
+        var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName, null);
         var formName = DataHandler.getAppData(pageName + ".formName");
         var validationData = null, status = null;
         if ($S.isStringV2(formName)) {

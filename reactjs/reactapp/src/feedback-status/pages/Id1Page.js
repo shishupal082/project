@@ -57,9 +57,8 @@ Id1Page.extend({
         return comments;
     },
     _getFeedbackDetails: function(pageName, pid, id1) {
-        var tableName = DataHandler.getTableName("feedbackTable");
         var attr = {"pid": pid, "unique_id": id1};
-        var tableData = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
+        var tableData = DataHandlerV2.getFeedbackTableDataByAttr(attr);
         if ($S.isArray(tableData) && tableData.length === 1) {
             DataHandlerV2.updateFeedbackStatus(tableData);
             return this._getFeedbackFields(tableData[0], pid, id1);
@@ -73,8 +72,10 @@ Id1Page.extend({
         var tableField = this._getProjectTable(pageName, pid, id1);
         var feedbackDetails = this._getFeedbackDetails(pageName, pid, id1);
         var currentStatus = DataHandlerV2.getFeedbackCurrentStatus(pid, id1);
+        var finalStatusRef = DataHandler.getAppData(pageName + ".finalStatusRef", "");
+        var isUpdateFeedbackEnable = DataHandlerV2.isEnabled("form", "updateFeedbackForm.force");
         var newFormField = null;
-        if (currentStatus !== "Closed") {
+        if (currentStatus !== finalStatusRef || isUpdateFeedbackEnable) {
             newFormField = FormHandler.getFormTemplate(pageName, "updateFeedbackForm");
         }
         if (tableField.length === 0 && newFormField === null && feedbackDetails === null) {

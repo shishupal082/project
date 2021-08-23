@@ -404,6 +404,23 @@ DataHandlerV2.extend({
         );
         return result;
     },
+    getFeedbackTableDataByAttr: function(attr) {
+        var tableName = DataHandler.getTableName("feedbackTable");
+        var tableData = this.getTableDataByAttrV2(tableName, attr);
+        var visibleFeedbackSection = DataHandler.getData("visibleFeedbackSection", []);
+        var finalTableData = [];
+        if ($S.isArray(tableData) && $S.isArray(visibleFeedbackSection)) {
+            for (var i=0; i<tableData.length; i++) {
+                if (!$S.isObject(tableData[i])) {
+                    continue;
+                }
+                if (visibleFeedbackSection.indexOf(tableData[i]["section"]) >= 0) {
+                    finalTableData.push(tableData[i]);
+                }
+            }
+        }
+        return finalTableData;
+    },
     getDisplayName: function(tableName, searchKey, searchRef, requiredKey, defaultValue) {
         var tableData = this.getTableData(tableName);
         if (!$S.isArray(tableData) || !$S.isStringV2(searchKey) || !$S.isStringV2(requiredKey)) {
