@@ -206,8 +206,6 @@ DataHandler.extend({
         $S.callMethod(callback);
     },
     handleStaticDataLoad: function() {
-        var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
-        Config.headingJson = headingJson;
         var feedbackSectionMapping = this.getAppData("feedbackSectionMapping", {});
         var roles = AppHandler.GetUserActiveRoles();
         var visibleFeedbackSection = [];
@@ -233,8 +231,10 @@ DataHandler.extend({
                     CommonDataHandler.loadAppControlData(function() {
                         DataHandler.setCurrentAppId();
                         DataHandler.loadDataByAppId(function() {
-                            DataHandler.handleStaticDataLoad();
+                            // set headingJson from staticData
+                            // headerLink and footerLink from UserControl and metaData
                             TemplateHandler.SetUserRealtedData();
+                            DataHandler.handleStaticDataLoad();
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });
                     });
@@ -429,7 +429,7 @@ DataHandler.extend({
             filterOptions = DataHandler.getData("filterOptions");
             dateSelectionRequiredPages.push(pageName);
         }
-        var renderFieldRow = [this.getRenderField(pageName, dataLoadStatus), {"tag": "div.center", "text": Config.footerLinkJsonAfterLogin}];
+        var renderFieldRow = [this.getRenderField(pageName, dataLoadStatus), {"tag": "div.center", "text": $S.clone(Config.footerLinkJsonAfterLogin)}];
 
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", CommonDataHandler.getPathParamsData("sid", ""));

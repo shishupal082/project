@@ -116,6 +116,8 @@ TemplateHandler.extend({
     },
     SetUserRealtedData: function() {
         var i;
+        var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
+        Config.headingJson = headingJson;
         var afterLoginLinkJson = Config.afterLoginLinkJson;
         var footerLinkJsonAfterLogin = Config.footerLinkJsonAfterLogin;
         var enabledPageId = DataHandlerV2.getEnabledPageId();
@@ -145,7 +147,7 @@ TemplateHandler.extend({
         }
     },
     GetHeadingField: function(headingText) {
-        return [Config.headingJson, {"tag": "div.center", "text": Config.afterLoginLinkJson}];
+        return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
     }
 });
 
