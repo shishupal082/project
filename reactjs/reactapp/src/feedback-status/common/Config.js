@@ -6,8 +6,8 @@ var Config = {};
 
 Config.tempConfig = {};
 Config.headingJson = [];
-Config.afterLoginLinkJson = $$$.afterLoginLinkJson;
-Config.footerLinkJsonAfterLogin = $$$.footerLinkJsonAfterLogin;
+Config.afterLoginLinkJson = [];//$$$.afterLoginLinkJson;
+Config.footerLinkJsonAfterLogin = [];//$$$.footerLinkJsonAfterLogin;
 
 var basepathname = CommonConfig.basepathname;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import $S from '../interface/stack.js';
 
-var Api
+var Api;
 (function($S) {
 Api = function(config) {
     return new Api.fn.init(config);

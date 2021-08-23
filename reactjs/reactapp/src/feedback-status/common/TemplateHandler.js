@@ -117,9 +117,8 @@ TemplateHandler.extend({
     SetUserRealtedData: function() {
         var i;
         var headingJson = AppHandler.GetStaticData("headingJson", [], "json");
-        Config.headingJson = headingJson;
-        var afterLoginLinkJson = Config.afterLoginLinkJson;
-        var footerLinkJsonAfterLogin = Config.footerLinkJsonAfterLogin;
+        var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", []);
+        var footerLinkJsonAfterLogin = DataHandler.getAppData("footerLinkJsonAfterLogin", []);
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         var username = AppHandler.GetUserData("username", "");
@@ -145,6 +144,9 @@ TemplateHandler.extend({
                 TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "roleId:" + activeUserRole[i], "d-none");
             }
         }
+        Config.headingJson = headingJson;
+        Config.afterLoginLinkJson = afterLoginLinkJson;
+        Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     GetHeadingField: function(headingText) {
         return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
