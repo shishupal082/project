@@ -56,12 +56,16 @@ Id1Page.extend({
         var comments = this._getTableHtml(tableData);
         return comments;
     },
-    _getFeedbackDetails: function(pageName, pid, id1) {
-        var attr = {"pid": pid, "unique_id": id1};
-        var tableData = DataHandlerV2.getFeedbackTableDataByAttr(attr);
+    _getFeedbackDetails: function(pageName, tableData, pid, id1) {
         if ($S.isArray(tableData) && tableData.length === 1) {
             DataHandlerV2.updateFeedbackStatus(tableData);
             return this._getFeedbackFields(tableData[0], pid, id1);
+        }
+        return null;
+    },
+    _getFormType: function(tableData) {
+        if ($S.isArray(tableData) && tableData.length === 1) {
+            return tableData[0]["form_type"];
         }
         return null;
     },
@@ -70,13 +74,18 @@ Id1Page.extend({
         var id1 = CommonDataHandler.getPathParamsData("id1", "");
         var template = TemplateHandler.getTemplate("id1Page");
         var tableField = this._getProjectTable(pageName, pid, id1);
-        var feedbackDetails = this._getFeedbackDetails(pageName, pid, id1);
+        var attr = {"pid": pid, "unique_id": id1};
+        var tableData = DataHandlerV2.getFeedbackTableDataByAttr(attr);
+        var formType = this._getFormType(tableData);
+        var feedbackDetails = this._getFeedbackDetails(pageName, tableData, pid, id1);
         var currentStatus = DataHandlerV2.getFeedbackCurrentStatus(pid, id1);
         var finalStatusRef = DataHandler.getAppData(pageName + ".finalStatusRef", "");
         var isUpdateFeedbackEnable = DataHandlerV2.isEnabled("form", "updateFeedbackForm.force");
         var newFormField = null;
         if (currentStatus !== finalStatusRef || isUpdateFeedbackEnable) {
-            newFormField = FormHandler.getFormTemplate(pageName, "updateFeedbackForm");
+            if ($S.isStringV2(formType)) {
+                newFormField = FormHandler.getFormTemplate(pageName, formType, "updateFeedbackForm");
+            }
         }
         if (tableField.length === 0 && newFormField === null && feedbackDetails === null) {
             template = TemplateHandler.getTemplate("noDataFound");

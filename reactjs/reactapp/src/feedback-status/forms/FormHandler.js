@@ -84,20 +84,31 @@ FormHandler.extend({
     //     formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, "addentry.submitStatus", status);
     //     return formTemplate;
     // },
-    _getFormTemplateName: function(pageName) {
+    _getFormTemplateName: function(pageName, formType) {
         var formTemplateName = "formTemplate";
+        if ($S.isStringV2(formType)) {
+            formTemplateName = formType + "." + formTemplateName;
+        }
         return formTemplateName;
     },
-    getFormTemplate: function(pageName, formIdentifier) {
+    _getFormName: function(pageName, formType) {
+        var formName = "formName";
+        if ($S.isStringV2(formType)) {
+            formName = formType + "." + formName;
+        }
+        return formName;
+    },
+    getFormTemplate: function(pageName, formType, formIdentifier) {
         if (!DataHandlerV2.isEnabled("form", formIdentifier)) {
             return null;
         }
-        var formTemplateName = this._getFormTemplateName(pageName);
+        var formTemplateName = this._getFormTemplateName(pageName, formType);
+        var formName = this._getFormName(pageName, formType);
         var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName, null);
-        var formName = DataHandler.getAppData(pageName + ".formName");
+        var finalFormName = DataHandler.getAppData(pageName + "." + formName);
         var validationData = null, status = null;
-        if ($S.isStringV2(formName)) {
-            validationData = DataHandler.getAppData(formName + ".validationData");
+        if ($S.isStringV2(finalFormName)) {
+            validationData = DataHandler.getAppData(finalFormName + ".validationData");
             status = DataHandler.getData(SUBMIT_BTN_NAME, "");
         }
         formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, SUBMIT_BTN_NAME, status);

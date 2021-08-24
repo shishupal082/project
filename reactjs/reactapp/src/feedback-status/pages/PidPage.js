@@ -53,9 +53,12 @@ PidPage.extend({
         return null;
     },
     _updateAttrV2: function(pageName, pid, rowData, colData) {
-        var updateLink, hrefLink, hrefText;
+        var updateLink, hrefLink, hrefText, displayValue = "";
         if ($S.isObject(colData)) {
             if (colData["name"] === "status") {
+                if ($S.isBooleanTrue(colData["displayValue"])) {
+                    displayValue = colData["value"];
+                }
                 updateLink = this._getUpdateLink(rowData);
                 if ($S.isObject(updateLink)) {
                     hrefLink = updateLink["value"];
@@ -70,7 +73,7 @@ PidPage.extend({
                         "text": [
                             {
                                 "tag": "div.span",
-                                "text": colData["value"]
+                                "text": displayValue
                             },
                             {
                                 "tag": "div",
@@ -130,7 +133,7 @@ PidPage.extend({
     getRenderField: function(pageName) {
         var template = TemplateHandler.getTemplate("home");
         var pid = CommonDataHandler.getPathParamsData("pid");
-        var newFormField = FormHandler.getFormTemplate(pageName, "addFeedbackForm");
+        var newFormField = FormHandler.getFormTemplate(pageName, null, "addFeedbackForm");
         var homeFields = this._getRenderTable(pageName, pid);
         if (homeFields.length === 0 && newFormField === null) {
             template = TemplateHandler.getTemplate("noDataFound");

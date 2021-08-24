@@ -103,3 +103,10 @@ csv_file data pattern
 entry_date_time, table_name, unique_id, updated_by, orher fields as applicable
 
 
+
+
+Table attribute used in code
+- "form_type" of feedback_table for finding formTemplate based of pid.id1.form_type
+- name == "status" then "displayValue" of pid.resultPattern.status
+
+
