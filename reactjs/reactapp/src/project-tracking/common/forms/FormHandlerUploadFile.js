@@ -64,6 +64,10 @@ FormHandlerUploadFile.extend({
         var resultData = ["table_name", "unique_id", "pid", "username", "subject", "filename"];
         var formData = {};
         formData["table_name"] = DataHandler.getTableName("fileTable");
+        if (!$S.isStringV2(formData["table_name"])) {
+            alert(FormHandler.GetAleartMessage("tableName.invalid"))
+            return;
+        }
         formData["unique_id"] = FormHandler.GetUniqueId();
         formData["pid"] = pid;
         formData["username"] = AppHandler.GetUserData("username", "");
@@ -128,6 +132,11 @@ FormHandlerUploadFile.extend({
     uploadFile: function(file, subject, heading, callback) {
         var url = CommonConfig.getApiUrl("upload_file", null, true);
         if (!$S.isString(url)) {
+            return;
+        }
+        var tableName = DataHandler.getTableName("fileTable");
+        if (!$S.isStringV2(tableName)) {
+            alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
         }
         var pid = DataHandler.getPathParamsData("pid", "");

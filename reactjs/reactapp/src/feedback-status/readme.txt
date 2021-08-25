@@ -108,5 +108,11 @@ entry_date_time, table_name, unique_id, updated_by, orher fields as applicable
 Table attribute used in code
 - "form_type" of feedback_table for finding formTemplate based of pid.id1.form_type
 - name == "status" then "displayValue" of pid.resultPattern.status
+- form_type of project_table
 
+resultPattern
+details_link is necessary in projectId.resultPattern
+
+on id1Page
+feedbackDetails.resultPattern
 
