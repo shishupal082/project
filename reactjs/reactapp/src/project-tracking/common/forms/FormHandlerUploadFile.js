@@ -6,11 +6,11 @@ import Config from "../Config";
 import UploadFileFormHandler from "../../../common/app/common/upload_file/UploadFileFormHandler";
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
+import CommonConfig from "../../../common/app/common/CommonConfig";
 import FormHandler from "./FormHandler";
 
 var FormHandlerUploadFile;
 
-AppHandler.SetStaticDataAttr("uploadFileApiVersion", "v2");
 UploadFileFormHandler.updateTemplate("upload_file.message", "text", Config.uploadFileInstruction);
 
 (function($S){
@@ -57,7 +57,7 @@ FormHandlerUploadFile.extend({
         return uploadFileTemplate;
     },
     addInFileTable: function(filename, subject, pid, callback) {
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
@@ -78,7 +78,7 @@ FormHandlerUploadFile.extend({
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             if (status === "FAILURE") {
                 AppHandler.TrackApiRequest("addInFileTable", "FAILURE");
             } else {
@@ -89,7 +89,7 @@ FormHandlerUploadFile.extend({
     },
     saveLink: function(pageName, formData, callback) {
         var resultData = ["table_name", "unique_id", "pid", "username", Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
@@ -113,7 +113,7 @@ FormHandlerUploadFile.extend({
         postData["filename"] = formData["table_name"] + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
             $S.callMethod(callback);
             if (status === "FAILURE") {
@@ -126,12 +126,12 @@ FormHandlerUploadFile.extend({
         });
     },
     uploadFile: function(file, subject, heading, callback) {
-        var url = Config.getApiUrl("upload_file", null, true);
+        var url = CommonConfig.getApiUrl("upload_file", null, true);
         if (!$S.isString(url)) {
             return;
         }
         var pid = DataHandler.getPathParamsData("pid", "");
-        UploadFileFormHandler.uploadFile(Config.JQ, url, function(formSubmitStatus, percentComplete, ajax, response) {
+        UploadFileFormHandler.uploadFile(CommonConfig.JQ, url, function(formSubmitStatus, percentComplete, ajax, response) {
             if (formSubmitStatus === "in_progress") {
                 DataHandler.setData("addentry.submitStatus", "in_progress");
                 DataHandler.setFieldsData("upload_file.percentComplete", percentComplete);
@@ -183,7 +183,7 @@ FormHandlerUploadFile.extend({
         }
     },
     deleteFile: function(uniqueId, filePath, callback) {
-        var url = Config.getApiUrl("delete_file", "", true);
+        var url = CommonConfig.getApiUrl("delete_file", "", true);
         var postData = {};
         postData["filename"] = filePath;
         var delete_key = "File Deleted";
@@ -197,7 +197,7 @@ FormHandlerUploadFile.extend({
                     AppHandler.LazyReload(250);
                 });
             } else {
-                $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+                $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
                     if (FormHandler.IsResponseFailure(response, message)) {
                         AppHandler.TrackApiRequest("deleteFile", "FAILURE");
                     } else {

@@ -4,7 +4,7 @@ import DataHandler from "../DataHandler";
 import TemplateHandler from "../template/TemplateHandler";
 import Config from "../Config";
 
-// import AppHandler from "../../../common/app/common/AppHandler";
+import CommonConfig from "../../../common/app/common/CommonConfig";
 import TemplateHelper from "../../../common/TemplateHelper";
 // import FormHandler from "./FormHandler";
 // import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
@@ -100,8 +100,8 @@ DisplayUploadedFiles.extend({
                 TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
             }
         }
-        hrefReplaceParam["open_in_new_tab.href"] = Config.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
-        hrefReplaceParam["download.href"] = Config.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
+        hrefReplaceParam["open_in_new_tab.href"] = CommonConfig.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
+        hrefReplaceParam["download.href"] = CommonConfig.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
         if (isValidFileData) {
             for(key in hrefReplaceParam) {

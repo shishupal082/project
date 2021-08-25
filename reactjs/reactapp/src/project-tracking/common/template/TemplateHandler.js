@@ -7,9 +7,13 @@ import DataHandler from "../DataHandler";
 import DataHandlerV2 from "../DataHandlerV2";
 import FormHandler from "../forms/FormHandler";
 
+import PidPage from "../pages/PidPage";
+import FeedbackPage from "../pages/FeedbackPage";
+
 
 import TemplateHelper from "../../../common/TemplateHelper";
-import AppHandler from "../../../common/app/common/AppHandler";
+// import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
+import CommonConfig from "../../../common/app/common/CommonConfig";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
 
@@ -32,7 +36,7 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 $S.extendObject(TemplateHandler);
 DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
-    generateHomeRenderField: function(renderData) {
+    generateHomeRenderField: function(pageName, renderData) {
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
             for (i=0; i<renderData.length; i++) {
@@ -48,7 +52,7 @@ TemplateHandler.extend({
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
-        var newProjectTemplate = FormHandler.getAddNewProjectTemplate();
+        var newProjectTemplate = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
         TemplateHelper.addItemInTextArray(template, "home.addNewProject", newProjectTemplate);
         return template;
     }
@@ -77,14 +81,12 @@ TemplateHandler.extend({
         TemplateHelper.updateTemplateText(linkTemplate, {"link-field.url": text});
         return linkTemplate;
     },
-    _getLink: function(pageName, pid, status) {
-        var link;
-        if (pageName === "projectStatus") {
-            link = Config.basepathname + "/pid/" + pid + "/" + status;
-        } else if (pageName === "projectId") {
-            link = Config.basepathname + "/pid/" + pid;
+    _getLink: function(pageName, pid) {
+        var link = "";
+        if (pageName === "projectId") {
+            link = CommonConfig.basepathname + "/pid/" + pid;
         } else {
-            link = Config.basepathname;
+            link = CommonConfig.basepathname;
             if (link === "") {
                 link = "/";
             }
@@ -95,74 +97,109 @@ TemplateHandler.extend({
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
-        if (renderData.status === "FAILURE") {
-            return this._getInvalidField(renderData.reason);
+        if (!$S.isObject(renderData["pidRow"])) {
+            renderData["pidRow"] = {};
         }
         var template = this.getTemplate("projectId");
-        var pName = renderData.pName, i;
-        var pid = DataHandler.getPathParamsData("pid");
-        TemplateHelper.updateTemplateText(template, {"projectId.pName": pName});
-        var projectSubLink = this.getTemplate("projectSubLink", []);
-        var linkTemplate, href, linkText;
-        if ($S.isArray(projectSubLink)) {
-            for(i=0; i<projectSubLink.length; i++) {
-                if (DataHandlerV2.isDisabled("pageName", projectSubLink[i].enablePageName)) {
-                    continue;
-                }
-                linkText = DataHandler.getAppData("pageName:" + projectSubLink[i].enablePageName + ":projectSubLinkText");
-                if (!$S.isStringV2(linkText)) {
-                    linkText = projectSubLink[i].text;
-                }
-                href = this._getLink("projectStatus", pid, projectSubLink[i].href);
-                linkTemplate = this._getLinkTemplate(href, linkText);
-                TemplateHelper.addItemInTextArray(template, "projectId.sub-link", linkTemplate);
-            }
+        var formName = DataHandlerV2.getFormNameByPageName(pageName);
+        var tableName = DataHandler.getTableName("fileTable");
+        if ($S.isStringV2(renderData["pidRow"]["form_type"])) {
+            formName += "." + renderData["pidRow"]["form_type"];
         }
-        var uploadFileData = TemplateHandler._generateFieldTable(renderData.uploadedFileData, renderData.tableName, "resultPatternUploadedFiles");
+        var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
+        var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName, tableName);
+        var generic1FormUploadedData = DataHandlerV2.getRenderTableDataV1(pageName, tableName2);
+        var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
+        var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "resultPatternUploadedFiles");
+        var generic1FormUploadedTable = PidPage.getRenderTable(pageName, tableName2, resultPatternName, generic1FormUploadedData);
         var uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
         var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
+        var genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["pidRow"]["form_type"], "generic_form1");
         var addLinkTemplate = FormHandler.getAddLinkTemplate(pageName);
+        if (!($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0 && $S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0)) {
+            if (uploadFileTemplate === null && addLinkTemplate === null && addCommentTemplate === null && genericTemplate === null) {
+                return this.getTemplate("noDataFound");
+            }
+        }
+        TemplateHelper.updateTemplateText(template, {"projectId.pName": renderData["pidRow"]["pName"]});
+        TemplateHelper.addItemInTextArray(template, "projectId.generic1-table", generic1FormUploadedTable);
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", uploadFileTemplate);
         TemplateHelper.addItemInTextArray(template, "projectId.upload_file", addLinkTemplate);
-        TemplateHelper.addItemInTextArray(template, "pageName:projectId.addCommentTemplate", addCommentTemplate);
+        TemplateHelper.addItemInTextArray(template, "pageName:projectId.otherTemplate", addCommentTemplate);
+        TemplateHelper.addItemInTextArray(template, "pageName:projectId.otherTemplate", genericTemplate);
         return template;
     },
-    generateProjectSupplyStatus: function(pageName, renderData) {
+    generateId1Page: function(pageName, renderData) {
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
-        if (renderData.status === "FAILURE") {
-            return this._getInvalidField(renderData.reason);
+        if (!$S.isObject(renderData["pidRow"])) {
+            renderData["pidRow"] = {};
         }
-        var template = this.getTemplate("projectSupplyStatus");
-        var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
-        var newSupplyStatus = FormHandler.getUpdateSupplyTemplate(pageName);
-        if (!$S.isArray(newSupplyStatus)) {
-            newSupplyStatus = [];
+        if (!$S.isObject(renderData["id1Row"])) {
+            renderData["id1Row"] = {};
         }
-        var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyStatus");
-        TemplateHelper.updateTemplateText(template, displayText);
-        TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
-        TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
+        var template = this.getTemplate("id1Page");
+        var formName = DataHandlerV2.getFormNameByPageName(pageName);
+        if ($S.isStringV2(renderData["id1Row"]["form_type"])) {
+            formName += "." + renderData["id1Row"]["form_type"];
+        }
+        var tableName = DataHandler.getTableName(formName + ".tableName", "");
+        var generic2FormUploadedData = DataHandlerV2.getRenderTableDataV3(pageName, tableName);
+        var genericTemplate = null;
+        if (FeedbackPage.isFormDisplayEnable(renderData["pidRow"], renderData["id1Row"], generic2FormUploadedData)) {
+            genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["id1Row"]["form_type"], "generic_form2");
+        }
+        var preDefinedPattern = FeedbackPage.getPreDefinedPattern(renderData["id1Row"]);
+        if (!($S.isArray(generic2FormUploadedData) && generic2FormUploadedData.length > 0)) {
+            if (genericTemplate === null && preDefinedPattern === null) {
+                return this.getTemplate("noDataFound");
+            }
+        }
+        var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
+        var generic2FormUploadedTable = this._generateFieldTable(generic2FormUploadedData, tableName, resultPatternName);
+        TemplateHelper.updateTemplateText(template, {"id1Page.pName": renderData["pidRow"]["pName"]});
+        TemplateHelper.addItemInTextArray(template, "id1Page.preDefinedPattern", preDefinedPattern);
+        TemplateHelper.addItemInTextArray(template, "id1Page.generic2-table", generic2FormUploadedTable);
+        TemplateHelper.addItemInTextArray(template, "pageName:id1Page.formTemplate", genericTemplate);
         return template;
     },
-    generateProjectSupplyItemList: function(pageName, renderData) {
-        if (!$S.isObject(renderData)) {
-            renderData = {};
-        }
-        if (renderData.status === "FAILURE") {
-            return this._getInvalidField(renderData.reason);
-        }
-        var template = this.getTemplate("projectSupplyItems");
-        var pName = renderData.pName;
-        var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
-        var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyItems");
-        TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
-        TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
-        TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
-        return template;
-    },
+    // generateProjectSupplyStatus: function(pageName, renderData) {
+    //     if (!$S.isObject(renderData)) {
+    //         renderData = {};
+    //     }
+    //     if (renderData.status === "FAILURE") {
+    //         return this._getInvalidField(renderData.reason);
+    //     }
+    //     var template = this.getTemplate("projectSupplyStatus");
+    //     var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
+    //     var newSupplyStatus = FormHandler.getUpdateSupplyTemplate(pageName);
+    //     if (!$S.isArray(newSupplyStatus)) {
+    //         newSupplyStatus = [];
+    //     }
+    //     var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyStatus");
+    //     TemplateHelper.updateTemplateText(template, displayText);
+    //     TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
+    //     TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
+    //     return template;
+    // },
+    // generateProjectSupplyItemList: function(pageName, renderData) {
+    //     if (!$S.isObject(renderData)) {
+    //         renderData = {};
+    //     }
+    //     if (renderData.status === "FAILURE") {
+    //         return this._getInvalidField(renderData.reason);
+    //     }
+    //     var template = this.getTemplate("projectSupplyItems");
+    //     var pName = renderData.pName;
+    //     var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
+    //     var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyItems");
+    //     TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
+    //     TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
+    //     TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
+    //     return template;
+    // },
     getDisplayPageTemplate: function(renderData) {
         var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
         var template = this.getTemplate("displayPage");
@@ -188,17 +225,19 @@ TemplateHandler.extend({
         var template = this.getTemplate("goBackLink");
         var backUrl = "";
         var pid = DataHandler.getPathParamsData("pid");
-        var linkRef = DataHandlerV2.getLinkRef(pageName);
         switch(pageName) {
-            case "projectStatusWork":
-            case "projectStatusSupply":
-            case "projectContingency":
+            // case "projectStatusWork":
+            // case "projectStatusSupply":
+            // case "projectContingency":
+            //     backUrl = this._getLink("projectId", pid);
+            // break;
+            // case "updateSupplyStatus":
+            // case "updateContingencyStatus":
+            // case "updateWorkStatus":
+            //     backUrl = this._getLink("projectStatus", pid, linkRef);
+            // break;
+            case "id1Page":
                 backUrl = this._getLink("projectId", pid);
-            break;
-            case "updateSupplyStatus":
-            case "updateContingencyStatus":
-            case "updateWorkStatus":
-                backUrl = this._getLink("projectStatus", pid, linkRef);
             break;
             case "projectId":
             default:
@@ -208,28 +247,28 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
         return template;
     },
-    SetUserRealtedData: function() {
-        var headingJson = Config.headingJson;
-        var footerJson = Config.footerJson, i;
-        var username = AppHandler.GetUserData("username", "");
-        var enabledPageId = DataHandlerV2.getEnabledPageId();
-        var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
-        if ($S.isString(username)) {
-            TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
-        }
-        if ($S.isArray(enabledPageId)) {
-            for(i=0; i<enabledPageId.length; i++) {
-                TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
-                TemplateHelper.removeClassTemplate(footerJson, "pageId:" + enabledPageId[i], "d-none");
-            }
-        }
-        if ($S.isArray(enabledViewPage)) {
-            for(i=0; i<enabledViewPage.length; i++) {
-                TemplateHelper.removeClassTemplate(headingJson, "viewPage:" + enabledViewPage[i], "d-none");
-                TemplateHelper.removeClassTemplate(footerJson, "viewPage:" + enabledViewPage[i], "d-none");
-            }
-        }
-    },
+    // SetUserRealtedData: function() {
+    //     var headingJson = Config.headingJson;
+    //     var footerJson = Config.footerJson, i;
+    //     var username = AppHandler.GetUserData("username", "");
+    //     var enabledPageId = DataHandlerV2.getEnabledPageId();
+    //     var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
+    //     if ($S.isString(username)) {
+    //         TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
+    //     }
+    //     if ($S.isArray(enabledPageId)) {
+    //         for(i=0; i<enabledPageId.length; i++) {
+    //             TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
+    //             TemplateHelper.removeClassTemplate(footerJson, "pageId:" + enabledPageId[i], "d-none");
+    //         }
+    //     }
+    //     if ($S.isArray(enabledViewPage)) {
+    //         for(i=0; i<enabledViewPage.length; i++) {
+    //             TemplateHelper.removeClassTemplate(headingJson, "viewPage:" + enabledViewPage[i], "d-none");
+    //             TemplateHelper.removeClassTemplate(footerJson, "viewPage:" + enabledViewPage[i], "d-none");
+    //         }
+    //     }
+    // },
     GetPageRenderField: function(dataLoadStatus, renderData, footerData, pageName) {
         var renderField;
         if (!dataLoadStatus) {
@@ -242,21 +281,24 @@ TemplateHandler.extend({
         } else {
             switch(pageName) {
                 case "home":
-                    renderField = this.generateHomeRenderField(renderData);
+                    renderField = this.generateHomeRenderField(pageName, renderData);
                 break;
                 case "projectId":
                     renderField = this.generateProjectDetailsPage(pageName, renderData);
                 break;
-                case "projectStatusWork":
-                case "projectStatusSupply":
-                case "projectContingency":
-                    renderField = this.generateProjectSupplyItemList(pageName, renderData);
+                case "id1Page":
+                    renderField = this.generateId1Page(pageName, renderData);
                 break;
-                case "updateSupplyStatus":
-                case "updateContingencyStatus":
-                case "updateWorkStatus":
-                    renderField = this.generateProjectSupplyStatus(pageName, renderData);
-                break;
+                // case "projectStatusWork":
+                // case "projectStatusSupply":
+                // case "projectContingency":
+                //     renderField = this.generateProjectSupplyItemList(pageName, renderData);
+                // break;
+                // case "updateSupplyStatus":
+                // case "updateContingencyStatus":
+                // case "updateWorkStatus":
+                //     renderField = this.generateProjectSupplyStatus(pageName, renderData);
+                // break;
                 case "displayPage":
                     renderField = this.getDisplayPageTemplate(renderData);
                 break;
@@ -269,23 +311,19 @@ TemplateHandler.extend({
                 break;
             }
         }
-        // var metaData = DataHandler.getData("metaData", {});
-        // var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
-        var footerField = this.getTemplate("footerField2");
-        var goBackLink = this.getGoBackLinkTemplate(pageName);
-        if ($S.isArray(renderField)) {
-            TemplateHelper.addItemInTextArray(footerField, "footer", $S.clone(Config.footerJson));
-            renderField.push(footerField);
+        var isGoBackLinkEnable = DataHandler.getAppData(pageName + ".goBackLinkEnable", false);
+        var isGoBackRowEnable = DataHandler.getAppData(pageName + ".goBackRowEnable", false);
+        if ($S.isBooleanTrue(isGoBackRowEnable)) {
+            TemplateHelper.removeClassTemplate(renderField, pageName + ".goBackRow", "d-none");
         }
-        // TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
-        TemplateHelper.updateTemplateText(renderField, {"goBackLink": goBackLink});
-        // TemplateHelper.addItemInTextArray(renderField, "footer", $S.clone(Config.footerJson));
+        if ($S.isBooleanTrue(isGoBackLinkEnable)) {
+            var goBackLink = this.getGoBackLinkTemplate(pageName);
+            TemplateHelper.updateTemplateText(renderField, {"goBackRow.goBackLink": goBackLink});
+        }
         return renderField;
     },
     GetHeadingField: function(headingText) {
-        var renderField = this.getTemplate("heading");
-        TemplateHelper.updateTemplateText(renderField, {"heading-text": headingText, "heading-link": $S.clone(Config.headingJson)});
-        return renderField;
+        return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
     }
 });
 

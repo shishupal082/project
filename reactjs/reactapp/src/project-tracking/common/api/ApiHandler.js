@@ -1,11 +1,13 @@
 import $S from "../../../interface/stack.js";
-import Config from "../Config";
+// import Config from "../Config";
 import DataHandler from "../DataHandler";
 // import TemplateHandler from "../template/TemplateHandler";
 // import DisplayUploadedFiles from "../pages/DisplayUploadedFiles";
 
 import Api from "../../../common/Api";
 import AppHandler from "../../../common/app/common/AppHandler";
+import CommonConfig from "../../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 
 var ApiHandler;
@@ -25,7 +27,7 @@ ApiHandler.fn = ApiHandler.prototype = {
 $S.extendObject(ApiHandler);
 ApiHandler.extend({
     _loadFileInfoData: function(callback) {
-        var url = Config.getApiUrl("getFilesInfoApi", "", true);
+        var url = CommonConfig.getApiUrl("getFilesInfoApi", "", true);
         DataHandler.setData("filesInfoLoadStatus", "in_progress");
         var request = [], temp;
         if ($S.isStringV2(url)) {
@@ -90,9 +92,9 @@ ApiHandler.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
                     } else {
-                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
                     }
                 }
                 if (urls.length < 1) {
@@ -142,7 +144,7 @@ ApiHandler.extend({
             return;
         }
         var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = CommonDataHandler.getData("metaData", {});
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
@@ -182,8 +184,8 @@ ApiHandler.extend({
         return tableData;
     },
     handlePageLoad: function(dbDataApis, callback) {
-        var keys = ["appControlDataLoadStatus", "appRelatedDataLoadStatus"];
-        var status = DataHandler.getDataLoadStatusByKey(keys);
+        var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
+        var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var tableData;
         if (status === "completed") {
             status = DataHandler.getData("dbViewDataLoadStatus");

@@ -3,13 +3,15 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 
 import AppHandler from "../common/app/common/AppHandler";
+import CommonConfig from "../common/app/common/CommonConfig";
+import CommonDataHandler from "../common/app/common/CommonDataHandler";
 
 import AppComponent from "../common/app/components/AppComponent";
 
 import DataHandler from "./common/DataHandler";
 import Config from "./common/Config";
 
-AppHandler.setGtag(Config.gtag);
+AppHandler.setGtag(CommonConfig.gtag);
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -164,10 +166,12 @@ class App extends React.Component {
     pageComponentDidMount(pageName, pathParams) {
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
+        CommonDataHandler.setData("pathParams", pathParams);
     }
     pageComponentDidUpdate(pageName, pathParams) {
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
+        CommonDataHandler.setData("pathParams", pathParams);
         DataHandler.PageComponentDidUpdate(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
@@ -192,34 +196,9 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectId}/>
                     )}
                 />
-                <Route exact path={pages.projectStatusWork}
+                <Route exact path={pages.id1Page}
                     render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusWork}/>
-                    )}
-                />
-                <Route exact path={pages.updateWorkStatus}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateWorkStatus}/>
-                    )}
-                />
-                <Route exact path={pages.projectStatusSupply}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusSupply}/>
-                    )}
-                />
-                <Route exact path={pages.updateSupplyStatus}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateSupplyStatus}/>
-                    )}
-                />
-                <Route exact path={pages.projectContingency}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectContingency}/>
-                    )}
-                />
-                <Route exact path={pages.updateContingencyStatus}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id1Page}/>
                     )}
                 />
                 <Route exact path={pages.viewPage}
@@ -243,6 +222,37 @@ class App extends React.Component {
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );
     }
+
+                // <Route exact path={pages.projectStatusWork}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusWork}/>
+                //     )}
+                // />
+                // <Route exact path={pages.updateWorkStatus}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateWorkStatus}/>
+                //     )}
+                // />
+                // <Route exact path={pages.projectStatusSupply}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusSupply}/>
+                //     )}
+                // />
+                // <Route exact path={pages.updateSupplyStatus}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateSupplyStatus}/>
+                //     )}
+                // />
+                // <Route exact path={pages.projectContingency}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectContingency}/>
+                //     )}
+                // />
+                // <Route exact path={pages.updateContingencyStatus}
+                //     render={props => (
+                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
+                //     )}
+                // />
 }
 
 export default App;

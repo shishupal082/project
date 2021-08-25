@@ -5,11 +5,12 @@ import Config from "../Config";
 
 import TemplateHelper from "../../../common/TemplateHelper";
 import AppHandler from "../../../common/app/common/AppHandler";
+import CommonConfig from "../../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 
 
 import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
 import FormHandlerAddSupplyItem from "./FormHandlerAddSupplyItem";
-import FormHandlerCreateNewProject from "./FormHandlerCreateNewProject";
 import FormHandlerAddWorkStatus from "./FormHandlerAddWorkStatus";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 import FormHandlerAddProjectComment from "./FormHandlerAddProjectComment";
@@ -33,7 +34,7 @@ FormHandler.fn = FormHandler.prototype = {
 $S.extendObject(FormHandler);
 FormHandler.extend({
     GetAleartMessage: function(key, value) {
-        var messageMapping = Config.messageMapping;
+        var messageMapping = DataHandler.getAppData("messageMapping", {});
         if ($S.isObject(messageMapping) && $S.isString(messageMapping[key])) {
             return messageMapping[key];
         }
@@ -50,9 +51,58 @@ FormHandler.extend({
     }
 });
 FormHandler.extend({
-    submitNewProject: function(pageName, callback) {
-        FormHandlerCreateNewProject.submit(callback);
+    _getFormTemplateName: function(pageName, formType) {
+        var formTemplateName = "formTemplate";
+        if ($S.isStringV2(formType)) {
+            formTemplateName = formType + "." + formTemplateName;
+        }
+        return formTemplateName;
     },
+    _getFormName: function(pageName, formType) {
+        var formName = "formName";
+        if ($S.isStringV2(formType)) {
+            formName = formType + "." + formName;
+        }
+        return formName;
+    },
+    getGenericTemplate: function(pageName, formType, formIdentifier) {
+        // FormType parameter used for finding proper id1Page form
+        // As each id1 may have different form types
+        if (DataHandlerV2.isDisabled("form", formIdentifier)) {
+            return null;
+        }
+        var formTemplateName = this._getFormTemplateName(pageName, formType);
+        var formName = this._getFormName(pageName, formType);
+        var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName, null);
+        var finalFormName = DataHandler.getAppData(pageName + "." + formName, "");
+        var validationData = null, status = null;
+        if ($S.isStringV2(finalFormName)) {
+            validationData = DataHandler.getAppData(finalFormName + ".validationData");
+            status = DataHandler.getData("addentry.submitStatus", "");
+        }
+        formTemplate = CommonDataHandler.getFormTemplate(formTemplate, validationData, "addentry.submitStatus", status);
+        return formTemplate;
+    },
+    submitGenericForm: function(pageName, formName, formType, callback) {
+        var status = DataHandler.getData("addentry.submitStatus", "");
+        if (status === CommonConfig.IN_PROGRESS) {
+            return null;
+        }
+        var tableNameKey = formName
+        if ($S.isStringV2(formType)) {
+            tableNameKey += "." + formType;
+        }
+        var requiredKeys = DataHandler.getAppData(formName + ".requiredKeys", []);
+        var validationData = DataHandler.getAppData(formName + ".validationData", {});
+        var tableName = DataHandler.getTableName(tableNameKey + ".tableName", "");
+        var messageMapping = DataHandler.getAppData("messageMapping", {});
+        CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
+            DataHandler.setData("addentry.submitStatus", status);
+            $S.callMethod(callback);
+        });
+    }
+});
+FormHandler.extend({
     submitAddProjectComment: function(pageName, callback) {
         FormHandlerAddProjectComment.submit(pageName, callback);
     },
@@ -95,7 +145,7 @@ FormHandler.extend({
         if (!$S.isStringV2(delete_value)) {
             delete_value = "";
         }
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
@@ -117,7 +167,7 @@ FormHandler.extend({
         postData["heading"] = formData["delete_value"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             if (status === "FAILURE" || !$S.isObject(response) || response.status === "FAILURE") {
                 AppHandler.TrackApiRequest("addInDeleteTable", "FAILURE");
             } else {
@@ -138,14 +188,6 @@ FormHandler.extend({
             TemplateHelper.removeClassTemplate(template, "addentry.submitStatus", "btn-secondary");
             TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
         }
-    },
-    getAddNewProjectTemplate: function() {
-        if (DataHandlerV2.isDisabled("form", "addNewProjectForm")) {
-            return null;
-        }
-        var formTemplate = FormHandlerCreateNewProject.getFormTemplate();
-        this.updateBtnStatus(formTemplate);
-        return formTemplate;
     },
     getAddNewSupplyItemTemplate: function() {
         if (DataHandlerV2.isDisabled("form", "addNewItemForm")) {

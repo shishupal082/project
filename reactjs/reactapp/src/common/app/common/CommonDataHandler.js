@@ -315,7 +315,7 @@ CommonDataHandler.extend({
         this.setFieldsData(key, fieldData);
         return fieldData;
     },
-    getFormTemplate: function(pageName, formTemplate, validationData, submitBtnName, formSubmitStatus) {
+    getFormTemplate: function(formTemplate, validationData, submitBtnName, formSubmitStatus) {
         if (!$S.isObject(validationData)) {
             return formTemplate;
         }
@@ -330,6 +330,32 @@ CommonDataHandler.extend({
         TemplateHelper.updateTemplateValue(formTemplate, formText);
         this._updateBtnStatus(formTemplate, submitBtnName, formSubmitStatus);
         return formTemplate;
+    },
+    setHeaderAndFooterData: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
+        var i;
+        var username = AppHandler.GetUserData("username", "");
+        var activeUserRole = AppHandler.GetUserActiveRoles();
+        if ($S.isStringV2(username)) {
+            TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
+        }
+        if ($S.isArray(enabledPageId)) {
+            for(i=0; i<enabledPageId.length; i++) {
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "pageId:" + enabledPageId[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "pageId:" + enabledPageId[i], "d-none");
+            }
+        }
+        if ($S.isArray(enabledViewPage)) {
+            for(i=0; i<enabledViewPage.length; i++) {
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPage:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPage:" + enabledViewPage[i], "d-none");
+            }
+        }
+        if ($S.isArray(activeUserRole)) {
+            for(i=0; i<activeUserRole.length; i++) {
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "roleId:" + activeUserRole[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "roleId:" + activeUserRole[i], "d-none");
+            }
+        }
     }
 });
 

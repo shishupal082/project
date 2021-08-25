@@ -111,7 +111,7 @@ FormHandler.extend({
             validationData = DataHandler.getAppData(finalFormName + ".validationData");
             status = DataHandler.getData(SUBMIT_BTN_NAME, "");
         }
-        formTemplate = CommonDataHandler.getFormTemplate(pageName, formTemplate, validationData, SUBMIT_BTN_NAME, status);
+        formTemplate = CommonDataHandler.getFormTemplate(formTemplate, validationData, SUBMIT_BTN_NAME, status);
         return formTemplate;
     },
     // submitAddProjectComment: function(pageName, callback) {

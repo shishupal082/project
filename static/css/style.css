@@ -113,6 +113,9 @@ body.theme-grey {
 .fs-40 {
     font-size: 40%;
 }
+.v-align-initial {
+    vertical-align: initial;
+}
 table.table-padded-px-5 > thead > tr > th,
 table.table-padded-px-5 > thead > tr > td,
 table.table-padded-px-5 > tbody > tr > th,

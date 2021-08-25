@@ -5,8 +5,10 @@ import FormHandler from "./forms/FormHandler";
 import TemplateHandler from "./template/TemplateHandler";
 import ApiHandler from "./api/ApiHandler";
 
-import Api from "../../common/Api";
+// import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 import DisplayPage from "./pages/DisplayPage";
@@ -43,6 +45,7 @@ keys.push("userData");
 keys.push("filteredUserData");
 keys.push("attendanceData");
 keys.push("latestAttendanceData");
+keys.push("visibleFeedbackSection");
 
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
@@ -82,6 +85,7 @@ CurrentData.setData("filesInfoLoadStatus", "not-started");
 CurrentData.setData("addentry.submitStatus", "not-started");
 
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
+
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -128,17 +132,7 @@ DataHandler.extend({
         return defaultValue;
     },
     getPathParamsData: function(key, defaultValue) {
-        var pathParams = this.getData("pathParams", {});
-        if ($S.isString(key) && key.length > 0) {
-            if ($S.isObject(pathParams)) {
-                if ($S.isUndefined(pathParams[key])) {
-                    return defaultValue;
-                } else {
-                    return pathParams[key];
-                }
-            }
-        }
-        return defaultValue;
+        return CommonDataHandler.getPathParamsData(key, defaultValue);
     },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
@@ -161,7 +155,7 @@ DataHandler.extend({
         return "completed";
     },
     getLink: function(pid, sid, page) {
-        var link = Config.basepathname + "/pid/" + pid + "/sid/" + sid + "/" + page;
+        var link = CommonConfig.basepathname + "/pid/" + pid + "/sid/" + sid + "/" + page;
         return link;
     },
     getLinkV2: function(sid) {
@@ -170,20 +164,30 @@ DataHandler.extend({
         var linkRef = DataHandlerV2.getLinkRef(pageName);
         return this.getLink(pid, sid, linkRef);
     },
+    getLinkV3: function(pid, id1) {
+        var link = CommonConfig.basepathname + "/pid/" + pid;
+        if ($S.isStringV2(id1)) {
+            link += "/id1/" + id1;
+        }
+        return link;
+    },
     isDataLoadComplete: function() {
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        dataLoadStatusKey.push("appRelatedDataLoadStatus");
-        dataLoadStatusKey.push("dbViewDataLoadStatus");
+        dataLoadStatusKey.push("metaDataLoadStatus");
+        if(CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
+            return false;
+        }
+        dataLoadStatusKey = ["dbViewDataLoadStatus"];
+        if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
+            return false;
+        }
         var pageName = this.getData("pageName", "");
         if (pageName === "viewPage") {
             dataLoadStatusKey.push("filesInfoLoadStatus");
         }
-        if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
-            return false;
-        }
-        DataHandler.setData("firstTimeDataLoadStatus", "completed");
+        CommonDataHandler.setData("firstTimeDataLoadStatus", "completed");
         return true;
     },
     getTableName: function(key) {
@@ -196,7 +200,7 @@ DataHandler.extend({
 });
 DataHandler.extend({
     setCurrentAppId: function(appId) {
-        var appControlData = this.getData("appControlData", []);
+        var appControlData = CommonDataHandler.getData("appControlData", []);
         var currentList1Id = "";
         if ($S.isArray(appControlData) && appControlData.length > 0) {
             if ($S.isString(appControlData[0]["id"])) {
@@ -206,7 +210,7 @@ DataHandler.extend({
         DataHandler.setData("currentList1Id", currentList1Id);
     },
     getCurrentAppData: function() {
-        var appControlData = this.getData("appControlData", []);
+        var appControlData = CommonDataHandler.getData("appControlData", []);
         var currentAppId = this.getData("currentList1Id", "");
         var currentAppData = {};
         if ($S.isArray(appControlData)) {
@@ -252,30 +256,30 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    loadUserRelatedData: function(callback) {
-        var loginUserDetailsApi = Config.getApiUrl("getLoginUserDetails", null, true);
-        if ($S.isString(loginUserDetailsApi)) {
-            DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
-            AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
-                var isLogin = AppHandler.GetUserData("login", false);
-                if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                    AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
-                    return;
-                }
-                DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-                $S.callMethod(callback);
-            });
-        } else {
-            DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-            $S.callMethod(callback);
-        }
-    },
+    // loadUserRelatedData: function(callback) {
+    //     var loginUserDetailsApi = CommonConfig.getApiUrl("getLoginUserDetailsApi", null, true);
+    //     if ($S.isString(loginUserDetailsApi)) {
+    //         DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
+    //         AppHandler.LoadLoginUserDetails(loginUserDetailsApi, function() {
+    //             var isLogin = AppHandler.GetUserData("login", false);
+    //             if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
+    //                 AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
+    //                 return;
+    //             }
+    //             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+    //             $S.callMethod(callback);
+    //         });
+    //     } else {
+    //         DataHandler.setData("loginUserDetailsLoadStatus", "completed");
+    //         $S.callMethod(callback);
+    //     }
+    // },
     getAppData: function(key, defaultValue) {
         if (!$S.isStringV2(key)) {
             return defaultValue;
         }
         var currentAppData = this.getCurrentAppData();
-        var metaData = this.getData("metaData", {});
+        var metaData = CommonDataHandler.getData("metaData", {});
         var tempConfig = Config.tempConfig;
         return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
     }
@@ -286,14 +290,30 @@ DataHandler.extend({
         DataHandler.loadDbTableData(callback);
         ApiHandler.loadDataByParams(callback);
     },
+    setHeaderAndFooterData: function() {
+        var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
+        var footerLinkJsonAfterLogin = DataHandler.getAppData("footerLinkJsonAfterLogin", {});
+        var enabledPageId = DataHandlerV2.getEnabledPageId();
+        var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
+        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage);
+        Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
+        Config.afterLoginLinkJson = afterLoginLinkJson;
+        Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
+    },
     loadDataByAppId: function(callback) {
+        var currentList1Id = DataHandler.getData("currentList1Id", "");
+        CommonDataHandler.loadMetaDataByAppId(currentList1Id, function() {
+            CommonDataHandler.setDateSelectParameter(currentList1Id);
+            DataHandler.loadDataByPage(callback);
+        });
+        /*
         var appControlData = DataHandler.getCurrentAppData();//{}
         var request = [], metaDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el + "?v=" + Config.appVersion;
+            return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
         });
         var metaDataRequest = {
                             "url": metaDataApi,
@@ -313,42 +333,90 @@ DataHandler.extend({
             $S.log("currentAppData load complete");
             DataHandler.loadDataByPage(callback);
         });
+        */
     },
     loadDbTableData: function(callback) {
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = CommonDataHandler.getData("metaData", {});
         var currentAppData = DataHandler.getCurrentAppData();
         var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
         ApiHandler.handlePageLoad(dbDataApis, function() {
             $S.callMethod(callback);
         });
     },
-    loadAppControlData: function(callback) {
-        DataHandler.setData("appControlDataLoadStatus", "in_progress");
-        var appControlApi = Config.getApiUrl("appControlData", null, true);
-        AppHandler.loadAppControlData(appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(appControlData, metaData) {
-            DataHandler.setData("appControlData", appControlData);
-            DataHandler.setData("appControlMetaData", metaData);
-            $S.log("appControlData load complete");
-            DataHandler.setData("appControlDataLoadStatus", "completed");
-            DataHandler.setCurrentAppId();
-            // DataHandler.generateDateParameter();
-            DataHandler.loadDataByAppId(function() {
-                $S.callMethod(callback);
-            });
-        });
+    checkForRedirect: function(callback) {
+        var isLogin = AppHandler.GetUserData("login", false);
+        if ($S.isBooleanTrue(CommonConfig.forceLogin) && isLogin === false) {
+            AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
+            return;
+        }
+        $S.callMethod(callback);
+    },
+    handleStaticDataLoad: function() {
+        var feedbackSectionMapping = this.getAppData("feedbackSectionMapping", {});
+        var roles = AppHandler.GetUserActiveRoles();
+        var visibleFeedbackSection = [];
+        if ($S.isArray(roles) && $S.isObject(feedbackSectionMapping)) {
+            for (var key in feedbackSectionMapping) {
+                if (roles.indexOf(key) >= 0) {
+                    if ($S.isStringV2(feedbackSectionMapping[key])) {
+                        visibleFeedbackSection.push(feedbackSectionMapping[key]);
+                    } else if ($S.isArray(feedbackSectionMapping[key])) {
+                        visibleFeedbackSection = visibleFeedbackSection.concat(feedbackSectionMapping[key]);
+                    }
+                }
+            }
+        }
+        this.setData("visibleFeedbackSection", visibleFeedbackSection);
     }
+    // loadAppControlData: function(callback) {
+    //     DataHandler.setData("appControlDataLoadStatus", "in_progress");
+    //     var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
+    //     AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
+    //         DataHandler.setData("appControlData", appControlData);
+    //         DataHandler.setData("appControlMetaData", metaData);
+    //         $S.log("appControlData load complete");
+    //         DataHandler.setData("appControlDataLoadStatus", "completed");
+    //         DataHandler.setCurrentAppId();
+    //         // DataHandler.generateDateParameter();
+    //         DataHandler.loadDataByAppId(function() {
+    //             $S.callMethod(callback);
+    //         });
+    //     });
+    // }
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         var pageName;
-        DataHandler.loadUserRelatedData(function() {
-            DataHandler.loadAppControlData(function() {
-                pageName = DataHandler.getData("pageName", "");
-                AppHandler.TrackPageView(pageName);
-                TemplateHandler.handlePageNameChange(pageName, "");
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
+        CommonDataHandler.loadLoginUserDetailsData(function() {
+            pageName = DataHandler.getData("pageName", "");
+            AppHandler.TrackPageView(pageName);
+            DataHandler.checkForRedirect(function() {
+                AppHandler.LoadStaticData(staticDataUrl, function() {
+                    CommonDataHandler.loadAppControlData(function() {
+                        DataHandler.setCurrentAppId();
+                        var title = DataHandler.getAppData("title", "");
+                        if ($S.isStringV2(title) && CommonConfig.JQ) {
+                            CommonConfig.JQ("title").html(title);
+                        }
+                        DataHandler.loadDataByAppId(function() {
+                            DataHandler.handleStaticDataLoad();
+                            DataHandler.setHeaderAndFooterData();
+                            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                        });
+                    });
+                });
             });
         });
+
+        // DataHandler.loadUserRelatedData(function() {
+        //         DataHandler.loadAppControlData(function() {
+        //             pageName = DataHandler.getData("pageName", "");
+        //             AppHandler.TrackPageView(pageName);
+        //             TemplateHandler.handlePageNameChange(pageName, "");
+        //             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //         });
+        // });
     },
     OnReloadClick: function(appStateCallback, appDataCallback) {
         AppHandler.TrackEvent("reloadClick");
@@ -384,17 +452,13 @@ DataHandler.extend({
     },
     OnDateSelectClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("dateSelect:" + value);
-        DataHandler.setData("date-select", value);
+        CommonDataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var pageName = DataHandler.getData("pageName", "");
         if (name === "new-work-status") {
             FormHandler.submitNewWorkStatus(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "new-project") {
-            FormHandler.submitNewProject(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-supply-status") {
@@ -425,6 +489,14 @@ DataHandler.extend({
             FormHandler.submitAddProjectFiles(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else {
+            var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
+            if (configFormName === name) {
+                var formType = DataHandlerV2.getFormTypeByPageName(pageName);
+                FormHandler.submitGenericForm(pageName, name, formType, function() {
+                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                });
+            }
         }
     },
     ViewFileClick: function(appStateCallback, appDataCallback, name, value) {
@@ -463,6 +535,7 @@ DataHandler.extend({
             return;
         }
         DataHandler.setFieldsData(name, value);
+        CommonDataHandler.setFieldsData(name, value);
     },
     OnResetClick: function(appStateCallback, appDataCallback, name, value) {
         AppHandler.TrackEvent("resetClick");
@@ -474,6 +547,7 @@ DataHandler.extend({
     },
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
         this.setFieldsData(name, value);
+        CommonDataHandler.setFieldsData(name, value);
     }
 });
 DataHandler.extend({
@@ -481,12 +555,12 @@ DataHandler.extend({
         var renderData;
         var currentAppData = this.getCurrentAppData();
         var currentList3Data = this.getCurrentList3Data();
-        var pageName = this.getData("pageName", "");
         var pageId = this.getPathParamsData("pageId", "");
         var viewPageName = this.getPathParamsData("viewPageName", "");
+        var dateSelect = CommonDataHandler.getData("date-select", "");
+        var metaData = CommonDataHandler.getData("metaData");
+        var pageName = this.getData("pageName", "");
         var sortingFields = this.getData("sortingFields", []);
-        var dateSelect = this.getData("date-select", "");
-        var metaData = this.getData("metaData");
         var filterOptions = this.getData("filterOptions");
         var dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
         if (DataHandlerV2.isDisabled("pageName", pageName)) {
@@ -499,16 +573,19 @@ DataHandler.extend({
             case "projectId":
                 renderData = DataHandlerV2.getProjectDataV2(pageName);
             break;
-            case "projectStatusSupply":
-            case "projectStatusWork":
-            case "projectContingency":
-                renderData = DataHandlerV2.getAddItemPageData(pageName, sortingFields);
+            case "id1Page":
+                renderData = DataHandlerV2.getProjectDataV3(pageName);
             break;
-            case "updateSupplyStatus":
-            case "updateContingencyStatus":
-            case "updateWorkStatus":
-                renderData = DataHandlerV2.getItemUpdatePageData(pageName, sortingFields);
-            break;
+            // case "projectStatusSupply":
+            // case "projectStatusWork":
+            // case "projectContingency":
+            //     renderData = DataHandlerV2.getAddItemPageData(pageName, sortingFields);
+            // break;
+            // case "updateSupplyStatus":
+            // case "updateContingencyStatus":
+            // case "updateWorkStatus":
+            //     renderData = DataHandlerV2.getItemUpdatePageData(pageName, sortingFields);
+            // break;
             case "displayPage":
                 if (DataHandlerV2.isDisabled("pageId", pageId)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
@@ -546,7 +623,7 @@ DataHandler.extend({
         var pageId = DataHandler.getPathParamsData("pageId", "");
         if (dataLoadStatus) {
             renderData = this.getRenderData();
-            footerData = AppHandler.GetFooterData(this.getData("metaData", {}));
+            footerData = AppHandler.GetFooterData(CommonDataHandler.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             list2Data = DataHandlerV2.getList2Data(pageName);
         }
@@ -564,11 +641,11 @@ DataHandler.extend({
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
 
         appDataCallback("appHeading", appHeading);
-        appDataCallback("renderFieldRow", renderFieldRow);
+        appDataCallback("renderFieldRow", [renderFieldRow, {"tag": "div.center", "text": $S.clone(Config.footerLinkJsonAfterLogin)}]);
 
         appDataCallback("dateSelectionRequiredPages", dateSelectionRequiredPages);
         appDataCallback("dateSelection", Config.dateSelection);
-        appDataCallback("selectedDateType", DataHandler.getData("date-select", ""));
+        appDataCallback("selectedDateType", CommonDataHandler.getData("date-select", ""));
         appDataCallback("filterOptions", AppHandler.getFilterData(filterOptions));
         appStateCallback();
     }

@@ -6,6 +6,7 @@ import Config from "../Config";
 
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
+import CommonConfig from "../../../common/app/common/CommonConfig";
 import FormHandler from "./FormHandler";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 
@@ -49,7 +50,7 @@ FormHandlerAddProjectFiles.extend({
     },
     save: function(formData, callback) {
         var resultData = ["table_name", "unique_id", "pid", "username", "subject", "filepath"];
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
@@ -65,13 +66,13 @@ FormHandlerAddProjectFiles.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData[Config.fieldsKey.ProjectNameKey];
+        postData["subject"] = formData["subject"];
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
-        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
             $S.callMethod(callback);
             if (status === "FAILURE") {

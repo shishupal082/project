@@ -1,13 +1,13 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
-import TemplateHandler from "./template/TemplateHandler";
+// import TemplateHandler from "./template/TemplateHandler";
 import DisplayPage from "./pages/DisplayPage";
 import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
-// import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 
 var DataHandlerV2;
 
@@ -80,7 +80,7 @@ DataHandlerV2.extend({
     },
     generateFilterOptions: function(dbViewData) {
         var currentAppData = DataHandler.getCurrentAppData();
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = CommonDataHandler.getData("metaData", {});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var pageId = DataHandler.getPathParamsData("pageId", "");
         var keyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping", {});
@@ -110,43 +110,43 @@ DataHandlerV2.extend({
         }
         DataHandler.setData("currentList3Id", currentList3Id);
     },
-    handleMetaDataLoad: function(metaDataResponse) {
-        var finalMetaData = {}, i, tempMetaData, temp;
-        var appControlMetaData = DataHandler.getData("appControlMetaData", {});
-        if ($S.isObject(appControlMetaData)) {
-            finalMetaData = appControlMetaData;
-        }
-        if ($S.isArray(metaDataResponse)) {
-            for (i=0; i<metaDataResponse.length; i++) {
-                if ($S.isObject(metaDataResponse[i])) {
-                    tempMetaData = metaDataResponse[i];
-                    temp = tempMetaData.metaData;
-                    if ($S.isObject(temp)) {
-                        temp = Object.keys(temp);
-                        if (temp.length > 0) {
-                            tempMetaData = tempMetaData.metaData;
-                        }
-                    }
-                    finalMetaData = Object.assign(finalMetaData, tempMetaData);
-                }
-            }
-        }
-        DataHandler.setData("metaData", finalMetaData);
-        var dateSelect = DataHandler.getData("date-select", "");
-        if (dateSelect === "") {
-            if ($S.isString(finalMetaData.dateSelect) && finalMetaData.dateSelect.length > 0) {
-                dateSelect = finalMetaData.dateSelect;
-            } else {
-                dateSelect = Config.defaultDateSelect;
-            }
-        }
-        DataHandler.setData("date-select", dateSelect);
-        this.findCurrentList3Id();
-        TemplateHandler.SetUserRealtedData();
-    }
+    // handleMetaDataLoad: function(metaDataResponse) {
+    //     var finalMetaData = {}, i, tempMetaData, temp;
+    //     var appControlMetaData = DataHandler.getData("appControlMetaData", {});
+    //     if ($S.isObject(appControlMetaData)) {
+    //         finalMetaData = appControlMetaData;
+    //     }
+    //     if ($S.isArray(metaDataResponse)) {
+    //         for (i=0; i<metaDataResponse.length; i++) {
+    //             if ($S.isObject(metaDataResponse[i])) {
+    //                 tempMetaData = metaDataResponse[i];
+    //                 temp = tempMetaData.metaData;
+    //                 if ($S.isObject(temp)) {
+    //                     temp = Object.keys(temp);
+    //                     if (temp.length > 0) {
+    //                         tempMetaData = tempMetaData.metaData;
+    //                     }
+    //                 }
+    //                 finalMetaData = Object.assign(finalMetaData, tempMetaData);
+    //             }
+    //         }
+    //     }
+    //     DataHandler.setData("metaData", finalMetaData);
+    //     var dateSelect = DataHandler.getData("date-select", "");
+    //     if (dateSelect === "") {
+    //         if ($S.isString(finalMetaData.dateSelect) && finalMetaData.dateSelect.length > 0) {
+    //             dateSelect = finalMetaData.dateSelect;
+    //         } else {
+    //             dateSelect = Config.defaultDateSelect;
+    //         }
+    //     }
+    //     DataHandler.setData("date-select", dateSelect);
+    //     this.findCurrentList3Id();
+    //     TemplateHandler.SetUserRealtedData();
+    // }
 });
 DataHandlerV2.extend({
-    _getUploadFileInfo: function(pageName, uploadedFileData) {
+    _updateFileInfo: function(pageName, uploadedFileData) {
         var loginUsername = AppHandler.GetUserData("username", "");
         if ($S.isArray(uploadedFileData)) {
             for(var i=0; i<uploadedFileData.length; i++) {
@@ -158,86 +158,193 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
-    getLinkRef: function(pageName) {
-        var linkRef = DataHandler.getAppData("linkRef");
-        if (!$S.isObject(linkRef)) {
-            linkRef = {};
+    _updateFormTypeAttr: function(pageName, uploadedFileData) {
+        var loginUsername = AppHandler.GetUserData("username", "");
+        if ($S.isArray(uploadedFileData)) {
+            for(var i=0; i<uploadedFileData.length; i++) {
+                if (!$S.isObject(uploadedFileData[i])) {
+                    continue;
+                }
+                uploadedFileData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, uploadedFileData[i], loginUsername);
+            }
         }
-        return linkRef["pageName:" + pageName + ":linkRef"];
+        return uploadedFileData;
     },
-    _getUpdateSupplyItemLink: function(pageName, pid, entry) {
-        var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
-        var sid = "";
-        if ($S.isObject(entry) && $S.isString(entry.sid)) {
-            sid = entry.sid;
+    // getLinkRef: function(pageName) {
+    //     var linkRef = DataHandler.getAppData("linkRef");
+    //     if (!$S.isObject(linkRef)) {
+    //         linkRef = {};
+    //     }
+    //     return linkRef["pageName:" + pageName + ":linkRef"];
+    // },
+    // _getUpdateSupplyItemLink: function(pageName, pid, entry) {
+    //     var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
+    //     var sid = "";
+    //     if ($S.isObject(entry) && $S.isString(entry.sid)) {
+    //         sid = entry.sid;
+    //     }
+    //     tdFieldText["href"] = DataHandler.getLink(pid, sid, this.getLinkRef(pageName));
+    //     return tdFieldText;
+    // },
+    getRowDataByAttr: function(tableName, attr) {
+        var response = {"status": "FAILURE"};
+        if (!$S.isObject(attr)) {
+            response["reason"] = "Invalid attr";
+            return response;
         }
-        tdFieldText["href"] = DataHandler.getLink(pid, sid, this.getLinkRef(pageName));
-        return tdFieldText;
-    },
-    getProjectData: function(pageName) {
-        var currentPId = DataHandler.getPathParamsData("pid");
-        var projectTable = DataHandlerV2.getTableDataByAttr(DataHandler.getTableName("projectTable"), "pid", currentPId);
-        var response = {"status": "SUCCESS"};
-        if (projectTable.length !== 1) {
-            response["status"] = "FAILURE";
-            response["reason"] = "Invalid Project Id: " + currentPId;
+        var projectTable = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
+
+        if (!$S.isArray(projectTable) || projectTable.length !== 1) {
+            response["reason"] = "Invalid Row";
+            for (var key in attr) {
+                response["reason"] += " "+ key + " : " + attr[key];
+            }
         } else {
-            response["pName"] = projectTable[0].pName;
+            response["status"] = "SUCCESS";
+            response["rowData"] = projectTable[0];
         }
         return response;
     },
     getProjectDataV2: function(pageName) {
-        var response = this.getProjectData();
-        var currentPId = DataHandler.getPathParamsData("pid");
-        var tableName = DataHandler.getTableName("fileTable");
-        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-        response["uploadedFileData"] = this._getUploadFileInfo(pageName, uploadedFileData);
-        response["tableName"] = tableName;
-        return response;
+        var tableName = DataHandler.getTableName("projectTable");
+        var pid = DataHandler.getPathParamsData("pid");
+        var response = this.getRowDataByAttr(tableName, {"pid": pid});
+        var finalResponse = {"status": "SUCCESS"};
+        if (response.status === "SUCCESS") {
+            finalResponse["pidRow"] = response["rowData"];
+        } else {
+            finalResponse = response;
+        }
+        return finalResponse;
     },
-    getAddItemPageData: function(pageName, sortingFields) {
-        var currentPId = DataHandler.getPathParamsData("pid");
-        var response = this.getProjectData();
-        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
-        var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-        if ($S.isArray(supplyItem)) {
-            for(var i=0; i<supplyItem.length; i++) {
-                if (!$S.isObject(supplyItem[i])) {
-                    continue;
+    getProjectDataV3: function(pageName) {
+        var tableName = DataHandler.getTableName("projectTable");
+        var formName = this.getFormNameByPageName("projectId");
+        var formType = this.getFormTypeByPageName("projectId");
+        var pid = DataHandler.getPathParamsData("pid");
+        var response = this.getRowDataByAttr(tableName, {"pid": pid});
+        var finalResponse = {"status": "SUCCESS"};
+        if ($S.isStringV2(formType)) {
+            formName += "." + formType;
+        }
+        if (response.status === "SUCCESS") {
+            var id1 = CommonDataHandler.getPathParamsData("id1", "");
+            tableName = DataHandler.getTableName(formName + ".tableName");
+            var response2 = this.getRowDataByAttr(tableName, {"pid": pid, "unique_id": id1});
+            if (response.status === "SUCCESS") {
+                finalResponse["pidRow"] = response["rowData"];
+                finalResponse["id1Row"] = response2["rowData"];
+            } else {
+                finalResponse = response2;
+            }
+        } else {
+            finalResponse = response;
+        }
+        return finalResponse;
+    },
+    getRenderTableDataV1: function(pageName, tableName) {
+        var pid = DataHandler.getPathParamsData("pid");
+        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
+        var uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
+        return uploadedFileTable;
+    },
+    getRenderTableDataV2: function(pageName, tableName) {
+        var pid = DataHandler.getPathParamsData("pid");
+        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
+        var uploadedFileTable = this._updateFormTypeAttr(pageName, uploadedFileData);
+        return uploadedFileTable;
+    },
+    getRenderTableDataV3: function(pageName, tableName) {
+        var pid = DataHandler.getPathParamsData("pid", "");
+        var id1 = DataHandler.getPathParamsData("id1", "");
+        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
+        return uploadedFileData;
+    },
+    getFormTypeByPageName: function(pageName) {
+        var formType = "";
+        if (pageName === "projectId") {
+            var pidData = this.getProjectDataV2(pageName);
+            if (pidData.status === "SUCCESS") {
+                if ($S.isObject(pidData["pidRow"]) && $S.isStringV2(pidData["pidRow"]["form_type"])) {
+                    formType = pidData["pidRow"]["form_type"];
                 }
-                supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(pageName, currentPId, supplyItem[i]);
+            }
+        } else if (pageName === "id1Page") {
+            var id1PageData = this.getProjectDataV3(pageName);
+            if (id1PageData.status === "SUCCESS") {
+                if ($S.isObject(id1PageData["id1Row"]) && $S.isStringV2(id1PageData["id1Row"]["form_type"])) {
+                    formType = id1PageData["id1Row"]["form_type"];
+                }
             }
         }
-        response["supplyItem"] = supplyItem;
-        response["tableName"] = tableName;
-        return response;
+        return formType;
     },
-    getItemUpdatePageData: function(pageName, sortingFields) {
-        var currentPId = DataHandler.getPathParamsData("pid");
-        var secondaryItemId = DataHandler.getPathParamsData("sid");
-        var response = this.getProjectData();
-        if (response.status !== "SUCCESS") {
-            return response;
+    getFormNameByPageName: function(pageName) {
+        var formType = this.getFormTypeByPageName(pageName);
+        var formNameKey = pageName;
+        if ($S.isStringV2(formType)) {
+            formNameKey += "." + formType;
         }
-        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
-        var secondaryItemList = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
-        if (secondaryItemList.length !== 1 || !$S.isObject(secondaryItemList[0])) {
-            response["status"] = "FAILURE";
-            response["reason"] = "Invalid Item Id: " + secondaryItemId;
-            return response;
-        } else if (secondaryItemList[0].pid !== currentPId) {
-            response["status"] = "FAILURE";
-            response["reason"] = "projectId: " + currentPId + ", and Item Id: " + secondaryItemId + " mismatch";
-            return response;
-        }
-        tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
-        var itemName = this.getDisplayName(DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems"), "sid", secondaryItemId, "supply_item_name");
-        var updatedItemData = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
-        response["supplyStatus"] = updatedItemData;
-        response["supplyItemName"] = itemName;
-        response["tableName"] = tableName;
-        return response;
+        return DataHandler.getAppData(formNameKey + ".formName", "");
     },
+    getResultPatternNameByPageName: function(pageName) {
+        var formType = this.getFormTypeByPageName(pageName);
+        var formNameKey = pageName;
+        if ($S.isStringV2(formType)) {
+            formNameKey += "." + formType;
+        }
+        return "pageName:" + formNameKey + ".resultPattern";
+    },
+    // getRenderTableDataV2: function(pageName, tableName) {
+    //     var pid = DataHandler.getPathParamsData("pid");
+    //     var id1 = DataHandler.getPathParamsData("id1");
+    //     var tableName = DataHandler.getTableName(tableName, "");
+    //     var tableData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
+    //     return tableData;
+    // },
+    // getAddItemPageData: function(pageName, sortingFields) {
+    //     var currentPId = DataHandler.getPathParamsData("pid");
+    //     var response = this.getProjectData();
+    //     var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
+    //     var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
+    //     if ($S.isArray(supplyItem)) {
+    //         for(var i=0; i<supplyItem.length; i++) {
+    //             if (!$S.isObject(supplyItem[i])) {
+    //                 continue;
+    //             }
+    //             supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(pageName, currentPId, supplyItem[i]);
+    //         }
+    //     }
+    //     response["supplyItem"] = supplyItem;
+    //     response["tableName"] = tableName;
+    //     return response;
+    // },
+    // getItemUpdatePageData: function(pageName, sortingFields) {
+    //     var currentPId = DataHandler.getPathParamsData("pid");
+    //     var secondaryItemId = DataHandler.getPathParamsData("sid");
+    //     var response = this.getProjectData();
+    //     if (response.status !== "SUCCESS") {
+    //         return response;
+    //     }
+    //     var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
+    //     var secondaryItemList = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
+    //     if (secondaryItemList.length !== 1 || !$S.isObject(secondaryItemList[0])) {
+    //         response["status"] = "FAILURE";
+    //         response["reason"] = "Invalid Item Id: " + secondaryItemId;
+    //         return response;
+    //     } else if (secondaryItemList[0].pid !== currentPId) {
+    //         response["status"] = "FAILURE";
+    //         response["reason"] = "projectId: " + currentPId + ", and Item Id: " + secondaryItemId + " mismatch";
+    //         return response;
+    //     }
+    //     tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
+    //     var itemName = this.getDisplayName(DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems"), "sid", secondaryItemId, "supply_item_name");
+    //     var updatedItemData = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
+    //     response["supplyStatus"] = updatedItemData;
+    //     response["supplyItemName"] = itemName;
+    //     response["tableName"] = tableName;
+    //     return response;
+    // },
     handlePageByPageId: function(pageId, dbViewData) {
         var i, tableData, loginUsername, fileTableName;
         switch(pageId) {
@@ -352,16 +459,26 @@ DataHandlerV2.extend({
         return tableData;
     },
     getTableDataByAttr: function(tableName, attrName, attrValue) {
+        var attr = {};
+        attr[attrName] = attrValue;
+        return this.getTableDataByAttrV2(tableName, attr);
+    },
+    getTableDataByAttrV2: function(tableName, attr) {
         var tableData = this.getTableData(tableName);
-        if (!$S.isArray(tableData) || !$S.isStringV2(attrName)) {
+        if (!$S.isArray(tableData) || !$S.isObject(attr)) {
             return [];
         }
-        var result = $S.searchItems([attrName], tableData, false, false, "i",
+        var result = $S.searchItems(null, tableData, false, false, "i",
             function(searchingPattern, el, i, arr) {
                 if (!$S.isObject(el)) {
                     return false;
                 }
-                return el[attrName] === attrValue;
+                for (var key in attr) {
+                    if (el[key] !== attr[key]) {
+                        return false;
+                    }
+                }
+                return true;
             }
         );
         return result;

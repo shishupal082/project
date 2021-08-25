@@ -36,27 +36,6 @@ Template["templateNotFound"] = [{
         "text": "Template not Found"
     }
 }];
-Template["heading"] = [
-    {
-        "tag": "div",
-        "className": "container",
-        "text": [
-            {
-                "tag": "center.h2",
-                "name": "heading-text",
-                "text": ""
-            },
-            {
-                "tag": "center",
-                "name": "heading-link",
-                "text": []
-            },
-        ]
-    },
-    {
-        "tag": "hr"
-    }
-];
 Template["loading"] = [
     {
         "tag": "center.h2",
@@ -287,38 +266,24 @@ Template["goBackLink"] = [
         }
     }
 ];
-Template["projectSubLink"] = [
-    {
-        "enablePageName": "projectStatusWork",
-        "href": "work",
-        "text": "Work Status"
-    },
-    {
-        "enablePageName": "projectStatusSupply",
-        "href": "supply",
-        "text": "Supply Progress"
-    },
-    {
-        "enablePageName": "projectContingency",
-        "href": "contingency",
-        "text": "Contingency"
-    }
-];
 Template["projectId"] = [
     {
         "tag": "div",
         "className": "page-data",
         "text": [
             {
-                "tag": "div.h4",
+                "tag": "div.table.tbody.tr",
+                "name": "projectId.goBackRow",
+                "className": "d-none",
                 "text": [
                     {
-                        "tag": "span",
-                        "name": "goBackLink",
+                        "tag": "td",
+                        "className": "v-align-initial",
+                        "name": "goBackRow.goBackLink",
                         "text": []
                     },
                     {
-                        "tag": "span",
+                        "tag": "td.h4",
                         "name": "projectId.pName",
                         "text": ""
                     }
@@ -326,7 +291,7 @@ Template["projectId"] = [
             },
             {
                 "tag": "div",
-                "name": "projectId.sub-link",
+                "name": "projectId.generic1-table",
                 "text": []
             },
             {
@@ -351,7 +316,48 @@ Template["projectId"] = [
             },
             {
                 "tag": "div",
-                "name": "pageName:projectId.addCommentTemplate",
+                "name": "pageName:projectId.otherTemplate",
+                "text": []
+            }
+        ]
+    }
+];
+Template["id1Page"] = [
+    {
+        "tag": "div",
+        "className": "page-data",
+        "text": [
+            {
+                "tag": "div.table.tbody.tr",
+                "name": "id1Page.goBackRow",
+                "className": "d-none",
+                "text": [
+                    {
+                        "tag": "td",
+                        "className": "v-align-initial",
+                        "name": "goBackRow.goBackLink",
+                        "text": []
+                    },
+                    {
+                        "tag": "td.h4",
+                        "name": "id1Page.pName",
+                        "text": ""
+                    }
+                ]
+            },
+            {
+                "tag": "div",
+                "name": "id1Page.preDefinedPattern",
+                "text": []
+            },
+            {
+                "tag": "div",
+                "name": "id1Page.generic2-table",
+                "text": []
+            },
+            {
+                "tag": "div",
+                "name": "pageName:id1Page.formTemplate",
                 "text": []
             }
         ]
@@ -437,45 +443,6 @@ Template["link-field"] = [
         "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
         "href": "",
         "text": ""
-    }
-];
-Template["home.addNewProject"] = [
-    {
-        "tag": "form",
-        "name": "new-project",
-        "value": "new-project",
-        "text": [
-            {
-                "tag": "div",
-                "text": {
-                    "tag": "span",
-                    "className": "badge badge-secondary",
-                    "text": "Add New Project"
-                }
-            },
-            {
-                "tag": "div",
-                "text": [
-                    {
-                        "tag": "span",
-                        "text": "Project Name"
-                    },
-                    {
-                        "tag": "input",
-                        "className": "form-control",
-                        "name": "new-project.name",
-                        "value": ""
-                    },
-                    {
-                        "tag": "button",
-                        "name": "addentry.submitStatus",
-                        "className": "btn btn-primary form-control",
-                        "text": "Save"
-                    }
-                ]
-
-            }
-        ]
     }
 ];
 Template["newWorkStatus"] = [
@@ -825,13 +792,4 @@ Template["viewPage"] = [
         "text": []
     }
 ];
-Template["footerField2"] = [
-    {
-        "tag": "div",
-        "name": "footer",
-        "className": "text-center",
-        "text": []
-    }
-];
-Template["footerField"] = [{"tag": "div.center", "name":"footerLink", "text": []}];
 export default Template;
