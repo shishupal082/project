@@ -502,6 +502,22 @@ DataHandlerV2.extend({
         );
         return result;
     },
+    getTableDataV2: function(pageName, tableName) {
+        var pid = DataHandler.getPathParamsData("pid", "");
+        if (!$S.isStringV2(pid)) {
+            return [];
+        }
+        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid});
+        return uploadedFileData;
+    },
+    getTableDataV3: function(pageName, tableName, id1) {
+        var pid = DataHandler.getPathParamsData("pid", "");
+        if (!$S.isStringV2(pid) || !$S.isStringV2(id1)) {
+            return [];
+        }
+        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
+        return uploadedFileData;
+    },
     getDisplayName: function(tableName, searchKey, searchRef, requiredKey, defaultValue) {
         var tableData = this.getTableData(tableName);
         if (!$S.isArray(tableData) || !$S.isStringV2(searchKey) || !$S.isStringV2(requiredKey)) {

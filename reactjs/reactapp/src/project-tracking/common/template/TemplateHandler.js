@@ -113,6 +113,7 @@ TemplateHandler.extend({
         var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
         var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName, tableName);
         var generic1FormUploadedData = DataHandlerV2.getRenderTableDataV1(pageName, tableName2);
+        PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
         var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
         var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "resultPatternUploadedFiles");

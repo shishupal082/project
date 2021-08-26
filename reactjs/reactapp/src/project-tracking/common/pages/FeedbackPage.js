@@ -45,10 +45,10 @@ FeedbackPage.extend({
         }
         return null;
     },
-    _updateAttrV2: function(pageName, pid, rowData, colData, dependentAttr) {
+    _updateAttrV2: function(pageName, pid, rowData, colData) {
         var updateLink, hrefLink, hrefText, displayValue = "";
-        var refColName = $S.isObject(dependentAttr) ? dependentAttr.fieldName : "";
-        if ($S.isObject(colData) && $S.isStringV2(refColName)) {
+        var refColName = "status";
+        if ($S.isObject(colData)) {
             if (colData["name"] === refColName) {
                 if ($S.isBooleanTrue(colData["displayValue"])) {
                     displayValue = colData["value"];
@@ -83,7 +83,7 @@ FeedbackPage.extend({
             }
         }
     },
-    _updateFieldAttrV2: function(pageName, pid, data, dependentAttr) {
+    _updateFieldAttrV2: function(pageName, pid, data) {
         if (!$S.isArray(data)) {
             return data;
         }
@@ -92,64 +92,13 @@ FeedbackPage.extend({
                 continue;
             }
             for(var j=0; j<data[i].length; j++) {
-                this._updateAttrV2(pageName, pid, data[i], data[i][j], dependentAttr);
+                this._updateAttrV2(pageName, pid, data[i], data[i][j]);
             }
         }
         return data;
     },
-    _getCurrentValue: function(initialValue, pid, id1, dependentAttr) {
-        if (!$S.isObject(dependentAttr)) {
-            return "";
-        }
-        var status = initialValue;
-        var dependentCount = 0;
-        function addCount(tempStatus, tempCount) {
-            if ($S.isStringV2(tempStatus)) {
-                if ($S.isNumber(tempCount) && tempCount > 0) {
-                    return tempStatus + " (" + tempCount + ")"
-                }
-                return tempStatus;
-            }
-            return "";
-        }
-        if (!$S.isStringV2(pid) || !$S.isStringV2(id1)) {
-            return addCount(status, dependentCount);
-        }
-        var tableName = dependentAttr["dependentTableName"];
-        var sourceFieldName = dependentAttr["sourceFieldName"];
-        var attr = {"pid": pid, "id1": id1};
-        if (!$S.isStringV2(sourceFieldName)) {
-            sourceFieldName = dependentAttr["fieldName"];
-        }
-        var dependentData = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
-        if ($S.isArray(dependentData) && dependentData.length > 0 && $S.isObject(dependentData[0]) && $S.isStringV2(dependentData[0][sourceFieldName])) {
-            dependentCount = dependentData.length;
-            status = dependentData[0][sourceFieldName];
-        }
-        return addCount(status, dependentCount);
-    },
-    _updateLatestDependentVariable: function(pageName, tableData, dependentAttr) {
-        if (pageName !== "projectId" || !$S.isArray(tableData) || !$S.isObject(dependentAttr)) {
-            return tableData;
-        }
-        var fieldName = dependentAttr["fieldName"];
-        if ($S.isStringV2(fieldName)) {
-            for (var i=0; i<tableData.length; i++) {
-                if (!$S.isObject(tableData[i])) {
-                    continue;
-                }
-                tableData[i][fieldName] = this._getCurrentValue(tableData[i][fieldName], tableData[i].pid, tableData[i].unique_id, dependentAttr);
-            }
-        }
-        return tableData;
-    },
-    updateStatusLink: function(pageName, tableData) {
-        var dependentAttr = DataHandler.getAppData("pageName:" + pageName + ".dependentAttr");
-        this._updateLatestDependentVariable(pageName, tableData, dependentAttr);
-    },
     updateStatusText: function(pageName, pid, tableData) {
-        var dependentAttr = DataHandler.getAppData("pageName:" + pageName + ".dependentAttr");
-        this._updateFieldAttrV2(pageName, pid, tableData, dependentAttr);
+        this._updateFieldAttrV2(pageName, pid, tableData);
     },
     isFormDisplayEnable: function(pidRowData, id1RowData, tableData) {
         if (!$S.isArray(tableData)) {
