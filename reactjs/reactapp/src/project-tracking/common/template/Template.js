@@ -431,7 +431,66 @@ Template["home"] = [
             {
                 "tag": "div",
                 "name": "home.addNewProject",
-                "text": []
+                "className": "d-none",
+                "text": [
+                    {
+                        "tag": "form",
+                        "name": "form.generic_form0",
+                        "value": "form.generic_form0",
+                        "text": [
+                            {
+                                "tag": "div",
+                                "text": {
+                                    "tag": "span",
+                                    "className": "badge badge-secondary",
+                                    "text": "Add New Project"
+                                }
+                            },
+                            {
+                                "tag": "div.table.tbody",
+                                "text": [
+                                    {
+                                        "tag": "tr",
+                                        "name": "home.addNewProject.formTypeField",
+                                        "text": [
+                                            {
+                                                "tag": "td",
+                                                "text": "Project Name"
+                                            },
+                                            {
+                                                "tag": "td",
+                                                "text": {
+                                                    "tag": "input",
+                                                    "className": "form-control",
+                                                    "name": "form.generic_form0.entry.project-name",
+                                                    "value": ""
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "tag": "tr",
+                                        "text": [
+                                            {
+                                                "tag": "td",
+                                                "colSpan": 4,
+                                                "className": "text-center",
+                                                "text": [
+                                                    {
+                                                        "tag": "button",
+                                                        "name": "addentry.submitStatus",
+                                                        "className": "btn btn-primary form-control",
+                                                        "text": "Save"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }

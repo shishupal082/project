@@ -156,11 +156,14 @@ CommonDataHandler.extend({
 });
 
 CommonDataHandler.extend({
-    _handleMetaDataLoad: function(metaDataResponse) {
+    _handleMetaDataLoad: function(defaultMetaData, metaDataResponse) {
         var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = this.getData("appControlMetaData", {});
+        if ($S.isObject(defaultMetaData)) {
+            finalMetaData = defaultMetaData;
+        }
         if ($S.isObject(appControlMetaData)) {
-            finalMetaData = appControlMetaData;
+            finalMetaData = Object.assign(finalMetaData, appControlMetaData);
         }
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
@@ -218,7 +221,7 @@ CommonDataHandler.extend({
             $S.callMethod(callback);
         });
     },
-    loadMetaDataByAppId: function(appId, callback) {
+    loadMetaDataByAppId: function(defaultMetaData, appId, callback) {
         var currentAppControlData = this.getAppDataById(appId, {});//{}
         var request = [], metaDataApi = [];
         if ($S.isArray(currentAppControlData["metaDataApi"])) {
@@ -236,7 +239,7 @@ CommonDataHandler.extend({
         AppHandler.LoadDataFromRequestApi(request, function() {
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
-                    CommonDataHandler._handleMetaDataLoad(request[i].response);
+                    CommonDataHandler._handleMetaDataLoad(defaultMetaData, request[i].response);
                 }
             }
             CommonDataHandler.setData("metaDataLoadStatus", "completed");

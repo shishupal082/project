@@ -1,5 +1,5 @@
 import $$$ from '../../interface/global';
-// import $S from "../../interface/stack.js";
+import $S from "../../interface/stack.js";
 import CommonConfig from "../../common/app/common/CommonConfig";
 
 var Config = {};
@@ -69,6 +69,36 @@ Config.fieldsKey = {
     "ProjectFileKey": "add-project-files-form.project",
     "AddLinkText": "upload_file_link.subject",
     "AddLinkUrl": "upload_file_link.heading"
+};
+
+var messageMapping = {
+    "form.generic_form0.entry.project-name": "Project name required.",
+    "form.generic_form0.entry.form_type": "Form type required."
+};
+var defaultMetaData = {
+    "home.formName": "form.generic_form0",
+    "form.generic_form0.validationData": {
+        "form.generic_form0.entry.project-name": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form0.entry.form_type": {
+            "type": "string",
+            "isRequired": true
+        }
+    },
+    "form.generic_form0.requiredKeys": ["form.generic_form0.entry.project-name", "form.generic_form0.entry.form_type"]
+};
+
+Config.getConfigData = function(key, defaultValue) {
+    switch(key) {
+        case "messageMapping":
+            return $S.clone(messageMapping);
+        case "defaultMetaData":
+            return $S.clone(defaultMetaData);
+        default:
+            return defaultValue;
+    }
 };
 
 export default Config;

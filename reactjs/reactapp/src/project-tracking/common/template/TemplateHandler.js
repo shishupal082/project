@@ -52,8 +52,11 @@ TemplateHandler.extend({
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
-        var newProjectTemplate = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
-        TemplateHelper.addItemInTextArray(template, "home.addNewProject", newProjectTemplate);
+        if (!DataHandlerV2.isDisabled("form", "generic_form0")) {
+            TemplateHelper.removeClassTemplate(template, "home.addNewProject", "d-none");
+            var formTypeField = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
+            TemplateHelper.addItemInTextArray(template, "home.addNewProject.formTypeField", formTypeField);
+        }
         return template;
     }
 });
@@ -116,7 +119,7 @@ TemplateHandler.extend({
         var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
         var genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["pidRow"]["form_type"], "generic_form1");
         var addLinkTemplate = FormHandler.getAddLinkTemplate(pageName);
-        if (!($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0 && $S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0)) {
+        if (!(($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0) || ($S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0))) {
             if (uploadFileTemplate === null && addLinkTemplate === null && addCommentTemplate === null && genericTemplate === null) {
                 return this.getTemplate("noDataFound");
             }

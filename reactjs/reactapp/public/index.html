@@ -27,7 +27,7 @@
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/project-tracking/static/css/project-tracking-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/feedback-status/static/css/feedback-status-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -56,17 +56,16 @@
 
 var GLOBAL = {
     baseApi: "http://localhost:8080",
-    basepathname: "/app/project-tracking",
-    appControlDataPath: "/project-tracking/",
+    basepathname: "/app/feedback-status",
+    appControlDataPath: "/feedback-status/json/",
     forceLogin: false
 };
 
-GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04"];
-GLOBAL.appControlApi = "/project-tracking/appControlData.json";
+GLOBAL.validAppControl = ["appControlTeam01", "appControlTeam02"];
+GLOBAL.appControlApi = "/feedback-status/appControlData.json";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
-GLOBAL.uploadFileInstruction = "(Only pdf less than 10MB)";
 window.GLOBAL = GLOBAL;
 </script>
 </body>

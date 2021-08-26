@@ -192,7 +192,7 @@ DataHandler.extend({
 
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getData("currentList1Id", "");
-        CommonDataHandler.loadMetaDataByAppId(currentList1Id, function() {
+        CommonDataHandler.loadMetaDataByAppId(null, currentList1Id, function() {
             // set headingJson from staticData
             // headerLink and footerLink from UserControl and metaData
             TemplateHandler.SetUserRealtedData();

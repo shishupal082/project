@@ -96,6 +96,12 @@ FormHandler.extend({
         var validationData = DataHandler.getAppData(formName + ".validationData", {});
         var tableName = DataHandler.getTableName(tableNameKey + ".tableName", "");
         var messageMapping = DataHandler.getAppData("messageMapping", {});
+        var configMessageMapping = Config.getConfigData("messageMapping", {});
+        if ($S.isObject(messageMapping)) {
+            messageMapping = Object.assign(configMessageMapping, messageMapping);
+        } else {
+            messageMapping = configMessageMapping;
+        }
         CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
             DataHandler.setData("addentry.submitStatus", status);
             $S.callMethod(callback);

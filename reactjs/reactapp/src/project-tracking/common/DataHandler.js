@@ -302,7 +302,7 @@ DataHandler.extend({
     },
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getData("currentList1Id", "");
-        CommonDataHandler.loadMetaDataByAppId(currentList1Id, function() {
+        CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
             CommonDataHandler.setDateSelectParameter(currentList1Id);
             DataHandler.loadDataByPage(callback);
         });
