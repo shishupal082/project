@@ -106,11 +106,10 @@ FeedbackPage.extend({
         }
         var finalStatusRef = DataHandler.getAppData("id1Page.finalStatusRef", "");
         if ($S.isStringV2(finalStatusRef) && $S.isObject(tableData[0]) && $S.isStringV2(tableData[0]["status"])) {
-            id1RowData["status"] = tableData[0]["status"];
             if (!DataHandlerV2.isDisabled("form", "generic_form2.force")) {
                 return true;
             }
-            return tableData[0]["status"] !== finalStatusRef;
+            return id1RowData["status"] !== finalStatusRef;
         }
         return true;
     },

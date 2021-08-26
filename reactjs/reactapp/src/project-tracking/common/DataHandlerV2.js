@@ -265,12 +265,6 @@ DataHandlerV2.extend({
         var uploadedFileTable = this._updateFormTypeAttr(pageName, uploadedFileData);
         return uploadedFileTable;
     },
-    getRenderTableDataV3: function(pageName, tableName) {
-        var pid = DataHandler.getPathParamsData("pid", "");
-        var id1 = DataHandler.getPathParamsData("id1", "");
-        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
-        return uploadedFileData;
-    },
     getFormTypeByPageName: function(pageName) {
         var formType = "";
         if (pageName === "projectId") {
@@ -507,16 +501,21 @@ DataHandlerV2.extend({
         if (!$S.isStringV2(pid)) {
             return [];
         }
-        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid});
-        return uploadedFileData;
+        var tableData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid});
+        return tableData;
     },
     getTableDataV3: function(pageName, tableName, id1) {
         var pid = DataHandler.getPathParamsData("pid", "");
         if (!$S.isStringV2(pid) || !$S.isStringV2(id1)) {
             return [];
         }
-        var uploadedFileData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
-        return uploadedFileData;
+        var tableData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
+        return tableData;
+    },
+    getTableDataV4: function(pageName, tableName) {
+        var id1 = DataHandler.getPathParamsData("id1", "");
+        var tableData = this.getTableDataV3(pageName, tableName, id1);
+        return tableData;
     },
     getDisplayName: function(tableName, searchKey, searchRef, requiredKey, defaultValue) {
         var tableData = this.getTableData(tableName);

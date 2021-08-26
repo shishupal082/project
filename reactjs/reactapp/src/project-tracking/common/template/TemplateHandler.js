@@ -156,7 +156,7 @@ TemplateHandler.extend({
             formName += "." + renderData["id1Row"]["form_type"];
         }
         var tableName = DataHandler.getTableName(formName + ".tableName", "");
-        var generic2FormUploadedData = DataHandlerV2.getRenderTableDataV3(pageName, tableName);
+        var generic2FormUploadedData = DataHandlerV2.getTableDataV4(pageName, tableName);
         var genericTemplate = null;
         if (FeedbackPage.isFormDisplayEnable(renderData["pidRow"], renderData["id1Row"], generic2FormUploadedData)) {
             genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["id1Row"]["form_type"], "generic_form2");
@@ -304,6 +304,7 @@ TemplateHandler.extend({
                         if (!$S.isArray(temp) || temp.length === 0) {
                             return this.getTemplate("noDataFound");
                         }
+                        PidPage.updateDependentAttr(pageName, [renderData["id1Row"]]);
                     }
                     renderField = this.generateId1Page(pageName, renderData);
                 break;
