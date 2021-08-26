@@ -628,13 +628,14 @@ DataHandler.extend({
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             list2Data = DataHandlerV2.getList2Data(pageName);
         }
-        if (dataLoadStatus && !DataHandlerV2.isDisabled("pageId", pageId)) {
-            list3Data = DataHandlerV2.getList3Data();
-            filterOptions = DataHandler.getData("filterOptions");
-            dateSelectionRequiredPages.push(pageName);
-        }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
-
+        if (dataLoadStatus) {
+            list3Data = DataHandlerV2.getList3Data();
+            dateSelectionRequiredPages.push(pageName);
+            if (DataHandlerV2.isFilterEnabled(pageName, pageId)) {
+                filterOptions = DataHandler.getData("filterOptions");
+            }
+        }
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", DataHandler.getPathParamsData("sid", ""));
 

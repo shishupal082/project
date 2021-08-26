@@ -12,6 +12,7 @@ import FeedbackPage from "../pages/FeedbackPage";
 
 
 import TemplateHelper from "../../../common/TemplateHelper";
+// import AppHandler from "../../../common/app/common/AppHandler";
 // import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 import CommonConfig from "../../../common/app/common/CommonConfig";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
@@ -112,6 +113,7 @@ TemplateHandler.extend({
         var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
         var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName, tableName);
         var generic1FormUploadedData = DataHandlerV2.getRenderTableDataV1(pageName, tableName2);
+        generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
         var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
         var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "resultPatternUploadedFiles");
         var generic1FormUploadedTable = PidPage.getRenderTable(pageName, tableName2, resultPatternName, generic1FormUploadedData);
@@ -122,6 +124,8 @@ TemplateHandler.extend({
         if (!(($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0) || ($S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0))) {
             if (uploadFileTemplate === null && addLinkTemplate === null && addCommentTemplate === null && genericTemplate === null) {
                 return this.getTemplate("noDataFound");
+            } else {
+                generic1FormUploadedTable = this.getTemplate("noDataFound");
             }
         }
         TemplateHelper.updateTemplateText(template, {"projectId.pName": renderData["pidRow"]["pName"]});

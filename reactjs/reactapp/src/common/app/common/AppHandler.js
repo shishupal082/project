@@ -1024,6 +1024,14 @@ AppHandler.extend({
         return selectionOptions;
     },
     generateFilterDataV2: function(keyMapping, currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
+        /**
+         * keyMapping = {"x.filterKeys": "filterKeys"}
+         * currentAppData = {}
+         * metaData = {"x.filterKeys": [status, device]}
+         * then it will generate as
+         * currentAppData["filterKeys"] = undefined
+         * metaData["filterKeys"] = [status, device]
+         * */
         if (!$S.isObject(keyMapping)) {
             keyMapping = {};
         }

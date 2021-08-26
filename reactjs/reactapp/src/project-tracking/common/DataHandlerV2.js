@@ -88,6 +88,17 @@ DataHandlerV2.extend({
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewData;
     },
+    generateFilterOptionAndApplyFilter: function(pageName, tableData) {
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = CommonDataHandler.getData("metaData", {});
+        var filterSelectedValues = DataHandler.getData("filterValues", {});
+        var pageRef = this.getPageRefByPageName(pageName);
+        var keyMapping = DataHandler.getAppData("pageName:" + pageRef + ".filterKeyMapping", {});
+        var filterOptions = AppHandler.generateFilterDataV2(keyMapping, currentAppData, metaData, tableData, filterSelectedValues, "name");
+        DataHandler.setData("filterOptions", filterOptions);
+        var result = AppHandler.getFilteredData(currentAppData, metaData, tableData, filterOptions, "name");
+        return result;
+    },
     findCurrentList3Id: function() {
         var currentList3Data = DataHandler.getCurrentList3Data();
         var currentList3Id = DataHandler.getData("currentList3Id", "");
@@ -278,6 +289,14 @@ DataHandlerV2.extend({
             }
         }
         return formType;
+    },
+    getPageRefByPageName: function(pageName) {
+        var formType = this.getFormTypeByPageName(pageName);
+        var pageRef = pageName;
+        if ($S.isStringV2(formType)) {
+            pageRef += "." + formType;
+        }
+        return pageRef;
     },
     getFormNameByPageName: function(pageName) {
         var formType = this.getFormTypeByPageName(pageName);
@@ -553,6 +572,17 @@ DataHandlerV2.extend({
             return enabledViewPage.indexOf(value) < 0;
         }
         return true;
+    },
+    isFilterEnabled: function(pageName, pageId) {
+        if ([Config.projectId].indexOf(pageName) >= 0) {
+            return true;
+        }
+        if ([Config.displayPage].indexOf(pageName) >= 0) {
+            if (!this.isDisabled(pageId)) {
+                return true;
+            }
+        }
+        return false;
     }
 });
 })($S);

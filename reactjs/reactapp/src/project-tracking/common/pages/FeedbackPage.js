@@ -105,7 +105,7 @@ FeedbackPage.extend({
         var dependentCount = 0;
         function addCount(tempStatus, tempCount) {
             if ($S.isStringV2(tempStatus)) {
-                if ($S.isNumeric(tempCount)) {
+                if ($S.isNumber(tempCount) && tempCount > 0) {
                     return tempStatus + " (" + tempCount + ")"
                 }
                 return tempStatus;
