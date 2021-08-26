@@ -547,6 +547,55 @@ CommonDataHandler.extend({
         return false;
     }
 });
+CommonDataHandler.extend({
+    _getRoleFilterMapping: function(appId, filterKey) {
+        if (!$S.isStringV2(filterKey)) {
+            return [];
+        }
+        var filterMapping = this.getAppData(appId, filterKey, {});
+        var roles = AppHandler.GetUserActiveRoles();
+        var visibleFeedbackSection = [];
+        if ($S.isArray(roles) && $S.isObject(filterMapping)) {
+            for (var key in filterMapping) {
+                if (roles.indexOf(key) >= 0) {
+                    if ($S.isStringV2(filterMapping[key])) {
+                        visibleFeedbackSection.push(filterMapping[key]);
+                    } else if ($S.isArray(filterMapping[key])) {
+                        visibleFeedbackSection = visibleFeedbackSection.concat(filterMapping[key]);
+                    }
+                }
+            }
+        }
+        return visibleFeedbackSection;
+    },
+    applyRoleFilter: function(appId, tableData, filterKey) {
+        if (!$S.isStringV2(filterKey)) {
+            return tableData;
+        }
+        var filterMapping = this._getRoleFilterMapping(appId, filterKey);
+        if (!$S.isArray(filterMapping) || filterMapping.length === 0) {
+            return tableData;
+        }
+        if (!$S.isArray(tableData)) {
+            return tableData;
+        }
+        var finalTableData = [];
+        var filterKeyArr = filterKey.split(".");
+        var key = filterKey;
+        if (filterKeyArr.length >= 2) {
+            key = filterKeyArr[filterKeyArr.length - 2];
+        }
+        for (var i=0; i<tableData.length; i++) {
+            if (!$S.isObject(tableData[i])) {
+                continue;
+            }
+            if (filterMapping.indexOf(tableData[i][key]) >= 0) {
+                finalTableData.push(tableData[i]);
+            }
+        }
+        return finalTableData;
+    }
+});
 })($S);
 
 export default CommonDataHandler;

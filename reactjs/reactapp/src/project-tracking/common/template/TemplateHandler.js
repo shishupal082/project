@@ -13,7 +13,7 @@ import FeedbackPage from "../pages/FeedbackPage";
 
 import TemplateHelper from "../../../common/TemplateHelper";
 // import AppHandler from "../../../common/app/common/AppHandler";
-// import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
+import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 import CommonConfig from "../../../common/app/common/CommonConfig";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
@@ -104,6 +104,7 @@ TemplateHandler.extend({
         if (!$S.isObject(renderData["pidRow"])) {
             renderData["pidRow"] = {};
         }
+        var currentAppId = DataHandler.getData("currentList1Id", "");
         var template = this.getTemplate("projectId");
         var formName = DataHandlerV2.getFormNameByPageName(pageName);
         var tableName = DataHandler.getTableName("fileTable");
@@ -113,6 +114,7 @@ TemplateHandler.extend({
         var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
         var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName, tableName);
         var generic1FormUploadedData = DataHandlerV2.getRenderTableDataV1(pageName, tableName2);
+        generic1FormUploadedData = CommonDataHandler.applyRoleFilter(currentAppId, generic1FormUploadedData, "pageName:" + pageName + ".section.mapping");
         PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
         var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
@@ -125,7 +127,7 @@ TemplateHandler.extend({
         if (!(($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0) || ($S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0))) {
             if (uploadFileTemplate === null && addLinkTemplate === null && addCommentTemplate === null && genericTemplate === null) {
                 return this.getTemplate("noDataFound");
-            } else {
+            } else if (DataHandlerV2.isFilterEnabled(pageName)) {
                 generic1FormUploadedTable = this.getTemplate("noDataFound");
             }
         }
@@ -284,6 +286,8 @@ TemplateHandler.extend({
             $S.log("loadingCount: " + (loadingCount++));
             return renderField;
         }
+        var temp;
+        var currentAppId = DataHandler.getData("currentList1Id", "");
         if ($S.isObject(renderData) && renderData.status === "FAILURE") {
             return this._getInvalidField(renderData.reason);
         } else {
@@ -295,6 +299,12 @@ TemplateHandler.extend({
                     renderField = this.generateProjectDetailsPage(pageName, renderData);
                 break;
                 case "id1Page":
+                    if ($S.isObject(renderData["id1Row"])) {
+                        temp = CommonDataHandler.applyRoleFilter(currentAppId, [renderData["id1Row"]], "pageName:projectId.section.mapping");
+                        if (!$S.isArray(temp) || temp.length === 0) {
+                            return this.getTemplate("noDataFound");
+                        }
+                    }
                     renderField = this.generateId1Page(pageName, renderData);
                 break;
                 // case "projectStatusWork":

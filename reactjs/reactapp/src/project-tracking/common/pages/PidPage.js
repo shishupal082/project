@@ -82,7 +82,7 @@ PidPage.extend({
         }
     },
     updateDependentAttr: function(pageName, tableData) {
-        var dependentAttr = DataHandler.getAppData("dependentAttr");
+        var dependentAttr = DataHandler.getAppData("pageName:" + pageName + ".dependentAttr");
         if ($S.isArray(dependentAttr)) {
             for(var i=0; i<dependentAttr.length; i++) {
                 this._updateAttr(pageName, tableData, dependentAttr[i]);

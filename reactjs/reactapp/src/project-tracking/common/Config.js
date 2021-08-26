@@ -87,7 +87,7 @@ var defaultMetaData = {
             "isRequired": true
         }
     },
-    "form.generic_form0.requiredKeys": ["form.generic_form0.entry.project-name", "form.generic_form0.entry.form_type"]
+    "form.generic_form0.requiredKeys": ["form.generic_form0.entry.form_type", "form.generic_form0.entry.project-name"]
 };
 
 Config.getConfigData = function(key, defaultValue) {

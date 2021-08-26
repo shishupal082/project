@@ -45,7 +45,6 @@ keys.push("userData");
 keys.push("filteredUserData");
 keys.push("attendanceData");
 keys.push("latestAttendanceData");
-keys.push("visibleFeedbackSection");
 
 keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
@@ -53,12 +52,9 @@ keys.push("appRelatedDataLoadStatus");
 keys.push("dbViewDataLoadStatus");
 keys.push("filesInfoLoadStatus");
 
-// keys.push("sortable");
-// keys.push("sortableValue");
 keys.push("sortingFields");
 keys.push("dbViewData");
 keys.push("filesInfoData");
-// keys.push("dbViewDataTable");
 
 keys.push("firstTimeDataLoadStatus");
 
@@ -304,36 +300,9 @@ DataHandler.extend({
         var currentList1Id = DataHandler.getData("currentList1Id", "");
         CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
             CommonDataHandler.setDateSelectParameter(currentList1Id);
+            DataHandler.setHeaderAndFooterData();
             DataHandler.loadDataByPage(callback);
         });
-        /*
-        var appControlData = DataHandler.getCurrentAppData();//{}
-        var request = [], metaDataApi = [];
-        if ($S.isArray(appControlData["metaDataApi"])) {
-            metaDataApi = appControlData["metaDataApi"];
-        }
-        metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
-        });
-        var metaDataRequest = {
-                            "url": metaDataApi,
-                            "apiName": "metaData",
-                            "requestMethod": Api.getAjaxApiCallMethod()};
-        request.push(metaDataRequest);
-        DataHandler.setData("appRelatedDataLoadStatus", "in_progress");
-        DataHandler.setData("dbViewDataLoadStatus", "not-started");
-        AppHandler.LoadDataFromRequestApi(request, function() {
-            for(var i=0; i<request.length; i++) {
-                if (request[i].apiName === "metaData") {
-                    DataHandlerV2.handleMetaDataLoad(request[i].response);
-                }
-            }
-            // DataHandler.generateDateParameter();
-            DataHandler.setData("appRelatedDataLoadStatus", "completed");
-            $S.log("currentAppData load complete");
-            DataHandler.loadDataByPage(callback);
-        });
-        */
     },
     loadDbTableData: function(callback) {
         var metaData = CommonDataHandler.getData("metaData", {});
@@ -350,39 +319,7 @@ DataHandler.extend({
             return;
         }
         $S.callMethod(callback);
-    },
-    handleStaticDataLoad: function() {
-        var feedbackSectionMapping = this.getAppData("feedbackSectionMapping", {});
-        var roles = AppHandler.GetUserActiveRoles();
-        var visibleFeedbackSection = [];
-        if ($S.isArray(roles) && $S.isObject(feedbackSectionMapping)) {
-            for (var key in feedbackSectionMapping) {
-                if (roles.indexOf(key) >= 0) {
-                    if ($S.isStringV2(feedbackSectionMapping[key])) {
-                        visibleFeedbackSection.push(feedbackSectionMapping[key]);
-                    } else if ($S.isArray(feedbackSectionMapping[key])) {
-                        visibleFeedbackSection = visibleFeedbackSection.concat(feedbackSectionMapping[key]);
-                    }
-                }
-            }
-        }
-        this.setData("visibleFeedbackSection", visibleFeedbackSection);
     }
-    // loadAppControlData: function(callback) {
-    //     DataHandler.setData("appControlDataLoadStatus", "in_progress");
-    //     var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
-    //     AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
-    //         DataHandler.setData("appControlData", appControlData);
-    //         DataHandler.setData("appControlMetaData", metaData);
-    //         $S.log("appControlData load complete");
-    //         DataHandler.setData("appControlDataLoadStatus", "completed");
-    //         DataHandler.setCurrentAppId();
-    //         // DataHandler.generateDateParameter();
-    //         DataHandler.loadDataByAppId(function() {
-    //             $S.callMethod(callback);
-    //         });
-    //     });
-    // }
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
@@ -400,23 +337,12 @@ DataHandler.extend({
                             CommonConfig.JQ("title").html(title);
                         }
                         DataHandler.loadDataByAppId(function() {
-                            DataHandler.handleStaticDataLoad();
-                            DataHandler.setHeaderAndFooterData();
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });
                     });
                 });
             });
         });
-
-        // DataHandler.loadUserRelatedData(function() {
-        //         DataHandler.loadAppControlData(function() {
-        //             pageName = DataHandler.getData("pageName", "");
-        //             AppHandler.TrackPageView(pageName);
-        //             TemplateHandler.handlePageNameChange(pageName, "");
-        //             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-        //         });
-        // });
     },
     OnReloadClick: function(appStateCallback, appDataCallback) {
         AppHandler.TrackEvent("reloadClick");

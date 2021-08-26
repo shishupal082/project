@@ -206,7 +206,7 @@ DataHandlerV2.extend({
         var projectTable = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
 
         if (!$S.isArray(projectTable) || projectTable.length !== 1) {
-            response["reason"] = "Invalid Row";
+            response["reason"] = "Invalid row, ";
             for (var key in attr) {
                 response["reason"] += " "+ key + " : " + attr[key];
             }
@@ -242,7 +242,7 @@ DataHandlerV2.extend({
             var id1 = CommonDataHandler.getPathParamsData("id1", "");
             tableName = DataHandler.getTableName(formName + ".tableName");
             var response2 = this.getRowDataByAttr(tableName, {"pid": pid, "unique_id": id1});
-            if (response.status === "SUCCESS") {
+            if (response2.status === "SUCCESS") {
                 finalResponse["pidRow"] = response["rowData"];
                 finalResponse["id1Row"] = response2["rowData"];
             } else {
@@ -590,15 +590,22 @@ DataHandlerV2.extend({
         return true;
     },
     isFilterEnabled: function(pageName, pageId) {
+        var status = false;
         if ([Config.projectId].indexOf(pageName) >= 0) {
-            return true;
+            status = true;
         }
         if ([Config.displayPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled(pageId)) {
-                return true;
+                status = true;
             }
         }
-        return false;
+        if (status) {
+            var filterOptions = DataHandler.getData("filterOptions", []);
+            if (!$S.isArray(filterOptions) || filterOptions.length === 0) {
+                status = false;
+            }
+        }
+        return status;
     }
 });
 })($S);
