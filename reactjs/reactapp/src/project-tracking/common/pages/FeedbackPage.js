@@ -97,13 +97,23 @@ FeedbackPage.extend({
         }
         return data;
     },
-    _getCurrentValue: function(pid, id1, dependentAttr) {
+    _getCurrentValue: function(initialValue, pid, id1, dependentAttr) {
         if (!$S.isObject(dependentAttr)) {
             return "";
         }
-        var status = dependentAttr["defaultValue"];
-        if (!$S.isStringV2(pid) && !$S.isStringV2(id1)) {
-            return status;
+        var status = initialValue;
+        var dependentCount = 0;
+        function addCount(tempStatus, tempCount) {
+            if ($S.isStringV2(tempStatus)) {
+                if ($S.isNumeric(tempCount)) {
+                    return tempStatus + " (" + tempCount + ")"
+                }
+                return tempStatus;
+            }
+            return "";
+        }
+        if (!$S.isStringV2(pid) || !$S.isStringV2(id1)) {
+            return addCount(status, dependentCount);
         }
         var tableName = dependentAttr["dependentTableName"];
         var sourceFieldName = dependentAttr["sourceFieldName"];
@@ -113,20 +123,22 @@ FeedbackPage.extend({
         }
         var dependentData = DataHandlerV2.getTableDataByAttrV2(tableName, attr);
         if ($S.isArray(dependentData) && dependentData.length > 0 && $S.isObject(dependentData[0]) && $S.isStringV2(dependentData[0][sourceFieldName])) {
+            dependentCount = dependentData.length;
             status = dependentData[0][sourceFieldName];
         }
-        return status;
+        return addCount(status, dependentCount);
     },
     _updateLatestDependentVariable: function(pageName, tableData, dependentAttr) {
-        if (pageName !== "projectId" || !$S.isArray(tableData)) {
+        if (pageName !== "projectId" || !$S.isArray(tableData) || !$S.isObject(dependentAttr)) {
             return tableData;
         }
-        if ($S.isObject(dependentAttr) && $S.isStringV2(dependentAttr["fieldName"])) {
+        var fieldName = dependentAttr["fieldName"];
+        if ($S.isStringV2(fieldName)) {
             for (var i=0; i<tableData.length; i++) {
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                tableData[i][dependentAttr["fieldName"]] = this._getCurrentValue(tableData[i].pid, tableData[i].unique_id, dependentAttr);
+                tableData[i][fieldName] = this._getCurrentValue(tableData[i][fieldName], tableData[i].pid, tableData[i].unique_id, dependentAttr);
             }
         }
         return tableData;

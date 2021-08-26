@@ -568,7 +568,8 @@ DataHandler.extend({
         }
         switch(pageName) {
             case "home":
-                renderData = DataHandlerV2.getTableData(this.getTableName("projectTable"));
+                var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
+                renderData = DataHandlerV2.getTableData(this.getTableName(configFormName + ".tableName"));
             break;
             case "projectId":
                 renderData = DataHandlerV2.getProjectDataV2(pageName);
