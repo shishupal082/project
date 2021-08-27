@@ -18,12 +18,6 @@ var pages = {
     "home": basepathname+"/",
     "projectId": basepathname+"/pid/:pid",
     "id1Page": basepathname+"/pid/:pid/id1/:id1",
-    // "projectStatusWork": basepathname+"/pid/:pid/work",
-    // "updateWorkStatus": basepathname+"/pid/:pid/sid/:sid/work",
-    // "projectStatusSupply": basepathname+"/pid/:pid/supply",
-    // "updateSupplyStatus": basepathname+"/pid/:pid/sid/:sid/supply",
-    // "projectContingency": basepathname+"/pid/:pid/contingency",
-    // "updateContingencyStatus": basepathname+"/pid/:pid/sid/:sid/contingency",
     "displayPage": basepathname+"/display/:pageId",
     "viewPage": basepathname+"/view/:viewPageName"
 };
@@ -36,14 +30,6 @@ Config.projectId = "projectId";
 Config.id1Page = "id1Page";
 Config.displayPage = "displayPage";
 Config.viewPage = "viewPage";
-
-// Config.projectStatusWork = "projectStatusWork";
-// Config.updateWorkStatus = "updateWorkStatus";
-
-// Config.projectStatusSupply = "projectStatusSupply";
-// Config.updateSupplyStatus = "updateSupplyStatus";
-// Config.projectContingency = "projectContingency";
-// Config.updateContingencyStatus = "updateContingencyStatus";
 
 
 Config.dateSelection = [

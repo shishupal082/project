@@ -222,37 +222,6 @@ class App extends React.Component {
         //     <AppComponent data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}/>
         // );
     }
-
-                // <Route exact path={pages.projectStatusWork}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusWork}/>
-                //     )}
-                // />
-                // <Route exact path={pages.updateWorkStatus}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateWorkStatus}/>
-                //     )}
-                // />
-                // <Route exact path={pages.projectStatusSupply}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectStatusSupply}/>
-                //     )}
-                // />
-                // <Route exact path={pages.updateSupplyStatus}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateSupplyStatus}/>
-                //     )}
-                // />
-                // <Route exact path={pages.projectContingency}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectContingency}/>
-                //     )}
-                // />
-                // <Route exact path={pages.updateContingencyStatus}
-                //     render={props => (
-                //         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.updateContingencyStatus}/>
-                //     )}
-                // />
 }
 
 export default App;

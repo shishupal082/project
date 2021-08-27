@@ -9,8 +9,6 @@ import CommonConfig from "../../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 
 
-import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
-import FormHandlerAddWorkStatus from "./FormHandlerAddWorkStatus";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 import FormHandlerAddProjectComment from "./FormHandlerAddProjectComment";
 import FormHandlerAddProjectFiles from "./FormHandlerAddProjectFiles";
@@ -108,12 +106,6 @@ FormHandler.extend({
     submitAddProjectComment: function(pageName, callback) {
         FormHandlerAddProjectComment.submit(pageName, callback);
     },
-    submitAddSupplyStatus: function(pageName, callback) {
-        FormHandlerAddSupplyStatus.submit(pageName, callback);
-    },
-    submitNewWorkStatus: function(pageName, callback) {
-        FormHandlerAddWorkStatus.submit(pageName, callback);
-    },
     submitUploadFile: function(pageName, callback) {
         FormHandlerUploadFile.submit(callback);
     },
@@ -188,16 +180,6 @@ FormHandler.extend({
             TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
         }
     },
-    // getUpdateSupplyTemplate: function(pageName) {
-    //     var formTemplate;
-    //     if ([Config.updateWorkStatus].indexOf(pageName) >= 0) {
-    //         formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
-    //     } else {
-    //         formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
-    //     }
-    //     this.updateBtnStatus(formTemplate);
-    //     return formTemplate;
-    // },
     getUploadFileTemplate: function(pageName) {
         if (DataHandlerV2.isDisabled("form", "fileUploadForm")) {
             return null;

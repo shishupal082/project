@@ -5,7 +5,7 @@ import DataHandler from "../DataHandler";
 
 import TemplateHandler from "./TemplateHandler";
 
-import TemplateHelper from "../../../common/TemplateHelper";
+// import TemplateHelper from "../../../common/TemplateHelper";
 // import AppHandler from "../../../common/app/common/AppHandler";
 // import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
@@ -28,15 +28,13 @@ TemplateHandlerDBView.fn = TemplateHandlerDBView.prototype = {
 $S.extendObject(TemplateHandlerDBView);
 TemplateHandlerDBView.extend({
     getDbViewFieldsV2: function(renderData) {
-        var template = TemplateHandler.getTemplate("displaySupplyStatus");
+        var template;
         var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = DataHandler.getData("sortingFields", []);
-        var htmlFields;
         if (!$S.isArray(renderData) || renderData.length === 0) {
             template = TemplateHandler.getTemplate("noDataFound");
         } else {
-            htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
-            TemplateHelper.addItemInTextArray(template, "displaySupplyStatus.projectSupplyStatus.table", htmlFields);
+            template = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
         }
         return template;
     }

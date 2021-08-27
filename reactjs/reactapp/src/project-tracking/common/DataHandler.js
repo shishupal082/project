@@ -493,16 +493,6 @@ DataHandler.extend({
             case "id1Page":
                 renderData = DataHandlerV2.getProjectDataV3(pageName);
             break;
-            // case "projectStatusSupply":
-            // case "projectStatusWork":
-            // case "projectContingency":
-            //     renderData = DataHandlerV2.getAddItemPageData(pageName, sortingFields);
-            // break;
-            // case "updateSupplyStatus":
-            // case "updateContingencyStatus":
-            // case "updateWorkStatus":
-            //     renderData = DataHandlerV2.getItemUpdatePageData(pageName, sortingFields);
-            // break;
             case "displayPage":
                 if (DataHandlerV2.isDisabled("pageId", pageId)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};

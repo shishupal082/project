@@ -47,12 +47,18 @@ PidPage.extend({
         }
         return data;
     },
-    _getValue: function(pageName, attr, currentRow, sourceTableName, value, defaultValue) {
-        if (!$S.isObject(currentRow)) {
-            currentRow = {};
+    _setValue: function(pageName, rowData, dependentAttr) {
+        if (!$S.isObject(rowData) || !$S.isObject(dependentAttr)) {
+            return;
         }
-        var result = defaultValue;
-        var tableData = DataHandlerV2.getTableDataV3(pageName, sourceTableName, currentRow.unique_id);
+        var sourceTableName = dependentAttr["sourceTableName"];
+        var destinationFieldName = dependentAttr["destinationFieldName"];
+        var value = dependentAttr["value"];
+        if (!$S.isStringV2(sourceTableName) || !$S.isStringV2(destinationFieldName) || !$S.isStringV2(value)) {
+            return;
+        }
+        var result = rowData[destinationFieldName];
+        var tableData = DataHandlerV2.getTableDataV3(pageName, sourceTableName, rowData.unique_id);
         if ($S.isArray(tableData) && $S.isStringV2(value)) {
             var valueAttr = value.split(":");
             if (valueAttr.length === 1 && valueAttr[0] === "LENGTH") {
@@ -63,29 +69,27 @@ PidPage.extend({
                 }
             }
         }
-        return result;
+        rowData[destinationFieldName] = result;
     },
-    _updateAttr: function(pageName, tableData, attr) {
-        if (!$S.isObject(attr) || !$S.isArray(tableData)) {
-            return;
-        }
-        var sourceTableName = attr["sourceTableName"];
-        var destinationFieldName = attr["destinationFieldName"];
-        var value = attr["value"];
-        if ($S.isStringV2(sourceTableName) && $S.isStringV2(destinationFieldName)) {
-            for (var i=0; i<tableData.length; i++) {
+    updateDependentAttr: function(pageName, tableData) {
+        var i, j, dependentAttr;
+        if ($S.isArray(tableData)) {
+            for (i=0; i<tableData.length; i++) {
                 if (!$S.isObject(tableData[i])) {
                     continue;
                 }
-                tableData[i][destinationFieldName] = this._getValue(pageName, attr, tableData[i], sourceTableName, value, tableData[i][destinationFieldName]);
-            }
-        }
-    },
-    updateDependentAttr: function(pageName, tableData) {
-        var dependentAttr = DataHandler.getAppData("pageName:" + pageName + ".dependentAttr");
-        if ($S.isArray(dependentAttr)) {
-            for(var i=0; i<dependentAttr.length; i++) {
-                this._updateAttr(pageName, tableData, dependentAttr[i]);
+                if (!$S.isStringV2(tableData[i]["form_type"])) {
+                    continue;
+                }
+                dependentAttr = DataHandler.getAppData("pageName:" + pageName + "." + tableData[i]["form_type"] +  ".dependentAttr");
+                if ($S.isArray(dependentAttr)) {
+                    for(j=0; j<dependentAttr.length; j++) {
+                        if (!$S.isObject(dependentAttr[j])) {
+                            continue;
+                        }
+                        this._setValue(pageName, tableData[i], dependentAttr[j]);
+                    }
+                }
             }
         }
     },

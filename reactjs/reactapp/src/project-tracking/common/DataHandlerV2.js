@@ -120,41 +120,7 @@ DataHandlerV2.extend({
             }
         }
         DataHandler.setData("currentList3Id", currentList3Id);
-    },
-    // handleMetaDataLoad: function(metaDataResponse) {
-    //     var finalMetaData = {}, i, tempMetaData, temp;
-    //     var appControlMetaData = DataHandler.getData("appControlMetaData", {});
-    //     if ($S.isObject(appControlMetaData)) {
-    //         finalMetaData = appControlMetaData;
-    //     }
-    //     if ($S.isArray(metaDataResponse)) {
-    //         for (i=0; i<metaDataResponse.length; i++) {
-    //             if ($S.isObject(metaDataResponse[i])) {
-    //                 tempMetaData = metaDataResponse[i];
-    //                 temp = tempMetaData.metaData;
-    //                 if ($S.isObject(temp)) {
-    //                     temp = Object.keys(temp);
-    //                     if (temp.length > 0) {
-    //                         tempMetaData = tempMetaData.metaData;
-    //                     }
-    //                 }
-    //                 finalMetaData = Object.assign(finalMetaData, tempMetaData);
-    //             }
-    //         }
-    //     }
-    //     DataHandler.setData("metaData", finalMetaData);
-    //     var dateSelect = DataHandler.getData("date-select", "");
-    //     if (dateSelect === "") {
-    //         if ($S.isString(finalMetaData.dateSelect) && finalMetaData.dateSelect.length > 0) {
-    //             dateSelect = finalMetaData.dateSelect;
-    //         } else {
-    //             dateSelect = Config.defaultDateSelect;
-    //         }
-    //     }
-    //     DataHandler.setData("date-select", dateSelect);
-    //     this.findCurrentList3Id();
-    //     TemplateHandler.SetUserRealtedData();
-    // }
+    }
 });
 DataHandlerV2.extend({
     _updateFileInfo: function(pageName, uploadedFileData) {
@@ -181,22 +147,6 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
-    // getLinkRef: function(pageName) {
-    //     var linkRef = DataHandler.getAppData("linkRef");
-    //     if (!$S.isObject(linkRef)) {
-    //         linkRef = {};
-    //     }
-    //     return linkRef["pageName:" + pageName + ":linkRef"];
-    // },
-    // _getUpdateSupplyItemLink: function(pageName, pid, entry) {
-    //     var tdFieldText = {"tag": "link", "text": "Update", "href": ""};
-    //     var sid = "";
-    //     if ($S.isObject(entry) && $S.isString(entry.sid)) {
-    //         sid = entry.sid;
-    //     }
-    //     tdFieldText["href"] = DataHandler.getLink(pid, sid, this.getLinkRef(pageName));
-    //     return tdFieldText;
-    // },
     getRowDataByAttr: function(tableName, attr) {
         var response = {"status": "FAILURE"};
         if (!$S.isObject(attr)) {
@@ -308,56 +258,6 @@ DataHandlerV2.extend({
         }
         return "pageName:" + formNameKey + ".resultPattern";
     },
-    // getRenderTableDataV2: function(pageName, tableName) {
-    //     var pid = DataHandler.getPathParamsData("pid");
-    //     var id1 = DataHandler.getPathParamsData("id1");
-    //     var tableName = DataHandler.getTableName(tableName, "");
-    //     var tableData = DataHandlerV2.getTableDataByAttrV2(tableName, {"pid": pid, "id1": id1});
-    //     return tableData;
-    // },
-    // getAddItemPageData: function(pageName, sortingFields) {
-    //     var currentPId = DataHandler.getPathParamsData("pid");
-    //     var response = this.getProjectData();
-    //     var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
-    //     var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-    //     if ($S.isArray(supplyItem)) {
-    //         for(var i=0; i<supplyItem.length; i++) {
-    //             if (!$S.isObject(supplyItem[i])) {
-    //                 continue;
-    //             }
-    //             supplyItem[i].update_item_link = this._getUpdateSupplyItemLink(pageName, currentPId, supplyItem[i]);
-    //         }
-    //     }
-    //     response["supplyItem"] = supplyItem;
-    //     response["tableName"] = tableName;
-    //     return response;
-    // },
-    // getItemUpdatePageData: function(pageName, sortingFields) {
-    //     var currentPId = DataHandler.getPathParamsData("pid");
-    //     var secondaryItemId = DataHandler.getPathParamsData("sid");
-    //     var response = this.getProjectData();
-    //     if (response.status !== "SUCCESS") {
-    //         return response;
-    //     }
-    //     var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
-    //     var secondaryItemList = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
-    //     if (secondaryItemList.length !== 1 || !$S.isObject(secondaryItemList[0])) {
-    //         response["status"] = "FAILURE";
-    //         response["reason"] = "Invalid Item Id: " + secondaryItemId;
-    //         return response;
-    //     } else if (secondaryItemList[0].pid !== currentPId) {
-    //         response["status"] = "FAILURE";
-    //         response["reason"] = "projectId: " + currentPId + ", and Item Id: " + secondaryItemId + " mismatch";
-    //         return response;
-    //     }
-    //     tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyStatus");
-    //     var itemName = this.getDisplayName(DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems"), "sid", secondaryItemId, "supply_item_name");
-    //     var updatedItemData = DataHandlerV2.getTableDataByAttr(tableName, "sid", secondaryItemId);
-    //     response["supplyStatus"] = updatedItemData;
-    //     response["supplyItemName"] = itemName;
-    //     response["tableName"] = tableName;
-    //     return response;
-    // },
     handlePageByPageId: function(pageId, dbViewData) {
         var i, tableData, loginUsername, fileTableName;
         switch(pageId) {

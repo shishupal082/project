@@ -175,41 +175,6 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(template, "pageName:id1Page.formTemplate", genericTemplate);
         return template;
     },
-    // generateProjectSupplyStatus: function(pageName, renderData) {
-    //     if (!$S.isObject(renderData)) {
-    //         renderData = {};
-    //     }
-    //     if (renderData.status === "FAILURE") {
-    //         return this._getInvalidField(renderData.reason);
-    //     }
-    //     var template = this.getTemplate("projectSupplyStatus");
-    //     var displayText = {"projectSupplyStatus.pName": renderData.pName, "projectSupplyStatus.supplyItemName": renderData.supplyItemName};
-    //     var newSupplyStatus = FormHandler.getUpdateSupplyTemplate(pageName);
-    //     if (!$S.isArray(newSupplyStatus)) {
-    //         newSupplyStatus = [];
-    //     }
-    //     var projectSupplyStatus = this._generateFieldTable(renderData.supplyStatus, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyStatus");
-    //     TemplateHelper.updateTemplateText(template, displayText);
-    //     TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.statusTable", projectSupplyStatus);
-    //     TemplateHelper.addItemInTextArray(template, "projectSupplyStatus.addNew", newSupplyStatus);
-    //     return template;
-    // },
-    // generateProjectSupplyItemList: function(pageName, renderData) {
-    //     if (!$S.isObject(renderData)) {
-    //         renderData = {};
-    //     }
-    //     if (renderData.status === "FAILURE") {
-    //         return this._getInvalidField(renderData.reason);
-    //     }
-    //     var template = this.getTemplate("projectSupplyItems");
-    //     var pName = renderData.pName;
-    //     var newSupplyItem = FormHandler.getAddNewSupplyItemTemplate();
-    //     var projectSupplyItems = this._generateFieldTable(renderData.supplyItem, renderData.tableName, "pageName:" + pageName + ".resultPatternSupplyItems");
-    //     TemplateHelper.updateTemplateText(template, {"projectSupplyItems.pName": pName});
-    //     TemplateHelper.addItemInTextArray(template, "projectSupplyItems.table", projectSupplyItems);
-    //     TemplateHelper.addItemInTextArray(template, "projectSupplyItems.addNew", newSupplyItem);
-    //     return template;
-    // },
     getDisplayPageTemplate: function(renderData) {
         var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
         var template = this.getTemplate("displayPage");
@@ -236,16 +201,6 @@ TemplateHandler.extend({
         var backUrl = "";
         var pid = DataHandler.getPathParamsData("pid");
         switch(pageName) {
-            // case "projectStatusWork":
-            // case "projectStatusSupply":
-            // case "projectContingency":
-            //     backUrl = this._getLink("projectId", pid);
-            // break;
-            // case "updateSupplyStatus":
-            // case "updateContingencyStatus":
-            // case "updateWorkStatus":
-            //     backUrl = this._getLink("projectStatus", pid, linkRef);
-            // break;
             case "id1Page":
                 backUrl = this._getLink("projectId", pid);
             break;
@@ -257,28 +212,6 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
         return template;
     },
-    // SetUserRealtedData: function() {
-    //     var headingJson = Config.headingJson;
-    //     var footerJson = Config.footerJson, i;
-    //     var username = AppHandler.GetUserData("username", "");
-    //     var enabledPageId = DataHandlerV2.getEnabledPageId();
-    //     var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
-    //     if ($S.isString(username)) {
-    //         TemplateHelper.setTemplateAttr(headingJson, "pageHeading.username", "text", username);
-    //     }
-    //     if ($S.isArray(enabledPageId)) {
-    //         for(i=0; i<enabledPageId.length; i++) {
-    //             TemplateHelper.removeClassTemplate(headingJson, "pageId:" + enabledPageId[i], "d-none");
-    //             TemplateHelper.removeClassTemplate(footerJson, "pageId:" + enabledPageId[i], "d-none");
-    //         }
-    //     }
-    //     if ($S.isArray(enabledViewPage)) {
-    //         for(i=0; i<enabledViewPage.length; i++) {
-    //             TemplateHelper.removeClassTemplate(headingJson, "viewPage:" + enabledViewPage[i], "d-none");
-    //             TemplateHelper.removeClassTemplate(footerJson, "viewPage:" + enabledViewPage[i], "d-none");
-    //         }
-    //     }
-    // },
     GetPageRenderField: function(dataLoadStatus, renderData, footerData, pageName) {
         var renderField;
         if (!dataLoadStatus) {
@@ -308,16 +241,6 @@ TemplateHandler.extend({
                     }
                     renderField = this.generateId1Page(pageName, renderData);
                 break;
-                // case "projectStatusWork":
-                // case "projectStatusSupply":
-                // case "projectContingency":
-                //     renderField = this.generateProjectSupplyItemList(pageName, renderData);
-                // break;
-                // case "updateSupplyStatus":
-                // case "updateContingencyStatus":
-                // case "updateWorkStatus":
-                //     renderField = this.generateProjectSupplyStatus(pageName, renderData);
-                // break;
                 case "displayPage":
                     renderField = this.getDisplayPageTemplate(renderData);
                 break;
@@ -343,36 +266,6 @@ TemplateHandler.extend({
     },
     GetHeadingField: function(headingText) {
         return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
-    }
-});
-
-TemplateHandler.extend({
-    _updatePermenentTemplateText: function(templateName, formValues) {
-        var template = Template[templateName];
-        TemplateHelper.updateTemplateText(template, formValues);
-    },
-    handlePageNameChange: function(newPageName, oldPageName) {
-        var pageDisplayText = DataHandler.getAppData("pageDisplayText");
-        var formFieldText = DataHandler.getAppData("formFieldText");
-        var key = "pageName:" + newPageName + ":badgeText";
-        var key2 = "pageName:" + newPageName + ":formBadgeText";
-        var temp = {};
-        if ($S.isObject(pageDisplayText)) {
-            temp["pageName:badgeText"] = pageDisplayText[key];
-            temp["pageName:formBadgeText"] = pageDisplayText[key2];
-            if ([Config.projectStatusSupply, Config.projectContingency, Config.projectStatusWork].indexOf(newPageName) >= 0) {
-                this._updatePermenentTemplateText("projectSupplyItems", temp);
-                this._updatePermenentTemplateText("addNewSupplyItem", temp);
-            } else if ([Config.updateSupplyStatus, Config.updateContingencyStatus].indexOf(newPageName) >= 0) {
-                this._updatePermenentTemplateText("projectSupplyStatus", temp);
-                this._updatePermenentTemplateText("addSupplyStatus", temp);
-            } else if ([Config.updateWorkStatus].indexOf(newPageName) >= 0) {
-                this._updatePermenentTemplateText("projectSupplyStatus", temp);
-                this._updatePermenentTemplateText("newWorkStatus", temp);
-                temp = formFieldText["pageName:" + newPageName];
-                this._updatePermenentTemplateText("newWorkStatus", temp);
-            }
-        }
     }
 });
 
