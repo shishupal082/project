@@ -138,7 +138,7 @@ class App extends React.Component {
         var params = arg["params"];
         var isComponentUpdate = false;
         var oldPid = DataHandler.getPathParamsData("pid");
-        var oldSid = DataHandler.getPathParamsData("sid");
+        var oldId1 = DataHandler.getPathParamsData("id1");
         var oldPageId = DataHandler.getPathParamsData("pageId");
         var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
         if (currentPageName !== prevPageName) {
@@ -149,9 +149,9 @@ class App extends React.Component {
                 if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("pid");
-                } if ($S.isStringV2(oldSid) && $S.isStringV2(params.sid) && oldSid !== params.sid) {
+                } if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("sid");
+                    DataHandler.HandleComponentChange("id1");
                 } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("pageId");

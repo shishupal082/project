@@ -62,8 +62,6 @@ Config.fieldsKey = {
     "DistanceKey": "new-work-status.distance",
     "SectionKey": "new-work-status.section",
     "supplyDiscription": "supplyDiscription",
-    "NewSupplyItemName": "add-supply-item.name",
-    "NewSupplyItemDetails": "add-supply-item.details",
     "UploadFile": "upload_file.file",
     "AddProjectComment": "add-project-comment-form.comment",
     "ProjectFileKey": "add-project-files-form.project",

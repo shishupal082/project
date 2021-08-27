@@ -62,7 +62,7 @@ FormHandlerAddProjectComment.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData[Config.fieldsKey.NewSupplyItemName];
+        postData["subject"] = formData["subject"];
         postData["heading"] = formData["pid"];
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";

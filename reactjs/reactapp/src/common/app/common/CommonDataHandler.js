@@ -363,9 +363,16 @@ CommonDataHandler.extend({
 });
 
 CommonDataHandler.extend({
-    _getAleartMessage: function(messageMapping, key, value) {
-        if ($S.isObject(messageMapping) && $S.isStringV2(messageMapping[key])) {
-            return messageMapping[key];
+    getAleartMessage: function(messageMapping, key, isInvalid) {
+        if ($S.isObject(messageMapping)) {
+            if ($S.isBooleanTrue(isInvalid)) {
+                if ($S.isStringV2(messageMapping[key + ".invalid"])) {
+                    return messageMapping[key + ".invalid"];
+                }
+            }
+            if ($S.isStringV2(messageMapping[key])) {
+                return messageMapping[key];
+            }
         }
         return "Invalid " + key;
     },
@@ -408,27 +415,35 @@ CommonDataHandler.extend({
             }
         });
     },
-    _isValidField: function(messageMapping, validationData, fieldsData, key) {
+    _isValidField: function(messageMapping, validationData, key, value) {
         if (!$S.isStringV2(key)) {
             alert("Invalid key");
             return false;
         }
         if (!$S.isObject(validationData[key])) {
-            alert("Invalid validation config data");
+            alert(key + ": not found in validation data");
             return false;
         }
         var fieldAttr = validationData[key];
-        var fieldData = fieldsData[key];
-        var isValid = false;
+        var isInvalid = false, isValid;
+        /**
+         * There are 3 scenario
+         * field is valid type (string) and content is also valid
+         * field is valid type (string) but content is invalid
+         * field is invalid type
+         * */
         if ($S.isBooleanTrue(fieldAttr.isRequired)) {
-            isValid = $S.isStringV2(fieldData);
+            isValid = $S.isStringV2(value);
             if (isValid) {
                 switch(fieldAttr.type) {
                     case "date":
-                        isValid = AppHandler.isValidDateStr(fieldData);
+                        isValid = AppHandler.isValidDateStr(value);
                     break;
                     case "numeric":
-                        isValid = $S.isNumeric(fieldData);
+                        isValid = $S.isNumeric(value);
+                        if (!isValid) {
+                            isInvalid = true;
+                        }
                     break;
                     case "string":
                     break;
@@ -440,7 +455,7 @@ CommonDataHandler.extend({
             isValid = true;
         }
         if (!isValid) {
-            alert(this._getAleartMessage(messageMapping, key));
+            alert(this.getAleartMessage(messageMapping, key, isInvalid));
         }
         return isValid;
     },
@@ -470,12 +485,15 @@ CommonDataHandler.extend({
             alert("Required keys not found in config.");
             requiredKeys = [];
         }
+        var key, value;
         for (i=0; i<requiredKeys.length; i++) {
-            if (!this._isValidField(messageMapping, validationData, fieldsData, requiredKeys[i])) {
+            key = requiredKeys[i];
+            value = this._getFinalFieldData(validationData, fieldsData, key);
+            if (!this._isValidField(messageMapping, validationData, key, value)) {
                 isFormValid = false;
                 break;
             }
-            formData[requiredKeys[i]] = this._getFinalFieldData(validationData, fieldsData, requiredKeys[i]);
+            formData[key] = value;
         }
         if (isFormValid) {
             this._saveData(pageName, formName, tableName, formData, requiredKeys, callback);

@@ -10,7 +10,6 @@ import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 
 
 import FormHandlerAddSupplyStatus from "./FormHandlerAddSupplyStatus";
-import FormHandlerAddSupplyItem from "./FormHandlerAddSupplyItem";
 import FormHandlerAddWorkStatus from "./FormHandlerAddWorkStatus";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 import FormHandlerAddProjectComment from "./FormHandlerAddProjectComment";
@@ -35,10 +34,7 @@ $S.extendObject(FormHandler);
 FormHandler.extend({
     GetAleartMessage: function(key, value) {
         var messageMapping = DataHandler.getAppData("messageMapping", {});
-        if ($S.isObject(messageMapping) && $S.isString(messageMapping[key])) {
-            return messageMapping[key];
-        }
-        return "Invalid " + key;
+        return CommonDataHandler.getAleartMessage(messageMapping, key);
     },
     FormateString: function(str) {
         return AppHandler.FormateString(str);
@@ -111,9 +107,6 @@ FormHandler.extend({
 FormHandler.extend({
     submitAddProjectComment: function(pageName, callback) {
         FormHandlerAddProjectComment.submit(pageName, callback);
-    },
-    submitNewSupplyItem: function(pageName, callback) {
-        FormHandlerAddSupplyItem.submit(pageName, callback);
     },
     submitAddSupplyStatus: function(pageName, callback) {
         FormHandlerAddSupplyStatus.submit(pageName, callback);
@@ -195,24 +188,16 @@ FormHandler.extend({
             TemplateHelper.addClassTemplate(template, "addentry.submitStatus", "btn-primary");
         }
     },
-    getAddNewSupplyItemTemplate: function() {
-        if (DataHandlerV2.isDisabled("form", "addNewItemForm")) {
-            return null;
-        }
-        var formTemplate = FormHandlerAddSupplyItem.getFormTemplate();
-        this.updateBtnStatus(formTemplate);
-        return formTemplate;
-    },
-    getUpdateSupplyTemplate: function(pageName) {
-        var formTemplate;
-        if ([Config.updateWorkStatus].indexOf(pageName) >= 0) {
-            formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
-        } else {
-            formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
-        }
-        this.updateBtnStatus(formTemplate);
-        return formTemplate;
-    },
+    // getUpdateSupplyTemplate: function(pageName) {
+    //     var formTemplate;
+    //     if ([Config.updateWorkStatus].indexOf(pageName) >= 0) {
+    //         formTemplate = FormHandlerAddWorkStatus.getFormTemplate();
+    //     } else {
+    //         formTemplate = FormHandlerAddSupplyStatus.getFormTemplate();
+    //     }
+    //     this.updateBtnStatus(formTemplate);
+    //     return formTemplate;
+    // },
     getUploadFileTemplate: function(pageName) {
         if (DataHandlerV2.isDisabled("form", "fileUploadForm")) {
             return null;

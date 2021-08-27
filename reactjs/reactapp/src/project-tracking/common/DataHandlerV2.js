@@ -43,7 +43,7 @@ DataHandlerV2.extend({
                 if (!$S.isObject(supplyItem[i])) {
                     continue;
                 }
-                list2Data.push({"name": supplyItem[i]["sid"], "toText": supplyItem[i]["supply_item_name"]})
+                list2Data.push({"name": supplyItem[i]["unique_id"], "toText": supplyItem[i]["supply_item_name"]});
             }
         }
         return list2Data;

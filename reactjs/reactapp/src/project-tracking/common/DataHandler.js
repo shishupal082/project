@@ -150,15 +150,9 @@ DataHandler.extend({
         }
         return "completed";
     },
-    getLink: function(pid, sid, page) {
-        var link = CommonConfig.basepathname + "/pid/" + pid + "/sid/" + sid + "/" + page;
-        return link;
-    },
-    getLinkV2: function(sid) {
+    getLinkV2: function(id1) {
         var pid = this.getPathParamsData("pid");
-        var pageName = this.getData("pageName", "");
-        var linkRef = DataHandlerV2.getLinkRef(pageName);
-        return this.getLink(pid, sid, linkRef);
+        return this.getLinkV3(pid, id1);
     },
     getLinkV3: function(pid, id1) {
         var link = CommonConfig.basepathname + "/pid/" + pid;
@@ -391,10 +385,6 @@ DataHandler.extend({
             FormHandler.submitAddSupplyStatus(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        } else if (name === "add-supply-item") {
-            FormHandler.submitNewSupplyItem(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
         } else if (name === "upload_file_form") {
             FormHandler.submitUploadFile(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -563,7 +553,7 @@ DataHandler.extend({
             }
         }
         appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", DataHandler.getPathParamsData("sid", ""));
+        appDataCallback("currentList2Id", DataHandler.getPathParamsData("id2", ""));
 
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
