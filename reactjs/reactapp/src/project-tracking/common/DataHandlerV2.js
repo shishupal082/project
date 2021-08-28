@@ -27,41 +27,6 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
-    getList2Data: function(pageName) {
-        if ([Config.updateSupplyStatus, Config.updateContingencyStatus, Config.updateWorkStatus].indexOf(pageName) < 0) {
-            return null;
-        }
-        if (this.isDisabled("pageName", pageName)) {
-            return null;
-        }
-        var list2Data = [];
-        var currentPId = DataHandler.getPathParamsData("pid");
-        var tableName = DataHandler.getTableName("pageName:" + pageName + ".materialSupplyItems");
-        var supplyItem = DataHandlerV2.getTableDataByAttr(tableName, "pid", currentPId);
-        if ($S.isArray(supplyItem)) {
-            for(var i=0; i<supplyItem.length; i++) {
-                if (!$S.isObject(supplyItem[i])) {
-                    continue;
-                }
-                list2Data.push({"name": supplyItem[i]["unique_id"], "toText": supplyItem[i]["supply_item_name"]});
-            }
-        }
-        return list2Data;
-    },
-    getList2DataByName: function(name) {
-        var list2Data = this.getList2Data();
-        if ($S.isArray(list2Data)) {
-            for(var i=0; i<list2Data.length; i++) {
-                if (!$S.isObject(list2Data[i])) {
-                    continue;
-                }
-                if (list2Data[i].name === name) {
-                    return list2Data[i];
-                }
-            }
-        }
-        return null;
-    },
     getList3Data: function() {
         var pageId = DataHandler.getPathParamsData("pageId", "");
         var key =  "pageId:" + pageId + ".list3DataKey";
@@ -233,6 +198,13 @@ DataHandlerV2.extend({
             }
         }
         return formType;
+    },
+    getRowDataParamByFormType: function(rowData, param) {
+        var rowDataParam = "";
+        if ($S.isObject(rowData) && $S.isStringV2(rowData["form_type"]) && $S.isStringV2(param)) {
+            rowDataParam = rowData["form_type"] + "." + param;
+        }
+        return rowDataParam;
     },
     getPageRefByPageName: function(pageName) {
         var formType = this.getFormTypeByPageName(pageName);

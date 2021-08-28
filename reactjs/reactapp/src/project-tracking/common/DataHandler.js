@@ -514,7 +514,6 @@ DataHandler.extend({
         var renderData = null;
         var footerData = null;
         var appHeading = null;
-        var list2Data = null;
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
@@ -524,7 +523,6 @@ DataHandler.extend({
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(CommonDataHandler.getData("metaData", {}));
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-            list2Data = DataHandlerV2.getList2Data(pageName);
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
         if (dataLoadStatus) {
@@ -534,9 +532,6 @@ DataHandler.extend({
                 filterOptions = DataHandler.getData("filterOptions");
             }
         }
-        appDataCallback("list2Data", list2Data);
-        appDataCallback("currentList2Id", DataHandler.getPathParamsData("id2", ""));
-
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
 

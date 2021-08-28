@@ -114,7 +114,7 @@ FeedbackPage.extend({
         return true;
     },
     getPreDefinedPattern: function(id1RowData) {
-        var template = DataHandler.getAppData("pageName:id1Page.preDefinedPattern", null);
+        var template = DataHandler.getAppData("pageName:id1Page." + DataHandlerV2.getRowDataParamByFormType(id1RowData, "preDefinedPattern"), null);
         if (template !== null) {
             TemplateHelper.updateTemplateText(template, id1RowData);
         }
