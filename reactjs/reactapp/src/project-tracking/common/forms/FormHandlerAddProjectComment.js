@@ -5,9 +5,8 @@ import Config from "../Config";
 
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
-import CommonConfig from "../../../common/app/common/CommonConfig";
+// import CommonConfig from "../../../common/app/common/CommonConfig";
 import FormHandler from "./FormHandler";
-
 
 var FormHandlerAddProjectComment;
 
@@ -41,44 +40,11 @@ FormHandlerAddProjectComment.extend({
         return template;
     },
     save: function(pageName, formData, callback) {
-        var resultData = ["table_name", "unique_id", "pid", "username", "subject",
-                        Config.fieldsKey.AddProjectComment];
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
-        if (!$S.isString(url)) {
-            return;
-        }
-        formData["table_name"] = DataHandler.getTableName("pageName:" + pageName + ".projectComment");
-        if (!$S.isStringV2(formData["table_name"])) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"))
-            return;
-        }
-        formData["unique_id"] = FormHandler.GetUniqueId();
-        formData["pid"] = DataHandler.getPathParamsData("pid");
-        formData["username"] = AppHandler.GetUserData("username", "");
+        var resultData = ["table_name", "unique_id", "username", "pid", "subject", Config.fieldsKey.AddProjectComment];
+        formData["pid"] = DataHandler.getPathParamsData("pid", "");
         formData["subject"] = "Comment";
-        formData[Config.fieldsKey.AddProjectComment] = FormHandler.FormateString(formData[Config.fieldsKey.AddProjectComment]);
-        var finalText = [];
-        for(var i=0; i<resultData.length; i++) {
-            finalText.push(formData[resultData[i]]);
-        }
-        var postData = {};
-        postData["subject"] = formData["subject"];
-        postData["heading"] = formData["pid"];
-        postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
-        DataHandler.setData("addentry.submitStatus", "in_progress");
-        $S.callMethod(callback);
-        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
-            DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callback);
-            if (status === "FAILURE") {
-                AppHandler.TrackApiRequest("addSupplyItem", "FAILURE");
-                alert("Error in uploading data, Please Try again.");
-            } else {
-                AppHandler.TrackApiRequest("addSupplyItem", "SUCCESS");
-                AppHandler.LazyReload(250);
-            }
-        });
+        var tableName = DataHandler.getTableName("pageName:" + pageName + ".projectComment");
+        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectComment", callback);
     },
     submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.AddProjectComment];

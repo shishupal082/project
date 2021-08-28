@@ -61,73 +61,19 @@ FormHandlerUploadFile.extend({
         if (!$S.isString(url)) {
             return;
         }
-        var resultData = ["table_name", "unique_id", "pid", "username", "subject", "filename"];
         var formData = {};
-        formData["table_name"] = DataHandler.getTableName("fileTable");
-        if (!$S.isStringV2(formData["table_name"])) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"))
-            return;
-        }
-        formData["unique_id"] = FormHandler.GetUniqueId();
         formData["pid"] = pid;
-        formData["username"] = AppHandler.GetUserData("username", "");
         formData["subject"] = AppHandler.ReplaceComma(subject);
         formData["filename"] = filename;
-        var finalText = [];
-        for(var i=0; i<resultData.length; i++) {
-            finalText.push(formData[resultData[i]]);
-        }
-        var postData = {};
-        postData["subject"] = formData["subject"];
-        postData["heading"] = formData["pid"];
-        postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
-        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
-            if (status === "FAILURE") {
-                AppHandler.TrackApiRequest("addInFileTable", "FAILURE");
-            } else {
-                AppHandler.TrackApiRequest("addInFileTable", "SUCCESS");
-            }
-            $S.callMethod(callback);
-        });
+        var resultData = ["table_name", "unique_id", "username", "pid", "subject", "filename"];
+        var tableName = DataHandler.getTableName("fileTable");
+        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInFileTable", callback);
     },
     saveLink: function(pageName, formData, callback) {
-        var resultData = ["table_name", "unique_id", "pid", "username", Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
-        if (!$S.isString(url)) {
-            return;
-        }
-        var pid = DataHandler.getPathParamsData("pid", "");
-        formData["table_name"] = DataHandler.getTableName("projectLink");
-        if (!$S.isStringV2(formData["table_name"])) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"))
-            return;
-        }
-        formData["unique_id"] = FormHandler.GetUniqueId();
-        formData["pid"] = pid;
-        formData["username"] = AppHandler.GetUserData("username", "");
-        var finalText = [];
-        for(var i=0; i<resultData.length; i++) {
-            finalText.push(formData[resultData[i]]);
-        }
-        var postData = {};
-        postData["subject"] = formData[Config.fieldsKey.AddLinkText];
-        postData["heading"] = formData["pid"];
-        postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
-        DataHandler.setData("addentry.submitStatus", "in_progress");
-        $S.callMethod(callback);
-        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
-            DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callback);
-            if (status === "FAILURE") {
-                AppHandler.TrackApiRequest("addProjectLink", "FAILURE");
-                alert("Error in uploading data, Please Try again.");
-            } else {
-                AppHandler.TrackApiRequest("addProjectLink", "SUCCESS");
-                AppHandler.LazyReload(250);
-            }
-        });
+        var resultData = ["table_name", "unique_id", "username", "pid", Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
+        formData["pid"] = DataHandler.getPathParamsData("pid", "");
+        var tableName = DataHandler.getTableName("projectLink");;
+        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectLink", callback);
     },
     uploadFile: function(file, subject, heading, callback) {
         var url = CommonConfig.getApiUrl("upload_file", null, true);

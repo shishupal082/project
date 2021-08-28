@@ -136,35 +136,62 @@ FormHandler.extend({
         if (!$S.isStringV2(delete_value)) {
             delete_value = "";
         }
+        var resultData = ["table_name", "unique_id", "username", "deleteId", "isDeleted", "delete_key", "delete_value"];
+        var formData = {};
+        var tableName = DataHandler.getTableName("deleteTable");
+        formData["deleteId"] = AppHandler.ReplaceComma(deleteId);
+        formData["isDeleted"] = "true";
+        formData["delete_key"] = AppHandler.ReplaceComma(delete_key);
+        formData["delete_value"] = AppHandler.ReplaceComma(delete_value);
+        return this.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInDeleteTable", callback);
+    },
+    saveProjectContent: function(formData, dataPattern, tableName, subject, heading, gaTrackingName, callback) {
+        if (!$S.isStringV2(gaTrackingName)) {
+            gaTrackingName = "projectContent";
+        }
+        var resultData = [], i;
+        if ($S.isArray(dataPattern)) {
+            for (i=0; i<dataPattern.length; i++) {
+                if ($S.isStringV2(dataPattern[i])) {
+                    resultData.push(dataPattern[i]);
+                }
+            }
+        }
+        if (resultData.length < 1) {
+            return $S.callMethod(callback);
+        }
         var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        var resultData = ["table_name", "unique_id", "deleteId", "username", "isDeleted", "delete_key", "delete_value"];
-        var formData = {};
-        formData["table_name"] = DataHandler.getTableName("deleteTable");
-        formData["unique_id"] = this.GetUniqueId();
-        formData["deleteId"] = AppHandler.ReplaceComma(deleteId);
+        formData["table_name"] = tableName;
+        if (!$S.isStringV2(formData["table_name"])) {
+            alert(FormHandler.GetAleartMessage("tableName.invalid"))
+            return;
+        }
+        formData["unique_id"] = FormHandler.GetUniqueId();
         formData["username"] = AppHandler.GetUserData("username", "");
-        formData["isDeleted"] = "true";
-        formData["delete_key"] = AppHandler.ReplaceComma(delete_key);;
-        formData["delete_value"] = AppHandler.ReplaceComma(delete_value);;
         var finalText = [];
-        for(var i=0; i<resultData.length; i++) {
+        for(i=0; i<resultData.length; i++) {
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData["username"];
-        postData["heading"] = formData["delete_value"];
+        postData["subject"] = subject;
+        postData["heading"] = heading;
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
+        DataHandler.setData("addentry.submitStatus", "in_progress");
+        $S.callMethod(callback);
         $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
-            if (status === "FAILURE" || !$S.isObject(response) || response.status === "FAILURE") {
-                AppHandler.TrackApiRequest("addInDeleteTable", "FAILURE");
-            } else {
-                AppHandler.TrackApiRequest("addInDeleteTable", "SUCCESS");
-            }
+            DataHandler.setData("addentry.submitStatus", "completed");
             $S.callMethod(callback);
+            if (status === "FAILURE") {
+                AppHandler.TrackApiRequest(gaTrackingName, "FAILURE");
+                alert("Error in uploading data, Please Try again.");
+            } else {
+                AppHandler.TrackApiRequest(gaTrackingName, "SUCCESS");
+                AppHandler.LazyReload(250);
+            }
         });
     }
 });

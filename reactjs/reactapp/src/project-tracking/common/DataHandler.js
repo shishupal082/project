@@ -377,15 +377,7 @@ DataHandler.extend({
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var pageName = DataHandler.getData("pageName", "");
-        if (name === "new-work-status") {
-            FormHandler.submitNewWorkStatus(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "add-supply-status") {
-            FormHandler.submitAddSupplyStatus(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "upload_file_form") {
+        if (name === "upload_file_form") {
             FormHandler.submitUploadFile(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
@@ -393,12 +385,12 @@ DataHandler.extend({
             FormHandler.submitAddLink(pageName, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
-        } else if (name === "delete_file.form") {
-            FormHandler.submitDeleteFile(pageName, value, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
         } else if (name === "add-project-comment-form") {
             FormHandler.submitAddProjectComment(pageName, function() {
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        } else if (name === "delete_file.form") {
+            FormHandler.submitDeleteFile(pageName, value, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
         } else if (name === "add-project-files-form") {

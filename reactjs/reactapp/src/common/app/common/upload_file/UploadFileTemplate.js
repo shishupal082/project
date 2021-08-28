@@ -94,8 +94,7 @@ UploadFileTemplate["upload_file"] = [
                                     {
                                         "tag": "input",
                                         "type": "file",
-                                        "name": "upload_file.file",
-                                        "id": "file"
+                                        "name": "upload_file.file"
                                     },
                                     {
                                         "tag": "div.span",

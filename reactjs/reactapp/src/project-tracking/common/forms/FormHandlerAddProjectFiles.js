@@ -6,7 +6,7 @@ import Config from "../Config";
 
 import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
-import CommonConfig from "../../../common/app/common/CommonConfig";
+// import CommonConfig from "../../../common/app/common/CommonConfig";
 import FormHandler from "./FormHandler";
 import FormHandlerUploadFile from "./FormHandlerUploadFile";
 
@@ -49,40 +49,10 @@ FormHandlerAddProjectFiles.extend({
         return template;
     },
     save: function(formData, callback) {
-        var resultData = ["table_name", "unique_id", "pid", "username", "subject", "filepath"];
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
-        if (!$S.isString(url)) {
-            return;
-        }
-        formData["table_name"] = DataHandler.getTableName("fileTable");
-        if (!$S.isStringV2(formData["table_name"])) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"))
-            return;
-        }
-        formData["unique_id"] = FormHandler.GetUniqueId();
-        formData["username"] = AppHandler.GetUserData("username", "");
-        var finalText = [];
-        for(var i=0; i<resultData.length; i++) {
-            finalText.push(formData[resultData[i]]);
-        }
-        var postData = {};
-        postData["subject"] = formData["subject"];
-        postData["heading"] = formData["pid"];
-        postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
-        DataHandler.setData("addentry.submitStatus", "in_progress");
-        $S.callMethod(callback);
-        $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
-            DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callback);
-            if (status === "FAILURE") {
-                AppHandler.TrackApiRequest("addNewProject", "FAILURE");
-                alert("Error in uploading data, Please Try again.");
-            } else {
-                AppHandler.TrackApiRequest("addNewProject", "SUCCESS");
-                AppHandler.LazyReload(250);
-            }
-        });
+        var resultData = ["table_name", "unique_id", "username", "pid", "subject", "filepath"];
+        formData["pid"] = DataHandler.getPathParamsData("pid", "");
+        var tableName = DataHandler.getTableName("fileTable");
+        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addNewProjectFile", callback);
     },
     submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.ProjectFileKey];
