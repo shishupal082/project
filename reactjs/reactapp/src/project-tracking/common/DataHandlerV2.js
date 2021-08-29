@@ -110,18 +110,6 @@ DataHandlerV2.extend({
         }
         return uploadedFileData;
     },
-    _updateFormTypeAttr: function(pageName, uploadedFileData) {
-        var loginUsername = AppHandler.GetUserData("username", "");
-        if ($S.isArray(uploadedFileData)) {
-            for(var i=0; i<uploadedFileData.length; i++) {
-                if (!$S.isObject(uploadedFileData[i])) {
-                    continue;
-                }
-                uploadedFileData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, uploadedFileData[i], loginUsername);
-            }
-        }
-        return uploadedFileData;
-    },
     getRowDataByAttr: function(tableName, attr) {
         var response = {"status": "FAILURE"};
         if (!$S.isObject(attr)) {
@@ -178,16 +166,41 @@ DataHandlerV2.extend({
         }
         return finalResponse;
     },
-    getRenderTableDataV1: function(pageName, tableName) {
+    _getFileTableEquivalentName: function() {
+        var requiredTableData = [];
+        var fileTableName = DataHandler.getTableName("fileTable");
+        var linkTableName = DataHandler.getTableName("projectLink");
+        var commentTableName = DataHandler.getTableName("projectComment");
+        if ($S.isStringV2(fileTableName)) {
+            requiredTableData.push(fileTableName);
+        }
+        if ($S.isStringV2(linkTableName)) {
+            requiredTableData.push(linkTableName);
+        }
+        if ($S.isStringV2(commentTableName)) {
+            requiredTableData.push(commentTableName);
+        }
+        return requiredTableData;
+    },
+    getRenderTableDataV1: function(pageName) {
         var pid = DataHandler.getPathParamsData("pid");
-        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
-        var uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
+        var requiredTableData = this._getFileTableEquivalentName();
+        var uploadedFileData = [];
+        for (var i=0; i<requiredTableData.length; i++) {
+            uploadedFileData = uploadedFileData.concat(DataHandlerV2.getTableDataByAttr(requiredTableData[i], "pid", pid));
+        }
+        var uploadedFileTable = $S.sortResult(uploadedFileData, "descending", "entryTime", null, "");
+        uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
         return uploadedFileTable;
     },
-    getRenderTableDataV2: function(pageName, tableName) {
-        var pid = DataHandler.getPathParamsData("pid");
-        var uploadedFileData = DataHandlerV2.getTableDataByAttr(tableName, "pid", pid);
-        var uploadedFileTable = this._updateFormTypeAttr(pageName, uploadedFileData);
+    getRenderTableDataV1_1: function(pageName) {
+        var requiredTableData = this._getFileTableEquivalentName();
+        var uploadedFileData = [];
+        for (var i=0; i<requiredTableData.length; i++) {
+            uploadedFileData = uploadedFileData.concat(DataHandlerV2.getTableData(requiredTableData[i]));
+        }
+        var uploadedFileTable = $S.sortResult(uploadedFileData, "descending", "entryTime", null, "");
+        uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
         return uploadedFileTable;
     },
     getFormTypeByPageName: function(pageName) {
@@ -241,9 +254,10 @@ DataHandlerV2.extend({
         return "pageName:" + formNameKey + ".resultPattern";
     },
     handlePageByPageId: function(pageName, pageId, finalTable) {
-        var i, loginUsername, fileTableName, tempData;
+        var i, loginUsername, fileTableName, tempData, tempData2;
         var fileInfoData, fileInfoTableName, projectTable;
         var result = [];
+        var addedFilePid = [];
         switch(pageId) {
             case "displayUploadedFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
@@ -264,7 +278,7 @@ DataHandlerV2.extend({
                 loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
                 fileInfoData = DataHandler.getData("filesInfoData");
-                fileInfoTableName = DataHandler.getTableName("pageName:displayPage:fileInfoTable");
+                fileInfoTableName = DataHandler.getTableName("pageName:displayPage.fileInfoTable");
                 projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
                 if ($S.isStringV2(fileInfoTableName)) {
                     if ($S.isArray(fileInfoData)) {
@@ -274,11 +288,26 @@ DataHandlerV2.extend({
                             }
                             tempData = {};
                             fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, fileInfoData[i].filepath, loginUsername);
-                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], finalTable, loginUsername);
+                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], finalTable, loginUsername, addedFilePid);
                             fileInfoData[i]["add_projects"] = FormHandler.getAddProjectFilesTemplate(pageName, fileInfoData[i], projectTable);
                             tempData[fileInfoTableName] = fileInfoData[i];
                             result.push(tempData);
                         }
+                    }
+                }
+                if ($S.isStringV2(fileInfoTableName) && $S.isArray(finalTable) && $S.isArray(addedFilePid)) {
+                    for (i=0; i < finalTable.length; i++) {
+                        if (!$S.isObject(finalTable[i]) || !$S.isStringV2(finalTable[i].unique_id)) {
+                            continue;
+                        }
+                        if (addedFilePid.indexOf(finalTable[i].unique_id) >= 0) {
+                            continue;
+                        }
+                        tempData = {};
+                        tempData2 = {};
+                        tempData2["available_on"] = DisplayPage.getFileAvailableProjectsV2(finalTable[i], loginUsername, addedFilePid);
+                        tempData[fileInfoTableName] = tempData2;
+                        result.push(tempData);
                     }
                 }
             break;

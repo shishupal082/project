@@ -111,8 +111,8 @@ TemplateHandler.extend({
             formName += "." + renderData["pidRow"]["form_type"];
         }
         var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
-        var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName, tableName);
-        var generic1FormUploadedData = DataHandlerV2.getRenderTableDataV1(pageName, tableName2);
+        var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName);
+        var generic1FormUploadedData = DataHandlerV2.getTableDataByAttr(tableName2, "pid", renderData["pidRow"]["pid"]);
         generic1FormUploadedData = CommonDataHandler.applyRoleFilter(currentAppId, generic1FormUploadedData, "pageName:" + pageName + ".section.mapping");
         PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
