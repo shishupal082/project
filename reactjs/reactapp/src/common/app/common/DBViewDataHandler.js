@@ -528,16 +528,12 @@ DBViewDataHandler.extend({
                 if (AppHandler.isValidDateStr(availableDate[i])) {
                     dateRange.push(availableDate[i]);
                     break;
-                } else {
-                    $S.log("Invalid date entry: " + availableDate[i]);
                 }
             }
             for(i=availableDate.length-1; i>=0; i--) {
                 if (AppHandler.isValidDateStr(availableDate[i])) {
                     dateRange.push(availableDate[i]);
                     break;
-                } else {
-                    $S.log("Invalid date entry: " + availableDate[i]);
                 }
             }
         }
