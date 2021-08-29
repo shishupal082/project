@@ -278,6 +278,7 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadDataByPage: function(callback) {
+        DataHandlerV2.findCurrentList3Id();
         DataHandler.loadDbTableData(callback);
         ApiHandler.loadDataByParams(callback);
     },
@@ -364,9 +365,6 @@ DataHandler.extend({
         DataHandler.setData("componentChangeType", type);
     },
     PageComponentDidUpdate: function(appStateCallback, appDataCallback, pageName, changeType) {
-        if (pageName === Config.displayPage) {
-            DataHandlerV2.findCurrentList3Id();
-        }
         this.loadDataByPage(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
