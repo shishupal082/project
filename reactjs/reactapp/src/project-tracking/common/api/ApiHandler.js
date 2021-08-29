@@ -148,9 +148,15 @@ ApiHandler.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
-    _getTableData: function(request) {
-        var tableData = {}, i, temp;
+    _generateDatabase: function(request) {
+        var database = {}, tableName;
+        var tableData = {}, i, key;
         var wordBreak;
+        var jsonData;
+        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
+        if (!$S.isObject(dbTableDataIndex)) {
+            dbTableDataIndex = {};
+        }
         if ($S.isArray(request)) {
             for(i=0; i<request.length; i++) {
                 if (!$S.isObject(request[i])) {
@@ -169,32 +175,55 @@ ApiHandler.extend({
                 tableData[request[i].apiName]["response"] = request[i].response;
             }
         }
-        for(var key in tableData) {
+        for(key in tableData) {
             tableData[key]["responseJson"] = [];
             wordBreak = tableData[key].wordBreak;
             if ($S.isArray(tableData[key]["response"])) {
                 for(i=0; i<tableData[key]["response"].length; i++) {
-                    temp = AppHandler.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
-                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
+                    jsonData = AppHandler.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
+                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(jsonData);
                 }
             }
-            tableData[key]["tableData"] = AppHandler.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
         }
-        this._handleDefaultSorting(tableData);
-        return tableData;
+        for(key in tableData) {
+            if ($S.isObject(tableData[key]) && $S.isArray(tableData[key]["responseJson"])) {
+                jsonData = tableData[key]["responseJson"];
+                for (i=0; i<jsonData.length; i++) {
+                    if (!$S.isArray(jsonData[i]) || jsonData[i].length < 3) {
+                        continue;
+                    }
+                    tableName = jsonData[i][1];
+                    if (!$S.isStringV2(tableName)) {
+                        continue;
+                    }
+                    if (!$S.isObject(database[tableName])) {
+                        database[tableName] = {};
+                    }
+                    if (!$S.isArray(database[tableName]["responseJson"])) {
+                        database[tableName]["responseJson"] = [];
+                    }
+                    database[tableName]["responseJson"].push(jsonData[i]);
+                }
+            }
+        }
+        for (tableName in database) {
+            database[tableName]["tableData"] = AppHandler.ConvertJsonToTable(database[tableName]["responseJson"], dbTableDataIndex[tableName]);
+        }
+        this._handleDefaultSorting(database);
+        return database;
     },
     handlePageLoad: function(dbDataApis, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
-        var tableData;
+        var database;
         if (status === "completed") {
             status = DataHandler.getData("dbViewDataLoadStatus");
             if (status === "not-started") {
                 DataHandler.setData("dbViewDataLoadStatus", "in-progress");
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    tableData = ApiHandler._getTableData(request);
-                    DataHandler.setData("dbViewData", tableData);
+                    database = ApiHandler._generateDatabase(request);
+                    DataHandler.setData("dbViewData", database);
                     $S.callMethod(callback);
                 });
             } else {
