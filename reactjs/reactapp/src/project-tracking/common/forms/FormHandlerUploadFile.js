@@ -67,13 +67,25 @@ FormHandlerUploadFile.extend({
         formData["filename"] = filename;
         var resultData = ["table_name", "unique_id", "username", "pid", "subject", "filename"];
         var tableName = DataHandler.getTableName("fileTable");
-        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInFileTable", callback);
+        FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInFileTable", function(formStatus, resultStatus) {
+            if (formStatus === "in_progress") {
+                $S.callMethod(callback);
+            } else if (resultStatus === "SUCCESS") {
+                AppHandler.LazyReload(250);
+            }
+        });
     },
     saveLink: function(pageName, formData, callback) {
         var resultData = ["table_name", "unique_id", "username", "pid", Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
         formData["pid"] = DataHandler.getPathParamsData("pid", "");
         var tableName = DataHandler.getTableName("projectLink");;
-        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectLink", callback);
+        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectLink", function(formStatus, resultStatus) {
+            if (formStatus === "in_progress") {
+                $S.callMethod(callback);
+            } else if (resultStatus === "SUCCESS") {
+                AppHandler.LazyReload(250);
+            }
+        });
     },
     uploadFile: function(file, subject, heading, callback) {
         var url = CommonConfig.getApiUrl("upload_file", null, true);
@@ -137,7 +149,7 @@ FormHandlerUploadFile.extend({
             this.saveLink(pageName, formData, callback);
         }
     },
-    deleteFile: function(uniqueId, filePath, callback) {
+    deleteFile: function(uniqueId, filePath, action, callback) {
         var url = CommonConfig.getApiUrl("delete_file", "", true);
         var postData = {};
         postData["filename"] = filePath;
@@ -147,7 +159,11 @@ FormHandlerUploadFile.extend({
         var fileTableName = DataHandler.getTableName("fileTable");
         var fileTable = DataHandlerV2.getTableDataByAttr(fileTableName, "filename", filePath);
         if ($S.isArray(fileTable)) {
-            if (fileTable.length > 1) {
+            if (action === "remove") {
+                FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
+                    AppHandler.LazyReload(250);
+                });
+            } else if (fileTable.length > 1) {
                 FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
                     AppHandler.LazyReload(250);
                 });

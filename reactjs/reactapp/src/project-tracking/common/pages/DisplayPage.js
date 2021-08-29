@@ -6,12 +6,12 @@ import TemplateHandler from "../template/TemplateHandler";
 
 // import AppHandler from "../../../common/app/common/AppHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
-import FormHandler from "../forms/FormHandler";
+// import FormHandler from "../forms/FormHandler";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 
 
 var DisplayPage;
-
+var _temp;
 (function($S){
 // var DT = $S.getDT();
 
@@ -27,9 +27,30 @@ DisplayPage.fn = DisplayPage.prototype = {
 };
 $S.extendObject(DisplayPage);
 DisplayPage.extend({
-    getRenderData: function(pageName, sortingFields) {
-        var pageId = DataHandler.getPathParamsData("pageId");
+    _getFinalDbTable: function(finalTable, requiredDataTable) {
+        var finalDbTable = [], temp;
+        var requiredTableName = "";
+        if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0 && $S.isStringV2(requiredDataTable[0])) {
+            requiredTableName = requiredDataTable[0];
+        } else {
+            return finalDbTable;
+        }
+        if ($S.isArray(finalTable)) {
+            for (var i=0; i<finalTable.length; i++) {
+                if (!$S.isObject(finalTable[i]) || !$S.isObject(finalTable[i][requiredTableName])) {
+                    continue;
+                }
+                temp = finalTable[i][requiredTableName];
+                if (Object.keys(temp).length > 0) {
+                    finalDbTable.push(temp);
+                }
+            }
+        }
+        return finalDbTable;
+    },
+    getRenderData: function(pageName, pageId, sortingFields) {
         var requiredDataTable = DataHandler.getAppData("pageId:" + pageId + ".requiredDataTable");
+        var filterKeyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping");
         var dbViewData = {}, i;
         if ($S.isArray(requiredDataTable)) {
             for (i=0; i<requiredDataTable.length; i++) {
@@ -38,16 +59,18 @@ DisplayPage.extend({
                 }
             }
         }
-        DataHandlerV2.handlePageByPageId(pageId, dbViewData);
         var resultPattern = DataHandler.getAppData("pageId:" + pageId + ".resultPattern");
         var resultCriteria = DataHandler.getAppData("pageId:" + pageId + ".resultCriteria");
-        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
-        DataHandlerV2.generateFilterOptions(finalTable);
+        var finalTable = DBViewDataHandler.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
+        finalTable = this._getFinalDbTable(finalTable, requiredDataTable);
+        DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
+        dbViewData = DataHandlerV2.handlePageByPageId(pageName, pageId, finalTable);
+        finalTable = DBViewDataHandler.ApplyResultPattern(dbViewData, resultPattern);
         return finalTable;
     },
     getRenderDataV2: function(pageName, viewPageName, sortingFields) {
-        var requiredDataTable = DataHandler.getAppData("viewPage:" + viewPageName + ".requiredDataTable");
-        var fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable")
+        var requiredDataTable = DataHandler.getAppData("viewPageName:" + viewPageName + ".requiredDataTable");
+        var filterKeyMapping = DataHandler.getAppData("viewPageName:" + viewPageName + ".filterKeyMapping");
         var dbViewData = {}, i;
         if ($S.isArray(requiredDataTable)) {
             for (i=0; i<requiredDataTable.length; i++) {
@@ -56,74 +79,83 @@ DisplayPage.extend({
                 }
             }
         }
-        DataHandlerV2.handlePageByViewPageName(pageName, viewPageName, dbViewData);
-        var resultPattern = DataHandler.getAppData("viewPage:" + viewPageName + ".resultPattern");
-        var resultCriteria = DataHandler.getAppData("viewPage:" + viewPageName + ".resultCriteria");
-        var finalTable = DBViewDataHandler.GetFinalTableV2(dbViewData, resultCriteria, [fileInfoTableName]);
-        DataHandlerV2.handlePageByViewPageNameV2(pageName, viewPageName, finalTable);
-        finalTable = DBViewDataHandler.ApplyResultPattern(finalTable, resultPattern);
-        DataHandlerV2.generateFilterOptions(finalTable);
+        var resultPattern = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultPattern");
+        var resultCriteria = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultCriteria");
+        var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
+        DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
         return finalTable;
     },
-    _generateResult: function(fileTable, loginUsername) {
-        var result = {"tag": "table.tbody", "className": "table-striped table-padded-px-5", "text": []}, i;
+    _generateResult: function(fileInfoDataRow, fileTableRow, loginUsername, index) {
+        var result = null;
         var deleteFileTemplate = TemplateHandler.getTemplate("deleteFileTemplate");
         var temp;
-        function isDeleteEnable(fileTableEntry, loginUsername) {
-            if ($S.isObject(fileTableEntry) && $S.isStringV2(loginUsername)) {
-                return loginUsername === fileTableEntry.updatedBy;
+        var buttonNameRemove = "remove_file.form.button";
+        var deleteAllowed = false;
+        if ($S.isObject(fileInfoDataRow) && $S.isObject(fileTableRow)) {
+            temp = deleteFileTemplate;
+            TemplateHelper.updateTemplateValue(temp, {"delete_file.form": fileTableRow.unique_id});
+            if (fileTableRow.updatedBy === loginUsername) {
+                TemplateHelper.removeClassTemplate(temp, buttonNameRemove, "disabled");
+                TemplateHelper.addClassTemplate(temp, buttonNameRemove, "text-danger");
             }
-            return false;
-        }
-        var buttonName = "delete_file.form.button";
-        if ($S.isArray(fileTable)) {
-            for(i=0; i<fileTable.length; i++) {
-                temp = $S.clone(deleteFileTemplate);
-                TemplateHelper.updateTemplateValue(temp, {"delete_file.form": fileTable[i].unique_id});
-                if (isDeleteEnable(fileTable[i], loginUsername)) {
-                    TemplateHelper.removeClassTemplate(temp, buttonName, "disabled");
-                    TemplateHelper.addClassTemplate(temp, buttonName, "text-danger");
+            if (fileInfoDataRow.fileUsername === loginUsername) {
+                deleteAllowed = true;
+            }
+            result = {"tag": "tr", "deleteAllowed": deleteAllowed, "text": [
+                {
+                    "tag": "td.b",
+                    "text": index
+                },
+                {
+                    "tag": "td",
+                    "text": fileTableRow.subject
+                },
+                {
+                    "tag": "td.b",
+                    "text": fileTableRow.updatedBy
+                },
+                {
+                    "tag": "td",
+                    "text": fileTableRow.pName
+                },
+                {
+                    "tag": "td",
+                    "text": temp
                 }
-                result.text.push({"tag": "tr", "text": [
-                    {
-                        "tag": "td.b",
-                        "text": (i+1)
-                    },
-                    {
-                        "tag": "td",
-                        "text": fileTable[i].subject
-                    },
-                    {
-                        "tag": "td.b",
-                        "text": fileTable[i].updatedBy
-                    },
-                    {
-                        "tag": "td",
-                        "text": fileTable[i].pName
-                    },
-                    {
-                        "tag": "td",
-                        "text": temp
-                    }
-                ]});
-            }
+            ]};
         }
         return result;
     },
-    getFileAvailableProjects: function(fileInfoData, loginUsername) {
-        if (!$S.isObject(fileInfoData)) {
-            fileInfoData = {};
+    getFileAvailableProjects: function(fileInfoDataRow, finalTable, loginUsername) {
+        var result = [], filepath;
+        if (!$S.isArray(finalTable) || !$S.isObject(fileInfoDataRow) || !$S.isStringV2(fileInfoDataRow.filepath)) {
+            return result;
         }
-        var fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
-        var relatedProjectsFiles;
-        if ($S.isObject(fileInfoData[fileInfoTableName]) && $S.isArray(fileInfoData[fileInfoTableName]["relatedProjectsFiles"])) {
-            relatedProjectsFiles = fileInfoData[fileInfoTableName]["relatedProjectsFiles"];
+        var fieldHtml = {"tag": "table.tbody", "className": "table-striped table-padded-px-5", "text": []};
+        var buttonNameDelete = "delete_file.form.button";
+        filepath = fileInfoDataRow.filepath;
+        var index = 1, i;
+        for (i=0; i<finalTable.length; i++) {
+            if (!$S.isObject(finalTable[i])) {
+                continue;
+            }
+            if (filepath === finalTable[i].filename) {
+                _temp = this._generateResult(fileInfoDataRow, finalTable[i], loginUsername, index);
+                if (_temp === null) {
+                    continue;
+                }
+                fieldHtml.text.push(_temp);
+                index++;
+            }
         }
-        return this._generateResult(relatedProjectsFiles, loginUsername);
-    },
-    getAddProjectForm: function(fileInfoData) {
-        var projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"))
-        return FormHandler.getAddProjectFilesTemplate(null, fileInfoData, projectTable);
+        if (index > 1) {
+            if (fieldHtml.text.length === 1 && $S.isObject(fieldHtml.text[0]) && fieldHtml.text[0].deleteAllowed) {
+                TemplateHelper.addClassTemplate(fieldHtml.text[0], buttonNameDelete, "text-danger");
+                TemplateHelper.removeClassTemplate(fieldHtml.text[0], buttonNameDelete, "disabled");
+            }
+            result.push(fieldHtml);
+        }
+        return result;
     }
 });
 })($S);

@@ -324,7 +324,7 @@ DBViewDataHandler.extend({
     },
     GetFinalTableV2: function(dbViewData, resultCriteria, requiredDataTable) {
         var finalTable = [];
-        if ($S.isArray(resultCriteria) && resultCriteria.length > 1) {
+        if ($S.isArray(resultCriteria) && resultCriteria.length >= 1) {
             for(var i=0; i<resultCriteria.length; i++) {
                 finalTable = this._generateFinalTable(dbViewData, [resultCriteria[i]], requiredDataTable);
                 dbViewData = this._generateTempDbViewData(dbViewData, finalTable, resultCriteria[i]);

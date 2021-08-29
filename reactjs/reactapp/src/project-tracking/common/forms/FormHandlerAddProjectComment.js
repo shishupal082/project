@@ -44,7 +44,13 @@ FormHandlerAddProjectComment.extend({
         formData["pid"] = DataHandler.getPathParamsData("pid", "");
         formData["subject"] = "Comment";
         var tableName = DataHandler.getTableName("pageName:" + pageName + ".projectComment");
-        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectComment", callback);
+        FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectComment", function(formStatus, resultStatus) {
+            if (formStatus === "in_progress") {
+                $S.callMethod(callback);
+            } else if (resultStatus === "SUCCESS") {
+                AppHandler.LazyReload(250);
+            }
+        });
     },
     submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.AddProjectComment];

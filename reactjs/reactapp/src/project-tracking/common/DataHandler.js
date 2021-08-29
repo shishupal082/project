@@ -170,12 +170,13 @@ DataHandler.extend({
             return false;
         }
         dataLoadStatusKey = ["dbViewDataLoadStatus"];
+        var pageName = this.getData("pageName", "");
+        var pageId = this.getPathParamsData("pageId", "");
+        if (pageName === "displayPage" && pageId === "manageFiles") {
+            dataLoadStatusKey.push("filesInfoLoadStatus");
+        }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
-        }
-        var pageName = this.getData("pageName", "");
-        if (pageName === "viewPage") {
-            dataLoadStatusKey.push("filesInfoLoadStatus");
         }
         CommonDataHandler.setData("firstTimeDataLoadStatus", "completed");
         return true;
@@ -411,6 +412,13 @@ DataHandler.extend({
         console.log(name + ":" + value);
     },
     OnClick: function(appStateCallback, appDataCallback, name, value) {
+        if (name === "delete_file.form.button") {
+            DataHandler.setFieldsData(name, value);
+            DataHandler.setFieldsData("remove_file.form.button", "");
+        } else if (name === "remove_file.form.button") {
+            DataHandler.setFieldsData(name, value);
+            DataHandler.setFieldsData("delete_file.form.button", "");
+        }
     },
     SortClick: function(appStateCallback, appDataCallback, value) {
         AppHandler.TrackEvent("sort:" + value);
@@ -462,15 +470,15 @@ DataHandler.extend({
     getRenderData: function() {
         var renderData;
         var currentAppData = this.getCurrentAppData();
+        var metaData = CommonDataHandler.getData("metaData");
         var currentList3Data = this.getCurrentList3Data();
+        var pageName = this.getData("pageName", "");
         var pageId = this.getPathParamsData("pageId", "");
         var viewPageName = this.getPathParamsData("viewPageName", "");
         var dateSelect = CommonDataHandler.getData("date-select", "");
-        var metaData = CommonDataHandler.getData("metaData");
-        var pageName = this.getData("pageName", "");
         var sortingFields = this.getData("sortingFields", []);
         var filterOptions = this.getData("filterOptions");
-        var dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
+        var dateParameterField;
         if (DataHandlerV2.isDisabled("pageName", pageName)) {
             return {"status": "FAILURE", "reason": "Requested page disabled"};
         }
@@ -489,7 +497,8 @@ DataHandler.extend({
                 if (DataHandlerV2.isDisabled("pageId", pageId)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
-                renderData = DisplayPage.getRenderData(pageName, sortingFields);
+                dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
+                renderData = DisplayPage.getRenderData(pageName, pageId, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
@@ -498,6 +507,7 @@ DataHandler.extend({
                 if (DataHandlerV2.isDisabled("viewPage", viewPageName)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
+                dateParameterField = this.getAppData("viewPageName:" + viewPageName + ".dateParameterField", {});
                 renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
@@ -518,7 +528,6 @@ DataHandler.extend({
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
         var pageName= DataHandler.getData("pageName", "");
-        var pageId = DataHandler.getPathParamsData("pageId", "");
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(CommonDataHandler.getData("metaData", {}));
@@ -528,7 +537,7 @@ DataHandler.extend({
         if (dataLoadStatus) {
             list3Data = DataHandlerV2.getList3Data();
             dateSelectionRequiredPages.push(pageName);
-            if (DataHandlerV2.isFilterEnabled(pageName, pageId)) {
+            if (DataHandlerV2.isFilterEnabled(pageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
             }
         }

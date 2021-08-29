@@ -118,7 +118,7 @@ TemplateHandler.extend({
         PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
         var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
-        var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "resultPatternUploadedFiles");
+        var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "pageName:projectId.resultPatternUploadedFiles");
         var generic1FormUploadedTable = PidPage.getRenderTable(pageName, tableName2, resultPatternName, generic1FormUploadedData);
         var uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
         var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
@@ -173,12 +173,6 @@ TemplateHandler.extend({
         TemplateHelper.addItemInTextArray(template, "id1Page.preDefinedPattern", preDefinedPattern);
         TemplateHelper.addItemInTextArray(template, "id1Page.generic2-table", generic2FormUploadedTable);
         TemplateHelper.addItemInTextArray(template, "pageName:id1Page.formTemplate", genericTemplate);
-        return template;
-    },
-    getDisplayPageTemplate: function(renderData) {
-        var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
-        var template = this.getTemplate("displayPage");
-        TemplateHelper.addItemInTextArray(template, "displayPage.field", pageField);
         return template;
     },
     getViewPageTemplate: function(renderData) {
@@ -242,7 +236,7 @@ TemplateHandler.extend({
                     renderField = this.generateId1Page(pageName, renderData);
                 break;
                 case "displayPage":
-                    renderField = this.getDisplayPageTemplate(renderData);
+                    renderField = this.getViewPageTemplate(renderData);
                 break;
                 case "viewPage":
                     renderField = this.getViewPageTemplate(renderData);

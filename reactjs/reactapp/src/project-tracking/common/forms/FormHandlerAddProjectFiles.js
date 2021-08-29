@@ -29,30 +29,34 @@ FormHandlerAddProjectFiles.fn = FormHandlerAddProjectFiles.prototype = {
 $S.extendObject(FormHandlerAddProjectFiles);
 FormHandlerAddProjectFiles.extend({
     getFormTemplate: function(pageName, fileInfoData, allProjects) {
-        var fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
         if (!$S.isObject(fileInfoData)) {
             fileInfoData = {};
         }
-        if (!$S.isObject(fileInfoData)) {
-            fileInfoData[fileInfoTableName] = {};
-         }
         var template = TemplateHandler.getTemplate("addProjectFilesTemplate");
         var dropdownList = [];
-        var filepath = fileInfoData[fileInfoTableName]["filepath"];
-        if ($S.isArray(allProjects) && allProjects.length > 0) {
+        var filepath = fileInfoData["filepath"];
+        if ($S.isStringV2(filepath) && $S.isArray(allProjects) && allProjects.length > 0) {
             dropdownList.push({"value": "", "text": "Select..."});
             for(var i=0; i<allProjects.length; i++) {
                 dropdownList.push({"value": filepath + "::" + allProjects[i].pid, "text": allProjects[i].pName})
             }
+            TemplateHelper.updateTemplateText(template, {"add-project-files-form.project": dropdownList});
+        } else {
+            template = null;
         }
-        TemplateHelper.updateTemplateText(template, {"add-project-files-form.project": dropdownList});
         return template;
     },
     save: function(formData, callback) {
         var resultData = ["table_name", "unique_id", "username", "pid", "subject", "filepath"];
         formData["pid"] = DataHandler.getPathParamsData("pid", "");
         var tableName = DataHandler.getTableName("fileTable");
-        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addNewProjectFile", callback);
+        FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addNewProjectFile", function(formStatus, resultStatus) {
+            if (formStatus === "in_progress") {
+                $S.callMethod(callback);
+            } else if (resultStatus === "SUCCESS") {
+                AppHandler.LazyReload(250);
+            }
+        });
     },
     submit: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.ProjectFileKey];
@@ -93,9 +97,7 @@ FormHandlerAddProjectFiles.extend({
             subject = "File added to Project " + projectTable[0].pName;
         }
         if (isFormValid) {
-            FormHandlerUploadFile.addInFileTable(filepath, subject, pid, function() {
-                AppHandler.LazyReload(250);
-            });
+            FormHandlerUploadFile.addInFileTable(filepath, subject, pid, callback);
         }
     }
 });

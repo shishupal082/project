@@ -8,6 +8,7 @@ import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
+import FormHandler from "./forms/FormHandler";
 
 var DataHandlerV2;
 
@@ -28,8 +29,19 @@ $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
     getList3Data: function() {
+        var pageName = DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
-        var key =  "pageId:" + pageId + ".list3DataKey";
+        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var key = "";
+        if (Config.displayPage === pageName) {
+            key = "pageId:" + pageId;
+        } else if (Config.viewPage === pageName) {
+            key = "viewPageName:" + viewPageName;
+        }
+        if (!$S.isStringV2(key)) {
+            return [];
+        }
+        key += ".list3DataKey";
         var name = DataHandler.getAppData(key, false);
         var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
@@ -43,13 +55,11 @@ DataHandlerV2.extend({
         }
         return list3Data;
     },
-    generateFilterOptions: function(dbViewData) {
+    generateFilterOptions: function(pageName, dbViewData, filterKeyMapping) {
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = CommonDataHandler.getData("metaData", {});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
-        var pageId = DataHandler.getPathParamsData("pageId", "");
-        var keyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping", {});
-        var filterOptions = AppHandler.generateFilterDataV2(keyMapping, currentAppData, metaData, dbViewData, filterSelectedValues, "name");
+        var filterOptions = AppHandler.generateFilterDataV2(filterKeyMapping, currentAppData, metaData, dbViewData, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return dbViewData;
     },
@@ -230,69 +240,44 @@ DataHandlerV2.extend({
         }
         return "pageName:" + formNameKey + ".resultPattern";
     },
-    handlePageByPageId: function(pageId, dbViewData) {
-        var i, tableData, loginUsername, fileTableName;
+    handlePageByPageId: function(pageName, pageId, finalTable) {
+        var i, loginUsername, fileTableName, tempData;
+        var fileInfoData, fileInfoTableName, projectTable;
+        var result = [];
         switch(pageId) {
             case "displayUploadedFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
-                if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
-                    tableData = dbViewData[fileTableName]["tableData"];
-                    for(i=0; i<tableData.length; i++) {
-                        if (!$S.isObject(tableData[i])) {
+                if ($S.isArray(finalTable)) {
+                    for (i=0; i < finalTable.length; i++) {
+                        if (!$S.isObject(finalTable[i])) {
                             continue;
                         }
-                        tableData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, tableData[i], loginUsername);
+                        finalTable[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, finalTable[i], loginUsername);
+                        tempData = {};
+                        tempData[fileTableName] = finalTable[i];
+                        result.push(tempData);
                     }
                 }
             break;
-            default:
-            break;
-        }
-    },
-    handlePageByViewPageName: function(pageName, viewPageName, dbViewData) {
-        if (!$S.isObject(dbViewData)) {
-            dbViewData = {};
-        }
-        var i, fileInfoTableName, loginUsername, fileTableName, filepath;
-        var fileInfoData, tableData;
-        var tempData = {};
-        switch(viewPageName) {
             case "manageFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
                 fileInfoData = DataHandler.getData("filesInfoData");
-                fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
-                if ($S.isObject(dbViewData[fileTableName]) && $S.isArray(dbViewData[fileTableName]["tableData"])) {
-                    tableData = dbViewData[fileTableName]["tableData"];
-                    for(i=0; i<tableData.length; i++) {
-                        if (!$S.isObject(tableData[i])) {
-                            continue;
-                        }
-                        if (tableData[i]["table_name"] === fileTableName) {
-                            tableData[i]["pName"] = this.getDisplayName(DataHandler.getTableName("projectTable"), "pid", tableData[i]["pid"], "pName")
-                            if ($S.isArray(tempData[tableData[i]["filename"]])) {
-                                tempData[tableData[i]["filename"]].push(tableData[i]);
-                            } else {
-                                tempData[tableData[i]["filename"]] = [tableData[i]];
-                            }
-                        }
-                    }
-                }
+                fileInfoTableName = DataHandler.getTableName("pageName:displayPage:fileInfoTable");
+                projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
                 if ($S.isStringV2(fileInfoTableName)) {
-                    dbViewData[fileInfoTableName] = {"tableData": []};
                     if ($S.isArray(fileInfoData)) {
                         for(i=0; i<fileInfoData.length; i++) {
                             if (!$S.isObject(fileInfoData[i])) {
                                 continue;
                             }
-                            filepath = fileInfoData[i].filepath;
-                            fileInfoData[i].table_name = fileInfoTableName;
-                            fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, filepath, loginUsername);
-                            if ($S.isArray(tempData[filepath])) {
-                                fileInfoData[i].relatedProjectsFiles = tempData[filepath];
-                            }
-                            dbViewData[fileInfoTableName]["tableData"].push(fileInfoData[i]);
+                            tempData = {};
+                            fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, fileInfoData[i].filepath, loginUsername);
+                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], finalTable, loginUsername);
+                            fileInfoData[i]["add_projects"] = FormHandler.getAddProjectFilesTemplate(pageName, fileInfoData[i], projectTable);
+                            tempData[fileInfoTableName] = fileInfoData[i];
+                            result.push(tempData);
                         }
                     }
                 }
@@ -300,32 +285,7 @@ DataHandlerV2.extend({
             default:
             break;
         }
-    },
-    handlePageByViewPageNameV2: function(pageName, viewPageName, finalTable) {
-        if (!$S.isArray(finalTable)) {
-            finalTable = [];
-        }
-        var i, fileInfoTableName, loginUsername;
-        switch(viewPageName) {
-            case "manageFiles":
-                fileInfoTableName = DataHandler.getTableName("pageName:pageView:fileInfoTable");
-                loginUsername = AppHandler.GetUserData("username", "");
-                if ($S.isStringV2(fileInfoTableName)) {
-                    if ($S.isArray(finalTable)) {
-                        for(i=0; i<finalTable.length; i++) {
-                            if ($S.isObject(finalTable[i])) {
-                                if ($S.isObject(finalTable[i][fileInfoTableName])) {
-                                    finalTable[i][fileInfoTableName]["available_on"] = DisplayPage.getFileAvailableProjects(finalTable[i], loginUsername);
-                                    finalTable[i][fileInfoTableName]["add_projects"] = DisplayPage.getAddProjectForm(finalTable[i]);
-                                }
-                            }
-                        }
-                    }
-                }
-            break;
-            default:
-            break;
-        }
+        return result;
     }
 });
 
@@ -460,13 +420,20 @@ DataHandlerV2.extend({
         }
         return true;
     },
-    isFilterEnabled: function(pageName, pageId) {
+    isFilterEnabled: function(pageName) {
         var status = false;
+        var pageId = DataHandler.getPathParamsData("pageId", "");
+        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         if ([Config.projectId].indexOf(pageName) >= 0) {
             status = true;
         }
         if ([Config.displayPage].indexOf(pageName) >= 0) {
-            if (!this.isDisabled(pageId)) {
+            if (!this.isDisabled("pageId", pageId)) {
+                status = true;
+            }
+        }
+        if ([Config.viewPage].indexOf(pageName) >= 0) {
+            if (!this.isDisabled("viewPage", viewPageName)) {
                 status = true;
             }
         }

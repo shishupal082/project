@@ -112,6 +112,7 @@ Template["file_details"] = {
                         "tag": "button",
                         "name": "delete_file.form.button",
                         "className": "btn btn-link pt-1px disabled",
+                        "value": "delete",
                         "text": "Delete"
                     }
                 }
@@ -157,6 +158,7 @@ Template["file_details_as_comment_or_link"] = {
                         "tag": "button",
                         "name": "delete_file.form.button",
                         "className": "btn btn-link pt-1px disabled",
+                        "value": "delete",
                         "text": "Delete"
                     }
                 }
@@ -170,12 +172,22 @@ Template["deleteFileTemplate"] = [
         "name": "delete_file.form",
         "value": "delete_file.form",
         "className": "list-inline-item",
-        "text": {
-            "tag": "button",
-            "name": "delete_file.form.button",
-            "className": "btn btn-link pt-1px disabled",
-            "text": "Remove"
-        }
+        "text": [
+            {
+                "tag": "button",
+                "name": "delete_file.form.button",
+                "className": "btn btn-link pt-1px disabled",
+                "value": "delete",
+                "text": "Delete"
+            },
+            {
+                "tag": "button",
+                "name": "remove_file.form.button",
+                "className": "btn btn-link pt-1px disabled",
+                "value": "remove",
+                "text": "Remove"
+            }
+        ]
     }
 ];
 Template["addCommentProjectTemplate"] = [
@@ -447,13 +459,6 @@ Template["link-field"] = [
         "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
         "href": "",
         "text": ""
-    }
-];
-Template["displayPage"] = [
-    {
-        "tag": "div",
-        "name": "displayPage.field",
-        "text": []
     }
 ];
 Template["viewPage"] = [

@@ -54,9 +54,9 @@ ApiHandler.extend({
     },
     loadDataByParams: function(callback) {
         var pageName = DataHandler.getData("pageName", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var pageId = DataHandler.getPathParamsData("pageId", "");
         var filesInfoLoadStatus = DataHandler.getData("filesInfoLoadStatus", "");
-        if (pageName === "viewPage" && viewPageName === "manageFiles" && filesInfoLoadStatus === "not-started") {
+        if (pageName === "displayPage" && pageId === "manageFiles" && filesInfoLoadStatus === "not-started") {
             this._loadFileInfoData(callback);
         } else {
             $S.callMethod(callback);

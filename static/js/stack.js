@@ -2082,6 +2082,27 @@ Stack.extend({
         }
         return 0;
     },
+    callMethodV1: function(method, arg1) {
+        if (Stack.isFunction(method)) {
+            method(arg1);
+            return 1;
+        }
+        return 0;
+    },
+    callMethodV2: function(method, arg1, arg2) {
+        if (Stack.isFunction(method)) {
+            method(arg1, arg2);
+            return 1;
+        }
+        return 0;
+    },
+    callMethodV3: function(method, arg1, arg2, arg3) {
+        if (Stack.isFunction(method)) {
+            method(arg1, arg2, arg3);
+            return 1;
+        }
+        return 0;
+    },
     extendObject: function(Obj) {
         ExtendObject(Obj);
     },/*

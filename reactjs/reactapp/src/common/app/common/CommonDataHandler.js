@@ -349,8 +349,8 @@ CommonDataHandler.extend({
         }
         if ($S.isArray(enabledViewPage)) {
             for(i=0; i<enabledViewPage.length; i++) {
-                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPage:" + enabledViewPage[i], "d-none");
-                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPage:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPageName:" + enabledViewPage[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPageName:" + enabledViewPage[i], "d-none");
             }
         }
         if ($S.isArray(activeUserRole)) {

@@ -119,11 +119,23 @@ FormHandler.extend({
         if (!$S.isStringV2(uniqueId)) {
             return;
         }
+        var action = "";
+        var deleteFileValue = DataHandler.getFieldsData("delete_file.form.button", "");
+        var removeFileValue = DataHandler.getFieldsData("remove_file.form.button", "");
+        if (deleteFileValue === "delete") {
+            action = "delete";
+        } else if (removeFileValue === "remove") {
+            action = "remove";
+        }
+        if (["delete", "remove"].indexOf(action) < 0) {
+            alert("Config error.");
+            return;
+        }
         var fileTableName = DataHandler.getTableName("fileTable");
         var filePath = DataHandlerV2.getDisplayName(fileTableName, "unique_id", uniqueId, "filename");
-        var deleting = window.confirm("Are you sure? You want to delete file: " + filePath);
+        var deleting = window.confirm("Are you sure? You want to " + action + " file: " + filePath);
         if (deleting) {
-            FormHandlerUploadFile.deleteFile(uniqueId, filePath, callback);
+            FormHandlerUploadFile.deleteFile(uniqueId, filePath, action, callback);
         }
     },
     addInDeleteTable: function(deleteId, delete_key, delete_value, callback) {
@@ -143,7 +155,13 @@ FormHandler.extend({
         formData["isDeleted"] = "true";
         formData["delete_key"] = AppHandler.ReplaceComma(delete_key);
         formData["delete_value"] = AppHandler.ReplaceComma(delete_value);
-        return this.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInDeleteTable", callback);
+        this.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInDeleteTable", function(formStatus, resultStatus) {
+            if (formStatus === "in_progress") {
+                $S.callMethod(callback);
+            } else if (resultStatus === "SUCCESS") {
+                AppHandler.LazyReload(250);
+            }
+        });
     },
     saveProjectContent: function(formData, dataPattern, tableName, subject, heading, gaTrackingName, callback) {
         if (!$S.isStringV2(gaTrackingName)) {
@@ -181,16 +199,16 @@ FormHandler.extend({
         postData["text"] = [finalText.join(",")];
         postData["filename"] = formData["table_name"] + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
-        $S.callMethod(callback);
+        $S.callMethodV1(callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
-            $S.callMethod(callback);
             if (status === "FAILURE") {
                 AppHandler.TrackApiRequest(gaTrackingName, "FAILURE");
                 alert("Error in uploading data, Please Try again.");
+                $S.callMethodV2(callback, "completed", "FAILURE");
             } else {
                 AppHandler.TrackApiRequest(gaTrackingName, "SUCCESS");
-                AppHandler.LazyReload(250);
+                $S.callMethodV2(callback, "completed", "SUCCESS");
             }
         });
     }
