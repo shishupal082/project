@@ -164,7 +164,7 @@ DataHandlerV2.extend({
             formName += "." + formType;
         }
         if (response.status === "SUCCESS") {
-            var id1 = CommonDataHandler.getPathParamsData("id1", "");
+            var id1 = DataHandler.getPathParamsData("id1", "");
             tableName = DataHandler.getTableName(formName + ".tableName");
             var response2 = this.getRowDataByAttr(tableName, {"pid": pid, "unique_id": id1});
             if (response2.status === "SUCCESS") {
@@ -390,6 +390,9 @@ DataHandlerV2.extend({
         return enabledViewPage;
     },
     isDisabled: function(type, value) {
+        if (!$S.isStringV2(value)) {
+            return true;
+        }
         var dynamicEnablingData = this._getDynamicEnabledData();
         var enabledPages = [], enabledPageId = [], enabledForms = [], enabledViewPage = [];
         if ($S.isObject(dynamicEnablingData)) {
@@ -420,19 +423,15 @@ DataHandlerV2.extend({
         }
         return true;
     },
-    isFilterEnabled: function(pageName) {
+    isFilterEnabled: function(pageName, pageId, viewPageName) {
         var status = false;
-        var pageId = DataHandler.getPathParamsData("pageId", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         if ([Config.projectId].indexOf(pageName) >= 0) {
             status = true;
-        }
-        if ([Config.displayPage].indexOf(pageName) >= 0) {
+        } else if ([Config.displayPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("pageId", pageId)) {
                 status = true;
             }
-        }
-        if ([Config.viewPage].indexOf(pageName) >= 0) {
+        } else if ([Config.viewPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("viewPage", viewPageName)) {
                 status = true;
             }
@@ -442,6 +441,30 @@ DataHandlerV2.extend({
             if (!$S.isArray(filterOptions) || filterOptions.length === 0) {
                 status = false;
             }
+        }
+        return status;
+    },
+    isDateSelectionEnable: function(pageName, pageId, viewPageName) {
+        var status, dateParameterField;
+        if ([Config.home, Config.projectId, Config.id1Page].indexOf(pageName) < 0) {
+            status = false;
+        }
+        if ([Config.displayPage].indexOf(pageName) >= 0) {
+            if (!this.isDisabled("pageId", pageId)) {
+                status = true;
+                dateParameterField = DataHandler.getAppData("pageId:" + pageId + ".dateParameterField", {});
+            }
+        }
+        if ([Config.viewPage].indexOf(pageName) >= 0) {
+            if (!this.isDisabled("viewPage", viewPageName)) {
+                status = true;
+                dateParameterField = DataHandler.getAppData("viewPageName:" + viewPageName + ".dateParameterField", {});
+            }
+        }
+        if (status && $S.isObjectV2(dateParameterField)) {
+            status = true;
+        } else {
+            status = false;
         }
         return status;
     }

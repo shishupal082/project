@@ -1497,6 +1497,13 @@ Stack.extend({
     isObject: function(value) {
         return isObject(value);
     },
+    isObjectV2: function(value) {
+        var temp = isObject(value);
+        if (temp) {
+            return Object.keys(value).length > 0;
+        }
+        return false;
+    },
     isFunction: function(value) {
         return isFunction(value);
     },

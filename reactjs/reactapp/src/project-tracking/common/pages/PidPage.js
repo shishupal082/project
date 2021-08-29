@@ -11,7 +11,7 @@ import FeedbackPage from "./FeedbackPage";
 
 // import TemplateHelper from "../../../common/TemplateHelper";
 // import AppHandler from "../../common/app/common/AppHandler";
-import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
+// import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 // import CommonConfig from "../../common/app/common/CommonConfig";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
@@ -94,7 +94,7 @@ PidPage.extend({
         }
     },
     getRenderTable: function(pageName, tableName, resultPatternName, tableData) {
-        var pid = CommonDataHandler.getPathParamsData("pid", "");
+        var pid = DataHandler.getPathParamsData("pid", "");
         this._updateDetailsLink(pageName, pid, tableData);
         var resultPattern = DataHandler.getAppData(resultPatternName);
         var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;

@@ -1,5 +1,4 @@
 import $S from "../../../interface/stack.js";
-import TemplateHandlerDBView from "./TemplateHandlerDBView";
 import Template from "./Template";
 
 import Config from "../Config";
@@ -176,7 +175,14 @@ TemplateHandler.extend({
         return template;
     },
     getViewPageTemplate: function(renderData) {
-        var pageField = TemplateHandlerDBView.getDbViewFieldsV2(renderData);
+        var pageField;
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var sortingFields = DataHandler.getData("sortingFields", []);
+        if (!$S.isArray(renderData) || renderData.length === 0) {
+            pageField = TemplateHandler.getTemplate("noDataFound");
+        } else {
+            pageField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+        }
         var template = this.getTemplate("viewPage");
         TemplateHelper.addItemInTextArray(template, "viewPage.field", pageField);
         return template;
@@ -206,7 +212,7 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
         return template;
     },
-    GetPageRenderField: function(dataLoadStatus, renderData, footerData, pageName) {
+    GetPageRenderField: function(dataLoadStatus, renderData, pageName) {
         var renderField;
         if (!dataLoadStatus) {
             renderField = this.getTemplate("loading");

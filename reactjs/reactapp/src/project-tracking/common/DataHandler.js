@@ -32,7 +32,7 @@ keys.push("componentChangeType");
 keys.push("currentList1Id");
 // keys.push("currentList2Id");
 keys.push("currentList3Id");
-keys.push("date-select");
+// keys.push("date-select");
 
 keys.push("filterValues");
 keys.push("filterOptions");
@@ -465,14 +465,11 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getRenderData: function() {
+    getRenderData: function(pageName, pageId, viewPageName) {
         var renderData;
         var currentAppData = this.getCurrentAppData();
         var metaData = CommonDataHandler.getData("metaData");
         var currentList3Data = this.getCurrentList3Data();
-        var pageName = this.getData("pageName", "");
-        var pageId = this.getPathParamsData("pageId", "");
-        var viewPageName = this.getPathParamsData("viewPageName", "");
         var dateSelect = CommonDataHandler.getData("date-select", "");
         var sortingFields = this.getData("sortingFields", []);
         var filterOptions = this.getData("filterOptions");
@@ -520,23 +517,25 @@ DataHandler.extend({
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var dataLoadStatus = this.isDataLoadComplete();
         var renderData = null;
-        var footerData = null;
         var appHeading = null;
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
         var pageName= DataHandler.getData("pageName", "");
+        var pageId = DataHandler.getPathParamsData("pageId", "");
+        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         if (dataLoadStatus) {
-            renderData = this.getRenderData();
-            footerData = AppHandler.GetFooterData(CommonDataHandler.getData("metaData", {}));
+            renderData = this.getRenderData(pageName, pageId, viewPageName);
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
-        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName);
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
         if (dataLoadStatus) {
             list3Data = DataHandlerV2.getList3Data();
-            dateSelectionRequiredPages.push(pageName);
-            if (DataHandlerV2.isFilterEnabled(pageName)) {
+            if (DataHandlerV2.isFilterEnabled(pageName, pageId, viewPageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
+            }
+            if (DataHandlerV2.isDateSelectionEnable(pageName, pageId, viewPageName)) {
+                dateSelectionRequiredPages.push(pageName);
             }
         }
         appDataCallback("list3Data", list3Data);
