@@ -38,11 +38,12 @@ DataHandlerTA.extend({
             DataHandler.setData("addentry.submitStatus", "completed");
             if (status === "FAILURE") {
                 alert("Error in uploading data, Please Try again.");
+                $S.callMethod(callback);
             } else {
                 DataHandler.setData("fieldsData", {});
                 alert("Data upload completed.");
+                AppHandler.LazyReload(250);
             }
-            $S.callMethod(callback);
         });
     },
     SubmitFormClick: function(callback) {
