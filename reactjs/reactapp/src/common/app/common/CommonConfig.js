@@ -9,6 +9,7 @@ CommonConfig.JQ = $$$.JQ;
 CommonConfig.forceLogin = $$$.forceLogin;
 CommonConfig.appControlDataPath = $$$.appControlDataPath;
 CommonConfig.validAppControl = $$$.validAppControl;
+CommonConfig.addBasepathLinkName = $$$.addBasepathLinkName;
 
 
 

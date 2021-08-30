@@ -46,9 +46,9 @@ GLOBAL.appVersion = "v1.0.1";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script1.js"></script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script2.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-attendance-app/script3.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script3.js"></script>
 </body>
 
 </html>

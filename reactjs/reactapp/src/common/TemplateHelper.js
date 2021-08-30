@@ -76,6 +76,13 @@ function updateField(field, attr) {
                 case "setText":
                     field.text = attr[key];
                 break;
+                case "addInHref":
+                    if ($S.isStringV2(field.href)) {
+                        field.href =  attr[key] + field.href;
+                    } else {
+                        field.href = attr[key];
+                    }
+                break;
                 case "replaceTextPattern":
                     if ($S.isString(field.text) && $S.isString(field.pattern)) {
                         field.text = field.text.replace(field.pattern, attr[key]);
@@ -105,6 +112,19 @@ Template.extend({
         if ($S.isObject(field)) {
             if ($S.isArray(field.text)) {
                 field.text.push(subTemplate);
+            }
+        }
+        return template;
+    },
+    addInHref: function(template, fieldName, basepathname) {
+        if (!$S.isStringV2(basepathname)) {
+            return template;
+        }
+        var field = {};
+        if ($S.isStringV2(fieldName)) {
+            field = Template(template).searchField(fieldName);
+            if (field.name === fieldName) {
+                updateField(field, {"addInHref": basepathname});
             }
         }
         return template;

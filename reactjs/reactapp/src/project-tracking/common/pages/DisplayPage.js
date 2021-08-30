@@ -4,7 +4,8 @@ import DataHandlerV2 from "../DataHandlerV2";
 import TemplateHandler from "../template/TemplateHandler";
 // import Config from "../Config";
 
-// import AppHandler from "../../../common/app/common/AppHandler";
+import AppHandler from "../../../common/app/common/AppHandler";
+import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
 // import FormHandler from "../forms/FormHandler";
 import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
@@ -53,6 +54,9 @@ DisplayPage.extend({
         var filterKeyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping");
         var resultPattern = DataHandler.getAppData("pageId:" + pageId + ".resultPattern");
         var resultCriteria = DataHandler.getAppData("pageId:" + pageId + ".resultCriteria");
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = CommonDataHandler.getData("metaData");
+        var filterOptions = DataHandler.getData("filterOptions");
         var fileTableName = DataHandler.getTableName("fileTable");
         var dbViewData = {}, i;
         if ($S.isArray(requiredDataTable)) {
@@ -69,6 +73,7 @@ DisplayPage.extend({
         var finalTable = DBViewDataHandler.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
         finalTable = this._getFinalDbTable(finalTable, requiredDataTable);
         DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
+        finalTable = AppHandler.getFilteredData(currentAppData, metaData, finalTable, filterOptions, "name");
         dbViewData = DataHandlerV2.handlePageByPageId(pageName, pageId, finalTable);
         finalTable = DBViewDataHandler.ApplyResultPattern(dbViewData, resultPattern);
         return finalTable;
@@ -76,6 +81,8 @@ DisplayPage.extend({
     getRenderDataV2: function(pageName, viewPageName, sortingFields) {
         var requiredDataTable = DataHandler.getAppData("viewPageName:" + viewPageName + ".requiredDataTable");
         var filterKeyMapping = DataHandler.getAppData("viewPageName:" + viewPageName + ".filterKeyMapping");
+        var resultPattern = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultPattern");
+        var resultCriteria = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultCriteria");
         var dbViewData = {}, i;
         if ($S.isArray(requiredDataTable)) {
             for (i=0; i<requiredDataTable.length; i++) {
@@ -84,8 +91,6 @@ DisplayPage.extend({
                 }
             }
         }
-        var resultPattern = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultPattern");
-        var resultCriteria = DataHandler.getAppData("viewPageName:" + viewPageName + ".resultCriteria");
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, null);
         DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
         return finalTable;

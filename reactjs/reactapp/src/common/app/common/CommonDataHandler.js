@@ -338,6 +338,8 @@ CommonDataHandler.extend({
         var i;
         var username = AppHandler.GetUserData("username", "");
         var activeUserRole = AppHandler.GetUserActiveRoles();
+        var addBasepathLinkName = CommonConfig.addBasepathLinkName;
+        var basepathname = CommonConfig.basepathname;
         if ($S.isStringV2(username)) {
             TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
         }
@@ -351,6 +353,12 @@ CommonDataHandler.extend({
             for(i=0; i<enabledViewPage.length; i++) {
                 TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPageName:" + enabledViewPage[i], "d-none");
                 TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPageName:" + enabledViewPage[i], "d-none");
+            }
+        }
+        if ($S.isArray(addBasepathLinkName) && $S.isStringV2(basepathname)) {
+            for(i=0; i<addBasepathLinkName.length; i++) {
+                TemplateHelper.addInHref(afterLoginLinkJson, addBasepathLinkName[i], basepathname);
+                TemplateHelper.addInHref(footerLinkJsonAfterLogin, addBasepathLinkName[i], basepathname);
             }
         }
         if ($S.isArray(activeUserRole)) {

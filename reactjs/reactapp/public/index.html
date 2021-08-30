@@ -56,12 +56,19 @@
 
 var GLOBAL = {
     baseApi: "http://localhost:8080",
-    basepathname: "/app/project-tracking",
+    basepathname: "",
     appControlDataPath: "/project-tracking/",
     forceLogin: false
 };
 
 GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04"];
+
+GLOBAL.addBasepathLinkName = [
+                        "pageHeading:viewPageName.dashboardLink","pageHeading:viewPageName.displaySupplyStatusLink",
+                        "pageHeading:viewPageName.displaySupplyStatusLink","pageHeading:viewPageName.displayWorkStatus",
+                        "pageHeading:viewPageName.projectComment", "pageHeading:pageId.displayUploadedFiles",
+                        "pageFooter:pageId.manageFiles"];
+
 GLOBAL.appControlApi = "/project-tracking/appControlData.json";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";

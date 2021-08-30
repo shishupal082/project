@@ -494,7 +494,6 @@ DataHandler.extend({
                 }
                 dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
                 renderData = DisplayPage.getRenderData(pageName, pageId, sortingFields);
-                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
