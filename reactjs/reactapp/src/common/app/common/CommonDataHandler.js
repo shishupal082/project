@@ -13,7 +13,7 @@ var CommonDataHandler;
 var DT = $S.getDT();
 var CurrentData = $S.getDataObj();
 var keys = [];
-
+// var _temp;
 keys.push("fieldsData");
 keys.push("pathParams");
 
@@ -334,11 +334,22 @@ CommonDataHandler.extend({
         this._updateBtnStatus(formTemplate, submitBtnName, formSubmitStatus);
         return formTemplate;
     },
+    removeDuplicateString: function(requestArray) {
+        var responseArray = [];
+        if ($S.isArray(requestArray)) {
+            for (var i=0; i<requestArray.length; i++) {
+                if ($S.isString(requestArray[i]) && responseArray.indexOf(requestArray[i]) < 0) {
+                    responseArray.push(requestArray[i]);
+                }
+            }
+        }
+        return responseArray;
+    },
     setHeaderAndFooterData: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
         var i;
         var username = AppHandler.GetUserData("username", "");
         var activeUserRole = AppHandler.GetUserActiveRoles();
-        var addBasepathLinkName = CommonConfig.addBasepathLinkName;
+        var addBasepathLinkName = this.removeDuplicateString(CommonConfig.addBasepathLinkName);
         var basepathname = CommonConfig.basepathname;
         if ($S.isStringV2(username)) {
             TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
