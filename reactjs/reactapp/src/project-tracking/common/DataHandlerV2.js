@@ -304,7 +304,7 @@ DataHandlerV2.extend({
                             continue;
                         }
                         tempData = {};
-                        tempData2 = {};
+                        tempData2 = finalTable[i];
                         tempData2["available_on"] = DisplayPage.getFileAvailableProjectsV2(finalTable[i], loginUsername, addedFilePid);
                         tempData[fileInfoTableName] = tempData2;
                         result.push(tempData);
