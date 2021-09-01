@@ -42,6 +42,7 @@ DataHandlerTA.extend({
             } else {
                 DataHandler.setData("fieldsData", {});
                 alert("Data upload completed.");
+                // $S.callMethod(callback);
                 AppHandler.LazyReload(250);
             }
         });
