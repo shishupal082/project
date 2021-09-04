@@ -103,7 +103,7 @@ DisplayPage.extend({
         var deleteAllowed = false;
         if ($S.isObject(fileTableRow)) {
             temp = deleteFileTemplate;
-            TemplateHelper.updateTemplateValue(temp, {"delete_file.form": fileTableRow.unique_id});
+            TemplateHelper.updateTemplateValue(temp, {"delete_file.form": fileTableRow.tableUniqueId});
             if (fileTableRow.updatedBy === loginUsername) {
                 TemplateHelper.removeClassTemplate(temp, buttonNameRemove, "disabled");
                 TemplateHelper.addClassTemplate(temp, buttonNameRemove, "text-danger");
@@ -157,7 +157,7 @@ DisplayPage.extend({
                 if (_temp === null) {
                     continue;
                 }
-                addedFilePid.push(finalTable[i].unique_id);
+                addedFilePid.push(finalTable[i].tableUniqueId);
                 fieldHtml.text.push(_temp);
                 index++;
             }
@@ -182,7 +182,7 @@ DisplayPage.extend({
         if (_temp === null) {
             return [];
         }
-        addedFilePid.push(finalTableRow.unique_id);
+        addedFilePid.push(finalTableRow.tableUniqueId);
         fieldHtml.text.push(_temp);
         result.push(fieldHtml);
         return result;

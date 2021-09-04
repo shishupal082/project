@@ -15,9 +15,9 @@ import ReactDOM from 'react-dom';
 // import App from './attendance/App';
 // import App from './ml2/App';
 // import App from './ftp/App';
-// import App from './project-tracking/App';
+import App from './project-tracking/App';
 // import App from './feedback-status/App';
-import App from './auth/App';
+// import App from './auth/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

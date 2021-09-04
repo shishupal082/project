@@ -301,10 +301,9 @@ DataHandler.extend({
         });
     },
     loadDbTableData: function(callback) {
-        var metaData = CommonDataHandler.getData("metaData", {});
-        var currentAppData = DataHandler.getCurrentAppData();
-        var dbDataApis = $S.findParam([currentAppData, metaData], "dbDataApis", []);
-        ApiHandler.handlePageLoad(dbDataApis, function() {
+        var param = this.getAppData("tableFilterParam", {});
+        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
+        ApiHandler.handlePageLoadV2(param, dbTableDataIndex, function() {
             $S.callMethod(callback);
         });
     },

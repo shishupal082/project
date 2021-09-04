@@ -132,7 +132,7 @@ DataHandlerV2.extend({
     getProjectDataV2: function(pageName) {
         var tableName = DataHandler.getTableName("projectTable");
         var pid = DataHandler.getPathParamsData("pid");
-        var response = this.getRowDataByAttr(tableName, {"pid": pid});
+        var response = this.getRowDataByAttr(tableName, {"tableUniqueId": pid});
         var finalResponse = {"status": "SUCCESS"};
         if (response.status === "SUCCESS") {
             finalResponse["pidRow"] = response["rowData"];
@@ -146,7 +146,7 @@ DataHandlerV2.extend({
         var formName = this.getFormNameByPageName("projectId");
         var formType = this.getFormTypeByPageName("projectId");
         var pid = DataHandler.getPathParamsData("pid");
-        var response = this.getRowDataByAttr(tableName, {"pid": pid});
+        var response = this.getRowDataByAttr(tableName, {"tableUniqueId": pid});
         var finalResponse = {"status": "SUCCESS"};
         if ($S.isStringV2(formType)) {
             formName += "." + formType;
@@ -154,7 +154,7 @@ DataHandlerV2.extend({
         if (response.status === "SUCCESS") {
             var id1 = DataHandler.getPathParamsData("id1", "");
             tableName = DataHandler.getTableName(formName + ".tableName");
-            var response2 = this.getRowDataByAttr(tableName, {"pid": pid, "unique_id": id1});
+            var response2 = this.getRowDataByAttr(tableName, {"pid": pid, "tableUniqueId": id1});
             if (response2.status === "SUCCESS") {
                 finalResponse["pidRow"] = response["rowData"];
                 finalResponse["id1Row"] = response2["rowData"];
@@ -297,10 +297,10 @@ DataHandlerV2.extend({
                 }
                 if ($S.isStringV2(fileInfoTableName) && $S.isArray(finalTable) && $S.isArray(addedFilePid)) {
                     for (i=0; i < finalTable.length; i++) {
-                        if (!$S.isObject(finalTable[i]) || !$S.isStringV2(finalTable[i].unique_id)) {
+                        if (!$S.isObject(finalTable[i]) || !$S.isStringV2(finalTable[i].tableUniqueId)) {
                             continue;
                         }
-                        if (addedFilePid.indexOf(finalTable[i].unique_id) >= 0) {
+                        if (addedFilePid.indexOf(finalTable[i].tableUniqueId) >= 0) {
                             continue;
                         }
                         tempData = {};

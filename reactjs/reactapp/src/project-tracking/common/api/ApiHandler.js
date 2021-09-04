@@ -230,6 +230,24 @@ ApiHandler.extend({
                 $S.callMethod(callback);
             }
         }
+    },
+    handlePageLoadV2: function(param, dbTableDataIndex, callback) {
+        var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
+        var status = CommonDataHandler.getDataLoadStatusByKey(keys);
+        if (status === "completed") {
+            status = DataHandler.getData("dbViewDataLoadStatus");
+            if (status === "not-started") {
+                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                AppHandler.LoadTableData(param, dbTableDataIndex, function(database) {
+                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    ApiHandler._handleDefaultSorting(database);
+                    DataHandler.setData("dbViewData", database);
+                    $S.callMethod(callback);
+                });
+            } else {
+                $S.callMethod(callback);
+            }
+        }
     }
 });
 })($S);

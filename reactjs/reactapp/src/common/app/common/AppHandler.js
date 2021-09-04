@@ -2,6 +2,8 @@ import $S from '../../../interface/stack.js';
 import Api from '../../Api.js';
 import TemplateHelper from '../../TemplateHelper.js';
 
+import CommonConfig from './CommonConfig.js';
+
 
 var AppHandler;
 
@@ -532,6 +534,53 @@ AppHandler.extend({
             result.push(this._generateTableRow(jsonData[i], dataIndex));
         }
         return result;
+    },
+    _getFormatedText: function(text, dataIndex) {
+        if (!$S.isString(text) || !$S.isArray(dataIndex)) {
+            return {};
+        }
+        var textArr = text.split(",");
+        var result = {};
+        var temp = [], i, j;
+        for (i=0; i<dataIndex.length; i++) {
+            if (i < textArr.length-1) {
+                result[dataIndex[i]] = textArr[i];
+            } else if (i === textArr.length-1) {
+                for (j=i; j<textArr.length; j++) {
+                    temp.push(textArr[j]);
+                }
+                result[dataIndex[i]] = temp.join(",");
+            } else {
+                result[dataIndex[i]] = "";
+            }
+        }
+        return result;
+    },
+    _getProperTableData: function(tableData, dataIndex) {
+        if ($S.isArray(tableData)) {
+            for(var i=0; i<tableData.length; i++) {
+                if ($S.isObject(tableData[i])) {
+                    tableData[i] = Object.assign(tableData[i], this._getFormatedText(tableData[i]["text"], dataIndex));
+                }
+            }
+        }
+    },
+    ConvertTableDataToDatabase: function(allTableData, allTableDataIndex) {
+        var database = {};
+        if (!$S.isObject(allTableData)) {
+            allTableData = {};
+        }
+        if (!$S.isObject(allTableDataIndex)) {
+            allTableDataIndex = {};
+        }
+        var tableData = [], dataIndex = [];
+        for (var tableName in allTableData) {
+            tableData = allTableData[tableName];
+            dataIndex = allTableDataIndex[tableName];
+            this._getProperTableData(tableData, dataIndex);
+            database[tableName] = {"tableData": tableData};
+        }
+        return database;
     }
 });
 AppHandler.extend({
@@ -715,6 +764,37 @@ AppHandler.extend({
             $S.log("Load staticData complete.");
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
+    },
+    LoadTableData: function(param, dbTableDataIndex, callback) {
+        var url = CommonConfig.getApiUrl("getTableData", null, true);
+        if (!$S.isObject(param)) {
+            param = {};
+        }
+        var queryParam = "";
+        for(var key in param) {
+            if ($S.isStringV2(queryParam)) {
+                queryParam += "&";
+            }
+            queryParam += key + "=" + param[key];
+        }
+        if ($S.isStringV2(queryParam)) {
+            url += "?" + queryParam;
+        }
+        var request = [], database = null;
+        var requestApi = {
+            "url": [url],
+            "apiName": "tableData",
+            "requestMethod": Api.getAjaxApiCallMethod()
+        };
+        request.push(requestApi);
+        this.LoadDataFromRequestApi(request, function() {
+            if ($S.isArray(request[0].response) && request[0].response.length > 0) {
+                if ($S.isObject(request[0].response[0]) && request[0].response[0].status === "SUCCESS") {
+                    database = AppHandler.ConvertTableDataToDatabase(request[0].response[0].data, dbTableDataIndex);
+                }
+            }
+            $S.callMethodV1(callback, database);
+        });
     }
 });
 

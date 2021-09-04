@@ -43,7 +43,7 @@ TemplateHandler.extend({
                 if (!$S.isObject(renderData[i])) {
                     continue;
                 }
-                homeFields.push({"toUrl": this._getLink("projectId", renderData[i].pid),
+                homeFields.push({"toUrl": this._getLink("projectId", renderData[i].tableUniqueId),
                         "toText": renderData[i].pName});
             }
         }
@@ -112,7 +112,7 @@ TemplateHandler.extend({
         }
         var tableName2 = DataHandler.getTableName(formName + ".tableName", "");
         var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName);
-        var generic1FormUploadedData = DataHandlerV2.getTableDataByAttr(tableName2, "pid", renderData["pidRow"]["pid"]);
+        var generic1FormUploadedData = DataHandlerV2.getTableDataByAttr(tableName2, "pid", renderData["pidRow"]["tableUniqueId"]);
         generic1FormUploadedData = CommonDataHandler.applyRoleFilter(currentAppId, generic1FormUploadedData, "pageName:" + pageName + ".section.mapping");
         PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);

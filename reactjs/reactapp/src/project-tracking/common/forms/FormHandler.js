@@ -132,7 +132,7 @@ FormHandler.extend({
             return;
         }
         var fileTableName = DataHandler.getTableName("fileTable");
-        var filePath = DataHandlerV2.getDisplayName(fileTableName, "unique_id", uniqueId, "filename");
+        var filePath = DataHandlerV2.getDisplayName(fileTableName, "tableUniqueId", uniqueId, "filename");
         var deleting = window.confirm("Are you sure? You want to " + action + " file: " + filePath);
         if (deleting) {
             FormHandlerUploadFile.deleteFile(uniqueId, filePath, action, callback);

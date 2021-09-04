@@ -396,28 +396,23 @@ CommonDataHandler.extend({
         return "Invalid " + key;
     },
     _saveData: function(pageName, formName, tableName, formData, requiredKeys, callback) {
-        var resultData = ["table_name", "unique_id", "username"];
-        resultData = resultData.concat(requiredKeys);
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
+        var resultData = requiredKeys;
+        var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = tableName;
-        if (!$S.isStringV2(formData["table_name"])) {
+        if (!$S.isStringV2(tableName)) {
             alert("Invalid table_name");
             return;
         }
-        formData["unique_id"] = AppHandler.GetUniqueId();
-        formData["username"] = AppHandler.GetUserData("username", "");
         var finalText = [];
         for(var i=0; i<resultData.length; i++) {
             finalText.push(AppHandler.ReplaceComma(formData[resultData[i]]));
         }
         var postData = {};
-        postData["subject"] = "SUbject";
-        postData["heading"] = "Heading";
         postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
+        postData["tableName"] = tableName;
+        postData["filename"] = tableName + ".csv";
         if ($S.isFunction(callback)) {
             callback(CommonConfig.IN_PROGRESS);
         }
@@ -425,7 +420,7 @@ CommonDataHandler.extend({
             if ($S.isFunction(callback)) {
                 callback(CommonConfig.COMPLETED);
             }
-            if (status === "FAILURE") {
+            if (status === "FAILURE" || ($S.isObject(response) && response.status === "FAILURE")) {
                 AppHandler.TrackApiRequest("addNewProject", "FAILURE");
                 alert("Error in uploading data, Please Try again.");
             } else {

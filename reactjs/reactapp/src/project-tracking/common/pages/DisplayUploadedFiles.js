@@ -61,7 +61,7 @@ DisplayUploadedFiles.extend({
         var commentTableName = DataHandler.getTableName("projectComment");
         var subject = data["subject"];
         var filename = data["filename"];
-        var valueReplaceParam = {"view_file.unique_id": data.unique_id, "delete_file.form": data.unique_id};
+        var valueReplaceParam = {"view_file.unique_id": data.tableUniqueId, "delete_file.form": data.tableUniqueId};
         if (data["table_name"] === fileTableName) {
             fileTemplate = this.getFileDisplayTemplateV2(pageName, filename, loginUsername, subject);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);

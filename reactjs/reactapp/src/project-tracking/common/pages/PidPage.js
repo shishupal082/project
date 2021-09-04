@@ -41,8 +41,8 @@ PidPage.extend({
             if (!$S.isObject(data[i])) {
                 continue;
             }
-            if ($S.isStringV2(data[i]["unique_id"])) {
-                data[i]["details_link"] = DataHandler.getLinkV3(pid, data[i]["unique_id"]);
+            if ($S.isStringV2(data[i]["tableUniqueId"])) {
+                data[i]["details_link"] = DataHandler.getLinkV3(pid, data[i]["tableUniqueId"]);
             }
         }
         return data;
@@ -58,7 +58,7 @@ PidPage.extend({
             return;
         }
         var result = rowData[destinationFieldName];
-        var tableData = DataHandlerV2.getTableDataV3(pageName, sourceTableName, rowData.unique_id);
+        var tableData = DataHandlerV2.getTableDataV3(pageName, sourceTableName, rowData.tableUniqueId);
         if ($S.isArray(tableData) && $S.isStringV2(value)) {
             var valueAttr = value.split(":");
             if (valueAttr.length === 1 && valueAttr[0] === "LENGTH") {
