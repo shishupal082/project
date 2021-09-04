@@ -4,13 +4,16 @@ import Template from "./Template";
 import TemplateHandler from "./TemplateHandler";
 import FormHandler from "./FormHandler";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 import Api from "../../common/Api";
 
 
+import CommonConfig from "../../common/app/common/CommonConfig";
 import UserControl from "../pages/UserControl";
 import PermissionControl from "../pages/PermissionControl";
 import CompareControl from "../pages/CompareControl";
+import DatabaseFiles from "../pages/DatabaseFiles";
 // import GATracking from "./GATracking";
 
 var DataHandler;
@@ -37,6 +40,8 @@ keys.push("create_password.username");
 keys.push("create_password.create_password_otp");
 keys.push("create_password.new_password");
 keys.push("create_password.confirm_password");
+
+keys.push("database_files.response");
 
 keys.push("register.username");
 keys.push("register.passcode");
@@ -216,13 +221,21 @@ DataHandler.extend({
             }
         }
         return currentList1Data;
+    },
+    getAppData: function(key, defaultValue) {
+        if (!$S.isStringV2(key)) {
+            return defaultValue;
+        }
+        var metaData = CommonDataHandler.getData("metaData", {});
+        return $S.findParam([metaData], key, defaultValue);
     }
 });
 DataHandler.extend({
     loadPageData: function(pageName, callback) {
-        var staticDataUrl = Config.getApiUrl("getStaticDataApi", null, true);
+        CommonDataHandler.loadMetaDataByAppId(Config.defaultMetaData);
+        var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         if ([Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
-            var url = Config.getApiUrl("relatedUsersDataV2Api", null, true);
+            var url = CommonConfig.getApiUrl("getRelatedUsersDataV2Api", null, true);
             var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
             if ($S.isBooleanTrue(isLoginOtherUserEnable)) {
                 $S.loadJsonData(null, [url], function(response, apiName, ajax) {
@@ -236,6 +249,10 @@ DataHandler.extend({
             }
         } else if (pageName === Config.users_control) {
             UserControl.loadRelatedUsersData(function() {
+                $S.callMethod(callback);
+            });
+        } else if (pageName === Config.database_files) {
+            DatabaseFiles.loadData(function() {
                 $S.callMethod(callback);
             });
         } else if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
@@ -260,7 +277,7 @@ DataHandler.extend({
         AppHandler.TrackPageView(pageName);
         var redirectStatus = this.checkForRedirect();
         if (!redirectStatus) {
-            if ([Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+            if ([Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
                 DataHandler.loadPageData(pageName, function() {
                     DataHandler.reRenderApp(appStateCallback, appDataCallback);
                 });
@@ -325,7 +342,7 @@ DataHandler.extend({
 DataHandler.extend({
     getRenderData: function(pageName) {
         var renderData = {};
-        if ([Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+        if ([Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
             return renderData;
         }
         renderData = {"guest-login-status": false, "is_guest_enable": false,

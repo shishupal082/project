@@ -88,9 +88,7 @@ var syncData = {
     "dist-auth-app-to-ftp-application": {
         "src": [
             "../app/auth/auth-style.css",
-            "../reactjs/reactapp/dist-auth-app/script1.js",
-            "../reactjs/reactapp/dist-auth-app/script2.js",
-            "../reactjs/reactapp/dist-auth-app/script3.js"
+            "../reactjs/reactapp/dist-auth-app/script2.js"
         ],
         "destinationDir": [
             "../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/"

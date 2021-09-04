@@ -38,11 +38,11 @@
     <div style="display: none;">
       <input type="hidden" style="display: none;" name="pageData" id="pageData"
         value="page=change_password,app_version=x.y.z.p,is_guest_enable=true,android_check_enable=true,displayCreatePasswordLinkEnable=true"/>
-      <input type="hidden" style="display: none;" name="loginUserDetailsV2Str" id="loginUserDetailsV2Str" value='{"username":"XYZ","login":"true","displayName":"","roles":{"isDevUser":"true", "isDevUser2":"true", "isLoginOtherUserEnable": "true", "isUsersControlEnable":"true"}}'/>
+      <input type="hidden" style="display: none;" name="loginUserDetailsV2Str" id="loginUserDetailsV2Str" value='{"username":"XYZ","login":"true","displayName":"","roles":{"isDevUser":"true", "isDevUser2":"true","isDevUser3":"true","isDevUser4":"true", "isLoginOtherUserEnable": "true", "isUsersControlEnable":"true"}}'/>
       <input type="hidden" style="display: none;" name="headingJson" id="headingJson" value='[{"tag":"div.center.table.tbody.tr","className":"heading","text":[{"tag":"td","text":{"tag":"img","className":"w-40px","src":"http://localhost/static/img/icons/railwayslogo-64.png"}},{"tag":"td","className":"text-center pl-5px","text":[{"tag":"div","text":"Field Report"}]}]}]'/>
       <input type="hidden" style="display: none;" name="afterLoginLinkJson" id="afterLoginLinkJson" value='[{"tag":"div.center","text":[{"tag":"a","href":"/change_password","name":"link.change_password","className":"p-5px","text":"Change Password"},{"tag":"a","name":"link.logout","href":"/logout","className":"p-5px","text":"Logout"}]},{"tag":"div.center","text":[{"tag":"span","text":"Login as"},{"tag":"span","className":"","text":": "},{"tag":"b","name":"link.loginAs","text":""}]}]'/>
       <input type="hidden" style="display: none;" name="footerLinkJson" id="footerLinkJson" value='[{"tag": "div.center", "text": "Footer link before login"}]'/>
-      <input type="hidden" style="display: none;" name="footerLinkJsonAfterLogin" id="footerLinkJsonAfterLogin" value='[{"tag":"div.center","text":[{"tag":"a","href":"/users_control","name":"isUsersControlEnable","className":"p-5px d-none","text":"Users Control"},{"tag":"a","href":"/permission_control","name":"isDevUser","className":"p-5px d-none","text":"Permission Control"},{"tag":"a","href":"/compare_control","name":"isDevUser2","className":"p-5px d-none","text":"Compare Control"},{"tag":"a","href":"/login_other_user","name":"isLoginOtherUserEnable","className":"p-5px d-none","text":"Login Other User"}]}]'/>
+      <input type="hidden" style="display: none;" name="footerLinkJsonAfterLogin" id="footerLinkJsonAfterLogin" value='[{"tag":"div.center","text":[{"tag":"a","href":"/users_control","name":"isUsersControlEnable","className":"p-5px d-none","text":"Users Control"},{"tag":"a","href":"/permission_control","name":"isDevUser","className":"p-5px d-none","text":"Permission Control"},{"tag":"a","href":"/compare_control","name":"isDevUser2","className":"p-5px d-none","text":"Compare Control"},{"tag":"a","href":"/database_files","name":"isDevUser4","className":"p-5px d-none","text":"Database Files"},{"tag":"a","href":"/api/update_config","name":"isDevUser3","className":"p-5px d-none","text":"Update Config Files"},{"tag":"a","href":"/login_other_user","name":"isLoginOtherUserEnable","className":"p-5px d-none","text":"Login Other User"}]}]'/>
       <input type="hidden" style="display: none;" name="loginRedirectUrl" id="loginRedirectUrl" value="/view/resource"/>
       <input type="hidden" style="display: none;" name="forgotPasswordPageInstruction" id="forgotPasswordPageInstruction" value=""/>
       <input type="hidden" style="display: none;" name="createPasswordOtpInstruction" id="createPasswordOtpInstruction" value=""/>
@@ -63,12 +63,9 @@
 
 var GLOBAL = {
     baseApi: "http://localhost:8080",
-    basepathname: "",
-    staticDataApi: "/api/get_static_data",
-    relatedUsersDataApi: "/api/get_related_users_data",
-    relatedUsersDataV2Api: "/api/get_related_users_data_v2",
-    rolesConfigDataApi: "/api/get_roles_config"
+    basepathname: ""
 };
+
 GLOBAL.JQ = $;
 GLOBAL.gaTrackingEnable = true;
 GLOBAL.gtag = gtag;

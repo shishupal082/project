@@ -1,62 +1,61 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-// import Config from "../common/Config";
+// import AppHandler from '../../common/app/common/AppHandler.js';
+import Config from "../common/Config";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
-import CommonConfig from "../../common/app/common/CommonConfig";
 
 
-var UserControl;
+var DatabaseFiles;
 
 (function($S){
-UserControl = function(arg) {
-    return new UserControl.fn.init(arg);
+DatabaseFiles = function(arg) {
+    return new DatabaseFiles.fn.init(arg);
 };
 
-UserControl.fn = UserControl.prototype = {
-    constructor: UserControl,
+DatabaseFiles.fn = DatabaseFiles.prototype = {
+    constructor: DatabaseFiles,
     init: function(arg) {
         this.arg = arg;
         return this;
     }
 };
-$S.extendObject(UserControl);
+$S.extendObject(DatabaseFiles);
 
-UserControl.extend({
-    loadRelatedUsersData: function(callback) {
-        var url = CommonConfig.getApiUrl("getRelatedUsersDataApi", false, true);
+DatabaseFiles.extend({
+    loadData: function(callback) {
+        var url = Config.getApiUrl("getDatabaseFilesInfoApi", null, true);
         if (!$S.isString(url)) {
-            $S.callMethod(callback);
+            return $S.callMethod(callback);
         }
-        var finalResponse = [];
         $S.loadJsonData(null, [url], function(response, apiName, ajax){
             if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isArray(response["data"])) {
-                finalResponse = $S.sortResult(response["data"], "ascending", "username");
-                DataHandler.setData("users_control.response", UserControl.getFinalTableData(finalResponse));
+                DataHandler.setData("database_files.response", response["data"]);
             }
         }, function() {
-            $S.log("Load relatedUserData complete.");
+            $S.log("Load database files info complete.");
             $S.callMethod(callback);
-        }, null, Api.getAjaxApiCallMethod());
+        }, "databaseFiles", Api.getAjaxApiCallMethod());
     }
 });
 
-UserControl.extend({
-    getFinalTableData: function(response) {
+DatabaseFiles.extend({
+    getRenderData: function() {
         var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
-        var userControlPattern = DataHandler.getAppData("userControlPattern", []);
+        var response = DataHandler.getData("database_files.response", []);
+        var databaseFilesPattern = DataHandler.getAppData("database_files_info.pattern", []);
         if (!$S.isArray(response)) {
             response = [];
         }
-        var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": response}}, userControlPattern, resultCriteria, requiredDataTable);
+        var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": response}}, databaseFilesPattern, resultCriteria, requiredDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     },
     getRenderFieldRow: function() {
         var currentList3Data = null, dateParameterField = null;
-        var renderData = DataHandler.getData("users_control.response", []);
+        var renderData = this.getRenderData();
         var sortingFields = DataHandler.getData("sortingFields", []);
         renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
         var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
@@ -65,4 +64,4 @@ UserControl.extend({
 });
 })($S);
 
-export default UserControl;
+export default DatabaseFiles;

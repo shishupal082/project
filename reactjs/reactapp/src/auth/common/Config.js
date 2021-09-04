@@ -30,11 +30,6 @@ Config.location = $$$.location;
 Config.baseApi = baseApi;
 Config.basepathname = basepathname;
 
-var staticDataApi = $$$.staticDataApi;
-var relatedUsersDataApi = $$$.relatedUsersDataApi;
-var relatedUsersDataV2Api = $$$.relatedUsersDataV2Api;
-var rolesConfigDataApi = $$$.rolesConfigDataApi;
-
 
 if (!$S.isString(loginRedirectUrl) || loginRedirectUrl.length < 1) {
     loginRedirectUrl = "/view/resource";
@@ -76,7 +71,8 @@ var pages = {
     "login_other_user": basepathname+"/login_other_user",
     "users_control": basepathname+"/users_control",
     "permission_control": basepathname+"/permission_control",
-    "compare_control": basepathname+"/compare_control"
+    "compare_control": basepathname+"/compare_control",
+    "database_files": basepathname+"/database_files"
 };
 
 Config.pages = pages;
@@ -91,6 +87,7 @@ Config.register = "register";
 Config.change_password = "change_password";
 Config.forgot_password = "forgot_password";
 Config.create_password = "create_password";
+Config.database_files = "database_files";
 Config.noMatch = "noMatch";
 
 
@@ -115,56 +112,82 @@ if ($S.isString(tempPageData)) {
 Config.UserData = UserData;
 Config.PageData = PageData;
 
-Config.userControlPattern = [
-    {
-        "tableName": "table1",
-        "name": "username",
-        "heading": "Username",
-        "isSortable": true
+Config.defaultMetaData = {
+    "userControlPattern": [
+        {
+            "tableName": "table1",
+            "name": "username",
+            "heading": "Username",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "valid",
+            "heading": "Valid?",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "name",
+            "heading": "Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "email",
+            "heading": "Email",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "mobile",
+            "heading": "Mobile",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "createPasswordOtp",
+            "heading": "OTP",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "methodRequestCount",
+            "heading": "Count",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "method",
+            "heading": "Method",
+            "isSortable": true
+        }
+    ],
+    "filterKeys.mapping": {
+        "pageName:database_files.filterKeys": "filterKeys"
     },
-    {
-        "tableName": "table1",
-        "name": "valid",
-        "heading": "Valid?",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "name",
-        "heading": "Name",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "email",
-        "heading": "Email",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "mobile",
-        "heading": "Mobile",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "createPasswordOtp",
-        "heading": "OTP",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "methodRequestCount",
-        "heading": "Count",
-        "isSortable": true
-    },
-    {
-        "tableName": "table1",
-        "name": "method",
-        "heading": "Method",
-        "isSortable": true
-    }
-];
+    "pageName:database_files.filterKeys": ["fileUsername", "filename"],
+    "database_files_info.pattern": [
+        {
+            "tableName": "table1",
+            "name": "fileUsername",
+            "heading": "File Username",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "filename",
+            "heading": "Filename",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "filepath",
+            "heading": "Filepath",
+            "isSortable": true
+        }
+    ]
+};
 
 var apiMapping = {};
 
@@ -175,11 +198,8 @@ apiMapping["forgot_password"] = "/api/forgot_password";
 apiMapping["create_password"] = "/api/create_password";
 apiMapping["change_password"] = "/api/change_password";
 apiMapping["track_event"] = "/api/track_event";
-
-apiMapping["getStaticDataApi"] = staticDataApi;
-apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
-apiMapping["relatedUsersDataV2Api"] = relatedUsersDataV2Api;
-apiMapping["getRolesConfig"] = rolesConfigDataApi;
+apiMapping["getDatabaseFilesInfoApi"] = "/api/get_database_files_info";
+apiMapping["getRolesConfig"] = "/api/get_roles_config";
 
 
 Config.setApiUrl = function(key, value) {

@@ -10,6 +10,7 @@ import Template from "./Template";
 import UserControl from "../pages/UserControl";
 import PermissionControl from "../pages/PermissionControl";
 import CompareControl from "../pages/CompareControl";
+import DatabaseFiles from "../pages/DatabaseFiles";
 
 var TemplateHandler;
 
@@ -95,7 +96,6 @@ TemplateHandler.extend({
         var fieldsValue = renderData.fieldsValue;
         var submitBtnName = renderData.submitBtnName;
         var formSubmitStatus = renderData.formSubmitStatus;
-        var displayCreatePasswordLinkEnable;
         if (!$S.isObject(fieldsValue)) {
             fieldsValue = {};
         }
@@ -108,10 +108,6 @@ TemplateHandler.extend({
             break;
             case "forgot_password":
                 renderFieldRow = AppHandler.getTemplate(Template, pageName, "Page Not Found");
-                displayCreatePasswordLinkEnable = AppHandler.GetStaticData("displayCreatePasswordLinkEnable");
-                if (displayCreatePasswordLinkEnable === "true") {
-                    TemplateHelper.removeClassTemplate(renderFieldRow, "displayCreatePasswordLinkEnable", "d-none");
-                }
             break;
             case "logout":
             case "login_other_user":
@@ -125,6 +121,9 @@ TemplateHandler.extend({
             break;
             case "compare_control":
                 renderFieldRow = CompareControl.getRenderFieldRow();
+            break;
+            case "database_files":
+                renderFieldRow = DatabaseFiles.getRenderFieldRow();
             break;
             case "noMatch":
             default:
