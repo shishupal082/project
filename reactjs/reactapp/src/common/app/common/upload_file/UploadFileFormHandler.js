@@ -25,9 +25,8 @@ UploadFileFormHandler.extend({
     updateTemplate: function(key, attr, value) {
         TemplateHelper.setTemplateAttr(UploadFileTemplate["upload_file"], key, attr, value);
     },
-    getUploadFileTemplate: function(formSubmitStatus, percentComplete, subject, heading, uploadFileInspection) {
+    getUploadFileTemplate: function(uploadFileApiVersion, formSubmitStatus, percentComplete, subject, heading, uploadFileInstruction) {
         var template = AppHandler.getTemplate(UploadFileTemplate, "upload_file", []);
-        var uploadFileApiVersion = AppHandler.GetStaticData("uploadFileApiVersion", "v1");
         if (uploadFileApiVersion === "v2") {
             TemplateHelper.removeClassTemplate(template, "upload_file.subject.div", "d-none");
             TemplateHelper.removeClassTemplate(template, "upload_file.heading.div", "d-none");
@@ -47,8 +46,8 @@ UploadFileFormHandler.extend({
         } else {
             TemplateHelper.setTemplateAttr(template, "upload_file.complete-status", "text", "");
         }
-        if ($S.isStringV2(uploadFileInspection)) {
-            TemplateHelper.setTemplateAttr(template, "upload_file.message", "text", uploadFileInspection);
+        if ($S.isStringV2(uploadFileInstruction)) {
+            TemplateHelper.setTemplateAttr(template, "upload_file.message", "text", uploadFileInstruction);
         }
         return template;
     },
@@ -57,27 +56,9 @@ UploadFileFormHandler.extend({
             callback(formSubmitStatus, percentComplete, ajax, response);
         }
     },
-    uploadFile: function(JQ, url, callback, file, subject, heading) {
+    uploadFile: function(JQ, url, file, callback) {
         var formData = new FormData();
-        var uploadFileApiVersion = AppHandler.GetStaticData("uploadFileApiVersion", "v1");
         formData.append("file", file);
-        if (uploadFileApiVersion === "v2") {
-            if ($S.isString(subject) && $S.isString(heading)) {
-                if (subject.length < 1) {
-                    alert("Subject required");
-                    return;
-                }
-                if (heading.length < 1) {
-                    alert("Heading required");
-                    return
-                }
-            } else {
-                alert("Subject and Heading required");
-                return;
-            }
-            formData.append("subject", subject);
-            formData.append("heading", heading);
-        }
         this._fireCallback(callback, "in_progress", 0);
         $S.uploadFile(JQ, url, formData, function(ajax, status, response) {
             if (status === "FAILURE" || !$S.isObject(response)) {

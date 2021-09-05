@@ -32,13 +32,13 @@ DisplayUploadedFiles.extend({
         var buttonName = "delete_file.form.button";
         // We could not implement delete because
         // delete will only work when file exist
-        var updatedBy = "";//data.updatedBy;
+        var addedBy = "";//data.addedBy;
         var textReplaceParam = {"heading": heading};
         if ([Config.projectId].indexOf(pageName) >= 0) {
             if ($S.isStringV2(subject)) {
                 textReplaceParam["subject"] = subject;
             }
-            if (loginUsername === updatedBy) {
+            if (loginUsername === addedBy) {
                 TemplateHelper.removeClassTemplate(fileTemplate, buttonName, "disabled");
                 TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
             }
@@ -62,14 +62,14 @@ DisplayUploadedFiles.extend({
         var subject = data["subject"];
         var filename = data["filename"];
         var valueReplaceParam = {"view_file.unique_id": data.tableUniqueId, "delete_file.form": data.tableUniqueId};
-        if (data["table_name"] === fileTableName) {
+        if (data["tableName"] === fileTableName) {
             fileTemplate = this.getFileDisplayTemplateV2(pageName, filename, loginUsername, subject);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
-        } else if (data["table_name"] === linkTableName) {
+        } else if (data["tableName"] === linkTableName) {
             fileTemplate = this._getFileDisplayAsCommentOrLink(pageName, data, loginUsername, subject, filename);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
             TemplateHelper.removeClassTemplate(fileTemplate, "file-action-field", "d-none");
-        } else if (data["table_name"] === commentTableName) {
+        } else if (data["tableName"] === commentTableName) {
             fileTemplate = this._getFileDisplayAsCommentOrLink(pageName, data, loginUsername, subject, filename);
             TemplateHelper.updateTemplateValue(fileTemplate, valueReplaceParam);
         }

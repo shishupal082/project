@@ -32,7 +32,7 @@ FormHandlerUploadFile.extend({
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var percentComplete = DataHandler.getFieldsData("upload_file.percentComplete", 0);
         var subject = DataHandler.getFieldsData("upload_file.subject", "");
-        var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate(formSubmitStatus, percentComplete, subject);
+        var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate("v2", formSubmitStatus, percentComplete, subject);
         TemplateHelper.addClassTemplate(uploadFileTemplate, "upload_file.heading.div", "d-none");
         return uploadFileTemplate;
     },
@@ -40,7 +40,7 @@ FormHandlerUploadFile.extend({
         var formSubmitStatus = DataHandler.getData("addentry.submitStatus", "");
         var subject = DataHandler.getFieldsData("upload_file_link.subject", "");
         var heading = DataHandler.getFieldsData("upload_file_link.heading", "");
-        var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate(formSubmitStatus, 0, subject, heading);
+        var uploadFileTemplate = UploadFileFormHandler.getUploadFileTemplate("v2", formSubmitStatus, 0, subject, heading);
         var updateFieldParameter = [];
         updateFieldParameter.push(["upload_file.subject", "name", "upload_file_link.subject"]);
         updateFieldParameter.push(["upload_file.heading", "name", "upload_file_link.heading"]);
@@ -56,38 +56,7 @@ FormHandlerUploadFile.extend({
         }
         return uploadFileTemplate;
     },
-    addInFileTable: function(filename, subject, pid, callback) {
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
-        if (!$S.isString(url)) {
-            return;
-        }
-        var formData = {};
-        formData["pid"] = pid;
-        formData["subject"] = AppHandler.ReplaceComma(subject);
-        formData["filename"] = filename;
-        var resultData = ["table_name", "unique_id", "username", "pid", "subject", "filename"];
-        var tableName = DataHandler.getTableName("fileTable");
-        FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInFileTable", function(formStatus, resultStatus) {
-            if (formStatus === "in_progress") {
-                $S.callMethod(callback);
-            } else if (resultStatus === "SUCCESS") {
-                AppHandler.LazyReload(250);
-            }
-        });
-    },
-    saveLink: function(pageName, formData, callback) {
-        var resultData = ["table_name", "unique_id", "username", "pid", Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
-        formData["pid"] = DataHandler.getPathParamsData("pid", "");
-        var tableName = DataHandler.getTableName("projectLink");;
-        return FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectLink", function(formStatus, resultStatus) {
-            if (formStatus === "in_progress") {
-                $S.callMethod(callback);
-            } else if (resultStatus === "SUCCESS") {
-                AppHandler.LazyReload(250);
-            }
-        });
-    },
-    uploadFile: function(file, subject, heading, callback) {
+    uploadFile: function(file, subject, callback) {
         var url = CommonConfig.getApiUrl("upload_file", null, true);
         if (!$S.isString(url)) {
             return;
@@ -98,7 +67,7 @@ FormHandlerUploadFile.extend({
             return;
         }
         var pid = DataHandler.getPathParamsData("pid", "");
-        UploadFileFormHandler.uploadFile(CommonConfig.JQ, url, function(formSubmitStatus, percentComplete, ajax, response) {
+        UploadFileFormHandler.uploadFile(CommonConfig.JQ, url, file, function(formSubmitStatus, percentComplete, ajax, response) {
             if (formSubmitStatus === "in_progress") {
                 DataHandler.setData("addentry.submitStatus", "in_progress");
                 DataHandler.setFieldsData("upload_file.percentComplete", percentComplete);
@@ -108,26 +77,29 @@ FormHandlerUploadFile.extend({
                 $S.callMethod(callback);
                 if ($S.isObject(response)) {
                     if (response.status === "SUCCESS") {
-                        FormHandlerUploadFile.addInFileTable(response.data.path, subject, pid, function() {
-                            AppHandler.LazyReload(250);
+                        FormHandler.saveProjectContent(pid, subject, response.data.path, tableName, "addInFileTable", function(formStatus, resultStatus) {
+                            $S.callMethod(callback);
                         });
                     } else if (response.failureCode === "UNAUTHORIZED_USER") {
                         AppHandler.LazyReload(250);
                     }
                 }
             }
-        }, file, subject, heading);
+        });
     },
     submit: function(callback) {
         var key = Config.fieldsKey.UploadFile;
         var file = DataHandler.getData(key, false, true);
         var subject = DataHandler.getFieldsData("upload_file.subject", "");
-        var heading = DataHandler.getPathParamsData("pid", "");
         if ($S.isBooleanFalse(file)) {
             alert(FormHandler.GetAleartMessage(key));
             return;
         }
-        this.uploadFile(file, subject, heading, callback);
+        if (!$S.isStringV2(subject)) {
+            alert("Subject required.");
+            return;
+        }
+        this.uploadFile(file, subject, callback);
     },
     submitAddLink: function(pageName, callback) {
         var requiredKeys = [Config.fieldsKey.AddLinkText, Config.fieldsKey.AddLinkUrl];
@@ -146,25 +118,29 @@ FormHandlerUploadFile.extend({
             formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
         }
         if (isFormValid) {
-            this.saveLink(pageName, formData, callback);
+            var pid = DataHandler.getPathParamsData("pid", "");
+            var linkText = formData[Config.fieldsKey.AddLinkText];
+            var linkUrl = formData[Config.fieldsKey.AddLinkUrl];
+            var tableName = DataHandler.getTableName("projectLink");;
+            FormHandler.saveProjectContent(pid, linkText, linkUrl, tableName, "addProjectLink", function(formStatus, resultStatus) {
+                $S.callMethod(callback);
+            });
         }
     },
     deleteFile: function(uniqueId, filePath, action, callback) {
         var url = CommonConfig.getApiUrl("delete_file", "", true);
         var postData = {};
         postData["filename"] = filePath;
-        var delete_key = "File Deleted";
-        var delete_value = filePath;
         var message = "Error in delete file, Please Try again.";
         var fileTableName = DataHandler.getTableName("fileTable");
         var fileTable = DataHandlerV2.getTableDataByAttr(fileTableName, "filename", filePath);
         if ($S.isArray(fileTable)) {
             if (action === "remove") {
-                FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
+                FormHandler.deleteText(uniqueId, fileTableName, function() {
                     AppHandler.LazyReload(250);
                 });
             } else if (fileTable.length > 1) {
-                FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
+                FormHandler.deleteText(uniqueId, fileTableName, function() {
                     AppHandler.LazyReload(250);
                 });
             } else {
@@ -173,7 +149,7 @@ FormHandlerUploadFile.extend({
                         AppHandler.TrackApiRequest("deleteFile", "FAILURE");
                     } else {
                         AppHandler.TrackApiRequest("deleteFile", "SUCCESS");
-                        FormHandler.addInDeleteTable(uniqueId, delete_key, delete_value, function() {
+                        FormHandler.deleteText(uniqueId, fileTableName, function() {
                             AppHandler.LazyReload(250);
                         });
                     }

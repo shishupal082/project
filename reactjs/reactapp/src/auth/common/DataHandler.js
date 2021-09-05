@@ -61,10 +61,13 @@ keys.push("compare_control.allUsername");
 keys.push("rolesConfig");
 keys.push("appControlDataApi");
 keys.push("appControlData");
+
 keys.push("list1Data");
 keys.push("currentList1Id");
-
+keys.push("filterOptions");
+keys.push("filterValues");
 keys.push("sortingFields");
+
 keys.push("formSubmitStatus"); // in_progress, completed
 
 CurrentFormData.setKeys(keys);
@@ -148,6 +151,28 @@ DataHandler.extend({
         }
         return redirectStatus;
     },
+    generateFilterOptions: function(pageName, finalTableData, filterKeyMapping) {
+        var currentAppData = {};
+        var metaData = CommonDataHandler.getData("metaData", {});
+        var filterSelectedValues = DataHandler.getData("filterValues", {});
+        var filterOptions = AppHandler.generateFilterDataV2(filterKeyMapping, currentAppData, metaData, finalTableData, filterSelectedValues, "name");
+        DataHandler.setData("filterOptions", filterOptions);
+    },
+    setList1Data: function(list1Data) {
+        if (!$S.isArray(list1Data)) {
+            list1Data = [];
+        }
+        list1Data.map(function(el, i, arr) {
+            if ($S.isObject(el)) {
+                el.id = i.toString();
+            }
+            return el;
+        });
+        if (list1Data.length > 0) {
+            DataHandler.setData("currentList1Id", list1Data[0]["id"]);
+        }
+        DataHandler.setData("list1Data", list1Data);
+    },
     handlePageLoad: function() {
         AppHandler.setGtag(Config.gtag);
         var userData = Config.UserData;
@@ -179,19 +204,8 @@ DataHandler.extend({
             } else if (pageName === Config.compare_control) {
                 list1Data = appControlData.compareControlList;
             }
-            if ($S.isArray(list1Data) && list1Data.length > 0) {
-                list1Data.map(function(el, i, arr) {
-                    if ($S.isObject(el)) {
-                        el.id = i.toString();
-                    }
-                    return el;
-                });
-                if (list1Data.length > 0) {
-                    DataHandler.setData("currentList1Id", "0");
-                }
-            }
         }
-        DataHandler.setData("list1Data", list1Data);
+        this.setList1Data(list1Data);
     },
     handleStaticDataLoad: function(pageName) {
         var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
@@ -234,6 +248,7 @@ DataHandler.extend({
     loadPageData: function(pageName, callback) {
         CommonDataHandler.loadMetaDataByAppId(Config.defaultMetaData);
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
+        var filterKeyMapping, data;
         if ([Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
             var url = CommonConfig.getApiUrl("getRelatedUsersDataV2Api", null, true);
             var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
@@ -253,6 +268,10 @@ DataHandler.extend({
             });
         } else if (pageName === Config.database_files) {
             DatabaseFiles.loadData(function() {
+                DataHandler.setList1Data(DatabaseFiles.getList1Data(pageName));
+                filterKeyMapping = DatabaseFiles.getFilterKeyMapping(pageName);
+                data = DataHandler.getData("database_files.response", []);
+                DataHandler.generateFilterOptions(pageName, data, filterKeyMapping);
                 $S.callMethod(callback);
             });
         } else if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
@@ -309,6 +328,35 @@ DataHandler.extend({
             DataHandler.setData("sortingFields", finalSortingField);
             DataHandler.reRenderApp(appStateCallback, appDataCallback);
         }
+    },
+    OnResetClick: function(appStateCallback, appDataCallback) {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                filterOptions[i].selectedValue = "";
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", {});
+        DataHandler.reRenderApp(appStateCallback, appDataCallback);
+    },
+    OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
+        var filterValues = DataHandler.getData("filterValues", {});
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if (!$S.isObject(filterValues)) {
+            filterValues = {};
+        }
+        filterValues[name] = value;
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                if (filterOptions[i].selectName === name) {
+                    filterOptions[i].selectedValue = value;
+                }
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", filterValues);
+        DataHandler.reRenderApp(appStateCallback, appDataCallback);
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var callback = function() {
@@ -400,10 +448,10 @@ DataHandler.extend({
         if ($S.isBooleanTrue(isLogin)) {
             appHeading.push(TemplateHandler.getLinkTemplate());
         }
-        if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
-            appDataCallback("list1Data", DataHandler.getData("list1Data", []));
-            appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
-        }
+
+        appDataCallback("filterOptions", DataHandler.getData("filterOptions", []));
+        appDataCallback("list1Data", DataHandler.getData("list1Data", []));
+        appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("firstTimeDataLoadStatus", "completed");

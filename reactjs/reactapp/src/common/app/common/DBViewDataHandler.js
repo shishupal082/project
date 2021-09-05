@@ -144,7 +144,7 @@ DBViewDataHandler.extend({
                 if ($S.isObject(tempTableData[i][tableName])) {
                     tableEntry = tempTableData[i][tableName];
                 }
-                tableEntry["tableName"] = tableName;
+                // tableEntry["tableName"] = tableName;
                 for (j=0; j<result.requiredData.length; j++) {
                     if (!$S.isObject(result.requiredData[j])) {
                         continue;

@@ -395,6 +395,13 @@ CommonDataHandler.extend({
         }
         return "Invalid " + key;
     },
+    getErrorStringFromResponse: function(response) {
+        var msg = "";
+        if ($S.isObject(response) && response.status === "FAILURE") {
+            msg = response.error;
+        }
+        return msg;
+    },
     _saveData: function(pageName, formName, tableName, formData, requiredKeys, callback) {
         var resultData = requiredKeys;
         var url = CommonConfig.getApiUrl("getAddTextApi", null, true);

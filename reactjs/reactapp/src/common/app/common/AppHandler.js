@@ -536,18 +536,17 @@ AppHandler.extend({
         return result;
     },
     _getFormatedText: function(text, dataIndex) {
-        if (!$S.isString(text) || !$S.isArray(dataIndex)) {
+        if (!$S.isArray(text) || !$S.isArray(dataIndex)) {
             return {};
         }
-        var textArr = text.split(",");
         var result = {};
         var temp = [], i, j;
         for (i=0; i<dataIndex.length; i++) {
-            if (i < textArr.length-1) {
-                result[dataIndex[i]] = textArr[i];
-            } else if (i === textArr.length-1) {
-                for (j=i; j<textArr.length; j++) {
-                    temp.push(textArr[j]);
+            if (i < text.length-1) {
+                result[dataIndex[i]] = text[i];
+            } else if (i === text.length-1) {
+                for (j=i; j<text.length; j++) {
+                    temp.push(text[j]);
                 }
                 result[dataIndex[i]] = temp.join(",");
             } else {

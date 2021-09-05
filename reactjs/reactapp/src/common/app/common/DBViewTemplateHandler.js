@@ -218,11 +218,12 @@ DBViewTemplateHandler.extend({
         }
         return renderField;
     },
-    _generateHeading: function(headingText, key, currentList3Data) {
+    _generateHeading: function(headingText, key, currentList3Data, showReloadButton) {
         var heading = headingText;
         var formValue = {"tableHeading": headingText};
         var currentField = null;
         var i = 0, isFound = false;
+        var reloadOption = $S.isBooleanTrue(showReloadButton) ? "-reload": "";
         formValue[key] = headingText;
         if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
             for (i = 0; i < currentList3Data.value.length; i++) {
@@ -244,11 +245,11 @@ DBViewTemplateHandler.extend({
         if (!isFound) {
             if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
                 if (i === 0 && currentList3Data.value.length === 1) {
-                    heading = this.getTemplate("dbViewHeading1-1");
+                    heading = this.getTemplate("dbViewHeading1-1" + reloadOption);
                 } else if (i === 0 && currentList3Data.value.length > 1) {
                     heading = this.getTemplate("dbViewHeading1-many");
                 } else if (i === 1 && currentList3Data.value.length >= 2) {
-                    heading = this.getTemplate("dbViewHeading2-many");
+                    heading = this.getTemplate("dbViewHeading2-many" + reloadOption);
                 } else if (currentList3Data.value.length > 2) {
                     heading = this.getTemplate("dbViewHeading3-many");
                 }
@@ -259,16 +260,16 @@ DBViewTemplateHandler.extend({
         }
         return heading;
     },
-    _recursiveGenerateHeading: function(renderField, tempRenderData, currentList3Data, sortingFields) {
+    _recursiveGenerateHeading: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton) {
         if (!$S.isArray(tempRenderData)) {
             return;
         }
         for (var i=0; i<tempRenderData.length; i++) {
             if ($S.isObject(tempRenderData[i])) {
                 if ($S.isString(tempRenderData[i].name)) {
-                    renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
+                    renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data, showReloadButton));
                 }
-                this._recursiveGenerateHeading(renderField, tempRenderData[i].text, currentList3Data, sortingFields);
+                this._recursiveGenerateHeading(renderField, tempRenderData[i].text, currentList3Data, sortingFields, showReloadButton);
             } else if ($S.isArray(tempRenderData[i])) {
                 renderField.push(this.generateDbViewRenderFieldV2([{"tableData": tempRenderData}], true, "tableData", sortingFields));
                 break;
@@ -363,21 +364,21 @@ DBViewTemplateHandler.extend({
         }
         return renderField;
     },
-    GenerateDbViewRenderField: function(renderData, currentList3Data, sortingFields) {
+    GenerateDbViewRenderField: function(renderData, currentList3Data, sortingFields, showReloadButton) {
         // currentList3Data is required for generate heading
         // sortingFields is required for highlight button (primary / secondary)
         var renderField = [];
         if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeading(renderField, renderData, currentList3Data, sortingFields);
+            this._recursiveGenerateHeading(renderField, renderData, currentList3Data, sortingFields, showReloadButton);
         } else {
             renderField = this.getTemplate("noDataFound");
         }
         return renderField;
     },
-    GenerateDbViewSummaryRenderField: function(renderData, currentList3Data) {
+    GenerateDbViewSummaryRenderField: function(renderData, currentList3Data, showReloadButton) {
         var renderField = [];
         if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data);
+            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, showReloadButton);
         } else {
             renderField = this.getTemplate("noDataFound");
         }

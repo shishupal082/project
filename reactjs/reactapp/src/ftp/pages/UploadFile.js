@@ -33,13 +33,13 @@ UploadFile.extend({
         var percentComplete = DataHandler.getData("upload_file.percentComplete", 0);
         var subject = DataHandler.getData("upload_file.subject", "");
         var heading = DataHandler.getData("upload_file.heading", "");
-        var template = UploadFileFormHandler.getUploadFileTemplate(formSubmitStatus, percentComplete, subject, heading);
+        var template = UploadFileFormHandler.getUploadFileTemplate(Config.uploadApiVersion, formSubmitStatus, percentComplete, subject, heading);
         return template;
     },
     handleApiResponse: function(callback, ajax, response) {
         if (response.status === "FAILURE") {
             if (response.failureCode === "UNAUTHORIZED_USER") {
-                AppHandler.LazyReload();
+                AppHandler.LazyReload(250);
             }
             return false;
         } else {
@@ -59,9 +59,19 @@ UploadFile.extend({
     },
     upload: function(file, callback) {
         var url = Config.getApiUrl("upload_file", false, true);
-        var subject = DataHandler.getData("upload_file.subject", "");
-        var heading = DataHandler.getData("upload_file.heading", "");
-        UploadFileFormHandler.uploadFile(Config.JQ, url, function(formSubmitStatus, percentComplete, ajax, response) {
+        if (Config.uploadApiVersion === "v2") {
+            var subject = DataHandler.getData("upload_file.subject", "");
+            var heading = DataHandler.getData("upload_file.heading", "");
+            if (!$S.isString(subject)) {
+                alert("Subject required");
+                return;
+            }
+            if (!$S.isString(heading)) {
+                alert("Heading required");
+                return;
+            }
+        }
+        UploadFileFormHandler.uploadFile(Config.JQ, url, file, function(formSubmitStatus, percentComplete, ajax, response) {
             if (formSubmitStatus === "in_progress") {
                 DataHandler.setData("formSubmitStatus", "in_progress");
                 DataHandler.setData("upload_file.percentComplete", percentComplete);
@@ -72,7 +82,7 @@ UploadFile.extend({
                 }
             }
             $S.callMethod(callback);
-        }, file, subject, heading);
+        });
     }
 });
 })($S);

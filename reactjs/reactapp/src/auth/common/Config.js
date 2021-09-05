@@ -163,10 +163,32 @@ Config.defaultMetaData = {
             "isSortable": true
         }
     ],
-    "filterKeys.mapping": {
+    "pageName:database_files.list1Data": [
+        {
+            "name": "Show All"
+        },
+        {
+            "name": "Order by File Username",
+            "value": [{"key": "fileUsername"}]
+        },
+        {
+            "name": "Order by Filename",
+            "value": [{"key": "filename"}]
+        },
+        {
+            "name": "Order by File Username -- Filename",
+            "value": [{"key": "fileUsername"}, {"key": "filename"}]
+        },
+        {
+            "name": "Order by Filename -- File Username",
+            "value": [{"key": "filename"}, {"key": "fileUsername"}]
+        }
+    ],
+
+    "pageName:database_files.filterKeyMapping": {
         "pageName:database_files.filterKeys": "filterKeys"
     },
-    "pageName:database_files.filterKeys": ["fileUsername", "filename"],
+    "pageName:database_files.filterKeys": ["fileUsername", "filename", "reset"],
     "database_files_info.pattern": [
         {
             "tableName": "table1",

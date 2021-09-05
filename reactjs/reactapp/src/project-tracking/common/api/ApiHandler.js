@@ -136,7 +136,7 @@ ApiHandler.extend({
                 deletedIds.push(deleteTableData[i].deleteId);
             }
         }
-        DBViewDataHandler.RemoveDeletedItem(dbViewData, deletedIds, deleteTableName, "unique_id");
+        DBViewDataHandler.RemoveDeletedItem(dbViewData, deletedIds, deleteTableName, "tableUniqueId");
     },
     _handleDefaultSorting: function(tableData) {
         this._removeDeletedItem(tableData);
@@ -209,7 +209,6 @@ ApiHandler.extend({
         for (tableName in database) {
             database[tableName]["tableData"] = AppHandler.ConvertJsonToTable(database[tableName]["responseJson"], dbTableDataIndex[tableName]);
         }
-        this._handleDefaultSorting(database);
         return database;
     },
     handlePageLoad: function(dbDataApis, callback) {
@@ -223,6 +222,7 @@ ApiHandler.extend({
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
                     database = ApiHandler._generateDatabase(request);
+                    ApiHandler._handleDefaultSorting(database);
                     DataHandler.setData("dbViewData", database);
                     $S.callMethod(callback);
                 });

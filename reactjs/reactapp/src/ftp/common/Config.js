@@ -16,7 +16,7 @@ Config.gtag = $$$.gtag;
 Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
-
+Config.uploadApiVersion = $$$.uploadApiVersion;
 
 var staticDataApi = $$$.staticDataApi;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;

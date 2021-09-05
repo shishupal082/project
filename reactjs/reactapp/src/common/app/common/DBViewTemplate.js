@@ -33,6 +33,19 @@ DBViewTemplate["dbViewHeading1-1"] = [
                 "className": "badge badge-primary",
                 "name": "tableHeading",
                 "text": ""
+            }
+        ]
+    }
+];
+DBViewTemplate["dbViewHeading1-1-reload"] = [
+    {
+        "tag": "div.h4",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "tableHeading",
+                "text": ""
             },
             {
                 "tag": "button",
@@ -58,6 +71,19 @@ DBViewTemplate["dbViewHeading1-many"] = [
     }
 ];
 DBViewTemplate["dbViewHeading2-many"] = [
+    {
+        "tag": "div.h6",
+        "text": [
+            {
+                "tag": "span",
+                "className": "badge badge-primary",
+                "name": "tableHeading",
+                "text": ""
+            }
+        ]
+    }
+];
+DBViewTemplate["dbViewHeading2-many-reload"] = [
     {
         "tag": "div.h6",
         "text": [

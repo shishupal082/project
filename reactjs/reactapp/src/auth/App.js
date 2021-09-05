@@ -22,6 +22,7 @@ class App extends React.Component {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
             "appHeading": [{"tag": "div", "text": ""}],
+            "filterOptions": [],
             "renderFieldRow": []
         };
         this.onClick = this.onClick.bind(this);
@@ -53,7 +54,11 @@ class App extends React.Component {
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
-        DataHandler.OnButtonClick(this.appStateCallback, this.appDataCallback, name, value);
+        if (name === "reset-filter") {
+            DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
+        } else {
+            DataHandler.OnButtonClick(this.appStateCallback, this.appDataCallback, name, value);
+        }
     }
     // for input and textarea
     onChange(e) {
@@ -70,7 +75,18 @@ class App extends React.Component {
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filterNames = [];
+        for(var i=0; i<filterOptions.length; i++) {
+            if ($S.isString(filterOptions[i].selectName)) {
+                filterNames.push(filterOptions[i].selectName);
+            }
+        }
+        if (filterNames.indexOf(name) >= 0) {
+            DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
+        } else {
+            DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
+        }
     }
     appStateCallback() {
         $S.log("App:appStateCallback");

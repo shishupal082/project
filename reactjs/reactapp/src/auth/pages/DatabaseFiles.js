@@ -1,7 +1,7 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-// import AppHandler from '../../common/app/common/AppHandler.js';
+import AppHandler from '../../common/app/common/AppHandler.js';
 import Config from "../common/Config";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
@@ -25,6 +25,14 @@ DatabaseFiles.fn = DatabaseFiles.prototype = {
 $S.extendObject(DatabaseFiles);
 
 DatabaseFiles.extend({
+    getList1Data: function(pageName) {
+        var list1Data = DataHandler.getAppData("pageName:" + pageName + ".list1Data");
+        return list1Data;
+    },
+    getFilterKeyMapping: function(pageName) {
+        var filterKeyMapping = DataHandler.getAppData("pageName:" + pageName + ".filterKeyMapping");
+        return filterKeyMapping;
+    },
     loadData: function(callback) {
         var url = Config.getApiUrl("getDatabaseFilesInfoApi", null, true);
         if (!$S.isString(url)) {
@@ -42,23 +50,26 @@ DatabaseFiles.extend({
 });
 
 DatabaseFiles.extend({
-    getRenderData: function() {
-        var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
+    getRenderData: function(currentList3Data) {
+        var resultCriteria = null, requiredDataTable = null, dateParameterField = null, dateSelect = null;
         var response = DataHandler.getData("database_files.response", []);
         var databaseFilesPattern = DataHandler.getAppData("database_files_info.pattern", []);
         if (!$S.isArray(response)) {
             response = [];
         }
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        response = AppHandler.getFilteredData({}, {}, response, filterOptions, "name");
         var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": response}}, databaseFilesPattern, resultCriteria, requiredDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     },
     getRenderFieldRow: function() {
-        var currentList3Data = null, dateParameterField = null;
-        var renderData = this.getRenderData();
+        var dateParameterField = null, showReloadButton = false;
+        var currentList3Data = DataHandler.getCurrentList1Data();
+        var renderData = this.getRenderData(currentList3Data);
         var sortingFields = DataHandler.getData("sortingFields", []);
         renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-        var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+        var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, showReloadButton);
         return {"tag": "div", "className": "", "text": renderFieldRow};
     }
 });

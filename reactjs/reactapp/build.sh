@@ -29,8 +29,8 @@ distDir=dist-ftp-app
 distDir=dist-ml2-app
 distDir=dist-feedback-status-app
 distDir=dist-attendance-app
-distDir=dist-auth-app
 distDir=dist-project-tracking-app
+distDir=dist-auth-app
 
 
 

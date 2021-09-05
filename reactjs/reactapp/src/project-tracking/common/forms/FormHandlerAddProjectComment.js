@@ -39,37 +39,25 @@ FormHandlerAddProjectComment.extend({
         TemplateHelper.updateTemplateValue(template, formValue);
         return template;
     },
-    save: function(pageName, formData, callback) {
-        var resultData = ["table_name", "unique_id", "username", "pid", "subject", Config.fieldsKey.AddProjectComment];
-        formData["pid"] = DataHandler.getPathParamsData("pid", "");
-        formData["subject"] = "Comment";
-        var tableName = DataHandler.getTableName("projectComment");
-        FormHandler.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addProjectComment", function(formStatus, resultStatus) {
-            if (formStatus === "in_progress") {
-                $S.callMethod(callback);
-            } else if (resultStatus === "SUCCESS") {
-                AppHandler.LazyReload(250);
-            }
-        });
-    },
     submit: function(pageName, callback) {
-        var requiredKeys = [Config.fieldsKey.AddProjectComment];
+        var requiredKey = Config.fieldsKey.AddProjectComment;
         var fieldsData = DataHandler.getData("fieldsData", {});
-        var i, isFormValid = true, temp, formData = {};
+        var isFormValid = true, commentText;
+        var pid = DataHandler.getPathParamsData("pid", "");
+        var tableName = DataHandler.getTableName("projectComment");
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
-        for (i=0; i<requiredKeys.length; i++) {
-            temp = fieldsData[requiredKeys[i]];
-            if (!$S.isStringV2(temp)) {
-                isFormValid = false;
-                alert(FormHandler.GetAleartMessage(requiredKeys[i]));
-                break;
-            }
-            formData[requiredKeys[i]] = AppHandler.ReplaceComma(temp);
+        commentText = fieldsData[requiredKey];
+        if (!$S.isStringV2(commentText)) {
+            isFormValid = false;
+            alert(FormHandler.GetAleartMessage(requiredKey));
         }
+        commentText = AppHandler.ReplaceComma(commentText);
         if (isFormValid) {
-            this.save(pageName, formData, callback);
+            FormHandler.saveProjectContent(pid, "Comment", commentText, tableName, "addProjectComment", function(formStatus, resultStatus) {
+                $S.callMethod(callback);
+            });
         }
     }
 });

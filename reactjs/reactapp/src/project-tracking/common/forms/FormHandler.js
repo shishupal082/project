@@ -138,77 +138,80 @@ FormHandler.extend({
             FormHandlerUploadFile.deleteFile(uniqueId, filePath, action, callback);
         }
     },
-    addInDeleteTable: function(deleteId, delete_key, delete_value, callback) {
-        if (!$S.isStringV2(deleteId)) {
-            deleteId = "";
-        }
-        if (!$S.isStringV2(delete_key)) {
-            delete_key = "";
-        }
-        if (!$S.isStringV2(delete_value)) {
-            delete_value = "";
-        }
-        var resultData = ["table_name", "unique_id", "username", "deleteId", "isDeleted", "delete_key", "delete_value"];
-        var formData = {};
-        var tableName = DataHandler.getTableName("deleteTable");
-        formData["deleteId"] = AppHandler.ReplaceComma(deleteId);
-        formData["isDeleted"] = "true";
-        formData["delete_key"] = AppHandler.ReplaceComma(delete_key);
-        formData["delete_value"] = AppHandler.ReplaceComma(delete_value);
-        this.saveProjectContent(formData, resultData, tableName, "Subject", "Heading", "addInDeleteTable", function(formStatus, resultStatus) {
-            if (formStatus === "in_progress") {
-                $S.callMethod(callback);
-            } else if (resultStatus === "SUCCESS") {
-                AppHandler.LazyReload(250);
-            }
-        });
-    },
-    saveProjectContent: function(formData, dataPattern, tableName, subject, heading, gaTrackingName, callback) {
-        if (!$S.isStringV2(gaTrackingName)) {
-            gaTrackingName = "projectContent";
-        }
-        var resultData = [], i;
-        if ($S.isArray(dataPattern)) {
-            for (i=0; i<dataPattern.length; i++) {
-                if ($S.isStringV2(dataPattern[i])) {
-                    resultData.push(dataPattern[i]);
+    _handleDeleteResponse: function(callback, state, response) {
+        var msg = "";
+        if (state === "completed") {
+            if ($S.isObject(response)) {
+                if (response.status === "SUCCESS") {
+                    $S.callMethod(callback);
+                } else {
+                    msg = CommonDataHandler.getErrorStringFromResponse(response);
+                    alert(msg);
                 }
             }
         }
-        if (resultData.length < 1) {
-            return $S.callMethod(callback);
+    },
+    deleteText: function(deleteId, tableName, callback) {
+        if (!$S.isStringV2(deleteId)) {
+            deleteId = "";
         }
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
+        if (!$S.isStringV2(tableName)) {
+            alert(FormHandler.GetAleartMessage("tableName.invalid"));
+            return;
+        }
+        var postData = {};
+        postData["deleteId"] = deleteId;
+        postData["tableName"] = tableName;
+        $S.callMethodV2(this._handleDeleteResponse, callback, "in_progress");
+        $S.sendPostRequest(CommonConfig.JQ, CommonConfig.getApiUrl("deleteText", null, true), postData, function(ajax, status, response) {
+            DataHandler.setData("addentry.submitStatus", "completed");
+            if (status === "FAILURE") {
+                AppHandler.TrackApiRequest("deleteText", "FAILURE");
+                alert("Error in uploading data, Please Try again.");
+            } else {
+                AppHandler.TrackApiRequest("deleteText", "SUCCESS");
+            }
+            $S.callMethodV3(FormHandler._handleDeleteResponse, callback, "completed", response);
+        });
+    },
+    saveProjectContent: function(pid, arg1, arg2, tableName, gaTrackingName, callback) {
+        if (!$S.isStringV2(gaTrackingName)) {
+            gaTrackingName = "projectContent";
+        }
+        if (!$S.isStringV2(pid)) {
+            pid = "";
+        }
+        if (!$S.isStringV2(arg1)) {
+            arg1 = "";
+        }
+        if (!$S.isStringV2(arg2)) {
+            arg2 = "";
+        }
+        var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
-        formData["table_name"] = tableName;
-        if (!$S.isStringV2(formData["table_name"])) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"))
+        if (!$S.isStringV2(tableName)) {
+            alert(FormHandler.GetAleartMessage("tableName.invalid"));
             return;
         }
-        formData["unique_id"] = FormHandler.GetUniqueId();
-        formData["username"] = AppHandler.GetUserData("username", "");
-        var finalText = [];
-        for(i=0; i<resultData.length; i++) {
-            finalText.push(formData[resultData[i]]);
-        }
+        var resultData = [pid, arg1, arg2];
         var postData = {};
-        postData["subject"] = subject;
-        postData["heading"] = heading;
-        postData["text"] = [finalText.join(",")];
-        postData["filename"] = formData["table_name"] + ".csv";
+        postData["text"] = [resultData.join(",")];
+        postData["tableName"] = tableName;
+        postData["filename"] = tableName + ".csv";
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethodV1(callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
-            if (status === "FAILURE") {
+            if (status === "FAILURE" || !$S.isObject(response) || response.status === "FAILURE") {
                 AppHandler.TrackApiRequest(gaTrackingName, "FAILURE");
                 alert("Error in uploading data, Please Try again.");
                 $S.callMethodV2(callback, "completed", "FAILURE");
             } else {
                 AppHandler.TrackApiRequest(gaTrackingName, "SUCCESS");
                 $S.callMethodV2(callback, "completed", "SUCCESS");
+                AppHandler.LazyReload(250);
             }
         });
     }

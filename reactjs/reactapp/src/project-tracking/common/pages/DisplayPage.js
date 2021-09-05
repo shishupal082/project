@@ -98,15 +98,15 @@ DisplayPage.extend({
     _generateResult: function(fileInfoDataRow, fileTableRow, loginUsername, index) {
         var result = null;
         var deleteFileTemplate = TemplateHandler.getTemplate("deleteFileTemplate");
-        var temp;
+        var actionItem;
         var buttonNameRemove = "remove_file.form.button";
         var deleteAllowed = false;
         if ($S.isObject(fileTableRow)) {
-            temp = deleteFileTemplate;
-            TemplateHelper.updateTemplateValue(temp, {"delete_file.form": fileTableRow.tableUniqueId});
-            if (fileTableRow.updatedBy === loginUsername) {
-                TemplateHelper.removeClassTemplate(temp, buttonNameRemove, "disabled");
-                TemplateHelper.addClassTemplate(temp, buttonNameRemove, "text-danger");
+            actionItem = deleteFileTemplate;
+            TemplateHelper.updateTemplateValue(actionItem, {"delete_file.form": fileTableRow.tableUniqueId});
+            if (fileTableRow.addedBy === loginUsername) {
+                TemplateHelper.removeClassTemplate(actionItem, buttonNameRemove, "disabled");
+                TemplateHelper.addClassTemplate(actionItem, buttonNameRemove, "text-danger");
             }
             if ($S.isObject(fileInfoDataRow) && fileInfoDataRow.fileUsername === loginUsername) {
                 deleteAllowed = true;
@@ -122,7 +122,7 @@ DisplayPage.extend({
                 },
                 {
                     "tag": "td.b",
-                    "text": fileTableRow.updatedBy
+                    "text": fileTableRow.addedBy
                 },
                 {
                     "tag": "td",
@@ -130,7 +130,7 @@ DisplayPage.extend({
                 },
                 {
                     "tag": "td",
-                    "text": temp
+                    "text": actionItem
                 }
             ]};
         }
