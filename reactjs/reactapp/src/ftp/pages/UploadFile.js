@@ -62,11 +62,11 @@ UploadFile.extend({
         if (Config.uploadApiVersion === "v2") {
             var subject = DataHandler.getData("upload_file.subject", "");
             var heading = DataHandler.getData("upload_file.heading", "");
-            if (!$S.isString(subject)) {
+            if (!$S.isStringV2(subject)) {
                 alert("Subject required");
                 return;
             }
-            if (!$S.isString(heading)) {
+            if (!$S.isStringV2(heading)) {
                 alert("Heading required");
                 return;
             }

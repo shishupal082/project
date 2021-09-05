@@ -311,7 +311,7 @@ DBViewTemplateHandler.extend({
         }
         return field;
     },
-    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data) {
+    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data, showReloadButton) {
         if (!$S.isArray(tempRenderData) || tempRenderData.length < 1) {
             return;
         }
@@ -331,8 +331,8 @@ DBViewTemplateHandler.extend({
             if (isBreak) {
                 break;
             }
-            renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data));
-            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data));
+            renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data, showReloadButton));
+            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data, showReloadButton));
         }
     },
     generateDbViewRenderFieldV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {

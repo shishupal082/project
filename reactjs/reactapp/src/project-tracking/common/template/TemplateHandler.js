@@ -178,10 +178,11 @@ TemplateHandler.extend({
         var pageField;
         var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = DataHandler.getData("sortingFields", []);
+        var viewReloadOption = false;
         if (!$S.isArray(renderData) || renderData.length === 0) {
             pageField = TemplateHandler.getTemplate("noDataFound");
         } else {
-            pageField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+            pageField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, viewReloadOption);
         }
         var template = this.getTemplate("viewPage");
         TemplateHelper.addItemInTextArray(template, "viewPage.field", pageField);
