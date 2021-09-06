@@ -6,6 +6,7 @@ import Config from "./Config";
 
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 var DataHandlerV2;
 
@@ -26,7 +27,7 @@ $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
     callAddTextApi: function(subject, heading, callBack) {
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         var currentAppData = DataHandler.getCurrentAppData();
         if (!$S.isString(url)) {
             return;
@@ -40,8 +41,6 @@ DataHandlerV2.extend({
         }
         var postData = {};
         var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
-        postData["subject"] = subject;
-        postData["heading"] = heading;
         postData["text"] = [attr];
         postData["filename"] = currentAppData.saveDataFilename;
         var msg = "Error in saving data, Please Try again.";

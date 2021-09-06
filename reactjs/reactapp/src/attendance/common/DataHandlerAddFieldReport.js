@@ -5,6 +5,7 @@ import Config from "./Config";
 
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 // import TemplateHelper from "../../common/TemplateHelper";
 
 var DataHandlerAddFieldReport;
@@ -23,7 +24,8 @@ DataHandlerAddFieldReport.fn = DataHandlerAddFieldReport.prototype = {
 };
 
 $S.extendObject(DataHandlerAddFieldReport);
-// "addTextOrder": ["dateTime", "team", "station", "device", "userId", "currentUserId", "currentDateTime"],
+// "addTextOrder": ["uiUserId", "team", "station", "device", "comment"]
+// "finalTextOrder": ["sNo","entryTime","addedBy","tableName","tableUniqueId","uiEntryTime","uiUserId", "team", "station", "device", "remarks"]
 DataHandlerAddFieldReport.extend({
     _getUserTeam: function(userTeamMapping) {
         if (!$S.isObject(userTeamMapping)) {
@@ -54,7 +56,7 @@ DataHandlerAddFieldReport.extend({
         if (!$S.isString(pattern)) {
             return pattern;
         }
-        var tempFilename = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm","/") + "-report.csv";
+        var tempFilename = "field_report_" + DT.getDateTime("YYYY/-/MMM","/") + ".csv";
         var isErrorFound = false;
         try {
             pattern = DT.getDateTimeV2(dateTimeStr, pattern, "/");
@@ -94,11 +96,11 @@ DataHandlerAddFieldReport.extend({
         }
         return pattern;
     },
-    saveData: function(formData, callback) {
-        var resultData = ["addFieldReport.dateTime.field", "team", "addFieldReport.station",
-                        "addFieldReport.device", "addFieldReport.userId.field",
-                        "currentUserId", "currentDateTime", "addFieldReport.comment"];
-        var url = Config.getApiUrl("addTextApi", null, true);
+    saveData: function(formData, uiEntryTime, callback) {
+        // team,station,device,uiUserId,comment
+        var resultData = ["addFieldReport.userId.field", "team", "addFieldReport.station",
+                        "addFieldReport.device", "addFieldReport.comment"];
+        var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         if (!$S.isString(url)) {
             return;
         }
@@ -121,11 +123,11 @@ DataHandlerAddFieldReport.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        postData["subject"] = formData["addFieldReport.station"];
-        postData["heading"] = formData["addFieldReport.device"];
         var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, formData["addFieldReport.dateTime.field"], username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
+        postData["tableName"] = "field_report";
+        postData["uiEntryTime"] = uiEntryTime;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
@@ -162,8 +164,8 @@ DataHandlerAddFieldReport.extend({
         var formData = {}, i;
         var formDataKey = ["addFieldReport.station", "addFieldReport.device", "addFieldReport.comment"];
         var fieldsData = DataHandler.getData("fieldsData", {});
-        formData["currentUserId"] = AppHandler.GetUserData("username", "");
-        formData["currentDateTime"] = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
+        var currentUserId = AppHandler.GetUserData("username", "");
+        var uiEntryTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm","/");
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
@@ -195,15 +197,14 @@ DataHandlerAddFieldReport.extend({
                 alert(this._getAleartMessage(key, value));
                 return;
             }
-        } else {
-            formData[key] = formData["currentDateTime"];
+            uiEntryTime = value;
         }
         key = "addFieldReport.userId.field";
         var team = this._getUserTeam(userTeamMapping);
         if (formDataKey.indexOf(key) >= 0) {
             team = this._getUserTeamV2(formData[key], userIds);
         } else {
-            formData[key] = formData["currentUserId"];
+            formData[key] = currentUserId;
         }
         formData["team"] = team;
         for(key in formData) {
@@ -213,7 +214,7 @@ DataHandlerAddFieldReport.extend({
                 return;
             }
         }
-        this.saveData(formData, callback);
+        this.saveData(formData, uiEntryTime, callback);
     }
 });
 

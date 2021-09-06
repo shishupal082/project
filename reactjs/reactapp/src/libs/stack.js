@@ -2333,10 +2333,12 @@ Stack.extend({
             label = "empty-string";
         }
         if (Stack.isDefined(Gtag) && Gtag !== null) {
-            Gtag('event', action, {
-              'event_category' : category,
-              'event_label' : label
-            });
+            setTimeout(function(){
+                Gtag('event', action, {
+                  'event_category' : category,
+                  'event_label' : label
+                });
+            }, 1);
         } else {
             Stack.log("Gtag is Invalid");
         }

@@ -3,6 +3,7 @@ import DataHandler from "./DataHandler";
 import Config from "./Config";
 
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 var DataHandlerTA;
 
@@ -23,13 +24,11 @@ $S.extendObject(DataHandlerTA);
 
 DataHandlerTA.extend({
     callAddTextApi: function(subject, heading, addTextFilename, finalText, callback) {
-        var url = Config.getApiUrl("addTextApi", null, true);
+        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
         if (!$S.isString(url)) {
             return;
         }
         var postData = {};
-        postData["subject"] = subject;
-        postData["heading"] = heading;
         postData["text"] = finalText;
         postData["filename"] = addTextFilename;
         DataHandler.setData("addentry.submitStatus", "in_progress");

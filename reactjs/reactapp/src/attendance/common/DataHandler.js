@@ -59,6 +59,9 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 
+keys.push("tableDataLoadStatus");
+keys.push("database");
+
 //TA page
 //Add Field Report Page
 keys.push("addentry.submitStatus");
@@ -71,6 +74,7 @@ CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("metaDataLoadStatus", "not-started");
 CurrentData.setData("dbDataLoadStatus", "not-started");
 CurrentData.setData("attendanceDataLoadStatus", "not-started");
+CurrentData.setData("tableDataLoadStatus", "not-started");
 
 CurrentData.setData("addentry.submitStatus", "not-started");
 
@@ -388,6 +392,26 @@ DataHandler.extend({
             $S.callMethod(callback);
         }
     },
+    loadTableData: function(callback) {
+        var pageName = this.getPathParamsData("pageName", "");
+        var pageRequiredTableDataLoadStatus = [Config.dbview, Config.custom_dbview, Config.dbview_summary, Config.add_field_report];
+        var tableDataLoadStatus = this.getData("tableDataLoadStatus", "");
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", "");
+        if (pageRequiredTableDataLoadStatus.indexOf(pageName) >= 0) {
+            var tableFilterParam = this.getAppData("tableFilterParam", {});
+            if (tableDataLoadStatus === "completed") {
+                $S.callMethod(callback);
+            } else if (tableDataLoadStatus === "in_progress") {
+                return;
+            } else {
+                DataHandlerV3.loadTableData(tableFilterParam, dbTableDataIndex, function() {
+                    $S.callMethod(callback);
+                });
+            }
+        } else {
+            $S.callMethod(callback);
+        }
+    },
     loadAttendanceData: function(callback) {
         var attendanceDbTable;
         var attendanceDataApis = this.getAppData("attendanceDataApis", []);
@@ -396,18 +420,18 @@ DataHandler.extend({
         var pageRequiredAttendanceDataLoadStatus = [Config.entry, Config.update, Config.summary, Config.dbview, Config.dbview_summary];
         if (pageRequiredAttendanceDataLoadStatus.indexOf(pageName) >= 0) {
             if (attendanceDataLoadStatus === "completed") {
-                $S.callMethod(callback);
+                DataHandler.loadTableData(callback);
             } else if (attendanceDataLoadStatus === "in_progress") {
                 return;
             } else {
                 DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
                     attendanceDbTable = DataHandler.getData("attendanceData", []);
                     DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
-                    $S.callMethod(callback);
+                    DataHandler.loadTableData(callback);
                 });
             }
         } else {
-            $S.callMethod(callback);
+            DataHandler.loadTableData(callback);
         }
     },
     handleApiDataLoad: function() {
@@ -451,6 +475,7 @@ DataHandler.extend({
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("dbDataLoadStatus", "not-started");
         DataHandler.setData("attendanceDataLoadStatus", "not-started");
+        DataHandler.setData("tableDataLoadStatus", "not-started");
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleApiDataLoad();
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
@@ -461,6 +486,7 @@ DataHandler.extend({
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("dbDataLoadStatus", "not-started");
         DataHandler.setData("attendanceDataLoadStatus", "not-started");
+        DataHandler.setData("tableDataLoadStatus", "not-started");
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;

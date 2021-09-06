@@ -198,6 +198,42 @@ DataHandlerV3.extend({
             $S.callMethod(callback);
         });
     },
+    _mergeDatabase: function(dbViewData, database) {
+        if ($S.isObject(dbViewData) && $S.isObject(database)) {
+            for (var tableName in database) {
+                if (!$S.isObject(database[tableName])) {
+                    continue;
+                }
+                if (!$S.isArray(database[tableName]["tableData"])) {
+                    continue;
+                }
+                if (!$S.isObject(dbViewData[tableName])) {
+                    dbViewData[tableName] = {};
+                }
+                if (!$S.isArray(dbViewData[tableName]["tableData"])) {
+                    dbViewData[tableName]["tableData"] = [];
+                }
+                dbViewData[tableName]["tableData"] = dbViewData[tableName]["tableData"].concat(database[tableName]["tableData"]);
+            }
+        }
+        return dbViewData;
+    },
+    loadTableData: function(tableFilterParam, dbTableDataIndex, callback) {
+        var dbViewData;
+        DataHandler.setData("tableDataLoadStatus", "in_progress");
+        AppHandler.LoadTableData(tableFilterParam, dbTableDataIndex, function(database) {
+            DataHandler.setData("tableDataLoadStatus", "completed");
+            dbViewData = DataHandler.getData("dbViewData", {});
+            if ($S.isObject(database)) {
+                dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
+                DataHandlerV3._handleDefaultSorting(dbViewData);
+                DataHandler.setData("dbViewData", dbViewData);
+            }
+            DataHandlerV3._handleDefaultSorting(database);
+            DataHandler.setData("database", database);
+            $S.callMethod(callback);
+        });
+    },
     generateFilterOptions: function() {
         var currentAppData = DataHandler.getCurrentAppData({});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);

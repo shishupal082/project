@@ -104,7 +104,7 @@ DBViewDataHandler.extend({
         if (!$S.isArray(resultPattern) || !$S.isArray(dbViewTableData)) {
             return [];
         }
-        var i, j, temp, t1Name, finalTable = [];
+        var i, j, k, temp, t1Name, finalTable = [], value, valueArr;
         for (i = 0; i < dbViewTableData.length; i++) {
             temp = $S.clone(resultPattern);
             for (j=0; j<temp.length; j++) {
@@ -112,7 +112,19 @@ DBViewDataHandler.extend({
                 if (!$S.isObject(dbViewTableData[i][t1Name]) || !$S.isStringV2(temp[j].name)) {
                     continue;
                 }
-                temp[j].value = dbViewTableData[i][t1Name][temp[j].name];
+                value = dbViewTableData[i][t1Name][temp[j].name];
+                valueArr = [];
+                if ($S.isArray(temp[j].combineDataFields) && temp[j].combineDataFields.length > 0) {
+                    for (k=0; k<temp[j].combineDataFields.length; k++) {
+                        if ($S.isStringV2(dbViewTableData[i][t1Name][temp[j].combineDataFields[k]])) {
+                            valueArr.push(dbViewTableData[i][t1Name][temp[j].combineDataFields[k]]);
+                        }
+                    }
+                    if (valueArr.length > 0) {
+                        value = valueArr.join(",");
+                    }
+                }
+                temp[j].value = value;
             }
             finalTable.push(temp);
         }
