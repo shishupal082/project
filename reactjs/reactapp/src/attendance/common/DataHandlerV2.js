@@ -104,9 +104,9 @@ DataHandlerV2.extend({
                     if (!$S.isStringV2(temp[i].type)) {
                         continue;
                     }
-                    if (AppHandler.isDateLiesInRangeV3(dateAttr.dateStr, temp[i].date)) {
+                    if (AppHandler.isDateLiesInRangeV3(dateAttr.dateStr, temp[i]["uiEntryTime"])) {
                         text.push(temp[i].type);
-                    } else if (dateAttr.dateStr === temp[i].date) {
+                    } else if (dateAttr.dateStr === temp[i]["uiEntryTime"]) {
                         text.push(temp[i].type);
                     }
                 }
@@ -178,10 +178,10 @@ DataHandlerV2.extend({
                             startDate = dateAttr.dateRange[0];
                             endDate = dateAttr.dateRange[1];
                         }
-                        if (AppHandler.isDateLiesInRange(startDate, endDate, attendance[i].date)) {
+                        if (AppHandler.isDateLiesInRange(startDate, endDate, attendance[i]["uiEntryTime"])) {
                             temp = $S.searchItems(userData.pattern, [attendance[i].type], userData.searchByPattern);
                             if (temp.length > 0) {
-                                dateResult.push(attendance[i].date);
+                                dateResult.push(attendance[i]["uiEntryTime"]);
                             }
                             count += temp.length;
                         }

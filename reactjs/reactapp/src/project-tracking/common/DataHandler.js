@@ -303,7 +303,8 @@ DataHandler.extend({
     loadDbTableData: function(callback) {
         var param = this.getAppData("tableFilterParam", {});
         var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
-        ApiHandler.handlePageLoadV2(param, dbTableDataIndex, function() {
+        var combineTableData = DataHandler.getAppData("combineTableData", {});
+        ApiHandler.handlePageLoadV2(param, dbTableDataIndex, combineTableData, function() {
             $S.callMethod(callback);
         });
     },

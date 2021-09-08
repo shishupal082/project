@@ -52,7 +52,7 @@ DataHandlerAddFieldReport.extend({
         }
         return "INFO";
     },
-    _generateStringFromPattern: function(pattern, dateTimeStr, username, station, device, team) {
+    _generateStringFromPattern: function(pattern, dateTimeStr) {
         if (!$S.isString(pattern)) {
             return pattern;
         }
@@ -60,36 +60,9 @@ DataHandlerAddFieldReport.extend({
         var isErrorFound = false;
         try {
             pattern = DT.getDateTimeV2(dateTimeStr, pattern, "/");
-            if ($S.isStringV2(username)) {
-                pattern = pattern.replaceAll("username", username);
-            }
         } catch(e) {
             isErrorFound = true;
-            AppHandler.TrackDebug("Error in generating filename replacing username");
-        }
-        try {
-            if ($S.isStringV2(station)) {
-                pattern = pattern.replaceAll("station", station);
-            }
-        } catch(e) {
-            isErrorFound = true;
-            AppHandler.TrackDebug("Error in generating filename replacing station");
-        }
-        try {
-            if ($S.isStringV2(device)) {
-                pattern = pattern.replaceAll("device", device);
-            }
-        } catch(e) {
-            isErrorFound = true;
-            AppHandler.TrackDebug("Error in generating filename replacing device");
-        }
-        try {
-            if ($S.isStringV2(team)) {
-                pattern = pattern.replaceAll("team", team);
-            }
-        } catch(e) {
-            isErrorFound = true;
-            AppHandler.TrackDebug("Error in generating filename replacing team");
+            AppHandler.TrackDebug("Error in generating filename from pattern given");
         }
         if (isErrorFound) {
             pattern = tempFilename;
@@ -108,8 +81,16 @@ DataHandlerAddFieldReport.extend({
         var metaData = DataHandler.getMetaData({});
         var successRedirectPage = $S.findParam([currentAppData, metaData], "addFieldReport.successRedirectPage", "");
         var successRedirectUrl = DataHandler.getPageUrlByPageName(successRedirectPage);
-        var addTextFilenamePattern = DataHandler.getAppData("addFieldReport.addTextFilenamePattern", "2021-01-01-00-00-user-field-report.csv");
-        var username = AppHandler.GetUserData("username", "");
+        var addTextFilenamePattern = DataHandler.getAppData("addFieldReport.addTextFilenamePattern", "");
+        var tableName = DataHandler.getAppData("addFieldReport.tableName", "");
+        if (!$S.isStringV2(tableName)) {
+            alert("Invalid table name");
+            return;
+        }
+        if (!$S.isStringV2(addTextFilenamePattern)) {
+            alert("Invalid filename pattern");
+            return;
+        }
         var finalText = [], temp, i;
         temp = formData["addFieldReport.comment"].split("\n");
         for (i = 0; i < temp.length; i++) {
@@ -123,10 +104,10 @@ DataHandlerAddFieldReport.extend({
             finalText.push(formData[resultData[i]]);
         }
         var postData = {};
-        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, formData["addFieldReport.dateTime.field"], username, formData["addFieldReport.station"], formData["addFieldReport.device"], formData["team"]);
+        var addTextFilename = this._generateStringFromPattern(addTextFilenamePattern, formData["addFieldReport.dateTime.field"]);
         postData["text"] = [finalText.join(",")];
         postData["filename"] = addTextFilename;
-        postData["tableName"] = "field_report";
+        postData["tableName"] = tableName;
         postData["uiEntryTime"] = uiEntryTime;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
@@ -134,7 +115,7 @@ DataHandlerAddFieldReport.extend({
             DataHandler.setData("addentry.submitStatus", "completed");
             $S.callMethod(callback);
             // console.log(response);
-            if (status === "FAILURE") {
+            if (status === "FAILURE" || ($S.isObjectV2(response) && response.status === "FAILURE")) {
                 AppHandler.TrackApiRequest("uploadText", "FAILURE");
                 alert("Error in uploading data, Please Try again.");
             } else {

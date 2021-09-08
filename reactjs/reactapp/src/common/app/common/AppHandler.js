@@ -2,7 +2,7 @@ import $S from '../../../interface/stack.js';
 import Api from '../../Api.js';
 import TemplateHelper from '../../TemplateHelper.js';
 
-import CommonConfig from './CommonConfig.js';
+// import CommonConfig from './CommonConfig.js';
 
 
 var AppHandler;
@@ -535,45 +535,43 @@ AppHandler.extend({
         }
         return result;
     },
-    _getFormatedText: function(text, dataIndex) {
-        if (!$S.isArray(text) || !$S.isArray(dataIndex)) {
-            return {};
-        }
-        var result = {};
-        var temp = [], i, j;
-        for (i=0; i<dataIndex.length; i++) {
-            if (i < text.length-1) {
-                result[dataIndex[i]] = text[i];
-            } else if (i === text.length-1) {
-                for (j=i; j<text.length; j++) {
-                    temp.push(text[j]);
-                }
-                result[dataIndex[i]] = temp.join(",");
-            } else {
-                result[dataIndex[i]] = "";
-            }
-        }
-        return result;
-    },
     _getProperTableData: function(tableData, dataIndex) {
+        var tableRow;
         if ($S.isArray(tableData)) {
             for(var i=0; i<tableData.length; i++) {
                 if ($S.isObject(tableData[i])) {
-                    tableData[i] = Object.assign(tableData[i], this._getFormatedText(tableData[i]["text"], dataIndex));
+                    tableRow = this.ConvertJsonToTable([tableData[i]["text"]], dataIndex);
+                    if ($S.isArray(tableRow) && tableRow.length === 1) {
+                        tableData[i] = Object.assign(tableData[i], tableRow[0]);
+                    }
                 }
             }
         }
     },
-    ConvertTableDataToDatabase: function(allTableData, allTableDataIndex) {
-        var database = {};
+    _convertTableDataToDatabase: function(allTableData, allTableDataIndex, combineTableData) {
+        var database = {}, sourceTableName, destinationTableName, tableName;
         if (!$S.isObject(allTableData)) {
             allTableData = {};
         }
         if (!$S.isObject(allTableDataIndex)) {
             allTableDataIndex = {};
         }
+        if ($S.isObjectV2(combineTableData) && $S.isStringV2(combineTableData["destinationTableName"]) && $S.isArray(combineTableData["sourceTableName"])) {
+            if (combineTableData["sourceTableName"].length > 0) {
+                sourceTableName = combineTableData["sourceTableName"];
+                destinationTableName = combineTableData["destinationTableName"];
+                if (!$S.isArray(allTableData[destinationTableName])) {
+                    allTableData[destinationTableName] = [];
+                }
+                for (tableName in allTableData) {
+                    if (tableName !== destinationTableName && sourceTableName.indexOf(tableName) >= 0) {
+                        allTableData[destinationTableName] = allTableData[destinationTableName].concat(allTableData[tableName]);
+                    }
+                }
+            }
+        }
         var tableData = [], dataIndex = [];
-        for (var tableName in allTableData) {
+        for (tableName in allTableData) {
             tableData = allTableData[tableName];
             dataIndex = allTableDataIndex[tableName];
             this._getProperTableData(tableData, dataIndex);
@@ -764,8 +762,10 @@ AppHandler.extend({
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
-    LoadTableData: function(param, dbTableDataIndex, callback) {
-        var url = CommonConfig.getApiUrl("getTableData", null, true);
+    LoadTableData: function(url, param, dbTableDataIndex, combineTableData, callback) {
+        if (!$S.isStringV2(url)) {
+            return $S.callMethod(callback);
+        }
         if (!$S.isObject(param)) {
             param = {};
         }
@@ -789,7 +789,7 @@ AppHandler.extend({
         this.LoadDataFromRequestApi(request, function() {
             if ($S.isArray(request[0].response) && request[0].response.length > 0) {
                 if ($S.isObject(request[0].response[0]) && request[0].response[0].status === "SUCCESS") {
-                    database = AppHandler.ConvertTableDataToDatabase(request[0].response[0].data, dbTableDataIndex);
+                    database = AppHandler._convertTableDataToDatabase(request[0].response[0].data, dbTableDataIndex, combineTableData);
                 }
             }
             $S.callMethodV1(callback, database);

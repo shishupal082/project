@@ -5,6 +5,7 @@ import Config from "./Config";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import TemplateHelper from "../../common/TemplateHelper";
@@ -218,16 +219,24 @@ DataHandlerV3.extend({
         }
         return dbViewData;
     },
-    loadTableData: function(tableFilterParam, dbTableDataIndex, callback) {
-        var dbViewData;
+    loadTableData: function(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, callback) {
+        var dbViewData, attendanceData;
+        var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
         DataHandler.setData("tableDataLoadStatus", "in_progress");
-        AppHandler.LoadTableData(tableFilterParam, dbTableDataIndex, function(database) {
+        AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, combineTableData, function(database) {
             DataHandler.setData("tableDataLoadStatus", "completed");
             dbViewData = DataHandler.getData("dbViewData", {});
+            attendanceData = DataHandler.getData("attendanceData", {});
             if ($S.isObject(database)) {
-                dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
-                DataHandlerV3._handleDefaultSorting(dbViewData);
-                DataHandler.setData("dbViewData", dbViewData);
+                if ($S.isObjectV2(attendanceData)) {
+                    attendanceData = DataHandlerV3._mergeDatabase(attendanceData, database);
+                    DataHandlerV3._handleDefaultSorting(attendanceData);
+                    DataHandler.setData("attendanceData", attendanceData);
+                } else {
+                    dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
+                    DataHandlerV3._handleDefaultSorting(dbViewData);
+                    DataHandler.setData("dbViewData", dbViewData);
+                }
             }
             DataHandlerV3._handleDefaultSorting(database);
             DataHandler.setData("database", database);
@@ -373,7 +382,7 @@ DataHandlerV3.extend({
             if (!$S.isObject(attendanceData[i])) {
                 continue;
             }
-            if (!AppHandler.isValidDateStr(attendanceData[i]["date"])) {
+            if (!AppHandler.isValidDateStr(attendanceData[i]["uiEntryTime"])) {
                 continue;
             }
             userId = attendanceData[i]["userId"];
@@ -393,8 +402,8 @@ DataHandlerV3.extend({
                 temp = [];
                 for(i=0; i<finalAttendanceData[key].attendance.length; i++) {
                     temp2 = finalAttendanceData[key].attendance[i];
-                    if (temp.indexOf(temp2.date) < 0) {
-                        temp.push(temp2.date);
+                    if (temp.indexOf(temp2["uiEntryTime"]) < 0) {
+                        temp.push(temp2["uiEntryTime"]);
                         temp2.type = temp2[attendanceDataKey];
                         if (temp2.type !== "") {
                             latestAttendanceData[key].attendance.push(temp2);

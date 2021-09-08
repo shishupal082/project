@@ -231,14 +231,15 @@ ApiHandler.extend({
             }
         }
     },
-    handlePageLoadV2: function(param, dbTableDataIndex, callback) {
+    handlePageLoadV2: function(param, dbTableDataIndex, combineTableData, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         if (status === "completed") {
             status = DataHandler.getData("dbViewDataLoadStatus");
             if (status === "not-started") {
                 DataHandler.setData("dbViewDataLoadStatus", "in-progress");
-                AppHandler.LoadTableData(param, dbTableDataIndex, function(database) {
+                var url = CommonConfig.getApiUrl("getTableData", null, true);
+                AppHandler.LoadTableData(url, param, dbTableDataIndex, combineTableData, function(database) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
                     ApiHandler._handleDefaultSorting(database);
                     DataHandler.setData("dbViewData", database);

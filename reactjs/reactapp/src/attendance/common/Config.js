@@ -23,7 +23,6 @@ Config.projectHeading = $$$.projectHeading;
 Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
-    "addFieldReport.addTextFilenamePattern": $$$.addTextFilenamePattern,
     "linkText": $$$.linkText
 };
 

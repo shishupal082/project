@@ -397,23 +397,26 @@ DataHandler.extend({
         var pageRequiredTableDataLoadStatus = [Config.dbview, Config.custom_dbview, Config.dbview_summary, Config.add_field_report];
         var tableDataLoadStatus = this.getData("tableDataLoadStatus", "");
         var dbTableDataIndex = this.getAppData("dbTableDataIndex", "");
+        var combineTableData = this.getAppData("combineTableData", "");
+        var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", null);
         if (pageRequiredTableDataLoadStatus.indexOf(pageName) >= 0) {
             var tableFilterParam = this.getAppData("tableFilterParam", {});
             if (tableDataLoadStatus === "completed") {
                 $S.callMethod(callback);
             } else if (tableDataLoadStatus === "in_progress") {
                 return;
-            } else {
-                DataHandlerV3.loadTableData(tableFilterParam, dbTableDataIndex, function() {
+            } else if ($S.isStringV2(getTableDataApiNameKey)) {
+                DataHandlerV3.loadTableData(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
                     $S.callMethod(callback);
                 });
+            } else {
+                $S.callMethod(callback);
             }
         } else {
             $S.callMethod(callback);
         }
     },
     loadAttendanceData: function(callback) {
-        var attendanceDbTable;
         var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         var pageName = this.getPathParamsData("pageName", "");
         var attendanceDataLoadStatus = this.getData("attendanceDataLoadStatus", "");
@@ -425,9 +428,10 @@ DataHandler.extend({
                 return;
             } else {
                 DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
-                    attendanceDbTable = DataHandler.getData("attendanceData", []);
-                    DataHandlerV3.handleAttendanceDataLoad(attendanceDbTable);
-                    DataHandler.loadTableData(callback);
+                    DataHandler.loadTableData(function() {
+                        DataHandlerV3.handleAttendanceDataLoad();
+                        $S.callMethod(callback);
+                    });
                 });
             }
         } else {
