@@ -166,39 +166,17 @@ DataHandlerV2.extend({
         }
         return finalResponse;
     },
-    _getFileTableEquivalentName: function() {
-        var requiredTableData = [];
-        var fileTableName = DataHandler.getTableName("fileTable");
-        var linkTableName = DataHandler.getTableName("projectLink");
-        var commentTableName = DataHandler.getTableName("projectComment");
-        if ($S.isStringV2(fileTableName)) {
-            requiredTableData.push(fileTableName);
-        }
-        if ($S.isStringV2(linkTableName)) {
-            requiredTableData.push(linkTableName);
-        }
-        if ($S.isStringV2(commentTableName)) {
-            requiredTableData.push(commentTableName);
-        }
-        return requiredTableData;
-    },
     getRenderTableDataV1: function(pageName) {
         var pid = DataHandler.getPathParamsData("pid");
-        var requiredTableData = this._getFileTableEquivalentName();
-        var uploadedFileData = [];
-        for (var i=0; i<requiredTableData.length; i++) {
-            uploadedFileData = uploadedFileData.concat(DataHandlerV2.getTableDataByAttr(requiredTableData[i], "pid", pid));
-        }
+        var fileTableName = DataHandler.getTableName("fileTable");
+        var uploadedFileData = DataHandlerV2.getTableDataByAttr(fileTableName, "pid", pid);
         var uploadedFileTable = $S.sortResult(uploadedFileData, "descending", "entryTime", null, "");
         uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
         return uploadedFileTable;
     },
     getRenderTableDataV1_1: function(pageName) {
-        var requiredTableData = this._getFileTableEquivalentName();
-        var uploadedFileData = [];
-        for (var i=0; i<requiredTableData.length; i++) {
-            uploadedFileData = uploadedFileData.concat(DataHandlerV2.getTableData(requiredTableData[i]));
-        }
+        var fileTableName = DataHandler.getTableName("fileTable");
+        var uploadedFileData = DataHandlerV2.getTableData(fileTableName);
         var uploadedFileTable = $S.sortResult(uploadedFileData, "descending", "entryTime", null, "");
         uploadedFileTable = this._updateFileInfo(pageName, uploadedFileData);
         return uploadedFileTable;
