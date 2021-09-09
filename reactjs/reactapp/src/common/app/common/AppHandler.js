@@ -967,6 +967,31 @@ AppHandler.extend({
         }
         return false;
     },
+    _applyKeyMapping: function(keyMapping, currentAppData, metaData) {
+        /**
+         * keyMapping = {"x.filterKeys": "filterKeys"}
+         * currentAppData = {}
+         * metaData = {"x.filterKeys": [status, device]}
+         * then it will generate as
+         * currentAppData["filterKeys"] = undefined
+         * metaData["filterKeys"] = [status, device]
+         * */
+        if (!$S.isObject(keyMapping)) {
+            keyMapping = {};
+        }
+        if (!$S.isObject(currentAppData)) {
+            currentAppData = {};
+        }
+        if (!$S.isObject(metaData)) {
+            metaData = {};
+        }
+        var value;
+        for(var key in keyMapping) {
+            value = keyMapping[key];
+            currentAppData[value] = currentAppData[key];
+            metaData[value] = metaData[key];
+        }
+    },
     _getRequiredMetaData: function(currentAppData, metaData) {
         var preFilter = $S.findParam([currentAppData, metaData], "preFilter", {});
         var filterKeys = $S.findParam([currentAppData, metaData], "filterKeys", []);
@@ -1103,29 +1128,7 @@ AppHandler.extend({
         return selectionOptions;
     },
     generateFilterDataV2: function(keyMapping, currentAppData, metaData, csvData, filterSelectedValues, searchParam) {
-        /**
-         * keyMapping = {"x.filterKeys": "filterKeys"}
-         * currentAppData = {}
-         * metaData = {"x.filterKeys": [status, device]}
-         * then it will generate as
-         * currentAppData["filterKeys"] = undefined
-         * metaData["filterKeys"] = [status, device]
-         * */
-        if (!$S.isObject(keyMapping)) {
-            keyMapping = {};
-        }
-        if (!$S.isObject(currentAppData)) {
-            currentAppData = {};
-        }
-        if (!$S.isObject(metaData)) {
-            metaData = {};
-        }
-        var value;
-        for(var key in keyMapping) {
-            value = keyMapping[key];
-            currentAppData[value] = currentAppData[key];
-            metaData[value] = metaData[key];
-        }
+        this._applyKeyMapping(keyMapping, currentAppData, metaData);
         return this.generateFilterData(currentAppData, metaData, csvData, filterSelectedValues, searchParam);
     },
     getFilteredData: function(currentAppData, metaData, csvData, filterOptions, searchParam) {
@@ -1202,6 +1205,10 @@ AppHandler.extend({
             reportData = temp3;
         }
         return reportData;
+    },
+    getFilteredDataV2: function(keyMapping, currentAppData, metaData, csvData, filterOptions, searchParam) {
+        this._applyKeyMapping(keyMapping, currentAppData, metaData);
+        return this.getFilteredData(currentAppData, metaData, csvData, filterOptions, searchParam);
     }
 });
 AppHandler.extend({

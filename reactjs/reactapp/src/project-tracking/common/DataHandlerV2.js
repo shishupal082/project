@@ -231,23 +231,24 @@ DataHandlerV2.extend({
         }
         return "pageName:" + formNameKey + ".resultPattern";
     },
-    handlePageByPageId: function(pageName, pageId, finalTable) {
+    handlePageByPageId: function(pageName, pageId, dbViewData) {
         var i, loginUsername, fileTableName, tempData, tempData2;
         var fileInfoData, fileInfoTableName, projectTable;
         var result = [];
         var addedFilePid = [];
+        var availableOn;
         switch(pageId) {
             case "displayUploadedFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
-                if ($S.isArray(finalTable)) {
-                    for (i=0; i < finalTable.length; i++) {
-                        if (!$S.isObject(finalTable[i])) {
+                if ($S.isArray(dbViewData)) {
+                    for (i=0; i < dbViewData.length; i++) {
+                        if (!$S.isObject(dbViewData[i]) || !$S.isObject(dbViewData[i][fileTableName])) {
                             continue;
                         }
-                        finalTable[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, finalTable[i], loginUsername);
+                        dbViewData[i][fileTableName]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, dbViewData[i][fileTableName], loginUsername);
                         tempData = {};
-                        tempData[fileTableName] = finalTable[i];
+                        tempData[fileTableName] = dbViewData[i][fileTableName];
                         result.push(tempData);
                     }
                 }
@@ -266,24 +267,28 @@ DataHandlerV2.extend({
                             }
                             tempData = {};
                             fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, fileInfoData[i].filepath, loginUsername);
-                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], finalTable, loginUsername, addedFilePid);
+                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], dbViewData, loginUsername, addedFilePid);
                             fileInfoData[i]["add_projects"] = FormHandler.getAddProjectFilesTemplate(pageName, fileInfoData[i], projectTable);
                             tempData[fileInfoTableName] = fileInfoData[i];
                             result.push(tempData);
                         }
                     }
                 }
-                if ($S.isStringV2(fileInfoTableName) && $S.isArray(finalTable) && $S.isArray(addedFilePid)) {
-                    for (i=0; i < finalTable.length; i++) {
-                        if (!$S.isObject(finalTable[i]) || !$S.isStringV2(finalTable[i].tableUniqueId)) {
+                if ($S.isStringV2(fileInfoTableName) && $S.isArray(dbViewData) && $S.isArray(addedFilePid)) {
+                    for (i=0; i < dbViewData.length; i++) {
+                        if (!$S.isObject(dbViewData[i]) || !$S.isObject(dbViewData[i][fileTableName]) || !$S.isStringV2(dbViewData[i][fileTableName].tableUniqueId)) {
                             continue;
                         }
-                        if (addedFilePid.indexOf(finalTable[i].tableUniqueId) >= 0) {
+                        if (addedFilePid.indexOf(dbViewData[i][[fileTableName]].tableUniqueId) >= 0) {
+                            continue;
+                        }
+                        availableOn = DisplayPage.getFileAvailableProjectsV2(dbViewData[i][[fileTableName]], loginUsername, addedFilePid);
+                        if (!$S.isArray(availableOn) || availableOn.length === 0) {
                             continue;
                         }
                         tempData = {};
-                        tempData2 = finalTable[i];
-                        tempData2["available_on"] = DisplayPage.getFileAvailableProjectsV2(finalTable[i], loginUsername, addedFilePid);
+                        tempData2 = dbViewData[i];
+                        tempData2["available_on"] = availableOn;
                         tempData[fileInfoTableName] = tempData2;
                         result.push(tempData);
                     }

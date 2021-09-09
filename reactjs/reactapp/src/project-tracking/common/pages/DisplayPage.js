@@ -28,27 +28,27 @@ DisplayPage.fn = DisplayPage.prototype = {
 };
 $S.extendObject(DisplayPage);
 DisplayPage.extend({
-    _getFinalDbTable: function(finalTable, requiredDataTable) {
-        var finalDbTable = [], temp;
-        var requiredTableName = "";
-        if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0 && $S.isStringV2(requiredDataTable[0])) {
-            requiredTableName = requiredDataTable[0];
-        } else {
-            return finalDbTable;
-        }
-        if ($S.isArray(finalTable)) {
-            for (var i=0; i<finalTable.length; i++) {
-                if (!$S.isObject(finalTable[i]) || !$S.isObject(finalTable[i][requiredTableName])) {
-                    continue;
-                }
-                temp = finalTable[i][requiredTableName];
-                if (Object.keys(temp).length > 0) {
-                    finalDbTable.push(temp);
-                }
-            }
-        }
-        return finalDbTable;
-    },
+    // _getFinalDbTable: function(dbViewData) {
+    //     var finalDbTable = [], temp;
+    //     var requiredTableName = "";
+    //     if ($S.isArray(dbViewData)) {
+    //         for (var i=0; i<dbViewData.length; i++) {
+    //             if (!$S.isObject(dbViewData[i])) {
+    //                 continue;
+    //             }
+    //             temp = {};
+    //             for (var tableName in dbViewData[i]) {
+    //                 if ($S.isObject(dbViewData[i][tableName])) {
+    //                     temp = Object.assign(temp, dbViewData[i][tableName]);
+    //                 }
+    //             }
+    //             if (Object.keys(temp).length > 0) {
+    //                 finalDbTable.push(temp);
+    //             }
+    //         }
+    //     }
+    //     return finalDbTable;
+    // },
     getRenderData: function(pageName, pageId, sortingFields) {
         var requiredDataTable = DataHandler.getAppData("pageId:" + pageId + ".requiredDataTable");
         var filterKeyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping");
@@ -71,11 +71,11 @@ DisplayPage.extend({
             }
         }
         var finalTable = DBViewDataHandler.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
-        finalTable = this._getFinalDbTable(finalTable, requiredDataTable);
-        DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
-        finalTable = AppHandler.getFilteredData(currentAppData, metaData, finalTable, filterOptions, "name");
         dbViewData = DataHandlerV2.handlePageByPageId(pageName, pageId, finalTable);
         finalTable = DBViewDataHandler.ApplyResultPattern(dbViewData, resultPattern);
+        // finalTable = this._getFinalDbTable(dbViewData);
+        DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
+        finalTable = AppHandler.getFilteredDataV2(filterKeyMapping, currentAppData, metaData, finalTable, filterOptions, "name");
         return finalTable;
     },
     getRenderDataV2: function(pageName, viewPageName, sortingFields) {
@@ -146,18 +146,19 @@ DisplayPage.extend({
         }
         var fieldHtml = {"tag": "table.tbody", "className": "table-striped table-padded-px-5", "text": []};
         var buttonNameDelete = "delete_file.form.button";
+        var fileTableName = DataHandler.getTableName("fileTable");
         filepath = fileInfoDataRow.filepath;
         var index = 1, i;
         for (i=0; i<finalTable.length; i++) {
-            if (!$S.isObject(finalTable[i])) {
+            if (!$S.isObject(finalTable[i]) && !$S.isObject(finalTable[i][fileTableName])) {
                 continue;
             }
-            if (filepath === finalTable[i].filename) {
-                _temp = this._generateResult(fileInfoDataRow, finalTable[i], loginUsername, index);
+            if (filepath === finalTable[i][fileTableName].filename) {
+                _temp = this._generateResult(fileInfoDataRow, finalTable[i][fileTableName], loginUsername, index);
                 if (_temp === null) {
                     continue;
                 }
-                addedFilePid.push(finalTable[i].tableUniqueId);
+                addedFilePid.push(finalTable[i][fileTableName].tableUniqueId);
                 fieldHtml.text.push(_temp);
                 index++;
             }
@@ -178,6 +179,7 @@ DisplayPage.extend({
         if (!$S.isObjectV2(finalTableRow)) {
             return [];
         }
+
         _temp = this._generateResult(null, finalTableRow, loginUsername, 1);
         if (_temp === null) {
             return [];

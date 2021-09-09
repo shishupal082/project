@@ -38,7 +38,7 @@ FormHandlerAddProjectFiles.extend({
         if ($S.isStringV2(filepath) && $S.isArray(allProjects) && allProjects.length > 0) {
             dropdownList.push({"value": "", "text": "Select..."});
             for(var i=0; i<allProjects.length; i++) {
-                dropdownList.push({"value": filepath + "::" + allProjects[i].pid, "text": allProjects[i].pName})
+                dropdownList.push({"value": filepath + "::" + allProjects[i]["tableUniqueId"], "text": allProjects[i].pName})
             }
             TemplateHelper.updateTemplateText(template, {"add-project-files-form.project": dropdownList});
         } else {
@@ -71,7 +71,7 @@ FormHandlerAddProjectFiles.extend({
             pid = valueArr[1];
         }
         var fileTable = DataHandlerV2.getTableDataByAttr(fileTableName, "filename", filepath);
-        var projectTable = DataHandlerV2.getTableDataByAttr(projectTableName, "pid", pid);
+        var projectTable = DataHandlerV2.getTableDataByAttr(projectTableName, "tableUniqueId", pid);
         if (!$S.isArray(projectTable) || projectTable.length !== 1 || !$S.isObject(projectTable[0])) {
             alert("Invalid project Id");
             return;
