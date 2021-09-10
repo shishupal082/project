@@ -402,24 +402,33 @@ DataHandlerV3.extend({
         var pageName = DataHandler.getPathParamsData("pageName", "");
         var currentList3Id = DataHandler.getData("currentList3Id", "");
         var currentList3Data = DataHandler.getCurrentList3Data();
-        var i, keys, list3Data, configList3Id;
+        var i, list3Data, configList3Id, configList3Data;
+        if (!$S.isStringV2(currentList3Id)) {
+            if ([Config.entry, Config.update, Config.summary].indexOf(pageName) >= 0) {
+                configList3Id = DataHandler.getAppData(pageName + ".list3Data_1.selected", "");
+            } else if ([Config.dbview, Config.dbview_summary, Config.add_field_report].indexOf(pageName) >= 0) {
+                configList3Id = DataHandler.getAppData(pageName + ".list3Data_2.selected", "");
+            }
+            configList3Data = DataHandler.getList3DataById(configList3Id);
+            if ($S.isObjectV2(configList3Data)) {
+                currentList3Id = configList3Id;
+                currentList3Data = configList3Data;
+            }
+        }
         if ([Config.custom_dbview].indexOf(pageName) >= 0) {
             configList3Id = DataHandler.getAppData(pageName + ".list3Data_2.selected", "");
             if ($S.isString(configList3Id)) {
                 currentList3Id = configList3Id;
             }
-        } else if ($S.isObject(currentList3Data)) {
-            keys = Object.keys(currentList3Data);
+        } else if (!$S.isObjectV2(currentList3Data)) {
             // If currentList3Data not found (Like in the first time loading) then search defaultSelected item in list3Data
-            if (keys.length < 1) {
-                list3Data = this.getList3Data();
-                if ($S.isArray(list3Data)) {
-                    for (i = 0; i < list3Data.length; i++) {
-                        if ($S.isObject(list3Data[i])) {
-                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
-                                currentList3Id = list3Data[i].name;
-                                break;
-                            }
+            list3Data = this.getList3Data();
+            if ($S.isArray(list3Data)) {
+                for (i = 0; i < list3Data.length; i++) {
+                    if ($S.isObject(list3Data[i])) {
+                        if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
+                            currentList3Id = list3Data[i].name;
+                            break;
                         }
                     }
                 }

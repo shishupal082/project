@@ -418,10 +418,7 @@ DataHandler.extend({
             return;
         } else if ($S.isArrayV2(attendanceDataApis)) {
             DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
-                DataHandler.loadTableData(pageName, function() {
-                    DataHandlerV3.handleAttendanceDataLoad();
-                    $S.callMethod(callback);
-                });
+                DataHandler.loadTableData(pageName, callback);
             });
         } else {
             this.loadTableData(pageName, callback);
@@ -434,6 +431,7 @@ DataHandler.extend({
         if ($S.isArray(pageResultCriteria)) {
             resultCriteria = pageResultCriteria;
         }
+        DataHandlerV3.handleAttendanceDataLoad();
         DataHandlerV3.setCurrentList3Id();
         DataHandler.generateDateParameter();
         DataHandlerV3.generateFinalTable(resultCriteria);
