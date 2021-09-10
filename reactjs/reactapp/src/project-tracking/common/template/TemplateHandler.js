@@ -56,6 +56,8 @@ TemplateHandler.extend({
             TemplateHelper.removeClassTemplate(template, "home.addNewProject", "d-none");
             var formTypeField = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
             TemplateHelper.addItemInTextArray(template, "home.addNewProject.formTypeField", formTypeField);
+        } else if (homeFields.length === 0) {
+            template = this.getTemplate("noDataFound");
         }
         return template;
     }
