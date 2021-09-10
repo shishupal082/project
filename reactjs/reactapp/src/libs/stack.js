@@ -1494,6 +1494,9 @@ Stack.extend({
     isArray: function(value) {
         return isArray(value);
     },
+    isArrayV2: function(value) {
+        return isArray(value) && value.length > 0;
+    },
     isObject: function(value) {
         return isObject(value);
     },

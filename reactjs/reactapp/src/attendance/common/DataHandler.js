@@ -38,7 +38,6 @@ keys.push("appControlMetaData");
 keys.push("metaData");
 keys.push("userData");
 keys.push("filteredUserData");
-keys.push("attendanceData");
 keys.push("latestAttendanceData");
 
 keys.push("loginUserDetailsLoadStatus");
@@ -60,7 +59,6 @@ keys.push("dateParameters");
 keys.push("fieldsData");
 
 keys.push("tableDataLoadStatus");
-keys.push("database");
 
 //TA page
 //Add Field Report Page
@@ -392,26 +390,20 @@ DataHandler.extend({
             $S.callMethod(callback);
         }
     },
-    loadTableData: function(callback) {
-        var pageName = this.getPathParamsData("pageName", "");
-        var pageRequiredTableDataLoadStatus = [Config.dbview, Config.custom_dbview, Config.dbview_summary, Config.add_field_report];
+    loadTableData: function(pageName, callback) {
         var tableDataLoadStatus = this.getData("tableDataLoadStatus", "");
         var dbTableDataIndex = this.getAppData("dbTableDataIndex", "");
         var combineTableData = this.getAppData("combineTableData", "");
         var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", null);
-        if (pageRequiredTableDataLoadStatus.indexOf(pageName) >= 0) {
-            var tableFilterParam = this.getAppData("tableFilterParam", {});
-            if (tableDataLoadStatus === "completed") {
+        var tableFilterParam = this.getAppData("tableFilterParam", {});
+        if (tableDataLoadStatus === "completed") {
+            $S.callMethod(callback);
+        } else if (tableDataLoadStatus === "in_progress") {
+            return;
+        } else if ($S.isStringV2(getTableDataApiNameKey)) {
+            DataHandlerV3.loadTableData(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
                 $S.callMethod(callback);
-            } else if (tableDataLoadStatus === "in_progress") {
-                return;
-            } else if ($S.isStringV2(getTableDataApiNameKey)) {
-                DataHandlerV3.loadTableData(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
-                    $S.callMethod(callback);
-                });
-            } else {
-                $S.callMethod(callback);
-            }
+            });
         } else {
             $S.callMethod(callback);
         }
@@ -420,22 +412,19 @@ DataHandler.extend({
         var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         var pageName = this.getPathParamsData("pageName", "");
         var attendanceDataLoadStatus = this.getData("attendanceDataLoadStatus", "");
-        var pageRequiredAttendanceDataLoadStatus = [Config.entry, Config.update, Config.summary, Config.dbview, Config.dbview_summary];
-        if (pageRequiredAttendanceDataLoadStatus.indexOf(pageName) >= 0) {
-            if (attendanceDataLoadStatus === "completed") {
-                DataHandler.loadTableData(callback);
-            } else if (attendanceDataLoadStatus === "in_progress") {
-                return;
-            } else {
-                DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
-                    DataHandler.loadTableData(function() {
-                        DataHandlerV3.handleAttendanceDataLoad();
-                        $S.callMethod(callback);
-                    });
+        if (attendanceDataLoadStatus === "completed") {
+            this.loadTableData(pageName, callback);
+        } else if (attendanceDataLoadStatus === "in_progress") {
+            return;
+        } else if ($S.isArrayV2(attendanceDataApis)) {
+            DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
+                DataHandler.loadTableData(pageName, function() {
+                    DataHandlerV3.handleAttendanceDataLoad();
+                    $S.callMethod(callback);
                 });
-            }
+            });
         } else {
-            DataHandler.loadTableData(callback);
+            this.loadTableData(pageName, callback);
         }
     },
     handleApiDataLoad: function() {
@@ -571,10 +560,12 @@ DataHandler.extend({
             return;
         }
         var pageName = DataHandler.getPathParamsData("pageName", "");
+        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         if ([Config.update].indexOf(pageName) >= 0) {
             DataHandlerV2.callAddTextApi(name, value, function() {
                 DataHandler.setData("attendanceDataLoadStatus", "not-started");
-                DataHandler.loadAttendanceData(function() {
+                DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
+                    DataHandlerV3.handleAttendanceDataLoad();
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                 });
             });

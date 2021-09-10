@@ -92,29 +92,22 @@ DataHandlerV3.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
-    _getResultPatternFromData: function(pageName, currentAppData, metaData, attendanceData) {
-        var resultPattern = $S.findParam([currentAppData, metaData], "resultPatternEntry" , []);
+    _getResultPatternFromData: function(pageName, currentAppData, metaData) {
+        var resultPattern = $S.findParam([currentAppData, metaData], "resultPattern.entry" , []);
         var attendanceDataKey = $S.findParam([currentAppData, metaData], "attendanceDataKey" , "");
-        var tables, attendanceTableData, i, summaryKey = [];
+        var i, summaryKey = [];
         if (!$S.isStringV2(attendanceDataKey)) {
             attendanceDataKey = "type";
         }
-        if ($S.isObject(attendanceData)) {
-            tables = Object.keys(attendanceData);
-            if (tables.length === 1) {
-                for(var tableName in attendanceData) {
-                    if ($S.isObject(attendanceData) && $S.isArray(attendanceData[tableName]["tableData"])) {
-                        attendanceTableData = attendanceData[tableName]["tableData"];
-                        for (i=0; i<attendanceTableData.length; i++) {
-                            if (!$S.isObject(attendanceTableData[i])) {
-                                continue;
-                            }
-                            if ($S.isStringV2(attendanceTableData[i][attendanceDataKey])) {
-                                if (summaryKey.indexOf(attendanceTableData[i][attendanceDataKey]) < 0) {
-                                    summaryKey.push(attendanceTableData[i][attendanceDataKey]);
-                                }
-                            }
-                        }
+        var attendanceData = this._getAttendanceData();
+        if ($S.isArray(attendanceData)) {
+            for (i=0; i<attendanceData.length; i++) {
+                if (!$S.isObject(attendanceData[i])) {
+                    continue;
+                }
+                if ($S.isStringV2(attendanceData[i][attendanceDataKey])) {
+                    if (summaryKey.indexOf(attendanceData[i][attendanceDataKey]) < 0) {
+                        summaryKey.push(attendanceData[i][attendanceDataKey]);
                     }
                 }
             }
@@ -133,30 +126,23 @@ DataHandlerV3.extend({
     },
     generateFinalTable: function(resultCriteria) {
         var pageName = DataHandler.getPathParamsData("pageName", "");
-        var tempDbViewData = DataHandler.getData("dbViewData", {});
-        var attendanceData = DataHandler.getData("attendanceData", {});
+        var dbViewData = DataHandler.getData("dbViewData", {});
         var requiredDataTable = DataHandler.getAppData("requiredDataTable." + pageName, []);
         var metaData = DataHandler.getMetaData({});
         var currentAppData = DataHandler.getCurrentAppData({});
-        var resultPatternKey = "resultPattern"+$S.capitalize(pageName);
+        var resultPatternKey = "resultPattern."+pageName;
         var resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
         var finalTable = [];
         if ((!$S.isArray(resultPattern) || resultPattern.length < 1)) {
             if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0) {
-                resultPatternKey =  "resultPattern" + $S.capitalize(Config.dbview);
+                resultPatternKey =  "resultPattern." + Config.dbview;
                 resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
             } else if ([Config.update].indexOf(pageName) >= 0) {
-                resultPatternKey =  "resultPattern" + $S.capitalize(Config.entry);
+                resultPatternKey =  "resultPattern." + Config.entry;
                 resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
             } else if ([Config.summary].indexOf(pageName) >= 0) {
-                resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData, attendanceData);
+                resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData);
             }
-        }
-        var dbViewData = {};
-        if ($S.isArray(requiredDataTable) && requiredDataTable.length > 0) {
-            dbViewData = Object.assign(tempDbViewData, attendanceData);
-        } else {
-            dbViewData = tempDbViewData;
         }
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
@@ -182,20 +168,27 @@ DataHandlerV3.extend({
         }
     },
     loadAttendanceData: function(attendanceDataApis, callback) {
-        var tableData;
+        var dbViewData, dbViewDataTemp;
         DataHandler.setData("attendanceDataLoadStatus", "in_progress");
         DataHandlerV3._loadDBViewData(attendanceDataApis, function(request) {
             DataHandler.setData("attendanceDataLoadStatus", "completed");
-            tableData = DBViewDataHandler.GenerateTableData(request);
-            if ($S.isObject(tableData)) {
-                for(var key in tableData) {
-                    if ($S.isArray(tableData[key].tableData)) {
-                        tableData[key].tableData = tableData[key].tableData.reverse();
+            dbViewDataTemp = DBViewDataHandler.GenerateTableData(request);
+            dbViewData = DataHandler.getData("dbViewData", {});
+            if ($S.isObjectV2(dbViewDataTemp)) {
+                if (!$S.isObject(dbViewData)) {
+                    dbViewData = {};
+                }
+                for(var key in dbViewDataTemp) {
+                    if (!$S.isObject(dbViewData[key])) {
+                        dbViewData[key] = {};
+                    }
+                    if ($S.isArray(dbViewDataTemp[key]["tableData"])) {
+                        dbViewData[key]["tableData"] = dbViewDataTemp[key]["tableData"].reverse();
                     }
                 }
+                DataHandlerV3._handleDefaultSorting(dbViewData);
+                DataHandler.setData("dbViewData", dbViewData);
             }
-            DataHandlerV3._handleDefaultSorting(tableData);
-            DataHandler.setData("attendanceData", tableData);
             $S.callMethod(callback);
         });
     },
@@ -220,26 +213,17 @@ DataHandlerV3.extend({
         return dbViewData;
     },
     loadTableData: function(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, callback) {
-        var dbViewData, attendanceData;
+        var dbViewData;
         var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
         DataHandler.setData("tableDataLoadStatus", "in_progress");
         AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, combineTableData, function(database) {
             DataHandler.setData("tableDataLoadStatus", "completed");
             dbViewData = DataHandler.getData("dbViewData", {});
-            attendanceData = DataHandler.getData("attendanceData", {});
             if ($S.isObject(database)) {
-                if ($S.isObjectV2(attendanceData)) {
-                    attendanceData = DataHandlerV3._mergeDatabase(attendanceData, database);
-                    DataHandlerV3._handleDefaultSorting(attendanceData);
-                    DataHandler.setData("attendanceData", attendanceData);
-                } else {
-                    dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
-                    DataHandlerV3._handleDefaultSorting(dbViewData);
-                    DataHandler.setData("dbViewData", dbViewData);
-                }
+                dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
+                DataHandlerV3._handleDefaultSorting(dbViewData);
+                DataHandler.setData("dbViewData", dbViewData);
             }
-            DataHandlerV3._handleDefaultSorting(database);
-            DataHandler.setData("database", database);
             $S.callMethod(callback);
         });
     },
@@ -356,22 +340,22 @@ DataHandlerV3.extend({
         }
         return true;
     },
+    _getAttendanceData: function() {
+        var attendanceDataTableName = DataHandler.getAppData("attendanceDataTableName", "");
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        if ($S.isStringV2(attendanceDataTableName) && $S.isObjectV2(dbViewData)) {
+            if ($S.isObject(dbViewData[attendanceDataTableName]) && $S.isArray(dbViewData[attendanceDataTableName]["tableData"])) {
+                return dbViewData[attendanceDataTableName]["tableData"];
+            }
+        }
+        return null;
+    },
     handleAttendanceDataLoad: function() {
-        var attendanceDataTable = DataHandler.getData("attendanceData", []);
         var attendanceDataKey = DataHandler.getAppData("attendanceDataKey", "");
         var finalAttendanceData = {};
         var latestAttendanceData = {};
-        var i, userId, temp, temp2, attendanceData;
-        if ($S.isObject(attendanceDataTable)) {
-            for(var tableName in attendanceDataTable) {
-                if ($S.isObject(attendanceDataTable[tableName])) {
-                    if ($S.isArray(attendanceDataTable[tableName].tableData)) {
-                        attendanceData = attendanceDataTable[tableName].tableData;
-                        break;
-                    }
-               }
-            }
-        }
+        var i, userId, temp, temp2;
+        var attendanceData = this._getAttendanceData();
         if (!$S.isArray(attendanceData)) {
             attendanceData = [];
         }
