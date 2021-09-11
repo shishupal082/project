@@ -101,8 +101,10 @@ DisplayPage.extend({
         var actionItem;
         var buttonNameRemove = "remove_file.form.button";
         var deleteAllowed = false;
+        var fileInfoText;
         if ($S.isObject(fileTableRow)) {
             actionItem = deleteFileTemplate;
+            fileInfoText = fileTableRow.subject;
             TemplateHelper.updateTemplateValue(actionItem, {"delete_file.form": fileTableRow.tableUniqueId});
             if (fileTableRow.addedBy === loginUsername) {
                 TemplateHelper.removeClassTemplate(actionItem, buttonNameRemove, "disabled");
@@ -111,6 +113,9 @@ DisplayPage.extend({
             if ($S.isObject(fileInfoDataRow) && fileInfoDataRow.fileUsername === loginUsername) {
                 deleteAllowed = true;
             }
+            if (fileInfoDataRow === null) {
+                fileInfoText += "--" + fileTableRow.filename;
+            }
             result = {"tag": "tr", "deleteAllowed": deleteAllowed, "text": [
                 {
                     "tag": "td.b",
@@ -118,7 +123,7 @@ DisplayPage.extend({
                 },
                 {
                     "tag": "td",
-                    "text": fileTableRow.subject
+                    "text": fileInfoText
                 },
                 {
                     "tag": "td.b",

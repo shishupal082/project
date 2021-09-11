@@ -133,7 +133,7 @@ FormHandler.extend({
         }
         var fileTableName = DataHandler.getTableName("fileTable");
         var filePath = DataHandlerV2.getDisplayName(fileTableName, "tableUniqueId", uniqueId, "filename");
-        var deleting = window.confirm("Are you sure? You want to " + action + " file: " + filePath);
+        var deleting = window.confirm("Are you sure? You want to " + action + ": " + filePath);
         if (deleting) {
             FormHandlerUploadFile.deleteFile(uniqueId, filePath, action, callback);
         }
@@ -151,17 +151,12 @@ FormHandler.extend({
             }
         }
     },
-    deleteText: function(deleteId, tableName, callback) {
+    deleteText: function(deleteId, callback) {
         if (!$S.isStringV2(deleteId)) {
             deleteId = "";
         }
-        if (!$S.isStringV2(tableName)) {
-            alert(FormHandler.GetAleartMessage("tableName.invalid"));
-            return;
-        }
         var postData = {};
         postData["deleteId"] = deleteId;
-        postData["tableName"] = tableName;
         $S.callMethodV2(this._handleDeleteResponse, callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, CommonConfig.getApiUrl("deleteText", null, true), postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");

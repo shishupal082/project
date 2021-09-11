@@ -8,7 +8,24 @@ var basepathname = CommonConfig.basepathname;
 
 Config.uploadFileInstruction = $$$.uploadFileInstruction;
 
-Config.tempConfig = {};
+Config.tempConfig = {
+    "afterLoginLinkJson": [
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span","text":"Login as: "},
+                {"tag":"span.b","name":"pageHeading.username","text":""}
+            ]
+        },
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span", "text":" |  "},
+                {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+            ]
+        }
+    ]
+};
 
 Config.headingJson = [];
 Config.afterLoginLinkJson = [];

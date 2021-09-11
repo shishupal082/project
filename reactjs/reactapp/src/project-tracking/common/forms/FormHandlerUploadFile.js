@@ -136,11 +136,11 @@ FormHandlerUploadFile.extend({
         var fileTable = DataHandlerV2.getTableDataByAttr(fileTableName, "filename", filePath);
         if ($S.isArray(fileTable)) {
             if (action === "remove") {
-                FormHandler.deleteText(uniqueId, fileTableName, function() {
+                FormHandler.deleteText(uniqueId, function() {
                     AppHandler.LazyReload(250);
                 });
             } else if (fileTable.length > 1) {
-                FormHandler.deleteText(uniqueId, fileTableName, function() {
+                FormHandler.deleteText(uniqueId, function() {
                     AppHandler.LazyReload(250);
                 });
             } else {
@@ -149,7 +149,7 @@ FormHandlerUploadFile.extend({
                         AppHandler.TrackApiRequest("deleteFile", "FAILURE");
                     } else {
                         AppHandler.TrackApiRequest("deleteFile", "SUCCESS");
-                        FormHandler.deleteText(uniqueId, fileTableName, function() {
+                        FormHandler.deleteText(uniqueId, function() {
                             AppHandler.LazyReload(250);
                         });
                     }
