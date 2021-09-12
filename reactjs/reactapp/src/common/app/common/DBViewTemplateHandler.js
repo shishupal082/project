@@ -35,6 +35,7 @@ DBViewTemplateHandler.extend({
         var value = $S.findParam([tdData], "value", "");
         var fieldName = $S.findParam([tdData], "fieldName", "");
         var text = $S.findParam([tdData], "text", "");
+        var valueField = $S.findParam([tdData], "valueField", "");
         var wordBreak = $S.findParam([tdData], "wordBreak", "");
         var wordBreakTag = $S.findParam([tdData], "wordBreakTag", "");
         var temp = {};
@@ -52,6 +53,12 @@ DBViewTemplateHandler.extend({
                 TemplateHelper.updateTemplateText(text, temp);
             }
             return text;
+        } else if (($S.isObject(valueField) || $S.isArray(valueField))) {
+            if ($S.isStringV2(fieldName)) {
+                temp[fieldName] = value;
+                TemplateHelper.updateTemplateValue(valueField, temp);
+            }
+            return valueField;
         }
         return value;
     },

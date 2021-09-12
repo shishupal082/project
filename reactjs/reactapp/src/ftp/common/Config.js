@@ -18,18 +18,22 @@ Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
 Config.uploadApiVersion = $$$.uploadApiVersion;
 
+Config.defaultMetaData = {};
+
 var staticDataApi = $$$.staticDataApi;
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 
 var pages = {
     "dashboard": basepathname+"/dashboard",
-    "upload_file": basepathname+"/upload_file"
+    "upload_file": basepathname+"/upload_file",
+    "manage_text": basepathname+"/manage_text"
 };
 
 Config.pages = pages;
 
 Config.dashboard = "dashboard";
 Config.upload_file = "upload_file";
+Config.manage_text = "manage_text";
 Config.noMatch = "noMatch";
 
 Config.dateSelectionRequired = [];

@@ -10,6 +10,7 @@ import GATracking from "./GATracking";
 import Template from "./Template";
 
 import UploadFile from "../pages/UploadFile";
+import ManageText from "../pages/ManageText";
 import Dashboard from "../pages/Dashboard";
 
 var DataHandler;
@@ -33,6 +34,12 @@ keys.push("dashboard.apiResponseByDate");// []
 keys.push("dashboard.currentPdfLink");
 keys.push("dashboard.orderBy"); // date or users
 
+
+keys.push("currentList1Id");
+keys.push("list1Data");
+keys.push("appControlMetaData");
+keys.push("metaData");
+keys.push("database");
 
 keys.push("formSubmitStatus"); // in_progress, completed
 
@@ -110,23 +117,6 @@ DataHandler.extend({
         }
         this.trackUIEvent(event, status, reason, comment);
         return false;
-    },
-    getCurrentList1Data: function() {
-        var currentList1Id = DataHandler.getData("currentList1Id", "");
-        var list1Data = DataHandler.getData("list1Data", "");
-        var currentList1Data = null;
-        if ($S.isArray(list1Data)) {
-            for(var i=0; i<list1Data.length; i++) {
-                if (!$S.isObject(list1Data[i])) {
-                    continue;
-                }
-                if (list1Data[i].id === currentList1Id) {
-                    currentList1Data = list1Data[i];
-                    break;
-                }
-            }
-        }
-        return currentList1Data;
     }
 });
 DataHandler.extend({
@@ -201,26 +191,62 @@ DataHandler.extend({
             }
         }
     },
-    loadPageData: function(callBack) {
+    loadPageData: function(callback) {
         var isLogin = AppHandler.GetUserData("login", false);
         var pageName = DataHandler.getData("pageName", "");
         if ($S.isBooleanTrue(Config.forceLogin)) {
             if (isLogin) {
                 if (pageName === Config.dashboard) {
                     Dashboard.loadPageData(function(response) {
-                        $S.callMethod(callBack);
+                        $S.callMethod(callback);
+                    });
+                } else if (pageName === Config.manage_text) {
+                    ManageText.loadPageData(pageName, function() {
+                        $S.callMethod(callback);
                     });
                 } else {
-                    $S.callMethod(callBack);
+                    $S.callMethod(callback);
                 }
-            } else if ([Config.dashboard, Config.upload_file].indexOf(pageName) >= 0) {
+            } else if ([Config.dashboard, Config.upload_file, Config.manage_text].indexOf(pageName) >= 0) {
                 AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", false));
             } else {
-                $S.callMethod(callBack);
+                $S.callMethod(callback);
             }
         } else {
-            $S.callMethod(callBack);
+            $S.callMethod(callback);
         }
+    },
+    getCurrentAppData: function() {
+        var currentList1Id = DataHandler.getData("currentList1Id", "");
+        var list1Data = DataHandler.getData("list1Data", "");
+        var currentList1Data = null;
+        if ($S.isArray(list1Data)) {
+            for(var i=0; i<list1Data.length; i++) {
+                if (!$S.isObject(list1Data[i])) {
+                    continue;
+                }
+                if (list1Data[i].id === currentList1Id) {
+                    currentList1Data = list1Data[i];
+                    break;
+                }
+            }
+        }
+        return currentList1Data;
+    },
+    getMetaData: function(defaultMetaData) {
+        return this.getData("metaData", defaultMetaData);
+    },
+    getAppData: function(key, defaultValue) {
+        if (!$S.isStringV2(key)) {
+            return defaultValue;
+        }
+        var currentAppData = this.getCurrentAppData(null);
+        var metaData = this.getMetaData(null);
+        var defaultMetaData = null;
+        if ($S.isObject(currentAppData) || $S.isObject(metaData)) {
+            defaultMetaData = Config.defaultMetaData;
+        }
+        return $S.findParam([currentAppData, metaData, defaultMetaData], key, defaultValue);
     }
 });
 DataHandler.extend({
@@ -251,13 +277,15 @@ DataHandler.extend({
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
         DataHandler.setData(name, value.trim());
     },
-    OnFormSubmit: function(appStateCallback, appDataCallback) {
+    OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
         var pageName = DataHandler.getData("pageName", "");
         if (pageName === Config.upload_file) {
             var file = CurrentFormData.getData("upload_file.file", {}, true);
             UploadFile.upload(file, function() {
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             });
+        } else if (pageName === Config.manage_text) {
+            ManageText.deleteText(pageName, value);
         }
     },
     OnDropdownChange: function(appStateCallback, appDataCallback, name, value) {
@@ -306,28 +334,47 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    _getRenderFieldRow: function() {
-        var pageName = DataHandler.getData("pageName", "");
-        var file = CurrentFormData.getData("upload_file.file", {}, true);
+    _getRenderFieldRow: function(pageName) {
         var renderFieldRow = [];
         if (pageName === Config.upload_file) {
+            var file = CurrentFormData.getData("upload_file.file", {}, true);
             renderFieldRow = UploadFile.getRenderFieldRow(file);
         } else if (pageName === Config.dashboard) {
             renderFieldRow = Dashboard.getRenderFieldRow();
+        } else if (pageName === Config.manage_text) {
+            renderFieldRow = ManageText.getRenderFieldRow(pageName);
         } else {
             renderFieldRow = AppHandler.getTemplate(Template, "pageNotFound", {});
         }
         return renderFieldRow;
     },
+    _getAdditionalFooterContent: function(pageName) {
+        var ftpFooterLinks = AppHandler.GetStaticDataJsonFile("ftp.footerLinks", []);
+        if (!$S.isArrayV2(ftpFooterLinks) && !$S.isObjectV2(ftpFooterLinks)) {
+            return null;
+        }
+        var i;
+        var activeRoleId = AppHandler.GetUserActiveRoles();
+        if ($S.isArray(activeRoleId)) {
+            for (i=0; i<activeRoleId.length; i++) {
+                if (!$S.isStringV2(activeRoleId[i])) {
+                    continue;
+                }
+                TemplateHelper.removeClassTemplate(ftpFooterLinks, "roleId:" + activeRoleId[i], "d-none");
+            }
+        }
+        return ftpFooterLinks;
+    },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
-        var renderFieldRow = this._getRenderFieldRow();
+        var pageName = DataHandler.getData("pageName", "");
+        var renderFieldRow = this._getRenderFieldRow(pageName);
         var appHeading = [AppHandler.getTemplate(Template, "heading", [])];
         appHeading.push(AppHandler.getTemplate(Template, "link", []));
 
         var finalResponse = [];
         finalResponse.push(renderFieldRow);
         finalResponse.push(AppHandler.getTemplate(Template, "footerLinkJsonAfterLogin", []));
-
+        finalResponse.push(this._getAdditionalFooterContent());
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", finalResponse);
         appDataCallback("firstTimeDataLoadStatus", "completed");

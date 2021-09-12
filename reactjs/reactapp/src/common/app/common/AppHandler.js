@@ -581,6 +581,18 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
+    getPathParamsData: function(pathParams, key, defaultValue) {
+        if ($S.isString(key) && key.length > 0) {
+            if ($S.isObject(pathParams)) {
+                if ($S.isUndefined(pathParams[key])) {
+                    return defaultValue;
+                } else {
+                    return pathParams[key];
+                }
+            }
+        }
+        return defaultValue;
+    },
     GenerateDateBetween2Date: function(startDateStr, endDateStr, startLimit, endLimit) {
         if (!this.isValidDateStr(startDateStr) || !this.isValidDateStr(endDateStr)) {
             return [];
@@ -675,18 +687,6 @@ AppHandler.extend({
             $S.log("Load loginUserDetails complete.");
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
-    },
-    getPathParamsData: function(pathParams, key, defaultValue) {
-        if ($S.isString(key) && key.length > 0) {
-            if ($S.isObject(pathParams)) {
-                if ($S.isUndefined(pathParams[key])) {
-                    return defaultValue;
-                } else {
-                    return pathParams[key];
-                }
-            }
-        }
-        return defaultValue;
     }
 });
 

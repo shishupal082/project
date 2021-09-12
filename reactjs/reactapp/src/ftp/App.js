@@ -2,6 +2,9 @@ import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import $S from "../interface/stack.js";
 
+
+import AppHandler from "../common/app/common/AppHandler";
+
 import AppComponent from "../common/app/components/AppComponent";
 import DataHandler from "./common/DataHandler";
 import Config from "./common/Config";
@@ -64,10 +67,11 @@ class App extends React.Component {
             DataHandler.OnInputChange(appStateCallback, appDataCallback, name, value);
         }
     }
-    // not working ?
     onFormSubmit(e) {
         e.preventDefault();
-        DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback);
+        var name = AppHandler.getFieldName(e);
+        var value = AppHandler.getFieldValue(e);
+        DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback, name, value);
         return false;
     }
     dropDownChange(e) {
@@ -105,6 +109,11 @@ class App extends React.Component {
                 <Route path={pages.upload_file}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.upload_file}/>
+                    )}
+                />
+                <Route path={pages.manage_text}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.manage_text}/>
                     )}
                 />
                 <Route
