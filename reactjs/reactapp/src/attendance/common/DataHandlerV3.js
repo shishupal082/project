@@ -216,11 +216,12 @@ DataHandlerV3.extend({
         var dbViewData;
         var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
         DataHandler.setData("tableDataLoadStatus", "in_progress");
-        AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, combineTableData, function(database) {
+        AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, function(database) {
             DataHandler.setData("tableDataLoadStatus", "completed");
             dbViewData = DataHandler.getData("dbViewData", {});
             if ($S.isObject(database)) {
                 dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
+                AppHandler.MergeDatabase(dbViewData, combineTableData);
                 DataHandlerV3._handleDefaultSorting(dbViewData);
                 DataHandler.setData("dbViewData", dbViewData);
             }
