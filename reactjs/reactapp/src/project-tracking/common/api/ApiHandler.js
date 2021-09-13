@@ -149,8 +149,8 @@ ApiHandler.extend({
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
     _generateDatabase: function(request, dbTableDataIndex) {
-        var database = {}, tableName;
-        var tableData = {}, i, j, key, apiName;
+        var dataTable = [], tableName;
+        var tableData = {}, i, key;
         var wordBreak;
         var jsonData;
         if (!$S.isObject(dbTableDataIndex)) {
@@ -186,36 +186,17 @@ ApiHandler.extend({
         for(key in tableData) {
             if ($S.isObject(tableData[key]) && $S.isArray(tableData[key]["responseJson"])) {
                 jsonData = tableData[key]["responseJson"];
-                for (i=0; i<jsonData.length; i++) {
-                    if (!$S.isArrayV2(jsonData[i])) {
-                        continue;
-                    }
-                    if (!$S.isStringV2(key)) {
-                        continue;
-                    }
-                    if (!$S.isArray(database[key])) {
-                        database[key] = [];
-                    }
-                    database[key].push(AppHandler.ConvertJsonToTable(jsonData, dbTableDataIndex[key]));
-                }
+                dataTable = dataTable.concat(AppHandler.ConvertJsonToTable(jsonData, dbTableDataIndex[key]));
             }
         }
         var finalDB = {};
-        for (apiName in database) {
-            if ($S.isArray(database[apiName])) {
-                for (i=0; i<database[apiName].length; i++) {
-                    if ($S.isArray(database[apiName][i])) {
-                        for (j=0; j<database[apiName][i].length; j++) {
-                            if ($S.isObject(database[apiName][i][j]) && $S.isStringV2(database[apiName][i][j]["tableName"])) {
-                                tableName = database[apiName][i][j]["tableName"];
-                                if (!$S.isObject(finalDB[tableName]) || !$S.isArray(finalDB[tableName]["tableData"])) {
-                                    finalDB[tableName] = {"tableData": []};
-                                }
-                                finalDB[tableName]["tableData"].push(database[apiName][i][j]);
-                            }
-                        }
-                    }
+        for (i=0; i<dataTable.length; i++) {
+            if ($S.isObject(dataTable[i]) && $S.isStringV2(dataTable[i]["tableName"])) {
+                tableName = dataTable[i]["tableName"];
+                if (!$S.isObject(finalDB[tableName]) || !$S.isArray(finalDB[tableName]["tableData"])) {
+                    finalDB[tableName] = {"tableData": []};
                 }
+                finalDB[tableName]["tableData"].push(dataTable[i]);
             }
         }
         return finalDB;
@@ -242,7 +223,7 @@ ApiHandler.extend({
             }
         }
     },
-    handlePageLoadV2: function(param, dbTableDataIndex, combineTableData, callback) {
+    handlePageLoadV2: function(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var status2 = DataHandler.getData("dbViewDataLoadStatus");
@@ -250,9 +231,9 @@ ApiHandler.extend({
             status = DataHandler.getData("dbTableDataLoadStatus");
             if (status === "not-started") {
                 DataHandler.setData("dbTableDataLoadStatus", "in-progress");
-                var url = CommonConfig.getApiUrl("getTableData", null, true);
+                var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
                 var dbViewData;
-                AppHandler.LoadTableData(url, param, dbTableDataIndex, function(database) {
+                AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, function(database) {
                     DataHandler.setData("dbTableDataLoadStatus", "completed");
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);

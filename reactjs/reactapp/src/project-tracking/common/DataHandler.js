@@ -171,7 +171,7 @@ DataHandler.extend({
         if(CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
         }
-        dataLoadStatusKey = ["dbViewDataLoadStatus"];
+        dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
         var pageName = this.getData("pageName", "");
         var pageId = this.getPathParamsData("pageId", "");
         if (pageName === "displayPage" && pageId === "manageFiles") {
@@ -285,16 +285,14 @@ DataHandler.extend({
         });
     },
     loadDbTableData: function(callback) {
-        var param = this.getAppData("tableFilterParam", {});
+        var tableFilterParam = this.getAppData("tableFilterParam", {});
+        var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", "");
         var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
         var combineTableData = DataHandler.getAppData("combineTableData", []);
         var dbDataApis = DataHandler.getAppData("dbDataApis", {});
-        var dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
         ApiHandler.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
-            ApiHandler.handlePageLoadV2(param, dbTableDataIndex, combineTableData, function() {
-                if (DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) === "completed") {
-                    $S.callMethod(callback);
-                }
+            ApiHandler.handlePageLoadV2(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
+                $S.callMethod(callback);
             });
         });
     },

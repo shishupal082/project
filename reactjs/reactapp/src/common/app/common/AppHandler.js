@@ -796,19 +796,19 @@ AppHandler.extend({
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
-    LoadTableData: function(url, param, dbTableDataIndex, callback) {
+    LoadTableData: function(url, tableFilterParam, dbTableDataIndex, callback) {
         if (!$S.isStringV2(url)) {
             return $S.callMethod(callback);
         }
-        if (!$S.isObject(param)) {
-            param = {};
+        if (!$S.isObject(tableFilterParam)) {
+            tableFilterParam = {};
         }
         var queryParam = "";
-        for(var key in param) {
+        for(var key in tableFilterParam) {
             if ($S.isStringV2(queryParam)) {
                 queryParam += "&";
             }
-            queryParam += key + "=" + param[key];
+            queryParam += key + "=" + tableFilterParam[key];
         }
         if ($S.isStringV2(queryParam)) {
             url += "?" + queryParam;
