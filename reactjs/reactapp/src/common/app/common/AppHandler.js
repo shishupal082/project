@@ -504,6 +504,54 @@ AppHandler.extend({
         }
         return result;
     },
+    CombineTableData: function(dbViewData, combineTableData) {
+        if (!$S.isObject(dbViewData)) {
+            return false;
+        }
+        if (!$S.isArray(combineTableData)) {
+            combineTableData = [];
+        }
+        var tableName, sourceTableName, destinationTableName;
+        for (var i=0; i<combineTableData.length; i++) {
+            if ($S.isObjectV2(combineTableData[i]) && $S.isStringV2(combineTableData[i]["destinationTableName"]) && $S.isArray(combineTableData[i]["sourceTableName"])) {
+                if (combineTableData[i]["sourceTableName"].length > 0) {
+                    sourceTableName = combineTableData[i]["sourceTableName"];
+                    destinationTableName = combineTableData[i]["destinationTableName"];
+                    if (!$S.isObject(dbViewData[destinationTableName])) {
+                        dbViewData[destinationTableName] = {"tableData": []};
+                    }
+                    for (tableName in dbViewData) {
+                        if (tableName !== destinationTableName && sourceTableName.indexOf(tableName) >= 0) {
+                            if ($S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName]["tableData"])) {
+                                dbViewData[destinationTableName]["tableData"] = dbViewData[destinationTableName]["tableData"].concat(dbViewData[tableName]["tableData"]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    },
+    MergeDatabase: function(dbViewData, database) {
+        if ($S.isObject(dbViewData) && $S.isObject(database)) {
+            for (var tableName in database) {
+                if (!$S.isObject(database[tableName])) {
+                    continue;
+                }
+                if (!$S.isArray(database[tableName]["tableData"])) {
+                    continue;
+                }
+                if (!$S.isObject(dbViewData[tableName])) {
+                    dbViewData[tableName] = {};
+                }
+                if (!$S.isArray(dbViewData[tableName]["tableData"])) {
+                    dbViewData[tableName]["tableData"] = [];
+                }
+                dbViewData[tableName]["tableData"] = dbViewData[tableName]["tableData"].concat(database[tableName]["tableData"]);
+            }
+        }
+        return dbViewData;
+    },
     ConvertJsonToTable: function(jsonData, dataIndex) {
         var maxLength = 0, i, j;
         if (!$S.isArray(jsonData)) {
@@ -548,27 +596,13 @@ AppHandler.extend({
             }
         }
     },
-    _convertTableDataToDatabase: function(allTableData, allTableDataIndex, combineTableData) {
-        var database = {}, sourceTableName, destinationTableName, tableName;
+    _convertTableDataToDatabase: function(allTableData, allTableDataIndex) {
+        var database = {}, tableName;
         if (!$S.isObject(allTableData)) {
             allTableData = {};
         }
         if (!$S.isObject(allTableDataIndex)) {
             allTableDataIndex = {};
-        }
-        if ($S.isObjectV2(combineTableData) && $S.isStringV2(combineTableData["destinationTableName"]) && $S.isArray(combineTableData["sourceTableName"])) {
-            if (combineTableData["sourceTableName"].length > 0) {
-                sourceTableName = combineTableData["sourceTableName"];
-                destinationTableName = combineTableData["destinationTableName"];
-                if (!$S.isArray(allTableData[destinationTableName])) {
-                    allTableData[destinationTableName] = [];
-                }
-                for (tableName in allTableData) {
-                    if (tableName !== destinationTableName && sourceTableName.indexOf(tableName) >= 0) {
-                        allTableData[destinationTableName] = allTableData[destinationTableName].concat(allTableData[tableName]);
-                    }
-                }
-            }
         }
         var tableData = [], dataIndex = [];
         for (tableName in allTableData) {
@@ -762,7 +796,7 @@ AppHandler.extend({
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
-    LoadTableData: function(url, param, dbTableDataIndex, combineTableData, callback) {
+    LoadTableData: function(url, param, dbTableDataIndex, callback) {
         if (!$S.isStringV2(url)) {
             return $S.callMethod(callback);
         }
@@ -789,7 +823,7 @@ AppHandler.extend({
         this.LoadDataFromRequestApi(request, function() {
             if ($S.isArray(request[0].response) && request[0].response.length > 0) {
                 if ($S.isObject(request[0].response[0]) && request[0].response[0].status === "SUCCESS") {
-                    database = AppHandler._convertTableDataToDatabase(request[0].response[0].data, dbTableDataIndex, combineTableData);
+                    database = AppHandler._convertTableDataToDatabase(request[0].response[0].data, dbTableDataIndex);
                 }
             }
             $S.callMethodV1(callback, database);

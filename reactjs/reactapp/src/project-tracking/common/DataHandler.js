@@ -50,6 +50,7 @@ keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
 keys.push("dbViewDataLoadStatus");
+keys.push("dbTableDataLoadStatus");
 keys.push("filesInfoLoadStatus");
 
 keys.push("sortingFields");
@@ -76,6 +77,7 @@ CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("appRelatedDataLoadStatus", "not-started");
 CurrentData.setData("dbViewDataLoadStatus", "not-started");
+CurrentData.setData("dbTableDataLoadStatus", "not-started");
 CurrentData.setData("filesInfoLoadStatus", "not-started");
 
 CurrentData.setData("addentry.submitStatus", "not-started");
@@ -247,24 +249,6 @@ DataHandler.extend({
 });
 
 DataHandler.extend({
-    // loadUserRelatedData: function(callback) {
-    //     var loginUserDetailsApi = CommonConfig.getApiUrl("getLoginUserDetailsApi", null, true);
-    //     if ($S.isString(loginUserDetailsApi)) {
-    //         DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
-    //         AppHandler.LoadLoginUserDetails(loginUserDetailsApi, function() {
-    //             var isLogin = AppHandler.GetUserData("login", false);
-    //             if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-    //                 AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
-    //                 return;
-    //             }
-    //             DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-    //             $S.callMethod(callback);
-    //         });
-    //     } else {
-    //         DataHandler.setData("loginUserDetailsLoadStatus", "completed");
-    //         $S.callMethod(callback);
-    //     }
-    // },
     getAppData: function(key, defaultValue) {
         if (!$S.isStringV2(key)) {
             return defaultValue;
@@ -303,9 +287,15 @@ DataHandler.extend({
     loadDbTableData: function(callback) {
         var param = this.getAppData("tableFilterParam", {});
         var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
-        var combineTableData = DataHandler.getAppData("combineTableData", {});
-        ApiHandler.handlePageLoadV2(param, dbTableDataIndex, combineTableData, function() {
-            $S.callMethod(callback);
+        var combineTableData = DataHandler.getAppData("combineTableData", []);
+        var dbDataApis = DataHandler.getAppData("dbDataApis", {});
+        var dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
+        ApiHandler.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
+            ApiHandler.handlePageLoadV2(param, dbTableDataIndex, combineTableData, function() {
+                if (DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) === "completed") {
+                    $S.callMethod(callback);
+                }
+            });
         });
     },
     checkForRedirect: function(callback) {

@@ -26,6 +26,12 @@ li code{
             <li><code>certutil -hashfile {filename} MD5</code></li>
             <li>Change drive<code>D:</code></li>
             <li><code>systeminfo | find "System Boot Time"</code></li>
+            <li>IP addres change from command line</li>
+            <li><code>netsh interface ip set address "Wi-Fi" dhcp</code></li>
+            <li><code>netsh interface ip set dns "Wi-Fi" dhcp</code></li>
+            <li><code>netsh interface ip set address name="Wi-Fi" static 10.130.5.181 255.255.254.0 10.130.4.1</code></li>
+            <li><code>netsh interface ip set dns name="Wi-Fi" static 203.153.41.28</code></li>
+            <li><code>netsh interface ip set dns name="Wi-Fi" static 203.153.41.29 index=2</code></li>
         </ul>
         <h2>Windows telnet</h2>
         <ul>

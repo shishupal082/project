@@ -138,7 +138,7 @@ ApiHandler.extend({
         }
         DBViewDataHandler.RemoveDeletedItem(dbViewData, deletedIds, deleteTableName, "tableUniqueId");
     },
-    _handleDefaultSorting: function(tableData) {
+    handleDefaultSorting: function(tableData) {
         this._removeDeletedItem(tableData);
         if (!$S.isObject(tableData)) {
             return;
@@ -148,12 +148,11 @@ ApiHandler.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
-    _generateDatabase: function(request) {
+    _generateDatabase: function(request, dbTableDataIndex) {
         var database = {}, tableName;
-        var tableData = {}, i, key;
+        var tableData = {}, i, j, key, apiName;
         var wordBreak;
         var jsonData;
-        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
         if (!$S.isObject(dbTableDataIndex)) {
             dbTableDataIndex = {};
         }
@@ -168,8 +167,7 @@ ApiHandler.extend({
                 if ($S.isUndefined(tableData[request[i].apiName])) {
                     tableData[request[i].apiName] = {};
                 }
-                tableData[request[i].apiName]["tableName"] = request[i].apiName;
-                tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
+                tableData[request[i].apiName]["apiName"] = request[i].apiName;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
                 tableData[request[i].apiName]["response"] = request[i].response;
@@ -189,29 +187,40 @@ ApiHandler.extend({
             if ($S.isObject(tableData[key]) && $S.isArray(tableData[key]["responseJson"])) {
                 jsonData = tableData[key]["responseJson"];
                 for (i=0; i<jsonData.length; i++) {
-                    if (!$S.isArray(jsonData[i]) || jsonData[i].length < 3) {
+                    if (!$S.isArrayV2(jsonData[i])) {
                         continue;
                     }
-                    tableName = jsonData[i][1];
-                    if (!$S.isStringV2(tableName)) {
+                    if (!$S.isStringV2(key)) {
                         continue;
                     }
-                    if (!$S.isObject(database[tableName])) {
-                        database[tableName] = {};
+                    if (!$S.isArray(database[key])) {
+                        database[key] = [];
                     }
-                    if (!$S.isArray(database[tableName]["responseJson"])) {
-                        database[tableName]["responseJson"] = [];
-                    }
-                    database[tableName]["responseJson"].push(jsonData[i]);
+                    database[key].push(AppHandler.ConvertJsonToTable(jsonData, dbTableDataIndex[key]));
                 }
             }
         }
-        for (tableName in database) {
-            database[tableName]["tableData"] = AppHandler.ConvertJsonToTable(database[tableName]["responseJson"], dbTableDataIndex[tableName]);
+        var finalDB = {};
+        for (apiName in database) {
+            if ($S.isArray(database[apiName])) {
+                for (i=0; i<database[apiName].length; i++) {
+                    if ($S.isArray(database[apiName][i])) {
+                        for (j=0; j<database[apiName][i].length; j++) {
+                            if ($S.isObject(database[apiName][i][j]) && $S.isStringV2(database[apiName][i][j]["tableName"])) {
+                                tableName = database[apiName][i][j]["tableName"];
+                                if (!$S.isObject(finalDB[tableName]) || !$S.isArray(finalDB[tableName]["tableData"])) {
+                                    finalDB[tableName] = {"tableData": []};
+                                }
+                                finalDB[tableName]["tableData"].push(database[apiName][i][j]);
+                            }
+                        }
+                    }
+                }
+            }
         }
-        return database;
+        return finalDB;
     },
-    handlePageLoad: function(dbDataApis, callback) {
+    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var database;
@@ -219,11 +228,13 @@ ApiHandler.extend({
             status = DataHandler.getData("dbViewDataLoadStatus");
             if (status === "not-started") {
                 DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                var dbViewData;
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    database = ApiHandler._generateDatabase(request);
-                    ApiHandler._handleDefaultSorting(database);
-                    DataHandler.setData("dbViewData", database);
+                    database = ApiHandler._generateDatabase(request, dbTableDataIndex);
+                    dbViewData = DataHandler.getData("dbViewData", {});
+                    dbViewData = AppHandler.MergeDatabase(dbViewData, database);
+                    DataHandler.setData("dbViewData", dbViewData);
                     $S.callMethod(callback);
                 });
             } else {
@@ -234,15 +245,20 @@ ApiHandler.extend({
     handlePageLoadV2: function(param, dbTableDataIndex, combineTableData, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
-        if (status === "completed") {
-            status = DataHandler.getData("dbViewDataLoadStatus");
+        var status2 = DataHandler.getData("dbViewDataLoadStatus");
+        if (status === "completed" && status2 === "completed") {
+            status = DataHandler.getData("dbTableDataLoadStatus");
             if (status === "not-started") {
-                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                DataHandler.setData("dbTableDataLoadStatus", "in-progress");
                 var url = CommonConfig.getApiUrl("getTableData", null, true);
-                AppHandler.LoadTableData(url, param, dbTableDataIndex, combineTableData, function(database) {
-                    DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    ApiHandler._handleDefaultSorting(database);
-                    DataHandler.setData("dbViewData", database);
+                var dbViewData;
+                AppHandler.LoadTableData(url, param, dbTableDataIndex, function(database) {
+                    DataHandler.setData("dbTableDataLoadStatus", "completed");
+                    dbViewData = DataHandler.getData("dbViewData", {});
+                    dbViewData = AppHandler.MergeDatabase(dbViewData, database);
+                    AppHandler.CombineTableData(dbViewData, combineTableData);
+                    ApiHandler.handleDefaultSorting(dbViewData);
+                    DataHandler.setData("dbViewData", dbViewData);
                     $S.callMethod(callback);
                 });
             } else {
