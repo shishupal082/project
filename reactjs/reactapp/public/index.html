@@ -21,12 +21,13 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App FTP</title>
+    <title>React App Feedback and Project Monitoring</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/ftp/ftp-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/project-tracking/static/css/project-tracking-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -35,7 +36,6 @@
     gtag('js', new Date());
     gtag('config', 'UA-75647007-1');
 </script>
-
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -57,17 +57,24 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    staticDataApi: "/api/get_static_data",
-    loginUserDetailsApi: "/api/get_login_user_details",
-    forceLogin: true
+    appControlDataPath: "/project-tracking/json/",
+    forceLogin: false
 };
-GLOBAL.uploadApiVersion = "v1";
-GLOBAL.disabledPages = [];
+
+GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04"];
+
+GLOBAL.addBasepathLinkName = [
+                        "pageHeading:viewPageName.dashboardLink","pageHeading:viewPageName.displaySupplyStatusLink",
+                        "pageHeading:viewPageName.contingencyStatusLink","pageHeading:viewPageName.displayWorkStatus",
+                        "pageHeading:viewPageName.projectComment", "pageHeading:pageId.displayUploadedFiles",
+                        "pageFooter:pageId.manageFiles"];
+
+GLOBAL.appControlApi = "/project-tracking/appControlData.json";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
+GLOBAL.uploadFileInstruction = "(Only pdf less than 10MB)";
 window.GLOBAL = GLOBAL;
 </script>
 </body>
-
 </html>

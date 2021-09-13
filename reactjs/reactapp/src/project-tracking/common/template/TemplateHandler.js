@@ -132,6 +132,10 @@ TemplateHandler.extend({
                 generic1FormUploadedTable = this.getTemplate("noDataFound");
             }
         }
+        if (!$S.isArray(uploadFileData) || uploadFileData.length === 0) {
+            uploadFileData = uploadFileTemplate;
+            uploadFileTemplate = null;
+        }
         TemplateHelper.updateTemplateText(template, {"projectId.pName": renderData["pidRow"]["pName"]});
         TemplateHelper.addItemInTextArray(template, "projectId.generic1-table", generic1FormUploadedTable);
         TemplateHelper.addItemInTextArray(template, "projectId.uploaded_files", uploadFileData);
