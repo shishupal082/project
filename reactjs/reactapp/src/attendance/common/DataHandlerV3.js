@@ -158,7 +158,6 @@ DataHandlerV3.extend({
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbDataLoadStatus", "completed");
                     tableData = DBViewDataHandler.GenerateTableData(request);
-                    DataHandlerV3._handleDefaultSorting(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
@@ -186,31 +185,10 @@ DataHandlerV3.extend({
                         dbViewData[key]["tableData"] = dbViewDataTemp[key]["tableData"].reverse();
                     }
                 }
-                DataHandlerV3._handleDefaultSorting(dbViewData);
                 DataHandler.setData("dbViewData", dbViewData);
             }
             $S.callMethod(callback);
         });
-    },
-    _mergeDatabase: function(dbViewData, database) {
-        if ($S.isObject(dbViewData) && $S.isObject(database)) {
-            for (var tableName in database) {
-                if (!$S.isObject(database[tableName])) {
-                    continue;
-                }
-                if (!$S.isArray(database[tableName]["tableData"])) {
-                    continue;
-                }
-                if (!$S.isObject(dbViewData[tableName])) {
-                    dbViewData[tableName] = {};
-                }
-                if (!$S.isArray(dbViewData[tableName]["tableData"])) {
-                    dbViewData[tableName]["tableData"] = [];
-                }
-                dbViewData[tableName]["tableData"] = dbViewData[tableName]["tableData"].concat(database[tableName]["tableData"]);
-            }
-        }
-        return dbViewData;
     },
     loadTableData: function(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, callback) {
         var dbViewData;
@@ -220,11 +198,11 @@ DataHandlerV3.extend({
             DataHandler.setData("tableDataLoadStatus", "completed");
             dbViewData = DataHandler.getData("dbViewData", {});
             if ($S.isObject(database)) {
-                dbViewData = DataHandlerV3._mergeDatabase(dbViewData, database);
-                AppHandler.MergeDatabase(dbViewData, combineTableData);
-                DataHandlerV3._handleDefaultSorting(dbViewData);
-                DataHandler.setData("dbViewData", dbViewData);
+                dbViewData = AppHandler.MergeDatabase(dbViewData, database);
             }
+            AppHandler.CombineTableData(dbViewData, combineTableData);
+            DataHandlerV3._handleDefaultSorting(dbViewData);
+            DataHandler.setData("dbViewData", dbViewData);
             $S.callMethod(callback);
         });
     },
