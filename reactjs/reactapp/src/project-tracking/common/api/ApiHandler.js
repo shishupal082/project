@@ -148,59 +148,6 @@ ApiHandler.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
-    _generateDatabase: function(request, dbTableDataIndex) {
-        var dataTable = [], tableName;
-        var tableData = {}, i, key;
-        var wordBreak;
-        var jsonData;
-        if (!$S.isObject(dbTableDataIndex)) {
-            dbTableDataIndex = {};
-        }
-        if ($S.isArray(request)) {
-            for(i=0; i<request.length; i++) {
-                if (!$S.isObject(request[i])) {
-                    continue;
-                }
-                if (!$S.isString(request[i].apiName) || request[i].apiName.length < 1) {
-                    continue;
-                }
-                if ($S.isUndefined(tableData[request[i].apiName])) {
-                    tableData[request[i].apiName] = {};
-                }
-                tableData[request[i].apiName]["apiName"] = request[i].apiName;
-                tableData[request[i].apiName]["apis"] = request[i].apis;
-                tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
-                tableData[request[i].apiName]["response"] = request[i].response;
-            }
-        }
-        for(key in tableData) {
-            tableData[key]["responseJson"] = [];
-            wordBreak = tableData[key].wordBreak;
-            if ($S.isArray(tableData[key]["response"])) {
-                for(i=0; i<tableData[key]["response"].length; i++) {
-                    jsonData = AppHandler.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
-                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(jsonData);
-                }
-            }
-        }
-        for(key in tableData) {
-            if ($S.isObject(tableData[key]) && $S.isArray(tableData[key]["responseJson"])) {
-                jsonData = tableData[key]["responseJson"];
-                dataTable = dataTable.concat(AppHandler.ConvertJsonToTable(jsonData, dbTableDataIndex[key]));
-            }
-        }
-        var finalDB = {};
-        for (i=0; i<dataTable.length; i++) {
-            if ($S.isObject(dataTable[i]) && $S.isStringV2(dataTable[i]["tableName"])) {
-                tableName = dataTable[i]["tableName"];
-                if (!$S.isObject(finalDB[tableName]) || !$S.isArray(finalDB[tableName]["tableData"])) {
-                    finalDB[tableName] = {"tableData": []};
-                }
-                finalDB[tableName]["tableData"].push(dataTable[i]);
-            }
-        }
-        return finalDB;
-    },
     handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
@@ -212,7 +159,7 @@ ApiHandler.extend({
                 var dbViewData;
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    database = ApiHandler._generateDatabase(request, dbTableDataIndex);
+                    database = AppHandler.GenerateDatabase(request, dbTableDataIndex);
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);
                     DataHandler.setData("dbViewData", dbViewData);
