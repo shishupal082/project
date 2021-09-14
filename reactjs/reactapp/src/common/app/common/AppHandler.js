@@ -532,6 +532,40 @@ AppHandler.extend({
         }
         return true;
     },
+    GenerateDatabaseV2: function(request) {
+        var tableData = {}, i, temp;
+        var wordBreak;
+        if ($S.isArray(request)) {
+            for(i=0; i<request.length; i++) {
+                if (!$S.isObject(request[i])) {
+                    continue;
+                }
+                if (!$S.isString(request[i].apiName) || request[i].apiName.length < 1) {
+                    continue;
+                }
+                if ($S.isUndefined(tableData[request[i].apiName])) {
+                    tableData[request[i].apiName] = {};
+                }
+                tableData[request[i].apiName]["tableName"] = request[i].apiName;
+                tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
+                tableData[request[i].apiName]["apis"] = request[i].apis;
+                tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
+                tableData[request[i].apiName]["response"] = request[i].response;
+            }
+        }
+        for(var key in tableData) {
+            tableData[key]["responseJson"] = [];
+            wordBreak = tableData[key].wordBreak;
+            if ($S.isArray(tableData[key]["response"])) {
+                for(i=0; i<tableData[key]["response"].length; i++) {
+                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
+                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
+                }
+            }
+            tableData[key]["tableData"] = this.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
+        }
+        return tableData;
+    },
     GenerateDatabase: function(request, dbTableDataIndex) {
         var i, tableName, apiName;
         var wordBreak, jsonData;
@@ -566,12 +600,7 @@ AppHandler.extend({
                     tableData[apiName]["responseJson"] = tableData[apiName]["responseJson"].concat(jsonData);
                 }
             }
-        }
-        for(apiName in tableData) {
-            if ($S.isObject(tableData[apiName]) && $S.isArray(tableData[apiName]["responseJson"])) {
-                jsonData = tableData[apiName]["responseJson"];
-                dataTable = dataTable.concat(this.ConvertJsonToTable(jsonData, dbTableDataIndex[apiName]));
-            }
+            dataTable = dataTable.concat(this.ConvertJsonToTable(tableData[apiName]["responseJson"], dbTableDataIndex[apiName]));
         }
         for (i=0; i<dataTable.length; i++) {
             if ($S.isObject(dataTable[i]) && $S.isStringV2(dataTable[i]["tableName"])) {

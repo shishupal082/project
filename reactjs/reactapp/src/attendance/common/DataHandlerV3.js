@@ -157,7 +157,7 @@ DataHandlerV3.extend({
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbDataLoadStatus", "completed");
-                    tableData = DBViewDataHandler.GenerateTableData(request);
+                    tableData = AppHandler.GenerateDatabaseV2(request);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });
@@ -171,7 +171,7 @@ DataHandlerV3.extend({
         DataHandler.setData("attendanceDataLoadStatus", "in_progress");
         DataHandlerV3._loadDBViewData(attendanceDataApis, function(request) {
             DataHandler.setData("attendanceDataLoadStatus", "completed");
-            dbViewDataTemp = DBViewDataHandler.GenerateTableData(request);
+            dbViewDataTemp = AppHandler.GenerateDatabaseV2(request);
             dbViewData = DataHandler.getData("dbViewData", {});
             if ($S.isObjectV2(dbViewDataTemp)) {
                 if (!$S.isObject(dbViewData)) {

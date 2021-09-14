@@ -58,7 +58,6 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/secondAppData/attendance/json/meta-data/",
     addTextFilenamePattern: "field_report_/YYYY/-/MMM/.csv",
@@ -68,13 +67,14 @@ var GLOBAL = {
 
 /*For project directory*/
 
-GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
-GLOBAL.appControlDataPath = "/pvt/app-data/attendance/";
+// GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
+// GLOBAL.appControlDataPath = "/pvt/app-data/attendance/";
 
 /*For project directory end*/
 
-
+GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
 GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
+
 GLOBAL.appControlApi = "/roleAttendanceUser/json/attendance/appControlData.json";
 
 GLOBAL.validAppControl = [
