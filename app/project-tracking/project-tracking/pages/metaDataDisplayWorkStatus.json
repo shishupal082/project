@@ -1,5 +1,5 @@
 {
-    "pageId:displayWorkStatus.list3DataKey": "list3Data_3",
+    "viewPageName:displayWorkStatus.list3DataKey": "list3Data_3",
     "list3Data_3": [
         {
             "text": "Show All"
@@ -11,11 +11,11 @@
         },
         {
             "text": "Order by Project Name -- Work Item Name",
-            "value": [{"key": "pName"}, {"key": "supply_item_name"}]
+            "value": [{"key": "pName"}, {"key": "work_item_name"}]
         },
         {
             "text": "Order by Date -- Project -- Work Item Name",
-            "value": [{"key": "date"}, {"key": "pName"}, {"key": "supply_item_name"}]
+            "value": [{"key": "date"}, {"key": "pName"}, {"key": "work_item_name"}]
         },
         {
             "text": "Order by Project Name",
@@ -27,11 +27,11 @@
         },
         {
             "text": "Order by Work Item Name",
-            "value": [{"key": "supply_item_name"}]
+            "value": [{"key": "work_item_name"}]
         },
         {
             "text": "Order by Updated By -- Date",
-            "value": [{"key": "updatedBy"}, {"key": "date"}]
+            "value": [{"key": "addedBy"}, {"key": "date"}]
         },
         {
             "text": "Order by Project Name -- Date",
@@ -39,34 +39,34 @@
         },
         {
             "text": "Order by Supply Item Name -- Date",
-            "value": [{"key": "supply_item_name"}, {"key": "date"}]
+            "value": [{"key": "work_item_name"}, {"key": "date"}]
         },
         {
             "text": "Order by Project Name -- Supply Item Name -- Date",
-            "value": [{"key": "pName"}, {"key": "supply_item_name"}, {"key": "date"}]
+            "value": [{"key": "pName"}, {"key": "work_item_name"}, {"key": "date"}]
         }
     ],
-    "pageId:displayWorkStatus.dateParameterField": {
+    "viewPageName:displayWorkStatus.dateParameterField": {
         "table": "project_work_status",
         "fieldName": "date"
     },
-    "pageId:displayWorkStatus.filterKeyMapping": {
-        "pageId:displayWorkStatus.filterKeys": "filterKeys"
+    "viewPageName:displayWorkStatus.filterKeyMapping": {
+        "viewPageName:displayWorkStatus.filterKeys": "filterKeys"
     },
-    "pageId:displayWorkStatus.filterKeys": ["updatedBy", "pName", "supply_item_name", "reset"],
-    "pageId:displayWorkStatus.requiredDataTable": ["project_work_status", "work_item", "project_table"],
-    "pageId:displayWorkStatus.resultCriteria": [
+    "viewPageName:displayWorkStatus.filterKeys": ["addedBy", "pName", "work_item_name", "reset"],
+    "viewPageName:displayWorkStatus.requiredDataTable": ["project_work_status", "work_item", "project_table"],
+    "viewPageName:displayWorkStatus.resultCriteria": [
         {
             "op": "==",
             "force1stEntry": true,
             "values": [
                 {
                     "tableName": "project_work_status",
-                    "col": "sid"
+                    "col": "id1"
                 },
                 {
                     "tableName": "work_item",
-                    "col": "sid"
+                    "col": "tableUniqueId"
                 }
             ],
             "result": {
@@ -74,7 +74,7 @@
                 "requiredData": [
                     {
                         "tableName": "project_work_status",
-                        "fieldName": "updatedBy"
+                        "fieldName": "addedBy"
                     },
                     {
                         "tableName": "project_work_status",
@@ -102,7 +102,7 @@
                     },
                     {
                         "tableName": "work_item",
-                        "fieldName": "supply_item_name"
+                        "fieldName": "work_item_name"
                     }
                 ]
             }
@@ -117,15 +117,15 @@
                 },
                 {
                     "tableName": "project_table",
-                    "col": "pid"
+                    "col": "tableUniqueId"
                 }
             ]
         }
     ],
-    "pageId:displayWorkStatus.resultPattern": [
+    "viewPageName:displayWorkStatus.resultPattern": [
         {
             "tableName": "project_work_status",
-            "name": "updatedBy",
+            "name": "addedBy",
             "heading": {"tag": "div", "text":"Updated By"},
             "isSortable": true
         },
@@ -139,7 +139,7 @@
         {
             "tableName": "project_work_status",
             "name": "distance",
-            "heading": "Distance",
+            "heading": "Quantity",
             "className": "text-center",
             "isSortable": true,
             "isTotalRow": true
@@ -158,7 +158,7 @@
         },
         {
             "tableName": "project_work_status",
-            "name": "discription",
+            "name": "remarks",
             "heading": "Remarks",
             "isSortable": true
         },
@@ -170,7 +170,7 @@
         },
         {
             "tableName": "project_work_status",
-            "name": "supply_item_name",
+            "name": "work_item_name",
             "heading": "Work Item Name",
             "isSortable": true
         }

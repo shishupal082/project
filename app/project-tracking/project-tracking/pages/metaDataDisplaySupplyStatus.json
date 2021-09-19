@@ -1,38 +1,15 @@
 {
-    "pageId:displaySupplyStatus.list3DataKey": "list3Data_1",
-    "pageId:displaySupplyStatus.dateParameterField": {
+    "viewPageName:displaySupplyStatus.list3DataKey": "list3Data_1",
+    "viewPageName:displaySupplyStatus.dateParameterField": {
         "table": "supply_status",
         "fieldName": "entryTime"
     },
-    "pageId:displaySupplyStatus.filterKeyMapping": {
-        "pageId:displaySupplyStatus.filterKeys": "filterKeys"
+    "viewPageName:displaySupplyStatus.filterKeyMapping": {
+        "viewPageName:displaySupplyStatus.filterKeys": "filterKeys"
     },
-    "pageId:displaySupplyStatus.filterKeys": ["updatedBy", "pName", "supply_status_key", "reset"],
-    "pageId:displaySupplyStatus.requiredDataTable": ["supply_status", "supply_item", "project_table"],
-    "pageId:displaySupplyStatus.resultCriteria": [
-        {
-            "op": "==",
-            "force1stEntry": true,
-            "values": [
-                {
-                    "tableName": "supply_status",
-                    "col": "sid"
-                },
-                {
-                    "tableName": "supply_item",
-                    "col": "sid"
-                }
-            ],
-            "result": {
-                "tableName": "supply_status",
-                "requiredData": [
-                    {
-                        "tableName": "supply_item",
-                        "fieldName": "supply_item_name"
-                    }
-                ]
-            }
-        },
+    "viewPageName:displaySupplyStatus.filterKeys": ["addedBy", "pName", "supply_status_key", "reset"],
+    "viewPageName:displaySupplyStatus.requiredDataTable": ["project_table", "work_item", "supply_status"],
+    "viewPageName:displaySupplyStatus.resultCriteria": [
         {
             "op": "==",
             "force1stEntry": true,
@@ -43,15 +20,38 @@
                 },
                 {
                     "tableName": "project_table",
-                    "col": "pid"
+                    "col": "tableUniqueId"
+                }
+            ],
+            "result": {
+                "tableName": "supply_status",
+                "requiredData": [
+                    {
+                        "tableName": "project_table",
+                        "fieldName": "pName"
+                    }
+                ]
+            }
+        },
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "supply_status",
+                    "col": "id1"
+                },
+                {
+                    "tableName": "work_item",
+                    "col": "tableUniqueId"
                 }
             ]
         }
     ],
-    "pageId:displaySupplyStatus.resultPattern": [
+    "viewPageName:displaySupplyStatus.resultPattern": [
         {
             "tableName": "supply_status",
-            "name": "updatedBy",
+            "name": "addedBy",
             "heading": {"tag": "div", "text":"Updated By"},
             "isSortable": true
         },
@@ -69,8 +69,8 @@
         },
         {
             "tableName": "supply_status",
-            "name": "discription",
-            "heading": "Discription",
+            "name": "remarks",
+            "heading": "Remarks Supply Status",
             "isSortable": true
         },
         {
@@ -80,15 +80,15 @@
             "isSortable": true
         },
         {
-            "tableName": "project_table",
+            "tableName": "supply_status",
             "name": "pName",
             "heading": "Project Name",
             "isSortable": true
         },
         {
-            "tableName": "supply_status",
-            "name": "supply_item_name",
-            "heading": "Supply Item Name",
+            "tableName": "work_item",
+            "name": "work_item_name",
+            "heading": "Work Item Name",
             "isSortable": true
         }
     ]

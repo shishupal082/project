@@ -1,11 +1,11 @@
 {
-    "pageId:projectComment.list3DataKey": "list3Data_2",
-    "pageId:projectComment.dateParameterField": {
+    "viewPageName:projectComment.list3DataKey": "list3Data_2",
+    "viewPageName:projectComment.dateParameterField": {
         "table": "project_comment",
         "fieldName": "entryTime"
     },
-    "pageId:projectComment.requiredDataTable": ["project_comment", "project_table"],
-    "pageId:projectComment.resultCriteria": [
+    "viewPageName:projectComment.requiredDataTable": ["project_comment", "project_table"],
+    "viewPageName:projectComment.resultCriteria": [
         {
             "op": "==",
             "force1stEntry": true,
@@ -16,15 +16,15 @@
                 },
                 {
                     "tableName": "project_table",
-                    "col": "pid"
+                    "col": "tableUniqueId"
                 }
             ]
         }
     ],
-    "pageId:projectComment.resultPattern": [
+    "viewPageName:projectComment.resultPattern": [
         {
             "tableName": "project_comment",
-            "name": "updatedBy",
+            "name": "addedBy",
             "heading": {"tag": "div", "text":"Updated By"},
             "isSortable": true
         },
@@ -42,7 +42,13 @@
         },
         {
             "tableName": "project_comment",
-            "name": "comment",
+            "name": "subject",
+            "heading": "Subject",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_comment",
+            "name": "filename",
             "heading": "Comment",
             "isSortable": false
         }

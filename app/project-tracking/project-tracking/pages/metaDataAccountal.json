@@ -1,0 +1,83 @@
+{
+    "viewPageName:accountal.list3DataKey": "list3Data_1_accountal",
+    "list3Data_1_accountal": [
+        {
+            "text": "Show All"
+        },
+        {
+            "defaultSelected": true,
+            "value": [{"key": "date"}],
+            "text": "Order by Date"
+        },
+        {
+            "text": "Order by Date -- Dr username",
+            "value": [{"key": "date"}, {"key": "dr_username"}]
+        },
+        {
+            "text": "Order by Date -- Cr username",
+            "value": [{"key": "date"}, {"key": "cr_username"}]
+        },
+        {
+            "text": "Order by Dr username -- Date",
+            "value": [{"key": "dr_username"}, {"key": "date"}]
+        },
+        {
+            "text": "Order by Cr username -- Date",
+            "value": [{"key": "cr_username"}, {"key": "date"}]
+        }
+    ],
+    "viewPageName:accountal.dateParameterField": {
+        "table": "accountal_data",
+        "fieldName": "date"
+    },
+    "viewPageName:accountal.filterKeyMapping": {
+        "viewPageName:accountal.filterKeys": "filterKeys"
+    },
+    "viewPageName:accountal.filterKeys": ["dr_username", "cr_username", "reset"],
+    "viewPageName:accountal.requiredDataTable": ["accountal_data"],
+    "viewPageName:accountal.resultPattern": [
+        {
+            "tableName": "accountal_data",
+            "name": "date",
+            "heading": "Date",
+            "isSortable": true,
+            "totalRowText": {"tag": "b", "text": "Total"}
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "amount",
+            "heading": "Amount",
+            "className": "text-center",
+            "isSortable": false,
+            "isTotalRow": true
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "remarks",
+            "heading": "Remarks",
+            "displayValue": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "dr_username",
+            "heading": "Dr Account",
+            "displayValue": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "cr_username",
+            "heading": "Cr Account",
+            "displayValue": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "entryTime",
+            "heading": "Entry Time",
+            "className": "w-200px",
+            "isSortable": true
+        }
+    ]
+}

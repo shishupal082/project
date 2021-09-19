@@ -4,6 +4,10 @@
         "table": "file_table",
         "fieldName": "entryTime"
     },
+    "pageId:displayUploadedFiles.filterKeyMapping": {
+        "pageId:displayUploadedFiles.filterKeys": "filterKeys"
+    },
+    "pageId:displayUploadedFiles.filterKeys": ["pName", "tableName", "reset"],
     "pageId:displayUploadedFiles.requiredDataTable": ["file_table", "project_table"],
     "pageId:displayUploadedFiles.resultCriteria": [
         {
@@ -16,20 +20,29 @@
                 },
                 {
                     "tableName": "project_table",
-                    "col": "pid"
+                    "col": "tableUniqueId"
                 }
-            ]
+            ],
+            "result": {
+                "tableName": "file_table",
+                "requiredData": [
+                    {
+                        "tableName": "project_table",
+                        "fieldName": "pName"
+                    }
+                ]
+            }
         }
     ],
     "pageId:displayUploadedFiles.resultPattern": [
         {
             "tableName": "file_table",
-            "name": "updatedBy",
+            "name": "addedBy",
             "heading": {"tag": "div", "text":"Updated By"},
             "isSortable": true
         },
         {
-            "tableName": "project_table",
+            "tableName": "file_table",
             "name": "pName",
             "heading": "Project Name",
             "isSortable": true
@@ -50,6 +63,12 @@
             "tableName": "file_table",
             "name": "entryTime",
             "heading": "Uploaded On",
+            "isSortable": true
+        },
+        {
+            "tableName": "file_table",
+            "name": "tableName",
+            "heading": "Table Name",
             "isSortable": true
         }
     ]

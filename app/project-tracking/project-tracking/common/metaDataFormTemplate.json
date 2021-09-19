@@ -1,0 +1,286 @@
+{
+    "projectId.WorkStatus.formTemplate": [
+        {
+            "tag": "form",
+            "name": "form.generic_form1",
+            "value": "form.generic_form1",
+            "text": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-secondary",
+                        "name": "pageName:formBadgeText",
+                        "text": "Add Item"
+                    }
+                },
+                {
+                    "tag": "div.table.tbody",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Item Name"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "input",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.name",
+                                        "text": ""
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Form Type"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "dropdown",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.formType",
+                                        "text": [
+                                            {
+                                                "text": "Select form type ...",
+                                                "value": ""
+                                            },
+                                            {
+                                                "text": "Work Item",
+                                                "value": "WorkItem"
+                                            },
+                                            {
+                                                "text": "Supply Item",
+                                                "value": "SupplyItem"
+                                            },
+                                            {
+                                                "text": "Contingency supply item",
+                                                "value": "ContingencySupplyItem"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "span",
+                                            "text": "Details"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tag": "td",
+                                    "colSpan": 3,
+                                    "text": [
+                                        {
+                                            "tag": "textarea",
+                                            "className": "form-control",
+                                            "name": "form.generic_form1.entry.details",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "colSpan": 4,
+                                    "className": "text-center",
+                                    "text": [
+                                        {
+                                            "tag": "button",
+                                            "name": "addentry.submitStatus",
+                                            "className": "btn btn-primary form-control",
+                                            "text": "Save"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+
+                }
+            ]
+        }
+    ],
+    "projectId.Accountal.formTemplate": [
+        {
+            "tag": "form",
+            "name": "form.generic_form1",
+            "value": "form.generic_form1",
+            "text": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-secondary",
+                        "name": "pageName:formBadgeText",
+                        "text": "Add Account Entry"
+                    }
+                },
+                {
+                    "tag": "div.table.tbody",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": "Date"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "input",
+                                        "className": "form-control",
+                                        "name": "form.generic_form1.entry.date",
+                                        "value": ""
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Amount"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "input",
+                                            "className": "form-control",
+                                            "name": "form.generic_form1.entry.amount",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Dr"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "dropdown",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.dr_username",
+                                        "text": [
+                                            {
+                                                "text": "Select Dr Account ...",
+                                                "value": ""
+                                            },
+                                            {
+                                                "text": "Cash",
+                                                "value": "Cash"
+                                            },
+                                            {
+                                                "text": "Bank",
+                                                "value": "Bank"
+                                            },
+                                            {
+                                                "text": "Misc",
+                                                "value": "Misc"
+                                            },
+                                            {
+                                                "text": "Assets",
+                                                "value": "Assets"
+                                            },
+                                            {
+                                                "text": "Medical",
+                                                "value": "Medical"
+                                            },
+                                            {
+                                                "text": "Transport",
+                                                "value": "Transport"
+                                            },
+                                            {
+                                                "text": "Transport",
+                                                "value": "Transport"
+                                            },
+                                            {
+                                                "text": "Bike-Fuel",
+                                                "value": "Bike-Fuel"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "span",
+                                            "text": "Remarks"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tag": "td",
+                                    "colSpan": 3,
+                                    "text": [
+                                        {
+                                            "tag": "textarea",
+                                            "className": "form-control",
+                                            "name": "form.generic_form1.entry.remarks",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "colSpan": 4,
+                                    "className": "text-center",
+                                    "text": [
+                                        {
+                                            "tag": "button",
+                                            "name": "addentry.submitStatus",
+                                            "className": "btn btn-primary form-control",
+                                            "text": "Save"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+
+                }
+            ]
+        }
+    ]
+}

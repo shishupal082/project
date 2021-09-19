@@ -1,0 +1,127 @@
+{
+    "projectId.goBackRowEnable": true,
+    "projectId.goBackLinkEnable": true,
+    "id1Page.goBackRowEnable": true,
+    "id1Page.goBackLinkEnable": true,
+    "afterLoginLinkJson": [
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span","text":"Login as: "},
+                {"tag":"span.b","name":"pageHeading.username","text":""}
+            ]
+        },
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.dashboardLink","href":"","text":"Dashboard"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "pageId:displayUploadedFiles",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:pageId.displayUploadedFiles","href":"/display/displayUploadedFiles","text":"Uploaded Files"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:displaySupplyStatus",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.displaySupplyStatusLink","href":"/view/displaySupplyStatus","text":"Supply Status"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:contingencyStatus",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.contingencyStatusLink","href":"/view/contingencyStatus","text":"Supply Contingency"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:displayWorkStatus",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.displayWorkStatus","href":"/view/displayWorkStatus","text":"Work Status"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:projectComment",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.projectComment","href":"/view/projectComment","text":"Project Comment"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:accountal",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.accountal","href":"/view/accountal","text":"Accountal"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:accountal_1",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.accountal_1","href":"/pid/6c5e1fb0-3df5-4329-af57-19a6de8e41a1","text":"Add entry"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span", "text":" |  "},
+                {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+            ]
+        }
+    ],
+    "footerLinkJsonAfterLogin": [
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "pageId:manageFiles",
+            "text": [
+                {"tag":"span","text":"  "},
+                {"tag":"span","text":{"tag":"link","name":"pageFooter:pageId.manageFiles","href":"/display/manageFiles","text":"Manage Files"}}
+            ]
+        }
+    ],
+    "home.formTemplate": [
+        {
+            "tag": "td",
+            "text": "Form Type"
+        },
+        {
+            "tag": "td",
+            "text": {
+                "tag": "dropdown",
+                "className": "form-control",
+                "name": "form.generic_form0.entry.form_type",
+                "text": [
+                    {
+                        "text": "Select section...",
+                        "value": ""
+                    },
+                    {
+                        "text": "Work Status",
+                        "value": "WorkStatus"
+                    }
+                ]
+            }
+        }
+    ]
+}

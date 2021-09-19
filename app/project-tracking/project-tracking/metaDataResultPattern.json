@@ -1,0 +1,70 @@
+{
+    "list3Data_1": [
+        {
+            "text": "Show All"
+        },
+        {
+            "defaultSelected": true,
+            "value": [{"key": "entryTime"}],
+            "text": "Order by Date"
+        },
+        {
+            "text": "Order by Project Name -- Work Item Name",
+            "value": [{"key": "pName"}, {"key": "work_item_name"}]
+        },
+        {
+            "text": "Order by Date -- Project -- Work Item",
+            "value": [{"key": "entryTime"}, {"key": "pName"}, {"key": "work_item_name"}]
+        },
+        {
+            "text": "Order by Project Name",
+            "value": [{"key": "pName"}]
+        },
+        {
+            "text": "Order by Work Item Name",
+            "value": [{"key": "work_item_name"}]
+        },
+        {
+            "text": "Order by Updated By -- Date",
+            "value": [{"key": "addedBy"}, {"key": "entryTime"}]
+        },
+        {
+            "text": "Order by Project Name -- Date",
+            "value": [{"key": "pName"}, {"key": "entryTime"}]
+        },
+        {
+            "text": "Order by Work Item Name -- Date",
+            "value": [{"key": "work_item_name"}, {"key": "entryTime"}]
+        },
+        {
+            "text": "Order by Project Name -- Work Item Name -- Date",
+            "value": [{"key": "pName"}, {"key": "work_item_name"}, {"key": "entryTime"}]
+        }
+    ],
+    "list3Data_2": [
+        {
+            "text": "Show All"
+        },
+        {
+            "defaultSelected": true,
+            "value": [{"key": "entryTime"}],
+            "text": "Order by Date"
+        },
+        {
+            "text": "Order by Updated By -- Project Name",
+            "value": [{"key": "addedBy"}, {"key": "pName"}]
+        },
+        {
+            "text": "Order by Project Name",
+            "value": [{"key": "pName"}]
+        },
+        {
+            "text": "Order by Updated By -- Date",
+            "value": [{"key": "addedBy"}, {"key": "entryTime"}]
+        },
+        {
+            "text": "Order by Project Name -- Date",
+            "value": [{"key": "pName"}, {"key": "entryTime"}]
+        }
+    ]
+}

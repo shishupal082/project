@@ -1,54 +1,30 @@
 {
-    "pageId:contingencyStatus.list3DataKey": "list3Data_1",
-    "pageId:contingencyStatus.dateParameterField": {
+    "viewPageName:contingencyStatus.list3DataKey": "list3Data_1",
+    "viewPageName:contingencyStatus.dateParameterField": {
         "table": "contingency_supply_status",
         "fieldName": "entryTime"
     },
-    "pageId:contingencyStatus.requiredDataTable": ["contingency_supply_status", "contingency_supply_item", "project_table"],
-    "pageId:contingencyStatus.resultCriteria": [
+    "viewPageName:contingencyStatus.requiredDataTable": ["contingency_supply_status", "work_item", "project_table"],
+    "viewPageName:contingencyStatus.resultCriteria": [
         {
             "op": "==",
             "force1stEntry": false,
             "values": [
                 {
                     "tableName": "contingency_supply_status",
-                    "col": "sid"
+                    "col": "id1"
                 },
                 {
-                    "tableName": "contingency_supply_item",
-                    "col": "sid"
+                    "tableName": "work_item",
+                    "col": "tableUniqueId"
                 }
             ],
             "result": {
                 "tableName": "contingency_supply_status",
                 "requiredData": [
                     {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "updatedBy"
-                    },
-                    {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "supply_status_key"
-                    },
-                    {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "pid"
-                    },
-                    {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "supply_status_value"
-                    },
-                    {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "entryTime"
-                    },
-                    {
-                        "tableName": "contingency_supply_status",
-                        "fieldName": "discription"
-                    },
-                    {
-                        "tableName": "contingency_supply_item",
-                        "fieldName": "supply_item_name"
+                        "tableName": "work_item",
+                        "fieldName": "work_item_name"
                     }
                 ]
             }
@@ -63,19 +39,19 @@
                 },
                 {
                     "tableName": "project_table",
-                    "col": "pid"
+                    "col": "tableUniqueId"
                 }
             ]
         }
     ],
-    "pageId:contingencyStatus.filterKeyMapping": {
-        "pageId:contingencyStatus.filterKeys": "filterKeys"
+    "viewPageName:contingencyStatus.filterKeyMapping": {
+        "viewPageName:contingencyStatus.filterKeys": "filterKeys"
     },
-    "pageId:contingencyStatus.filterKeys": ["updatedBy", "pName", "supply_status_key", "reset"],
-    "pageId:contingencyStatus.resultPattern": [
+    "viewPageName:contingencyStatus.filterKeys": ["addedBy", "pName", "supply_status_key", "reset"],
+    "viewPageName:contingencyStatus.resultPattern": [
         {
             "tableName": "contingency_supply_status",
-            "name": "updatedBy",
+            "name": "addedBy",
             "heading": {"tag": "div", "text":"Updated By"},
             "isSortable": true
         },
@@ -93,8 +69,8 @@
         },
         {
             "tableName": "contingency_supply_status",
-            "name": "discription",
-            "heading": "Discription",
+            "name": "remarks",
+            "heading": "Remarks",
             "isSortable": true
         },
         {
@@ -111,7 +87,7 @@
         },
         {
             "tableName": "contingency_supply_status",
-            "name": "supply_item_name",
+            "name": "work_item_name",
             "heading": "Supply Item Name",
             "isSortable": true
         }

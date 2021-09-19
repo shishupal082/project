@@ -1,0 +1,36 @@
+{
+    "list1Data": [
+        {
+            "name": "Project Monitoring",
+            "metaDataApi": [
+                "/project-and-feedback/viewTableData.json",
+                "/project-tracking/metaDataResultPattern.json",
+                "/project-tracking/pages/metaDataDisplayContingencySupplyStatus.json",
+                "/project-tracking/pages/metaDataDisplaySupplyStatus.json",
+                "/project-tracking/pages/metaDataDisplayUploadedFiles.json",
+                "/project-tracking/pages/metaDataDisplayWorkStatus.json",
+                "/project-tracking/pages/metaDataProjectComment.json",
+                "/project-tracking/pages/metaDataViewPageManageFiles.json",
+                "/project-tracking/common/metaDataId1PageContingencySupplyItem.json",
+                "/project-tracking/common/metaDataId1PageSupplyItem.json",
+                "/project-tracking/common/metaDataId1PageWorkStatus.json",
+                "/project-tracking/common/metaDataPidPage.json",
+                "/project-tracking/common/metaDataFormTemplate.json",
+                "/project-tracking/common/metaDataHomePage.json",
+                "/project-tracking/json/appControlDataTeam01.json"
+            ]
+        }
+    ],
+    "metaData": {
+        "dbDataApis": [
+            {
+                "tableName": "project_table_common",
+                "apis": ["/project-tracking/csv/project_table.csv"]
+            },
+            {
+                "tableName": "project_link_common",
+                "apis": ["/project-tracking/csv/project_link.csv"]
+            }
+        ]
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "projectId.Accountal.formName": "form.generic_form1",
+    "form.generic_form1.validationData": {
+        "pid": {
+            "readPathParam": true,
+            "isRequired": true
+        },
+        "form.generic_form1.entry.formType": {
+            "type": "string",
+            "isRequired": true,
+            "default": "Accountal"
+        },
+        "form.generic_form1.entry.date": {
+            "type": "date",
+            "isRequired": true,
+            "default": "YYYY/-/MM/-/DD"
+        },
+        "form.generic_form1.entry.amount": {
+            "type": "numeric",
+            "isRequired": true
+        },
+        "form.generic_form1.entry.dr": {
+            "type": "string",
+            "isRequired": true,
+            "default": "dr"
+        },
+        "form.generic_form1.entry.dr_username": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form1.entry.cr": {
+            "type": "string",
+            "isRequired": true,
+            "default": "cr"
+        },
+        "form.generic_form1.entry.cr_username": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form1.entry.remarks": {
+            "type": "string",
+            "isRequired": true
+        }
+    },
+    "form.generic_form1.requiredKeys": [
+        "pid",
+        "form.generic_form1.entry.formType",
+        "form.generic_form1.entry.date",
+        "form.generic_form1.entry.amount",
+        "form.generic_form1.entry.dr",
+        "form.generic_form1.entry.dr_username",
+        "form.generic_form1.entry.cr",
+        "form.generic_form1.entry.cr_username",
+        "form.generic_form1.entry.remarks"
+    ]
+}

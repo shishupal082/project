@@ -1,0 +1,14 @@
+{
+    "list1Data": [
+        {
+            "name": "Accountal",
+            "metaDataApi": [
+                "/project-tracking/pages/metaDataAccountal.json",
+                "/project-tracking/common/metaDataPidPageAccountal.json",
+                "/project-tracking/common/metaDataFormTemplate.json",
+                "/project-tracking/common/metaDataHomePage.json",
+                "/project-tracking/json/appControlDataTeam01.json"
+            ]
+        }
+    ]
+}

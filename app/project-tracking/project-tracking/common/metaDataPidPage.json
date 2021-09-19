@@ -1,0 +1,231 @@
+{
+    "pageName:projectId.WorkStatus.filterKeyMapping": {
+        "pageName:projectId.WorkStatus.filterKeys": "filterKeys"
+    },
+    "pageName:projectId.WorkStatus.filterKeys": ["form_type", "reset"],
+    "pageName:projectId.WorkItem.dependentAttr": [
+        {
+            "sourceTableName": "project_work_status",
+            "destinationFieldName": "child_count",
+            "value": "LENGTH"
+        }
+    ],
+    "pageName:projectId.SupplyItem.dependentAttr": [
+        {
+            "sourceTableName": "supply_status",
+            "destinationFieldName": "child_count",
+            "value": "LENGTH"
+        }
+    ],
+    "pageName:projectId.ContingencySupplyItem.dependentAttr": [
+        {
+            "sourceTableName": "contingency_supply_status",
+            "destinationFieldName": "child_count",
+            "value": "LENGTH"
+        }
+    ],
+    "pageName:projectId.WorkStatus.resultPattern": [
+        {
+            "tableName": "work_item",
+            "name": "work_item_name",
+            "heading": "Work Item Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "work_item",
+            "name": "item_details",
+            "heading": "Work Item Details",
+            "isSortable": false
+        },
+        {
+            "tableName": "work_item",
+            "name": "status",
+            "heading": "Details",
+            "displayValue": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "work_item",
+            "name": "child_count",
+            "heading": "Count",
+            "displayValue": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "work_item",
+            "name": "details_link",
+            "heading": "Details",
+            "hidden": true
+        },
+        {
+            "tableName": "work_item",
+            "name": "form_type",
+            "heading": "Form Type",
+            "className": "w-120px",
+            "isSortable": true
+        },
+        {
+            "tableName": "work_item",
+            "name": "entryTime",
+            "heading": "Entry Time",
+            "className": "w-120px",
+            "isSortable": true
+        }
+    ],
+    "pageName:projectId.resultPatternUploadedFiles": [
+        {
+            "tableName": "file_table",
+            "name": "addedBy",
+            "heading": {"tag": "div", "text":"Updated By"},
+            "isSortable": false
+        },
+        {
+            "tableName": "file_table",
+            "name": "file_details",
+            "heading": "File Details",
+            "isSortable": false
+        }
+    ],
+    "projectId.WorkStatus.formName": "form.generic_form1",
+    "projectId.WorkStatus.formTemplate": [
+        {
+            "tag": "form",
+            "name": "form.generic_form1",
+            "value": "form.generic_form1",
+            "text": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-secondary",
+                        "name": "pageName:formBadgeText",
+                        "text": "Add Item"
+                    }
+                },
+                {
+                    "tag": "div.table.tbody",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Item Name"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "input",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.name",
+                                        "text": ""
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
+                                        "text": "Form Type"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "dropdown",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.formType",
+                                        "text": [
+                                            {
+                                                "text": "Select form type ...",
+                                                "value": ""
+                                            },
+                                            {
+                                                "text": "Work Item",
+                                                "value": "WorkItem"
+                                            },
+                                            {
+                                                "text": "Supply Item",
+                                                "value": "SupplyItem"
+                                            },
+                                            {
+                                                "text": "Contingency supply item",
+                                                "value": "ContingencySupplyItem"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "span",
+                                            "text": "Details"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "tag": "td",
+                                    "colSpan": 3,
+                                    "text": [
+                                        {
+                                            "tag": "textarea",
+                                            "className": "form-control",
+                                            "name": "form.generic_form1.entry.details",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "colSpan": 4,
+                                    "className": "text-center",
+                                    "text": [
+                                        {
+                                            "tag": "button",
+                                            "name": "addentry.submitStatus",
+                                            "className": "btn btn-primary form-control",
+                                            "text": "Save"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+
+                }
+            ]
+        }
+    ],
+    "form.generic_form1.validationData": {
+        "form.generic_form1.entry.name": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form1.entry.details": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form1.entry.formType": {
+            "type": "string",
+            "isRequired": true
+        },
+        "pid": {
+            "readPathParam": true,
+            "isRequired": true
+        }
+    },
+    "form.generic_form1.requiredKeys": ["pid", "form.generic_form1.entry.formType", "form.generic_form1.entry.name", "form.generic_form1.entry.details"]
+}

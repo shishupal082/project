@@ -1,0 +1,63 @@
+{
+    "pageId:manageFiles.dateParameterField": {
+        "table": "file_table",
+        "fieldName": "entryTime"
+    },
+    "pageId:manageFiles.filterKeyMapping": {
+        "pageId:manageFiles.filterKeys": "filterKeys"
+    },
+    "pageId:manageFiles.filterKeys": ["fileUsername", "reset"],
+    "pageId:manageFiles.requiredDataTable": ["file_table", "project_table"],
+    "pageId:manageFiles.resultCriteria": [
+        {
+            "op": "==",
+            "force1stEntry": true,
+            "values": [
+                {
+                    "tableName": "file_table",
+                    "col": "pid"
+                },
+                {
+                    "tableName": "project_table",
+                    "col": "tableUniqueId"
+                }
+            ],
+            "result": {
+                "tableName": "file_table",
+                "requiredData": [
+                    {
+                        "tableName": "project_table",
+                        "fieldName": "pName"
+                    }
+                ]
+            }
+        }
+    ],
+    "pageId:manageFiles.resultPattern": [
+        {
+            "tableName": "file_info_table",
+            "name": "fileUsername",
+            "heading": {"tag": "div", "text":"Uploaded By"},
+            "isSortable": true
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "file_details",
+            "heading": "File Details",
+            "isSortable": false
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "available_on",
+            "heading": "Files available",
+            "isSortable": false
+        },
+        {
+            "tableName": "file_info_table",
+            "name": "add_projects",
+            "heading": [{"tag": "div", "text": "Add files to"}, {"tag": "div", "text": "Other project"}],
+            "className": "text-center align-top",
+            "isSortable": false
+        }
+    ]
+}

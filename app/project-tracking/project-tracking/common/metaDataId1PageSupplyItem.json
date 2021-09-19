@@ -1,0 +1,305 @@
+{
+    "pageName:id1Page.SupplyItem.resultPattern": [
+        {
+            "tableName": "supply_status",
+            "name": "addedBy",
+            "heading": "Updated By",
+            "className": "w-105px",
+            "isSortable": false
+        },
+        {
+            "tableName": "supply_status",
+            "name": "supply_status_key",
+            "heading": "Key",
+            "isSortable": false
+        },
+        {
+            "tableName": "supply_status",
+            "name": "supply_status_value",
+            "heading": "Value",
+            "isSortable": false
+        },
+        {
+            "tableName": "supply_status",
+            "name": "remarks",
+            "heading": "Remarks",
+            "isSortable": false
+        },
+        {
+            "tableName": "supply_status",
+            "name": "entryTime",
+            "heading": "Entry Time",
+            "className": "w-160px",
+            "isSortable": false
+        }
+    ],
+    "pageName:id1Page.SupplyItem.preDefinedPattern": [
+        {
+            "tag": "table.tbody",
+            "className": "table-padded-px-5 table-striped",
+            "text": [
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td.b",
+                            "className": "w-105px",
+                            "text": "Added By"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-105px",
+                            "name": "addedBy",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "className": "w-160px",
+                            "text": "Work Item Name"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "supply_item_name",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "text": "Entry Time"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "entryTime",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td.b",
+                            "text": "Form Type"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "form_type",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "text": "Item Details"
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": 5,
+                            "name": "item_details",
+                            "text": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "hr"
+        }
+    ],
+    "id1Page.SupplyItem.formName": "form.generic_form2_1",
+    "id1Page.SupplyItem.formTemplate": [
+        {
+            "tag": "form",
+            "name": "form.generic_form2_1",
+            "value": "form.generic_form2_1",
+            "text": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-secondary",
+                        "text": "Update supply status"
+                    }
+                },
+                {
+                    "tag": "div.table.tbody",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": "Key"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "dropdown",
+                                        "className": "form-control",
+                                        "name": "form.generic_form2_1.entry.key",
+                                        "text": [
+                                            {
+                                                "value": "",
+                                                "text": "Select ..."
+                                            },
+                                            {
+                                                "value": "Indent Number",
+                                                "text": "Indent Number"
+                                            },
+                                            {
+                                                "value": "Indent Date",
+                                                "text": "Indent Date"
+                                            },
+                                            {
+                                                "value": "Indent Amount",
+                                                "text": "Indent Amount"
+                                            },
+                                            {
+                                                "value": "Tender Date",
+                                                "text": "Tender Date"
+                                            },
+                                            {
+                                                "value": "Tender Amount",
+                                                "text": "Tender Amount"
+                                            },
+                                            {
+                                                "value": "Approved by Consignee",
+                                                "text": "Approved by Consignee"
+                                            },
+                                            {
+                                                "value": "Approved by DSTE",
+                                                "text": "Approved by DSTE"
+                                            },
+                                            {
+                                                "value": "Approved by Sr.DSTE",
+                                                "text": "Approved by Sr.DSTE"
+                                            },
+                                            {
+                                                "value": "Approved by ADRM",
+                                                "text": "Approved by ADRM"
+                                            },
+                                            {
+                                                "value": "Send for Budget",
+                                                "text": "Send for Budget"
+                                            },
+                                            {
+                                                "value": "Approved by Sr.DMM",
+                                                "text": "Approved by Sr.DMM"
+                                            },
+                                            {
+                                                "value": "Material Supply Date",
+                                                "text": "Material Supply Date"
+                                            },
+                                            {
+                                                "value": "Bill submitted to Sr.DSTE",
+                                                "text": "Bill submitted to Sr.DSTE"
+                                            },
+                                            {
+                                                "value": "Send for budget",
+                                                "text": "Send for budget"
+                                            },
+                                            {
+                                                "value": "Budget Date",
+                                                "text": "Budget Date"
+                                            },
+                                            {
+                                                "value": "Bill pushed to AIMS",
+                                                "text": "Bill pushed to AIMS"
+                                            },
+                                            {
+                                                "value": "CO6 number",
+                                                "text": "CO6 number"
+                                            },
+                                            {
+                                                "value": "CO7 number",
+                                                "text": "CO7 number"
+                                            },
+                                            {
+                                                "value": "Others",
+                                                "text": "Others"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": "Value"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "input",
+                                            "className": "form-control",
+                                            "name": "form.generic_form2_1.entry.value",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": "Remarks"
+                                },
+                                {
+                                    "tag": "td",
+                                    "colSpan": 3,
+                                    "text": [
+                                        {
+                                            "tag": "textarea",
+                                            "className": "form-control",
+                                            "name": "form.generic_form2_1.entry.remarks",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "colSpan": 4,
+                                    "className": "text-center",
+                                    "text": [
+                                        {
+                                            "tag": "button",
+                                            "name": "addentry.submitStatus",
+                                            "className": "btn btn-primary form-control",
+                                            "text": "Save"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "form.generic_form2_1.validationData": {
+        "form.generic_form2_1.entry.key": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form2_1.entry.value": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form2_1.entry.remarks": {
+            "type": "string",
+            "isRequired": true
+        },
+        "pid": {
+            "readPathParam": true,
+            "isRequired": false
+        },
+        "id1": {
+            "readPathParam": true,
+            "isRequired": true
+        }
+    },
+    "form.generic_form2_1.requiredKeys": ["pid", "id1", "form.generic_form2_1.entry.key", "form.generic_form2_1.entry.value", "form.generic_form2_1.entry.remarks"]
+}

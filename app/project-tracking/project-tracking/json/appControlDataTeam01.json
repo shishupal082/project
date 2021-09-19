@@ -1,0 +1,170 @@
+{
+    "list1Data": [
+        {
+            "name": "Project Monitoring",
+            "metaDataApi": [
+                "/project-tracking/metaDataResultPattern.json",
+                "/project-tracking/pages/metaDataDisplayContingencySupplyStatus.json",
+                "/project-tracking/pages/metaDataDisplaySupplyStatus.json",
+                "/project-tracking/pages/metaDataDisplayUploadedFiles.json",
+                "/project-tracking/pages/metaDataDisplayWorkStatus.json",
+                "/project-tracking/pages/metaDataProjectComment.json",
+                "/project-tracking/pages/metaDataViewPageManageFiles.json",
+                "/project-tracking/common/metaDataId1PageContingencySupplyItem.json",
+                "/project-tracking/common/metaDataId1PageSupplyItem.json",
+                "/project-tracking/common/metaDataId1PageWorkStatus.json",
+                "/project-tracking/common/metaDataPidPage.json",
+                "/project-tracking/common/metaDataFormTemplate.json",
+                "/project-tracking/common/metaDataHomePage.json"
+            ]
+        }
+    ],
+    "metaData": {
+        "dynamicEnabling": {
+            "enablePageGroup01": {
+                "enabledPages": ["noMatch", "home", "projectId", "id1Page", "displayPage", "viewPage"],
+                "enabledPageId": ["displayUploadedFiles"],
+                "enabledForms": ["generic_form0", "generic_form1", "generic_form2"],
+                "enabledViewPage": ["displaySupplyStatus", "contingencyStatus", "displayWorkStatus"]
+            },
+            "enablePageGroup02": {
+                "enabledPages": ["noMatch", "home", "projectId", "id1Page", "displayPage", "viewPage"],
+                "enabledPageId": ["displayUploadedFiles", "manageFiles"],
+                "enabledForms": ["generic_form1", "generic_form2", "fileUploadForm", "projectLinkForm", "projectCommentForm"],
+                "enabledViewPage": ["displaySupplyStatus", "contingencyStatus", "displayWorkStatus", "projectComment", "tableData1"]
+            },
+            "enablePageGroup03": {
+                "enabledPages": ["noMatch", "home", "projectId", "id1Page", "displayPage", "viewPage"],
+                "enabledForms": ["generic_form0", "generic_form1", "generic_form2", "generic_form2.force1", "fileUploadForm", "projectLinkForm", "projectCommentForm"],
+                "enabledPageId": ["displayUploadedFiles", "manageFiles"],
+                "enabledViewPage": ["projectComment", "displayWorkStatus", "displaySupplyStatus", "contingencyStatus", "tableData1"]
+            },
+            "enablePageGroup04": {
+                "enabledPages": ["noMatch", "home", "projectId", "id1Page", "displayPage", "viewPage"],
+                "enabledPageId": ["displayUploadedFiles"],
+                "enabledForms": ["fileUploadForm"],
+                "enabledViewPage": ["displayWorkStatus"]
+            },
+            "enablePageGroup05": {
+                "enabledPages": ["noMatch", "home", "projectId", "id1Page", "displayPage", "viewPage"],
+                "enabledPageId": ["displayUploadedFiles", "manageFiles"],
+                "enabledForms": ["generic_form0", "generic_form1", "generic_form2"],
+                "enabledViewPage": ["projectComment", "tableData1"]
+            },
+            "enablePageGroup06": {
+                "enabledForms": ["generic_form1"],
+                "enabledViewPage": ["accountal", "accountal_1"]
+            }
+        },
+        "getTableDataApiNameKey": "getTableData",
+        "tableName": {
+            "form.generic_form0.tableName": "project_table",
+            "form.generic_form1.WorkStatus.tableName": "work_item",
+            "form.generic_form1.Accountal.tableName": "accountal_data",
+            "form.generic_form2.WorkItem.tableName": "project_work_status",
+            "form.generic_form2_1.SupplyItem.tableName": "supply_status",
+            "form.generic_form2_1.ContingencySupplyItem.tableName": "contingency_supply_status",
+            "deleteTable": "delete_table",
+            "projectTable": "project_table",
+            "fileTable": "file_table",
+            "projectLink": "project_link",
+            "projectComment": "project_comment",
+            "pageName:displayPage.fileInfoTable": "file_info_table"
+        },
+        "messageMapping": {
+            "tableName.invalid": "Invalid table name",
+            "common-value": "Value Required",
+            "date-entry-key": "Please enter valid date",
+            "remark-entry-key": "Remarks Required",
+            "new-work-status.section": "Please select section",
+            "new-project.name": "Project Name Required",
+            "supplyDiscription": "Select Discription",
+            "new-work-status.distance": "Distance Required",
+            "new-work-status.distance.invalid": "Enter Valid Distance",
+            "add-supply-item.name": "Supply Item Name Required",
+            "add-supply-item.details": "Supply Item Details Required",
+            "upload_file.file": "File Required",
+            "add-project-comment-form.comment": "Comment Required",
+            "add-project-files-form.project": "Select Project Name",
+            "upload_file_link.subject": "Link Heading required",
+            "upload_file_link.heading": "Link required",
+            "form.generic_form1.entry.name": "Item name required.",
+            "form.generic_form1.entry.details": "Details required.",
+            "form.generic_form1.entry.formType": "Form type required.",
+            "form.generic_form2.entry.section": "Section required.",
+            "form.generic_form2.entry.distance": "Distance required.",
+            "form.generic_form2.entry.distance.invalid": "Please enter numeric value for distance.",
+            "form.generic_form2.entry.date": "Date required in YYYY-MM-DD formate.",
+            "form.generic_form2.entry.remarks": "Remarks required.",
+            "form.generic_form2_1.entry.key": "Please select key.",
+            "form.generic_form2_1.entry.value": "Value required.",
+            "form.generic_form2_1.entry.remarks": "Remarks required."
+        },
+        "dbTableDataIndex": {
+            "project_table_common":      ["sNo", "entryTime", "addedBy", "tableName", "tableUniqueId", "uiEntryTime", "form_type", "pName", "discription"],
+            "project_link_common":       ["sNo", "entryTime", "addedBy", "tableName", "tableUniqueId", "uiEntryTime", "pid", "subject", "filename", "discription"],
+            "project_table":             ["form_type", "pName", "discription"],
+            "file_table":                ["pid", "subject", "filename", "discription"],
+            "project_comment":           ["pid", "subject", "filename", "discription"],
+            "project_link":              ["pid", "subject", "filename", "discription"],
+            "accountal_data":            ["pid", "form_type", "date", "amount", "dr", "dr_username", "cr", "cr_username", "remarks"],
+            "work_item":                 ["pid", "form_type", "work_item_name", "item_details", "discription"],
+            "project_work_status":       ["pid", "id1", "section", "distance", "date", "remarks", "discription"],
+            "supply_status":             ["pid", "id1", "supply_status_key", "supply_status_value", "remarks", "discription"],
+            "contingency_supply_status": ["pid", "id1", "supply_status_key", "supply_status_value", "remarks", "discription"]
+        },
+        "combineTableData": [
+            {
+                "sourceTableName": ["file_table", "project_comment", "project_link"],
+                "destinationTableName": "file_table"
+            }
+        ],
+        "defaultSorting": [
+            {
+                "table": "project_table",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "accountal_data",
+                "index": "date",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "file_table",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "project_comment",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "project_link",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "project_link",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "project_work_status",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "supply_status",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            },
+            {
+                "table": "contingency_supply_status",
+                "index": "entryTime",
+                "sortableValue": "descending"
+            }
+        ]
+    }
+}

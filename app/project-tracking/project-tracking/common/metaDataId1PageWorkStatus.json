@@ -1,0 +1,252 @@
+{
+    "pageName:id1Page.WorkItem.resultPattern": [
+        {
+            "tableName": "project_work_status",
+            "name": "addedBy",
+            "heading": "Updated By",
+            "className": "w-105px",
+            "isSortable": false
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "date",
+            "heading": "Date",
+            "className": "w-105px",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "section",
+            "heading": "Section",
+            "isSortable": false,
+            "totalRowText": {"tag": "b", "text": "Total"}
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "distance",
+            "heading": "Quantity",
+            "className": "text-center",
+            "isSortable": false,
+            "isTotalRow": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "remarks",
+            "heading": "Remarks",
+            "isSortable": true
+        },
+        {
+            "tableName": "project_work_status",
+            "name": "entryTime",
+            "heading": "Entry Time",
+            "className": "w-160px",
+            "isSortable": false
+        }
+    ],
+    "pageName:id1Page.WorkItem.preDefinedPattern": [
+        {
+            "tag": "table.tbody",
+            "className": "table-padded-px-5 table-striped",
+            "text": [
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td.b",
+                            "className": "w-105px",
+                            "text": "Added By"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-105px",
+                            "name": "addedBy",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "className": "w-160px",
+                            "text": "Work Item Name"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "work_item_name",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "text": "Entry Time"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "entryTime",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td.b",
+                            "text": "Form Type"
+                        },
+                        {
+                            "tag": "td",
+                            "name": "form_type",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.b",
+                            "text": "Item Details"
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": 5,
+                            "name": "item_details",
+                            "text": ""
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "hr"
+        }
+    ],
+    "id1Page.WorkItem.formName": "form.generic_form2",
+    "id1Page.WorkItem.formTemplate": [
+        {
+            "tag": "form",
+            "name": "form.generic_form2",
+            "value": "form.generic_form2",
+            "text": [
+                {
+                    "tag": "div",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge badge-secondary",
+                        "text": "Update work item"
+                    }
+                },
+                {
+                    "tag": "div.table.tbody",
+                    "text": [
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": "Date"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "input",
+                                        "className": "form-control",
+                                        "name": "form.generic_form2.entry.date",
+                                        "value": ""
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": "Quantity"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": [
+                                        {
+                                            "tag": "input",
+                                            "className": "form-control",
+                                            "name": "form.generic_form2.entry.distance",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "text": "Section"
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "input",
+                                        "className": "form-control",
+                                        "name": "form.generic_form2.entry.section",
+                                        "value": ""
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": "Remarks"
+                                },
+                                {
+                                    "tag": "td",
+                                    "colSpan": 3,
+                                    "text": [
+                                        {
+                                            "tag": "textarea",
+                                            "className": "form-control",
+                                            "name": "form.generic_form2.entry.remarks",
+                                            "value": ""
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "tr",
+                            "text": [
+                                {
+                                    "tag": "td",
+                                    "colSpan": 4,
+                                    "className": "text-center",
+                                    "text": [
+                                        {
+                                            "tag": "button",
+                                            "name": "addentry.submitStatus",
+                                            "className": "btn btn-primary form-control",
+                                            "text": "Save"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "form.generic_form2.validationData": {
+        "form.generic_form2.entry.date": {
+            "type": "date",
+            "default": "YYYY/-/MM/-/DD",
+            "isRequired": true
+        },
+        "form.generic_form2.entry.section": {
+            "type": "string",
+            "isRequired": true
+        },
+        "form.generic_form2.entry.distance": {
+            "type": "numeric",
+            "isRequired": true
+        },
+        "form.generic_form2.entry.remarks": {
+            "type": "string",
+            "isRequired": true
+        },
+        "pid": {
+            "readPathParam": true,
+            "isRequired": false
+        },
+        "id1": {
+            "readPathParam": true,
+            "isRequired": true
+        }
+    },
+    "form.generic_form2.requiredKeys": ["pid", "id1", "form.generic_form2.entry.section", "form.generic_form2.entry.distance", "form.generic_form2.entry.date", "form.generic_form2.entry.remarks"]
+}
