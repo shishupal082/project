@@ -462,9 +462,6 @@ DataHandler.extend({
         var sortingFields = this.getData("sortingFields", []);
         var filterOptions = this.getData("filterOptions");
         var dateParameterField;
-        if (DataHandlerV2.isDisabled("pageName", pageName)) {
-            return {"status": "FAILURE", "reason": "Requested page disabled"};
-        }
         switch(pageName) {
             case "home":
                 var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
