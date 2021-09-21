@@ -402,7 +402,7 @@ CommonDataHandler.extend({
         }
         return msg;
     },
-    _saveData: function(pageName, formName, tableName, formData, requiredKeys, callback) {
+    _saveData: function(pageName, formName, tableName, uiEntryTime, formData, requiredKeys, callback) {
         var resultData = requiredKeys;
         var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         if (!$S.isString(url)) {
@@ -418,8 +418,9 @@ CommonDataHandler.extend({
         }
         var postData = {};
         postData["text"] = [finalText.join(",")];
-        postData["tableName"] = tableName;
         postData["filename"] = tableName + ".csv";
+        postData["tableName"] = tableName;
+        postData["uiEntryTime"] = uiEntryTime;
         if ($S.isFunction(callback)) {
             callback(CommonConfig.IN_PROGRESS);
         }
@@ -495,6 +496,7 @@ CommonDataHandler.extend({
     },
     submitForm: function(pageName, formName, tableName, messageMapping, requiredKeys, validationData, callback) {
         var fieldsData = CommonDataHandler.getData("fieldsData", {});
+        var uiEntryTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss","/");
         var i, isFormValid = true, formData = {};
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
@@ -506,7 +508,13 @@ CommonDataHandler.extend({
             alert("Required keys not found in config.");
             requiredKeys = [];
         }
-        var key, value;
+        var key = formName + ".uiEntryTime", value;
+        if ($S.isObjectV2(validationData[key])) {
+            uiEntryTime = this._getFinalFieldData(validationData, fieldsData, key);
+            if (!this._isValidField(messageMapping, validationData, key, uiEntryTime)) {
+                return;
+            }
+        }
         for (i=0; i<requiredKeys.length; i++) {
             key = requiredKeys[i];
             value = this._getFinalFieldData(validationData, fieldsData, key);
@@ -517,7 +525,7 @@ CommonDataHandler.extend({
             formData[key] = value;
         }
         if (isFormValid) {
-            this._saveData(pageName, formName, tableName, formData, requiredKeys, callback);
+            this._saveData(pageName, formName, tableName, uiEntryTime, formData, requiredKeys, callback);
         }
     }
 });

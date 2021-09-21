@@ -30,7 +30,7 @@ DataHandlerV2.extend({
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getData("metaData", {});
         var splitOnEqualWidth = $S.findParam([currentAppData, metaData], "splitOnEqualWidth", false);
-        var wordSplitingChar = $S.findParam([currentAppData, metaData], "wordSplitingChar", false);
+        var wordSplitingChar = $S.findParam([currentAppData, metaData], "wordSplitingChar", [" "]);
         var responseArr = [], result = [];
         var i,j, temp;
         for(i=0; i<finalResponse.length; i++) {

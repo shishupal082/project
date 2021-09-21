@@ -1,25 +1,19 @@
 import $$$ from '../../interface/global';
+import CommonConfig from "../../common/app/common/CommonConfig";
 import $S from "../../interface/stack.js";
 
 var Config = {};
 
-var basepathname = $$$.basepathname;
+var basepathname = CommonConfig.basepathname;
 
 
-Config.baseapi = $$$.baseapi;
-Config.backIconUrl = $$$.backIconUrl;
-Config.appVersion = $$$.appVersion;
-Config.gtag = $$$.gtag;
+Config.baseapi = CommonConfig.baseApi;
+Config.appVersion = CommonConfig.appVersion;
+Config.gtag = CommonConfig.gtag;
 
 var appControlApi = $$$.appControlApi;
 
-if (!$S.isArray(appControlApi)) {
-    appControlApi = [];
-}
-
-Config.appControlApi = appControlApi.map(function(el, i, arr) {
-    return Config.baseapi + el + "?v=" + Config.appVersion;
-});
+Config.appControlApi = [Config.baseapi + appControlApi]
 
 var pages = {
     "home": basepathname+"/",
@@ -86,7 +80,7 @@ Config.goBackLinkData = [
                 "text": [
                     {
                         "tag": "img",
-                        "src": Config.backIconUrl,
+                        "src": $$$.backIconUrl,
                         "className": "back-img",
                         "alt": "back"
                     },

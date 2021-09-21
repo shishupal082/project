@@ -23,10 +23,10 @@
     -->
     <title>React App Account V2</title>
     <!-- It will use nodejs to load static file -->
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/static/libs/bootstrap-v4.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost:3000/app/account/static/css/account.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/account.css"/>
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -42,13 +42,15 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 <script type="text/javascript">
+
 var GLOBAL = {
-    baseapi: "http://localhost:3000",
+    baseApi: "http://localhost:8080",
     basepathname: "",
-    backIconUrl: "http://localhost:3000/static/img/icons/back-32.png"
+    appControlDataPath: "/project-tracking/json/",
+    forceLogin: false
 };
 
-GLOBAL.appControlApi = ["/pvt/app-data/account/userControlV2.json"];
+GLOBAL.appControlApi = "/pvt/app-data/account/userControlV2.json";
 
 GLOBAL.gtag = null;
 GLOBAL.appVersion = "v1.0.0";

@@ -21,25 +21,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App Feedback and Project Monitoring</title>
+    <title>React App Account V2</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/project-tracking/static/css/project-tracking-style.css"/>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-75647007-1');
-</script>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/account.css"/>
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"><center>Loading...</center></div>
+    <div id="root">Loading...</div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -50,8 +41,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-<script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
-
 <script type="text/javascript">
 
 var GLOBAL = {
@@ -61,20 +50,12 @@ var GLOBAL = {
     forceLogin: false
 };
 
-GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04"];
+GLOBAL.appControlApi = "/pvt/app-data/account/userControlV2.json";
 
-GLOBAL.addBasepathLinkName = [
-                        "pageHeading:viewPageName.dashboardLink","pageHeading:viewPageName.displaySupplyStatusLink",
-                        "pageHeading:viewPageName.contingencyStatusLink","pageHeading:viewPageName.displayWorkStatus",
-                        "pageHeading:viewPageName.projectComment", "pageHeading:pageId.displayUploadedFiles",
-                        "pageFooter:pageId.manageFiles"];
-
-GLOBAL.appControlApi = "/project-tracking/appControlData.json";
-GLOBAL.gtag = gtag;
+GLOBAL.gtag = null;
 GLOBAL.appVersion = "v1.0.0";
-GLOBAL.JQ = $;
-GLOBAL.uploadFileInstruction = "(Only pdf less than 10MB)";
 window.GLOBAL = GLOBAL;
 </script>
 </body>
+
 </html>

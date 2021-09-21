@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 // import App from './DemoRouter/App';
 // import App from './management/App';
 // import App from './hooks/App';
-// import App from './account/App';
+import App from './account/App';
 // import App from './auth-demo/App';
 // import App from './monitoring/App';
 // import App from './assets/App';
@@ -15,7 +15,7 @@ import ReactDOM from 'react-dom';
 // import App from './attendance/App';
 // import App from './ml2/App';
 // import App from './ftp/App';
-import App from './project-tracking/App';
+// import App from './project-tracking/App';
 // import App from './auth/App';
 import * as serviceWorker from './serviceWorker';
 

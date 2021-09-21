@@ -19,7 +19,6 @@ distDir=dist-yard-app
 distDir=dist-management-app
 distDir=dist-search-app
 distDir=dist-auth-demo-app
-distDir=dist-account-app
 distDir=dist-data-entry-app
 distDir=dist-assets-app
 distDir=dist-monitoring-app
@@ -30,6 +29,7 @@ distDir=dist-auth-app
 distDir=dist-ftp-app
 distDir=dist-attendance-app
 distDir=dist-project-tracking-app
+distDir=dist-account-app
 
 
 

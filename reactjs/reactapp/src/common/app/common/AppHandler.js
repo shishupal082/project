@@ -476,7 +476,7 @@ AppHandler.extend({
         for(i=0; i<finalArr.length; i++) {
             temp = [];
             for(j=0; j<validDataIndex.length; j++) {
-                temp.push(finalArr[i][validDataIndex[j]]);
+                temp.push(finalArr[i][validDataIndex[j]].trim());
             }
             finalResult.push(temp);
         }

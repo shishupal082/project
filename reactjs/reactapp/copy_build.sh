@@ -41,11 +41,17 @@ cp build/static/js/*.js ${distDir}/
 
 mv ${distDir}/runtime-main.*.js ${reactBase}/script1.js
 mv ${distDir}/main.*.chunk.js ${distDir}/script2.js
-mv ${distDir}/*.chunk.js ${reactBase}/script3.js
 
 sed -i "2s/.*//" ${reactBase}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
-sed -i "3s/.*//" ${reactBase}/script3.js
+
+if [[ $distDir == "dist-data-display-app" ]]; then
+  mv ${distDir}/*.chunk.js ${distDir}/script3.js
+  sed -i "3s/.*//" ${distDir}/script3.js
+else
+  mv ${distDir}/*.chunk.js ${reactBase}/script3.js
+  sed -i "3s/.*//" ${reactBase}/script3.js
+fi
 
 
 # if [[ $distDir == "dist-auth-app" ]]; then
