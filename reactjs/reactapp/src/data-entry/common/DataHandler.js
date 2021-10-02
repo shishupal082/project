@@ -67,7 +67,6 @@ keys.push("fieldsData");
 // keys.push("currentSectionId");
 // keys.push("sectionName");
 // keys.push("currentSectionData");
-// keys.push("errorsData");
 
 // keys.push("homeFields");
 // keys.push("dropdownFields");

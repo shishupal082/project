@@ -22,7 +22,6 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
-            "goBackLinkData": [], // Used for back url
 
             "selectFilterComponentClass": "",
             "list1Text": "",
@@ -34,10 +33,8 @@ class App extends React.Component {
             "currentList2Id": "", // same as pageName
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
-            "pageHeading": "",
 
             "renderFieldRow": [],
-            "errorsData": [],
 
             "selectedDateType": "",
             "dateSelection": [],
@@ -51,7 +48,6 @@ class App extends React.Component {
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -59,7 +55,6 @@ class App extends React.Component {
             onChange: this.onChange,
             dropDownChange: this.dropDownChange,
             pageComponentDidMount: this.pageComponentDidMount,
-            getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -148,9 +143,6 @@ class App extends React.Component {
             return;
         }
         this.appData.pageTab.push(pageName);
-    }
-    getTabDisplayText(tabName) {
-        // return DataHandler.GetTabDisplayText(tabName);
     }
     render() {
         var methods = this.methods;

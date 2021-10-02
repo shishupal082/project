@@ -20,9 +20,9 @@ class App extends React.Component {
             isLoaded: false
         };
         this.appData = {
+            "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
-            "goBackLinkData": [], // Used for back url
 
             "list1Text": "Select User",
             "list1Data": [],
@@ -32,18 +32,15 @@ class App extends React.Component {
             "list2Data": [],
             "currentList2Id": "", // same as pageName
 
-            "appHeading": "Loading...",
-            "pageHeading": "",
-            "pageTab": [],
-
             "renderFieldRow": [],
-            "errorsData": [],
 
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
-            "enableFooter": false
+            "enableReloadButton": true,
+            "enableFooter": true
         };
+        this.appData.pageTab = [];
         this.onClick = this.onClick.bind(this);
         this.dropDownChange = this.dropDownChange.bind(this);
         /* methods used in selectFilter end */

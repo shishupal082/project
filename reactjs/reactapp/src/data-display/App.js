@@ -21,7 +21,6 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
-            "goBackLinkData": [], // Used for back url
 
             "selectFilterComponentClass": "",
             "list1Text": "",
@@ -33,10 +32,8 @@ class App extends React.Component {
             "currentList2Id": "", // same as pageName
 
             "appHeading": [{"tag": "center.h2", "text": "Loading..."}],
-            "pageHeading": "",
 
             "renderFieldRow": [],
-            "errorsData": [],
 
             "selectedDateType": "",
             "dateSelection": [],

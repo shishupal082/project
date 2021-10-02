@@ -21,7 +21,7 @@ class Footer extends React.Component {
         if ($S.isBoolean(this.props.data.enableFooterV2)) {
             enableFooterV2 = this.props.data.enableFooterV2;
         }
-        if ($S.isBooleanTrue(this.props.data.enableFooter) && $S.isBooleanTrue(enableFooterV2)) {
+        if (enableFooterV2 && $S.isBooleanTrue(this.props.data.enableFooter)) {
             footerWithNoContent += " d-none";
         } else {
             footerWithContent += " d-none";

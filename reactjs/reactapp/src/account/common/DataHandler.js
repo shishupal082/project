@@ -6,6 +6,7 @@ import Config from "./Config";
 import AccountHelper from "./AccountHelper";
 import AccountHelper2 from "./AccountHelper2";
 import Template from "./Template";
+import TemplateHandler from "./TemplateHandler";
 
 var DataHandler;
 
@@ -304,23 +305,22 @@ DataHandler.extend({
         var availableDataPageName = DataHandler.getData("availableDataPageName", "");
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         if (dataLoadStatus === "completed" && currentPageName !== availableDataPageName) {
-            var goBackLinkData = Config.goBackLinkData;
             var list1Data = DataHandler.getData("userControlData", []);
+            var list2Data = DataHandler.getData("dropdownFields", []);
             if (currentPageName === "home") {
-                goBackLinkData = [];
                 list1Data = [];
+                list2Data = [];
             }
             DataHandler.setData("availableDataPageName", currentPageName);
-            appDataCallback("goBackLinkData", goBackLinkData);
+            // appDataCallback("goBackLinkData", goBackLinkData);
             appDataCallback("list1Data", list1Data);
             appDataCallback("currentList1Id", DataHandler.getData("currentUserName", ""));
-            appDataCallback("list2Data", DataHandler.getData("dropdownFields", []));
+            appDataCallback("list2Data", list2Data);
             appDataCallback("currentList2Id", currentPageName);
-            appDataCallback("appHeading", DataHandler.getData("companyName", ""));
-            appDataCallback("pageHeading", DataHandler.GetMetaDataPageHeading(currentPageName));
-            // appDataCallback("homeFields", DataHandler.getData("homeFields", []));
+            appDataCallback("appHeading", TemplateHandler.getAppHeading(currentPageName));
+            // appDataCallback("pageHeading", DataHandler.GetMetaDataPageHeading(currentPageName));
             appDataCallback("selectedDateType", DataHandler.getData("selectedDateType", ""));
-            appDataCallback("errorsData", DataHandler.getData("errorsData", []));
+            // appDataCallback("errorsData", DataHandler.getData("errorsData", []));
             appDataCallback("dateSelection", Config.dateSelection);
             appDataCallback("dateSelectionRequiredPages", Config.dateSelectionRequired);
             // appDataCallback("dataLoadStatus", dataLoadStatus);

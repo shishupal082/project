@@ -29,7 +29,7 @@ distDir=dist-auth-app
 distDir=dist-ftp-app
 distDir=dist-attendance-app
 distDir=dist-project-tracking-app
-distDir=dist-account-app
+distDir=dist-account-app-2021-oct
 
 
 

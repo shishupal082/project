@@ -82,7 +82,7 @@ Config.goBackLinkData = [
                         "tag": "img",
                         "src": $$$.backIconUrl,
                         "className": "back-img",
-                        "alt": "back"
+                        "alt": "<"
                     },
                     {
                         "tag": "span",

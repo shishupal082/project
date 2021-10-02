@@ -45,10 +45,20 @@ mv ${distDir}/main.*.chunk.js ${distDir}/script2.js
 sed -i "2s/.*//" ${reactBase}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
 
-if [[ $distDir == "dist-data-display-app" ]]; then
-  mv ${distDir}/*.chunk.js ${distDir}/script3.js
-  sed -i "3s/.*//" ${distDir}/script3.js
-else
+requiredScript3=("dist-data-display-app" "dist-account-app-2021-oct")
+
+isNotFound="true"
+
+for i in "${requiredScript3[@]}"
+do
+    if [ "$i" == "$distDir" ] ; then
+        isNotFound="false"
+        mv ${distDir}/*.chunk.js ${distDir}/script3.js
+        sed -i "3s/.*//" ${distDir}/script3.js
+    fi
+done
+
+if [[ $isNotFound == "true" ]]; then
   mv ${distDir}/*.chunk.js ${reactBase}/script3.js
   sed -i "3s/.*//" ${reactBase}/script3.js
 fi
