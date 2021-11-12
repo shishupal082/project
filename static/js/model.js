@@ -67,6 +67,8 @@ var changeValueData = {
     "all": []
 };
 var currentValues = {};
+var timerBits = {};
+var pendingTimerBits = [];
 var exps = {};
 var debug = [];
 var valueToBeChecked = [];
@@ -126,39 +128,68 @@ function setVariableDependencies (name1, name2) {
     return variableDependencies;
 }
 var setValue = (function() {
-    function set(key, value) {
+    function set(key, newValue, oldValue, callback) {
+        var self = this;
         this._isValueChanged = false;
         var keyEquivalent;
-        if (Model.isValidKey(key) && Model.isValidValue(value)) {
-            var oldValue = Model(key).get();
-            currentValues[key] = value*1;
-            var newValue = Model(key).get();
-            if (oldValue !== newValue) {
-                setValueCount++;
-                keyEquivalent = "";
-                for (var i = 0; i < key.length; i++) {
-                    keyEquivalent += "-";
+        if (Model.isValidKey(key) && Model.isValidValue(newValue)) {
+            var timerData = timerBits[key], delay = 0;
+            if (oldValue !== newValue && Model.isObject(timerData)) {
+                if (newValue === 1 && Model.isNumeric(timerData["STP"])) {
+                    delay = timerData["STP"] * 1;
+                } else if (Model.isNumeric(timerData["STR"])) {
+                    delay = timerData["STR"] * 1;
                 }
-                if (changeValueDataLoggingEnable) {
-                    changeValueData["all"].push(key);
-                    if (oldValue === 0) {
-                        changeValueData["0to1"].push(key);
-                        changeValueData["0to1WithIndex"].push(key);
-                        changeValueData["1to0WithIndex"].push(keyEquivalent);
+            }
+            function localSetValue() {
+                currentValues[key] = newValue*1;
+                // var newValue = Model(key).get();
+                if (oldValue !== newValue) {
+                    setValueCount++;
+                    keyEquivalent = "";
+                    for (var i = 0; i < key.length; i++) {
+                        keyEquivalent += "-";
                     }
-                    if (oldValue === 1) {
-                        changeValueData["1to0"].push(key);
-                        changeValueData["1to0WithIndex"].push(key);
-                        changeValueData["0to1WithIndex"].push(keyEquivalent);
+                    if (changeValueDataLoggingEnable) {
+                        changeValueData["all"].push(key);
+                        if (oldValue === 0) {
+                            changeValueData["0to1"].push(key);
+                            changeValueData["0to1WithIndex"].push(key);
+                            changeValueData["1to0WithIndex"].push(keyEquivalent);
+                        }
+                        if (oldValue === 1) {
+                            changeValueData["1to0"].push(key);
+                            changeValueData["1to0WithIndex"].push(key);
+                            changeValueData["0to1WithIndex"].push(keyEquivalent);
+                        }
                     }
+                    if (changeValueLogStatus) {
+                        $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+                    }
+                    if (Model.isFunction(callback)) {
+                        callback(key, newValue, oldValue, true);
+                    }
+                    self._isValueChanged = true;
                 }
-                if (changeValueLogStatus) {
-                    $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+            }
+            if (delay > 0) {
+                if (pendingTimerBits.indexOf(key) < 0) {
+                    setTimeout(function() {
+                        pendingTimerBits = pendingTimerBits.filter(function(el, arr, i) {
+                            return el !== key;
+                        });
+                        localSetValue();
+                    }, delay);
+                    pendingTimerBits.push(key);
                 }
-                this._isValueChanged = true;
+            } else {
+                localSetValue();
             }
         } else {
             $S.log("Invalid key for set: " + key);
+        }
+        if (Model.isFunction(callback)) {
+            callback(key, newValue, oldValue, this._isValueChanged);
         }
         return this._isValueChanged;
     }
@@ -218,6 +249,12 @@ Model.fn = Model.prototype = {
             $S.log("Invalid expression key:" + this.key);
         }
         return 0;
+    },
+    setTimerBits: function(extTimerBits) {
+        if (Model.isObject(extTimerBits)) {
+            timerBits = extTimerBits;
+        }
+        return timerBits;
     },
     initializeCurrentValues: function(extCurrentValues) {
         if (Model.isObject(extCurrentValues)) {
@@ -397,10 +434,10 @@ Model.extend({
     getAsyncData: function() {
         return $S.clone(AsyncData);
     },
-    checkAsyncDataSetting: function(key, oldValue, newValue) {
+    checkAsyncDataSetting: function(key, oldValue, newValue, callback) {
         if (Model.isArray(AsyncData[key])) {
             for (var i = 0; i < AsyncData[key].length; i++) {
-                Model.setValueWithExpressionV2(AsyncData[key][i]);
+                Model.setValueWithExpressionV2(AsyncData[key][i], callback);
             }
         }
         return 1;
@@ -666,23 +703,23 @@ Model.extend({
         }
         return response;
     },
-    setValueWithoutRecheck: function(key, newValue) {
+    setValueWithoutRecheck: function(key, newValue, callback) {
         var oldValue = Model(key).get();
-        var set = new setValue(key, newValue);
+        var set = new setValue(key, newValue, oldValue, callback);
         if (set.isValueChanged()) {
-            Model.checkAsyncDataSetting(key, oldValue, newValue);
+            Model.checkAsyncDataSetting(key, oldValue, newValue, callback);
             if (Model.isFunction(Model["setValueChangedCallback"])) {
                 // Do nothing
             } else {
                 Model.addInMStack(Model.getVariableDependenciesByKey(key));
             }
             if (Model.isFunction(Model["changeValueCallback"])) {
-                Model["changeValueCallback"](key, oldValue, newValue);
+                Model["changeValueCallback"](key, oldValue, newValue, callback);
             }
         }
         return set.isValueChanged();
     },
-    setValue: function(key, newValue) {
+    setValue: function(key, newValue, callback) {
         if (setValueCount >= setValueCountLimit) {
             Model.fire("SetValueCountLimitExceed");
             setValueCount++;
@@ -691,30 +728,32 @@ Model.extend({
             throw logText;
         }
         var oldValue = Model(key).get();
-        var set = new setValue(key, newValue);
-        if (set.isValueChanged()) {
-            Model.checkAsyncDataSetting(key, oldValue, newValue);
-            if (Model.isFunction(Model["setValueChangedCallback"])) {
-                if (Model.isFunction(Model["changeValueCallback"])) {
-                    Model["changeValueCallback"](key, oldValue, newValue);
+        var set = new setValue(key, newValue, oldValue, function(finalKey, finalNewValue, finalOldValue, isChanged) {
+            if (isChanged) {
+                Model.checkAsyncDataSetting(finalKey, finalOldValue, finalNewValue, callback);
+                if (Model.isFunction(Model["setValueChangedCallback"])) {
+                    if (Model.isFunction(Model["changeValueCallback"])) {
+                        Model["changeValueCallback"](finalKey, finalOldValue, finalNewValue, callback);
+                    }
+                    Model["setValueChangedCallback"](finalKey, finalOldValue, finalNewValue, callback);
+                } else {
+                    Model.addInMStack(Model.getVariableDependenciesByKey(finalKey));
+                    if (Model.isFunction(Model["changeValueCallback"])) {
+                        Model["changeValueCallback"](finalKey, finalOldValue, finalNewValue, callback);
+                    }
+                    Model.reCheckAllValuesV2(callback);
                 }
-                Model["setValueChangedCallback"](key, oldValue, newValue);
-            } else {
-                Model.addInMStack(Model.getVariableDependenciesByKey(key));
-                if (Model.isFunction(Model["changeValueCallback"])) {
-                    Model["changeValueCallback"](key, oldValue, newValue);
-                }
-                Model.reCheckAllValuesV2();
             }
-        }
+            $S.callMethod(callback);
+        });
         return 0;
     },
-    toggleValue: function(key) {
+    toggleValue: function(key, callback) {
         var newValue = 1;
         if (Model(key).isUp()) {
             newValue = 0;
         }
-        return Model.setValue(key, newValue);
+        return Model.setValue(key, newValue, callback);
     }
 });
 function getExpressionValueByName(name) {
@@ -752,7 +791,7 @@ exps : {
     6: []
 };
 */
-    reCheckAllValuesV2: function() {
+    reCheckAllValuesV2: function(callBack) {
         if (reCheckingStatus === false) {
             return 0;
         }
@@ -760,12 +799,12 @@ exps : {
             var name = MStack.pop();
             increaseProcessingCount(name);
             if (Model.isExpDefined(name)) {
-                Model.setValueWithExpression(name);
+                Model.setValueWithExpression(name, callback);
             }
         }
         return 1;
     },
-    reCheckAllValues: function() {
+    reCheckAllValues: function(callback) {
         if (reCheckingStatus === false) {
             return 0;
         }
@@ -776,7 +815,7 @@ exps : {
             var oldValue = modelNode.get();
             var newValue = 0;
             if (Model.isExpDefined(name)) {
-                Model.setValueWithExpression(name);
+                Model.setValueWithExpression(name, callback);
             } else if (Model.isMethodDefined(name)) {
                 Model[name](name);
             } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
@@ -795,14 +834,14 @@ exps : {
         var itemsWithExp = $S.generateExpression(items);
         return itemsWithExp ? itemsWithExp["exp"] : "";
     },
-    setValueWithExpression: function(name) {
+    setValueWithExpression: function(name, callback) {
         var newValue = getExpressionValueByName(name);
-        Model.setValue(name, newValue);
+        Model.setValue(name, newValue, callback);
         return newValue;
     },
-    setValueWithExpressionV2: function(name) {
+    setValueWithExpressionV2: function(name, callback) {
         var newValue = getExpressionValueByName(name);
-        Model.setValueWithoutRecheck(name, newValue);
+        Model.setValueWithoutRecheck(name, newValue, callback);
         return newValue;
     },
     getTokenizedExp: function(exp) {

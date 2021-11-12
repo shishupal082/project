@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>Platform Light</title>
+<style type="text/css">
+.container {
+    width: 1170px;
+}
+td:first-child { width: 100px; };
+</style>
+</head>
+<body>
+    <div class="container yard">
+        <center><h2>Platform Light</h2></center>
+        <div>
+            <button value="S6_UR_A" class="evt toggle">S6-UR_A</button>
+            <button value="S6_UECR" class="evt toggle">S6-UECR</button>
+            <button value="60B_TPR" class="evt toggle">60BT</button>
+            <button value="S2_UR_A" class="evt toggle">S2-UR_A</button>
+            <button value="S2_HECR" class="evt toggle">S2-HECR</button>
+            <button value="2T1_TPR" class="evt toggle">2T1</button>
+        </div>
+        <div>
+            <button value="S1_UR_D" class="evt toggle">S1-UR_D</button>
+            <button value="S1_UECR" class="evt toggle">S1-UECR</button>
+            <button value="1T1_TPR" class="evt toggle">1T1</button>
+            <button value="S3_UR_B" class="evt toggle">S3-UR_B</button>
+            <button value="S3_UECR" class="evt toggle">S3-UECR</button>
+            <button value="3T1_TPR" class="evt toggle">3T1</button>
+        </div>
+        <div>
+            <button value="L4T1_TPR" class="evt toggle">L4T1</button>
+            <button value="L4T2_TPR" class="evt toggle">L4T2</button>
+            <button value="L4T3_TPR" class="evt toggle">L4T3</button>
+            <button value="RESET=1" class="evt auto_reset">RESET</button>
+        </div>
+        <hr></hr>
+        <div id="tableHtml"><center>Loading...</center></div>
+        <div id="timerCount"></div>
+        <div id="currentValues"></div>
+        <div>
+            <div id="changeValueData"></div>
+        </div>
+    </div>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/js/model.js"></script>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="/static/js/yard/yardHelper.js"></script>
+<script type="text/javascript" src="/static/js/yard/yardApiModel.js"></script>
+
+<script type="text/javascript" src="/app/platform_light/static/js/platformModel.js"></script>
+<script type="text/javascript" src="/app/platform_light/static/js/platformView.js"></script>
+
+<script type="text/javascript" src="/app/platform_light/static/script.js"></script>
+</body>
+</html>

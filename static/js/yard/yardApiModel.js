@@ -1,4 +1,4 @@
-// import './model'; var $M = window.$M;
+// import './model'; import './model'; var $S = window.$S; var $M = window.$M;
 
 /*
     - Load possibleValue, initialValue and expressions from api
@@ -53,9 +53,9 @@ function getPlatForm(global) {
 }
 
 var platform = getPlatForm(global);
-factory(global, platform, $M);
+factory(global, platform, $M, $S);
 
-}(window, function(global, Platform, $M) {
+}(window, function(global, Platform, $M, $S) {
 
 var LoggerInfo = $M.getScriptFileNameRef();
 var YardApiModel = function(selector, context) {
@@ -92,6 +92,7 @@ var PossibleValues = [];
 var InitialValues = {};
 var AllExpressions = [];
 var ExpWithoutKey = {};
+var TimerBits = {};
 
 var ExpressionsAdded = [];
 
@@ -108,6 +109,7 @@ var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
 var AsyncDataPath = [];
+var TimerBitsPath = [];
 
 var PossibleValuesByTypes = {};
 
@@ -250,7 +252,22 @@ function loadInitialValues(callBack) {
         }
     }, callBack, null, ajaxApiCall);
 }
-
+function loadTimerBits(callback) {
+    var url = [];
+    for (var i = 0; i < TimerBitsPath.length; i++) {
+        url.push(TimerBitsPath[i]+"?"+RequestId);
+    }
+    if (url.length === 0) {
+        return $M.callMethod(callback);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isObject(response)) {
+            Object.assign(TimerBits, response);
+        } else {
+            $M.log("Invalid response (timer_bits):" + response, LoggerInfo);
+        }
+    }, callback, null, ajaxApiCall);
+}
 function addExp(key, exp) {
     var partialKey, partialExp;
     for (var i = 0; i < partialKeys.length; i++) {
@@ -328,14 +345,17 @@ YardApiModel.extend({
                     for (var j = 0; j < debugItems.length; j++) {
                         $M(debugItems[j]).addDebug();
                     }
-                    loadInitialValues(function() {
-                        InitialValuesLoadStatus = true;
-                        $M().initializeCurrentValues(InitialValues);
-                        loadExpressions(function() {
-                            ExpressionsLoadStatus = true;
-                            if (isApisLoadComplete()) {
-                                callBack();
-                            }
+                    loadTimerBits(function() {
+                        $M().setTimerBits(TimerBits);
+                        loadInitialValues(function() {
+                            InitialValuesLoadStatus = true;
+                            $M().initializeCurrentValues(InitialValues);
+                            loadExpressions(function() {
+                                ExpressionsLoadStatus = true;
+                                if (isApisLoadComplete()) {
+                                    callBack();
+                                }
+                            });
                         });
                     });
                 });
@@ -368,6 +388,9 @@ YardApiModel.extend({
                 break;
                 case "initial-value":
                     InitialValuePath = InitialValuePath.concat(paths[key]);
+                break;
+                case "timer_bits":
+                    TimerBitsPath = TimerBitsPath.concat(paths[key]);
                 break;
                 case "expressions":
                     ExpressionsPath = ExpressionsPath.concat(paths[key]);
@@ -431,7 +454,11 @@ YardApiModel.extend({
         var zeroTo1 = changeValueData["0to1WithIndex"];
         var oneTo0 = changeValueData["1to0WithIndex"];
         var all = changeValueData["all"];
-        $M.addElAt(logData, 0, {zeroTo1: zeroTo1, oneTo0: oneTo0, all: all});
+        var time = "";
+        if (all.length < 1) {
+            return;
+        }
+        $M.addElAt(logData, 0, {zeroTo1: zeroTo1, oneTo0: oneTo0, all: all, time: $S.getDT().getDateTime("hh/:/mm/:/ss/:/ms", "/")});
         // console.log(zeroTo1);
         // console.log(oneTo0);
         // console.log(all);
@@ -440,13 +467,14 @@ YardApiModel.extend({
             zeroTo1 = logData[i]["zeroTo1"];
             oneTo0 = logData[i]["oneTo0"];
             all = logData[i]["all"];
+            time = logData[i]["time"];
             if (zeroTo1.length !== oneTo0.length) {
                 $M.logV2(LoggerInfo, "Invalid data.");
                 console.log(logData[i]);
                 continue;
             }
             var tempData = [];
-            var tableData = [];
+            var tableData = [time];
             var dataAddedStatus;
             for (var j = 0; j < zeroTo1.length; j++) {
                 dataAddedStatus = false;

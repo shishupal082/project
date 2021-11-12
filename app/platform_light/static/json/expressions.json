@@ -1,0 +1,36 @@
+{
+    "S6_PF3_UR": [
+        "~RESET",
+        "L4T3_TPR",
+        {
+            "op":"+",
+            "val": ["(S6_UR_A * S6_UECR)", "S6_PF3_UR"]
+        }
+    ],
+    "S2_PF3_UR": [
+        "~RESET",
+        "L4T3_TPR",
+        {
+            "op":"+",
+            "val": ["(S2_UR_A * S2_HECR)", "S2_PF3_UR"]
+        }
+    ],
+    "PF3_UR": [
+        {
+            "op": "+",
+            "val": ["S6_PF3_UR", "S2_PF3_UR", "S1_PF3_UR", "S3_PF3_UR"]
+        }
+    ],
+    "PF3_AR": [
+        "~RESET",
+        {
+            "op": "+",
+            "val": [
+                "(PF3_AR * (~L4T1_TPR + ~L4T2_TPR + ~L4T3_TPR))",
+                "((~L4T3_TPR * (S6_PF3_UR + S2_PF3_UR)) + (~L4T1_TPR * (S1_PF3_UR + S3_PF3_UR)))"
+            ]
+        }
+    ],
+    "PF3_UECR": ["PF3_UR"],
+    "PF3_RECR": ["PF3_AR"]
+}

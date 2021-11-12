@@ -1,0 +1,28 @@
+{
+    "topLoopLine": {
+        "PF3": [
+            [
+                "PF3-",
+                "<span class=\"signal-no\">IND</span>",
+                "<span id='PF3_UECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='PF3_RECR' class='badge signal red active'>&nbsp;</span>"
+            ]
+        ],
+        "S6": [
+            [
+                "S6-",
+                "<span>IND</span>",
+                "<span id='S6_UR_A' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S6_UECR' class='badge signal yellow active'>&nbsp;</span>"
+            ]
+        ],
+        "S2": [
+            [
+                "S2-",
+                "<span>IND</span>",
+                "<span id='S2_UR_A' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S2_HECR' class='badge signal yellow active'>&nbsp;</span>"
+            ]
+        ]
+    }
+}
