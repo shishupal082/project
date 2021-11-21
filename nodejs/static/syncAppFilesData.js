@@ -44,6 +44,15 @@ var syncData = {
             "../reactjs/reactapp/src/libs/"
         ]
     },
+    "modelV2": {
+        "src": [
+            "../static/js/modelV2.js"
+        ],
+        "destinationDir": [
+            "../reactjs/reactapp/src/libs/",
+            "../reactjs/reactapp/src/libs/nodejs/"
+        ]
+    },
     "ml2": {
         "src": [
             "../static/js/parser/ML2.js"

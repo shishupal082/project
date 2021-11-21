@@ -100,6 +100,7 @@ var PartialExpressionsLoadStatus = false;
 var PossibleValuesLoadStatus = false;
 var InitialValuesLoadStatus = false;
 var ExpressionsLoadStatus = false;
+var ExpressionsTxtLoadStatus = false;
 var AsyncDataLoadStatus = false;
 
 var YardDataPath = [];
@@ -108,6 +109,7 @@ var PartialExpressionsPath = [];
 var PossibleValuePath = [];
 var InitialValuePath = [];
 var ExpressionsPath = [];
+var ExpressionsTxtPath = [];
 var AsyncDataPath = [];
 var TimerBitsPath = [];
 
@@ -121,6 +123,7 @@ function isApisLoadComplete() {
     loadingCheck.push(PossibleValuesLoadStatus);
     loadingCheck.push(InitialValuesLoadStatus);
     loadingCheck.push(ExpressionsLoadStatus);
+    loadingCheck.push(ExpressionsTxtLoadStatus);
     loadingCheck.push(AsyncDataLoadStatus);
     for (var i = 0; i < loadingCheck.length; i++) {
         if (loadingCheck[i] === false) {
@@ -281,18 +284,7 @@ function addExp(key, exp) {
     return $M(key).addExp(exp);
 }
 function loadExpressions(callBack) {
-    var url = [];
-    for (var i = 0; i < ExpressionsPath.length; i++) {
-        url.push(ExpressionsPath[i]+"?"+RequestId);
-    }
-    if (url.length === 0) {
-        return $M.callMethod(callBack);
-    }
-    $M.loadJsonData($, url, function(response) {
-        if ($M.isObject(response)) {
-            AllExpressions.push(response);
-        }
-    }, function() {
+    function expressionLoadComplete() {
         var allExpressions = AllExpressions, exps;
         for (var i = 0; i < allExpressions.length; i++) {
             exps = allExpressions[i];
@@ -318,6 +310,58 @@ function loadExpressions(callBack) {
                 }
             }
         }
+    }
+    var url = [];
+    for (var i = 0; i < ExpressionsPath.length; i++) {
+        url.push(ExpressionsPath[i]+"?"+RequestId);
+    }
+    if (url.length === 0) {
+        expressionLoadComplete();
+        return $M.callMethod(callBack);
+    }
+    $M.loadJsonData($, url, function(response) {
+        if ($M.isObject(response)) {
+            AllExpressions.push(response);
+        }
+    }, function() {
+        expressionLoadComplete();
+        callBack();
+    }, null, ajaxApiCall);
+}
+function loadTxtExpressions(callBack) {
+    var url = [];
+    for (var i = 0; i < ExpressionsTxtPath.length; i++) {
+        url.push(ExpressionsTxtPath[i]+"?"+RequestId);
+    }
+    if (url.length === 0) {
+        return $M.callMethod(callBack);
+    }
+    $S.loadJsonData($, url, function(response) {
+        if ($S.isString(response)) {
+            var t = response.split("\n");
+            var temp = {}, t2;
+            for (var j=0; j<t.length; j++) {
+                if (!$S.isStringV2(t[j])) {
+                    continue;
+                }
+                t[j] = t[j].replaceAll(" ", "");
+                t[j] = t[j].split("\r").join("");
+                t2 = t[j].split("=");
+                if (t2.length != 2) {
+                    console.log("Invalid expression: " + t[j]);
+                    continue;
+                }
+                if (temp[t2[0]]) {
+                    // console.log("Duplicate entry: " + t[j] + ":::" + temp[t2[0]]);
+                    continue;
+                }
+                temp[t2[0]] = [t2[1]];
+            }
+        }
+        if ($M.isObject(temp)) {
+            AllExpressions.push(temp);
+        }
+    }, function() {
         callBack();
     }, null, ajaxApiCall);
 }
@@ -338,23 +382,26 @@ YardApiModel.extend({
             AsyncDataLoadStatus = true;
             loadPartialExpressions(function() {
                 PartialExpressionsLoadStatus = true;
-                loadPossibleValues(function() {
-                    PossibleValuesLoadStatus = true;
-                    $M().setPossibleValues(PossibleValues);
-                    var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
-                    for (var j = 0; j < debugItems.length; j++) {
-                        $M(debugItems[j]).addDebug();
-                    }
-                    loadTimerBits(function() {
-                        $M().setTimerBits(TimerBits);
-                        loadInitialValues(function() {
-                            InitialValuesLoadStatus = true;
-                            $M().initializeCurrentValues(InitialValues);
-                            loadExpressions(function() {
-                                ExpressionsLoadStatus = true;
-                                if (isApisLoadComplete()) {
-                                    callBack();
-                                }
+                loadTxtExpressions(function() {
+                    ExpressionsTxtLoadStatus = true;
+                    loadPossibleValues(function() {
+                        PossibleValuesLoadStatus = true;
+                        $M().setPossibleValues(PossibleValues);
+                        var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
+                        for (var j = 0; j < debugItems.length; j++) {
+                            $M(debugItems[j]).addDebug();
+                        }
+                        loadTimerBits(function() {
+                            $M().setTimerBits(TimerBits);
+                            loadInitialValues(function() {
+                                InitialValuesLoadStatus = true;
+                                $M().initializeCurrentValues(InitialValues);
+                                loadExpressions(function() {
+                                    ExpressionsLoadStatus = true;
+                                    if (isApisLoadComplete()) {
+                                        callBack();
+                                    }
+                                });
                             });
                         });
                     });
@@ -373,6 +420,9 @@ YardApiModel.extend({
             return PossibleValuesByTypes[key];
         }
         return [];
+    },
+    getPossibleKeys: function() {
+        return PossibleValues;
     },
     setApisPath: function(paths) {
         for (var key in paths) {
@@ -394,6 +444,9 @@ YardApiModel.extend({
                 break;
                 case "expressions":
                     ExpressionsPath = ExpressionsPath.concat(paths[key]);
+                break;
+                case "expressionsTxt":
+                    ExpressionsTxtPath = ExpressionsTxtPath.concat(paths[key]);
                 break;
                 case "async-data":
                     AsyncDataPath = AsyncDataPath.concat(paths[key]);

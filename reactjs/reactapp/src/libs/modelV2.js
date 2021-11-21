@@ -54,10 +54,11 @@ factory(global, platform, $S);
 // var loopCount = 0;
 var setValueCount = 0, setValueCountLimit = 400;
 var AllCallbacks = [];
-var possibleValues = [];
+var possibleKeys = [];
 var binaryPossibleValues = "";
+var inputKeys = [];
+var binaryInputValues = "";
 var isUpdateBinaryValue = false;
-var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
 var changeValueLogStatus = true;
@@ -77,11 +78,10 @@ var debug = [];
 var valueToBeChecked = [];
 var processingCount = {};
 var variableDependencies = {};
-var AsyncData = {};
 var binaryOperators = ["&&","||","~"];
 var binaryOperatorIncludingBracket = ["(",")"].concat(binaryOperators);
 var binaryOperatorIncludingValue = [true,false].concat(binaryOperators);
-var MStack = $S.getStack();
+var rechekIndex = 0;
 
 var EvaluatingExpressionKey = "";
 
@@ -134,7 +134,6 @@ var setValue = (function() {
     function set(key, newValue, oldValue, callback) {
         var self = this;
         this._isValueChanged = false;
-        var keyEquivalent;
         if (Model.isValidKey(key) && Model.isValidValue(newValue)) {
             var timerData = timerBits[key], delay = 0;
             if (oldValue !== newValue && Model.isObject(timerData)) {
@@ -144,55 +143,61 @@ var setValue = (function() {
                     delay = timerData["STR"] * 1;
                 }
             }
-            function localSetValue() {
-                currentValues[key] = newValue*1;
-                Model(key).updateBinaryValue(newValue);
-                // var newValue = Model(key).get();
-                if (oldValue !== newValue) {
+            function localSetValue(key2, new2, old2, callback2) {
+                currentValues[key2] = new2*1;
+                Model(key2).updateBinaryValue(new2);
+                if (new2 !== old2) {
                     setValueCount++;
-                    keyEquivalent = "";
-                    for (var i = 0; i < key.length; i++) {
+                    var keyEquivalent = "";
+                    for (var i = 0; i < key2.length; i++) {
                         keyEquivalent += "-";
                     }
                     if (changeValueDataLoggingEnable) {
-                        changeValueData["all"].push(key);
-                        if (oldValue === 0) {
-                            changeValueData["0to1"].push(key);
-                            changeValueData["0to1WithIndex"].push(key);
+                        changeValueData["all"].push(key2);
+                        if (old2 === 0) {
+                            changeValueData["0to1"].push(key2);
+                            changeValueData["0to1WithIndex"].push(key2);
                             changeValueData["1to0WithIndex"].push(keyEquivalent);
                         }
-                        if (oldValue === 1) {
-                            changeValueData["1to0"].push(key);
-                            changeValueData["1to0WithIndex"].push(key);
+                        if (old2 === 1) {
+                            changeValueData["1to0"].push(key2);
+                            changeValueData["1to0WithIndex"].push(key2);
                             changeValueData["0to1WithIndex"].push(keyEquivalent);
                         }
                     }
                     if (changeValueLogStatus) {
-                        $S.log(setValueCount + ": set " + key + " value change from " + oldValue + " to " + newValue);
+                        $S.log(setValueCount + ": set " + key2 + " value change from " + old2 + " to " + new2);
                     }
-                    if (Model.isFunction(callback)) {
-                        callback(key, newValue, oldValue, true);
-                    }
+                    $S.callMethodV4(callback2, key2, new2, old2, true);
                     self._isValueChanged = true;
+                } else {
+                    $S.callMethodV4(callback2, key2, new2, old2, false);
                 }
             }
             if (delay > 0) {
                 if (pendingTimerBits.indexOf(key) < 0) {
-                    setTimeout(function() {
+                    setTimeout(function(key1, new1, old1, callback1) {
                         pendingTimerBits = pendingTimerBits.filter(function(el, arr, i) {
-                            return el !== key;
+                            return el !== key1;
                         });
-                        localSetValue();
-                    }, delay);
+                        localSetValue(key1, new1, old1, function(key3, new3, old3, isChanged) {
+                            if (isChanged) {
+                                if (Model.isFunction(Model["timerBitChange"])) {
+                                    Model["timerBitChange"](key3, new3, old3, $S.clone(pendingTimerBits));
+                                }
+                            }
+                            $S.callMethodV4(callback1, key3, new3, old3, isChanged);
+                        });
+                    }, delay, key, newValue, oldValue, callback);
                     pendingTimerBits.push(key);
                 }
             } else {
-                localSetValue();
+                localSetValue(key, newValue, oldValue, callback);
             }
         } else {
             $S.log("Invalid key for set: " + key);
             if (Model.isFunction(callback)) {
-                callback(key, newValue, oldValue, this._isValueChanged);
+                callback(key, newValue, oldValue, false);
             }
         }
         return this._isValueChanged;
@@ -212,7 +217,7 @@ function isValidKey(key) {
     if (!$S.isString(key)) {
         return false;
     }
-    return possibleValues.indexOf(key) >= 0 ? true : false;
+    return possibleKeys.indexOf(key) >= 0 ? true : false;
 }
 /*
 Direct access by id: $M("id").get()
@@ -260,31 +265,47 @@ Model.fn = Model.prototype = {
         }
         return timerBits;
     },
-    initializeCurrentValues: function(extCurrentValues) {
+    setCurrentValues: function(extCurrentValues) {
         if (Model.isObject(extCurrentValues)) {
             for (var key in extCurrentValues) {
-                if (isValidKey(key)) {
+                if (isValidKey(key) && inputKeys.indexOf(key) >= 0) {
                     currentValues[key] = extCurrentValues[key];
+                    Model(key).updateInputBinaryValue(extCurrentValues[key]);
                     Model(key).updateBinaryValue(extCurrentValues[key]);
                 } else {
-                    $S.log("Invalid initializeCurrentValues key: " + key);
+                    $S.log("Invalid setCurrentValues key: " + key);
                 }
             }
         }
         return currentValues;
     },
-    setPossibleValues: function(extPossibleValues) {
-        if (Model.isArray(extPossibleValues)) {
-            possibleValues = [];
-            for (var i = 0; i < extPossibleValues.length; i++) {
-                if (possibleValues.indexOf(extPossibleValues[i]) >= 0) {
-                    throw new Error("Error: Duplicate entry in possibleValues: " + extPossibleValues[i]);
+    setInputKeys: function(extInputKeys) {
+        if (Model.isArray(extInputKeys)) {
+            for (var i = 0; i < extInputKeys.length; i++) {
+                if (inputKeys.indexOf(extInputKeys[i]) >= 0) {
+                    $S.log("Duplicate entry in inputKeys: " + extInputKeys[i]);
+                    continue;
                 }
-                if ($S.isString(extPossibleValues[i]) && extPossibleValues[i].length > 0) {
-                    possibleValues.push(extPossibleValues[i]);
+                if ($S.isStringV2(extInputKeys[i]) && inputKeys.indexOf(extInputKeys[i]) < 0 && possibleKeys.indexOf(extInputKeys[i]) >= 0) {
+                    inputKeys.push(extInputKeys[i]);
                 }
             }
-            setValueTobeChecked(possibleValues);
+        }
+        return 1;
+    },
+    setPossibleKeys: function(extPossibleKeys) {
+        if (Model.isArray(extPossibleKeys)) {
+            possibleKeys = [];
+            for (var i = 0; i < extPossibleKeys.length; i++) {
+                if (possibleKeys.indexOf(extPossibleKeys[i]) >= 0) {
+                    $S.log("Duplicate entry in possibleKeys: " + extPossibleKeys[i]);
+                    continue;
+                }
+                if ($S.isStringV2(extPossibleKeys[i])) {
+                    possibleKeys.push(extPossibleKeys[i]);
+                }
+            }
+            setValueTobeChecked(possibleKeys);
         }
         return 1;
     },
@@ -324,21 +345,62 @@ Model.fn = Model.prototype = {
     },
     updateBinaryValue: function(newValue) {
         if (isUpdateBinaryValue && isValidKey(this.key)) {
-            if (binaryPossibleValues.length !== possibleValues.length) {
+            if (binaryPossibleValues.length !== possibleKeys.length) {
                 binaryPossibleValues = "";
-                for (var i=0; i<possibleValues.length; i++) {
+                for (var i=0; i<possibleKeys.length; i++) {
                     binaryPossibleValues += "0";
                 }
             }
-            var index = possibleValues.indexOf(this.key);
+            var index = possibleKeys.indexOf(this.key);
             if (index < 0) {
                 return;
             }
             binaryPossibleValues = binaryPossibleValues.substring(0, index) + newValue + binaryPossibleValues.substring(index + 1);
         }
+    },
+    updateInputBinaryValue: function(newValue) {
+        if (isValidKey(this.key)) {
+            if (binaryInputValues.length !== inputKeys.length) {
+                binaryInputValues = "";
+                for (var i=0; i<inputKeys.length; i++) {
+                    binaryInputValues += "0";
+                }
+            }
+            var index = inputKeys.indexOf(this.key);
+            if (index < 0) {
+                return;
+            }
+            binaryInputValues = binaryInputValues.substring(0, index) + newValue + binaryInputValues.substring(index + 1);
+        }
     }
 };
 $S.extendObject(Model);
+function checkInputValueChange() {
+    var _currentBinaryInput = "";
+    var temp;
+    if (Model.isFunction(Model["getCurrentInput"])) {
+        _currentBinaryInput = Model["getCurrentInput"]();
+        if (_currentBinaryInput !== binaryInputValues || binaryInputValues.length !== inputKeys.length) {
+            Model.setInputValueFromBinary(_currentBinaryInput);
+        }
+    }
+}
+function getExpressionValueByName(name) {
+    var exp = exps[name];
+    var oldValue = Model(name).get();
+    var newValue = 0;
+    if (debug.indexOf(name) >=0) {
+        EvaluatingExpressionKey = name;
+        $S.log("DEBUG: " + name);
+    }
+    checkInputValueChange();
+    newValue = Model.isAllExpressionsTrue(exp) ? 1 : 0;
+    if (debug.indexOf(name) >=0) {
+        $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
+        EvaluatingExpressionKey = "";
+    }
+    return newValue;
+}
 Model.extend({
     fire: function(name) {
         for (var i = 0; i < AllCallbacks.length; i++) {
@@ -427,42 +489,6 @@ Model.extend({
         return $S.extendObject(Obj);
     }
 });
-/*
-End of direct access of ID
-*/
-Model.extend({
-    setAsyncData: function(asyncData) {
-        var key, value;
-        if (Model.isObject(asyncData)) {
-            for (key in asyncData) {
-                value = asyncData[key];
-                if (Model.isArray(value)) {
-                    for (var i = 0; i<value.length; i++) {
-                        if (Model.isString(value[i])) {
-                            if (AsyncData[key]) {
-                                AsyncData[key].push(value[i]);
-                            } else {
-                                AsyncData[key] = [value[i]];
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return 1;
-    },
-    getAsyncData: function() {
-        return $S.clone(AsyncData);
-    },
-    checkAsyncDataSetting: function(key, oldValue, newValue, callback) {
-        if (Model.isArray(AsyncData[key])) {
-            for (var i = 0; i < AsyncData[key].length; i++) {
-                Model.setValueWithExpressionV2(AsyncData[key][i], callback);
-            }
-        }
-        return 1;
-    }
-});
 /*Direct access of methods: $M.methodName*/
 Model.extend({
     setVariableDependencies: function() {
@@ -487,15 +513,6 @@ Model.extend({
             variableDependencies[name] = dependencies;
         }
         return variableDependencies;
-    },
-    addInMStack: function (values) {
-        var allValues = MStack.getAll();
-        for (var  i = values.length-1; i >= 0; i--) {
-            if (allValues.indexOf(values[i]) <0) {
-                MStack.push(values[i]);
-            }
-        }
-        return MStack.getAll();
     }
 });
 Model.extend({
@@ -521,14 +538,6 @@ Model.extend({
     },
     disableVerifyExpression: function() {
         verifyExpression = false;
-        return 0;
-    },
-    enableReChecking: function() {
-        reCheckingStatus = true;
-        return 1;
-    },
-    disableReChecking: function() {
-        reCheckingStatus = false;
         return 0;
     },
     enableUpdateBinaryValue: function() {
@@ -598,8 +607,14 @@ Model.extend({
         }
         return {exps: expsResponse, count: count};
     },
-    getPossibleValues : function() {
-        return $S.clone(possibleValues);
+    getInputKeys : function() {
+        return $S.clone(inputKeys);
+    },
+    getPossibleKeys : function() {
+        return $S.clone(possibleKeys);
+    },
+    getBinaryInputValue: function() {
+        return binaryInputValues;
     },
     getBinaryPossibleValue: function() {
         return binaryPossibleValues;
@@ -607,8 +622,8 @@ Model.extend({
     getValueToBeChecked : function() {
         return $S.clone(valueToBeChecked);;
     },
-    getReCheckingStatus: function() {
-        return reCheckingStatus;
+    getPendingTimerBits: function() {
+        return $S.clone(pendingTimerBits);
     },
     getProcessingCountStatus: function() {
         return isProcessingCountEnable;
@@ -737,22 +752,6 @@ Model.extend({
         }
         return response;
     },
-    setValueWithoutRecheck: function(key, newValue, callback) {
-        var oldValue = Model(key).get();
-        var set = new setValue(key, newValue, oldValue, callback);
-        if (set.isValueChanged()) {
-            Model.checkAsyncDataSetting(key, oldValue, newValue, callback);
-            if (Model.isFunction(Model["setValueChangedCallback"])) {
-                // Do nothing
-            } else {
-                Model.addInMStack(Model.getVariableDependenciesByKey(key));
-            }
-            if (Model.isFunction(Model["changeValueCallback"])) {
-                Model["changeValueCallback"](key, oldValue, newValue, callback);
-            }
-        }
-        return set.isValueChanged();
-    },
     setValue: function(key, newValue, callback) {
         if (setValueCount >= setValueCountLimit) {
             Model.fire("SetValueCountLimitExceed");
@@ -764,21 +763,14 @@ Model.extend({
         var oldValue = Model(key).get();
         new setValue(key, newValue, oldValue, function(finalKey, finalNewValue, finalOldValue, isChanged) {
             if (isChanged) {
-                Model.checkAsyncDataSetting(finalKey, finalOldValue, finalNewValue, callback);
                 if (Model.isFunction(Model["setValueChangedCallback"])) {
-                    if (Model.isFunction(Model["changeValueCallback"])) {
-                        Model["changeValueCallback"](finalKey, finalOldValue, finalNewValue, callback);
-                    }
-                    Model["setValueChangedCallback"](finalKey, finalOldValue, finalNewValue, callback);
-                } else {
-                    Model.addInMStack(Model.getVariableDependenciesByKey(finalKey));
-                    if (Model.isFunction(Model["changeValueCallback"])) {
-                        Model["changeValueCallback"](finalKey, finalOldValue, finalNewValue, callback);
-                    }
-                    Model.reCheckAllValuesV2(callback);
+                    Model["setValueChangedCallback"](finalKey, finalNewValue, finalOldValue, function() {
+                        $S.callMethod(callback);
+                    });
                 }
+            } else {
+                $S.callMethod(callback);
             }
-            $S.callMethod(callback);
         });
         return 0;
     },
@@ -790,24 +782,9 @@ Model.extend({
         return Model.setValue(key, newValue, callback);
     }
 });
-function getExpressionValueByName(name) {
-    var exp = exps[name];
-    var oldValue = Model(name).get();
-    var newValue = 0;
-    if (debug.indexOf(name) >=0) {
-        EvaluatingExpressionKey = name;
-        $S.log("DEBUG: " + name);
-    }
-    newValue = Model.isAllExpressionsTrue(exp) ? 1 : 0;
-    if (debug.indexOf(name) >=0) {
-        $S.log(name + ", oldValue=" + oldValue + ", newValue=" + newValue);
-        EvaluatingExpressionKey = "";
-    }
-    return newValue;
-}
 Model.extend({
 /*
-possibleValues = [1,2,3,4,5,6,7,8,9,10];
+possibleKeys = [1,2,3,4,5,6,7,8,9,10];
 variableDependencies = {
     1: [2,3,4]
     2: [1,3]
@@ -825,45 +802,35 @@ exps : {
     6: []
 };
 */
-    reCheckAllValuesV2: function(callback, isRecursive) {
-        if (reCheckingStatus === false) {
-            return 0;
-        }
-        while(MStack.getTop() >= 0) {
-            var name = MStack.pop();
-            increaseProcessingCount(name);
-            if (Model.isExpDefined(name)) {
-                Model.setValueWithExpression(name, callback);
-            }
-        }
-        if (MStack.getTop() < 0 && isRecursive === true) {
-            Model.reCheckAllValues(callback);
-        }
-        return 1;
-    },
     reCheckAllValues: function(callback) {
-        if (reCheckingStatus === false) {
-            return 0;
+        if (rechekIndex >= valueToBeChecked.length) {
+            rechekIndex = 0;
         }
-        for (var i = 0; i < valueToBeChecked.length; i++) {
+        for (var i = rechekIndex; i < valueToBeChecked.length; i++) {
             var name = valueToBeChecked[i];
+            rechekIndex++;
             increaseProcessingCount(name);
             var modelNode = Model(name);
             var oldValue = modelNode.get();
             var newValue = 0;
             if (Model.isExpDefined(name)) {
-                Model.setValueWithExpression(name, callback);
+                Model.setValueWithExpression(name, function() {
+                    setImmediate(function() {
+                        Model.reCheckAllValues(callback);
+                    });
+                });
+                return;
             } else if (Model.isMethodDefined(name)) {
-                Model[name](name);
-            } else if (Model.isFunction(Model["setValueDefaultMethod"])) {
-                Model["setValueDefaultMethod"](name);
+                Model[name](name, function() {
+                    setImmediate(function() {
+                        Model.reCheckAllValues(callback);
+                    });
+                });
+                return;
             }
-            newValue = modelNode.get();
-            // To avoid further processing if value changed
-            // Because it will already handle by setValue method
-            if (oldValue !== newValue) {
-                break;
-            }
+        }
+        if (rechekIndex >= valueToBeChecked.length) {
+            $S.callMethod(callback);
         }
         return 1;
     },
@@ -874,11 +841,6 @@ exps : {
     setValueWithExpression: function(name, callback) {
         var newValue = getExpressionValueByName(name);
         Model.setValue(name, newValue, callback);
-        return newValue;
-    },
-    setValueWithExpressionV2: function(name, callback) {
-        var newValue = getExpressionValueByName(name);
-        Model.setValueWithoutRecheck(name, newValue, callback);
         return newValue;
     },
     getTokenizedExp: function(exp) {

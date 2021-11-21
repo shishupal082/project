@@ -1,4 +1,5 @@
 // import $S from './stack';
+// const $S = require('../../../../../static/js/stack.js');
 (function(global, factory) {
 
 function checkStatus(params) {
@@ -48,12 +49,14 @@ function getPlatForm(global) {
 var platform = getPlatForm(global);
 factory(global, platform, $S);
 
-}(window, function(global, Platform, $S) {
+}(this, function(global, Platform, $S) {
 
 // var loopCount = 0;
 var setValueCount = 0, setValueCountLimit = 400;
 var AllCallbacks = [];
 var possibleValues = [];
+var binaryPossibleValues = "";
+var isUpdateBinaryValue = false;
 var reCheckingStatus = true;
 var verifyExpression = true;
 var isProcessingCountEnable = false;
@@ -143,6 +146,7 @@ var setValue = (function() {
             }
             function localSetValue() {
                 currentValues[key] = newValue*1;
+                Model(key).updateBinaryValue(newValue);
                 // var newValue = Model(key).get();
                 if (oldValue !== newValue) {
                     setValueCount++;
@@ -187,9 +191,9 @@ var setValue = (function() {
             }
         } else {
             $S.log("Invalid key for set: " + key);
-        }
-        if (Model.isFunction(callback)) {
-            callback(key, newValue, oldValue, this._isValueChanged);
+            if (Model.isFunction(callback)) {
+                callback(key, newValue, oldValue, this._isValueChanged);
+            }
         }
         return this._isValueChanged;
     }
@@ -261,6 +265,7 @@ Model.fn = Model.prototype = {
             for (var key in extCurrentValues) {
                 if (isValidKey(key)) {
                     currentValues[key] = extCurrentValues[key];
+                    Model(key).updateBinaryValue(extCurrentValues[key]);
                 } else {
                     $S.log("Invalid initializeCurrentValues key: " + key);
                 }
@@ -316,6 +321,21 @@ Model.fn = Model.prototype = {
             $S.log("Invalid key for debug:" + this.key);
         }
         return 0;
+    },
+    updateBinaryValue: function(newValue) {
+        if (isUpdateBinaryValue && isValidKey(this.key)) {
+            if (binaryPossibleValues.length !== possibleValues.length) {
+                binaryPossibleValues = "";
+                for (var i=0; i<possibleValues.length; i++) {
+                    binaryPossibleValues += "0";
+                }
+            }
+            var index = possibleValues.indexOf(this.key);
+            if (index < 0) {
+                return;
+            }
+            binaryPossibleValues = binaryPossibleValues.substring(0, index) + newValue + binaryPossibleValues.substring(index + 1);
+        }
     }
 };
 $S.extendObject(Model);
@@ -511,6 +531,17 @@ Model.extend({
         reCheckingStatus = false;
         return 0;
     },
+    enableUpdateBinaryValue: function() {
+        isUpdateBinaryValue = true;
+        return 1;
+    },
+    disableUpdateBinaryValue: function() {
+        isUpdateBinaryValue = false;
+        return 0;
+    },
+    isUpdateBinaryValueEnable: function() {
+        return isUpdateBinaryValue;
+    },
     enableProcessingCount: function() {
         isProcessingCountEnable = true;
         return 1;
@@ -569,6 +600,9 @@ Model.extend({
     },
     getPossibleValues : function() {
         return $S.clone(possibleValues);
+    },
+    getBinaryPossibleValue: function() {
+        return binaryPossibleValues;
     },
     getValueToBeChecked : function() {
         return $S.clone(valueToBeChecked);;
@@ -728,7 +762,7 @@ Model.extend({
             throw logText;
         }
         var oldValue = Model(key).get();
-        var set = new setValue(key, newValue, oldValue, function(finalKey, finalNewValue, finalOldValue, isChanged) {
+        new setValue(key, newValue, oldValue, function(finalKey, finalNewValue, finalOldValue, isChanged) {
             if (isChanged) {
                 Model.checkAsyncDataSetting(finalKey, finalOldValue, finalNewValue, callback);
                 if (Model.isFunction(Model["setValueChangedCallback"])) {
@@ -791,7 +825,7 @@ exps : {
     6: []
 };
 */
-    reCheckAllValuesV2: function(callBack) {
+    reCheckAllValuesV2: function(callback, isRecursive) {
         if (reCheckingStatus === false) {
             return 0;
         }
@@ -801,6 +835,9 @@ exps : {
             if (Model.isExpDefined(name)) {
                 Model.setValueWithExpression(name, callback);
             }
+        }
+        if (MStack.getTop() < 0 && isRecursive === true) {
+            Model.reCheckAllValues(callback);
         }
         return 1;
     },
@@ -962,5 +999,9 @@ Model.extend({
 });
 Model.$S = $S;
 /*End of direct access of methods*/
-global.$M = Model;
+if (Platform === "Window") {
+    window.$M = Model;
+} else if (Platform === "Node.js") {
+    module.exports = Model;
+}
 }));

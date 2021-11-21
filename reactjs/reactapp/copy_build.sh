@@ -45,7 +45,7 @@ mv ${distDir}/main.*.chunk.js ${distDir}/script2.js
 sed -i "2s/.*//" ${reactBase}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
 
-requiredScript3=("dist-data-display-app" "dist-account-app-2021-oct")
+requiredScript3=("dist-data-display-app" "dist-account-app-2021-oct", "dist-ml2-app")
 
 isNotFound="true"
 

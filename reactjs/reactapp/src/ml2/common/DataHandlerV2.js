@@ -155,6 +155,8 @@ DataHandlerV2.extend({
         var renderData = [];
         if (ml2DataKeys.indexOf(list2Id) >= 0) {
             renderData = $ML2.getData(list2Id);
+        } else if (["expressionV2"].indexOf(list2Id) >= 0) {
+            renderData = $ML2.getData("expression");
         } else if (list2Id === "customeBlockData") {
             var currentData = DataHandler.getCurrentList2Data();
             renderData = $ML2.getBlockData(currentData.requiredBlockPattern);
@@ -182,9 +184,17 @@ DataHandlerV2.extend({
                 }
                 renderData[i] = temp;
             }
+        } else if (list2Id === "expressionV2") {
+            temp = [];
+            for(i = 0; i<renderData.length; i++) {
+                for(j=0; j<renderData[i].length; j++) {
+                    temp.push(renderData[i][j].join("="));
+                }
+            }
+            renderData = [temp];
         }
         var filter2 = DataHandler.getData("filter2", "");
-        if (filter2 === "vertical") {
+        if (filter2 !== "vertical") {
             renderData = $S.convertRowToColumn(renderData);
         }
         return renderData;

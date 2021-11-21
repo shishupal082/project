@@ -886,7 +886,7 @@ var BST = (function() {
 var BT = (function(){
     function BT(val) {
         this.data = val;
-        isSubTree = false;
+        this.isSubTree = false;
         this.left = null;
         this.right = null;
     }
@@ -1023,7 +1023,6 @@ var BT = (function(){
         return this._getLeaf(root.right);
     };
     BT.prototype.createBinaryTree = function(items, obj) {
-        var currentTree, parent;
         var eTree = null, newNode = null;
         var temp = null;
         var start = isObject(obj) && isNumber(obj.start) ? obj.start : 0;
@@ -1831,6 +1830,24 @@ Stack.extend({
             }
         }
         return defaultValue;
+    },
+    changeBase: function(n, fromBase, toBase) {
+        // void 0 === 'undefined'
+        if (fromBase === void 0) {
+            fromBase = 10;
+        }
+        if (toBase === void 0) {
+            toBase = 10;
+        }
+        return parseInt(n.toString(), fromBase).toString(toBase);
+    },
+    convertHexToBin: function(hexCodedData) {
+        var binaryData = [];
+        // void 0 === 'undefined'
+        for(var i=0; i<hexCodedData.length; i++) {
+            binaryData.push(Stack.changeBase(hexCodedData[i], 10, 2).padStart(8, '0'));
+        }
+        return binaryData;
     }
 });
 
@@ -2209,6 +2226,13 @@ Stack.extend({
     callMethodV3: function(method, arg1, arg2, arg3) {
         if (Stack.isFunction(method)) {
             method(arg1, arg2, arg3);
+            return 1;
+        }
+        return 0;
+    },
+    callMethodV4: function(method, arg1, arg2, arg3, arg4) {
+        if (Stack.isFunction(method)) {
+            method(arg1, arg2, arg3, arg4);
             return 1;
         }
         return 0;

@@ -1,0 +1,10 @@
+{
+    "addDebug": [],
+    "tpr": [
+    ],
+    "ui_bits": [
+        "FLASH",
+        "60_WLR", "60_NWKR", "60_RWKR", "60_WNR", "60_WRR",
+        "6_HR", "6_HECR", "6_RECR", "6_UECR"
+    ]
+}

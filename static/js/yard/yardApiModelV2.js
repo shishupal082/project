@@ -89,6 +89,7 @@ var YardData = {};
 var YardControlData = {};
 var PartialExpressions = {};
 var PossibleValues = [];
+var InputKeys = [];
 var InitialValues = {};
 var AllExpressions = [];
 var ExpWithoutKey = {};
@@ -116,6 +117,7 @@ var TimerBitsPath = [];
 var PossibleValuesByTypes = {};
 
 var partialKeys = [];
+var inputList = ["signal"];
 
 function isApisLoadComplete() {
     var loadingCheck = [];
@@ -223,8 +225,10 @@ function loadPossibleValues(callBack) {
                         if (key === "addDebug") {
                             continue;
                         }
-                        if ($M.isString(response[key][i])) {
-                            PossibleValues.push(response[key][i]);
+                        if (key === "all_bits") {
+                            if ($M.isString(response[key][i]) && PossibleValues.indexOf(response[key][i]) < 0) {
+                                PossibleValues.push(response[key][i]);
+                            }
                         }
                     }
                     if ($M.isArray(PossibleValuesByTypes[key])) {
@@ -386,7 +390,7 @@ YardApiModel.extend({
                     ExpressionsTxtLoadStatus = true;
                     loadPossibleValues(function() {
                         PossibleValuesLoadStatus = true;
-                        $M().setPossibleValues(PossibleValues);
+                        $M().setPossibleKeys(PossibleValues);
                         var debugItems = YardApiModel.getPossiblesValueByType("addDebug");
                         for (var j = 0; j < debugItems.length; j++) {
                             $M(debugItems[j]).addDebug();
@@ -395,7 +399,11 @@ YardApiModel.extend({
                             $M().setTimerBits(TimerBits);
                             loadInitialValues(function() {
                                 InitialValuesLoadStatus = true;
-                                $M().initializeCurrentValues(InitialValues);
+                                for (var i=0; i<inputList.length; i++) {
+                                    InputKeys = InputKeys.concat(YardApiModel.getPossiblesValueByType(inputList[i]));
+                                }
+                                $M().setInputKeys(InputKeys);
+                                $M().setCurrentValues(InitialValues);
                                 loadExpressions(function() {
                                     ExpressionsLoadStatus = true;
                                     if (isApisLoadComplete()) {
@@ -423,6 +431,17 @@ YardApiModel.extend({
     },
     getPossibleKeys: function() {
         return PossibleValues;
+    },
+    getInputKeys: function() {
+        return InputKeys;
+    },
+    getDisplayKeys: function() {
+        var indicationBitList = ["indication"];
+        var bits = [];
+        for (var i=0; i<indicationBitList.length; i++) {
+            bits = bits.concat(YardApiModel.getPossiblesValueByType(indicationBitList[i]));
+        }
+        return bits;
     },
     setApisPath: function(paths) {
         for (var key in paths) {

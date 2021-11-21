@@ -1,0 +1,10 @@
+create table ei_bit_status(
+    -- auto-generated primary key
+    s_no bigint primary key not null auto_increment,
+    ei_id varchar(128) default null,
+    bit_update_id varchar(128) default null,
+    // 65535 character
+    bit_status TEXT default null,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted boolean default false
+);

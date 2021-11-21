@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="us-en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="content-language" content="en-us">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>Yard S05</title>
+<style type="text/css">
+.container {
+    width: 1170px;
+}
+td:first-child { width: 100px; };
+</style>
+</head>
+<body>
+    <div class="container yard">
+        <center><h2>Yard S05</h2></center>
+        <center><h1 id="status">Wait...</h1></center>
+        <center><span>Line number: <span><b id="line_number">0</b></center>
+        <center><span>Bit Count: <span><b id="bit_count">0</b></center>
+        <div>
+            <textarea id="all_bits" style="width: 100%; height: 400px;"></textarea>
+        </div>
+    </div>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+var url = "/pvt/app-data/ml2/ml2_s05/s05_expression.txt";
+var PossibleValues = [];
+var symbol = ["(",")","=","+","*", "~","<",">"];
+var lineNumber = 0;
+var responseV2 = "";
+function addInPossibleValue(str) {
+    var strArr = $S.tokenize(str, symbol);
+    for (var i=0; i<strArr.length; i++) {
+        if (symbol.indexOf(strArr[i]) < 0 && PossibleValues.indexOf(strArr[i]) < 0) {
+            PossibleValues.push(strArr[i]);
+        }
+    }
+}
+$("#status").html("Loading...");
+$S.loadJsonData($, [url], function(response) {
+    $("#status").html("Evaluating...");
+    responseV2 = response;
+}, function() {
+    setTimeout(function(){
+        if ($S.isString(responseV2)) {
+            var t = responseV2.split("\n");
+            var temp = {}, t2;
+            for (var j=0; j<t.length; j++) {
+                if (!$S.isStringV2(t[j])) {
+                    continue;
+                }
+                lineNumber++;
+                t[j] = t[j].replaceAll(" ", "");
+                t[j] = t[j].split("\r").join("");
+                console.log("Total bits: " + PossibleValues.length);
+                $("#line_number").html(lineNumber);
+                $("#bit_count").html(PossibleValues.length);
+                addInPossibleValue(t[j]);
+            }
+        }
+        $("#status").html("Evaluation completed.");
+        console.log("Final total bits: " + PossibleValues.length);
+        var result = PossibleValues.join("\",\"");
+        $("#all_bits").html(result);
+        console.log(result);
+    }, 1000);
+}, null, null);
+});
+</script>
+</body>
+</html>
