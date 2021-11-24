@@ -29,19 +29,25 @@ $S.extendObject(EMadhura);
 EMadhura.extend({
     ListToken: function(encryptionKeyID, encryptedRequest , callback) {
         var data = {"encryptedRequest": encryptedRequest, encryptionKeyID: encryptionKeyID};
-        $S.sendPostRequestV2($, baseUrl + path.ListToken, data, accessControlHeader, function(req, status, res) {
+        $S.sendPostRequest($, baseUrl + path.ListToken, data, function(req, status, res) {
             console.log(req);
             console.log(status);
             console.log(res);
         });
     },
+    ListTokenV2: function(tokenRequest, callback) {
+        this.ListToken(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
+    },
     ListCertificate: function(encryptionKeyID, encryptedRequest , callback) {
         var data = {"encryptedRequest": encryptedRequest, encryptionKeyID: encryptionKeyID};
-        $S.sendPostRequestV2($, baseUrl + path.ListCertificate, data, accessControlHeader, function(req, status, res) {
+        $S.sendPostRequest($, baseUrl + path.ListCertificate, data, function(req, status, res) {
             console.log(req);
             console.log(status);
             console.log(res);
         });
+    },
+    ListCertificateV2: function(tokenRequest, callback) {
+        this.ListCertificate(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
     },
     PkcsSign: function() {
     },
