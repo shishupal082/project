@@ -36,7 +36,11 @@ EMadhura.extend({
         });
     },
     ListTokenV2: function(tokenRequest, callback) {
-        this.ListToken(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
+        if ($S.isObject(tokenRequest)) {
+            this.ListToken(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
+        } else {
+            $S.callMethod(callback);
+        }
     },
     ListCertificate: function(encryptionKeyID, encryptedRequest , callback) {
         var data = {"encryptedRequest": encryptedRequest, encryptionKeyID: encryptionKeyID};
@@ -47,7 +51,11 @@ EMadhura.extend({
         });
     },
     ListCertificateV2: function(tokenRequest, callback) {
-        this.ListCertificate(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
+        if ($S.isObject(tokenRequest)) {
+            this.ListCertificate(tokenRequest.encryptionKeyID, tokenRequest.encryptedData, callback);
+        } else {
+            $S.callMethod(callback);
+        }
     },
     PkcsSign: function() {
     },
