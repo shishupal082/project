@@ -1843,11 +1843,17 @@ Stack.extend({
     },
     convertHexToBin: function(hexCodedData) {
         var binaryData = [];
-        // void 0 === 'undefined'
         for(var i=0; i<hexCodedData.length; i++) {
             binaryData.push(Stack.changeBase(hexCodedData[i], 10, 2).padStart(8, '0'));
         }
         return binaryData;
+    },
+    convertHexToStr: function(hexCodedData) {
+        var strData = [];
+        for(var i=0; i<hexCodedData.length; i++) {
+            strData.push(Stack.changeBase(hexCodedData[i], 10, 16).padStart(2, '0'));
+        }
+        return strData.join(" ");
     }
 });
 
@@ -2166,17 +2172,24 @@ Stack.extend({
         };
         JQ.ajax(options);
     },
-    sendPostRequest: function(JQ, url, data, callBack) {
+    sendPostRequest: function(JQ, url, data, callback) {
+        this.sendPostRequestV2(JQ, url, data, null, callback);
+    },
+    sendPostRequestV2: function(JQ, url, data, headers, callback) {
         var reqOption = {};
         reqOption["url"] = url;
         reqOption["type"] = "POST";
         reqOption["data"] = JSON.stringify(data);
         reqOption["dataType"] = "json";
-        reqOption["headers"] = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        };
-        Stack._send(JQ, reqOption, callBack);
+        if (Stack.isObject(headers)) {
+            reqOption["headers"] = headers;
+        } else {
+            reqOption["headers"] = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            };
+        }
+        Stack._send(JQ, reqOption, callback);
     },
     uploadFile: function(JQ, url, formData, callBack, percentageCompleteCallBack) {
         var reqOption = {};
