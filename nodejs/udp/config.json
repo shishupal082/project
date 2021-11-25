@@ -1,0 +1,13 @@
+{
+    "intercept.VDULocalPort": 59998,
+    "intercept.VDURemotePort": 60005,
+    "intercept.MLKLocalPort": 60000,
+    "intercept.MLKRemotePort": 60000,
+
+    "client.isEchoServer": true,
+    "client.localPort": 59996,
+    "client.remotePort": 60003,
+    "client.serverHost": "127.0.0.1",
+
+    "server.localPort": 60003
+}

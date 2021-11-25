@@ -2,6 +2,7 @@ var $S = require("../../static/js/stack.js");
 var UDP = require("./udp");
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
+const FS = require("../static/fsmodule.js");
 
 
 
@@ -19,5 +20,14 @@ UDP.onReceive(server, function(msg, ip, port, length, rinfo) {
     }
     UDP.sendBufferData(server, msg, port, ip);
 });
-server.bind(localPort);
-console.log("Server started on port: " + localPort);
+
+
+FS.readJsonFile("config.json", {}, function(jsonData) {
+    if ($S.isNumber(jsonData["server.localPort"])) {
+        localPort = jsonData["server.localPort"];
+    }
+    server.bind(localPort);
+    console.log("Server started on port: " + localPort);
+});
+
+

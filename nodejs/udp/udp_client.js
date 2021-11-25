@@ -4,6 +4,7 @@ const readline = require("readline");
 
 const $S = require("../../static/js/stack.js");
 const UDP = require("./udp");
+const FS = require("../static/fsmodule.js");
 
 
 var rl = readline.createInterface({
@@ -44,11 +45,24 @@ UDP.onReceive(udpClient, function(msg, ip, port, length) {
     }
 });
 
-udpClient.bind(localPort);
 
-console.log("Client started: localPort=" + localPort + ", remotePort=" + remotePort);
+FS.readJsonFile("config.json", {}, function(jsonData) {
+    if ($S.isBoolean(jsonData["client.isEchoServer"])) {
+        isEchoServer = jsonData["client.isEchoServer"];
+    }
+    if ($S.isNumber(jsonData["client.localPort"])) {
+        localPort = jsonData["client.localPort"];
+    }
+    if ($S.isNumber(jsonData["client.remotePort"])) {
+        remotePort = jsonData["client.remotePort"];
+    }
+    if ($S.isNumber(jsonData["client.serverHost"])) {
+        serverHost = jsonData["client.serverHost"];
+    }
+    udpClient.bind(localPort);
+    console.log("Client started: localPort=" + localPort + ", remotePort=" + remotePort);
+    readUserInput(textReadCallback);
+});
 
-
-readUserInput(textReadCallback);
 
 

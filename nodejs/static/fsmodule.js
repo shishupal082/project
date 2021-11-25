@@ -91,6 +91,37 @@ FS.extend({
     }
 });
 
+FS.extend({
+    readJsonFile: function(filepath, defaultData, callback) {
+        FS.isFileExist(filepath, function(status, filepath) {
+            if (status) {
+                var rawdata = fs.readFileSync(filepath);
+                try {
+                    var jsonData = JSON.parse(rawdata);
+                    callback(jsonData);
+                } catch(e) {
+                    console.log("Error in reading file: " + filepath);
+                    callback(defaultData);
+                }
+            } else {
+                callback(defaultData);
+            }
+        });
+    },
+    readTextFile: function(filepath, defaultData, callback) {
+        FS.isFileExist(filepath, function(status, filepath) {
+            if (status) {
+                fs.readFile(filepath, "utf8", function(err, data) {
+                    if (err) throw err;
+                    callback(data);
+                });
+            } else {
+                callback(defaultData);
+            }
+        });
+    }
+});
+
 module.exports = FS;
 
 })(fs, path);

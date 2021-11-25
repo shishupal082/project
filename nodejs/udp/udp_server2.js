@@ -3,6 +3,7 @@ var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 
 var UDP = require("./udp");
+const FS = require("../static/fsmodule.js");
 
 UDP.onReceive(server, function(msg, ip, port, length) {
     console.log("udp_server2: " + ip + ":" + port);
