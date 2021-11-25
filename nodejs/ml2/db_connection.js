@@ -1,10 +1,8 @@
 const $S = require("../../static/js/stack.js");
 const Logger = require("../static/logger.js");
 const File = require("../static/apis/file.js");
-// const FS = require("../fsmodule.js");
 // const AppConstant = require("../AppConstant.js");
 
-const fs = require("fs");
 const mysql = require('mysql');
 
 (function() {
