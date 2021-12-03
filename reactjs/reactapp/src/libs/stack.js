@@ -1351,6 +1351,9 @@ Stack.extend({
             Last1000UniqueNumberQue.EnqueV2(unqieNumber);
         }
         return unqieNumber;
+    },
+    generateRandomUUID: function(matchedStr, index, orgStr) {
+        return (matchedStr ? (matchedStr ^ ((Math.random() * 16) >> (matchedStr / 4))).toString(16) : ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, Stack.generateRandomUUID));
     }
 });
 
@@ -2212,6 +2215,66 @@ Stack.extend({
             }
         }
         Stack._send(JQ, reqOption, callBack);
+    },
+    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
+        var obj = {"type": "json", "dataType": "json"};
+        return Stack.callGetRequest(JQ, urls, obj, eachApiCallback, callBack, apiName, ajaxApiCall);
+    },
+    callGetRequest: function(JQ, urls, obj, eachApiCallback, callBack, apiName, ajaxApiCall) {
+        if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
+            ajaxApiCall = function(ajax, callBack) {
+                JQ.ajax({url: ajax.url,
+                    type: "GET",
+                    success: function(response, textStatus) {
+                        callBack(ajax, "SUCCESS", response);
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        callBack(ajax, "FAILURE", null);
+                    }
+                });
+            }
+        }
+        if (isArray(urls) === false || urls.length < 1 || isFunction(ajaxApiCall) === false) {
+            if (isFunction(eachApiCallback)) {
+                eachApiCallback(null, apiName);
+            }
+            Stack.callMethod(callBack);
+            return false;
+        }
+        if (!isObject(obj)) {
+            obj = {};
+        }
+        var apiSendCount = urls.length, apiReceiveCount = 0;
+        var st = Stack.getStack(), temp;
+        for (var i = 0; i < urls.length; i++) {
+            var ajax = {};
+            ajax.type = obj.type ? obj.type : "json";
+            ajax.dataType = obj.dataType ? obj.dataType : "json";
+            ajax.url = urls[i];
+            ajax.apiName = apiName;
+            st.push(ajax);
+        }
+        function loadAjaxSequentially() {
+            if (st.getTop() >= 0) {
+                temp = st.pop();
+                ajaxApiCall(temp, function(ajaxDetails, status, response) {
+                    apiReceiveCount++;
+                    if (status === "FAILURE") {
+                        Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo);
+                    }
+                    if (isFunction(eachApiCallback)) {
+                        eachApiCallback(response, ajaxDetails.apiName, ajaxDetails);
+                    }
+                    if (apiSendCount === apiReceiveCount) {
+                        Stack.callMethod(callBack);
+                    } else {
+                        loadAjaxSequentially();
+                    }
+                });
+            }
+        }
+        loadAjaxSequentially();
+        return true;
     }
 });
 Stack.extend({
@@ -2296,60 +2359,6 @@ Stack.extend({
         }
         return true;
     },*/
-    loadJsonData: function(JQ, urls, eachApiCallback, callBack, apiName, ajaxApiCall) {
-        if (Stack.isFunction(JQ) && Stack.isFunction(JQ.ajax)) {
-            ajaxApiCall = function(ajax, callBack) {
-                JQ.ajax({url: ajax.url,
-                    type: "GET",
-                    success: function(response, textStatus) {
-                        callBack(ajax, "SUCCESS", response);
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        callBack(ajax, "FAILURE", null);
-                    }
-                });
-            }
-        }
-        if (isArray(urls) === false || urls.length < 1 || isFunction(ajaxApiCall) === false) {
-            if (isFunction(eachApiCallback)) {
-                eachApiCallback(null, apiName);
-            }
-            Stack.callMethod(callBack);
-            return false;
-        }
-
-        var apiSendCount = urls.length, apiReceiveCount = 0;
-        var st = Stack.getStack(), temp;
-        for (var i = 0; i < urls.length; i++) {
-            var ajax = {};
-            ajax.type = "json";
-            ajax.dataType = "json";
-            ajax.url = urls[i];
-            ajax.apiName = apiName;
-            st.push(ajax);
-        }
-        function loadAjaxSequentially() {
-            if (st.getTop() >= 0) {
-                temp = st.pop();
-                ajaxApiCall(temp, function(ajaxDetails, status, response) {
-                    apiReceiveCount++;
-                    if (status === "FAILURE") {
-                        Stack.log("Error in api: " + ajaxDetails.url, LoggerInfo);
-                    }
-                    if (isFunction(eachApiCallback)) {
-                        eachApiCallback(response, ajaxDetails.apiName, ajaxDetails);
-                    }
-                    if (apiSendCount === apiReceiveCount) {
-                        Stack.callMethod(callBack);
-                    } else {
-                        loadAjaxSequentially();
-                    }
-                });
-            }
-        }
-        loadAjaxSequentially();
-        return true;
-    }
 });
 Stack.extend({
     /*
@@ -2532,7 +2541,57 @@ Stack.extend({
         }
         return trackingData.join(",");
     }
-})
+});
+Stack.extend({
+    readTextData: function(rawResponse) {
+        if (Stack.isStringV2(rawResponse)) {
+            return rawResponse.split("\r\n");
+        }
+        return [];
+    },
+    removeSingleLineComment: function(fileResponse, singleLineCommentPattern) {
+        var result = [], i, temp;
+        if (!isArray(fileResponse)) {
+            return result;
+        }
+        for (i = 0; i < fileResponse.length; i++) {
+            temp = fileResponse[i].split(singleLineCommentPattern);
+            if (temp.length >= 2) {
+                result.push(temp[0]);
+                continue;
+            }
+            result.push(fileResponse[i]);
+        }
+        return result;
+    },
+    removeMultiLineComment: function(fileResponse, startPattern, endPattern) {
+        var result = [], i, j, k, isValidData = true, temp, temp2;
+        for (i = 0; i < fileResponse.length; i++) {
+            if (fileResponse[i].split(startPattern).length >= 2) {
+                temp = fileResponse[i].split(startPattern);
+                result.push(temp[0]);
+                isValidData = false;
+                for (j = i; j < fileResponse.length; j++) {
+                    if (fileResponse[j].split(endPattern).length >= 2) {
+                        temp = fileResponse[j].split(endPattern);
+                        temp2 = [];
+                        for (k=1; k<temp.length; k++) {
+                            temp2.push(temp[k]);
+                        }
+                        result.push(temp2.join(endPattern));
+                        break;
+                    } else {
+                        i++;
+                        continue;
+                    }
+                }
+            } else if (isValidData) {
+                result.push(fileResponse[i]);
+            }
+        }
+        return result;
+    },
+});
 /*End of direct access of methods*/
 if (Platform === "Window") {
     window.$S = Stack;

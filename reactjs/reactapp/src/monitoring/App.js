@@ -90,13 +90,6 @@ class App extends React.Component {
         } else if (name === "reset-filter" && value === "reset-filter") {
             DataHandler.TrackFilterOperation("click", this.appData.currentList1Id);
             DataHandler.OnResetFilter(this.appStateCallback, this.appDataCallback);
-        } else if (name === "open-tab") {
-            if (value !== this.appData.currentList2Id) {
-                this.gotoPage(value);// value is page name
-            }
-        } else if (name === "close-tab") {
-            this.removeTab(value);// value is page name
-            this.appStateCallback();
         } else if (name === "date-select") {
             var selectedDateType = value;
             DataHandler.TrackDateSelection(selectedDateType);
@@ -140,7 +133,6 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     pageComponentDidMount(pageName) {
-        this.addTab(pageName);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback, pageName);
     }
     componentDidMount() {
@@ -148,20 +140,6 @@ class App extends React.Component {
         var appDataCallback = this.appDataCallback;
         var appStateCallback = this.appStateCallback;
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
-    }
-    removeTab(pageName) {
-        this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
-            if (pageName === el) {
-                return false;
-            }
-            return true;
-        });
-    }
-    addTab(pageName) {
-        if (this.appData.pageTab.indexOf(pageName) >= 0) {
-            return;
-        }
-        this.appData.pageTab.push(pageName);
     }
     getTabDisplayText(tabName) {
         return DataHandler.GetTabDisplayText(tabName);

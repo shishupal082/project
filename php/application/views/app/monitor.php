@@ -61,6 +61,6 @@ window.GLOBAL = GLOBAL;
 </script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script1.js"></script>
 <script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script2.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script3.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-monitoring-app/script3.js"></script>
 </body>
 </html>

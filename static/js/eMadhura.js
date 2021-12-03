@@ -1,5 +1,23 @@
 (function(window, $S) {
 
+/**
+ * Steps
+ * 1) getTokenRequest
+ * 2) DSC/ListToken from step1 response
+ * 3) getTokenData from step2 response --> select Token
+ * 4) getCertificateEncryptData from step3 tokenName: mToken-IN<actualId>(mToken CryptoID)
+ * 5) DSC/ListCertificate from step1 response
+ * 6) getCertificate from step5 response --> Select sertificate and enter password
+ * 7) getSignedPdf
+ *      - filePath: <pdfFilePath>
+ *      - tokenName: same as step 4
+ *      - password: Entered in step 6
+ *      - key: <key>
+ *      - certificateName: Selected in step 6
+ * 8) DSC/PKCSBulkSign
+ * 9) generatetSignedPdf
+ * */
+
 var baseUrl = "https://localhost.emudhra.com:26769";
 var path = {
     ListToken: "/DSC/ListToken",
