@@ -1,0 +1,5 @@
+//projectId ,source filepath, destination filepath
+
+Center, proj-2/Center_FAT.ML2, ../dist/proj-2/Center_FAT_01.ML2
+South, proj-2/South_FAT.ML2, ../dist/proj-2/South_FAT_01.ML2
+

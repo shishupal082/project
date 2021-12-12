@@ -11,6 +11,7 @@ var localPort = 60002;
 UDP.onReceive(server, function(msg, ip, port, length, rinfo) {
     console.log(rinfo);
     console.log(msg);
+    console.log($S.convertHexToStr(msg));
     console.log(msg.toString());
 
     var str = '';

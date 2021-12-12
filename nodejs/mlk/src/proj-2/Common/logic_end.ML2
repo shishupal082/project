@@ -1,0 +1,28 @@
+NV.ASSIGN	VDL_C_OK										TO LED.5;
+NV.ASSIGN	VDL_S_OK										TO LED.6;
+
+
+END LOGIC
+
+
+%=================================================================================================
+						CARDFILE IDENTIFICATION LOGIC
+=================================================================================================\
+
+%NUMERIC BEGIN
+
+BLOCK 1 TRIGGERS ON CHECKADDRESS AND STALE AFTER 0:SEC;
+
+ASSIGN	(CONFIGURATIONELEMENT_ADDRESS <> INSTALLATION_ADDRESS) OR
+		(CONFIGURATIONELEMENT_APPLICATION_DATA_VERSION <>
+		APPLICATION_DATA_VERSION) OR
+		(CONFIGURATIONELEMENT_EXECUTIVE_SOFTWARE_VERSION <>
+		EXECUTIVE_SOFTWARE_VERSION) OR CONFIGURE.ERROR				TO KILL;
+
+END BLOCK
+
+END NUMERIC
+\
+END PROGRAM
+%================================================================================================\
+

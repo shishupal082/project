@@ -1844,6 +1844,26 @@ Stack.extend({
         }
         return parseInt(n.toString(), fromBase).toString(toBase);
     },
+    changeBaseV2: function(n, fromBase, toBase, minLength) {
+        var result = "", temp;
+        if (!isNumber(minLength)) {
+            minLength = 1;
+        }
+        if (isString(n)) {
+            for(var i=0; i<n.length; i++) {
+                if (n[i] === ' ') {
+                    result += ' ';
+                    continue;
+                }
+                temp = Stack.changeBase(n[i], fromBase, toBase);
+                if (minLength > 1) {
+                    temp = temp.padStart(minLength, '0');
+                }
+                result += temp;
+            }
+        }
+        return result;
+    },
     convertHexToBin: function(hexCodedData) {
         var binaryData = [];
         for(var i=0; i<hexCodedData.length; i++) {
@@ -2554,6 +2574,9 @@ Stack.extend({
         if (!isArray(fileResponse)) {
             return result;
         }
+        if (!Stack.isStringV2(singleLineCommentPattern)) {
+            return fileResponse;
+        }
         for (i = 0; i < fileResponse.length; i++) {
             temp = fileResponse[i].split(singleLineCommentPattern);
             if (temp.length >= 2) {
@@ -2561,6 +2584,19 @@ Stack.extend({
                 continue;
             }
             result.push(fileResponse[i]);
+        }
+        return result;
+    },
+    removeEmpty: function(fileResponse) {
+        var result = [], i, temp;
+        if (!isArray(fileResponse)) {
+            return result;
+        }
+        for (i = 0; i < fileResponse.length; i++) {
+            temp = fileResponse[i].trim();
+            if (temp.length > 0) {
+                result.push(temp);
+            }
         }
         return result;
     },

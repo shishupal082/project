@@ -4,10 +4,10 @@
     "intercept.MLKLocalPort": 60000,
     "intercept.MLKRemotePort": 60000,
 
-    "client.isEchoServer": true,
-    "client.localPort": 59996,
-    "client.remotePort": 60003,
-    "client.serverHost": "127.0.0.1",
+    "client.isEchoServer": false,
+    "client.localPort": 60000,
+    "client.remotePort": 60000,
+    "client.serverHost": "192.168.1.101",
 
     "server.localPort": 60003
 }

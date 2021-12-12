@@ -116,9 +116,25 @@ FS.extend({
                     callback(data);
                 });
             } else {
+                console.log("Filepath does not exist: " + filepath);
                 callback(defaultData);
             }
         });
+    },
+    appendTextFile: function(filepath, textData, callback) {
+        fs.appendFile(filepath, "\n" + textData, "utf8", function(err) {
+            if (err) throw err;
+            if (typeof callback === "function") {
+                callback(true, textData);
+            }
+        });
+    },
+    deleteContent: function(filepath, callback) {
+        if (this.isFile(filepath)) {
+            fs.writeFile(filepath, '', callback);
+        } else {
+            $S.callMethod(callback);
+        }
     }
 });
 
