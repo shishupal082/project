@@ -1,0 +1,60 @@
+{
+    "topLoopLine": {
+        "Common-bits": [
+            [
+                "<span>IND</span>",
+                "<span id='SM_KEY' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='PC_CONTROL' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='CPS.STATUS' class='badge signal yellow active'>&nbsp;</span>"
+            ],
+            [
+                "",
+                "<span>SM</span>",
+                "<span>PC</span>",
+                "<span class='text-right'>CP</span>",
+                "<span class='text-left'>S</span>"
+            ]
+        ],
+        "Track-bits": [
+            [
+                "<button class='evt btn tpr green toggle 1_ATPR' value='1_ATPR' id='1_ATPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green toggle 2_ATPR' value='2_ATPR' id='2_ATPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green toggle 3_ATPR' value='3_ATPR' id='3_ATPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green toggle 4_ATPR' value='4_ATPR' id='4_ATPR'><span class='badge'>&nbsp;</span></button>"
+            ],
+            [
+                "<span>1AT</span>",
+                "<span>2AT</span>",
+                "<span>3AT</span>",
+                "<span>4AT</span>"
+            ]
+        ],
+        "Shunt-signal": [
+            [
+                "<span id='SH7_ONECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='SH7_OFFECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='SH8_ONECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='SH8_OFFECR' class='badge signal yellow active'>&nbsp;</span>"
+            ],
+            [
+                "<span>SH</span>",
+                "<span>7</span>",
+                "<span>SH</span>",
+                "<span>8</span>"
+            ]
+        ],
+        "Main-signal": [
+            [
+                "<span id='S3_RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S3_HECR' class='badge signal yellow active'>&nbsp;</span>",
+                "<span id='S46_RECR' class='badge signal red active'>&nbsp;</span>",
+                "<span id='S46_DECR' class='badge signal green active'>&nbsp;</span>"
+            ],
+            [
+                "<span>S3</span>",
+                "",
+                "<span>S46</span>"
+            ]
+        ]
+    }
+}

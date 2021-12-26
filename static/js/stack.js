@@ -2564,10 +2564,14 @@ Stack.extend({
 });
 Stack.extend({
     readTextData: function(rawResponse) {
+        var temp = [];
         if (Stack.isStringV2(rawResponse)) {
-            return rawResponse.split("\r\n");
+            temp = rawResponse.split("\r\n");
+            if (temp.length === 1) {
+                temp = rawResponse.split("\n");
+            }
         }
-        return [];
+        return temp;
     },
     removeSingleLineComment: function(fileResponse, singleLineCommentPattern) {
         var result = [], i, temp;

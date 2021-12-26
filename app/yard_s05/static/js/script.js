@@ -5,9 +5,7 @@ $M.changeSetValueCountLimit(5000);
 
 var apisPath = {};
 var commonPath = {
-    "possible-value": ["/app/yard_s05/data/items.json"],
-    "initial-value": ["/app/yard_s05/data/initial-value.json"],
-    "timer_bits": ["/app/yard_s05/data/timer_bits.json"]
+    "possible-value": ["/app/yard_s05/data/items.json"]
 };
 
 for (var key in commonPath) {
@@ -80,19 +78,28 @@ $("#toggleDisplayDomino").on("click", function(e) {
     checkDominoDisplayStatus();
 });
 $YApiModel.documentLoaded(function() {
-    $V.startTimer();
-    $V.loadApiData(function() {
-        $V.startTimer();
-        // $(".container").attr("style", "width: 1670px;")
+    $V.loadYardData(function() {
+        $(".container").attr("style", "width: 1670px;");
         var tableHtml = $V.getYardHtml();
         $("#tableHtml").addClass("table-html").html(tableHtml);
-        $(".evt").on("click", function(e) {
-            evtClick($(e.currentTarget));
+        $V.loadApiData(function() {
+            $(".evt").on("click", function(e) {
+                evtClick($(e.currentTarget));
+            });
+            checkUIStyle();
+            $("#help").removeClass("hide");
+            checkDominoDisplayStatus();
+            // $V.renderData();
+            $V.startTimer();
         });
-        checkUIStyle();
-        $("#help").removeClass("hide");
-        checkDominoDisplayStatus();
     });
+});
+
+$S.callGetRequest($, ["/app/yard_s05/data/class-name-mapping.csv"], {"type": "txt", "dataType": "txt"}, function(response, apiName, ajax) {
+    var fileResponse = $S.readTextData(response);
+    fileResponse = $S.removeSingleLineComment(fileResponse, "//");
+    fileResponse = $S.removeEmpty(fileResponse);
+    $V.setClassNameMapping(fileResponse);
 });
 
 });

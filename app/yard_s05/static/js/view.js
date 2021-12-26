@@ -18,13 +18,35 @@ var yardComponent = {};
 var tableContent = [];
 var requestId = $M.getRequestId();
 
-var topLoopLine = ["PF3", "", "", "S6", "", "", "S2"];
+var topLoopLine = ["Common-bits", "Track-bits", "Shunt-signal", "Main-signal"];
 var requiredContent = [];
 requiredContent.push(topLoopLine);
 $M().setBinaryOperators(["+","*","~"]);
 $M.enableChangeValueDataLogging();
 var dataLoadStatus = "not-started";
 var bitMapping = {};
+
+var indicationBitMapping = {};
+View.extend({
+    setClassNameMapping: function(fileResponse) {
+        var temp, key, logicEquation, value, className;
+        if ($S.isArray(fileResponse)) {
+            for (var i=0; i<fileResponse.length; i++) {
+                temp = fileResponse[i].split(",");
+                if (temp.length === 4) {
+                    key = temp[0];
+                    logicEquation = temp[1];
+                    value = temp[2];
+                    className = temp[3];
+                    if (!$S.isArray(indicationBitMapping[key])) {
+                        indicationBitMapping[key] = [];
+                    }
+                    indicationBitMapping[key].push({"key": key, "logicEquation": logicEquation, value: value, "className": className});
+                }
+            }
+        }
+    }
+});
 View.extend({
     getYardHtml: function() {
         var table = $M.getTable(tableContent, "yard");
@@ -63,15 +85,15 @@ View.extend({
         if ($S.isString(response)) {
             if (response.length === possibleKeys.length) {
                 for (var i=0; i<possibleKeys.length; i++) {
-                    bitMapping[possibleKeys[i]] = response.charAt(i) === '1' ? true : false;
+                    bitMapping[possibleKeys[i]] = response.charAt(i) === '1' ? '1' : '0';
                 }
             }
         }
     }
 });
 View.extend({
-    loadApiData: function(callBack) {
-        var apiUrl = ["/app/platform_light/static/json/yard-top.json?"+requestId];
+    loadYardData: function(callBack) {
+        var apiUrl = ["/app/yard_s05/data/ui/yard-top.json?"+requestId];
         $M.loadJsonData($, apiUrl, function(response) {
             if (response) {
                 for (var key in response) {
@@ -84,7 +106,7 @@ View.extend({
         });
         return true;
     },
-    loadApiData: function() {
+    loadApiData: function(callback) {
         if (dataLoadStatus === "in-progress") {
             return;
         }
@@ -100,8 +122,8 @@ View.extend({
                     }
                 }
             }
-            $V.renderData();
             dataLoadStatus = "completed";
+            $S.callMethod(callback);
         });
     },
     addTprClass: function(name) {
@@ -123,22 +145,35 @@ View.extend({
         }
         return 1;
     },
+    _isLogicTrue: function(logic, value) {
+        if (bitMapping[logic] === value) {
+            return true;
+        }
+        return false;
+    },
     renderData: function(response) {
-        var displayKeys = $YApiModel.getDisplayKeys();
-        // var signals = [
-        //     "PF3_UECR", "PF3_RECR",
-        //     "S6_UR_A","S6_UECR"
-        // ];
-        var displayClass = "";
-        for (var i=0; i <displayKeys.length; i++) {
-            console.log(displayKeys[i]);
-            console.log(bitMapping[displayKeys[i]]);
-            if ($S.isBooleanTrue(bitMapping[displayKeys[i]])) {
-                displayClass = "active";
-            } else {
-                displayClass = "";
+        // var displayKeys = $YApiModel.getDisplayKeys();
+        // var displayClass = "";
+        // for (var i=0; i <displayKeys.length; i++) {
+        //     if ($S.isBooleanTrue(bitMapping[displayKeys[i]])) {
+        //         displayClass = "active";
+        //     } else {
+        //         displayClass = "";
+        //     }
+        //     $("#"+displayKeys[i]).removeClass("active").addClass(displayClass);
+        // }
+        var className;
+        for (var key in indicationBitMapping) {
+            if ($S.isArray(indicationBitMapping[key])) {
+                for (var i=0; i<indicationBitMapping[key].length; i++) {
+                    className = indicationBitMapping[key][i].className;
+                    if (this._isLogicTrue(indicationBitMapping[key][i].logicEquation, indicationBitMapping[key][i].value)) {
+                        $("#"+key).addClass(className);
+                    } else {
+                        $("#"+key).removeClass(className);
+                    }
+                }
             }
-            $("#"+displayKeys[i]).removeClass("active").addClass(displayClass);
         }
         return 1;
     },
@@ -168,7 +203,9 @@ View.extend({
     startTimer: function() {
         setInterval(function() {
             // $V.toggleValues("FLASH");
-            $V.loadApiData();
+            $V.loadApiData(function() {
+                $V.renderData();
+            });
         }, 1000);
     }
 });

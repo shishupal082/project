@@ -18,8 +18,24 @@ function generateTextFile(configJson, generatedId, callback) {
             continue;
         }
         generatedId.push(projectId);
-        generateFile.save(configJson[projectId]["source"], configJson[projectId]["destination"], function() {
-            generateTextFile(configJson, generatedId, callback);
+        Logger.log("************************************************", function() {
+            generateFile.save(configJson[projectId]["source"], configJson[projectId]["destination"], function() {
+                generateTextFile(configJson, generatedId, callback);
+            }, function(textData) {
+                if ($S.isArray(textData) && textData.length === 5) {
+                    if (textData[4] === "01") {
+                        var temp = [];
+                        temp[0] = textData[0];
+                        temp[1] = textData[1];
+                        temp[2] = textData[2];
+                        if ($S.isString(configJson[projectId]["identifier"])) {
+                            temp[3] = textData[3] + configJson[projectId]["identifier"];
+                        }
+                        return temp;
+                    }
+                }
+                return textData;
+            });
         });
         return;
     }
@@ -34,14 +50,18 @@ function generateAllFile(csvConfigData, callback) {
             for (var j=0; j<temp.length; j++) {
                 temp[j] = temp[j].trim();
             }
-            if (temp.length === 3 && temp[0] !== "") {
+            if (temp.length >= 3 && temp[0] !== "") {
                 if (configJson[temp[0]]) {
                     Logger.log("Duplicate project id: " + temp[0], function() {
                         $S.callMethod(callback);
                     });
                     return;
                 }
-                configJson[temp[0]] = {"source": temp[1], "destination": temp[2]};
+                if (temp.length === 3) {
+                    configJson[temp[0]] = {"source": temp[1], "destination": temp[2]};
+                } else if (temp.length === 4) {
+                    configJson[temp[0]] = {"source": temp[1], "destination": temp[2], "identifier": temp[3]};
+                }
             } else {
                 console.log("Invalid csv config data.");
                 console.log(csvConfigData);
@@ -60,8 +80,7 @@ function start(configFilepath) {
         textData = $S.removeMultiLineComment(textData, "/*", "*/");
         textData = $S.removeEmpty(textData);
         console.log(textData);
-        generateAllFile(textData, function() {
-        });
+        generateAllFile(textData, function() {});
     });
 }
 
@@ -72,6 +91,6 @@ Logger("../log/").setLogDir().enableLoging(function(status) {
     } else {
         console.log("Error in log enabling.");
     }
-    start("proj-1/config.csv");
+    start("proj-3/config.csv");
     // start("proj-1/file-1.ML2", "../dist/proj-1/FAT/MURI_C1_T06_FAT.ML2");
 });

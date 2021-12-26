@@ -67,12 +67,19 @@ ReadText.extend({
         }
         if ($S.isStringV2(textData)) {
             temp = textData.split("|||");
-            if (temp.length === 4) {
+            for (var j=0; j<temp.length; j++) {
+                temp[j] = temp[j].trim();
+            }
+            if (temp.length === 5 && $S.isFunction(obj.getFilePath)) {
+                temp = obj.getFilePath(temp);
+            }
+            if ($S.isArray(temp) && temp.length === 4) {
                 type = temp[0];
                 filename = temp[1];
                 fileExt = temp[2];
                 dir = temp[3];
-                if (obj.processedFile.indexOf(filename) >= 0) {
+                // It can end up in infinite loop
+                if (obj.processedFile.indexOf(filename) && false) {
                     Logger.log("Filename " + filename + " read already completed.", function() {
                         $S.callMethodV1(callback, [textData]);
                     });
@@ -126,8 +133,8 @@ ReadText.extend({
 });
 
 var generateFile = {
-    "save": function(filepath, destinationPath, callback) {
-        var obj = {};
+    "save": function(filepath, destinationPath, callback, getFilePath) {
+        var obj = {getFilePath: getFilePath};
         ReadText.read(filepath, obj, function(finalTextData) {
             // console.log(destinationPath);
             ReadText({"i": 0, "textData": finalTextData}).writeText(destinationPath, function(status) {

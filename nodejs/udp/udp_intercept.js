@@ -28,17 +28,38 @@ var MLKRxCount = 0;
 var DT = $S.getDT();
 var dateTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/");
 
+function getLogStr(str) {
+    var finalStr = "";
+    if ($S.isStringV2(str)) {
+        for (var i=0; i<str.length; i++) {
+            if (i>29 && str[i] !== ' ') {
+                finalStr += str[i];
+            }
+        }
+    }
+    return finalStr;
+}
+function removeSpace(str) {
+    var finalStr = "";
+    if ($S.isStringV2(str)) {
+        for (var i=0; i<str.length; i++) {
+            if (str[i] !== ' ') {
+                finalStr += str[i];
+            }
+        }
+    }
+    finalStr = $S.changeBaseV2(finalStr, 16, 2, 4);
+    return finalStr;
+}
 UDP.onReceive(MLK, function(msg, ip, port, length) {
     if (port === MLKLocalPort) {
         return;
     }
     MLKRxCount++;
-    // console.log("****************************" + MLKRxCount);
-    // console.log("Received from MLK: " + ip + ":" + port + ", size: " + length);
-    // console.log($S.convertHexToStr(msg));
-    // console.log(msg.toString());
     if (VDURemotePort > 0) {
-        Logger.log("MLK--" + MLKRxCount + "--" + ip + "--" + $S.convertHexToStr(msg), function(status) {
+        var logStr = "MLK--" + MLKRxCount + "--" + ip + "--" + $S.convertHexToStr(msg);
+        logStr = removeSpace($S.convertHexToStr(msg));
+        Logger.log(logStr, function(status) {
             UDP.sendBufferData(VDU, msg, VDURemotePort, ip, function() {});
         });
     } else {
@@ -55,7 +76,7 @@ UDP.onReceive(VDU, function(msg, ip, port, length) {
     VDURemotePort = port;
     console.log(msg);
     Logger.log("VDU--" + VDURxCount + "--" + ip + "--" + $S.convertHexToStr(msg), function(status) {
-        // UDP.sendBufferData(MLK, msg, MLKRemotePort, ip, function() {})
+        UDP.sendBufferData(MLK, msg, MLKRemotePort, ip, function() {})
     });
     // console.log("Received from VDU: " + ip + ":" + port + ", size: " + length);
 });

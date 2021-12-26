@@ -1,0 +1,15 @@
+// uiBitId, Logic Equation, bit-value, className
+// when bit-value is not mapping with logic equation value then className to be removed
+SM_KEY,SM_KEY,1,active
+PC_CONTROL,PC_CONTROL,1,active
+CPS.STATUS,CPS.STATUS,1,active
+1_ATPR,1AT_KE,1,btn-warning
+1_ATPR,1AT_KRE,1,btn-danger
+SH7_ONECR,SH7_ONECR,1,active
+SH7_OFFECR,SH7_OFFECR,1,active
+SH8_ONECR,SH8_ONECR,1,active
+SH8_OFFECR,SH8_OFFECR,1,active
+S3_RECR,3_RECR,1,active
+S3_HECR,3_HECR,1,active
+S46_RECR,46_RECR,1,active
+S46_DECR,46_DECR,1,active

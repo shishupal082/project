@@ -8,14 +8,14 @@ const FS = require("../static/fsmodule.js");
 const Logger = require("../static/logger-v2.js");
 
 
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+// var rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
 
 
 var isEchoServer = true;
-var localPort = 59996;
+var localPort = 60000;
 var remotePort = 60002;
 var serverHost = "127.0.0.1";
 
@@ -33,10 +33,13 @@ function removeSpace(text) {
 
 function readUserInput(callback) {
     console.log("----------------------------------------");
-    rl.question("Enter text: ", function(text) {
-        // text = removeSpace(text);
-        $S.callMethodV1(callback, text);
-    });
+    // rl.question("Enter text: ", function(text) {
+    //     // text = removeSpace(text);
+    //     $S.callMethodV1(callback, text);
+    // });
+}
+function endProcess() {
+    // process.exit(0);
 }
 
 function textReadCallback(text) {
@@ -57,7 +60,7 @@ function textReadCallback(text) {
         }
     } else {
         console.log("BYE BYE!!!");
-        process.exit(0);
+        endProcess();
     }
 }
 
