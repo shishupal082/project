@@ -58,7 +58,7 @@ ReadText.fn.init.prototype = ReadText.fn;
 $S.extendObject(ReadText);
 ReadText.extend({
     _parseText: function(textData, obj, callback) {
-        var temp, type, filename, fileExt, dir;
+        var temp, type, filename, fileExt, dir, preText, postText;
         if (!$S.isObject(obj)) {
             obj = {};
         }
@@ -72,21 +72,45 @@ ReadText.extend({
             }
             if (temp.length === 5 && $S.isFunction(obj.getFilePath)) {
                 temp = obj.getFilePath(temp);
+            } else if (temp.length === 7 && $S.isFunction(obj.getFilePath)) {
+                temp = obj.getFilePath(temp);
             }
             if ($S.isArray(temp) && temp.length === 4) {
                 type = temp[0];
                 filename = temp[1];
                 fileExt = temp[2];
                 dir = temp[3];
-                // It can end up in infinite loop
+                // It can end up in infinite loop when same filename is included in reading
                 if (obj.processedFile.indexOf(filename) && false) {
                     Logger.log("Filename " + filename + " read already completed.", function() {
                         $S.callMethodV1(callback, [textData]);
                     });
                 } else {
                     obj.processedFile.push(filename);
-                    ReadText.read(dir + filename + fileExt, obj, function(data) {
+                    ReadText.read(dir + filename + fileExt, obj, {}, function(data, tempObj) {
                         $S.callMethodV1(callback, data);
+                    });
+                }
+            } else if($S.isArray(temp) && temp.length === 6){
+                type = temp[0];
+                filename = temp[1];
+                fileExt = temp[2];
+                dir = temp[3];
+                preText = temp[4];
+                postText = temp[5];
+                // It can end up in infinite loop when same filename is included in reading
+                if (obj.processedFile.indexOf(filename) && false) {
+                    Logger.log("Filename " + filename + " read already completed.", function() {
+                        $S.callMethodV1(callback, [textData]);
+                    });
+                } else {
+                    obj.processedFile.push(filename);
+                    ReadText.read(dir + filename + fileExt, obj, {"preText": preText, "postText": postText}, function(data, tempObj) {
+                        if ($S.isArray(data) && data.length === 1) {
+                            $S.callMethodV1(callback, [tempObj["preText"] + data[0] + tempObj["postText"]]);
+                        } else {
+                            $S.callMethodV1(callback, data);
+                        }
                     });
                 }
             } else {
@@ -116,7 +140,7 @@ ReadText.extend({
             });
         });
     },
-    read: function(filepath, obj, callback) {
+    read: function(filepath, obj, tempObj, callback) {
         var text = "------------------------------------------------\nReading text file: \t\t";
         Logger.log(text + filepath, function() {
             FS.readTextFile(filepath, [], function(fileData) {
@@ -124,7 +148,7 @@ ReadText.extend({
                     var fileDataV2 = $S.readTextData(fileData);
                     var finalTextDataV2 = [];
                     ReadText.parseData(fileDataV2, obj, 0, finalTextDataV2, function(finalTextData) {
-                        $S.callMethodV1(callback, finalTextData);
+                        $S.callMethodV2(callback, finalTextData, tempObj);
                     });
                 });
             });
@@ -135,7 +159,7 @@ ReadText.extend({
 var generateFile = {
     "save": function(filepath, destinationPath, callback, getFilePath) {
         var obj = {getFilePath: getFilePath};
-        ReadText.read(filepath, obj, function(finalTextData) {
+        ReadText.read(filepath, obj, {}, function(finalTextData, tempObj) {
             // console.log(destinationPath);
             ReadText({"i": 0, "textData": finalTextData}).writeText(destinationPath, function(status) {
                 $S.callMethod(callback);

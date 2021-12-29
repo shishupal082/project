@@ -9,8 +9,7 @@ CHECKADDRESS, VDL_C_OK,			VDL_S_OK,			SYSINITTMR, CPS_DN;
                                     NON-VITAL BOOLEAN BIT SECTION
 =================================================================================================\
 NV.BOOLEAN BITS
-PC_RQ,			PC_ON,
-PANEL, PC,				FLASH;
+PANEL,		PC,				FLASH;
 
 %=================================================================================================
 						TIMER BIT SECTION
@@ -20,12 +19,11 @@ TIMER BITS
 CHECKADDRESS:			SET = 500:MSEC		CLEAR = 20:SEC;
 FLASH:				SET = 700:MSEC		CLEAR = 700:MSEC;
 
-
 CPS_DN:				SET = 5:SEC			CLEAR = 0:SEC;
 
 %=================================================================================================
 					USER DATA LOG SECTION
 =================================================================================================\
 LOG BITS
-
 SYSINITTMR;
+

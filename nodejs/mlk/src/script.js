@@ -25,12 +25,35 @@ function generateTextFile(configJson, generatedId, callback) {
                 if ($S.isArray(textData) && textData.length === 5) {
                     if (textData[4] === "01") {
                         var temp = [];
-                        temp[0] = textData[0];
-                        temp[1] = textData[1];
-                        temp[2] = textData[2];
+                        temp.push(textData[0]); //type
+                        temp.push(textData[1]); //filename
+                        temp.push(textData[2]); //fileExt
                         if ($S.isString(configJson[projectId]["identifier"])) {
-                            temp[3] = textData[3] + configJson[projectId]["identifier"];
+                            temp.push(textData[3] + configJson[projectId]["identifier"]);
+                        } else {
+                            temp.push(textData[3]); //dir
                         }
+                        return temp;
+                    }
+                } else if ($S.isArray(textData) && textData.length === 7) {
+                    if (["00", "01"].indexOf(textData[5]) >= 0) {
+                        var temp = [];
+                        temp.push(textData[1]); //type
+                        temp.push(textData[2]); //filename
+                        temp.push(textData[3]); //fileExt
+                        if (textData[5] === "00") {
+                            temp.push(textData[4]); //dir
+                        } else if (textData[5] === "01") {
+                            if ($S.isString(configJson[projectId]["identifier"])) {
+                                temp.push(textData[4] + configJson[projectId]["identifier"]);
+                            } else {
+                                temp.push(textData[4]);
+                            }
+                        } else {
+                            temp.push(textData[4]);
+                        }
+                        temp.push(textData[0]);
+                        temp.push(textData[6]);
                         return temp;
                     }
                 }
@@ -75,7 +98,8 @@ function generateAllFile(csvConfigData, callback) {
 
 function start(configFilepath) {
     var ReadText = generateFile.getReadText();
-    ReadText.read(configFilepath, {}, function(textData) {
+    var tempObj = {};
+    ReadText.read(configFilepath, {}, tempObj, function(textData, tempObj2) {
         textData = $S.removeSingleLineComment(textData, "//");
         textData = $S.removeMultiLineComment(textData, "/*", "*/");
         textData = $S.removeEmpty(textData);
@@ -91,6 +115,6 @@ Logger("../log/").setLogDir().enableLoging(function(status) {
     } else {
         console.log("Error in log enabling.");
     }
-    start("proj-3/config.csv");
+    start("proj-2/config.csv");
     // start("proj-1/file-1.ML2", "../dist/proj-1/FAT/MURI_C1_T06_FAT.ML2");
 });
