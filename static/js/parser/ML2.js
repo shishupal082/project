@@ -50,6 +50,10 @@ ML2.extend({
         }
         return result;
     },
+    getDataV2: function(key, defaultValue, isDirect) {
+        var result = ML2Local.getData(key, defaultValue, isDirect);
+        return result;
+    },
     getBlockData: function(blockFilterPattern) {
         var data = ML2Local.getData("ml2FileData", []);
         var result = [], i, j, k;
@@ -181,6 +185,7 @@ ML2Local.extend({
                 if (this._isAssignStart(fileData[i]) && this._isAssignEnd(fileData[i])) {
                     isAssignContinue = false;
                     temp = $S.replaceString(fileData[i], "\t", " ");
+                    temp = $S.replaceString(temp, "\r", "");
                     temp = $S.replaceString(temp, "  ", " ");
                     result.push(temp);
                     temp = "";
@@ -193,6 +198,7 @@ ML2Local.extend({
                     isAssignContinue = false;
                     temp += fileData[i];
                     temp = $S.replaceString(temp, "\t", " ");
+                    temp = $S.replaceString(temp, "\r", "");
                     temp = $S.replaceString(temp, "  ", " ");
                     result.push(temp);
                     temp = "";

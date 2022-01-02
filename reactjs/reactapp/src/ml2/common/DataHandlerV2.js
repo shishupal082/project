@@ -157,6 +157,8 @@ DataHandlerV2.extend({
             renderData = $ML2.getData(list2Id);
         } else if (["expressionV2"].indexOf(list2Id) >= 0) {
             renderData = $ML2.getData("expression");
+        } else if (["assignStatementV2"].indexOf(list2Id) >= 0) {
+            renderData = $ML2.getDataV2("assignStatement");
         } else if (list2Id === "customeBlockData") {
             var currentData = DataHandler.getCurrentList2Data();
             renderData = $ML2.getBlockData(currentData.requiredBlockPattern);
@@ -189,6 +191,15 @@ DataHandlerV2.extend({
             for(i = 0; i<renderData.length; i++) {
                 for(j=0; j<renderData[i].length; j++) {
                     temp.push(renderData[i][j].join("="));
+                }
+            }
+            renderData = [temp];
+        } else if (list2Id === "assignStatementV2") {
+            temp = [];
+            for(i = 0; i<renderData.length; i++) {
+                temp.push("MLK-" + (i+1));
+                for(j=0; j<renderData[i].length; j++) {
+                    temp.push(renderData[i][j]);
                 }
             }
             renderData = [temp];

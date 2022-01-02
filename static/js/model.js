@@ -1,6 +1,6 @@
 // import $S from './stack';
 // const $S = require('../../../../../static/js/stack.js');
-(function(global, factory) {
+(function(attr, factory) {
 
 function checkStatus(params) {
     var status = true;
@@ -13,17 +13,17 @@ function checkStatus(params) {
     return status;
 }
 
-function getPlatForm(global) {
+function getPlatForm(attr) {
     var checkingWindowStatus = [];
-    checkingWindowStatus.push(typeof global !== 'undefined');
+    checkingWindowStatus.push(typeof attr !== 'undefined');
     if (checkStatus(checkingWindowStatus)) {
-        checkingWindowStatus.push(typeof global.constructor !== 'undefined');
+        checkingWindowStatus.push(typeof attr.constructor !== 'undefined');
     } else {
         checkingWindowStatus.push(false);
     }
 
     if (checkStatus(checkingWindowStatus)) {
-        checkingWindowStatus.push(global.constructor.name === "Window");
+        checkingWindowStatus.push(attr.constructor.name === "Window");
     } else {
         checkingWindowStatus.push(false);
     }
@@ -46,10 +46,10 @@ function getPlatForm(global) {
     return "";
 }
 
-var platform = getPlatForm(global);
-factory(global, platform, $S);
+var platform = getPlatForm(attr);
+factory(platform, $S);
 
-}(this, function(global, Platform, $S) {
+}(global, function(Platform, $S) {
 
 // var loopCount = 0;
 var setValueCount = 0, setValueCountLimit = 400;
