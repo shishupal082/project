@@ -1,7 +1,7 @@
 const $S = require("../../../static/js/stack.js");
 const FS = require("../../static/fsmodule.js");
 const Logger = require("../../static/logger-v2.js");
-const generateFile = require("./generateFile.js");
+const generateFile = require("./js/generateFile.js");
 
 
 var fileGenerateConfigPath = "";
