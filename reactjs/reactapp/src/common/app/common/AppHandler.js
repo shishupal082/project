@@ -370,11 +370,11 @@ AppHandler.extend({
         if (!$S.isString(dataStr) || $S.isJsonString(dataStr)) {
             return finalArr;
         }
-        var arr = dataStr.split("\n");
+        var arr = $S.readTextData(dataStr);//.split("\n");
+        arr = $S.removeSingleLineComment(arr, "//");
         for (i = 0; i < arr.length; i++) {
             arr[i] = arr[i].split(wordBreak);
         }
-
         for (i = 0; i < arr.length; i++) {
             if (arr[i].length === 1 && arr[i][0].trim() === "") {
                 continue;

@@ -39,10 +39,14 @@ class App extends CI_Controller {
     public function accountsv2() {
         $this->load->view("app/account.php");
     }
-    public function monitorv2() {
-        $this->load->view("app/monitor.php");
-    }
+    // Depricated
+    // public function monitorv2() {
+    //     $this->load->view("app/monitor.php");
+    // }
     public function attendancev2() {
         $this->load->view("app/attendancev2.php");
+    }
+    public function rccv2() {
+        $this->load->view("app/rcc.php");
     }
 }

@@ -28,6 +28,7 @@ attendance app
 validAppControl array defined in html page
 userTeam defined in metaData (isSignalTeam, isTelecomTeam, isSAndTTeam, isAMCTeam, isSFRTeam) for add_field_report page
 
+
 ftp app
 ********
 26.12.2021
@@ -46,3 +47,7 @@ dynamicEnabling key defined in metaData (enablePageGroup01, enablePageGroup02, e
 monitor (Depricated on 26.12.2021)
 ***********************************************
 validAppControl array defined in html page
+
+rcc (05.01.2021)
+***********************************************
+

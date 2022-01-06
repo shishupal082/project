@@ -43,9 +43,11 @@ DBViewTemplateHandler.extend({
             if (!$S.isStringV2(wordBreakTag)) {
                 wordBreakTag = "li";
             }
-            value = value.split(wordBreak).map(function(el,i, arr) {
-                return {"tag": wordBreakTag, "text": el.trim()};
-            });
+            if ($S.isStringV2(value)) {
+                value = value.split(wordBreak).map(function(el,i, arr) {
+                    return {"tag": wordBreakTag, "text": el.trim()};
+                });
+            }
         }
         if (($S.isObject(text) || $S.isArray(text))) {
             if ($S.isStringV2(fieldName)) {
