@@ -37,7 +37,7 @@ DataHandlerV2.extend({
             if ($S.isBooleanTrue(splitOnEqualWidth)) {
                 responseArr = responseArr.concat(AppHandler.ParseTextDataOnEqualWidth(finalResponse[i], wordSplitingChar));
             } else {
-                responseArr = responseArr.concat(AppHandler.ParseTextData(finalResponse[i], workBreak, skipEmpty, true));
+                responseArr = responseArr.concat(AppHandler.ParseTextData(finalResponse[i], workBreak, skipEmpty, true, null));
             }
         }
         for (i = 0; i < responseArr.length; i++) {

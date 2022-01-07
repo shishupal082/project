@@ -354,9 +354,9 @@ AppHandler.extend({
         return rows;
     },
     ParseCSVData: function(dataStr) {
-        return this.ParseTextData(dataStr, ",", false, true);
+        return this.ParseTextData(dataStr, ",", false, true, null);
     },
-    ParseTextData: function(dataStr, wordBreak, skipEmpty, trimEntry) {
+    ParseTextData: function(dataStr, wordBreak, skipEmpty, trimEntry, request) {
         if (!$S.isString(wordBreak)) {
             wordBreak = ",";
         }
@@ -370,8 +370,12 @@ AppHandler.extend({
         if (!$S.isString(dataStr) || $S.isJsonString(dataStr)) {
             return finalArr;
         }
-        var arr = $S.readTextData(dataStr);//.split("\n");
-        arr = $S.removeSingleLineComment(arr, "//");
+        var arr = $S.readTextData(dataStr);
+        if ($S.isObject(request)) {
+            if ($S.isStringV2(request.singleLineComment)) {
+                arr = $S.removeSingleLineComment(arr, request.singleLineComment);
+            }
+        }
         for (i = 0; i < arr.length; i++) {
             arr[i] = arr[i].split(wordBreak);
         }
@@ -546,6 +550,7 @@ AppHandler.extend({
                 if ($S.isUndefined(tableData[request[i].apiName])) {
                     tableData[request[i].apiName] = {};
                 }
+                tableData[request[i].apiName]["request"] = request[i];
                 tableData[request[i].apiName]["tableName"] = request[i].apiName;
                 tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
@@ -558,7 +563,7 @@ AppHandler.extend({
             wordBreak = tableData[key].wordBreak;
             if ($S.isArray(tableData[key]["response"])) {
                 for(i=0; i<tableData[key]["response"].length; i++) {
-                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, false, true);
+                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, false, true, tableData[key]["request"]);
                     tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
                 }
             }
@@ -585,6 +590,7 @@ AppHandler.extend({
                 if ($S.isUndefined(tableData[request[i].apiName])) {
                     tableData[request[i].apiName] = {};
                 }
+                tableData[request[i].apiName]["request"] = request[i];
                 tableData[request[i].apiName]["apiName"] = request[i].apiName;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
@@ -596,7 +602,7 @@ AppHandler.extend({
             wordBreak = tableData[apiName].wordBreak;
             if ($S.isArray(tableData[apiName]["response"])) {
                 for(i=0; i<tableData[apiName]["response"].length; i++) {
-                    jsonData = this.ParseTextData(tableData[apiName]["response"][i], wordBreak, false, true);
+                    jsonData = this.ParseTextData(tableData[apiName]["response"][i], wordBreak, false, true, tableData[apiName]["request"]);
                     tableData[apiName]["responseJson"] = tableData[apiName]["responseJson"].concat(jsonData);
                 }
             }
@@ -635,6 +641,55 @@ AppHandler.extend({
             }
         }
         return dbViewData;
+    },
+    _isValidTableEntry: function(dbApi) {
+        if (!$S.isObject(dbApi)) {
+            return false;
+        }
+        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
+            return false;
+        }
+        if (!$S.isArray(dbApi.apis)) {
+            return false;
+        }
+        return true;
+    },
+    GenerateApiRequest: function(dbDataApis, baseApi, requestId) {
+        var request = [], i, j, el, urls, temp;
+        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
+            for(i=0; i<dbDataApis.length; i++) {
+                if (!this._isValidTableEntry(dbDataApis[i])) {
+                    continue;
+                }
+                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
+                    if ($S.isString(el) && el.length > 0) {
+                        return true;
+                    }
+                    return false;
+                });
+                for (j=0; j<urls.length; j++) {
+                    el = urls[j];
+                    if ($S.isString(el) && el.split("?").length > 1) {
+                        urls[j] = baseApi + el + "&requestId=" + requestId;
+                    } else {
+                        urls[j] = baseApi + el + "?requestId=" + requestId;
+                    }
+                }
+                if (urls.length < 1) {
+                    continue;
+                }
+                temp = {};
+                temp.apis = dbDataApis[i].apis;
+                temp.dataIndex = dbDataApis[i].dataIndex;
+                temp.wordBreak = dbDataApis[i].wordBreak;
+                temp.singleLineComment = dbDataApis[i].singleLineComment;
+                temp.apiName = dbDataApis[i].tableName.trim();
+                temp.requestMethod = Api.getAjaxApiCallMethodV2();
+                temp.url = urls;
+                request.push(temp);
+            }
+        }
+        return request;
     },
     ConvertJsonToTable: function(jsonData, dataIndex) {
         var maxLength = 0, i, j;

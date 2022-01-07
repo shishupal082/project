@@ -3,7 +3,7 @@ import DataHandler from "./DataHandler";
 import Config from "./Config";
 
 
-import Api from "../../common/Api";
+// import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
 
@@ -27,52 +27,8 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 $S.extendObject(DataHandlerV3);
 var temp, temp2, temp3, temp4, i, j, k, l;
 DataHandlerV3.extend({
-    _isValidTableEntry: function(dbApi) {
-        if (!$S.isObject(dbApi)) {
-            return false;
-        }
-        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
-            return false;
-        }
-        if (!$S.isArray(dbApi.apis)) {
-            return false;
-        }
-        return true;
-    },
     _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, j, el, urls;
-        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
-            for(i=0; i<dbDataApis.length; i++) {
-                if (!this._isValidTableEntry(dbDataApis[i])) {
-                    continue;
-                }
-                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
-                    if ($S.isString(el) && el.length > 0) {
-                        return true;
-                    }
-                    return false;
-                });
-                for (j=0; j<urls.length; j++) {
-                    el = urls[j];
-                    if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId;
-                    } else {
-                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId;
-                    }
-                }
-                if (urls.length < 1) {
-                    continue;
-                }
-                temp = {};
-                temp.apis = dbDataApis[i].apis;
-                temp.dataIndex = dbDataApis[i].dataIndex;
-                temp.wordBreak = dbDataApis[i].wordBreak;
-                temp.apiName = dbDataApis[i].tableName.trim();
-                temp.requestMethod = Api.getAjaxApiCallMethodV2();
-                temp.url = urls;
-                request.push(temp);
-            }
-        }
+        var request = AppHandler.GenerateApiRequest(dbDataApis, Config.baseApi, Config.requestId);
         if (request.length < 1) {
             $S.callMethod(callback);
         } else {
