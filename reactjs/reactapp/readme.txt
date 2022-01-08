@@ -50,4 +50,11 @@ validAppControl array defined in html page
 
 rcc (05.01.2021)
 ***********************************************
+Step-1
+Write TLSR/TRSR in excel sheet and run node /nodejs/excel/script.js
+It will create json from excel and save in required directory
+Read those data in rcc application and generate all route data
+Formate:
+S/C/SH-1-A/B/F
+S/C/SH-1-A/B/C/D/E (i.e. writting A-E is not allowed)
 

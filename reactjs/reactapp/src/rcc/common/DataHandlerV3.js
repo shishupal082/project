@@ -25,7 +25,6 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 };
 
 $S.extendObject(DataHandlerV3);
-var temp, temp2, temp3, temp4, i, j, k, l;
 DataHandlerV3.extend({
     _loadDBViewData: function(dbDataApis, callback) {
         var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
@@ -117,6 +116,7 @@ DataHandlerV3.extend({
         if (!$S.isStringV2(str)) {
             return result;
         }
+        var temp, temp2, temp3, temp4, i, j, k, l;
         var strArr = str.split(",");
         for (i=0; i<strArr.length; i++) {
             temp = strArr[i].trim().split("-");
@@ -226,7 +226,7 @@ DataHandlerV3.extend({
         var pages = Config.pages;
         var list2Data = [];
         var i, key;
-        temp = Object.keys(pages);
+        var temp = Object.keys(pages);
         var pageOrder = [];
         for(i=0; i<enabledPages.length; i++) {
             if (temp.indexOf(enabledPages[i]) >= 0) {
@@ -328,7 +328,7 @@ DataHandlerV3.extend({
         var attendanceDataKey = DataHandler.getAppData("attendanceDataKey", "");
         var finalAttendanceData = {};
         var latestAttendanceData = {};
-        var i, userId;
+        var i, userId, temp, temp2;
         var attendanceData = this._getAttendanceData();
         if (!$S.isArray(attendanceData)) {
             attendanceData = [];
@@ -412,7 +412,7 @@ DataHandlerV3.extend({
         return currentList3Id;
     },
     handleMetaDataLoad: function(metaDataResponse) {
-        var finalMetaData = {}, i, tempMetaData;
+        var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = DataHandler.getData("appControlMetaData", {});
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = appControlMetaData;
