@@ -1,0 +1,114 @@
+{
+    "list1Data": [
+        {
+            "name": "RCC Parameter Station-1",
+            "enabledPages": ["dbview", "rcc_view"],
+            "dbDataApis": [
+                {
+                    "tableName": "tlsr_trsr",
+                    "apis": ["/app/rcc/data/rcc_data.json"]
+                }
+            ]
+        }
+    ],
+    "metaData": {
+        "enableFooter": true,
+        "enableToggleButton": true,
+        "resultPattern.dbview": [
+            {
+                "tableName": "tlsr_trsr",
+                "name": "s_no",
+                "heading": "S.No.",
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "parameter",
+                "heading": "Parameter",
+                "className": "w-200px",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "on_route",
+                "heading": "On Route",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting",
+                "heading": "Conflicting",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "in_isolation",
+                "heading": "In Isolation",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "remarks",
+                "heading": "Remarks",
+                "className": "w-200px",
+                "isSortable": false
+            }
+        ],
+        "resultPattern.rcc_view": [
+            {
+                "tableName": "tlsr_trsr",
+                "name": "signal_route",
+                "heading": "Signal + Route",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "on_route",
+                "heading": "On Route",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting",
+                "heading": "Conflicting",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "in_isolation",
+                "heading": "In Isolation",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            }
+        ]
+    }
+}
