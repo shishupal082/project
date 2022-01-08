@@ -26,7 +26,14 @@ ReadExcel.extend({
    },
    readFile: function(filepath, sheet_index) {
       var result = [];
-      var file = reader.readFile(filepath);
+      var file;
+      try {
+         file = reader.readFile(filepath);
+      } catch(e) {
+         // File not found
+         console.log("Error in reading excel file: " + filepath);
+         return result;
+      }
       var sheets = file.SheetNames;
       if ($S.isNumber(sheet_index) && sheet_index >= 0) {
          if (sheet_index < sheets.length) {

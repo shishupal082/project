@@ -536,6 +536,34 @@ AppHandler.extend({
         }
         return true;
     },
+    GenerateDatabaseV3: function(request) {
+        // Response is json data
+        var tableData = {}, i, j, temp;
+        if ($S.isArray(request)) {
+            for(i=0; i<request.length; i++) {
+                temp = [];
+                if (!$S.isObject(request[i])) {
+                    continue;
+                }
+                if (!$S.isString(request[i].apiName) || request[i].apiName.length < 1) {
+                    continue;
+                }
+                if ($S.isUndefined(tableData[request[i].apiName])) {
+                    tableData[request[i].apiName] = {};
+                }
+                tableData[request[i].apiName]["request"] = request[i];
+                tableData[request[i].apiName]["tableName"] = request[i].apiName;
+                tableData[request[i].apiName]["apis"] = request[i].apis;
+                if ($S.isArray(request[i].response)) {
+                    for (j=0; j<request[i].response.length; j++) {
+                        temp = temp.concat(request[i].response[j]);
+                    }
+                }
+                tableData[request[i].apiName]["tableData"] = temp;
+            }
+        }
+        return tableData;
+    },
     GenerateDatabaseV2: function(request) {
         var tableData = {}, i, temp;
         var wordBreak;
@@ -654,7 +682,7 @@ AppHandler.extend({
         }
         return true;
     },
-    GenerateApiRequest: function(dbDataApis, baseApi, requestId) {
+    GenerateApiRequest: function(dbDataApis, ajaxApiCallMethod, baseApi, requestId) {
         var request = [], i, j, el, urls, temp;
         if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
             for(i=0; i<dbDataApis.length; i++) {
@@ -684,7 +712,7 @@ AppHandler.extend({
                 temp.wordBreak = dbDataApis[i].wordBreak;
                 temp.singleLineComment = dbDataApis[i].singleLineComment;
                 temp.apiName = dbDataApis[i].tableName.trim();
-                temp.requestMethod = Api.getAjaxApiCallMethodV2();
+                temp.requestMethod = ajaxApiCallMethod;
                 temp.url = urls;
                 request.push(temp);
             }

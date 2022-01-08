@@ -3,7 +3,7 @@ import DataHandler from "./DataHandler";
 import Config from "./Config";
 
 
-// import Api from "../../common/Api";
+import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
 
@@ -28,7 +28,9 @@ $S.extendObject(DataHandlerV3);
 var temp, temp2, temp3, temp4, i, j, k, l;
 DataHandlerV3.extend({
     _loadDBViewData: function(dbDataApis, callback) {
-        var request = AppHandler.GenerateApiRequest(dbDataApis, Config.baseApi, Config.requestId);
+        var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
+        var requestId = $S.getUniqueNumber();
+        var request = AppHandler.GenerateApiRequest(dbDataApis, ajaxApiCallMethod, Config.baseApi, requestId);
         if (request.length < 1) {
             $S.callMethod(callback);
         } else {
@@ -173,7 +175,7 @@ DataHandlerV3.extend({
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbDataLoadStatus", "completed");
-                    tableData = AppHandler.GenerateDatabaseV2(request);
+                    tableData = AppHandler.GenerateDatabaseV3(request);
                     tableData = DataHandlerV3._removeDoubleQuote(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);

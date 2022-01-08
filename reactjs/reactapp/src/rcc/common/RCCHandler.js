@@ -66,13 +66,13 @@ RCCHandler.extend({
                 temp2 = {"signal_route": signalRoute};
                 for (i=0; i<signalMapping[signalRoute].tableData.length; i++) {
                     temp3 = signalMapping[signalRoute].tableData[i];
-                    if (temp3["conflicting_signal"].indexOf(signalRoute) >= 0) {
+                    if ($S.isArray(temp3["conflicting_signal"]) && temp3["conflicting_signal"].indexOf(signalRoute) >= 0) {
                         this.updateText(temp2, "conflicting", temp3["parameter"]);
                     }
-                    if (temp3["in_isolation_signal"].indexOf(signalRoute) >= 0) {
+                    if ($S.isArray(temp3["in_isolation_signal"]) && temp3["in_isolation_signal"].indexOf(signalRoute) >= 0) {
                         this.updateText(temp2, "in_isolation", temp3["parameter"]);
                     }
-                    if (temp3["on_route_signal"].indexOf(signalRoute) >= 0) {
+                    if ($S.isArray(temp3["on_route_signal"]) && temp3["on_route_signal"].indexOf(signalRoute) >= 0) {
                         this.updateText(temp2, "on_route", temp3["parameter"]);
                     }
                 }
