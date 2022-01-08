@@ -142,3 +142,11 @@ To start server
 
 It should start working
 
+excel
+*******************************************
+08.01.2021
+-------------------------------------------
+goto nodejs directory and run
+npm install xlsx
+Note: It will add "xlsx": "^0.17.4" in package.json --> dependencies
+

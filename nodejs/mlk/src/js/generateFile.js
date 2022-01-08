@@ -160,10 +160,14 @@ var generateFile = {
     "save": function(filepath, destinationPath, callback, getFilePath) {
         var obj = {getFilePath: getFilePath};
         ReadText.read(filepath, obj, {}, function(finalTextData, tempObj) {
-            // console.log(destinationPath);
             ReadText({"i": 0, "textData": finalTextData}).writeText(destinationPath, function(status) {
                 $S.callMethod(callback);
-            })
+            });
+        });
+    },
+    saveText: function(textDataArr, destinationPath, callback) {
+        ReadText({"i": 0, "textData": textDataArr}).writeText(destinationPath, function(status) {
+            $S.callMethod(callback);
         });
     },
     getReadText: function() {
