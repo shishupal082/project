@@ -34,6 +34,23 @@ RCCHandler.extend({
             }
         }
     },
+    _updateTextV2: function(obj, key, value) {
+        var arr1, arr2, temp;
+        if ($S.isObject(obj) && $S.isStringV2(key) && $S.isStringV2(value)) {
+            if ($S.isStringV2(obj[key])) {
+                arr1 = obj[key].split(",");
+                arr2 = value.split(",");
+                for (var i=0; i<arr2.length; i++) {
+                    temp = arr2[i].trim();
+                    if (arr1.indexOf(temp) < 0) {
+                        obj[key] += "," + temp;
+                    }
+                }
+            } else {
+                obj[key] = value;
+            }
+        }
+    },
     _getSignalRoute: function(obj) {
         if (!$S.isObject(obj)) {
             return "";
@@ -101,17 +118,36 @@ RCCHandler.extend({
         }
         return result;
     },
+    _addTempRouteConfig: function(tempRouteConfig, dbViewTableRow) {
+        var signalRoute = [];
+        if (!$S.isObject(tempRouteConfig)) {
+            tempRouteConfig = {};
+        }
+        if ($S.isObject(dbViewTableRow) && dbViewTableRow.type === "signal") {
+            signalRoute = DataHandlerV3.parseSignal(dbViewTableRow.parameter);
+            if ($S.isArray(signalRoute) && signalRoute.length > 1) {
+                for(var i=0; i<signalRoute.length; i++) {
+                    if (!$S.isArray(tempRouteConfig[signalRoute[i]])) {
+                        tempRouteConfig[signalRoute[i]] = [];
+                    }
+                    tempRouteConfig[signalRoute[i]].push(dbViewTableRow);
+                }
+            }
+        }
+        return true;
+    },
     getRccRenderData: function() {
         var dbViewData = DataHandler.getData("dbViewData", {});
         var tableName = "tlsr_trsr";
         var tableData = [];
         var temp, temp2, temp3;
+        var tempRouteConfig = {};
         var signalRouteKey = ["conflicting_signal", "on_route_signal", "in_isolation_signal"];
         if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
             tableData = dbViewData[tableName].tableData;
         }
         var signalMapping = {};
-        var i, j, k;
+        var i, j, k, signalRoute;
         for (i=0; i<tableData.length; i++) {
             if ($S.isObject(tableData[i])) {
                 for (j=0; j<signalRouteKey.length; j++) {
@@ -120,17 +156,18 @@ RCCHandler.extend({
                         for (k=0; k<temp.length; k++) {
                             if ($S.isStringV2(temp[k])) {
                                 if (!$S.isObject(signalMapping[temp[k]])) {
-                                    signalMapping[temp[k]] = {"tableData": [], "tableRow": []};
+                                    signalMapping[temp[k]] = {"tableData": [], "tableRow": {}};
                                 }
                                 signalMapping[temp[k]].tableData.push(tableData[i]);
+                                this._addTempRouteConfig(tempRouteConfig, tableData[i]);
                             }
                         }
                     }
                 }
             }
         }
-        for (var signalRoute in signalMapping) {
-            temp = [];
+        for (signalRoute in signalMapping) {
+            temp2 = {};
             if ($S.isObject(signalMapping[signalRoute]) && $S.isArray(signalMapping[signalRoute].tableData)) {
                 temp2 = {"signal_route": signalRoute};
                 for (i=0; i<signalMapping[signalRoute].tableData.length; i++) {
@@ -145,16 +182,27 @@ RCCHandler.extend({
                         this._updateText(temp2, "on_route", temp3["parameter"]);
                     }
                 }
-                temp.push(temp2);
             }
-            signalMapping[signalRoute]["tableRow"] = temp;
+            signalMapping[signalRoute]["tableRow"] = temp2;
+        }
+        for(signalRoute in tempRouteConfig) {
+            if (signalMapping[signalRoute] && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
+                if ($S.isArray(tempRouteConfig[signalRoute])) {
+                    for(i=0; i<tempRouteConfig[signalRoute].length; i++) {
+                        this._updateTextV2(signalMapping[signalRoute]["tableRow"], "conflicting", tempRouteConfig[signalRoute][i]["conflicting"]);
+                    }
+                }
+            // } else {
+            //     signalMapping[signalRoute] = {"tableData": [], "tableRow": []};
+            }
+            // signalMapping[signalRoute].tableData = signalMapping[signalRoute].tableData.concat(tempRouteConfig[signalRoute]);
         }
         temp = Object.keys(signalMapping);
         temp = this._sortSignalName(temp);
         var result = [];
         for (i=0; i<temp.length; i++) {
-            if ($S.isObject(signalMapping[temp[i]]) && $S.isArray(signalMapping[temp[i]].tableRow)) {
-                result = result.concat(signalMapping[temp[i]].tableRow);
+            if ($S.isObject(signalMapping[temp[i]]) && $S.isObject(signalMapping[temp[i]].tableRow)) {
+                result.push(signalMapping[temp[i]].tableRow);
             }
         }
         var finalTable = DataHandlerV3.getFinalTable({"tlsr_trsr": {"tableData": result}}, null);
