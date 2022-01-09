@@ -153,7 +153,7 @@ DataHandlerV3.extend({
                             for (var key in tableData[tableName].tableData[i]) {
                                 if ($S.isString(tableData[tableName].tableData[i][key])) {
                                     tableData[tableName].tableData[i][key] = tableData[tableName].tableData[i][key].replaceAll('"', "");
-                                    if (["on_route", "conflicting", "in_isolation"].indexOf(key) >= 0) {
+                                    if (["on_route", "conflicting", "in_isolation", "conflicting_route"].indexOf(key) >= 0) {
                                         tableData[tableName].tableData[i][key+"_signal"] = this.parseSignal(tableData[tableName].tableData[i][key]);
                                     }
                                 }

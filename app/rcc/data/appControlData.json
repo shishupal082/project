@@ -63,6 +63,17 @@
             },
             {
                 "tableName": "tlsr_trsr",
+                "name": "conflicting_route",
+                "heading": "Conflicting Route",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
                 "name": "remarks",
                 "heading": "Remarks",
                 "className": "w-200px",
@@ -91,6 +102,17 @@
                 "tableName": "tlsr_trsr",
                 "name": "conflicting",
                 "heading": "Conflicting",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting_route",
+                "heading": "Conflicting Route Signal",
                 "className": "w-200px",
                 "wordBreak": ",",
                 "wordBreakTag": "li",

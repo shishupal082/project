@@ -34,23 +34,6 @@ RCCHandler.extend({
             }
         }
     },
-    _updateTextV2: function(obj, key, value) {
-        var arr1, arr2, temp;
-        if ($S.isObject(obj) && $S.isStringV2(key) && $S.isStringV2(value)) {
-            if ($S.isStringV2(obj[key])) {
-                arr1 = obj[key].split(",");
-                arr2 = value.split(",");
-                for (var i=0; i<arr2.length; i++) {
-                    temp = arr2[i].trim();
-                    if (arr1.indexOf(temp) < 0) {
-                        obj[key] += "," + temp;
-                    }
-                }
-            } else {
-                obj[key] = value;
-            }
-        }
-    },
     _getSignalRoute: function(obj) {
         if (!$S.isObject(obj)) {
             return "";
@@ -118,31 +101,12 @@ RCCHandler.extend({
         }
         return result;
     },
-    _addTempRouteConfig: function(tempRouteConfig, dbViewTableRow) {
-        var signalRoute = [];
-        if (!$S.isObject(tempRouteConfig)) {
-            tempRouteConfig = {};
-        }
-        if ($S.isObject(dbViewTableRow) && dbViewTableRow.type === "signal") {
-            signalRoute = DataHandlerV3.parseSignal(dbViewTableRow.parameter);
-            if ($S.isArray(signalRoute) && signalRoute.length > 1) {
-                for(var i=0; i<signalRoute.length; i++) {
-                    if (!$S.isArray(tempRouteConfig[signalRoute[i]])) {
-                        tempRouteConfig[signalRoute[i]] = [];
-                    }
-                    tempRouteConfig[signalRoute[i]].push(dbViewTableRow);
-                }
-            }
-        }
-        return true;
-    },
     getRccRenderData: function() {
         var dbViewData = DataHandler.getData("dbViewData", {});
         var tableName = "tlsr_trsr";
         var tableData = [];
         var temp, temp2, temp3;
-        var tempRouteConfig = {};
-        var signalRouteKey = ["conflicting_signal", "on_route_signal", "in_isolation_signal"];
+        var signalRouteKey = ["conflicting_signal", "on_route_signal", "in_isolation_signal", "conflicting_route_signal"];
         if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
             tableData = dbViewData[tableName].tableData;
         }
@@ -159,7 +123,6 @@ RCCHandler.extend({
                                     signalMapping[temp[k]] = {"tableData": [], "tableRow": {}};
                                 }
                                 signalMapping[temp[k]].tableData.push(tableData[i]);
-                                this._addTempRouteConfig(tempRouteConfig, tableData[i]);
                             }
                         }
                     }
@@ -181,22 +144,14 @@ RCCHandler.extend({
                     if ($S.isArray(temp3["on_route_signal"]) && temp3["on_route_signal"].indexOf(signalRoute) >= 0) {
                         this._updateText(temp2, "on_route", temp3["parameter"]);
                     }
+                    if ($S.isArray(temp3["conflicting_route_signal"]) && temp3["conflicting_route_signal"].indexOf(signalRoute) >= 0) {
+                        this._updateText(temp2, "conflicting_route", temp3["parameter"]);
+                    }
                 }
             }
             signalMapping[signalRoute]["tableRow"] = temp2;
         }
-        for(signalRoute in tempRouteConfig) {
-            if (signalMapping[signalRoute] && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
-                if ($S.isArray(tempRouteConfig[signalRoute])) {
-                    for(i=0; i<tempRouteConfig[signalRoute].length; i++) {
-                        this._updateTextV2(signalMapping[signalRoute]["tableRow"], "conflicting", tempRouteConfig[signalRoute][i]["conflicting"]);
-                    }
-                }
-            // } else {
-            //     signalMapping[signalRoute] = {"tableData": [], "tableRow": []};
-            }
-            // signalMapping[signalRoute].tableData = signalMapping[signalRoute].tableData.concat(tempRouteConfig[signalRoute]);
-        }
+        this._updateConflictingSignal(signalMapping);
         temp = Object.keys(signalMapping);
         temp = this._sortSignalName(temp);
         var result = [];
@@ -207,6 +162,49 @@ RCCHandler.extend({
         }
         var finalTable = DataHandlerV3.getFinalTable({"tlsr_trsr": {"tableData": result}}, null);
         return finalTable;
+    },
+    _addConflict: function(route, route2, signalMapping) {
+        if (!$S.isObject(signalMapping) || !$S.isStringV2(route)) {
+            return;
+        }
+        if (!$S.isObject(signalMapping[route]) || !$S.isObject(signalMapping[route]["tableRow"])) {
+            signalMapping[route] = {"tableRow": {"signal_route": route}};
+        }
+        if ($S.isStringV2(signalMapping[route]["tableRow"]["conflicting_route"])) {
+            if (signalMapping[route]["tableRow"]["conflicting_route"].indexOf(route2) < 0) {
+                this._updateText(signalMapping[route]["tableRow"], "conflicting_route", route2);
+            }
+        } else {
+            this._updateText(signalMapping[route]["tableRow"], "conflicting_route", route2);
+        }
+    },
+    _checkConflicting: function(signalRoute, conflicting, signalMapping) {
+        var conflictingRoute;
+        for(var i=0; i<conflicting.length; i++) {
+            if (!$S.isObject(signalMapping[conflicting[i]])) {
+                signalMapping[conflicting[i]] = {"tableRow": {"signal_route": conflicting[i]}};
+            }
+            if (!$S.isObject(signalMapping[conflicting[i]]["tableRow"])) {
+                signalMapping[conflicting[i]]["tableRow"] = {"signal_route": conflicting[i]}
+            }
+            conflictingRoute = signalMapping[conflicting[i]]["tableRow"]["conflicting_route"];
+            conflictingRoute = DataHandlerV3.parseSignal(conflictingRoute);
+            if (conflictingRoute.indexOf(signalRoute) < 0) {
+                this._updateText(signalMapping[conflicting[i]]["tableRow"], "conflicting_route", signalRoute);
+            }
+        }
+    },
+    _updateConflictingSignal: function(signalMapping) {
+        if (!$S.isObject(signalMapping)) {
+            return;
+        }
+        var arrConflicting;
+        for (var signalRoute in signalMapping) {
+            if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
+                arrConflicting = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
+                this._checkConflicting(signalRoute, arrConflicting, signalMapping);
+            }
+        }
     }
 });
 
