@@ -23,7 +23,8 @@ RCCHandler.fn = RCCHandler.prototype = {
 };
 
 $S.extendObject(RCCHandler);
-
+var EMPTY = "EMPTY";
+var SIGNAL_TYPE = ["S", "C", "SH"];
 RCCHandler.extend({
     _updateText: function(obj, key, value) {
         if ($S.isObject(obj) && $S.isStringV2(key) && $S.isStringV2(value)) {
@@ -69,20 +70,32 @@ RCCHandler.extend({
         }
         return route;
     },
+    _splitSignal: function(signalRoute, isNumeric) {
+        var result = {}, temp, signalNumber;
+        if ($S.isStringV2(signalRoute)) {
+            temp = signalRoute.split("-");
+            if (temp.length >= 2 && $S.isBooleanTrue(isNumeric) && $S.isNumeric(temp[1])) {
+                signalNumber = temp[1] * 1;
+            } else {
+                signalNumber = temp[1];
+            }
+            if (temp.length >= 4) {
+                result = {"name": temp[0], "number": signalNumber, "route": temp[2], "ov": temp[3]};
+            } else if(temp.length >= 3) {
+                result = {"name": temp[0], "number": signalNumber, "route": temp[2]};
+            } else if(temp.length >= 2) {
+                result = {"name": temp[0], "number": signalNumber};
+            }
+        }
+        return result;
+    },
     _sortSignalName: function(signalNames) {
         var result = [];
-        var temp, sortingFields, i, temp3 = [];
+        var sortingFields, i, temp3 = [];
         if ($S.isArray(signalNames)) {
             for (i=0; i<signalNames.length; i++) {
                 if ($S.isStringV2(signalNames[i])) {
-                    temp = signalNames[i].split("-");
-                    if (temp.length >= 4) {
-                        temp3.push({"name": temp[0], "number": temp[1]*1, "route": temp[2], "ov": temp[3]});
-                    } else if(temp.length >= 3) {
-                        temp3.push({"name": temp[0], "number": temp[1]*1, "route": temp[2]});
-                    } else if(temp.length >= 2) {
-                        temp3.push({"name": temp[0], "number": temp[1]*1});
-                    }
+                    temp3.push(this._splitSignal(signalNames[i], true));
                 }
             }
         }
@@ -152,6 +165,7 @@ RCCHandler.extend({
             signalMapping[signalRoute]["tableRow"] = temp2;
         }
         this._updateConflictingSignal(signalMapping);
+        this._combineConflictingSignal(signalMapping);
         temp = Object.keys(signalMapping);
         temp = this._sortSignalName(temp);
         var result = [];
@@ -205,9 +219,220 @@ RCCHandler.extend({
                 this._checkConflicting(signalRoute, arrConflicting, signalMapping);
             }
         }
+    },
+    _combineSignalRoute: function(signalByType, signalByNumber, signalByRoute, arr) {
+        var result = [];
+        var combinedRoute;
+        var isFound;
+        var alreadyFoundList = [];
+        for (var signalNumber in signalByNumber) {
+            if ($S.isArray(signalByNumber[signalNumber])) {
+                for(var i=0; i<SIGNAL_TYPE.length; i++) {
+                    combinedRoute = "";
+                    isFound = false;
+                    for (var j=0; j<signalByNumber[signalNumber].length; j++) {
+                        if ($S.isObject(signalByNumber[signalNumber][j])) {
+                            if (alreadyFoundList.indexOf(signalByNumber[signalNumber][j]["signalRoute"]) >= 0) {
+                                continue;
+                            }
+                            if (signalByNumber[signalNumber][j]["attr"]["name"] === SIGNAL_TYPE[i]) {
+                                if ($S.isStringV2(signalByNumber[signalNumber][j]["attr"]["route"])) {
+                                    if ($S.isStringV2(combinedRoute)) {
+                                        combinedRoute += "/" + signalByNumber[signalNumber][j]["attr"]["route"];
+                                    } else {
+                                        combinedRoute = signalByNumber[signalNumber][j]["attr"]["route"];
+                                    }
+                                    alreadyFoundList.push(signalByNumber[signalNumber][j]["signalRoute"]);
+                                    isFound = true;
+                                }
+                            }
+                        }
+                    }
+                    if (isFound) {
+                        if ($S.isStringV2(combinedRoute)) {
+                            result.push(SIGNAL_TYPE[i] + "-" + signalNumber + "-" + combinedRoute);
+                        } else {
+                            result.push(SIGNAL_TYPE[i] + "-" + signalNumber);
+                        }
+                    }
+                }
+            }
+        }
+        this._combineRemaining(arr, result, alreadyFoundList);
+        return result;
+    },
+    _combineSignalType: function(signalByType, signalByNumber, signalByRoute, arr) {
+        var result = [];
+        var signalNumbers = Object.keys(signalByNumber);
+        var combinedType;
+        var isFound;
+        var alreadyFoundList = [];
+        for (var route in signalByRoute) {
+            if ($S.isArray(signalByRoute[route])) {
+                for(var i=0; i<signalNumbers.length; i++) {
+                    combinedType = "";
+                    isFound = false;
+                    for (var j=0; j<signalByRoute[route].length; j++) {
+                        if ($S.isObject(signalByRoute[route][j])) {
+                            if (alreadyFoundList.indexOf(signalByRoute[route][j]["signalRoute"]) >= 0) {
+                                continue;
+                            }
+                            if (signalByRoute[route][j]["attr"]["number"] === signalNumbers[i]) {
+                                if ($S.isStringV2(signalByRoute[route][j]["attr"]["name"]) && SIGNAL_TYPE.indexOf(signalByRoute[route][j]["attr"]["name"]) >= 0) {
+                                    if ($S.isStringV2(combinedType)) {
+                                        combinedType += "/" + signalByRoute[route][j]["attr"]["name"];
+                                    } else {
+                                        combinedType = signalByRoute[route][j]["attr"]["name"];
+                                    }
+                                    alreadyFoundList.push(signalByRoute[route][j]["signalRoute"]);
+                                    isFound = true;
+                                }
+                            }
+                        }
+                    }
+                    if (isFound) {
+                        if ($S.isStringV2(combinedType)) {
+                            if (route === EMPTY) {
+                                result.push(combinedType + "-" + signalNumbers[i]);
+                            } else {
+                                result.push(combinedType + "-" + signalNumbers[i] + "-" + route);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        this._combineRemaining(arr, result, alreadyFoundList);
+        return result;
+    },
+    _combineSignalNumber: function(signalByType, signalByNumber, signalByRoute, arr) {
+        var result = [];
+        var combinedAttr;
+        var isFound;
+        var alreadyFoundList = [];
+        var signalType = Object.keys(signalByType);
+        for (var route in signalByRoute) {
+            if ($S.isArray(signalByRoute[route])) {
+                for(var i=0; i<signalType.length; i++) {
+                    combinedAttr = "";
+                    isFound = false;
+                    for (var j=0; j<signalByRoute[route].length; j++) {
+                        if ($S.isObject(signalByRoute[route][j])) {
+                            if (alreadyFoundList.indexOf(signalByRoute[route][j]["signalRoute"]) >= 0) {
+                                continue;
+                            }
+                            if (signalByRoute[route][j]["attr"]["name"] === signalType[i]) {
+                                if ($S.isStringV2(signalByRoute[route][j]["attr"]["number"])) {
+                                    if ($S.isStringV2(combinedAttr)) {
+                                        combinedAttr += "/" + signalByRoute[route][j]["attr"]["number"];
+                                    } else {
+                                        combinedAttr = signalByRoute[route][j]["attr"]["number"];
+                                    }
+                                    alreadyFoundList.push(signalByRoute[route][j]["signalRoute"]);
+                                    isFound = true;
+                                }
+                            }
+                        }
+                    }
+                    if (isFound) {
+                        if ($S.isStringV2(combinedAttr)) {
+                            if (route === EMPTY) {
+                                result.push(signalType[i] + "-" + combinedAttr);
+                            } else {
+                                result.push(signalType[i] + "-" + combinedAttr + "-" + route);
+                            }
+                        } else {
+                            result.push(signalType[i] + "-" + combinedAttr);
+                        }
+                    }
+                }
+            }
+        }
+        this._combineRemaining(arr, result, alreadyFoundList);
+        return result;
+    },
+    _mergeResult: function(arr, combineAttr) {
+        var result = [], temp;
+        if (!$S.isArray(arr)) {
+            return result;
+        }
+        var signalByType = {};
+        var signalByNumber = {};
+        var signalByRoute = {};
+        for (var i=0; i<arr.length; i++) {
+            temp = this._splitSignal(arr[i], false);
+            if ($S.isStringV2(temp["name"])) {
+                if (!$S.isArray(signalByType[temp["name"]])) {
+                    signalByType[temp["name"]] = [];
+                }
+                signalByType[temp["name"]].push({"signalRoute": arr[i], "attr": temp});
+            }
+            if ($S.isStringV2(temp["number"])) {
+                if (!$S.isArray(signalByNumber[temp["number"]])) {
+                    signalByNumber[temp["number"]] = [];
+                }
+                signalByNumber[temp["number"]].push({"signalRoute": arr[i], "attr": temp});
+            }
+            if (!$S.isStringV2(temp["route"])) {
+                temp["route"] = EMPTY;
+            }
+            if (!$S.isArray(signalByRoute[temp["route"]])) {
+                signalByRoute[temp["route"]] = [];
+            }
+            signalByRoute[temp["route"]].push({"signalRoute": arr[i], "attr": temp});
+        }
+        if (combineAttr === "route") {
+            result = this._combineSignalRoute(signalByType, signalByNumber, signalByRoute, arr);
+        } else if (combineAttr === "type") {
+            result = this._combineSignalType(signalByType, signalByNumber, signalByRoute, arr);
+        } else if (combineAttr === "number") {
+            result = this._combineSignalNumber(signalByType, signalByNumber, signalByRoute, arr);
+        }
+        return result;
+    },
+    _combineConflictingSignal: function(signalMapping) {
+        if (!$S.isObject(signalMapping)) {
+            return;
+        }
+        var arrConflicting;
+        for (var signalRoute in signalMapping) {
+            if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
+                arrConflicting = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
+                arrConflicting = this._removeDuplicate(arrConflicting);
+                arrConflicting = this._sortSignalName(arrConflicting);
+                arrConflicting = this._mergeResult(arrConflicting, "route");
+                arrConflicting = this._mergeResult(arrConflicting, "type");
+                arrConflicting = this._mergeResult(arrConflicting, "number");
+                signalMapping[signalRoute]["tableRow"]["conflicting_route"] = arrConflicting.join(",");
+            }
+        }
     }
 });
-
+RCCHandler.extend({
+    _removeDuplicate: function(arr) {
+        var result = [];
+        if ($S.isArray(arr)) {
+            for (var i=0; i<arr.length; i++) {
+                if ($S.isStringV2(arr[i])) {
+                    if (result.indexOf(arr[i]) < 0) {
+                        result.push(arr[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    },
+    _combineRemaining: function(arr, result, alreadyFoundList) {
+        if (!$S.isArray(arr) || !$S.isArray(result) || !$S.isArray(alreadyFoundList)) {
+            return;
+        }
+        for (var i=0; i<arr.length; i++) {
+            if (alreadyFoundList.indexOf(arr[i]) < 0) {
+                result.push(arr[i]);
+            }
+        }
+    }
+});
 })($S);
 
 export default RCCHandler;
