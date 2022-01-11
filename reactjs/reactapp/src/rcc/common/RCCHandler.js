@@ -99,7 +99,22 @@ RCCHandler.extend({
                 }
             }
         }
-        sortingFields = [{"name": "route", "value": "ascending"}, {"name": "name", "value": "ascending"}];
+        // sortingFields = [{"name": "route", "value": "ascending"}, {"name": "name", "value": "ascending"}];
+        // temp3 = $S.sortResultV2(temp3, sortingFields, "name");
+        var tempSignalType = SIGNAL_TYPE.concat(["OV", "OV1", "OV2", "OV3", "OV4"]);
+        temp3 = temp3.sort(function(a, b) {
+            if ($S.isObject(a) && $S.isObject(b)) {
+                for (var j=0; j<tempSignalType.length; j++) {
+                    if (a["name"] === tempSignalType[j]) {
+                        return -1;
+                    } else if (b["name"] === tempSignalType[j]) {
+                        return 1;
+                    }
+                }
+            }
+            return 0;
+        });
+        sortingFields = [{"name": "route", "value": "ascending"}];
         temp3 = $S.sortResultV2(temp3, sortingFields, "name");
         sortingFields = [{"name": "number", "value": "ascending"}];
         temp3 = $S.sortResultV2(temp3, sortingFields, "name");
