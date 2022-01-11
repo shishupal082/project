@@ -74,6 +74,12 @@
             },
             {
                 "tableName": "tlsr_trsr",
+                "name": "set_overlap",
+                "heading": "Overlap",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
                 "name": "remarks",
                 "heading": "Remarks",
                 "className": "w-200px",
@@ -85,6 +91,12 @@
                 "tableName": "tlsr_trsr",
                 "name": "signal_route",
                 "heading": "Signal + Route",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "set_overlap",
+                "heading": "Overlap",
                 "isSortable": true
             },
             {

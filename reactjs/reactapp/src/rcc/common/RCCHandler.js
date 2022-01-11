@@ -129,6 +129,64 @@ RCCHandler.extend({
         }
         return result;
     },
+    _combineRoute: function(route1, route2) {
+        if (!$S.isStringV2(route1)) {
+            return route2;
+        } else if (!$S.isStringV2(route2)) {
+            return route1;
+        }
+        return this._getFinalConflictingRoute(route1 + "," + route2);
+    },
+    _combineTableRow: function(routeTableRow, ovTableRow) {
+        if (!$S.isObject(ovTableRow) || !$S.isObject(routeTableRow)) {
+            return;
+        }
+        if ($S.isStringV2(ovTableRow["signal_route"])) {
+            routeTableRow["set_overlap"] = ovTableRow["signal_route"];
+        }
+        if ($S.isStringV2(ovTableRow["conflicting_route"])) {
+            routeTableRow["conflicting_route"] = this._combineRoute(routeTableRow["conflicting_route"], ovTableRow["conflicting_route"]);
+        }
+    },
+    _getFinalRoute: function(tableRow, signalMapping, tableData) {
+        var overlap = [];
+        var finalTableRow = [];
+        var signalRoute, parameter, parameterRoute, i;
+        var temp;
+        if (!$S.isArray(tableData)) {
+            tableData = [];
+        }
+        if (!$S.isObject(signalMapping)) {
+            signalMapping = {};
+        }
+        if ($S.isObject(tableRow) && $S.isStringV2(tableRow["signal_route"])) {
+            signalRoute = tableRow["signal_route"];
+            for (i=0; i<tableData.length; i++) {
+                if ($S.isObject(tableData[i]) && $S.isStringV2(tableData[i]["parameter"])) {
+                    parameter = tableData[i]["parameter"];
+                    parameterRoute = DataHandlerV3.parseSignal(parameter);
+                    if (parameterRoute.indexOf(signalRoute) >= 0) {
+                        if ($S.isStringV2(tableData[i]["set_overlap"])) {
+                            overlap.push(tableData[i]["set_overlap"]);
+                        }
+                    }
+                }
+            }
+        }
+        if (overlap.length > 0) {
+            overlap = DataHandlerV3.parseSignal(overlap.join(","));
+            for (i=0; i<overlap.length; i++) {
+                temp = $S.clone(tableRow);
+                if ($S.isObject(signalMapping[overlap[i]]) && $S.isObject(signalMapping[overlap[i]]["tableRow"])) {
+                    this._combineTableRow(temp, signalMapping[overlap[i]]["tableRow"]);
+                }
+                finalTableRow.push(temp);
+            }
+        } else {
+            finalTableRow.push(tableRow);
+        }
+        return finalTableRow;
+    },
     getRccRenderData: function() {
         var dbViewData = DataHandler.getData("dbViewData", {});
         var tableName = "tlsr_trsr";
@@ -186,7 +244,7 @@ RCCHandler.extend({
         var result = [];
         for (i=0; i<temp.length; i++) {
             if ($S.isObject(signalMapping[temp[i]]) && $S.isObject(signalMapping[temp[i]].tableRow)) {
-                result.push(signalMapping[temp[i]].tableRow);
+                result = result.concat(this._getFinalRoute(signalMapping[temp[i]].tableRow, signalMapping, tableData));
             }
         }
         var finalTable = DataHandlerV3.getFinalTable({"tlsr_trsr": {"tableData": result}}, null);
@@ -409,16 +467,9 @@ RCCHandler.extend({
         if (!$S.isObject(signalMapping)) {
             return;
         }
-        var arrConflicting;
         for (var signalRoute in signalMapping) {
             if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
-                arrConflicting = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
-                arrConflicting = this._removeDuplicate(arrConflicting);
-                arrConflicting = this._sortSignalName(arrConflicting);
-                arrConflicting = this._mergeResult(arrConflicting, "route");
-                arrConflicting = this._mergeResult(arrConflicting, "type");
-                arrConflicting = this._mergeResult(arrConflicting, "number");
-                signalMapping[signalRoute]["tableRow"]["conflicting_route"] = arrConflicting.join(",");
+                signalMapping[signalRoute]["tableRow"]["conflicting_route"] = this._getFinalConflictingRoute(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
             }
         }
     }
@@ -446,6 +497,18 @@ RCCHandler.extend({
                 result.push(arr[i]);
             }
         }
+    },
+    _getFinalConflictingRoute: function(conflictingRouteStr) {
+        if (!$S.isStringV2(conflictingRouteStr)) {
+            return "";
+        }
+        var arrConflicting = DataHandlerV3.parseSignal(conflictingRouteStr);
+        arrConflicting = this._removeDuplicate(arrConflicting);
+        arrConflicting = this._sortSignalName(arrConflicting);
+        arrConflicting = this._mergeResult(arrConflicting, "route");
+        arrConflicting = this._mergeResult(arrConflicting, "type");
+        arrConflicting = this._mergeResult(arrConflicting, "number");
+        return arrConflicting.join(",");
     }
 });
 })($S);
