@@ -144,7 +144,7 @@ DataHandlerV3.extend({
         }
         return result;
     },
-    _removeDoubleQuote: function(tableData) {
+    generateRCCTableParameter: function(tableData) {
         if ($S.isObject(tableData)) {
             for (var tableName in tableData) {
                 if ($S.isObject(tableData[tableName]) && $S.isArray(tableData[tableName].tableData)) {
@@ -152,7 +152,6 @@ DataHandlerV3.extend({
                         if ($S.isObject(tableData[tableName].tableData[i])) {
                             for (var key in tableData[tableName].tableData[i]) {
                                 if ($S.isString(tableData[tableName].tableData[i][key])) {
-                                    tableData[tableName].tableData[i][key] = tableData[tableName].tableData[i][key].replaceAll('"', "");
                                     if (["on_route", "conflicting", "in_isolation", "conflicting_route"].indexOf(key) >= 0) {
                                         tableData[tableName].tableData[i][key+"_signal"] = this.parseSignal(tableData[tableName].tableData[i][key]);
                                     }
@@ -176,7 +175,7 @@ DataHandlerV3.extend({
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbDataLoadStatus", "completed");
                     tableData = AppHandler.GenerateDatabaseV3(request);
-                    tableData = DataHandlerV3._removeDoubleQuote(tableData);
+                    tableData = DataHandlerV3.generateRCCTableParameter(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);
                 });

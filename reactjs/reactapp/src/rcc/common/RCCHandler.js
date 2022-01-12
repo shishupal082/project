@@ -187,6 +187,43 @@ RCCHandler.extend({
         }
         return finalTableRow;
     },
+    _generateConflictingRoute: function(parameter) {
+        var result = [], temp;
+        var conflictingSignal = DataHandlerV3.parseSignal(parameter);
+        if ($S.isArray(conflictingSignal)) {
+            for (var i=0; i<conflictingSignal.length; i++) {
+                temp = [];
+                if ($S.isStringV2(conflictingSignal[i])) {
+                    for(var j=0; j<conflictingSignal.length; j++) {
+                        if (conflictingSignal[i] !== conflictingSignal[j]) {
+                            temp.push(conflictingSignal[j]);
+                        }
+                    }
+                }
+                if (temp.length > 0) {
+                    result.push({"type": "signal", "parameter": conflictingSignal[i], "conflicting_route": temp.join(",")});
+                }
+            }
+        }
+        return result;
+    },
+    handleSinglePathParameter: function(tableData) {
+        var result = [], parameter;
+        if ($S.isArray(tableData)) {
+            for (var i=0; i<tableData.length; i++) {
+                if ($S.isObject(tableData[i])) {
+                    if (tableData[i]["type"] === "single_path") {
+                        parameter = tableData[i]["parameter"];
+                        result = result.concat(this._generateConflictingRoute(parameter));
+                    } else {
+                        result.push(tableData[i]);
+                    }
+                }
+            }
+        }
+        DataHandlerV3.generateRCCTableParameter({"table": {"tableData": result}});
+        return result;
+    },
     getRccRenderData: function() {
         var dbViewData = DataHandler.getData("dbViewData", {});
         var tableName = "tlsr_trsr";
@@ -196,6 +233,7 @@ RCCHandler.extend({
         if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
             tableData = dbViewData[tableName].tableData;
         }
+        tableData = this.handleSinglePathParameter(tableData);
         var signalMapping = {};
         var i, j, k, signalRoute;
         for (i=0; i<tableData.length; i++) {
@@ -475,19 +513,6 @@ RCCHandler.extend({
     }
 });
 RCCHandler.extend({
-    _removeDuplicate: function(arr) {
-        var result = [];
-        if ($S.isArray(arr)) {
-            for (var i=0; i<arr.length; i++) {
-                if ($S.isStringV2(arr[i])) {
-                    if (result.indexOf(arr[i]) < 0) {
-                        result.push(arr[i]);
-                    }
-                }
-            }
-        }
-        return result;
-    },
     _combineRemaining: function(arr, result, alreadyFoundList) {
         if (!$S.isArray(arr) || !$S.isArray(result) || !$S.isArray(alreadyFoundList)) {
             return;
@@ -503,7 +528,7 @@ RCCHandler.extend({
             return "";
         }
         var arrConflicting = DataHandlerV3.parseSignal(conflictingRouteStr);
-        arrConflicting = this._removeDuplicate(arrConflicting);
+        arrConflicting = $S.removeDuplicate(arrConflicting);
         arrConflicting = this._sortSignalName(arrConflicting);
         arrConflicting = this._mergeResult(arrConflicting, "route");
         arrConflicting = this._mergeResult(arrConflicting, "type");

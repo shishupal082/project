@@ -105,7 +105,11 @@ function isNumber(value) {
     return false;
 }
 function isNumeric(value) {
-    // if value = null then typeof value = "object"
+    /**
+     * isNaN(value) = false, for value = null, "", "9090", 9090, [], {}
+     * isNaN(value) = true, for value = "string", {}
+     * value = null, typeof value = "object"
+     */
     if (!isNaN(value) && typeof value != "object") {
         // if value = "" then it should return false
         if (typeof value === "string" && value.trim() === "") {
@@ -1656,6 +1660,19 @@ Stack.extend({
             }
         }
         return str;
+    },
+    removeDuplicate: function(arr) {
+        var result = [];
+        if (isArray(arr)) {
+            for (var i=0; i<arr.length; i++) {
+                if (isString(arr[i]) || isNumeric(arr[i])) {
+                    if (result.indexOf(arr[i]) < 0) {
+                        result.push(arr[i]);
+                    }
+                }
+            }
+        }
+        return result;
     },
     sortResult: function(requestedArray, sortableValue, sortableName, searchName, defaultValue) {
         // sortableValue: "ascending" or "descending"

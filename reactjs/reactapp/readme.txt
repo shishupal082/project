@@ -58,3 +58,5 @@ Formate:
 S/C/SH-1-A/B/F
 S/C/SH-1-A/B/C/D/E (i.e. writting A-E is not allowed)
 
+Important key in excel:
+- type (signal, single_path)
