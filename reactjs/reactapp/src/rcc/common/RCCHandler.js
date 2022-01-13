@@ -179,6 +179,8 @@ RCCHandler.extend({
                 temp = $S.clone(tableRow);
                 if ($S.isObject(signalMapping[overlap[i]]) && $S.isObject(signalMapping[overlap[i]]["tableRow"])) {
                     this._combineTableRow(temp, signalMapping[overlap[i]]["tableRow"]);
+                } else {
+                    temp["set_overlap"] = overlap[i];
                 }
                 finalTableRow.push(temp);
             }
@@ -215,9 +217,9 @@ RCCHandler.extend({
                     if (tableData[i]["type"] === "single_path") {
                         parameter = tableData[i]["parameter"];
                         result = result.concat(this._generateConflictingRoute(parameter));
-                    } else {
-                        result.push(tableData[i]);
+                        tableData[i]["type"] = "signal";
                     }
+                    result.push(tableData[i]);
                 }
             }
         }
