@@ -6,7 +6,7 @@
 
     "client.isEchoServer": false,
     "client.localPort": 60000,
-    "client.remotePort": 60000,
+    "client.remotePort": 60002,
     "client.serverHost": "192.168.1.101",
 
     "server.localPort": 60003

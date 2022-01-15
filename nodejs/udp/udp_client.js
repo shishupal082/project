@@ -8,10 +8,10 @@ const FS = require("../static/fsmodule.js");
 const Logger = require("../static/logger-v2.js");
 
 
-// var rl = readline.createInterface({
-//     input: process.stdin,
-//     output: process.stdout
-// });
+var rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 
 var isEchoServer = true;
@@ -33,13 +33,13 @@ function removeSpace(text) {
 
 function readUserInput(callback) {
     console.log("----------------------------------------");
-    // rl.question("Enter text: ", function(text) {
-    //     // text = removeSpace(text);
-    //     $S.callMethodV1(callback, text);
-    // });
+    rl.question("Enter text: ", function(text) {
+        text = removeSpace(text);
+        $S.callMethodV1(callback, text);
+    });
 }
 function endProcess() {
-    // process.exit(0);
+    process.exit(0);
 }
 
 function textReadCallback(text) {
@@ -49,12 +49,7 @@ function textReadCallback(text) {
         for (var i=0; i<t2.length; i++) {
             t1.push($S.changeBase(t2[i], 16, 10));
         }
-        // console.log(t2);
-        // console.log(t1);
-        var bufferData = Buffer.from(text);
-        // console.log(bufferData);
-        console.log(Buffer.from(t1));
-        // UDP.sendBufferData(udpClient, Buffer.from(t1), remotePort, serverHost);
+        UDP.sendData(udpClient, text, remotePort, serverHost);
         if (isEchoServer === false) {
             readUserInput(textReadCallback);
         }
@@ -66,8 +61,8 @@ function textReadCallback(text) {
 
 UDP.onReceive(udpClient, function(msg, ip, port, length) {
     console.log("udpClient");
-    Logger.log(ip+":"+port+":"+$S.convertHexToStr(msg));
-    // console.log("msg: " + msg.toString());
+    // Logger.log(ip+":"+port+":"+$S.convertHexToStr(msg));
+    console.log("msg: " + msg.toString());
     if (isEchoServer) {
         readUserInput(textReadCallback);
     }
