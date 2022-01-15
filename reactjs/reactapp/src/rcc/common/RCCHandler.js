@@ -144,8 +144,24 @@ RCCHandler.extend({
         if ($S.isStringV2(ovTableRow["signal_route"])) {
             routeTableRow["set_overlap"] = ovTableRow["signal_route"];
         }
-        if ($S.isStringV2(ovTableRow["conflicting_route"])) {
-            routeTableRow["conflicting_route"] = this._combineRoute(routeTableRow["conflicting_route"], ovTableRow["conflicting_route"]);
+        var combineParameter = ["conflicting_route", "on_route", "conflicting", "in_isolation"];
+        for (var i=0; i<combineParameter.length; i++) {
+            if ($S.isStringV2(ovTableRow[combineParameter[i]])) {
+                if (combineParameter[i] === "conflicting_route") {
+                    routeTableRow[combineParameter[i]] = this._combineRoute(routeTableRow[combineParameter[i]], ovTableRow[combineParameter[i]]);
+                } else {
+                    routeTableRow[combineParameter[i]] = routeTableRow[combineParameter[i]] + "," + ovTableRow[combineParameter[i]];
+                }
+            }
+        }
+    },
+    _combineRouteParameter: function(routeTableRow) {
+        if (!$S.isObject(routeTableRow)) {
+            return;
+        }
+        var combineParameter = ["on_route", "conflicting", "in_isolation"];
+        for (var i=0; i<combineParameter.length; i++) {
+            routeTableRow[combineParameter[i]] = this._combineParameter(routeTableRow[combineParameter[i]]);
         }
     },
     _getFinalRoute: function(tableRow, signalMapping, tableData) {
@@ -182,9 +198,11 @@ RCCHandler.extend({
                 } else {
                     temp["set_overlap"] = overlap[i];
                 }
+                this._combineRouteParameter(temp);
                 finalTableRow.push(temp);
             }
         } else {
+            this._combineRouteParameter(tableRow);
             finalTableRow.push(tableRow);
         }
         return finalTableRow;
@@ -536,6 +554,13 @@ RCCHandler.extend({
         arrConflicting = this._mergeResult(arrConflicting, "type");
         arrConflicting = this._mergeResult(arrConflicting, "number");
         return arrConflicting.join(",");
+    },
+    _combineParameter: function(routeParameter) {
+        if (!$S.isStringV2(routeParameter)) {
+            return routeParameter;
+        }
+        routeParameter = $S.removeDuplicate(routeParameter.split(","));
+        return routeParameter.join(",");
     }
 });
 })($S);
