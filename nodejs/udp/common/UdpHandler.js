@@ -1,5 +1,6 @@
 var $S = require("../../../static/js/stack.js");
 var ConvertExcelToJson = require("../../excel/ConvertExcelToJson.js");
+var Logger = require("../../static/logger-v2.js");
 
 ConvertExcelToJson.setConfigPath("./excel/config.json");
 ConvertExcelToJson.readConfigData();
@@ -29,16 +30,16 @@ UdpHandler.fn.init.prototype = UdpHandler.fn;
 $S.extendObject(UdpHandler);
 UdpHandler.extend({
     _parseRequest: function(msg) {
-        var result = {"appId": "", "workId": ""};
+        var result = {"appId": "", "workId": "", "msg": ""};
         var msg = msg.toString();
         var msgArr = msg.split("|");
         if (msgArr.length < 2) {
             return result;
         }
-        result["appId"] = msgArr[0];
-        result["workId"] = msgArr[1];
         if (appIdMappingFunction[msgArr[0]]) {
             result["appId"] = msgArr[0];
+            result["workId"] = msgArr[1];
+            result["msg"] = msg;
         }
         return result;
     },
@@ -60,13 +61,17 @@ UdpHandler.extend({
         } else {
             request = this._parseRequest(msg);
             if ($S.isStringV2(request["appId"])) {
-                status = FinalResponse.statusValidRequest;
                 if ($S.isFunction(appIdMappingFunction[request["appId"]])) {
+                    status = FinalResponse.statusValidRequest;
                     returnResponseStatus = false;
-                    appIdMappingFunction[request["appId"]](request, function(result) {
-                        response = result;
-                        self.returResponse(FinalResponse.statusValidRequest, response, callback);
+                    Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"], function() {
+                        appIdMappingFunction[request["appId"]](request, function(result) {
+                            response = result;
+                            self.returResponse(FinalResponse.statusValidRequest, response, callback);
+                        });
                     });
+                } else {
+                    status = FinalResponse.statusInvalidAppId;
                 }
             } else {
                 console.log("Invalid request appId");

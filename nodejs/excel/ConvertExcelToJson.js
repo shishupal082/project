@@ -61,22 +61,30 @@ ConvertExcelToJson.extend({
         if (!$S.isArray(excelConfig)) {
             return $S.callMethod(callback);
         }
+        var self = this;
         var data, source, destination, index;
         for (var i=0; i<excelConfig.length; i++) {
             if ($S.isObject(excelConfig[i]) && excelConfig[i]["isVisited"] !== "true") {
                 source = excelConfig[i]["source"];
                 destination = excelConfig[i]["destination"];
                 index = excelConfig[i]["index"];
-                if ($S.isStringV2(source) && $S.isStringV2(destination) && $S.isNumber(index) && index > 0) {
+                excelConfig[i]["isVisited"] = "true";
+                if ($S.isStringV2(source) && $S.isNumber(index) && index > 0) {
                     data = Excel.readFile(source, index);
                     if ($S.isArray(data) && data.length === 1) {
                         data = data[0];
                     }
-                    generateFile.saveText([JSON.stringify(data)], destination, function(status) {
-                        Logger.log("File read and write completed.");
-                    });
-                    excelConfig[i]["isVisited"] = "true";
-                    return this.generateFile(excelConfig, callback);
+                    if ($S.isStringV2(destination)) {
+                        generateFile.saveText([JSON.stringify(data)], destination, function(status) {
+                            Logger.log("File read and write completed.");
+                            return self.generateFile(excelConfig, callback);
+                        });
+                    } else {
+                        console.log(data);
+                        Logger.log("File read completed.");
+                        return self.generateFile(excelConfig, callback);
+                    }
+                    return;
                 }
             }
         }
