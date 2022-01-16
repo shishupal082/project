@@ -26,19 +26,32 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 
 $S.extendObject(DataHandlerV3);
 DataHandlerV3.extend({
-    _loadDBViewData: function(dbDataApis, callback) {
-        var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
-        var requestId = $S.getUniqueNumber();
-        var request = AppHandler.GenerateApiRequest(dbDataApis, ajaxApiCallMethod, Config.baseApi, requestId);
-        if (request.length < 1) {
-            $S.callMethod(callback);
-        } else {
-            AppHandler.LoadDataFromRequestApi(request, function() {
-                if ($S.isFunction(callback)) {
-                    callback(request);
-                }
+    _callUdpService: function(callback) {
+        var udpConfig = DataHandler.getAppData("udpConfig", {});
+        var apiUrl = Config.getApiUrl("udpServicePostApi", "", true);
+        if ($S.isStringV2(apiUrl) && $S.isObject(udpConfig) && $S.isStringV2(udpConfig["data"])) {
+            $S.sendPostRequest(Config.JQ, apiUrl, {"data": udpConfig["data"]}, function(ajax, status, response) {
+                $S.callMethod(callback);
             });
+        } else {
+            $S.callMethod(callback);
         }
+    },
+    _loadDBViewData: function(dbDataApis, callback) {
+        this._callUdpService(function() {
+            var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
+            var requestId = $S.getUniqueNumber();
+            var request = AppHandler.GenerateApiRequest(dbDataApis, ajaxApiCallMethod, Config.baseApi, requestId);
+            if (request.length < 1) {
+                $S.callMethod(callback);
+            } else {
+                AppHandler.LoadDataFromRequestApi(request, function() {
+                    if ($S.isFunction(callback)) {
+                        callback(request);
+                    }
+                });
+            }
+        });
     },
     _handleDefaultSorting: function(tableData) {
         if (!$S.isObject(tableData)) {
@@ -89,8 +102,8 @@ DataHandlerV3.extend({
         var currentAppData = DataHandler.getCurrentAppData({});
         var resultPatternKey, resultPattern;
         var finalTable = [];
-        if ([Config.rcc_view].indexOf(pageName) >= 0) {
-            resultPatternKey =  "resultPattern." + pageName;
+        if ([Config.rcc_view, Config.rcc_summary].indexOf(pageName) >= 0) {
+            resultPatternKey =  "resultPattern." + Config.rcc_view;
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
             finalTable = DBViewDataHandler.GetFinalTable(tableData, resultPattern, resultCriteria, requiredDataTable);
         }
@@ -282,12 +295,8 @@ DataHandlerV3.extend({
         var currentAppData = DataHandler.getCurrentAppData({});
         var pageName = DataHandler.getPathParamsData("pageName", "");
         var name = "list3Data", i;
-        if ([Config.entry, Config.update, Config.summary].indexOf(pageName) >= 0) {
+        if ([Config.rcc_view, Config.rcc_summary].indexOf(pageName) >= 0) {
             name = "list3Data_1";
-        } else if ([Config.dbview, Config.rcc_view].indexOf(pageName) >= 0) {
-            name = "list3Data_2";
-        } else if ([Config.ta].indexOf(pageName) >= 0) {
-            name = "list3Data_3";
         } else {
             return [];
         }

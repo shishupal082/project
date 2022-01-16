@@ -30,6 +30,7 @@ Config.tempConfig = {
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
+var udpServicePostApi = $$$.udpServicePostApi;
 
 
 try {
@@ -47,7 +48,8 @@ var pages = {
     "projectHome": pageUrl["projectHome"],
     "home": pageUrl["home"],
     "dbview": pageUrl["otherPages"],
-    "rcc_view": pageUrl["otherPages"]
+    "rcc_view": pageUrl["otherPages"],
+    "rcc_summary": pageUrl["otherPages"]
 };
 
 Config.pages = pages;
@@ -58,9 +60,10 @@ Config.home = "home";
 Config.otherPages = "otherPages";
 Config.dbview = "dbview";
 Config.rcc_view = "rcc_view";
+Config.rcc_summary = "rcc_summary";
 Config.noMatch = "noMatch";
 
-Config.validPages = [Config.dbview, Config.rcc_view];
+Config.validPages = [Config.dbview, Config.rcc_view, Config.rcc_summary];
 
 Config.dateSelectionRequired = [];
 
@@ -73,6 +76,7 @@ Config.dateSelection = [
 Config.defaultDateSelect = "monthly";
 
 var apiMapping = {};
+apiMapping["udpServicePostApi"] = udpServicePostApi;
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
 apiMapping["addTextApi"] = "/api/add_text";

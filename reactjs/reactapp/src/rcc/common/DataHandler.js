@@ -367,7 +367,7 @@ DataHandler.extend({
     loadDbData: function(callback) {
         var dbDataLoadStatus = this.getData("dbDataLoadStatus", "");
         var pageName = this.getPathParamsData("pageName", "");
-        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.rcc_view];
+        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.rcc_view, Config.rcc_summary];
         if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
             if (dbDataLoadStatus === "in_progress") {
                 return;
@@ -575,7 +575,7 @@ DataHandler.extend({
         var sortingFields = DataHandler.getData("sortingFields", []);
         var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
 
-        if ([Config.rcc_view].indexOf(pageName) >= 0) {
+        if ([Config.rcc_view, Config.rcc_summary].indexOf(pageName) >= 0) {
             filteredUserData = RCCHandler.getRccRenderData();
         } else if ([Config.dbview].indexOf(pageName) < 0) {
             filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
@@ -587,6 +587,7 @@ DataHandler.extend({
                 renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             case Config.rcc_view:
+            case Config.rcc_summary:
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField, dateSelect);
                 renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);

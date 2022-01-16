@@ -2223,10 +2223,11 @@ Stack.extend({
         reqOption["dataType"] = "json";
         if (Stack.isObject(headers)) {
             reqOption["headers"] = headers;
+            //headers = {"Accept": "text/html", "Content-Type": "application/json"};
         } else {
             reqOption["headers"] = {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                "Accept": "application/json",
+                "Content-Type": "application/json"
             };
         }
         Stack._send(JQ, reqOption, callback);

@@ -2,8 +2,7 @@ var $S = require("../../../static/js/stack.js");
 var ConvertExcelToJson = require("../../excel/ConvertExcelToJson.js");
 var Logger = require("../../static/logger-v2.js");
 
-ConvertExcelToJson.setConfigPath("./excel/config.json");
-ConvertExcelToJson.readConfigData();
+ConvertExcelToJson.readConfigData("./excel/config.json");
 
 (function() {
 var FinalResponse = {
@@ -56,7 +55,7 @@ UdpHandler.extend({
         var returnResponseStatus = true;
         var self = this;
         if (length < 7) {
-            console.log("Invalid request length");
+            Logger.log("Invalid request length");
             status = FinalResponse.statusInvalidRequestLength;
         } else {
             request = this._parseRequest(msg);
@@ -74,7 +73,7 @@ UdpHandler.extend({
                     status = FinalResponse.statusInvalidAppId;
                 }
             } else {
-                console.log("Invalid request appId");
+                Logger.log("Invalid request appId");
                 status = FinalResponse.statusInvalidAppId;
             }
         }
@@ -89,9 +88,9 @@ module.exports = UdpHandler;
 })();
 
 /**
- * Request pattern
- *      appId(3 bit)|workId(3 bit)
+ * Request pattern (Total minimum 7 character required)
+ *      appId(3 character)|workId(min 3 character)
  * Result pattern
- *      responseLength|status(5 bit)|response|endOfResult(5 bit)
+ *      responseLength(same as response.length)|status(5 character)|response|endOfResult(5 character)
  * 
 */

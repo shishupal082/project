@@ -35,9 +35,11 @@ ReadExcel.extend({
          return result;
       }
       var sheets = file.SheetNames;
-      if ($S.isNumber(sheet_index) && sheet_index >= 0) {
-         if (sheet_index < sheets.length) {
+      if ($S.isNumber(sheet_index)) {
+         if (sheet_index >= 0 && sheet_index < sheets.length) {
             result.push(this._readSheet(file, sheet_index));
+         } else {
+            console.log("Invalid sheet_index: " + sheet_index);
          }
       } else {
          for(i = 0; i < sheets.length; i++) {
@@ -47,8 +49,6 @@ ReadExcel.extend({
       return result;
    }
 });
-
-
 var Excel = {
    readFile: function(filepath, sheet_index) {
       return ReadExcel.readFile(filepath, sheet_index);

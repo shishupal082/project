@@ -213,6 +213,9 @@ TemplateHandler.extend({
                 case "rcc_view":
                     renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
                 break;
+                case "rcc_summary":
+                    renderField = DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(renderData, currentList3Data, sortingFields, true);
+                break;
                 case "noMatch":
                 default:
                     renderField = this.getTemplate("noMatch");

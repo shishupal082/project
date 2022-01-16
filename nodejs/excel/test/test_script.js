@@ -1,13 +1,26 @@
 var ConvertExcelToJson = require("../ConvertExcelToJson.js");
 
-ConvertExcelToJson.setConfigPath("test_config.json");
-ConvertExcelToJson.readConfigData(function() {
-    ConvertExcelToJson.convert({"workId": "001"}, function(status) {
+function _convertExcelToJson(requestData) {
+    for (var i=0; i<requestData.length; i++) {
+        if (requestData[i]["isVisited"] === "true") {
+            continue;
+        }
+        requestData[i]["isVisited"] = "true";
         console.log("--------------------------------------------------");
-        ConvertExcelToJson.convert({"workId": "002"}, function(status) {
-            console.log("--------------------------------------------------");
-            ConvertExcelToJson.convert({"workId": "003"});
+        ConvertExcelToJson.convert({"workId": requestData[i]["workId"]}, function(status) {
+            _convertExcelToJson(requestData);
         });
-    });
+        return;
+    }
+}
+var request = [];
+request.push({"workId": "000"});
+request.push({"workId": "004"});
+request.push({"workId": "003"});
+request.push({"workId": "002"});
+request.push({"workId": "001"});
+
+ConvertExcelToJson.readConfigData("test_config.json", function() {
+    _convertExcelToJson(request);
 });
 

@@ -191,6 +191,35 @@ DBViewTemplate["dbviewSummaryField"] = [
         ]
     }
 ];
+DBViewTemplate["dbviewSummaryFieldV2"] = [
+    {
+        "tag": "table.tbody",
+        "className": "table table-striped table-padded-px-5",
+        "name": "dbviewSummaryField",
+        "text": [
+            {
+                "tag": "tr",
+                "text": [
+                    {
+                        "tag": "td.b",
+                        "text": "S.No."
+                    },
+                    {
+                        "tag": "td.b",
+                        "name": "descriptionButton",
+                        "text": []
+                    },
+                    {
+                        "tag": "td.b",
+                        "className": "text-center",
+                        "name": "countButton",
+                        "text": []
+                    }
+                ]
+            }
+        ]
+    }
+];
 DBViewTemplate["dbviewSummaryField.tr"] = [
     {
         "tag": "tr",

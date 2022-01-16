@@ -2,7 +2,7 @@
     "list1Data": [
         {
             "name": "RCC Parameter Station-1",
-            "enabledPages": ["dbview", "rcc_view"],
+            "enabledPages": ["dbview", "rcc_view", "rcc_summary"],
             "dbDataApis": [
                 {
                     "tableName": "tlsr_trsr",
@@ -14,6 +14,55 @@
     "metaData": {
         "enableFooter": true,
         "enableToggleButton": true,
+        "udpConfig": {
+            "info": "appId:001, wordId:001",
+            "port": "64000",
+            "data": "001|001"
+        },
+        "list3Data_1": [
+            {
+                "defaultSelected": true,
+                "name": "list3Data_1_1",
+                "text": "All"
+            },
+            {
+                "text": "Order by Route",
+                "value": [{"key": "signal_route"}]
+            },
+            {
+                "text": "Order by Overlap",
+                "value": [
+                    {
+                        "key": "set_overlap",
+                        "text": {
+                            "tag": "h4",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "className": "badge badge-primary",
+                                    "name": "set_overlap"
+                                },
+                                {
+                                    "tag": "button",
+                                    "name": "reload",
+                                    "value": "reload",
+                                    "className": "btn btn-primary pt-0 pb-0 ml-10px",
+                                    "text": "Realod"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "text": "Order by Overlap --> Route",
+                "value": [{"key": "set_overlap"}, {"key": "signal_route"}]
+            },
+            {
+                "text": "Order by Route --> Overlap",
+                "value": [{"key": "signal_route"}, {"key": "set_overlap"}]
+            }
+        ],
         "resultPattern.dbview": [
             {
                 "tableName": "tlsr_trsr",

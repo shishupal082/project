@@ -6,7 +6,7 @@ var UDP = require("./udp/udp");
 var UdpHandler = require("./udp/common/UdpHandler");
 var Logger = require("./static/logger-v2.js");
 
-var localPort = 60002;
+var localPort = 64000;
 UDP.onReceive(SERVER, function(msg, ip, port, length) {
     Logger.log("-----------------------------------------------------------------------------", function(status) {
         Logger.log("Request: " + ip + ":" + port, function(status) {

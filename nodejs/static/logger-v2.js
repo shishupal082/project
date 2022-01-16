@@ -57,6 +57,13 @@ Logger.extend({
             console.log(text);
             $S.callMethodV2(callback, false, text);
         }
+    },
+    logV2: function(obj, callback) {
+        if ($S.isObject(obj) || $S.isArray(obj)) {
+            this.log(JSON.stringify(obj), callback);
+        } else {
+            this.log(obj, callback);
+        }
     }
 });
 

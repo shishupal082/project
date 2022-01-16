@@ -22,6 +22,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"><center>Loading...</center></div>
 
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
 <script type="text/javascript">
 var GLOBAL = {
     baseApi: "",
@@ -30,9 +31,10 @@ var GLOBAL = {
     forceLogin: true,
     projectHeading: "App Heading"
 };
-
+GLOBAL.JQ = $;
 GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
 GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
+// GLOBAL.udpServicePostApi = "/api/udp_service_response.json";
 
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";

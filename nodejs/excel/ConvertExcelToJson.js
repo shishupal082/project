@@ -6,7 +6,6 @@ const generateFile = require("../mlk/src/js/generateFile.js");
 
 (function() {
 var ConfigData = {};
-var configPath = "";
 var ConvertExcelToJson = function(config) {
     return new UDP.fn.init(config);
 };
@@ -22,22 +21,21 @@ ConvertExcelToJson.fn.init.prototype = ConvertExcelToJson.fn;
 
 $S.extendObject(ConvertExcelToJson);
 ConvertExcelToJson.extend({
-    setConfigPath: function(configFilePath) {
+    readConfigData: function(configFilePath, callback) {
         if ($S.isStringV2(configFilePath)) {
-            configPath = configFilePath;
-        }
-    },
-    readConfigData: function(callback) {
-        FS.readJsonFile(configPath, {}, function(jsonData) {
-            if ($S.isObject(jsonData)) {
-                ConfigData = jsonData;
-                console.log("Config data read success.");
-            } else {
-                console.log("Invalid config data.");
-            }
+            FS.readJsonFile(configFilePath, {}, function(jsonData) {
+                if ($S.isObject(jsonData)) {
+                    ConfigData = jsonData;
+                    Logger.log("Config data read success.");
+                } else {
+                    Logger.log("Invalid config data.");
+                }
+                $S.callMethod(callback);
+            });
+        } else {
+            Logger.log("Invalid config path.");
             $S.callMethod(callback);
-        });
-
+        }
     }
 });
 ConvertExcelToJson.extend({
@@ -47,13 +45,13 @@ ConvertExcelToJson.extend({
             return excelConfig;
         }
         var workId = request["workId"];
-        if (!$S.isString(workId)) {
+        if (!$S.isStringV2(workId)) {
             return excelConfig;
         }
         if ($S.isArrayV2(ConfigData[workId])) {
             excelConfig = $S.clone(ConfigData[workId]);
         } else {
-            console.log("Invalid workId: " + workId);
+            Logger.log("Invalid workId: " + workId);
         }
         return excelConfig;
     },
@@ -69,7 +67,7 @@ ConvertExcelToJson.extend({
                 destination = excelConfig[i]["destination"];
                 index = excelConfig[i]["index"];
                 excelConfig[i]["isVisited"] = "true";
-                if ($S.isStringV2(source) && $S.isNumber(index) && index > 0) {
+                if ($S.isStringV2(source)) {
                     data = Excel.readFile(source, index);
                     if ($S.isArray(data) && data.length === 1) {
                         data = data[0];
@@ -77,12 +75,13 @@ ConvertExcelToJson.extend({
                     if ($S.isStringV2(destination)) {
                         generateFile.saveText([JSON.stringify(data)], destination, function(status) {
                             Logger.log("File read and write completed.");
-                            return self.generateFile(excelConfig, callback);
+                            self.generateFile(excelConfig, callback);
                         });
                     } else {
-                        console.log(data);
-                        Logger.log("File read completed.");
-                        return self.generateFile(excelConfig, callback);
+                        Logger.logV2(data, function(status) {
+                            Logger.log("File read completed.");
+                            self.generateFile(excelConfig, callback);
+                        });
                     }
                     return;
                 }
@@ -91,10 +90,11 @@ ConvertExcelToJson.extend({
         return $S.callMethod(callback);
     },
     convert: function(request, callback) {
-        console.log(request);
-        var excelConfig = ConvertExcelToJson.getExcelConfig(request);
-        ConvertExcelToJson.generateFile(excelConfig, function() {
-            $S.callMethodV1(callback, "SUCCESS");
+        Logger.logV2(request, function(status) {
+            var excelConfig = ConvertExcelToJson.getExcelConfig(request);
+            ConvertExcelToJson.generateFile(excelConfig, function() {
+                $S.callMethodV1(callback, "SUCCESS");
+            });
         });
     }
 });
