@@ -454,8 +454,8 @@ DataHandler.extend({
         if (isSinglePageApp && $S.isStringV2(currentAppData["id"])) {
             DataHandler.setData("isSinglePageApp", true);
             DataHandler.updatePathParameter("pid", currentAppData["id"]);
-            DataHandler.updatePathParameter("pageName", "dbview");
-            DataHandler.setData("pageName", "otherPages");
+            DataHandler.updatePathParameter("pageName", Config.dbview);
+            DataHandler.setData("pageName", Config.otherPages);
         }
     }
 });
