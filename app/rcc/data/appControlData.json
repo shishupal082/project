@@ -14,9 +14,9 @@
     "metaData": {
         "enableFooter": true,
         "enableToggleButton": true,
-        "udpConfig": {
+        "tcpConfig": {
             "info": "appId:001, wordId:001",
-            "port": "64000",
+            "tcpId": "id_001",
             "data": "001|001"
         },
         "list3Data_1": [

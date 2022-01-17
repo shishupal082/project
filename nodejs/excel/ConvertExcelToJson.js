@@ -57,7 +57,12 @@ ConvertExcelToJson.extend({
     },
     generateFile: function(excelConfig, callback) {
         if (!$S.isArray(excelConfig)) {
-            return $S.callMethod(callback);
+            Logger.log("Invalid excelConfig.", callback);
+            return;
+        }
+        if (excelConfig.length < 1) {
+            Logger.log("excelConfig not found.", callback);
+            return;
         }
         var self = this;
         var data, source, destination, index;
@@ -87,13 +92,13 @@ ConvertExcelToJson.extend({
                 }
             }
         }
-        return $S.callMethod(callback);
+        return $S.callMethodV1(callback, "SUCCESS");
     },
     convert: function(request, callback) {
         Logger.logV2(request, function(status) {
             var excelConfig = ConvertExcelToJson.getExcelConfig(request);
-            ConvertExcelToJson.generateFile(excelConfig, function() {
-                $S.callMethodV1(callback, "SUCCESS");
+            ConvertExcelToJson.generateFile(excelConfig, function(status) {
+                $S.callMethodV1(callback, status);
             });
         });
     }

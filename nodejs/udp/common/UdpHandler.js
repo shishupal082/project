@@ -30,9 +30,9 @@ $S.extendObject(UdpHandler);
 UdpHandler.extend({
     _parseRequest: function(msg) {
         var result = {"appId": "", "workId": "", "msg": ""};
-        var msg = msg.toString();
         var msgArr = msg.split("|");
         if (msgArr.length < 2) {
+            result["appId"] = msg;
             return result;
         }
         if (appIdMappingFunction[msgArr[0]]) {
@@ -43,10 +43,11 @@ UdpHandler.extend({
         return result;
     },
     returResponse: function(status, response, callback) {
-        var responseLength = 0;
-        if ($S.isStringV2(response)) {
-            responseLength = response.length;
+        var responseLength;
+        if (!$S.isString(response)) {
+            response = "";
         }
+        responseLength = 1 + 5 + 1 + response.length + 1 + 5;
         $S.callMethodV1(callback, responseLength + "|" + status + "|" + response + "|" + FinalResponse.endOfResult);
     },
     HandleRequest: function(msg, ip, port, length, callback) {
@@ -54,28 +55,26 @@ UdpHandler.extend({
         var request = {};
         var returnResponseStatus = true;
         var self = this;
-        if (length < 7) {
-            Logger.log("Invalid request length");
-            status = FinalResponse.statusInvalidRequestLength;
-        } else {
-            request = this._parseRequest(msg);
-            if ($S.isStringV2(request["appId"])) {
-                if ($S.isFunction(appIdMappingFunction[request["appId"]])) {
-                    status = FinalResponse.statusValidRequest;
-                    returnResponseStatus = false;
-                    Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"], function() {
-                        appIdMappingFunction[request["appId"]](request, function(result) {
-                            response = result;
-                            self.returResponse(FinalResponse.statusValidRequest, response, callback);
-                        });
+        msg = msg.toString();
+        request = this._parseRequest(msg);
+        if ($S.isStringV2(request["appId"])) {
+            returnResponseStatus = false;
+            if ($S.isFunction(appIdMappingFunction[request["appId"]])) {
+                status = FinalResponse.statusValidRequest;
+                Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"], function() {
+                    appIdMappingFunction[request["appId"]](request, function(result) {
+                        response = result;
+                        self.returResponse(FinalResponse.statusValidRequest, response, callback);
                     });
-                } else {
-                    status = FinalResponse.statusInvalidAppId;
-                }
+                });
             } else {
-                Logger.log("Invalid request appId");
-                status = FinalResponse.statusInvalidAppId;
+                Logger.log("Invalid appId: " + request["appId"], function(status) {
+                    self.returResponse(FinalResponse.statusInvalidAppId, null, callback);
+                });
             }
+        } else {
+            Logger.log("Invalid request: " + msg);
+            status = FinalResponse.statusInvalidAppId;
         }
         if (returnResponseStatus) {
             this.returResponse(status, response, callback);
@@ -91,6 +90,9 @@ module.exports = UdpHandler;
  * Request pattern (Total minimum 7 character required)
  *      appId(3 character)|workId(min 3 character)
  * Result pattern
- *      responseLength(same as response.length)|status(5 character)|response|endOfResult(5 character)
+ *      responseLength(Total length max 5 digit excluding responseLength size)|status(5 character)|response|endOfResult(5 character)
+ *      for response = SUCCESS
+ *          responseLength = 1+5+1+7(SUCCESS length)+1+5 = 20
+ *      final response = 20|00000|SUCCESS|11111
  * 
 */

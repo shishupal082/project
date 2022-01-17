@@ -27,12 +27,19 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 $S.extendObject(DataHandlerV3);
 DataHandlerV3.extend({
     _callUdpService: function(callback) {
-        var udpConfig = DataHandler.getAppData("udpConfig", {});
+        var tcpConfig = DataHandler.getAppData("tcpConfig", {});
         var apiUrl = Config.getApiUrl("udpServicePostApi", "", true);
-        if ($S.isStringV2(apiUrl) && $S.isObject(udpConfig) && $S.isStringV2(udpConfig["data"])) {
-            $S.sendPostRequest(Config.JQ, apiUrl, {"data": udpConfig["data"]}, function(ajax, status, response) {
+        var postData = {};
+        if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
+            if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
+                    postData["data"] = tcpConfig["data"];
+                    postData["tcp_id"] = tcpConfig["tcpId"];
+                    $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
+                    $S.callMethod(callback);
+                });
+            } else {
                 $S.callMethod(callback);
-            });
+            }
         } else {
             $S.callMethod(callback);
         }

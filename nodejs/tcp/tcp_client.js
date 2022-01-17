@@ -1,12 +1,12 @@
-const dgram = require('dgram');
-const udpClient = dgram.createSocket('udp4');
-const readline = require("readline");
+var net = require('net');
+var readline = require("readline");
 
-const $S = require("../../static/js/stack.js");
-const UDP = require("./udp");
-const FS = require("../static/fsmodule.js");
-const Logger = require("../static/logger-v2.js");
+var $S = require("../../static/js/stack.js");
+var TCP = require("./tcp");
+var FS = require("../static/fsmodule.js");
+var Logger = require("../static/logger-v2.js");
 
+// var TCP = TCPService.getService();
 
 var rl = readline.createInterface({
     input: process.stdin,
@@ -14,9 +14,8 @@ var rl = readline.createInterface({
 });
 
 
-var isEchoServer = true;
-var localPort = 60000;
-var remotePort = 60002;
+var localPort = 8086;
+var remotePort = 8087;
 var serverHost = "127.0.0.1";
 
 function removeSpace(text) {
@@ -34,45 +33,49 @@ function removeSpace(text) {
 function readUserInput(callback) {
     console.log("----------------------------------------");
     rl.question("Enter text: ", function(text) {
-        text = removeSpace(text);
+        // text = removeSpace(text);
         $S.callMethodV1(callback, text);
     });
 }
 function endProcess() {
     process.exit(0);
 }
-
+function sendData(data) {
+    if (!$S.isStringV2(data)) {
+        readUserInput(textReadCallback);
+        return;
+    }
+    var tcpClient = new net.Socket();
+    tcpClient.connect(localPort, serverHost, function() {
+        TCP.register(tcpClient, onReceive, onClose, function(remoteAddress, remotePort) {
+            console.log("remoteAddress:"+remoteAddress+", remotePort:"+remotePort);
+            TCP.sendData(tcpClient, data, remotePort, serverHost);
+            setTimeout(function() {
+                TCP.close(tcpClient);
+            }, 200);
+        });
+    });
+}
 function textReadCallback(text) {
     if (text !== "bye") {
-        var t1 = [];
-        var t2 = text.split(" ");
-        for (var i=0; i<t2.length; i++) {
-            t1.push($S.changeBase(t2[i], 16, 10));
-        }
-        UDP.sendData(udpClient, text, remotePort, serverHost);
-        if (isEchoServer === false) {
-            readUserInput(textReadCallback);
-        }
+        sendData(text);
     } else {
         console.log("BYE BYE!!!");
         endProcess();
     }
 }
 
-UDP.onReceive(udpClient, function(msg, ip, port, length) {
-    console.log("udpClient");
-    // Logger.log(ip+":"+port+":"+$S.convertHexToStr(msg));
-    console.log("msg: " + msg.toString());
-    if (isEchoServer) {
-        readUserInput(textReadCallback);
-    }
-});
+function onReceive(sock, msg, ip, port, length) {
+    console.log("tcpClient");
+    console.log("msg: " + msg);
+}
 
+function onClose(sock, remoteAddress, remotePort) {
+    console.log("Connection close: " + remoteAddress + ":" + remotePort);
+    readUserInput(textReadCallback);
+}
 function start() {
     FS.readJsonFile("config.json", {}, function(jsonData) {
-        if ($S.isBoolean(jsonData["client.isEchoServer"])) {
-            isEchoServer = jsonData["client.isEchoServer"];
-        }
         if ($S.isNumber(jsonData["client.localPort"])) {
             localPort = jsonData["client.localPort"];
         }
@@ -82,15 +85,9 @@ function start() {
         if ($S.isNumber(jsonData["client.serverHost"])) {
             serverHost = jsonData["client.serverHost"];
         }
-        Logger.log("Client started: localPort=" + localPort + ", remotePort=" + remotePort, function() {
-            udpClient.bind(localPort);
-            readUserInput(textReadCallback);
-        });
+        readUserInput(textReadCallback);
     });
 }
-
-
-
 
 Logger("log/").setLogDir().enableLoging(function(status) {
     if (status) {
