@@ -35,8 +35,7 @@ GLOBAL.JQ = $;
 GLOBAL.isSinglePageApp = false;
 GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
 GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
-// GLOBAL.udpServicePostApi = "/api/udp_service_response.json";
-// GLOBAL.udpServicePostApi = "/api/call_tcp";
+GLOBAL.udpServicePostApi = "/api/call_tcp";
 
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
