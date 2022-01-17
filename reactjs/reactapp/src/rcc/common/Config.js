@@ -23,7 +23,8 @@ Config.projectHeading = $$$.projectHeading;
 Config.tempConfig = {
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
-    "linkText": $$$.linkText
+    "linkText": $$$.linkText,
+    "isSinglePageApp": $$$.isSinglePageApp
 };
 
 

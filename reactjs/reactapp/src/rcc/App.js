@@ -40,6 +40,7 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
+            "isSinglePageApp": false,
             "enableReloadButton": true,
             "enableFooter": true,
             "enableFooterV2": true,
@@ -73,12 +74,20 @@ class App extends React.Component {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
     gotoPage(pageName) {
+        if ($S.isBooleanTrue(this.appData.isSinglePageApp)) {
+            DataHandler.updatePathParameter("pageName", pageName);
+            return;
+        }
         var pages = Config.pages;
         if ($S.isString(pages[pageName])) {
             this.childAttribute["history"].push(DataHandler.getPageUrlByPageName(pageName));
         }
     }
     gotoPageV2(currentAppId) {
+        if ($S.isBooleanTrue(this.appData.isSinglePageApp)) {
+            DataHandler.updatePathParameter("pid", currentAppId);
+            return;
+        }
         this.childAttribute["history"].push(DataHandler.getPageUrlByAppId(currentAppId));
     }
     onClick(e) {
@@ -148,6 +157,9 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     isComponentUpdate(arg) {
+        if ($S.isBooleanTrue(this.appData.isSinglePageApp)) {
+            return false;
+        }
         var currentPageName = arg["currentPageName"];
         var prevPageName = arg["prevPageName"];
         var params = arg["params"];

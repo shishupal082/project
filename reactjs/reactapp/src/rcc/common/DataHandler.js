@@ -61,6 +61,8 @@ keys.push("tableDataLoadStatus");
 //Add Field Report Page
 keys.push("addentry.submitStatus");
 
+keys.push("isSinglePageApp");
+
 CurrentData.setKeys(keys);
 
 
@@ -177,6 +179,16 @@ DataHandler.extend({
             url += "/" + pageName;
         }
         return url;
+    },
+    updatePathParameter: function(key, value) {
+        if ($S.isStringV2(key) && $S.isStringV2(value)) {
+            var pathParams = this.getData("pathParams", {});
+            if (!$S.isObject(pathParams)) {
+                pathParams = {};
+            }
+            pathParams[key] = value;
+            this.setData("pathParams", pathParams);
+        }
     },
     getPathParamsData: function(key, defaultValue) {
         var pathParams = this.getData("pathParams", {});
@@ -424,12 +436,34 @@ DataHandler.extend({
             DataHandler.setData("appControlDataLoadStatus", "completed");
             $S.callMethod(callback);
         });
+    },
+    handleSinglePageApp: function() {
+        var tempConfig = Config.tempConfig;
+        var isSinglePageApp = false;
+        if ($S.isObject(tempConfig) && $S.isBooleanTrue(tempConfig.isSinglePageApp)) {
+            isSinglePageApp = true;
+        }
+        var appControlData = DataHandler.getData("appControlData", []);
+        var currentAppData = {};
+        if ($S.isArray(appControlData) && appControlData.length > 0 && $S.isObject(appControlData[0])) {
+            currentAppData = appControlData[0];
+            if ($S.isBooleanTrue(currentAppData["isSinglePageApp"])) {
+                isSinglePageApp = true;
+            }
+        }
+        if (isSinglePageApp && $S.isStringV2(currentAppData["id"])) {
+            DataHandler.setData("isSinglePageApp", true);
+            DataHandler.updatePathParameter("pid", currentAppData["id"]);
+            DataHandler.updatePathParameter("pageName", "dbview");
+            DataHandler.setData("pageName", "otherPages");
+        }
     }
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
+                DataHandler.handleSinglePageApp();
                 DataHandler.loadDataByAppId(function() {
                     AppHandler.TrackPageView(DataHandler.getData("pageName", ""));
                     DataHandler.handleApiDataLoad();
@@ -455,6 +489,12 @@ DataHandler.extend({
         DataHandler.setData("dbDataLoadStatus", "not-started");
         DataHandler.setData("attendanceDataLoadStatus", "not-started");
         DataHandler.setData("tableDataLoadStatus", "not-started");
+        if ($S.isBooleanTrue(DataHandler.getData("isSinglePageApp", false))) {
+            DataHandler.loadDataByAppId(function() {
+                DataHandler.handleApiDataLoad();
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        }
     },
     OnList2Change: function(appStateCallback, appDataCallback, list2Id) {
         var pages = Config.pages;
@@ -466,6 +506,10 @@ DataHandler.extend({
                 AppHandler.LazyRedirect(currentList2Data.toUrl, 250);
                 return;
             }
+        }
+        if ($S.isBooleanTrue(DataHandler.getData("isSinglePageApp", false))) {
+            DataHandler.handleApiDataLoad();
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
     },
     OnList3Change: function(appStateCallback, appDataCallback, list3Id) {
@@ -636,6 +680,7 @@ DataHandler.extend({
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);
+        appDataCallback("isSinglePageApp", this.getData("isSinglePageApp", false));
         appDataCallback("enableFooter", this.getBooleanParam("enableFooter", true));
         appDataCallback("enableToggleButton", this.getBooleanParam("enableToggleButton", true));
 

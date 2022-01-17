@@ -32,6 +32,7 @@ var GLOBAL = {
     projectHeading: "App Heading"
 };
 GLOBAL.JQ = $;
+GLOBAL.isSinglePageApp = false;
 GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
 GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
 // GLOBAL.udpServicePostApi = "/api/udp_service_response.json";

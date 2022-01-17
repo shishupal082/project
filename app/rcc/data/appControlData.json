@@ -3,6 +3,7 @@
         {
             "name": "RCC Parameter Station-1",
             "enabledPages": ["dbview", "rcc_view", "rcc_summary"],
+            "isSinglePageApp": false,
             "dbDataApis": [
                 {
                     "tableName": "tlsr_trsr",
