@@ -2,9 +2,14 @@ const $S = require("../../../static/js/stack.js");
 const FS = require("../../static/fsmodule.js");
 const Logger = require("../../static/logger-v2.js");
 const generateFile = require("./js/generateFile.js");
-
-
-var fileGenerateConfigPath = "";
+var arg = process.argv;
+var configFilepath = "";
+if ($S.isArray(arg) && arg.length >= 3) {
+    configFilepath = arg[2];
+    console.log("Command line argument 'configFilepath': " + configFilepath);
+} else {
+    console.log("-----Command line argument 'configFilepath' required.-----");
+}
 
 function generateTextFile(configJson, generatedId, callback) {
     if (!$S.isArray(generatedId)) {
@@ -96,7 +101,7 @@ function generateAllFile(csvConfigData, callback) {
     generateTextFile(configJson, [], callback);
 }
 
-function start(configFilepath) {
+function start() {
     var ReadText = generateFile.getReadText();
     var tempObj = {};
     ReadText.read(configFilepath, {}, tempObj, function(textData, tempObj2) {
@@ -109,12 +114,11 @@ function start(configFilepath) {
 }
 
 
-Logger("../log/").setLogDir().enableLoging(function(status) {
+Logger("C:/java/mlk_log/").setLogDir().enableLoging(function(status) {
     if (status) {
         console.log("Logging enable.");
     } else {
         console.log("Error in log enabling.");
     }
-    start("proj-2/config.csv");
-    // start("proj-1/file-1.ML2", "../dist/proj-1/FAT/MURI_C1_T06_FAT.ML2");
+    start();
 });
