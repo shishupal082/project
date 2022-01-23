@@ -9,7 +9,8 @@
                     "tableName": "tlsr_trsr",
                     "apis": ["/app/rcc/data/rcc_data.json"]
                 }
-            ]
+            ],
+            "metaDataApi_1": ["/app/rcc/data/metaData.json"]
         }
     ],
     "metaData": {

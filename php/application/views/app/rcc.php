@@ -33,7 +33,8 @@ var GLOBAL = {
 };
 GLOBAL.JQ = $;
 GLOBAL.isSinglePageApp = false;
-GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
+// GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
+GLOBAL.appControlApi = "/pvt/app-data/rcc/appControlData.json";
 GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
 // GLOBAL.udpServicePostApi = "/api/call_tcp";
 
