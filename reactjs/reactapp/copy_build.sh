@@ -41,27 +41,29 @@ cp build/static/js/*.js ${distDir}/
 
 mv ${distDir}/runtime-main.*.js ${reactBase}/script1.js
 mv ${distDir}/main.*.chunk.js ${distDir}/script2.js
+mv ${distDir}/*.chunk.js ${distDir}/script3.js
 
 sed -i "2s/.*//" ${reactBase}/script1.js
 sed -i "2s/.*//" ${distDir}/script2.js
+sed -i "3s/.*//" ${distDir}/script3.js
 
-requiredScript3=("dist-monitoring-app" "dist-data-display-app" "dist-account-app-2021-oct" "dist-ml2-app" "dist-rcc-app")
+# requiredScript3=("dist-monitoring-app" "dist-data-display-app" "dist-account-app-2021-oct" "dist-ml2-app" "dist-rcc-app")
 
-isNotFound="true"
+# isNotFound="true"
 
-for i in "${requiredScript3[@]}"
-do
-    if [ "$i" == "$distDir" ] ; then
-        isNotFound="false"
-        mv ${distDir}/*.chunk.js ${distDir}/script3.js
-        sed -i "3s/.*//" ${distDir}/script3.js
-    fi
-done
+# for i in "${requiredScript3[@]}"
+# do
+#     if [ "$i" == "$distDir" ] ; then
+#         isNotFound="false"
+#         mv ${distDir}/*.chunk.js ${distDir}/script3.js
+#         sed -i "3s/.*//" ${distDir}/script3.js
+#     fi
+# done
 
-if [[ $isNotFound == "true" ]]; then
-  mv ${distDir}/*.chunk.js ${reactBase}/script3.js
-  sed -i "3s/.*//" ${reactBase}/script3.js
-fi
+# if [[ $isNotFound == "true" ]]; then
+#   mv ${distDir}/*.chunk.js ${reactBase}/script3.js
+#   sed -i "3s/.*//" ${reactBase}/script3.js
+# fi
 
 
 # if [[ $distDir == "dist-auth-app" ]]; then

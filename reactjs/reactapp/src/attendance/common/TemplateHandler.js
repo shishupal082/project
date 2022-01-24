@@ -222,7 +222,7 @@ TemplateHandler.extend({
                     renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
                 break;
                 case "dbview_summary":
-                    renderField = DBViewTemplateHandler.GenerateDbViewSummaryRenderField(renderData, currentList3Data, true);
+                    renderField = DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(renderData, currentList3Data, sortingFields, true);
                 break;
                 case "add_field_report":
                     renderField = this.generateDbViewRenderFieldV5(renderData);
