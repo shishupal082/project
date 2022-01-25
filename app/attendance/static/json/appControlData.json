@@ -383,6 +383,7 @@
             {
                 "tableName": "table1",
                 "wordBreak": ",",
+                "singleLineComment": "//",
                 "dataIndex": ["date", "team", "station", "designation", "userId", "name", "description"],
                 "apis": ["/app/attendance/static/csv/user_data.csv"]
             },

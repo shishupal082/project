@@ -68,6 +68,7 @@ DataHandlerV3.extend({
                 temp.dataIndex = dbDataApis[i].dataIndex;
                 temp.wordBreak = dbDataApis[i].wordBreak;
                 temp.apiName = dbDataApis[i].tableName.trim();
+                temp.singleLineComment = dbDataApis[i].singleLineComment;
                 temp.requestMethod = Api.getAjaxApiCallMethodV2();
                 temp.url = urls;
                 request.push(temp);
