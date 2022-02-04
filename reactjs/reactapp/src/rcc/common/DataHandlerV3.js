@@ -116,6 +116,21 @@ DataHandlerV3.extend({
         }
         return finalTable;
     },
+    _setDataForDbviewRcc: function(obj) {
+        if (!$S.isObject(obj)) {
+            return obj;
+        }
+        var attr = ["parameter", "on_route", "conflicting", "in_isolation", "conflicting_route", "set_overlap"], value;
+        for (var i=0; i<attr.length; i++) {
+            if ($S.isStringV2(obj[attr[i]])) {
+                value = DataHandlerV3.parseSignal(obj[attr[i]]);
+                if ($S.isArray(value)) {
+                    obj[attr[i]] = value.join(",");
+                }
+            }
+        }
+        return obj;
+    },
     generateFinalTable: function(resultCriteria) {
         var pageName = DataHandler.getPathParamsData("pageName", "");
         var dbViewData = DataHandler.getData("dbViewData", {});
@@ -124,8 +139,21 @@ DataHandlerV3.extend({
         var currentAppData = DataHandler.getCurrentAppData({});
         var resultPatternKey, resultPattern;
         var finalTable = [];
-        if ([Config.dbview].indexOf(pageName) >= 0) {
-            resultPatternKey =  "resultPattern." + pageName;
+        if ([Config.dbview_rcc].indexOf(pageName) >= 0) {
+            if ($S.isObject(dbViewData)) {
+                for (var tableName in dbViewData) {
+                    if ($S.isArray(dbViewData[tableName]["tableData"])) {
+                        for (var i=0; i<dbViewData[tableName]["tableData"].length; i++) {
+                            if ($S.isObject(dbViewData[tableName]["tableData"][i])) {
+                                this._setDataForDbviewRcc(dbViewData[tableName]["tableData"][i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ([Config.dbview, Config.dbview_rcc].indexOf(pageName) >= 0) {
+            resultPatternKey =  "resultPattern." + Config.dbview;
             resultPattern = $S.findParam([currentAppData, metaData], resultPatternKey, []);
             finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         }

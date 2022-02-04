@@ -210,6 +210,7 @@ TemplateHandler.extend({
         } else {
             switch(pageName) {
                 case "dbview":
+                case "dbview_rcc":
                 case "rcc_view":
                     renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
                 break;

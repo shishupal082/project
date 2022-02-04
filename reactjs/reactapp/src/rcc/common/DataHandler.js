@@ -150,7 +150,7 @@ DataHandler.extend({
         if ([Config.home].indexOf(pageName1) >= 0) {
             dataLoadStatusKey.push("metaDataLoadStatus");
         }
-        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.rcc_view];
+        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.dbview_rcc, Config.rcc_view, Config.rcc_summary];
         if (pageRequiredDbDataLoadStatus.indexOf(pageName2) >= 0) {
             dataLoadStatusKey.push("metaDataLoadStatus");
             dataLoadStatusKey.push("dbDataLoadStatus");
@@ -379,7 +379,7 @@ DataHandler.extend({
     loadDbData: function(callback) {
         var dbDataLoadStatus = this.getData("dbDataLoadStatus", "");
         var pageName = this.getPathParamsData("pageName", "");
-        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.rcc_view, Config.rcc_summary];
+        var pageRequiredDbDataLoadStatus = [Config.dbview, Config.dbview_rcc, Config.rcc_view, Config.rcc_summary];
         if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
             if (dbDataLoadStatus === "in_progress") {
                 return;
@@ -621,15 +621,12 @@ DataHandler.extend({
 
         if ([Config.rcc_view, Config.rcc_summary].indexOf(pageName) >= 0) {
             filteredUserData = RCCHandler.getRccRenderData();
-        } else if ([Config.dbview].indexOf(pageName) < 0) {
+        } else if ([Config.dbview, Config.dbview_rcc].indexOf(pageName) < 0) {
             filteredUserData = $S.sortResultV2(filteredUserData, sortingFields, "name");
         }
         switch(pageName) {
             case Config.dbview:
-                currentList3Data = this.getCurrentList3Data();
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField, dateSelect);
-                renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
+            case Config.dbview_rcc:
             case Config.rcc_view:
             case Config.rcc_summary:
                 currentList3Data = this.getCurrentList3Data();

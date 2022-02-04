@@ -2,7 +2,6 @@
     "list1Data": [
         {
             "name": "RCC Parameter Station-1",
-            "enabledPages": ["dbview", "rcc_view", "rcc_summary"],
             "isSinglePageApp": false,
             "singleLineComment": "//",
             "dbDataApis": [
@@ -22,6 +21,7 @@
             "tcpId": "id_001",
             "data": "001|001"
         },
+        "enabledPages": ["dbview", "dbview_rcc", "rcc_view", "rcc_summary"],
         "list3Data_1": [
             {
                 "defaultSelected": true,
@@ -85,7 +85,7 @@
                 "name": "on_route",
                 "heading": "On Route",
                 "className": "w-200px",
-                "wordBreak": ",",
+                "wordBreak_temp": ",",
                 "wordBreakTag": "li",
                 "fieldName": "info",
                 "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
@@ -96,7 +96,7 @@
                 "name": "conflicting",
                 "heading": "Conflicting",
                 "className": "w-200px",
-                "wordBreak": ",",
+                "wordBreak_temp": ",",
                 "wordBreakTag": "li",
                 "fieldName": "info",
                 "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
@@ -107,7 +107,7 @@
                 "name": "in_isolation",
                 "heading": "In Isolation",
                 "className": "w-200px",
-                "wordBreak": ",",
+                "wordBreak_temp": ",",
                 "wordBreakTag": "li",
                 "fieldName": "info",
                 "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
@@ -118,7 +118,7 @@
                 "name": "conflicting_route",
                 "heading": "Conflicting Route",
                 "className": "w-200px",
-                "wordBreak": ",",
+                "wordBreak_temp": ",",
                 "wordBreakTag": "li",
                 "fieldName": "info",
                 "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},

@@ -49,6 +49,7 @@ var pages = {
     "projectHome": pageUrl["projectHome"],
     "home": pageUrl["home"],
     "dbview": pageUrl["otherPages"],
+    "dbview_rcc": pageUrl["otherPages"],
     "rcc_view": pageUrl["otherPages"],
     "rcc_summary": pageUrl["otherPages"]
 };
@@ -60,11 +61,12 @@ Config.projectHome = "projectHome";
 Config.home = "home";
 Config.otherPages = "otherPages";
 Config.dbview = "dbview";
+Config.dbview_rcc = "dbview_rcc";
 Config.rcc_view = "rcc_view";
 Config.rcc_summary = "rcc_summary";
 Config.noMatch = "noMatch";
 
-Config.validPages = [Config.dbview, Config.rcc_view, Config.rcc_summary];
+Config.validPages = [Config.dbview, Config.dbview_rcc, Config.rcc_view, Config.rcc_summary];
 
 Config.dateSelectionRequired = [];
 
