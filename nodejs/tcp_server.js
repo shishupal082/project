@@ -12,9 +12,19 @@ var HOST = "127.0.0.1";
 var socket = {};
 var lineSepratorString = "-----------------------------------------------------------------------------";
 var connectionList = [];
+var logStr;
 function onReceive(sock, msg, ip, port, length) {
     Logger.log(port + ": Request: " + ip + ":" + port + ",length: " + length, function(status) {
         UdpHandler.HandleRequest(msg, ip, port, length, function(responseString) {
+            if ($S.isStringV2(responseString)) {
+                if (responseString.length < 512) {
+                    logStr = responseString;
+                } else {
+                    logStr = "Length: " + responseString;
+                }
+            } else {
+                logStr = responseString;
+            }
             Logger.log(port + ": Response: " + responseString, function(status) {
                 TCP.sendData(sock, responseString, port, ip);
                 Logger.log(port + ": " + lineSepratorString);

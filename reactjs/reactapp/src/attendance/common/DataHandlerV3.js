@@ -84,6 +84,43 @@ DataHandlerV3.extend({
             });
         }
     },
+    // _getFilterParam: function() {
+    //     var filterOptions = DataHandler.getData("filterOptions", []);
+    //     var filterParameter = "";
+    //     if ($S.isArray(filterOptions)) {
+    //         for (var i=0; i<filterOptions.length; i++) {
+    //             if ($S.isObject(filterOptions[i]) && $S.isStringV2(filterOptions[i]["dataKey"]) && $S.isStringV2(filterOptions[i]["selectedValue"])) {
+    //                 if ($S.isStringV2(filterParameter)) {
+    //                     filterParameter += ",";
+    //                 }
+    //                 filterParameter += filterOptions[i]["dataKey"] + "='" + filterOptions[i]["selectedValue"] + "'";
+    //             }
+    //         }
+    //     }
+    //     return filterParameter;
+    // },
+    _callTcpService: function(callback) {
+        var tcpConfig = DataHandler.getAppData("tcpConfig", {});
+        var apiUrl = CommonConfig.getApiUrl("tcpServicePostApi", "", true);
+        var postData = {};
+        var jsonResponse = {"tcp_table": {"tableData": []}};
+        if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
+            if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
+                postData["data"] = tcpConfig["data"];
+                postData["tcp_id"] = tcpConfig["tcpId"];
+                $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
+                    if ($S.isObject(response)) {
+                        jsonResponse["tcp_table"]["tableData"] = AppHandler.ParseTcpResponseJson(response.data, []);
+                    }
+                    $S.callMethodV1(callback, jsonResponse);
+                });
+            } else {
+                $S.callMethodV1(callback, jsonResponse);
+            }
+        } else {
+            $S.callMethodV1(callback, jsonResponse);
+        }
+    },
     _handleDefaultSorting: function(tableData) {
         if (!$S.isObject(tableData)) {
             return;
@@ -152,15 +189,19 @@ DataHandlerV3.extend({
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
         var tableData;
+        var self = this;
         if (status === "completed") {
             status = DataHandler.getData("dbDataLoadStatus");
             if (status === "not-started") {
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
-                    DataHandler.setData("dbDataLoadStatus", "completed");
                     tableData = AppHandler.GenerateDatabaseV2(request);
-                    DataHandler.setData("dbViewData", tableData);
-                    $S.callMethod(callback);
+                    self._callTcpService(function(jsonResponse) {
+                        DataHandler.setData("dbDataLoadStatus", "completed");
+                        tableData = AppHandler.MergeDatabase(tableData, jsonResponse);
+                        DataHandler.setData("dbViewData", tableData);
+                        $S.callMethod(callback);
+                    });
                 });
             } else {
                 $S.callMethod(callback);

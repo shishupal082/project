@@ -52,6 +52,7 @@ apiMapping["getAddTextApi"] = "/api/add_text";
 apiMapping["getAddTextApiV2"] = "/api/add_text_v2";
 apiMapping["getTableData"] = "/api/get_table_data";
 apiMapping["getTableDataV2"] = "/api/get_table_data_v2";
+apiMapping["tcpServicePostApi"] = "/api/call_tcp";
 apiMapping["upload_file"] = "/api/upload_file";
 apiMapping["delete_file"] = "/api/delete_file";
 apiMapping["deleteText"] = "/api/delete_text";

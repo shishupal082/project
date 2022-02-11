@@ -150,8 +150,8 @@ li code{
             <li><code tabindex="1">ALTER TABLE users RENAME TO users_2018;</code></li>
             <li><code tabindex="1">ALTER TABLE book MODIFY id INT UNSIGNED NOT NULL AUTO_INCREMENT, ADD INDEX (id);</code></li>
             <li><code tabindex="1">ALTER TABLE book ADD item_id INT;</code></li>
-            <li><code tabindex="1">ALTER TABLE users RENAME COLUMN e_mail TO email;</code></li>
-            <li><code tabindex="1">ALTER TABLE users change mobile mobile varchar(15);</code></li>
+            <li>Rename column<code tabindex="1">ALTER TABLE users RENAME COLUMN e_mail TO email;</code></li>
+            <li>Change column attribute<code tabindex="1">ALTER TABLE users change mobile mobile varchar(15);</code></li>
             <li><code tabindex="1">ALTER TABLE [table_name] ADD [new_column] varchar(100) DEFAULT NULL AFTER [old_column];</code></li>
             <li><code tabindex="1">ALTER TABLE book ALTER COLUMN item_id SET DEFAULT 0;</code></li>
             <li><code tabindex="1">ALTER TABLE event_data DROP INDEX username;</code></li>

@@ -26,9 +26,9 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 
 $S.extendObject(DataHandlerV3);
 DataHandlerV3.extend({
-    _callUdpService: function(callback) {
+    _callTcpService: function(callback) {
         var tcpConfig = DataHandler.getAppData("tcpConfig", {});
-        var apiUrl = Config.getApiUrl("udpServicePostApi", "", true);
+        var apiUrl = Config.getApiUrl("tcpServicePostApi", "", true);
         var postData = {};
         if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
             if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
@@ -45,7 +45,7 @@ DataHandlerV3.extend({
         }
     },
     _loadDBViewData: function(dbDataApis, callback) {
-        this._callUdpService(function() {
+        this._callTcpService(function() {
             var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
             var requestId = $S.getUniqueNumber();
             var request = AppHandler.GenerateApiRequest(dbDataApis, ajaxApiCallMethod, Config.baseApi, requestId);

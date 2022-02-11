@@ -31,7 +31,7 @@ Config.tempConfig = {
 var loginUserDetailsApi = $$$.loginUserDetailsApi;
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
-var udpServicePostApi = $$$.udpServicePostApi;
+var tcpServicePostApi = $$$.tcpServicePostApi;
 
 
 try {
@@ -79,7 +79,7 @@ Config.dateSelection = [
 Config.defaultDateSelect = "monthly";
 
 var apiMapping = {};
-apiMapping["udpServicePostApi"] = udpServicePostApi;
+apiMapping["tcpServicePostApi"] = tcpServicePostApi;
 apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
 apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
 apiMapping["addTextApi"] = "/api/add_text";

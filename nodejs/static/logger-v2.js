@@ -47,7 +47,10 @@ Logger.fn = Logger.prototype = {
 Logger.fn.init.prototype = Logger.fn;
 $S.extendObject(Logger);
 Logger.extend({
-    log: function(text, callback) {
+    log: function(text, callback, isAddDate) {
+        if ($S.isBooleanTrue(isAddDate)) {
+            text = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/") + " " + text;
+        }
         if (isEnableLoging) {
             FS.appendTextFile(fileDir + logFilename, text, function(status, textData) {
                 console.log(textData);
@@ -58,11 +61,11 @@ Logger.extend({
             $S.callMethodV2(callback, false, text);
         }
     },
-    logV2: function(obj, callback) {
+    logV2: function(obj, callback, isAddDate) {
         if ($S.isObject(obj) || $S.isArray(obj)) {
-            this.log(JSON.stringify(obj), callback);
+            this.log(JSON.stringify(obj), callback, isAddDate);
         } else {
-            this.log(obj, callback);
+            this.log(obj, callback, isAddDate);
         }
     }
 });

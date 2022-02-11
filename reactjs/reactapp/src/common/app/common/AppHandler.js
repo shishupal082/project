@@ -353,6 +353,43 @@ AppHandler.extend({
         }
         return rows;
     },
+    _parseTcpResponse: function(tcpResponse, defaultResponse) {
+        if (!$S.isStringV2(tcpResponse)) {
+            return defaultResponse;
+        }
+        var rArray = tcpResponse.split("|");
+        var temp = [];
+        for (var i=2; i<rArray.length-1; i++) {
+            temp.push(rArray[i]);
+        }
+        return temp;
+    },
+    ParseTcpResponseString: function(tcpResponse, defaultResponse) {
+        if (!$S.isStringV2(tcpResponse)) {
+            return defaultResponse;
+        }
+        var temp = this._parseTcpResponse(tcpResponse, defaultResponse);
+        if ($S.isArray(temp)) {
+            return temp.join("");
+        }
+        return defaultResponse;
+    },
+    ParseTcpResponseJson: function(tcpResponse, defaultResponse) {
+        if (!$S.isStringV2(tcpResponse)) {
+            return defaultResponse;
+        }
+        var temp = this._parseTcpResponse(tcpResponse, defaultResponse);
+        var response = defaultResponse;
+        if ($S.isArray(temp)) {
+            temp = temp.join("");
+            try {
+                response = JSON.parse(temp);
+            } catch(e) {
+                console.log("Error in parsing json.");
+            }
+        }
+        return response;
+    },
     ParseCSVData: function(dataStr) {
         return this.ParseTextData(dataStr, ",", false, true, null);
     },

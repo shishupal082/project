@@ -1,6 +1,7 @@
 var $S = require("../../../static/js/stack.js");
 var ConvertExcelToJson = require("../../excel/ConvertExcelToJson.js");
 var Logger = require("../../static/logger-v2.js");
+var NmsService = require("../../nms/nms_service.js");
 
 ConvertExcelToJson.readConfigData("./excel/config.json");
 
@@ -12,7 +13,8 @@ var FinalResponse = {
     endOfResult: "11111",
 };
 var appIdMappingFunction = {
-    "001": ConvertExcelToJson.convert
+    "001": ConvertExcelToJson.convert,
+    "002": NmsService.getTcpResponse
 };
 var UdpHandler = function(config) {
     return new UDP.fn.init(config);

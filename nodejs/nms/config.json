@@ -1,0 +1,36 @@
+{
+    "hostList-1": [
+        {
+            "hostname": "127.0.0.1",
+            "delayInSec": 20
+        }
+    ],
+    "hostList": [
+        {
+            "hostname": "127.0.0.1",
+            "delayInSec": 0
+        },
+        {
+            "hostname": "192.168.43.112",
+            "delayInSec": -1
+        },
+        {
+            "hostname": "192.168.43.109",
+            "delayInSec": 20
+        },
+        {
+            "hostname": "192.168.3.109",
+            "delayInSec": 20
+        },
+        {
+            "hostname": "192.168.3.1090",
+            "delayInSec": "20"
+        }
+    ],
+    "dbConfig": {
+        "hostname": "localhost",
+        "username": "mysqljs",
+        "password": "mysqljs",
+        "database": "ftpapp"
+    }
+}
