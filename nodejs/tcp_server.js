@@ -20,12 +20,12 @@ function onReceive(sock, msg, ip, port, length) {
                 if (responseString.length < 512) {
                     logStr = responseString;
                 } else {
-                    logStr = "Length: " + responseString;
+                    logStr = "Length: " + responseString.length;
                 }
             } else {
                 logStr = responseString;
             }
-            Logger.log(port + ": Response: " + responseString, function(status) {
+            Logger.log(port + ": Response: " + logStr, function(status) {
                 TCP.sendData(sock, responseString, port, ip);
                 Logger.log(port + ": " + lineSepratorString);
                 setTimeout(function(socket) {
