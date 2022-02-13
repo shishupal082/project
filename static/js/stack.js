@@ -2703,6 +2703,87 @@ Stack.extend({
         }
         return result;
     },
+    tokenizeFileData: function(fileResponse, wordBreak) {
+        var result = [];
+        if (Stack.isArray(fileResponse) && Stack.isStringV2(wordBreak)) {
+            for (var i=0; i<fileResponse.length; i++) {
+                if (Stack.isStringV2(fileResponse[i])) {
+                    result.push(fileResponse[i].split(wordBreak));
+                }
+            }
+        }
+        return result;
+    },
+    _generateTableRow: function(rowData, rowIndex) {
+        var result = {}, i, j, temp;
+        if (Stack.isArray(rowData) && Stack.isArray(rowIndex)) {
+            for (i = 0; i < rowData.length; i++) {
+                if (i < rowIndex.length-1) {
+                    result[rowIndex[i]] = rowData[i].trim();
+                } else {
+                    temp = [];
+                    for(j=i; j<rowData.length; j++) {
+                        if (Stack.isString(rowData[j]) && rowData[j].length > 0) {
+                            temp.push(rowData[j].trim());
+                        }
+                    }
+                    i = j;
+                    result[rowIndex[rowIndex.length-1]] = temp.join(",");
+                }
+            }
+        }
+        return result;
+    },
+    convertArrayToTable: function(arrayData, dataIndex) {
+        var maxLength = 0, i, j;
+        if (!Stack.isArray(arrayData)) {
+            arrayData = [];
+        }
+        for(i=0; i<arrayData.length; i++) {
+            if (Stack.isArray(arrayData[i])) {
+                if (maxLength < arrayData[i].length) {
+                    maxLength = arrayData[i].length;
+                }
+            }
+        }
+        for(i=0; i<arrayData.length; i++) {
+            if (Stack.isArray(arrayData[i])) {
+                for(j = arrayData[i].length; j<maxLength; j++) {
+                    arrayData[i].push("");
+                }
+            }
+        }
+        if (!Stack.isArray(dataIndex) || dataIndex.length === 0) {
+            dataIndex = [];
+            for (i=0; i<maxLength; i++) {
+                dataIndex.push(i.toString());
+            }
+        }
+        var result = [];
+        for(i=0; i<arrayData.length; i++) {
+            result.push(this._generateTableRow(arrayData[i], dataIndex));
+        }
+        return result;
+    },
+    convertFileDataToTable: function(fileData, dbDataApiObj) {
+        var temp = Stack.readTextData(fileData);
+        if (Stack.isObject(dbDataApiObj) && Stack.isStringV2(dbDataApiObj["singleLineComment"])) {
+            temp = Stack.removeSingleLineComment(temp, dbDataApiObj["singleLineComment"]);
+        }
+        temp = Stack.removeEmpty(temp);
+        if (Stack.isObject(dbDataApiObj)) {
+            if (Stack.isStringV2(dbDataApiObj["wordBreak"])) {
+                temp = Stack.tokenizeFileData(temp, dbDataApiObj["wordBreak"]);
+            }
+            if (Stack.isArray(dbDataApiObj["dataIndex"])) {
+                temp = Stack.convertArrayToTable(temp, dbDataApiObj["dataIndex"]);
+            }
+        }
+        if (!Stack.isArray(dbDataApiObj["tableData"])) {
+            dbDataApiObj["tableData"] = [];
+        }
+        dbDataApiObj["tableData"].push(temp);
+    }
 });
 /*End of direct access of methods*/
 if (Platform === "Window") {

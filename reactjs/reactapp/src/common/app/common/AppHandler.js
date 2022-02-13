@@ -525,26 +525,6 @@ AppHandler.extend({
     }
 });
 AppHandler.extend({
-    _generateTableRow: function(rowData, rowIndex) {
-        var result = {}, i, j, temp;
-        if ($S.isArray(rowData) && $S.isArray(rowIndex)) {
-            for (i = 0; i < rowData.length; i++) {
-                if (i < rowIndex.length-1) {
-                    result[rowIndex[i]] = rowData[i];
-                } else {
-                    temp = [];
-                    for(j=i; j<rowData.length; j++) {
-                        if ($S.isString(rowData[j]) && rowData[j].length > 0) {
-                            temp.push(rowData[j]);
-                        }
-                    }
-                    i = j;
-                    result[rowIndex[rowIndex.length-1]] = temp.join(",");
-                }
-            }
-        }
-        return result;
-    },
     CombineTableData: function(dbViewData, combineTableData) {
         if (!$S.isObject(dbViewData)) {
             return false;
@@ -757,35 +737,7 @@ AppHandler.extend({
         return request;
     },
     ConvertJsonToTable: function(jsonData, dataIndex) {
-        var maxLength = 0, i, j;
-        if (!$S.isArray(jsonData)) {
-            jsonData = [];
-        }
-        for(i=0; i<jsonData.length; i++) {
-            if ($S.isArray(jsonData[i])) {
-                if (maxLength < jsonData[i].length) {
-                    maxLength = jsonData[i].length;
-                }
-            }
-        }
-        for(i=0; i<jsonData.length; i++) {
-            if ($S.isArray(jsonData[i])) {
-                for(j = jsonData[i].length; j<maxLength; j++) {
-                    jsonData[i].push("");
-                }
-            }
-        }
-        if (!$S.isArray(dataIndex) || dataIndex.length === 0) {
-            dataIndex = [];
-            for (i=0; i<maxLength; i++) {
-                dataIndex.push(i.toString());
-            }
-        }
-        var result = [];
-        for(i=0; i<jsonData.length; i++) {
-            result.push(this._generateTableRow(jsonData[i], dataIndex));
-        }
-        return result;
+        return $S.convertArrayToTable(jsonData, dataIndex);
     },
     _getProperTableData: function(tableData, dataIndex) {
         var tableRow;

@@ -1,6 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
+const $S = require("../../static/js/stack.js");
+
+
 (function(fs, path) {
 var FS = function(config) {
     return new FS.fn.init(config);
@@ -121,6 +124,11 @@ FS.extend({
             }
         });
     },
+    readTextFileV2: function(filepath, defaultData, dataObj, callback) {
+        this.readTextFile(filepath, defaultData, function(data) {
+            $S.callMethodV2(callback, data, dataObj);
+        });
+    },
     appendTextFile: function(filepath, textData, callback) {
         fs.appendFile(filepath, "\n" + textData, "utf8", function(err) {
             if (err) throw err;
@@ -138,6 +146,38 @@ FS.extend({
     }
 });
 
+FS.extend({
+    _readData: function(initialCount, dbDataApis, callback) {
+        if (!$S.isNumber(initialCount) || !$S.isArray(dbDataApis)) {
+            $S.callMethod(callback);
+            return;
+        }
+        var temp;
+        var self = this;
+        for (var i=initialCount; i<dbDataApis.length; i++) {
+            initialCount++;
+            if ($S.isObject(dbDataApis[i]) && $S.isArray(dbDataApis[i]["apis"]) && $S.isStringV2(dbDataApis[i]["tableName"])) {
+                if ($S.isStringV2(dbDataApis[i]["apis"][0])) {
+                    this.readTextFileV2(dbDataApis[i]["apis"][0], "", dbDataApis[i], function(result, dataObj) {
+                        $S.convertFileDataToTable(result, dataObj);
+                        self._readData(initialCount, dbDataApis, callback);
+                    });
+                    return;
+                }
+            }
+        }
+        $S.callMethod(callback);
+    },
+    readCsvData: function(dbDataApis, callback) {
+        if ($S.isArray(dbDataApis)) {
+            this._readData(0, dbDataApis, function() {
+                $S.callMethod(callback);
+            });
+        } else {
+            $S.callMethod(callback);
+        }
+    }
+});
 module.exports = FS;
 
 })(fs, path);

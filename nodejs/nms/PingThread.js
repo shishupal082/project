@@ -45,9 +45,14 @@ PingThread.extend({
     },
     savePingResult: function(deviceInfo, hostname, status) {
         var did = "1";
+        if ($S.isObject(deviceInfo) && $S.isStringV2(deviceInfo["did"])) {
+            did = deviceInfo["did"];
+        } else {
+            return;
+        }
         var dip = hostname;
         var ping_status = status;
-        var response_id = "2";
+        var response_id = $S.generateRandomUUID();
         var q = "INSERT INTO ping_status (did, dip, status, response_id) values('"+did+"', '"+dip+"', '"+ping_status + "', '"+response_id+"')";
         database.query(q);
     },
@@ -72,20 +77,37 @@ PingThread.extend({
     start: function(configPath) {
         var self = this;
         var interval;
+        var dbDataApis;
+        var result;
         this.readConfigData(configPath, function() {
-            if ($S.isObject(ConfigData) && $S.isArray(ConfigData["hostList"])) {
-                for (var i=0; i<ConfigData["hostList"].length; i++) {
-                    interval = 0;
-                    if ($S.isObject(ConfigData["hostList"][i]) && $S.isStringV2(ConfigData["hostList"][i]["hostname"])) {
-                        if ($S.isNumber(ConfigData["hostList"][i]["delayInSec"]) && ConfigData["hostList"][i]["delayInSec"] > 0) {
-                            interval = ConfigData["hostList"][i]["delayInSec"];
+            if ($S.isObject(ConfigData)) {
+                dbDataApis = ConfigData["dbDataApis"];
+                FS.readCsvData(dbDataApis, function() {
+                    if ($S.isArray(dbDataApis)) {
+                        for (var i=0; i<dbDataApis.length; i++) {
+                            if ($S.isObject(dbDataApis[i]) && $S.isArray(dbDataApis[i]["tableData"])) {
+                                if (dbDataApis[i]["tableData"].length === 1 && $S.isArray(dbDataApis[i]["tableData"][0])) {
+                                    result = dbDataApis[i]["tableData"][0];
+                                    for (var j=0; j<result.length; j++) {
+                                        interval = 0;
+                                        if ($S.isObject(result[j]) && $S.isStringV2(result[j]["dip"])) {
+                                            if ($S.isNumeric(result[j]["delayInSec"])) {
+                                                interval = result[j]["delayInSec"] * 1;
+                                                if (interval < 0) {
+                                                    interval = 0;
+                                                }
+                                            }
+                                            self.pingRequest(result[j], result[j]["dip"], interval, function(deviceInfo, dip, status) {
+                                                Logger.log(dip + ":" + status, null, true);
+                                                self.savePingResult(deviceInfo, dip, status);
+                                            });
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        self.pingRequest(ConfigData["hostList"][i], ConfigData["hostList"][i]["hostname"], interval, function(deviceInfo, hostname, status) {
-                            Logger.log(hostname + ":" + status, null, true);
-                            self.savePingResult(deviceInfo, hostname, status);
-                        });
                     }
-                }
+                });
             }
         });
     }
