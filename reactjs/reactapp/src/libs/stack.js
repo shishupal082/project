@@ -414,7 +414,61 @@ var DT = (function() {
         }
         return null;
     };
-
+    DateTime.prototype.getDateRange = function(timeRange) {
+        var finalTimeRange = [];
+        if (!Stack.isStringV2(timeRange)) {
+            return finalTimeRange;
+        }
+        var today = new Date(), startDay;
+        var startTime = "", endTime = "";
+        var count = 0, temp, temp2;
+        var searchResult = Stack.searchItems(["last-[0-9]{1,3}-days"], [timeRange], true);
+        if (Stack.isArray(searchResult) && searchResult.length === 1) {
+            temp = timeRange.split("-");
+            endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
+            if (temp.length === 3) {
+                count = temp[1] * 1;
+                startDay = this.addDate(today, -1 * count);
+                startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
+            }
+        } else {
+            searchResult = Stack.searchItems(["last-[0-9]{1,3}-months"], [timeRange], true);
+            if (Stack.isArray(searchResult) && searchResult.length === 1) {
+                temp = timeRange.split("-");
+                endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
+                if (temp.length === 3) {
+                    count = temp[1] * 1;
+                    startDay = today;
+                    startDay.setDate(1);
+                    for(var i=0; i<count; i++) {
+                        startDay = this.addDate(startDay, -1);
+                        startDay.setDate(1);
+                    }
+                    startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
+                }
+            } else {
+                searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
+                if (Stack.isArray(searchResult) && searchResult.length === 1) {
+                    temp = timeRange.split(",");
+                    if (temp.length === 2) {
+                        temp2 = this.getDateObj(temp[0]);
+                        if (temp2 !== null) {
+                            temp2 = this.getDateObj(temp[1]);
+                            if (temp2 !== null) {
+                                startTime = temp[0];
+                                endTime = temp[1];
+                            }
+                        }
+                    }
+                } else {
+                    console.log("Invalid timeRange pattern: " + timeRange);
+                }
+            }
+        }
+        finalTimeRange.push(startTime);
+        finalTimeRange.push(endTime);
+        return finalTimeRange;
+    }
     return DateTime;
 })();
 var LocalStorage = (function(){

@@ -27,13 +27,13 @@ function onReceive(sock, msg, ip, port, length) {
             }
             Logger.log(port + ": Response: " + logStr, function(status) {
                 TCP.sendData(sock, responseString, port, ip);
-                Logger.log(port + ": " + lineSepratorString);
+                Logger.log(port + ": " + lineSepratorString, null, true);
                 setTimeout(function(socket) {
                     TCP.close(sock, connectionList);
                 }, 3000, socket);
-            });
+            }, true);
         });
-    });
+    }, true);
 }
 
 function onClose(sock, ip, port) {
@@ -43,13 +43,13 @@ function onClose(sock, ip, port) {
         }
         return true;
     });
-    Logger.log(port + ": Connection closed: " + ip + ":" + port);
+    Logger.log(port + ": Connection closed: " + ip + ":" + port, null, true);
 }
 
 SERVER.on("connection", function(sock) {
     TCP.register(sock, onReceive, onClose, function(remoteAddress, remotePort) {
         connectionList.push(remoteAddress+":"+remotePort);
-        Logger.log(remotePort + ": CONNECTED: " + remoteAddress + ":" + remotePort);
+        Logger.log(remotePort + ": CONNECTED: " + remoteAddress + ":" + remotePort, null, true);
     });
 });
 
@@ -61,8 +61,8 @@ Logger("C:/java/server_tcp_port" + localPort + "/").setLogDir().enableLoging(fun
     }
     SERVER.listen(localPort, HOST, () => {
         Logger.log("TCP Server started on port: " + localPort, function(status) {
-            Logger.log(lineSepratorString);
-        });
+            Logger.log(lineSepratorString, null, true);
+        }, true);
     });
 });
 

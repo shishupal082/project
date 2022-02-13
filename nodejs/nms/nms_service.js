@@ -25,7 +25,7 @@ NmsService.fn.init.prototype = NmsService.fn;
 $S.extendObject(NmsService);
 NmsService.extend({
     parseRequest: function(request) {
-        var result = {"appId": "", "workId": "", "filterParameter": "", "limitParam": ""};
+        var result = {"appId": "", "workId": "", "timeRange": "", "filterParameter": "", "limitParam": "", "uiFilterParam": ""};
         if (!$S.isStringV2(request)) {
             return result;
         }
@@ -37,13 +37,16 @@ NmsService.extend({
             result["workId"] = msgArr[1];
         }
         if (msgArr.length > 2) {
-            result["filterParameter"] = msgArr[2];
+            result["timeRange"] = msgArr[2];
         }
         if (msgArr.length > 3) {
-            result["limitParam"] = msgArr[3];
+            result["filterParameter"] = msgArr[3];
         }
         if (msgArr.length > 4) {
-            result["uiFilterParam"] = msgArr[4];
+            result["limitParam"] = msgArr[4];
+        }
+        if (msgArr.length > 5) {
+            result["uiFilterParam"] = msgArr[5];
         }
         return result;
     }
@@ -79,10 +82,36 @@ NmsService.extend({
             }
         }
     },
-    getDevicePingStatus: function(filterParameter, limitParam, uiFilterParam, callback) {
+    _getTimeRangeParameter: function(timeRange) {
+        var finalTimeRange = dt.getDateRange(timeRange);
+        var finalStr = "", startTime = "", endTime = "";
+        if ($S.isArray(finalTimeRange) && finalTimeRange.length === 2) {
+            startTime = finalTimeRange[0];
+            endTime = finalTimeRange[1];
+        }
+        if ($S.isStringV2(startTime)) {
+            finalStr += " and timestamp >= '" + startTime + "'";
+        }
+        if ($S.isStringV2(endTime)) {
+            finalStr += " and timestamp < '" + endTime + "'";
+        }
+        return finalStr;
+    },
+    getDevicePingStatus: function(requestParam, callback) {
         var finalResult = [];
         var self = this;
         var tableFilterParam = "";
+
+        if (!$S.isObject(requestParam)) {
+            $S.callMethodV1(callback, finalResult);
+            return;
+        }
+
+        var timeRange = requestParam["timeRange"];
+        var filterParameter = requestParam["filterParameter"];
+        var limitParam = requestParam["limitParam"];
+        var uiFilterParam = requestParam["uiFilterParam"];
+
         if (!$S.isNumeric(limitParam)) {
             limitParam = "1000";
         } else if (limitParam*1 > 10000) {
@@ -94,7 +123,8 @@ NmsService.extend({
         if ($S.isStringV2(uiFilterParam)) {
             tableFilterParam += " and " + uiFilterParam;
         }
-        var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam +" order by s_no desc limit " + limitParam + ";"
+        var timeParameter = this._getTimeRangeParameter(timeRange);
+        var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam + timeParameter + " order by s_no desc limit " + limitParam + ";"
         Logger.log(q, function() {
             database.query(q, function (err, result, fields) {
                 if (err) {
@@ -108,10 +138,10 @@ NmsService.extend({
             });
         }, true);
     },
-    getData: function(configPath, filterParameter, limitParam, uiFilterParam, callback) {
+    getData: function(configPath, requestParam, callback) {
         var self = this;
         this.readConfigData(configPath, function() {
-            self.getDevicePingStatus(filterParameter, limitParam, uiFilterParam, function(result) {
+            self.getDevicePingStatus(requestParam, function(result) {
                 DB.closeDbConnection(database);
                 $S.callMethodV1(callback, JSON.stringify(result));
             });
@@ -124,11 +154,8 @@ NmsService.extend({
             return;
         }
         var requestParam = NmsService.parseRequest(request["msg"]);
-        var filterParameter = requestParam.filterParameter;
-        var limitParam = requestParam.limitParam;
-        var uiFilterParam = requestParam.uiFilterParam;
         Logger.log("Request: " + JSON.stringify(request), function() {
-            NmsService.getData(configPath, filterParameter, limitParam, uiFilterParam, function(result) {
+            NmsService.getData(configPath, requestParam, function(result) {
                 $S.callMethodV1(callback, result);
             });
         }, true);

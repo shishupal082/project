@@ -68,14 +68,14 @@ UdpHandler.extend({
                         response = result;
                         self.returResponse(FinalResponse.statusValidRequest, response, callback);
                     });
-                });
+                }, true);
             } else {
                 Logger.log("Invalid appId: " + request["appId"], function(status) {
                     self.returResponse(FinalResponse.statusInvalidAppId, null, callback);
-                });
+                }, true);
             }
         } else {
-            Logger.log("Invalid request: " + msg);
+            Logger.log("Invalid request: " + msg, null, true);
             status = FinalResponse.statusInvalidAppId;
         }
         if (returnResponseStatus) {
