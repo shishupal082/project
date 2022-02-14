@@ -21,12 +21,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App NMS</title>
+    <title>React App Attendance</title>
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/nms/css/nms-style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/attendance/static/css/attendance-style.css"/>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
@@ -56,25 +56,60 @@
 <script type="text/javascript">
 
 var GLOBAL = {
-    baseApi: "http://localhost:8096",
+    baseApi: "http://localhost:8080",
     basepathname: "",
-    appControlDataPath: "/nms/json/",
+    relatedUsersDataApi: "/api/get_related_users_data_v2",
+    appControlDataPath: "/secondAppData/attendance/json/meta-data/",
+    addTextFilenamePattern: "field_report_/YYYY/-/MMM/.csv",
     forceLogin: false
 };
 
 
+/*For project directory*/
+
+// GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
+// GLOBAL.appControlDataPath = "/pvt/app-data/attendance/";
+
+/*For project directory end*/
+
 GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
-GLOBAL.appControlDataPath = "/nms/json/";
+GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
 
-GLOBAL.appControlApi = "/nms/json/appControlData.json";
-GLOBAL.validAppControl = ["appControlTeam01-na"];
+GLOBAL.appControlApi = "/roleAttendanceUser/json/attendance/appControlData.json";
 
+GLOBAL.validAppControl = [
+    "appControlDataTeam01","appControlDataTeam02",
+    "appControlDataTeam03","appControlDataTeam04",
+    "appControlDataTeam05","appControlDataTeam06","appControlDataTeam07",
+    "appControlTeam11", "appControlTeam12",
+    "appControlTeam13", "appControlTeam14"];
+
+// GLOBAL.linkText = {
+//     "add_field_report": "Add Entry",
+//     "dbview": "Entry By Date Filter",
+//     "dbview_summary": "DBView Summary",
+//     "custom_dbview": "Entry By Date"
+// };
+
+
+// GLOBAL.appControlApi = "/pvt/app-data/assetsv2/appControlData.json";
+// GLOBAL.appControlApi = "/secondAppData/attendance/json/meta-data-ta/appControlData.json";
+// GLOBAL.appControlApi = "/pvt/app-data/attendance/appControlTeam14.json";
 GLOBAL.headingJson = document.getElementById("headingJson").value;
 GLOBAL.projectHeading = "App Heading";
+// GLOBAL.enabledPages = ["entry", "update", "ta", "summary", "dbview", "dbview_summary", "custom_dbview", "add_field_report"];
+// GLOBAL.redirectPages = [
+//     {
+//         "name": "upload_file",
+//         "toText": "Upload File",
+//         "toUrl": "/upload_file"
+//     }
+// ];
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
 window.GLOBAL = GLOBAL;
 </script>
 </body>
+
 </html>

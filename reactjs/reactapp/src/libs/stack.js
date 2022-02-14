@@ -447,21 +447,33 @@ var DT = (function() {
                     startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
                 }
             } else {
-                searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
+                searchResult = Stack.searchItems(["from-[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
                 if (Stack.isArray(searchResult) && searchResult.length === 1) {
-                    temp = timeRange.split(",");
+                    endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
+                    temp = timeRange.split("from-");
                     if (temp.length === 2) {
-                        temp2 = this.getDateObj(temp[0]);
+                        temp2 = this.getDateObj(temp[1]);
                         if (temp2 !== null) {
-                            temp2 = this.getDateObj(temp[1]);
-                            if (temp2 !== null) {
-                                startTime = temp[0];
-                                endTime = temp[1];
-                            }
+                            startTime = temp[1];
                         }
                     }
                 } else {
-                    console.log("Invalid timeRange pattern: " + timeRange);
+                    searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
+                    if (Stack.isArray(searchResult) && searchResult.length === 1) {
+                        temp = timeRange.split(",");
+                        if (temp.length === 2) {
+                            temp2 = this.getDateObj(temp[0]);
+                            if (temp2 !== null) {
+                                temp2 = this.getDateObj(temp[1]);
+                                if (temp2 !== null) {
+                                    startTime = temp[0];
+                                    endTime = temp[1];
+                                }
+                            }
+                        }
+                    } else {
+                        console.log("Invalid timeRange pattern: " + timeRange);
+                    }
                 }
             }
         }

@@ -258,10 +258,21 @@ AppHandler.extend({
     GetDataParameterFromDate: function(dateRange) {
         var allDate, tempAllDate, arrangedDate, startLimit, endLimit;
         var i;
-        if ($S.isArray(dateRange) && dateRange.length === 2) {
-            allDate = this.GenerateDateBetween2Date(dateRange[0], dateRange[1]);
-            startLimit = dateRange[0];
-            endLimit = dateRange[1];
+        var startTime, endTime;
+        if ($S.isArray(dateRange)) {
+            if (dateRange.length === 2) {
+                startTime = dateRange[0];
+                endTime = dateRange[1];
+            } else if (dateRange.length === 1) {
+                dateRange = DT.getDateRange(dateRange[0]);
+                if ($S.isArray(dateRange) && dateRange.length === 2) {
+                    startTime = dateRange[0];
+                    endTime = dateRange[1];
+                }
+            }
+            allDate = this.GenerateDateBetween2Date(startTime, endTime);
+            startLimit = startTime;
+            endLimit = endTime;
             tempAllDate = allDate.map(function(el, index, arr) {
                 return el.dateStr;
             });
