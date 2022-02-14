@@ -51,7 +51,7 @@ ManageText.extend({
         var combineTableData = DataHandler.getAppData("combineTableData", {});
         var defaultSorting = DataHandler.getAppData("defaultSorting", []);
         var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
-        AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, function(database) {
+        AppHandler.LoadTableData(url, tableFilterParam, null, dbTableDataIndex, function(database) {
             AppHandler.CombineTableData(database, combineTableData);
             DBViewDataHandler.SortTableData(database, defaultSorting);
             if ($S.isObject(database)) {

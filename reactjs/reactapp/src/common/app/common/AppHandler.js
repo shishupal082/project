@@ -963,7 +963,49 @@ AppHandler.extend({
             $S.callMethod(callback);
         }, null, Api.getAjaxApiCallMethod());
     },
-    LoadTableData: function(url, tableFilterParam, dbTableDataIndex, callback) {
+    _getTimeDependentFilenamePattern: function(dynamicFilenamesFilterParam) {
+        if (!$S.isObject(dynamicFilenamesFilterParam)) {
+            return "";
+        }
+        var dateRange;
+        var temp = [], temp2 = [], temp3, dateObj;
+        if ($S.isStringV2(dynamicFilenamesFilterParam["patternSeprator"])) {
+            if ($S.isStringV2(dynamicFilenamesFilterParam["pattern"])) {
+                if ($S.isStringV2(dynamicFilenamesFilterParam["dateRange"])) {
+                    dateRange = DT.getDateRange(dynamicFilenamesFilterParam["dateRange"]);
+                    if ($S.isArray(dateRange) && dateRange.length === 2) {
+                        dateRange = this.GetDataParameterFromDate(dateRange);
+                        if ($S.isObject(dateRange) && $S.isArray(dateRange["all"]) && dateRange["all"].length === 1) {
+                            if ($S.isObject(dateRange["all"][0]) && $S.isArray(dateRange["all"][0]["allDate"])) {
+                                temp = dateRange["all"][0]["allDate"].map(function(el, arr, i) {
+                                    if ($S.isObject(el) && $S.isStringV2(el["dateStr"])) {
+                                        return el["dateStr"];
+                                    }
+                                    return "";
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(var i=0; i<temp.length; i++) {
+            if ($S.isStringV2(temp[i])) {
+                dateObj = DT.getDateObj(temp[i]);
+                if (dateObj !== null) {
+                    temp3 = DT.formateDateTime(dynamicFilenamesFilterParam["pattern"], dynamicFilenamesFilterParam["patternSeprator"], dateObj);
+                    if (temp2.indexOf(temp3) < 0) {
+                        temp2.push(temp3);
+                    }
+                }
+            }
+        }
+        if (temp2.length > 0) {
+            return "(" + temp2.join("|") + ")";
+        }
+        return "";
+    },
+    LoadTableData: function(url, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, callback) {
         if (!$S.isStringV2(url)) {
             return $S.callMethod(callback);
         }
@@ -971,6 +1013,21 @@ AppHandler.extend({
             tableFilterParam = {};
         }
         var queryParam = "";
+        var filenames = "";
+        var filenamePattern = "";
+        if ($S.isObject(dynamicFilenamesFilterParam)) {
+            filenamePattern = this._getTimeDependentFilenamePattern(dynamicFilenamesFilterParam);
+            if ($S.isStringV2(filenamePattern)) {
+                if ($S.isStringV2(dynamicFilenamesFilterParam["preFileName"])) {
+                    filenames += dynamicFilenamesFilterParam["preFileName"];
+                }
+                filenames += filenamePattern;
+                if ($S.isStringV2(dynamicFilenamesFilterParam["postFileName"])) {
+                    filenames += dynamicFilenamesFilterParam["postFileName"];
+                }
+                tableFilterParam["filenames"] = filenames;
+            }
+        }
         for(var key in tableFilterParam) {
             if ($S.isStringV2(queryParam)) {
                 queryParam += "&";

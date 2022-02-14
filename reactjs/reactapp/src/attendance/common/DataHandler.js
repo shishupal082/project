@@ -396,12 +396,13 @@ DataHandler.extend({
         var combineTableData = this.getAppData("combineTableData", "");
         var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", null);
         var tableFilterParam = this.getAppData("tableFilterParam", {});
+        var dynamicFilenamesFilterParam = this.getAppData("dynamicFilenamesFilterParam", {});
         if (tableDataLoadStatus === "completed") {
             $S.callMethod(callback);
         } else if (tableDataLoadStatus === "in_progress") {
             return;
         } else if ($S.isStringV2(getTableDataApiNameKey)) {
-            DataHandlerV3.loadTableData(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
+            DataHandlerV3.loadTableData(getTableDataApiNameKey, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, combineTableData, function() {
                 $S.callMethod(callback);
             });
         } else {

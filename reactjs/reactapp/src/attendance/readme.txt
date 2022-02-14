@@ -142,6 +142,13 @@ Mode of dataTable reading
 ]
 2)
 "getTableDataApiNameKey": "getTableData", // "getTableDataV2"
+"dynamicFilenamesFilterParam": {
+    "preFileName": "field_report_(sfr_)?",
+    "pattern": "YYYY/-/MMM",
+    "patternSeprator": "/",
+    "dateRange": "last-4-months",
+    "postFileName": ".csv"
+},
 "tableFilterParam": {
     "filenames": "(field_report_(2021-(NOV|DEC))|(2022-(JAN|FEB)))|field_report_sfr_((2021-(NOV|DEC))|(2022-(JAN|FEB))).csv",
     "table_names": "(field_report|field_report_sfr)"
@@ -156,6 +163,7 @@ Mode of dataTable reading
         "destinationTableName": "field_report"
     }
 ]
+Here tableFilterParam.filenames will be replaced from {dynamicFilenamesFilterParam}
 3)
 "tcpConfig": {
     "info": "appId:002, wordId:NMS_Service",

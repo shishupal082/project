@@ -180,7 +180,7 @@ ApiHandler.extend({
                 DataHandler.setData("dbTableDataLoadStatus", "in-progress");
                 var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
                 var dbViewData;
-                AppHandler.LoadTableData(url, tableFilterParam, dbTableDataIndex, function(database) {
+                AppHandler.LoadTableData(url, tableFilterParam, null, dbTableDataIndex, function(database) {
                     DataHandler.setData("dbTableDataLoadStatus", "completed");
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);
