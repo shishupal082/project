@@ -1,7 +1,7 @@
 //gapi : Get api
 const https = require('https');
 const http = require('http')
-const $S = require("../../../static/js/stack.js");
+const $S = require("../../libs/stack.js");
 const Logger = require("../logger.js");
 const AppConstant = require("../AppConstant.js");
 

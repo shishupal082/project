@@ -1,7 +1,7 @@
-var $S = require("../../static/js/stack.js");
-var Logger = require("../static/logger-v2.js");
-var FS = require("../static/fsmodule.js");
-var DB = require("../static/db.js");
+var $S = require("../libs/stack.js");
+var Logger = require("../common/logger-v2.js");
+var FS = require("../common/fsmodule.js");
+var DB = require("../common/db.js");
 var exec = require('child_process').exec;
 var mysql = require('mysql');
 

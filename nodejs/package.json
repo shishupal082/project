@@ -2,9 +2,9 @@
   "name": "nodejs",
   "version": "1.0.1",
   "description": "Nodejs project",
-  "main": "index.js",
+  "main": "src/tcp_server.js",
   "scripts": {
-    "start": "node indexv2.js"
+    "start": "node src/tcp_server.js"
   },
   "author": "",
   "license": "ISC",

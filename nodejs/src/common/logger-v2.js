@@ -1,4 +1,4 @@
-const $S = require("../../static/js/stack.js");
+const $S = require("../libs/stack.js");
 const FS = require("./fsmodule.js");
 
 

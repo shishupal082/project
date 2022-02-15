@@ -1,4 +1,4 @@
-var $S = require("../../static/js/stack.js");
+var $S = require("../libs/stack.js");
 
 (function() {
 var TCP = function(config) {

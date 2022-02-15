@@ -1,4 +1,4 @@
-var ConvertExcelToJson = require("../ConvertExcelToJson.js");
+var ConvertExcelToJson = require("../../src/excel/ConvertExcelToJson.js");
 
 function _convertExcelToJson(requestData) {
     for (var i=0; i<requestData.length; i++) {

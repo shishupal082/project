@@ -1,8 +1,9 @@
 const fs = require("fs");
 const path = require("path");
 
-const $S = require("../../static/js/stack.js");
+const $S = require("../libs/stack.js");
 
+var arg = process.argv;
 
 (function(fs, path) {
 var FS = function(config) {
@@ -176,6 +177,16 @@ FS.extend({
         } else {
             $S.callMethod(callback);
         }
+    },
+    readArgs: function() {
+        var args = [];
+        if ($S.isArray(arg)) {
+            for (var i=2; i<arg.length; i++) {
+                args.push(arg[i]);
+            }
+        }
+        console.log(args);
+        return args;
     }
 });
 module.exports = FS;

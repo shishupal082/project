@@ -1,8 +1,8 @@
-const $S = require("../../static/js/stack.js");
-const FS = require("../static/fsmodule.js");
-const Logger = require("../static/logger-v2.js");
+const $S = require("../libs/stack.js");
+const FS = require("../common/fsmodule.js");
+const Logger = require("../common/logger-v2.js");
+const generateFile = require("../common/generateFile.js");
 const Excel = require("./read_excel.js");
-const generateFile = require("../mlk/src/js/generateFile.js");
 
 (function() {
 var ConfigData = {};
@@ -26,14 +26,14 @@ ConvertExcelToJson.extend({
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
-                    Logger.log("Config data read success.");
+                    Logger.log("Config data read success.", null, true);
                 } else {
-                    Logger.log("Invalid config data.");
+                    Logger.log("Invalid config data.", null, true);
                 }
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path.");
+            Logger.log("Invalid config path.", null, true);
             $S.callMethod(callback);
         }
     }

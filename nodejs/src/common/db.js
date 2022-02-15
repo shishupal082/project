@@ -1,5 +1,5 @@
-const $S = require("../../static/js/stack.js");
-const Logger = require("../static/logger-v2.js");
+const $S = require("../libs/stack.js");
+const Logger = require("./logger-v2.js");
 
 const mysql = require('mysql');
 

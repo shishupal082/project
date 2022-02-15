@@ -1,0 +1,6 @@
+{
+    "localPort": 8086,
+    "log_filepath": "C:/java/server_tcp_port8086/",
+    "excel_configpath": "./excel/config.json"
+}
+

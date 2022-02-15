@@ -1,7 +1,7 @@
-var $S = require("../../static/js/stack.js");
-var Logger = require("../static/logger-v2.js");
-var FS = require("../static/fsmodule.js");
-var DB = require("../static/db.js");
+var $S = require("../libs/stack.js");
+var Logger = require("../common/logger-v2.js");
+var FS = require("../common/fsmodule.js");
+var DB = require("../common/db.js");
 var exec = require('child_process').exec;
 
 (function() {
@@ -25,7 +25,7 @@ PingThread.extend({
     readConfigData: function(configFilePath, callback) {
         if ($S.isStringV2(configFilePath)) {
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
-                if ($S.isObject(jsonData)) {
+                if ($S.isObjectV2(jsonData)) {
                     ConfigData = jsonData;
                     DB.setDbParameter(jsonData["dbConfig"]);
                     Logger.log("Config data read success.", null, true);
@@ -34,7 +34,7 @@ PingThread.extend({
                         $S.callMethod(callback);
                     });
                 } else {
-                    Logger.log("Invalid config data.", null, true);
+                    Logger.log("Invalid config data: " + configFilePath, null, true);
                     $S.callMethod(callback);
                 }
             });
@@ -80,7 +80,7 @@ PingThread.extend({
         var dbDataApis;
         var result;
         this.readConfigData(configPath, function() {
-            if ($S.isObject(ConfigData)) {
+            if ($S.isObjectV2(ConfigData)) {
                 dbDataApis = ConfigData["dbDataApis"];
                 FS.readCsvData(dbDataApis, function() {
                     if ($S.isArray(dbDataApis)) {
@@ -88,6 +88,7 @@ PingThread.extend({
                             if ($S.isObject(dbDataApis[i]) && $S.isArray(dbDataApis[i]["tableData"])) {
                                 if (dbDataApis[i]["tableData"].length === 1 && $S.isArray(dbDataApis[i]["tableData"][0])) {
                                     result = dbDataApis[i]["tableData"][0];
+                                    Logger.log("Total HostList: " + result.length, null, true);
                                     for (var j=0; j<result.length; j++) {
                                         interval = 0;
                                         if ($S.isObject(result[j]) && $S.isStringV2(result[j]["dip"])) {
@@ -108,6 +109,9 @@ PingThread.extend({
                         }
                     }
                 });
+            } else {
+                DB.closeDbConnection(database);
+                Logger.log("Invalid config data.", null, true);
             }
         });
     }

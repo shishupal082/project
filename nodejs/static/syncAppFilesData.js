@@ -33,6 +33,7 @@ var syncData = {
         ],
         "destinationDir": [
             "../reactjs/reactapp/src/libs/",
+            "../nodejs/src/libs/",
             "../../ftp-application/FTP/src/main/resources/assets/static/js/"
         ]
     },

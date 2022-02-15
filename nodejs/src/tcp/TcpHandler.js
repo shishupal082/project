@@ -1,35 +1,33 @@
-var $S = require("../../../static/js/stack.js");
-var ConvertExcelToJson = require("../../excel/ConvertExcelToJson.js");
-var Logger = require("../../static/logger-v2.js");
-var NmsService = require("../../nms/nms_service.js");
-
-ConvertExcelToJson.readConfigData("./excel/config.json");
+var $S = require("../libs/stack.js");
+var ConvertExcelToJson = require("../excel/ConvertExcelToJson.js");
+var Logger = require("../common/logger-v2.js");
+var NmsService = require("../nms/nms_service.js");
 
 (function() {
 var FinalResponse = {
     statusValidRequest: "00000",
     statusInvalidRequestLength: "00001",
     statusInvalidAppId: "00010",
-    endOfResult: "11111",
+    endOfResult: "11111"
 };
 var appIdMappingFunction = {
     "001": ConvertExcelToJson.convert,
     "002": NmsService.getTcpResponse
 };
-var UdpHandler = function(config) {
+var TcpHandler = function(config) {
     return new UDP.fn.init(config);
 };
 
-UdpHandler.fn = UdpHandler.prototype = {
-    constructor: UdpHandler,
+TcpHandler.fn = TcpHandler.prototype = {
+    constructor: TcpHandler,
     init: function(config) {
         this.config = config;
         return this;
     }
 };
-UdpHandler.fn.init.prototype = UdpHandler.fn;
-$S.extendObject(UdpHandler);
-UdpHandler.extend({
+TcpHandler.fn.init.prototype = TcpHandler.fn;
+$S.extendObject(TcpHandler);
+TcpHandler.extend({
     _parseRequest: function(msg) {
         var result = {"appId": "", "workId": "", "msg": ""};
         var msgArr = msg.split("|");
@@ -43,6 +41,13 @@ UdpHandler.extend({
             result["msg"] = msg;
         }
         return result;
+    },
+    handleConfigData: function(jsonData) {
+        if ($S.isObjectV2(jsonData)) {
+            if ($S.isStringV2(jsonData["excel_configpath"])) {
+                ConvertExcelToJson.readConfigData(jsonData["excel_configpath"]);
+            }
+        }
     },
     returResponse: function(status, response, callback) {
         var responseLength;
@@ -84,7 +89,7 @@ UdpHandler.extend({
     }
 });
 
-module.exports = UdpHandler;
+module.exports = TcpHandler;
 
 })();
 

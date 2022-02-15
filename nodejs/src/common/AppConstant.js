@@ -11,7 +11,7 @@ const AppConstant = {
     IMAGE_X_ICON: "image/x-icon",
     IMAGE_JPG: "image/jpg",
     IMAGE_JPEG: "image/jpeg",
-    PUBLIC_DIR: __dirname + "/../..",
+    PUBLIC_DIR: __dirname,
     UNDEFINED: undefined
 };
 
