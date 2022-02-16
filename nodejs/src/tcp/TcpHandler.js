@@ -10,6 +10,7 @@ var FinalResponse = {
     statusInvalidAppId: "00010",
     endOfResult: "11111"
 };
+var EnableAppId = [];
 var appIdMappingFunction = {
     "001": ConvertExcelToJson.convert,
     "002": NmsService.getTcpResponse
@@ -35,7 +36,7 @@ TcpHandler.extend({
             result["appId"] = msg;
             return result;
         }
-        if (appIdMappingFunction[msgArr[0]]) {
+        if (EnableAppId.indexOf(msgArr[0]) >= 0 && appIdMappingFunction[msgArr[0]]) {
             result["appId"] = msgArr[0];
             result["workId"] = msgArr[1];
             result["msg"] = msg;
@@ -44,8 +45,13 @@ TcpHandler.extend({
     },
     handleConfigData: function(jsonData) {
         if ($S.isObjectV2(jsonData)) {
-            if ($S.isStringV2(jsonData["excel_configpath"])) {
-                ConvertExcelToJson.readConfigData(jsonData["excel_configpath"]);
+            if ($S.isArray(jsonData["enableAppId"])) {
+                EnableAppId = jsonData["enableAppId"];
+            }
+            if (EnableAppId.indexOf("001") >= 0) {
+                if ($S.isStringV2(jsonData["excel_configpath"])) {
+                    ConvertExcelToJson.readConfigData(jsonData["excel_configpath"]);
+                }
             }
         }
     },

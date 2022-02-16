@@ -1,10 +1,10 @@
 var net = require('net');
 var readline = require("readline");
 
-var $S = require("../../static/js/stack.js");
-var TCP = require("./tcp");
-var FS = require("../static/fsmodule.js");
-var Logger = require("../static/logger-v2.js");
+var $S = require("../src/libs/stack.js");
+var TCP = require("../src/tcp/tcp");
+var FS = require("../src/common/fsmodule.js");
+var Logger = require("../src/common/logger-v2.js");
 
 // var TCP = TCPService.getService();
 

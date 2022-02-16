@@ -34,7 +34,7 @@ function onReceive(sock, msg, ip, port, length) {
             }
             Logger.log(port + ": Response: " + logStr, function(status) {
                 TCP.sendData(sock, responseString, port, ip);
-                Logger.log(port + ": " + lineSepratorString);
+                Logger.log(lineSepratorString);
                 setTimeout(function(socket) {
                     TCP.close(sock, connectionList);
                 }, 3000, socket);

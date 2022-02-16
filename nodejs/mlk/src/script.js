@@ -1,7 +1,7 @@
-const $S = require("../../../static/js/stack.js");
-const FS = require("../../static/fsmodule.js");
-const Logger = require("../../static/logger-v2.js");
-const generateFile = require("./js/generateFile.js");
+const $S = require("../../src/libs/stack.js");
+const FS = require("../../src/common/fsmodule.js");
+const Logger = require("../../src/common/logger-v2.js");
+const generateFile = require("../../src/common/generateFile.js");
 var arg = process.argv;
 var configFilepath = "";
 if ($S.isArray(arg) && arg.length >= 3) {
