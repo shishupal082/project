@@ -26,7 +26,7 @@ ConvertExcelToJson.extend({
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
-                    Logger.log("Config data read success.", null, true);
+                    Logger.log("ConvertExcelToJson: Config data read success.", null, true);
                 } else {
                     Logger.log("Invalid config data.", null, true);
                 }

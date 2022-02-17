@@ -7,6 +7,7 @@ var mysql = require('mysql');
 
 (function() {
 var ConfigData = {};
+var isConfigDataRead = false;
 var database = null;
 var dt = $S.getDT();
 var NmsService = function(config) {
@@ -53,24 +54,31 @@ NmsService.extend({
 });
 NmsService.extend({
     readConfigData: function(configFilePath, callback) {
+        isConfigDataRead = true;
         if ($S.isStringV2(configFilePath)) {
             FS.readJsonFile(configFilePath, null, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
-                    DB.setDbParameter(jsonData["dbConfig"]);
-                    Logger.log("Config data read success.", null, true);
-                    DB.getDbConnection(function(dbCon) {
-                        database = dbCon;
-                        $S.callMethod(callback);
-                    });
+                    Logger.log("NmsService: Config data read success.", null, true);
                 } else {
-                    Logger.log("Invalid config data.", null, true);
-                    $S.callMethod(callback);
+                    Logger.log("Invalid config data: " + configFilePath, null, true);
                 }
+                $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path.", null, true);
+            Logger.log("Invalid config path: " + configFilePath, null, true);
             $S.callMethod(callback);
+        }
+    },
+    _connectDB: function(callback) {
+        if ($S.isObjectV2(ConfigData) && $S.isObjectV2(ConfigData["dbConfig"])) {
+            DB.setDbParameter(ConfigData["dbConfig"]);
+            DB.getDbConnection(function(dbCon) {
+                database = dbCon;
+                $S.callMethod(callback);
+            });
+        } else {
+            Logger.log("Invalid config data.", callback, true);
         }
     },
     _handleTimestamp: function(result) {
@@ -126,6 +134,10 @@ NmsService.extend({
         var timeParameter = this._getTimeRangeParameter(timeRange);
         var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam + timeParameter + " order by s_no desc limit " + limitParam + ";"
         Logger.log(q, function() {
+            if (database === null) {
+                $S.callMethodV1(callback, finalResult);
+                return;
+            }
             database.query(q, function (err, result, fields) {
                 if (err) {
                     throw err;
@@ -138,24 +150,29 @@ NmsService.extend({
             });
         }, true);
     },
-    getData: function(configPath, requestParam, callback) {
+    getData: function(requestParam, callback) {
         var self = this;
-        this.readConfigData(configPath, function() {
-            self.getDevicePingStatus(requestParam, function(result) {
-                DB.closeDbConnection(database);
-                $S.callMethodV1(callback, JSON.stringify(result));
+        if (isConfigDataRead) {
+            this._connectDB(function() {
+                self.getDevicePingStatus(requestParam, function(result) {
+                    DB.closeDbConnection(database);
+                    database = null;
+                    $S.callMethodV1(callback, JSON.stringify(result));
+                });
             });
-        });
+        } else {
+            Logger.log("Config data read pending.", null, true);
+            $S.callMethodV1(callback, "[]");
+        }
     },
     getTcpResponse: function(request, callback) {
-        var configPath = "config.json";
         if (!$S.isObject(request)) {
             $S.callMethodV1(callback, "FAILURE");
             return;
         }
         var requestParam = NmsService.parseRequest(request["msg"]);
         Logger.log("Request: " + JSON.stringify(request), function() {
-            NmsService.getData(configPath, requestParam, function(result) {
+            NmsService.getData(requestParam, function(result) {
                 $S.callMethodV1(callback, result);
             });
         }, true);

@@ -19,7 +19,7 @@ FS.readJsonFile(configFilePath, null, function(jsonData) {
         }
         PingThread.start(jsonData["config_path"]);
     } else {
-        Logger.log("Invalid config data.", null, true);
+        Logger.log("Invalid config data: " + configFilePath, null, true);
     }
 });
 

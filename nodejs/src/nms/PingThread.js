@@ -28,7 +28,7 @@ PingThread.extend({
                 if ($S.isObjectV2(jsonData)) {
                     ConfigData = jsonData;
                     DB.setDbParameter(jsonData["dbConfig"]);
-                    Logger.log("Config data read success.", null, true);
+                    Logger.log("PingThread: Config data read success.", null, true);
                     DB.getDbConnection(function(dbCon) {
                         database = dbCon;
                         $S.callMethod(callback);
@@ -39,12 +39,12 @@ PingThread.extend({
                 }
             });
         } else {
-            Logger.log("Invalid config path.", null, true);
+            Logger.log("Invalid config path: " + configFilePath, null, true);
             $S.callMethod(callback);
         }
     },
     savePingResult: function(deviceInfo, hostname, status) {
-        var did = "1";
+        var did;
         if ($S.isObject(deviceInfo) && $S.isStringV2(deviceInfo["did"])) {
             did = deviceInfo["did"];
         } else {

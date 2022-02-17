@@ -1,10 +1,16 @@
-var $S = require("../../static/js/stack.js");
-var NmsService = require("./nms_service.js");
+var $S = require("../src/libs/stack.js");
+var NmsService = require("../src/nms/nms_service.js");
 
-NmsService.getData("config.json", "did in (1)", "1", function(result) {
-    console.log(result.length);
-    NmsService.getTcpResponse("002", "workId", "002|workId|did in (1)|2", function(result) {
-        console.log(result.length);
+var lineSepratorString = "----------------------------------------------";
+
+NmsService.readConfigData("../config/nms_service_config.json", function() {
+    console.log(lineSepratorString);
+    NmsService.getData(NmsService.parseRequest("002|workId||did in (1)|1"), function(result) {
+        console.log(result);
+        console.log(lineSepratorString);
+        NmsService.getTcpResponse({"appId":"002", "workId": "workId", "msg": "002|workId|timeRange|did in (1)|2"}, function(result) {
+            console.log(result);
+        });
     });
 });
 

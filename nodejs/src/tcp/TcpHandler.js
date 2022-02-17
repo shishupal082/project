@@ -53,6 +53,11 @@ TcpHandler.extend({
                     ConvertExcelToJson.readConfigData(jsonData["excel_configpath"]);
                 }
             }
+            if (EnableAppId.indexOf("002") >= 0) {
+                if ($S.isStringV2(jsonData["nms_service_configpath"])) {
+                    NmsService.readConfigData(jsonData["nms_service_configpath"]);
+                }
+            }
         }
     },
     returResponse: function(status, response, callback) {

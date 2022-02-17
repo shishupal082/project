@@ -88,10 +88,7 @@ FS.readJsonFile(configFilePath, null, function(jsonData) {
         TcpHandler.handleConfigData(jsonData);
         start(jsonData);
     } else {
-        Logger.log("Invalid config data.", null, true);
+        Logger.log("Invalid config data: " + configFilePath, null, true);
     }
 });
-
-
-
 
