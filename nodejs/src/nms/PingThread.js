@@ -24,7 +24,7 @@ $S.extendObject(PingThread);
 PingThread.extend({
     readConfigData: function(configFilePath, callback) {
         if ($S.isStringV2(configFilePath)) {
-            FS.readJsonFile(configFilePath, {}, function(jsonData) {
+            FS.readJsonFile(configFilePath, null, function(jsonData) {
                 if ($S.isObjectV2(jsonData)) {
                     ConfigData = jsonData;
                     DB.setDbParameter(jsonData["dbConfig"]);

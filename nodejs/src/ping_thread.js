@@ -11,7 +11,7 @@ if (args.length > 0 && $S.isStringV2(args[0])) {
     configFilePath = args[0];
 }
 
-FS.readJsonFile(configFilePath, {}, function(jsonData) {
+FS.readJsonFile(configFilePath, null, function(jsonData) {
     if ($S.isObject(jsonData)) {
         Logger.log("PingThread: Config data read success.", null, true);
         if ($S.isStringV2(jsonData["log_filepath"])) {
