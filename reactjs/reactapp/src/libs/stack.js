@@ -719,15 +719,33 @@ var St = (function(){
 })();
 var Que = (function(){
     var capacity = 500000, que = [];
-    function Que() {
+    function Que(_capacity) {
+        if (isNumber(_capacity) && _capacity > 0 && _capacity <= capacity) {
+            capacity = _capacity;
+        }
         this._FRONT = -1;
         this._BACK = -1;
     }
+    Que.prototype._shiftElement = function() {
+        var index = 0;
+        for (var i = this._FRONT; i <= this._BACK; i++) {
+            que[index] = que[i];
+            index++;
+        }
+        this._FRONT = 0;
+        this._BACK = index-1;
+    },
     Que.prototype.Enque = function(item) {
+        var size = this.getSize();
         if (this._BACK === capacity - 1) {
-            var logText = "Que full";
-            Logger.log(logText);
-            return 0;
+            if (size < 1) {
+                this.clear();
+            } else if (size < capacity) {
+                this._shiftElement();
+            } else {
+                Logger.log("Que full");
+                return 0;
+            }
         }
         if (this._FRONT === -1) {
             this._FRONT = 0;
@@ -739,8 +757,7 @@ var Que = (function(){
     Que.prototype.Deque = function() {
         var item = 0;
         if (this._FRONT === -1 || this._FRONT > this._BACK) {
-            var logText = "Que under flow";
-            Logger.log(logText);
+            Logger.log("Que under flow");
             return 0;
         }
         item = que[this._FRONT];
@@ -754,13 +771,19 @@ var Que = (function(){
     };
     Que.prototype.getAll = function() {
         var res = [];
-        for (var i = this._FRONT; i <= this._BACK; i++) {
-            res.push(que[i]);
+        var size = this.getSize();
+        if (size > 0) {
+            for (var i = this._FRONT; i <= this._BACK; i++) {
+                res.push(que[i]);
+            }
         }
         return res;
     };
     Que.prototype.getSize = function() {
-        return this._BACK - this._FRONT+1;
+        if (this._FRONT >= 0 && this._FRONT <= this._BACK) {
+            return this._BACK - this._FRONT+1;
+        }
+        return 0;
     };
     return Que;
 })();
@@ -1395,8 +1418,8 @@ Stack.extend({
 
 Last1000UniqueNumberQue = new CirQue(1000);
 Stack.extend({
-    getQue: function(shareStorage) {
-        return new Que();
+    getQue: function(size) {
+        return new Que(size);
     },
     getCirQue: function(size) {
         return new CirQue(size);

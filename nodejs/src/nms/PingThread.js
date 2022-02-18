@@ -54,7 +54,9 @@ PingThread.extend({
         var ping_status = status;
         var response_id = $S.generateRandomUUID();
         var q = "INSERT INTO ping_status (did, dip, status, response_id) values('"+did+"', '"+dip+"', '"+ping_status + "', '"+response_id+"')";
-        database.query(q);
+        DB.executeQuery(database, q, function(currentDB) {
+            database = currentDB;
+        });
     },
     pingRequest: function(deviceInfo, hostname, interval, callback) {
         var validResponsePattern = new RegExp(/bytes=32/, "g");

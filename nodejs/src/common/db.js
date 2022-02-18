@@ -55,15 +55,26 @@ DB.extend({
                 database: DATABASE
             };
             var con = mysql.createConnection(dbConfig);
-            con.connect(function(err) {
-                if (err) throw err;
-                Logger.log("Mysql connection success!", null, true);
-            });
-            con.query("use "+ DATABASE + ";", function (err, result) {
-                if (err) throw err;
-                Logger.log("DB selection success!", null, true);
-                $S.callMethodV1(callback, con);
-            });
+            try {
+                con.connect(function(err) {
+                    if (err) {
+                        return;
+                    }
+                    Logger.log("Mysql connection success!", null, true);
+                });
+                con.query("use "+ DATABASE + ";", function (err, result) {
+                    if (err) {
+                        Logger.log("Error in db connection!", null, true);
+                        $S.callMethodV1(callback, null);
+                        return;
+                    }
+                    Logger.log("DB selection success!", null, true);
+                    $S.callMethodV1(callback, con);
+                });
+            } catch(e) {
+                Logger.log("Error in db connection!", null, true);
+                $S.callMethodV1(callback, null);
+            }
         } else {
             Logger.log("DB config is not set properly.", null, true);
             $S.callMethodV1(callback, null);
@@ -78,6 +89,54 @@ DB.extend({
         }
     }
 });
+
+var Q = $S.getQue();
+
+DB.extend({
+    _executeQuery: function() {
+        if (Q.getSize() < 1) {
+            return;
+        }
+        var self = this;
+        var temp = Q.Deque();
+        var dbObj, query, callback;
+        if ($S.isArray(temp) && temp.length === 3) {
+            dbObj = temp[0];
+            query = temp[1];
+            callback = temp[2];
+            try {
+                dbObj.query(query, function(err, status) {
+                    if (err) {
+                        self.closeDbConnection(dbObj);
+                        $S.callMethodV1(callback, null);
+                        return;
+                    }
+                    $S.callMethodV1(callback, dbObj);
+                    self._executeQuery();
+                });
+            } catch(e) {
+                Logger.log("Error in query execute.", function(status) {
+                    DB.getDbConnection(function(dbCon) {
+                        if (dbCon === null) {
+                            return;
+                        }
+                        Logger.log("New DB connection created.", null, true);
+                        self.executeQuery(dbCon, query, callback);
+                    });
+                }, true);
+                return;
+            }
+        }
+    },
+    executeQuery: function(dbObj, query, callback) {
+        var r = Q.Enque([dbObj, query, callback]);
+        if (r === 1) {
+            this._executeQuery();
+        } else {
+            $S.callMethodV1(callback, null);
+        }
+    }
+})
 
 module.exports = DB;
 })();
