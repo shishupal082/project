@@ -157,6 +157,14 @@ li code{
             <li><code tabindex="1">ALTER TABLE event_data DROP INDEX username;</code></li>
             <li><code tabindex="1">ALTER TABLE `users` MODIFY COLUMN `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;</code></li>
         </ul>
+        <h2>Mysql reset root password</h2>
+        <ul>
+            <li>Stop mysql server by opening services</li>
+            <li>Create "C:\reset.txt" file with content</li>
+            <li><code tabindex="1">ALTER user 'root'@'localhost' IDENTIFIED BY '12345678';</code></li>
+            <li><code tabindex="1">"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --defaults-file="C:\ProgramData\MySQL\MySQL Server 8.0\my.ini" --init-file="C:\reset.txt" --console</code></li>
+            <li>Start MySQL 8.0 Command Line command and enter newly created password and close then close cmd</li>
+        </ul>
         <h2>Dropwizrd setup</h2>
         <ul>
             <li><code tabindex="1">mvn dependency:tree</code></li>

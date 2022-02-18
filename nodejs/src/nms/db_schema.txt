@@ -3,7 +3,7 @@ create table ping_status(
     s_no bigint primary key not null auto_increment,
     did varchar(128) default null,
     dip varchar(128) default null,
-    ping_status varchar(128) default null,
+    status varchar(128) default null,
     response_id varchar(128) default null,
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted boolean default false

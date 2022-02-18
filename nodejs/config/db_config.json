@@ -1,0 +1,8 @@
+{
+    "dbConfig": {
+        "hostname": "localhost",
+        "username": "mysqljs",
+        "password": "mysqljs",
+        "database": "ftpapp"
+    }
+}

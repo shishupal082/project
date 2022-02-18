@@ -4,10 +4,10 @@ const Logger = require("./logger-v2.js");
 const mysql = require('mysql');
 
 (function() {
-var hostname = "localhost"
-var username = "mysqljs";
-var password = "mysqljs";
-var database = "ftpapp";
+var HOSTNAME = "localhost"
+var USERNAME = "mysqljs";
+var PASSWORD = "mysqljs";
+var DATABASE = "ftpapp";
 var setDbConfig = false;
 
 var DB = function(config) {
@@ -38,23 +38,28 @@ DB.extend({
             if (!$S.isStringV2(config.database)) {
                 return false;
             }
+            HOSTNAME = config.hostname;
+            USERNAME = config.username;
+            PASSWORD = config.password;
+            DATABASE = config.database;
+            setDbConfig = true;
         }
-        setDbConfig = true;
         return true;
     },
     getDbConnection: function(callback) {
         if (setDbConfig) {
-            var con = mysql.createConnection({
-                host: hostname,
-                user: username,
-                password: password,
-                database: database
-            });
+            var dbConfig = {
+                host: HOSTNAME,
+                user: USERNAME,
+                password: PASSWORD,
+                database: DATABASE
+            };
+            var con = mysql.createConnection(dbConfig);
             con.connect(function(err) {
                 if (err) throw err;
                 Logger.log("Mysql connection success!", null, true);
             });
-            con.query("use "+ database + ";", function (err, result) {
+            con.query("use "+ DATABASE + ";", function (err, result) {
                 if (err) throw err;
                 Logger.log("DB selection success!", null, true);
                 $S.callMethodV1(callback, con);

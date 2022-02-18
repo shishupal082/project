@@ -1,6 +1,6 @@
 {
     "log_filepath": "C:/java/nodejs_ping_thread/",
-    "config_path": "config/ping_thread_config.json",
+    "config_path": "./config/ping_thread_config.json",
     "dbDataApis": [
         {
             "tableName": "table1",
