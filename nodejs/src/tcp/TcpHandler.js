@@ -2,6 +2,7 @@ var $S = require("../libs/stack.js");
 var ConvertExcelToJson = require("../excel/ConvertExcelToJson.js");
 var Logger = require("../common/logger-v2.js");
 var NmsService = require("../nms/nms_service.js");
+var DBAccess = require("../db/DBAccess.js");
 
 (function() {
 var FinalResponse = {
@@ -13,8 +14,10 @@ var FinalResponse = {
 var EnableAppId = [];
 var appIdMappingFunction = {
     "001": ConvertExcelToJson.convert,
-    "002": NmsService.getTcpResponse
+    "002": NmsService.getTcpResponse,
+    "003": DBAccess.HandleDbAccess
 };
+var Q = $S.getQue(3);
 var TcpHandler = function(config) {
     return new UDP.fn.init(config);
 };
@@ -43,21 +46,45 @@ TcpHandler.extend({
         }
         return result;
     },
+    _readApplicationConfigData: function(callback) {
+        if (Q.getSize() < 1) {
+            $S.callMethod(callback);
+            return;
+        }
+        var qItem = Q.Deque();
+        if ($S.isObject(qItem) && $S.isStringV2(qItem["config_path"]) && $S.isFunction(qItem["readConfigData"])) {
+            qItem["readConfigData"](qItem["config_path"], function() {
+                TcpHandler._readApplicationConfigData(callback);
+            });
+        } else {
+            Logger.log("Invalid qItem.", null, true);
+            this._readApplicationConfigData(callback);
+        }
+    },
     handleConfigData: function(jsonData) {
         if ($S.isObjectV2(jsonData)) {
             if ($S.isArray(jsonData["enableAppId"])) {
                 EnableAppId = jsonData["enableAppId"];
             }
+            Logger.log("EnableAppId: " + JSON.stringify(EnableAppId), null, true);
             if (EnableAppId.indexOf("001") >= 0) {
                 if ($S.isStringV2(jsonData["excel_configpath"])) {
-                    ConvertExcelToJson.readConfigData(jsonData["excel_configpath"]);
+                    Q.Enque({"config_path": jsonData["excel_configpath"], "readConfigData": ConvertExcelToJson.readConfigData});
                 }
             }
             if (EnableAppId.indexOf("002") >= 0) {
                 if ($S.isStringV2(jsonData["nms_service_configpath"])) {
-                    NmsService.readConfigData(jsonData["nms_service_configpath"]);
+                    Q.Enque({"config_path": jsonData["nms_service_configpath"], "readConfigData": NmsService.readConfigData});
                 }
             }
+            if (EnableAppId.indexOf("003") >= 0) {
+                if ($S.isStringV2(jsonData["db_access_configpath"])) {
+                    Q.Enque({"config_path": jsonData["db_access_configpath"], "readConfigData": DBAccess.readConfigData});
+                }
+            }
+            this._readApplicationConfigData(function() {
+                Logger.log("Config data read completed.", null, true);
+            });
         }
     },
     returResponse: function(status, response, callback) {
@@ -81,7 +108,11 @@ TcpHandler.extend({
                 status = FinalResponse.statusValidRequest;
                 Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"], function() {
                     appIdMappingFunction[request["appId"]](request, function(result) {
-                        response = result;
+                        if ($S.isString(result)) {
+                            response = result;
+                        } else {
+                            response = "INVALID_RESPONSE";
+                        }
                         self.returResponse(FinalResponse.statusValidRequest, response, callback);
                     });
                 }, true);

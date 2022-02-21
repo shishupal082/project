@@ -414,6 +414,20 @@ var DT = (function() {
         }
         return null;
     };
+    DateTime.prototype.addMinutes = function(dateObj, count) {
+        if (isDateObject(dateObj) && isNumber(count)) {
+            dateObj = new Date(dateObj.setMinutes(dateObj.getMinutes() + count));
+            return dateObj;
+        }
+        return null;
+    };
+    DateTime.prototype.getEndTime = function(todayDateObj) {
+        var temp = this.addMinutes(todayDateObj, 1);
+        if (temp !== null) {
+            return this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", temp);
+        }
+        return this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", todayDateObj);
+    };
     DateTime.prototype.getDateRange = function(timeRange) {
         var finalTimeRange = [];
         if (!Stack.isStringV2(timeRange)) {
@@ -425,17 +439,16 @@ var DT = (function() {
         var searchResult = Stack.searchItems(["last-[0-9]{1,3}-days"], [timeRange], true);
         if (Stack.isArray(searchResult) && searchResult.length === 1) {
             temp = timeRange.split("-");
-            endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
             if (temp.length === 3) {
                 count = temp[1] * 1;
                 startDay = this.addDate(today, -1 * count);
                 startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
             }
+            endTime = this.getEndTime(today);
         } else {
             searchResult = Stack.searchItems(["last-[0-9]{1,3}-months"], [timeRange], true);
             if (Stack.isArray(searchResult) && searchResult.length === 1) {
                 temp = timeRange.split("-");
-                endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
                 if (temp.length === 3) {
                     count = temp[1] * 1;
                     startDay = today;
@@ -446,10 +459,10 @@ var DT = (function() {
                     }
                     startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
                 }
+                endTime = this.getEndTime(today);
             } else {
                 searchResult = Stack.searchItems(["from-[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
                 if (Stack.isArray(searchResult) && searchResult.length === 1) {
-                    endTime = this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", today);
                     temp = timeRange.split("from-");
                     if (temp.length === 2) {
                         temp2 = this.getDateObj(temp[1]);
@@ -457,6 +470,7 @@ var DT = (function() {
                             startTime = temp[1];
                         }
                     }
+                    endTime = this.getEndTime(today);
                 } else {
                     searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
                     if (Stack.isArray(searchResult) && searchResult.length === 1) {
@@ -660,27 +674,19 @@ var Log = (function(){
 var Logger = new Log();
 
 var St = (function(){
-    var MAXSTACK = 500000, STACK = [];
-    function St(shareStorage) {
-        if (typeof shareStorage == "boolean" && shareStorage) {
-            this._STACK = STACK;
-        } else {
-            this._STACK = [];
-        }
+    var MAXSTACK = 500000;
+    function St() {
+        this._STACK = [];
         this._TOP = -1;
     }
     St.prototype.reset = function() {
-        this._STACK = []; this._TOP = -1;
-        for (var i = 0; i < MAXSTACK; i++) {
-            this._STACK.push(0);
-        }
+        this._TOP = -1;
         return true;
     };
     St.prototype.push = function(item) {
         if (this._TOP >= MAXSTACK - 1) {
             var logText = "stack over flow";
             Logger.log(logText);
-            throw logText;
         } else {
             this._TOP = this._TOP + 1;
             this._STACK[this._TOP] = item;
@@ -688,11 +694,10 @@ var St = (function(){
         return 1;
     };
     St.prototype.pop = function() {
-        var item = 0;
+        var item = null;
         if (this._TOP < 0) {
             var logText = "stack under flow";
             Logger.log(logText);
-            throw logText;
         } else {
             item = this._STACK[this._TOP];
             this._TOP = this._TOP - 1;
@@ -718,18 +723,21 @@ var St = (function(){
     return St;
 })();
 var Que = (function(){
-    var capacity = 500000, que = [];
+    var maxCapacity = 500000;
     function Que(_capacity) {
-        if (isNumber(_capacity) && _capacity > 0 && _capacity <= capacity) {
-            capacity = _capacity;
+        if (isNumber(_capacity) && _capacity > 0 && _capacity <= maxCapacity) {
+            this._CAPACITY = _capacity;
+        } else {
+            this._CAPACITY = maxCapacity;
         }
+        this._que = [];
         this._FRONT = -1;
         this._BACK = -1;
     }
     Que.prototype._shiftElement = function() {
         var index = 0;
         for (var i = this._FRONT; i <= this._BACK; i++) {
-            que[index] = que[i];
+            this._que[index] = this._que[i];
             index++;
         }
         this._FRONT = 0;
@@ -737,10 +745,10 @@ var Que = (function(){
     },
     Que.prototype.Enque = function(item) {
         var size = this.getSize();
-        if (this._BACK === capacity - 1) {
+        if (this._BACK === this._CAPACITY - 1) {
             if (size < 1) {
                 this.clear();
-            } else if (size < capacity) {
+            } else if (size < this._CAPACITY) {
                 this._shiftElement();
             } else {
                 Logger.log("Que full");
@@ -751,7 +759,7 @@ var Que = (function(){
             this._FRONT = 0;
         }
         this._BACK++;
-        que[this._BACK] = item;
+        this._que[this._BACK] = item;
         return 1;
     };
     Que.prototype.Deque = function() {
@@ -760,7 +768,7 @@ var Que = (function(){
             Logger.log("Que under flow");
             return 0;
         }
-        item = que[this._FRONT];
+        item = this._que[this._FRONT];
         this._FRONT++;
         return item;
     };
@@ -774,7 +782,7 @@ var Que = (function(){
         var size = this.getSize();
         if (size > 0) {
             for (var i = this._FRONT; i <= this._BACK; i++) {
-                res.push(que[i]);
+                res.push(this._que[i]);
             }
         }
         return res;
@@ -1622,8 +1630,8 @@ return Table;
 })();
 
 Stack.extend({
-    getStack: function(shareStorage) {
-        return new St(shareStorage);
+    getStack: function() {
+        return new St();
     },
     getLocalStorage: function() {
         return new LocalStorage();

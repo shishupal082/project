@@ -67,9 +67,9 @@ function start(jsonData) {
     }
     Logger(log_filepath).setLogDir().enableLoging(function(status) {
         if (status) {
-            console.log("Logging enable.");
+            Logger.log("Logging enable.", null, true);
         } else {
-            console.log("Error in log enabling.");
+            Logger.log("Error in log enabling.", null, true);
         }
         if ($S.isNumber(jsonData["localPort"]) && jsonData["localPort"] > 1000 && jsonData["localPort"] < 10000) {
             localPort = jsonData["localPort"];

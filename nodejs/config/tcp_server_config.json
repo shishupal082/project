@@ -3,6 +3,7 @@
     "log_filepath": "C:/java/server_tcp_port8086/",
     "excel_configpath": "./excel/config.json",
     "nms_service_configpath": "./config/nms_service_config.json",
-    "enableAppId": ["001", "002"]
+    "db_access_configpath": "./config/db_access_configpath.json",
+    "enableAppId": ["001", "002", "003"]
 }
 

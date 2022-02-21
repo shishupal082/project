@@ -46,19 +46,42 @@ Logger.fn = Logger.prototype = {
 };
 Logger.fn.init.prototype = Logger.fn;
 $S.extendObject(Logger);
+var Q = $S.getQue();
+var IsProcessing = false;
 Logger.extend({
+    _log: function(callback) {
+        if (Q.getSize() < 1) {
+            IsProcessing = false;
+            $S.callMethod(callback);
+            return;
+        }
+        IsProcessing = true;
+        var self = this;
+        var qItem = Q.Deque();
+        var text = qItem["text"];
+        if ($S.isObject(qItem)) {
+            if (isEnableLoging) {
+                FS.appendTextFile(fileDir + logFilename, text, function(status, textData) {
+                    console.log(textData);
+                    $S.callMethodV2(qItem["callback"], status, textData);
+                    self._log(callback);
+                });
+            } else {
+                console.log(text);
+                $S.callMethodV2(qItem["callback"], false, text);
+                this._log(callback);
+            }
+        } else {
+            this._log(callback);
+        }
+    },
     log: function(text, callback, isAddDate) {
         if ($S.isBooleanTrue(isAddDate)) {
             text = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/") + " " + text;
         }
-        if (isEnableLoging) {
-            FS.appendTextFile(fileDir + logFilename, text, function(status, textData) {
-                console.log(textData);
-                $S.callMethodV2(callback, status, textData);
-            });
-        } else {
-            console.log(text);
-            $S.callMethodV2(callback, false, text);
+        Q.Enque({"text": text, "callback": callback});
+        if (IsProcessing === false) {
+            this._log();
         }
     },
     logV2: function(obj, callback, isAddDate) {
