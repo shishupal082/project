@@ -17,7 +17,6 @@ var appIdMappingFunction = {
     "002": NmsService.getTcpResponse,
     "003": DBAccess.HandleDbAccess
 };
-var Q = $S.getQue(3);
 var TcpHandler = function(config) {
     return new UDP.fn.init(config);
 };
@@ -31,21 +30,8 @@ TcpHandler.fn = TcpHandler.prototype = {
 };
 TcpHandler.fn.init.prototype = TcpHandler.fn;
 $S.extendObject(TcpHandler);
+var Q = $S.getQue(3);
 TcpHandler.extend({
-    _parseRequest: function(msg) {
-        var result = {"appId": "", "workId": "", "msg": ""};
-        var msgArr = msg.split("|");
-        if (msgArr.length < 2) {
-            result["appId"] = msg;
-            return result;
-        }
-        if (EnableAppId.indexOf(msgArr[0]) >= 0 && appIdMappingFunction[msgArr[0]]) {
-            result["appId"] = msgArr[0];
-            result["workId"] = msgArr[1];
-            result["msg"] = msg;
-        }
-        return result;
-    },
     _readApplicationConfigData: function(callback) {
         if (Q.getSize() < 1) {
             $S.callMethod(callback);
@@ -60,6 +46,22 @@ TcpHandler.extend({
             Logger.log("Invalid qItem.", null, true);
             this._readApplicationConfigData(callback);
         }
+    },
+});
+TcpHandler.extend({
+    _parseRequest: function(msg) {
+        var result = {"appId": "", "workId": "", "msg": ""};
+        var msgArr = msg.split("|");
+        if (msgArr.length < 2) {
+            result["appId"] = msg;
+            return result;
+        }
+        if (EnableAppId.indexOf(msgArr[0]) >= 0 && appIdMappingFunction[msgArr[0]]) {
+            result["appId"] = msgArr[0];
+            result["workId"] = msgArr[1];
+            result["msg"] = msg;
+        }
+        return result;
     },
     handleConfigData: function(jsonData) {
         if ($S.isObjectV2(jsonData)) {

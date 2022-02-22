@@ -50,8 +50,7 @@ var Q = $S.getQue();
 var IsProcessing = false;
 Logger.extend({
     _log: function(callback) {
-        if (Q.getSize() < 1) {
-            IsProcessing = false;
+        if (Q.getSize() < 1 || IsProcessing) {
             $S.callMethod(callback);
             return;
         }
@@ -64,14 +63,17 @@ Logger.extend({
                 FS.appendTextFile(fileDir + logFilename, text, function(status, textData) {
                     console.log(textData);
                     $S.callMethodV2(qItem["callback"], status, textData);
+                    IsProcessing = false;
                     self._log(callback);
                 });
             } else {
                 console.log(text);
                 $S.callMethodV2(qItem["callback"], false, text);
+                IsProcessing = false;
                 this._log(callback);
             }
         } else {
+            IsProcessing = false;
             this._log(callback);
         }
     },
@@ -80,9 +82,7 @@ Logger.extend({
             text = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/") + " " + text;
         }
         Q.Enque({"text": text, "callback": callback});
-        if (IsProcessing === false) {
-            this._log();
-        }
+        this._log();
     },
     logV2: function(obj, callback, isAddDate) {
         if ($S.isObject(obj) || $S.isArray(obj)) {

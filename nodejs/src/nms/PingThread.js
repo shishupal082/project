@@ -21,6 +21,37 @@ PingThread.fn = PingThread.prototype = {
 
 PingThread.fn.init.prototype = PingThread.fn;
 $S.extendObject(PingThread);
+var Q = $S.getQue(100);
+var IsProcessing = false;
+var ValidResponsePattern = new RegExp(/bytes=32/, "g");
+PingThread.extend({
+    _sendRequest: function() {
+        if (Q.getSize() < 1 || IsProcessing) {
+            return;
+        }
+        var temp = Q.Deque();
+        var hostname, deviceInfo;
+        var self = this;
+        IsProcessing = true;
+        if ($S.isObject(temp)) {
+            hostname = temp["hostname"];
+            deviceInfo = temp["deviceInfo"];
+            callback = temp["callback"];
+            exec("ping -c 1 " + hostname, function(error, stdout, stderr) {
+                if (error === null && stdout !== null && stdout.search(ValidResponsePattern) >= 0) {
+                    $S.callMethodV3(callback, deviceInfo, hostname, "Connected");
+                } else {
+                    $S.callMethodV3(callback, deviceInfo, hostname, "Not Connected");
+                }
+                IsProcessing = false;
+                self._sendRequest();
+            });
+        } else {
+            IsProcessing = false;
+            self._sendRequest();
+        }
+    },
+});
 PingThread.extend({
     readConfigData: function(configFilePath, callback) {
         if ($S.isStringV2(configFilePath)) {
@@ -59,15 +90,10 @@ PingThread.extend({
         });
     },
     pingRequest: function(deviceInfo, hostname, interval, callback) {
-        var validResponsePattern = new RegExp(/bytes=32/, "g");
+        var self = this;
         function sendRequest(hostname, callback) {
-            exec("ping -c 1 " + hostname, function(error, stdout, stderr) {
-                if (error === null && stdout !== null && stdout.search(validResponsePattern) >= 0) {
-                    $S.callMethodV3(callback, deviceInfo, hostname, "Connected");
-                } else {
-                    $S.callMethodV3(callback, deviceInfo, hostname, "Not Connected");
-                }
-            });
+            Q.Enque({"hostname": hostname, "deviceInfo": deviceInfo, "callback": callback});
+            self._sendRequest();
         }
         if ($S.isNumber(interval) && interval > 0) {
             setInterval(function() {
