@@ -439,16 +439,17 @@ var DT = (function() {
         var searchResult = Stack.searchItems(["last-[0-9]{1,3}-days"], [timeRange], true);
         if (Stack.isArray(searchResult) && searchResult.length === 1) {
             temp = timeRange.split("-");
+            endTime = this.getEndTime(today);
             if (temp.length === 3) {
                 count = temp[1] * 1;
                 startDay = this.addDate(today, -1 * count);
                 startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
             }
-            endTime = this.getEndTime(today);
         } else {
             searchResult = Stack.searchItems(["last-[0-9]{1,3}-months"], [timeRange], true);
             if (Stack.isArray(searchResult) && searchResult.length === 1) {
                 temp = timeRange.split("-");
+                endTime = this.getEndTime(today);
                 if (temp.length === 3) {
                     count = temp[1] * 1;
                     startDay = today;
@@ -459,18 +460,17 @@ var DT = (function() {
                     }
                     startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
                 }
-                endTime = this.getEndTime(today);
             } else {
                 searchResult = Stack.searchItems(["from-[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
                 if (Stack.isArray(searchResult) && searchResult.length === 1) {
                     temp = timeRange.split("from-");
+                    endTime = this.getEndTime(today);
                     if (temp.length === 2) {
                         temp2 = this.getDateObj(temp[1]);
                         if (temp2 !== null) {
                             startTime = temp[1];
                         }
                     }
-                    endTime = this.getEndTime(today);
                 } else {
                     searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
                     if (Stack.isArray(searchResult) && searchResult.length === 1) {
