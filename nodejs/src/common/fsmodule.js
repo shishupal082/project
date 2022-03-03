@@ -185,7 +185,6 @@ FS.extend({
                 args.push(arg[i]);
             }
         }
-        console.log(args);
         return args;
     }
 });
