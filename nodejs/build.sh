@@ -1,7 +1,9 @@
-version=1.0.1
-
+oldVersion=1.0.1
+newVersion=1.0.1
+echo "$(date +"%Y-%m-%d %T") v=$newVersion" >> src/version.txt
+sed -i "s/$oldVersion/$newVersion/1" src/common/AppConstant.js
 rm -rf build/*.tar.gz
 npm install
-tar czf build/nodejs-project-v$version.tar.gz node_modules src config package.json run_tcp_server.sh run_ping_thread.sh run_db_test.sh
-cp build/nodejs-project-v$version.tar.gz /f/app-nodejs/
+tar czf build/nodejs-project-v$newVersion.tar.gz node_modules src config package.json run_tcp_server.sh run_ping_thread.sh run_db_test.sh
+cp build/nodejs-project-v$newVersion.tar.gz /f/app-nodejs/
 
