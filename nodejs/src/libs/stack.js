@@ -304,7 +304,7 @@ var Data = (function() {
 var DT = (function() {
     var dateTime;
     // var YYYY, MM, DD, hh, mm, ss, ms, mr; //mr = meridian (AM/PM)
-    var MMMList = ["JAN", "FEB", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUG", "SEP", "OCT", "NOV", "DEC"];
+    var MMMList = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
     var DDDList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     function isDateObject(dateObj) {
         if (dateObj && dateObj.constructor && dateObj.constructor.name === "Date") {
@@ -742,7 +742,7 @@ var Que = (function(){
         }
         this._FRONT = 0;
         this._BACK = index-1;
-    },
+    };
     Que.prototype.Enque = function(item) {
         var size = this.getSize();
         if (this._BACK === this._CAPACITY - 1) {
@@ -2720,27 +2720,27 @@ Stack.extend({
         return result;
     },
     removeMultiLineComment: function(fileResponse, startPattern, endPattern) {
-        var result = [], i, j, k, isValidData = true, temp, temp2;
+        var result = [], i, j, k, temp, temp2;
         for (i = 0; i < fileResponse.length; i++) {
             if (fileResponse[i].split(startPattern).length >= 2) {
                 temp = fileResponse[i].split(startPattern);
                 result.push(temp[0]);
-                isValidData = false;
+                // j loop started from i because in the same line end pattern may be found
                 for (j = i; j < fileResponse.length; j++) {
                     if (fileResponse[j].split(endPattern).length >= 2) {
                         temp = fileResponse[j].split(endPattern);
                         temp2 = [];
+                        // k loop started from 1 by ignoring first part
                         for (k=1; k<temp.length; k++) {
                             temp2.push(temp[k]);
                         }
                         result.push(temp2.join(endPattern));
+                        // Here i++ not required because it will be automatically done
                         break;
-                    } else {
-                        i++;
-                        continue;
                     }
+                    i++;
                 }
-            } else if (isValidData) {
+            } else {
                 result.push(fileResponse[i]);
             }
         }

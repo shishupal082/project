@@ -5,8 +5,8 @@ const generateFile = require("../../src/common/generateFile.js");
 var arg = process.argv;
 var ReadText = generateFile.getReadText();
 var configFilepath = "";
-var crcConfigFilepath = "proj-3.1/config_crc.csv";
-var finalTablePath = "proj-3.1/final_crc_table.csv";
+var crcConfigFilepath = "";
+var finalTablePath = "";
 
 var DT = $S.getDT();
 
@@ -16,7 +16,17 @@ if ($S.isArray(arg) && arg.length >= 3) {
     if (arg.length >= 4) {
         generateChecksumCRCTable = arg[3] === "true";
     }
-    console.log("Command line argument 'configFilepath': " + configFilepath + ", 'generateChecksumCRCTable': " + generateChecksumCRCTable);
+    if (arg.length >= 5) {
+        crcConfigFilepath = arg[4];
+    }
+    if (arg.length >= 6) {
+        finalTablePath = arg[5];
+    }
+    var logText = "Command line argument 'configFilepath': " + configFilepath;
+    logText +=  ", 'generateChecksumCRCTable': " + generateChecksumCRCTable;
+    logText +=  ", 'crcConfigFilepath': " + crcConfigFilepath;
+    logText +=  ", 'finalTablePath': " + finalTablePath;
+    console.log(logText);
 } else {
     console.log("-----Command line argument 'configFilepath' required.-----");
 }
@@ -190,7 +200,7 @@ CRC.extend({
                 mllFileQue.Enque(mllFilePath[i]);
             }
         }
-        var textData = "//filename,CRC,checksum,filepath";
+        var textData = "//entryTime,filename,CRC,checksum,filepath";
         var entryTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/");
         this._readCrc(mllFileQue, [], function(finalResult) {
             if ($S.isArray(finalResult)) {

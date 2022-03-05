@@ -28,6 +28,10 @@ attendance app
 validAppControl array defined in html page
 userTeam defined in metaData (isSignalTeam, isTelecomTeam, isSAndTTeam, isAMCTeam, isSFRTeam) for add_field_report page
 
+After compilation copy
+dist-attendance-app folder to <App path>/app-data/public/src/js/dist-attendance-app
+dist-attendance-app folder to <App path>/app-data-v4/public/src/js/dist-attendance-app
+
 
 ftp app
 ********
