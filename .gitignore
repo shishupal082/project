@@ -5,6 +5,7 @@
 nodejs/node_modules/
 nodejs/build/
 nodejs/package-lock.json
+nodejs/version.txt
 
 reactjs/reactapp/node_modules/
 reactjs/reactapp/build/
