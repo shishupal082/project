@@ -59,14 +59,14 @@ NmsService.extend({
             FS.readJsonFile(configFilePath, null, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
-                    Logger.log("NmsService: Config data read success.", null, true);
+                    Logger.log("NmsService: Config data read success.");
                 } else {
-                    Logger.log("Invalid config data: " + configFilePath, null, true);
+                    Logger.log("Invalid config data: " + configFilePath);
                 }
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path: " + configFilePath, null, true);
+            Logger.log("Invalid config path: " + configFilePath);
             $S.callMethod(callback);
         }
     },
@@ -78,7 +78,8 @@ NmsService.extend({
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config data.", callback, true);
+            Logger.log("Invalid config data.");
+            $S.callMethod(callback);
         }
     },
     _handleTimestamp: function(result) {
@@ -133,22 +134,21 @@ NmsService.extend({
         }
         var timeParameter = this._getTimeRangeParameter(timeRange);
         var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam + timeParameter + " order by s_no desc limit " + limitParam + ";"
-        Logger.log(q, function() {
-            if (database === null) {
-                $S.callMethodV1(callback, finalResult);
-                return;
+        Logger.log(q);
+        if (database === null) {
+            $S.callMethodV1(callback, finalResult);
+            return;
+        }
+        database.query(q, function (err, result, fields) {
+            if (err) {
+                throw err;
             }
-            database.query(q, function (err, result, fields) {
-                if (err) {
-                    throw err;
-                }
-                if ($S.isArray(result) && result.length > 0) {
-                    finalResult = result;
-                }
-                self._handleTimestamp(finalResult);
-                $S.callMethodV1(callback, finalResult);
-            });
-        }, true);
+            if ($S.isArray(result) && result.length > 0) {
+                finalResult = result;
+            }
+            self._handleTimestamp(finalResult);
+            $S.callMethodV1(callback, finalResult);
+        });
     },
     getData: function(requestParam, callback) {
         var self = this;
@@ -161,7 +161,7 @@ NmsService.extend({
                 });
             });
         } else {
-            Logger.log("Config data read pending.", null, true);
+            Logger.log("Config data read pending.");
             $S.callMethodV1(callback, "[]");
         }
     },
@@ -171,11 +171,10 @@ NmsService.extend({
             return;
         }
         var requestParam = NmsService.parseRequest(request["msg"]);
-        Logger.log("Request: " + JSON.stringify(request), function() {
-            NmsService.getData(requestParam, function(result) {
-                $S.callMethodV1(callback, result);
-            });
-        }, true);
+        Logger.log("Request: " + JSON.stringify(request));
+        NmsService.getData(requestParam, function(result) {
+            $S.callMethodV1(callback, result);
+        });
     }
 });
 

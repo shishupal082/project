@@ -1,4 +1,5 @@
 const $S = require("../libs/stack.js");
+const Logger = require("../common/logger-v2.js");
 const reader = require('xlsx');
 
 (function() {
@@ -31,7 +32,7 @@ ReadExcel.extend({
          file = reader.readFile(filepath);
       } catch(e) {
          // File not found
-         console.log("Error in reading excel file: " + filepath);
+         Logger.log("Error in reading excel file: " + filepath);
          return result;
       }
       var sheets = file.SheetNames;
@@ -39,7 +40,7 @@ ReadExcel.extend({
          if (sheet_index >= 0 && sheet_index < sheets.length) {
             result.push(this._readSheet(file, sheet_index));
          } else {
-            console.log("Invalid sheet_index: " + sheet_index);
+            Logger.log("Invalid sheet_index: " + sheet_index);
          }
       } else {
          for(i = 0; i < sheets.length; i++) {

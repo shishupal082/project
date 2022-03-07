@@ -60,32 +60,32 @@ DB.extend({
                     if (err) {
                         return;
                     }
-                    Logger.log("Mysql connection success!", null, true);
+                    Logger.log("Mysql connection success!");
                 });
                 con.query("use "+ DATABASE + ";", function (err, result) {
                     if (err) {
-                        Logger.log("Error in db connection!", null, true);
+                        Logger.log("Error in db connection!");
                         $S.callMethodV1(callback, null);
                         return;
                     }
-                    Logger.log("DB selection success!", null, true);
+                    Logger.log("DB selection success!");
                     $S.callMethodV1(callback, con);
                 });
             } catch(e) {
-                Logger.log("Error in db connection!", null, true);
+                Logger.log("Error in db connection!");
                 $S.callMethodV1(callback, null);
             }
         } else {
-            Logger.log("DB config is not set properly.", null, true);
+            Logger.log("DB config is not set properly.");
             $S.callMethodV1(callback, null);
         }
     },
     closeDbConnection: function(dbObj) {
         if (dbObj === null) {
-            Logger.log("Erorr in db connection close.", null, true);
+            Logger.log("Erorr in db connection close.");
         } else {
             dbObj.end();
-            Logger.log("DB connection closed.", null, true);
+            Logger.log("DB connection closed.");
         }
     }
 });
@@ -115,15 +115,13 @@ DB.extend({
                     self._executeQuery();
                 });
             } catch(e) {
-                Logger.log("Error in query execute.", function(status) {
-                    DB.getDbConnection(function(dbCon) {
-                        if (dbCon === null) {
-                            return;
-                        }
-                        Logger.log("New DB connection created.", null, true);
-                        self.executeQuery(dbCon, query, callback);
-                    });
-                }, true);
+                DB.getDbConnection(function(dbCon) {
+                    if (dbCon === null) {
+                        return;
+                    }
+                    Logger.log("New DB connection created.");
+                    self.executeQuery(dbCon, query, callback);
+                });
                 return;
             }
         }

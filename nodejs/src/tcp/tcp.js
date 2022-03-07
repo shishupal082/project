@@ -1,4 +1,5 @@
 var $S = require("../libs/stack.js");
+var Logger = require("../common/logger-v2.js");
 
 (function() {
 var TCP = function(config) {
@@ -21,8 +22,8 @@ TCP.extend({
             }
         });
         tcpSocket.on('error', function(error) {
-            console.error("Error in TCP.");
-            console.log(error);
+            Logger.log("Error in TCP.");
+            Logger.log(error);
         });
         tcpSocket.on("close", function(data) {
             $S.callMethodV3(onCLose, tcpSocket, tcpSocket.remoteAddress, tcpSocket.remotePort);
@@ -37,8 +38,8 @@ TCP.extend({
         try {
             tcpSocket.write(text.trim());
         } catch(e) {
-            console.log("Error in sending data.");
-            console.log(e);
+            Logger.log("Error in sending data.");
+            Logger.log(e);
         }
     },
     close: function(tcpSocket, connectionList) {
@@ -48,14 +49,14 @@ TCP.extend({
             if ($S.isArray(connectionList)) {
                 if (connectionList.indexOf(remoteAddress+":"+remotePort) < 0) {
                     return;
-                    // console.log("Connection already closed");
+                    // Logger.log("Connection already closed");
                 }
             }
-            console.log("Closing: " + remoteAddress + ":" + remotePort);
+            Logger.log("Closing: " + remoteAddress + ":" + remotePort);
             tcpSocket.destroy();
         } catch(e) {
-            console.log("Error in closing connection.");
-            console.log(e);
+            Logger.log("Error in closing connection.");
+            Logger.log(e);
         }
     }
 });

@@ -26,14 +26,14 @@ ConvertExcelToJson.extend({
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
-                    Logger.log("ConvertExcelToJson: Config data read success.", null, true);
+                    Logger.log("ConvertExcelToJson: Config data read success.");
                 } else {
-                    Logger.log("Invalid config data.", null, true);
+                    Logger.log("Invalid config data.");
                 }
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path.", null, true);
+            Logger.log("Invalid config path.");
             $S.callMethod(callback);
         }
     }
@@ -83,10 +83,9 @@ ConvertExcelToJson.extend({
                             self.generateFile(excelConfig, callback);
                         });
                     } else {
-                        Logger.logV2(data, function(status) {
-                            Logger.log("File read completed.");
-                            self.generateFile(excelConfig, callback);
-                        });
+                        Logger.logV2(data);
+                        Logger.log("File read completed.");
+                        self.generateFile(excelConfig, callback);
                     }
                     return;
                 }
@@ -95,11 +94,10 @@ ConvertExcelToJson.extend({
         return $S.callMethodV1(callback, "SUCCESS");
     },
     convert: function(request, callback) {
-        Logger.logV2(request, function(status) {
-            var excelConfig = ConvertExcelToJson.getExcelConfig(request);
-            ConvertExcelToJson.generateFile(excelConfig, function(status) {
-                $S.callMethodV1(callback, status);
-            });
+        Logger.logV2(request);
+        var excelConfig = ConvertExcelToJson.getExcelConfig(request);
+        ConvertExcelToJson.generateFile(excelConfig, function(status) {
+            $S.callMethodV1(callback, status);
         });
     }
 });

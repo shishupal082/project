@@ -31,7 +31,7 @@ function removeSpace(text) {
 }
 
 function readUserInput(callback) {
-    console.log("----------------------------------------");
+    Logger.log("----------------------------------------");
     rl.question("Enter text: ", function(text) {
         // text = removeSpace(text);
         $S.callMethodV1(callback, text);
@@ -48,7 +48,7 @@ function sendData(data) {
     var tcpClient = new net.Socket();
     tcpClient.connect(localPort, serverHost, function() {
         TCP.register(tcpClient, onReceive, onClose, function(remoteAddress, remotePort) {
-            console.log("remoteAddress:"+remoteAddress+", remotePort:"+remotePort);
+            Logger.log("remoteAddress:"+remoteAddress+", remotePort:"+remotePort);
             TCP.sendData(tcpClient, data, remotePort, serverHost);
             setTimeout(function() {
                 TCP.close(tcpClient);
@@ -60,18 +60,18 @@ function textReadCallback(text) {
     if (text !== "bye") {
         sendData(text);
     } else {
-        console.log("BYE BYE!!!");
+        Logger.log("BYE BYE!!!");
         endProcess();
     }
 }
 
 function onReceive(sock, msg, ip, port, length) {
-    console.log("tcpClient");
-    console.log("msg: " + msg);
+    Logger.log("tcpClient");
+    Logger.log("msg: " + msg);
 }
 
 function onClose(sock, remoteAddress, remotePort) {
-    console.log("Connection close: " + remoteAddress + ":" + remotePort);
+    Logger.log("Connection close: " + remoteAddress + ":" + remotePort);
     readUserInput(textReadCallback);
 }
 function start() {
@@ -91,9 +91,9 @@ function start() {
 
 Logger("log/").setLogDir().enableLoging(function(status) {
     if (status) {
-        console.log("Logging enable.");
+        Logger.log("Logging enable.");
     } else {
-        console.log("Error in log enabling.");
+        Logger.log("Error in log enabling.");
     }
     start();
 });

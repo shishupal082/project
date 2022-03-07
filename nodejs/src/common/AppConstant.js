@@ -1,5 +1,5 @@
 const AppConstant = {
-    VERSION: "1.0.1",
+    VERSION: "1.0.2",
     CONTENT_TYPE: "Content-Type",
     APPLICATION_JSON: "application/json",
     TEXT_JS: "application/javascript",

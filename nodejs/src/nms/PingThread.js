@@ -59,18 +59,18 @@ PingThread.extend({
                 if ($S.isObjectV2(jsonData)) {
                     ConfigData = jsonData;
                     DB.setDbParameter(jsonData["dbConfig"]);
-                    Logger.log("PingThread: Config data read success.", null, true);
+                    Logger.log("PingThread: Config data read success.");
                     DB.getDbConnection(function(dbCon) {
                         database = dbCon;
                         $S.callMethod(callback);
                     });
                 } else {
-                    Logger.log("Invalid config data: " + configFilePath, null, true);
+                    Logger.log("Invalid config data: " + configFilePath);
                     $S.callMethod(callback);
                 }
             });
         } else {
-            Logger.log("Invalid config path: " + configFilePath, null, true);
+            Logger.log("Invalid config path: " + configFilePath);
             $S.callMethod(callback);
         }
     },
@@ -116,7 +116,7 @@ PingThread.extend({
                             if ($S.isObject(dbDataApis[i]) && $S.isArray(dbDataApis[i]["tableData"])) {
                                 if (dbDataApis[i]["tableData"].length === 1 && $S.isArray(dbDataApis[i]["tableData"][0])) {
                                     result = dbDataApis[i]["tableData"][0];
-                                    Logger.log("Total HostList: " + result.length, null, true);
+                                    Logger.log("Total HostList: " + result.length);
                                     for (var j=0; j<result.length; j++) {
                                         interval = 0;
                                         if ($S.isObject(result[j]) && $S.isStringV2(result[j]["dip"])) {
@@ -127,7 +127,7 @@ PingThread.extend({
                                                 }
                                             }
                                             self.pingRequest(result[j], result[j]["dip"], interval, function(deviceInfo, dip, status) {
-                                                Logger.log(dip + ":" + status, null, true);
+                                                Logger.log(dip + ":" + status);
                                                 self.savePingResult(deviceInfo, dip, status);
                                             });
                                         }
@@ -139,7 +139,7 @@ PingThread.extend({
                 });
             } else {
                 DB.closeDbConnection(database);
-                Logger.log("Invalid config data.", null, true);
+                Logger.log("Invalid config data.");
             }
         });
     }

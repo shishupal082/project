@@ -43,7 +43,7 @@ TcpHandler.extend({
                 TcpHandler._readApplicationConfigData(callback);
             });
         } else {
-            Logger.log("Invalid qItem.", null, true);
+            Logger.log("Invalid qItem.");
             this._readApplicationConfigData(callback);
         }
     },
@@ -68,7 +68,7 @@ TcpHandler.extend({
             if ($S.isArray(jsonData["enableAppId"])) {
                 EnableAppId = jsonData["enableAppId"];
             }
-            Logger.log("EnableAppId: " + JSON.stringify(EnableAppId), null, true);
+            Logger.log("EnableAppId: " + JSON.stringify(EnableAppId));
             if (EnableAppId.indexOf("001") >= 0) {
                 if ($S.isStringV2(jsonData["excel_configpath"])) {
                     Q.Enque({"config_path": jsonData["excel_configpath"], "readConfigData": ConvertExcelToJson.readConfigData});
@@ -85,7 +85,7 @@ TcpHandler.extend({
                 }
             }
             this._readApplicationConfigData(function() {
-                Logger.log("Config data read completed.", null, true);
+                Logger.log("Config data read completed.");
             });
         }
     },
@@ -108,23 +108,21 @@ TcpHandler.extend({
             returnResponseStatus = false;
             if ($S.isFunction(appIdMappingFunction[request["appId"]])) {
                 status = FinalResponse.statusValidRequest;
-                Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"], function() {
-                    appIdMappingFunction[request["appId"]](request, function(result) {
-                        if ($S.isString(result)) {
-                            response = result;
-                        } else {
-                            response = "INVALID_RESPONSE";
-                        }
-                        self.returResponse(FinalResponse.statusValidRequest, response, callback);
-                    });
-                }, true);
+                Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"]);
+                appIdMappingFunction[request["appId"]](request, function(result) {
+                    if ($S.isString(result)) {
+                        response = result;
+                    } else {
+                        response = "INVALID_RESPONSE";
+                    }
+                    self.returResponse(FinalResponse.statusValidRequest, response, callback);
+                });
             } else {
-                Logger.log("Invalid appId: " + request["appId"], function(status) {
-                    self.returResponse(FinalResponse.statusInvalidAppId, null, callback);
-                }, true);
+                Logger.log("Invalid appId: " + request["appId"]);
+                self.returResponse(FinalResponse.statusInvalidAppId, null, callback);
             }
         } else {
-            Logger.log("Invalid request: " + msg, null, true);
+            Logger.log("Invalid request: " + msg);
             status = FinalResponse.statusInvalidAppId;
         }
         if (returnResponseStatus) {

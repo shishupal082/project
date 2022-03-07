@@ -421,12 +421,36 @@ var DT = (function() {
         }
         return null;
     };
-    DateTime.prototype.getEndTime = function(todayDateObj) {
-        var temp = this.addMinutes(todayDateObj, 1);
-        if (temp !== null) {
-            return this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", temp);
+    DateTime.prototype._getEndTime = function(todayDateObj, isAddMinute) {
+        var endTime = "";
+        if (isAddMinute) {
+            var temp = this.addMinutes(todayDateObj, 1);
+            if (temp !== null) {
+                return this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", temp);
+            }
+        } else {
+            this.addDate(todayDateObj, 1);
+            endTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", todayDateObj);
+            this.addDate(todayDateObj, -1);
+            return endTime;
         }
         return this.formateDateTime("YYYY/-/MM/-/DD/ /hh/:/mm", "/", todayDateObj);
+    };
+    DateTime.prototype._getMatchingIndex = function(patternList, timeRange) {
+        var matchIndex = -1, temp;
+        if (!Stack.isStringV2(timeRange)) {
+            return matchIndex;
+        }
+        if (isArray(patternList)) {
+            for (var i=0; i<patternList.length; i++) {
+                temp = Stack.searchItems(patternList[i], [timeRange], true);
+                if (Stack.isArray(temp) && temp.length === 1) {
+                    matchIndex = i;
+                    break;
+                }
+            }
+        }
+        return matchIndex;
     };
     DateTime.prototype.getDateRange = function(timeRange) {
         var finalTimeRange = [];
@@ -435,61 +459,80 @@ var DT = (function() {
         }
         var today = new Date(), startDay;
         var startTime = "", endTime = "";
-        var count = 0, temp, temp2;
-        var searchResult = Stack.searchItems(["last-[0-9]{1,3}-days"], [timeRange], true);
-        if (Stack.isArray(searchResult) && searchResult.length === 1) {
+        var count = 0, temp, temp2, i;
+        var patternList = [];
+        patternList.push(["last-[0-9]{1,3}-days-offset-[0-9]{1,3}"]); //0
+        patternList.push(["last-[0-9]{1,3}-days"]); //1
+        patternList.push(["last-[0-9]{1,3}-months-offset-[0-9]{1,3}"]); //2
+        patternList.push(["last-[0-9]{1,3}-months"]); //3
+        patternList.push(["from-[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"]); // 4
+        patternList.push(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"]); // 5
+        var matchIndex = this._getMatchingIndex(patternList, timeRange);
+        if ([0, 1].indexOf(matchIndex) >= 0) {
             temp = timeRange.split("-");
-            endTime = this.getEndTime(today);
-            if (temp.length === 3) {
+            endTime = this._getEndTime(today, true);
+            if (temp.length === 5) {
+                count = temp[4] * 1;
+                if (count > 0) {
+                    startDay = this.addDate(today, -1 * count);
+                    endTime = this._getEndTime(startDay, false);
+                    today = startDay;
+                }
+            }
+            if (temp.length >= 3) {
                 count = temp[1] * 1;
                 startDay = this.addDate(today, -1 * count);
                 startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
             }
-        } else {
-            searchResult = Stack.searchItems(["last-[0-9]{1,3}-months"], [timeRange], true);
-            if (Stack.isArray(searchResult) && searchResult.length === 1) {
-                temp = timeRange.split("-");
-                endTime = this.getEndTime(today);
-                if (temp.length === 3) {
-                    count = temp[1] * 1;
-                    startDay = today;
-                    startDay.setDate(1);
-                    for(var i=0; i<count; i++) {
+        } else if ([2, 3].indexOf(matchIndex) >= 0) {
+            temp = timeRange.split("-");
+            endTime = this._getEndTime(today, true);
+            if (temp.length === 5) {
+                count = temp[4] * 1;
+                startDay = today;
+                if (count > 0) {
+                    for(i=0; i<count; i++) {
                         startDay = this.addDate(startDay, -1);
                         startDay.setDate(1);
                     }
-                    startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
+                    startDay.setDate(0);
+                    endTime = this._getEndTime(startDay, false);
+                    today = startDay;
                 }
-            } else {
-                searchResult = Stack.searchItems(["from-[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
-                if (Stack.isArray(searchResult) && searchResult.length === 1) {
-                    temp = timeRange.split("from-");
-                    endTime = this.getEndTime(today);
-                    if (temp.length === 2) {
-                        temp2 = this.getDateObj(temp[1]);
-                        if (temp2 !== null) {
-                            startTime = temp[1];
-                        }
-                    }
-                } else {
-                    searchResult = Stack.searchItems(["[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}"], [timeRange], true);
-                    if (Stack.isArray(searchResult) && searchResult.length === 1) {
-                        temp = timeRange.split(",");
-                        if (temp.length === 2) {
-                            temp2 = this.getDateObj(temp[0]);
-                            if (temp2 !== null) {
-                                temp2 = this.getDateObj(temp[1]);
-                                if (temp2 !== null) {
-                                    startTime = temp[0];
-                                    endTime = temp[1];
-                                }
-                            }
-                        }
-                    } else {
-                        console.log("Invalid timeRange pattern: " + timeRange);
+            }
+            if (temp.length >= 3) {
+                count = temp[1] * 1;
+                startDay = today;
+                startDay.setDate(1);
+                for(i=0; i<count; i++) {
+                    startDay = this.addDate(startDay, -1);
+                    startDay.setDate(1);
+                }
+                startTime = this.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", startDay);
+            }
+        } else if (matchIndex === 4) {
+            temp = timeRange.split("from-");
+            endTime = this._getEndTime(today, true);
+            if (temp.length === 2) {
+                temp2 = this.getDateObj(temp[1]);
+                if (temp2 !== null) {
+                    startTime = temp[1];
+                }
+            }
+        } else if (matchIndex === 5) {
+            temp = timeRange.split(",");
+            if (temp.length === 2) {
+                temp2 = this.getDateObj(temp[0]);
+                if (temp2 !== null) {
+                    temp2 = this.getDateObj(temp[1]);
+                    if (temp2 !== null) {
+                        startTime = temp[0];
+                        endTime = temp[1];
                     }
                 }
             }
+        } else {
+            console.log("Invalid timeRange pattern: " + timeRange);
         }
         finalTimeRange.push(startTime);
         finalTimeRange.push(endTime);

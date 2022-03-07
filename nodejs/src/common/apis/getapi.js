@@ -2,7 +2,7 @@
 const https = require('https');
 const http = require('http')
 const $S = require("../../libs/stack.js");
-const Logger = require("../logger.js");
+const Logger = require("../logger-v2.js");
 const AppConstant = require("../AppConstant.js");
 
 const Get = {

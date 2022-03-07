@@ -1,5 +1,5 @@
 const $S = require("../../libs/stack.js");
-const Logger = require("../logger.js");
+const Logger = require("../logger-v2.js");
 const FS = require("../fsmodule.js");
 const AppConstant = require("../AppConstant.js");
 

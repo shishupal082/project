@@ -27,18 +27,18 @@ DBAccess.extend({
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
                     DB.setDbParameter(ConfigData["dbConfig"]);
-                    Logger.log("DBAccess: Config data read success.", null, true);
+                    Logger.log("DBAccess: Config data read success.");
                     DB.getDbConnection(function(dbCon) {
                         database = dbCon;
                         $S.callMethod(callback);
                     });
                 } else {
-                    Logger.log("Invalid config data: " + configFilePath, null, true);
+                    Logger.log("Invalid config data: " + configFilePath);
                     $S.callMethod(callback);
                 }
             });
         } else {
-            Logger.log("Invalid config path: " + configFilePath, null, true);
+            Logger.log("Invalid config path: " + configFilePath);
             $S.callMethod(callback);
         }
     }

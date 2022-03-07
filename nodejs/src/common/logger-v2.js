@@ -7,9 +7,7 @@ var Logger = function(config) {
     return new Logger.fn.init(config);
 };
 var DT = $S.getDT();
-var dateTime = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm", "/");
-var logFilename = dateTime+".log";
-var fileDir;
+var LogFileDir;
 var isEnableLoging = false;
 Logger.fn = Logger.prototype = {
     constructor: Logger,
@@ -19,26 +17,18 @@ Logger.fn = Logger.prototype = {
     },
     setLogDir: function() {
         if ($S.isStringV2(this.config)) {
-            fileDir = $S.clone(this.config);
+            LogFileDir = $S.clone(this.config);
         } else {
             console.log("Invalid log dir: " + this.config);
         }
         return this;
     },
-    setLogFilename: function() {
-        if ($S.isStringV2(this.config)) {
-            logFilename = $S.clone(this.config);
-        } else {
-            console.log("Invalid log filename: " + this.config);
-        }
-        return this;
-    },
     enableLoging: function(callback) {
-        FS.isDirExist(fileDir, function(status) {
+        FS.isDirExist(LogFileDir, function(status) {
             if (status) {
                 isEnableLoging = true;
             } else {
-                console.log("Invalid log dir: " + fileDir);
+                console.log("Invalid log dir: " + LogFileDir);
             }
             $S.callMethodV1(callback, isEnableLoging);
         });
@@ -60,7 +50,7 @@ Logger.extend({
         var text = qItem["text"];
         if ($S.isObject(qItem)) {
             if (isEnableLoging) {
-                FS.appendTextFile(fileDir + logFilename, text, function(status, textData) {
+                FS.appendTextFile(LogFileDir + DT.getDateTime("YYYY/-/MM/-/DD", "/") +".log", text, function(status, textData) {
                     console.log(textData);
                     $S.callMethodV2(qItem["callback"], status, textData);
                     IsProcessing = false;
@@ -77,18 +67,19 @@ Logger.extend({
             this._log(callback);
         }
     },
-    log: function(text, callback, isAddDate) {
-        if ($S.isBooleanTrue(isAddDate)) {
+    log: function(text, notAddDate) {
+        if ($S.isBooleanTrue(notAddDate)) {
+        } else {
             text = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss", "/") + " " + text;
         }
-        Q.Enque({"text": text, "callback": callback});
+        Q.Enque({"text": text});
         this._log();
     },
-    logV2: function(obj, callback, isAddDate) {
+    logV2: function(obj, notAddDate) {
         if ($S.isObject(obj) || $S.isArray(obj)) {
-            this.log(JSON.stringify(obj), callback, isAddDate);
+            this.log(JSON.stringify(obj), notAddDate);
         } else {
-            this.log(obj, callback, isAddDate);
+            this.log(obj, notAddDate);
         }
     }
 });

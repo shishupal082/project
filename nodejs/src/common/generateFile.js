@@ -42,14 +42,14 @@ ReadText.fn = ReadText.prototype = {
     writeText: function(filepath, callback) {
         var self = this;
         if (FS.isFile(filepath)) {
-            console.log("File exist: " + filepath);
+            Logger.log("File exist: " + filepath);
             FS.deleteContent(filepath, function() {
                 self.writeContent(filepath, function() {
                     $S.callMethod(callback);
                 });
             });
         } else {
-            console.log("File does not exist: " + filepath);
+            Logger.log("File does not exist: " + filepath);
             $S.callMethod(callback);
         }
     }
@@ -82,9 +82,8 @@ ReadText.extend({
                 dir = temp[3];
                 // It can end up in infinite loop when same filename is included in reading
                 if (obj.processedFile.indexOf(filename) && false) {
-                    Logger.log("Filename " + filename + " read already completed.", function() {
-                        $S.callMethodV1(callback, [textData]);
-                    });
+                    Logger.log("Filename " + filename + " read already completed.");
+                    $S.callMethodV1(callback, [textData]);
                 } else {
                     obj.processedFile.push(filename);
                     ReadText.read(dir + filename + fileExt, obj, {}, function(data, tempObj) {
@@ -100,9 +99,8 @@ ReadText.extend({
                 postText = temp[5];
                 // It can end up in infinite loop when same filename is included in reading
                 if (obj.processedFile.indexOf(filename) && false) {
-                    Logger.log("Filename " + filename + " read already completed.", function() {
-                        $S.callMethodV1(callback, [textData]);
-                    });
+                    Logger.log("Filename " + filename + " read already completed.");
+                    $S.callMethodV1(callback, [textData]);
                 } else {
                     obj.processedFile.push(filename);
                     ReadText.read(dir + filename + fileExt, obj, {"preText": preText, "postText": postText}, function(data, tempObj) {
@@ -125,7 +123,7 @@ ReadText.extend({
             $S.callMethodV1(callback, finalTextDataV2);
             return;
         }
-        // console.log(fileData.length + "::" + i);
+        // Logger.log(fileData.length + "::" + i);
         if (i >= fileData.length || i < 0) {
             $S.callMethodV1(callback, finalTextDataV2);
             return;
@@ -142,15 +140,13 @@ ReadText.extend({
     },
     read: function(filepath, obj, tempObj, callback) {
         var text = "------------------------------------------------\nReading text file: \t\t";
-        Logger.log(text + filepath, function() {
-            FS.readTextFile(filepath, [], function(fileData) {
-                Logger.log("Read text file completed: \t" + filepath, function() {
-                    var fileDataV2 = $S.readTextData(fileData);
-                    var finalTextDataV2 = [];
-                    ReadText.parseData(fileDataV2, obj, 0, finalTextDataV2, function(finalTextData) {
-                        $S.callMethodV2(callback, finalTextData, tempObj);
-                    });
-                });
+        Logger.log(text + filepath);
+        FS.readTextFile(filepath, [], function(fileData) {
+            Logger.log("Read text file completed: \t" + filepath);
+            var fileDataV2 = $S.readTextData(fileData);
+            var finalTextDataV2 = [];
+            ReadText.parseData(fileDataV2, obj, 0, finalTextDataV2, function(finalTextData) {
+                $S.callMethodV2(callback, finalTextData, tempObj);
             });
         });
     }
