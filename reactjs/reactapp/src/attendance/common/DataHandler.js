@@ -406,6 +406,7 @@ DataHandler.extend({
                 $S.callMethod(callback);
             });
         } else {
+            DataHandlerV3.applyDefaultSort();
             $S.callMethod(callback);
         }
     },

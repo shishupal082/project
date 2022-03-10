@@ -130,6 +130,11 @@ DataHandlerV3.extend({
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
     },
+    applyDefaultSort: function() {
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        this._handleDefaultSorting(dbViewData);
+        DataHandler.setData("dbViewData", dbViewData);
+    },
     _getResultPatternFromData: function(pageName, currentAppData, metaData) {
         var resultPattern = $S.findParam([currentAppData, metaData], "resultPattern.entry" , []);
         var attendanceDataKey = $S.findParam([currentAppData, metaData], "attendanceDataKey" , "");
