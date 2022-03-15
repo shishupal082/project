@@ -1,5 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
+
 import $S from '../interface/stack.js';
 
 var Api;
@@ -294,6 +296,19 @@ childGenerator = {
     },
     "dropdownV2": function(props, data, reactChildText, key) {
         return childGenerator["dropdown"](props, data, reactChildText, key, "selectV2");
+    },
+    "gmail-login": function(props, data, reactChildText, key) {
+        if ($S.isFunction(props.methods.responseGoogleSuccess) && $S.isFunction(props.methods.responseGoogleFailure)) {
+            return <GoogleLogin
+                clientId={data.googleLoginClientId}
+                buttonText={data.buttonText}
+                onSuccess={props.methods.responseGoogleSuccess}
+                onFailure={props.methods.responseGoogleFailure}
+                cookiePolicy={'single_host_origin'}
+            />;
+        } else {
+            return null;
+        }
     }
 };
 

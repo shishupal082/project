@@ -180,6 +180,31 @@ FormHandler.extend({
             }
         });
     },
+    handleSocialLoginForm: function(pageName, callback) {
+        var url = Config.getApiUrl("login_social", null, true);
+        var postData = {};
+        DataHandler.setData("formSubmitStatus", "in_progress");
+        $S.callMethod(callback);
+        var tokenId = DataHandler.getData("social_login_token_id", "");
+        postData["id_token"] = tokenId;
+        postData["type"] = "LOGIN_WITH_GOOGLE";
+        postData["username"] = DataHandler.getData("social_login_email", "");
+        postData["user_agent"] = $S.getUserAgentTrackingData(Config.navigator);
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            DataHandler.setData("formSubmitStatus", "completed");
+            DataHandler.isAndroid(postData["username"]);
+            if (status === "FAILURE") {
+                $S.callMethod(callback);
+                response = {"status": "FAILURE_RESPONSE"};
+                response["data"] = FormHandler.parseUsername(ajax.data);
+                FormHandler.trackResponse(postData["username"], postData["user_agent"], "login_social", response);
+                alert("Error in login, Please Try again.");
+            } else {
+                FormHandler.trackResponse(postData["username"], postData["user_agent"], "login_social", response);
+                FormHandler.handleApiResponse(callback, pageName, ajax, response);
+            }
+        });
+    },
     handleChangePasswordForm: function(pageName, callback) {
         var username = AppHandler.GetUserData("username", "");
         var url = Config.getApiUrl(pageName, null, true) + "?u=" + username;

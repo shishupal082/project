@@ -104,6 +104,12 @@ Template["login"] = [
                         },
                         {
                             "tag": "div",
+                            "className": "google-login-div",
+                            "name": "google-login-field",
+                            "text": []
+                        },
+                        {
+                            "tag": "div",
                             "className": "text-center d-none",
                             "name": "login.guest-login-link",
                             "text": [

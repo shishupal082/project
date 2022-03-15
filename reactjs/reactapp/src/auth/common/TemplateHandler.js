@@ -4,7 +4,7 @@ import TemplateHelper from "../../common/TemplateHelper";
 import AppHandler from "../../common/app/common/AppHandler";
 import DataHandler from "./DataHandler";
 import Template from "./Template";
-// import Config from "./Config";
+import Config from "./Config";
 
 
 import UserControl from "../pages/UserControl";
@@ -99,8 +99,27 @@ TemplateHandler.extend({
         if (!$S.isObject(fieldsValue)) {
             fieldsValue = {};
         }
+        var loginWithGmailTag = {
+            "tag": "center",
+            "text": {
+                "tag": "gmail-login",
+                "googleLoginClientId": "googleLoginClientId",
+                "className": "btn btn-primary",
+                "buttonText": "Login with GMAIL"
+            }
+        };
+        var googleLoginClientId = "";
+        var loginWithGmailEnable = "false";
         switch(pageName) {
             case "login":
+                renderFieldRow = AppHandler.getTemplate(Template, pageName, "Page Not Found");
+                loginWithGmailEnable = AppHandler.GetStaticData("login_with_gmail_enable", "false");
+                googleLoginClientId = Config.googleLoginClientId;
+                if (loginWithGmailEnable === "true" && $S.isStringV2(googleLoginClientId)) {
+                    loginWithGmailTag["text"]["googleLoginClientId"] = googleLoginClientId;
+                    TemplateHelper.addItemInTextArray(renderFieldRow, "google-login-field", loginWithGmailTag);
+                }
+            break;
             case "register":
             case "change_password":
             case "create_password":

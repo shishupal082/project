@@ -36,6 +36,7 @@ if (!$S.isString(loginRedirectUrl) || loginRedirectUrl.length < 1) {
 }
 
 Config.loginRedirectUrl = loginRedirectUrl;
+Config.googleLoginClientId = $$$.googleLoginClientId;
 
 try {
     headingJson = JSON.parse(headingJson);
@@ -215,6 +216,7 @@ var apiMapping = {};
 
 apiMapping["login"] = "/api/login_user";
 apiMapping["login_other_user"] = "/api/login_other_user";
+apiMapping["login_social"] = "/api/login_social";
 apiMapping["register"] = "/api/register_user";
 apiMapping["forgot_password"] = "/api/forgot_password";
 apiMapping["create_password"] = "/api/create_password";

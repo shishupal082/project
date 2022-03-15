@@ -26,6 +26,8 @@ var keys = ["platform"];
 keys.push("pageName");
 keys.push("login.username");
 keys.push("login.password");
+keys.push("social_login_token_id");
+keys.push("social_login_email");
 keys.push("guest-login-status");
 
 keys.push("change_password.old_password");
@@ -366,6 +368,9 @@ DataHandler.extend({
         switch(value) {
             case "login_form":
                 FormHandler.handleLoginForm(pageName, callback);
+            break;
+            case "social_login_form":
+                FormHandler.handleSocialLoginForm(pageName, callback);
             break;
             case "register_form":
                 FormHandler.handleRegisterForm(pageName, callback);

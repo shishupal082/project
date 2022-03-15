@@ -34,6 +34,8 @@ class App extends React.Component {
         this.appDataCallback = this.appDataCallback.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
+        this.responseGoogleSuccess = this.responseGoogleSuccess.bind(this);
+        this.responseGoogleFailure = this.responseGoogleFailure.bind(this);
         this.childAttribute = {};
         this.methods = {
             onClick: this.onClick,
@@ -41,12 +43,23 @@ class App extends React.Component {
             dropDownChange: this.dropDownChange,
             onFormSubmit: this.onFormSubmit,
             pageComponentDidMount: this.pageComponentDidMount,
-            registerChildAttribute: this.registerChildAttribute
+            registerChildAttribute: this.registerChildAttribute,
+            responseGoogleSuccess: this.responseGoogleSuccess,
+            responseGoogleFailure: this.responseGoogleFailure
         };
     }
     registerChildAttribute(name, method) {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
+    responseGoogleSuccess(response) {
+        if ($S.isObject(response) && $S.isObject(response.profileObj) && $S.isStringV2(response.tokenId)) {
+            var email = response.profileObj.email;
+            DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, "social_login_email", email);
+            DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, "social_login_token_id", response.tokenId);
+            DataHandler.OnFormSubmit(this.appStateCallback, this.appDataCallback, "form_name" ,"social_login_form");
+        }
+    }
+    responseGoogleFailure(response) {}
     gotoPage(pageName) {
     }
     onClick(e) {

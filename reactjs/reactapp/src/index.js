@@ -14,9 +14,10 @@ import ReactDOM from 'react-dom';
 // import App from './ml2/App';
 // import App from './ftp/App';
 // import App from './project-tracking/App';
-// import App from './auth/App';
+import App from './auth/App';
 // import App from './rcc/App';
-import App from './attendance/App';
+// import App from './attendance/App';
+// import App from './google_login/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
