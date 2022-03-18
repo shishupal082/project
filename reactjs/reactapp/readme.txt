@@ -64,3 +64,7 @@ S/C/SH-1-A/B/C/D/E (i.e. writting A-E is not allowed)
 
 Important key in excel:
 - type (signal, single_path)
+
+auth-app (15.03.2022)
+***********************************************
+Login with gmail added on login screen

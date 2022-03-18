@@ -100,6 +100,16 @@ FormHandler.extend({
             } else {
                 AppHandler.LazyRedirect(getLoginRedirectUrl(response), 250);
             }
+        } else if (apiName === "reset_count") {
+            if (response.status === "FAILURE") {
+                $S.callMethod(callback);
+                alert(this.getAleartMessage(response));
+                if (response.failureCode === "UNAUTHORIZED_USER") {
+                    AppHandler.LazyReload();
+                }
+            } else {
+                AppHandler.LazyReload();
+            }
         }
     },
     trackResponse: function(username, userAgent, pageName, response) {
@@ -244,7 +254,7 @@ FormHandler.extend({
                 response = {"status": "FAILURE_RESPONSE"};
                 response["data"] = FormHandler.parseUsername(ajax.data);
                 FormHandler.trackResponse(postData["username"], postData["user_agent"], pageName, response);
-                alert("Error in forgot password user, Please Try again.");
+                alert("Error in forgot password, Please Try again.");
             } else {
                 FormHandler.trackResponse(postData["username"], postData["user_agent"], pageName, response);
                 FormHandler.handleApiResponse(callback, pageName, ajax, response);
@@ -269,7 +279,7 @@ FormHandler.extend({
                 response = {"status": "FAILURE_RESPONSE"};
                 response["data"] = FormHandler.parseUsername(ajax.data);
                 FormHandler.trackResponse(postData["username"], postData["user_agent"], pageName, response);
-                alert("Error in register user, Please Try again.");
+                alert("Error in create password, Please Try again.");
             } else {
                 FormHandler.trackResponse(postData["username"], postData["user_agent"], pageName, response);
                 FormHandler.handleApiResponse(callback, pageName, ajax, response);
@@ -287,6 +297,7 @@ FormHandler.extend({
         $S.callMethod(callback);
         var username = DataHandler.getData("login_other_user.username", "");
         postData["username"] = username;
+        postData["user_agent"] = $S.getUserAgentTrackingData(Config.navigator);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             DataHandler.setData("formSubmitStatus", "completed");
             if (status === "FAILURE") {
@@ -298,6 +309,28 @@ FormHandler.extend({
             } else {
                 FormHandler.trackResponse(orgUsername + ":" + postData["username"], postData["user_agent"], "login_other_user", response);
                 FormHandler.handleApiResponse(callback, "login_other_user_form", ajax, response);
+            }
+        });
+    },
+    handleResetCountClick: function(pageName, callback) {
+        var apiName = "reset_count";
+        var url = Config.getApiUrl(apiName, null, true);
+        var postData = {};
+        DataHandler.setData("formSubmitStatus", "in_progress");
+        $S.callMethod(callback);
+        postData["username"] = DataHandler.getData("user_control.reset_count_username", "");
+        $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
+            DataHandler.setData("formSubmitStatus", "completed");
+            DataHandler.isAndroid(postData["username"]);
+            if (status === "FAILURE") {
+                $S.callMethod(callback);
+                response = {"status": "FAILURE_RESPONSE"};
+                response["data"] = FormHandler.parseUsername(ajax.data);
+                FormHandler.trackResponseAfterLogin(apiName, response);
+                alert("Error in reset count, Please Try again.");
+            } else {
+                FormHandler.trackResponseAfterLogin(apiName, response);
+                FormHandler.handleApiResponse(callback, apiName, ajax, response);
             }
         });
     }

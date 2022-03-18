@@ -56,6 +56,7 @@ keys.push("login_other_user.username");
 keys.push("relatedUsersData");
 
 keys.push("users_control.response");
+keys.push("user_control.reset_count_username");
 keys.push("permission_control.response");
 keys.push("permission_control.validPermissionList"); // Use for marshaling permission data
 keys.push("compare_control.allUsername");
@@ -324,6 +325,9 @@ DataHandler.extend({
     OnButtonClick: function(appStateCallback, appDataCallback, name, value) {
         if (name === "login.submit-guest") {
             DataHandler.setData("guest-login-status", true);
+        } else if (name === "user_control.reset_count_button") {
+            DataHandler.setData("user_control.reset_count_username", value);
+            DataHandler.OnFormSubmit(appStateCallback, appDataCallback, name, name);
         } else if (name === "sortable") {
             var sortingFields = DataHandler.getData("sortingFields", []);
             var finalSortingField = DBViewDataHandler.UpdateSortingFields(sortingFields, value);
@@ -386,6 +390,9 @@ DataHandler.extend({
             break;
             case "login_other_user_form":
                 FormHandler.handleLoginOtherUser(pageName, callback, value);
+            break;
+            case "user_control.reset_count_button":
+                FormHandler.handleResetCountClick(pageName, callback);
             break;
             default:
             break;

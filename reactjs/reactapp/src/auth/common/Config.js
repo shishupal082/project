@@ -153,8 +153,30 @@ Config.defaultMetaData = {
         },
         {
             "tableName": "table1",
-            "name": "methodRequestCount",
             "heading": "Count",
+            "name": "methodRequestCount",
+            "fieldName": "methodRequestCount.value",
+            "text": {
+                "tag": "button",
+                "name": "user_control.reset_count_button",
+                "value": "table1.reset.button",
+                "className": "btn btn-primary",
+                "text": [
+                    {
+                        "tag": "span",
+                        "name": "methodRequestCount.value",
+                        "text": ""
+                    },
+                    {
+                        "tag": "span",
+                        "text": " "
+                    },
+                    {
+                        "tag": "span",
+                        "text": "Reset"
+                    }
+                ]
+            },
             "isSortable": true
         },
         {
@@ -221,6 +243,7 @@ apiMapping["register"] = "/api/register_user";
 apiMapping["forgot_password"] = "/api/forgot_password";
 apiMapping["create_password"] = "/api/create_password";
 apiMapping["change_password"] = "/api/change_password";
+apiMapping["reset_count"] = "/api/reset_count";
 apiMapping["track_event"] = "/api/track_event";
 apiMapping["getDatabaseFilesInfoApi"] = "/api/get_database_files_info";
 apiMapping["getRolesConfig"] = "/api/get_roles_config";
