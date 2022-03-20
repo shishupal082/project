@@ -31,7 +31,17 @@ FS.extend = FS.fn.extend = function(options) {
     }
     return FS;
 };
-
+FS.extend({
+    createDir: function(dir) {
+        if (!fs.existsSync(dir)) {
+            try {
+                fs.mkdirSync(dir);
+            } catch(e) {
+                console.log("Error in createDir: " + dir);
+            }
+        }
+    }
+});
 FS.extend({
     isFile: function(pathname) {
         try {
@@ -131,10 +141,13 @@ FS.extend({
         });
     },
     appendTextFile: function(filepath, textData, callback) {
+        var status = true;
         fs.appendFile(filepath, "\n" + textData, "utf8", function(err) {
-            if (err) throw err;
+            if (err) {
+                status = false;
+            }
             if (typeof callback === "function") {
-                callback(true, textData);
+                callback(status, textData);
             }
         });
     },

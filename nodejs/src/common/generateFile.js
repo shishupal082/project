@@ -35,7 +35,7 @@ ReadText.fn = ReadText.prototype = {
                 self.writeContent(filepath, callback);
             });
         } else {
-            $S.callMethod(callback);
+            $S.callMethodV1(callback, false);
             return;
         }
     },
@@ -44,13 +44,23 @@ ReadText.fn = ReadText.prototype = {
         if (FS.isFile(filepath)) {
             Logger.log("File exist: " + filepath);
             FS.deleteContent(filepath, function() {
-                self.writeContent(filepath, function() {
-                    $S.callMethod(callback);
+                self.writeContent(filepath, function(status) {
+                    $S.callMethodV1(callback, status);
                 });
             });
         } else {
             Logger.log("File does not exist: " + filepath);
             $S.callMethod(callback);
+        }
+    },
+    writeTextV2: function(filepath, callback) {
+        var self = this;
+        if (!FS.isFile(filepath)) {
+            FS.appendTextFile(filepath, "", function() {
+                self.writeText(filepath, callback);
+            });
+        } else {
+            this.writeText(filepath, callback);
         }
     }
 };
@@ -164,6 +174,11 @@ var generateFile = {
     saveText: function(textDataArr, destinationPath, callback) {
         ReadText({"i": 0, "textData": textDataArr}).writeText(destinationPath, function(status) {
             $S.callMethod(callback);
+        });
+    },
+    saveTextV2: function(textDataArr, destinationPath, callback) {
+        ReadText({"i": 0, "textData": textDataArr}).writeTextV2(destinationPath, function(status) {
+            $S.callMethodV1(callback, status);
         });
     },
     getReadText: function() {

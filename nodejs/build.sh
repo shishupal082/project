@@ -1,5 +1,5 @@
-oldVersion=1.0.1
-newVersion=1.0.2
+oldVersion=1.0.2
+newVersion=1.0.3
 echo "$(date +"%Y-%m-%d %T") v=$newVersion" >> version.txt
 sed -i "s/$oldVersion/$newVersion/1" src/common/AppConstant.js
 rm -rf build/*.tar.gz

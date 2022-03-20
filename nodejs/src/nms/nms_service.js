@@ -4,6 +4,7 @@ var FS = require("../common/fsmodule.js");
 var DB = require("../common/db.js");
 var exec = require('child_process').exec;
 var mysql = require('mysql');
+var generateFile = require("../common/generateFile.js");
 
 (function() {
 var ConfigData = {};
@@ -37,17 +38,33 @@ NmsService.extend({
         if (msgArr.length > 1) {
             result["workId"] = msgArr[1];
         }
-        if (msgArr.length > 2) {
-            result["timeRange"] = msgArr[2];
+        if (["NMS_Service", "NMS_Service_File"].indexOf(result["workId"]) >= 0) {
+            if (msgArr.length > 2) {
+                result["timeRange"] = msgArr[2];
+            }
+            if (msgArr.length > 3) {
+                result["filterParameter"] = msgArr[3];
+            }
+            if (msgArr.length > 4) {
+                result["limitParam"] = msgArr[4];
+            }
+            if (msgArr.length > 5) {
+                result["uiFilterParam"] = msgArr[5];
+            }
         }
-        if (msgArr.length > 3) {
-            result["filterParameter"] = msgArr[3];
-        }
-        if (msgArr.length > 4) {
-            result["limitParam"] = msgArr[4];
-        }
-        if (msgArr.length > 5) {
-            result["uiFilterParam"] = msgArr[5];
+        if (result["workId"] === "NMS_Service_File") {
+            if (msgArr.length > 6) {
+                result["username"] = msgArr[6];
+            }
+            if (msgArr.length > 7) {
+                result["filename"] = msgArr[7];
+            }
+            if ($S.isStringV2(result["username"]) && (result["username"].indexOf("/") >= 0 || result["username"].indexOf("\\") >= 0)) {
+                result["username"] = "";
+            }
+            if ($S.isStringV2(result["filename"]) && (result["filename"].indexOf("/") >= 0 || result["filename"].indexOf("\\") >= 0)) {
+                result["filename"] = "";
+            }
         }
         return result;
     }
@@ -122,9 +139,7 @@ NmsService.extend({
         var uiFilterParam = requestParam["uiFilterParam"];
 
         if (!$S.isNumeric(limitParam)) {
-            limitParam = "1000";
-        } else if (limitParam*1 > 10000) {
-            limitParam = "10000";
+            limitParam = "";
         }
         if ($S.isStringV2(filterParameter)) {
             tableFilterParam += " and " + filterParameter;
@@ -133,7 +148,11 @@ NmsService.extend({
             tableFilterParam += " and " + uiFilterParam;
         }
         var timeParameter = this._getTimeRangeParameter(timeRange);
-        var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam + timeParameter + " order by s_no desc limit " + limitParam + ";"
+        var q = "SELECT did, dip, status, response_id, timestamp from ping_status where deleted = false "+ tableFilterParam + timeParameter + " order by s_no desc";
+        if ($S.isStringV2(limitParam)) {
+            q += " limit " + limitParam;
+        }
+        q += ";";
         Logger.log(q);
         if (database === null) {
             $S.callMethodV1(callback, finalResult);
@@ -141,7 +160,7 @@ NmsService.extend({
         }
         database.query(q, function (err, result, fields) {
             if (err) {
-                throw err;
+                Logger.log(err);
             }
             if ($S.isArray(result) && result.length > 0) {
                 finalResult = result;
@@ -150,14 +169,14 @@ NmsService.extend({
             $S.callMethodV1(callback, finalResult);
         });
     },
-    getData: function(requestParam, callback) {
+    _getData: function(requestParam, callback) {
         var self = this;
         if (isConfigDataRead) {
             this._connectDB(function() {
                 self.getDevicePingStatus(requestParam, function(result) {
                     DB.closeDbConnection(database);
                     database = null;
-                    $S.callMethodV1(callback, JSON.stringify(result));
+                    $S.callMethodV1(callback, result);
                 });
             });
         } else {
@@ -171,14 +190,51 @@ NmsService.extend({
             return;
         }
         var requestParam = NmsService.parseRequest(request["msg"]);
-        Logger.log("Request: " + JSON.stringify(request));
-        NmsService.getData(requestParam, function(result) {
-            $S.callMethodV1(callback, result);
+        Logger.log("Request: " + JSON.stringify(requestParam));
+        var isNotFound = true, filepath;
+        NmsService._getData(requestParam, function(result) {
+            if (requestParam["workId"] === "NMS_Service_File") {
+                if ($S.isObjectV2(ConfigData) && $S.isStringV2(ConfigData["fileSaveDir"])) {
+                    if ($S.isStringV2(requestParam["username"]) && $S.isStringV2(requestParam["filename"])) {
+                        filepath = requestParam["username"] + "/" + requestParam["filename"] + ".json";
+                        isNotFound = false;
+                        FS.isDirExist(ConfigData["fileSaveDir"], function(status) {
+                            if (status) {
+                                FS.isDirExist(ConfigData["fileSaveDir"] + requestParam["username"], function(status) {
+                                    if (!status) {
+                                        FS.createDir(ConfigData["fileSaveDir"] + requestParam["username"]);
+                                    }
+                                    Logger.log("Result length: " + JSON.stringify(result).length + ", count: " + result.length);
+                                    generateFile.saveTextV2([JSON.stringify(result)], ConfigData["fileSaveDir"] + filepath, function(status) {
+                                        Logger.log("File operation completed.");
+                                        if (FS.isFile(ConfigData["fileSaveDir"] + filepath)) {
+                                            result = {"status": "SUCCESS", "type": "file", "filepath": filepath};
+                                        } else {
+                                            result = {"status": "FAILURE", "type": "file", "filepath": null};
+                                        }
+                                        $S.callMethodV1(callback, JSON.stringify(result));
+                                    });
+                                });
+                            } else {
+                                Logger.log("fileSaveDir: " + ConfigData["fileSaveDir"] + " does not exist.");
+                                result = {"status": "SUCCESS", "type": "data", "response": result};
+                                $S.callMethodV1(callback, JSON.stringify(result));
+                            }
+                        });
+                    } else {
+                        Logger.log("Invalid request parameter username or filename: " + requestParam["username"] + "/" + requestParam["filename"]);
+                    }
+                } else {
+                    Logger.log("Invalid config parameter fileSaveDir: " + ConfigData["fileSaveDir"]);
+                }
+            }
+            if (isNotFound) {
+                result = {"status": "SUCCESS", "type": "data", "response": result};
+                $S.callMethodV1(callback, JSON.stringify(result));
+            }
         });
     }
 });
-
-
 
 module.exports = NmsService;
 

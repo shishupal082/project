@@ -1,5 +1,5 @@
 {
-    "client.localPort": 8087,
-    "client.remotePort": 8086,
-    "client.serverHost": "127.0.0.1",
+    "client.localPort": 8086,
+    "client.remotePort": 8087,
+    "client.serverHost": "127.0.0.1"
 }

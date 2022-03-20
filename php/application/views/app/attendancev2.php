@@ -40,7 +40,7 @@ GLOBAL.validAppControl = ["appControlTeam14"];
 // GLOBAL.appControlApi = "/roleAttendanceUser/json/attendance/appControlData.json";
 
 GLOBAL.headingJson = document.getElementById("headingJson").value;
-
+GLOBAL.projectHeading = "App Heading";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.1";
 GLOBAL.JQ = $;

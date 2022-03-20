@@ -4,5 +4,6 @@
         "username": "mysqljs",
         "password": "mysqljs",
         "database": "ftpapp"
-    }
+    },
+    "fileSaveDir": "C:/java/nms_service_file_response/"
 }

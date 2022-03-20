@@ -2,7 +2,6 @@ import $S from "../../interface/stack.js";
 import DataHandler from "./DataHandler";
 import Config from "./Config";
 
-
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
@@ -99,20 +98,66 @@ DataHandlerV3.extend({
     //     }
     //     return filterParameter;
     // },
+    _loadTcpFileData: function(filepath, callback) {
+        var tcpFileDataRequest = {
+                            "url": [Config.baseApi + "/view/file/" + filepath + "?iframe=false&u=" + AppHandler.GetUserData("username", "")],
+                            "apiName": "tcpFileData",
+                            "requestMethod": Api.getAjaxApiCallMethod()};
+        var request = [];
+        request.push(tcpFileDataRequest);
+        AppHandler.LoadDataFromRequestApi(request, function() {
+            if ($S.isArray(request[0].response) && request[0].response.length > 0) {
+                $S.callMethodV1(callback, request[0].response[0]);
+            } else {
+                $S.callMethodV1(callback, []);
+            }
+        });
+    },
+    _getTcpTableData: function(tcpResponse, callback) {
+        tcpResponse = AppHandler.ParseTcpResponseJson(tcpResponse, []);
+        if ($S.isObject(tcpResponse)) {
+            if (tcpResponse.type === "data") {
+                if ($S.isArray(tcpResponse.response)) {
+                    $S.callMethodV1(callback, tcpResponse.response);
+                } else {
+                    $S.callMethodV1(callback, []);
+                }
+            } else if (tcpResponse.type === "file") {
+                if ($S.isStringV2(tcpResponse.filepath)) {
+                    this._loadTcpFileData(tcpResponse.filepath, function(data) {
+                        $S.callMethodV1(callback, data);
+                    });
+                } else {
+                    $S.callMethodV1(callback, []);
+                }
+            }
+        } else {
+            $S.callMethodV1(callback, []);
+        }
+    },
     _callTcpService: function(callback) {
         var tcpConfig = DataHandler.getAppData("tcpConfig", {});
         var apiUrl = CommonConfig.getApiUrl("tcpServicePostApi", "", true);
         var postData = {};
         var jsonResponse = {"tcp_table": {"tableData": []}};
+        var self = this;
+        var username = AppHandler.GetUserData("username", "");
         if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
             if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
                 postData["data"] = tcpConfig["data"];
                 postData["tcp_id"] = tcpConfig["tcpId"];
+                if ($S.isBooleanTrue(tcpConfig["addUsername"])) {
+                    postData["data"] += username + "|" + username;
+                }
                 $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
                     if ($S.isObject(response)) {
-                        jsonResponse["tcp_table"]["tableData"] = AppHandler.ParseTcpResponseJson(response.data, []);
+                        self._getTcpTableData(response.data, function(tableData) {
+                            jsonResponse["tcp_table"]["tableData"] = tableData;
+                            $S.callMethodV1(callback, jsonResponse);
+                        });
+                    } else {
+                        $S.callMethodV1(callback, jsonResponse);
                     }
-                    $S.callMethodV1(callback, jsonResponse);
                 });
             } else {
                 $S.callMethodV1(callback, jsonResponse);

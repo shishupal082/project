@@ -540,6 +540,42 @@ var DT = (function() {
     }
     return DateTime;
 })();
+//WebSocket
+var WSS = (function() {
+    function WebSocketObj(url, obj) {
+        if (!Stack.isStringV2(url)) {
+            this.connection = null;
+            return;
+        }
+        if (!isObject(obj)) {
+            obj = {};
+        }
+        this.connection = new WebSocket(url);
+        this.connection.onopen = function(e) {
+            Stack.callMethodV1(obj.onopen, e);
+        };
+        this.connection.onclose = function(e) {
+            Stack.callMethodV1(obj.onclose, e);
+        };
+        this.connection.onmessage = function(e) {
+            Stack.callMethodV2(obj.onmessage, e, e.data);
+        };
+        this.connection.onerror = function(e) {
+            Stack.callMethodV1(obj.onerror, e);
+        };
+    }
+    WebSocketObj.prototype.send = function(data) {
+        if (this.connection) {
+            this.connection.send(data);
+        }
+    };
+    WebSocketObj.prototype.close = function() {
+        if (this.connection) {
+            this.connection.close();
+        }
+    };
+    return WebSocketObj;
+})();
 var LocalStorage = (function(){
     function LocalStorage () {
         var _localStorage = localStorage;
@@ -1681,6 +1717,9 @@ Stack.extend({
     },
     getDT: function() {
         return new DT();
+    },
+    getWSS: function(url, obj) {
+        return new WSS(url, obj);
     },
     getDataObj: function() {
         return new Data();
