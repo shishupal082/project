@@ -81,7 +81,7 @@ function start(jsonData) {
 
 FS.readJsonFile(configFilePath, null, function(jsonData) {
     if ($S.isObjectV2(jsonData)) {
-        Logger.log("tcp_server: Config data read success.");
+        Logger.log("tcp_server: Config data read success: " + configFilePath);
         TcpHandler.handleConfigData(jsonData);
         start(jsonData);
     } else {

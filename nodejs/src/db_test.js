@@ -14,14 +14,14 @@ if (args.length > 0 && $S.isStringV2(args[0])) {
 FS.readJsonFile(configFilePath, null, function(jsonData) {
     if ($S.isObject(jsonData)) {
         DB.setDbParameter(jsonData["dbConfig"]);
-        Logger.log("Config data read success.");
+        Logger.log("Config data read success: " + configFilePath);
         DB.getDbConnection(function(dbCon) {
             setTimeout(function() {
                 DB.closeDbConnection(dbCon);
             }, 1000);
         });
     } else {
-        Logger.log("Config data read success.");
+        Logger.log("Config data read success: " + configFilePath);
     }
 });
 

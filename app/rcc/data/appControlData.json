@@ -18,7 +18,7 @@
         "enableToggleButton": true,
         "tcpConfig": {
             "info": "appId:001, wordId:001",
-            "tcpId": "id_001",
+            "tcpId": "id_local_001",
             "data": "001|001"
         },
         "enabledPages": ["dbview", "dbview_rcc", "rcc_view", "rcc_summary"],
@@ -82,6 +82,13 @@
             },
             {
                 "tableName": "tlsr_trsr",
+                "name": "type",
+                "heading": "Type",
+                "className": "w-200px",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
                 "name": "on_route",
                 "heading": "On Route",
                 "className": "w-200px",
@@ -112,6 +119,18 @@
                 "fieldName": "info",
                 "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
                 "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting_route_direct",
+                "heading": "Conflicting Route Direct",
+                "isSortable": true
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting_route_indirect",
+                "heading": "Conflicting Route In Direct",
+                "isSortable": true
             },
             {
                 "tableName": "tlsr_trsr",
@@ -166,6 +185,28 @@
                 "tableName": "tlsr_trsr",
                 "name": "conflicting",
                 "heading": "Conflicting",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting_route_direct",
+                "heading": "Conflicting Route Signal [DIRECT]",
+                "className": "w-200px",
+                "wordBreak": ",",
+                "wordBreakTag": "li",
+                "fieldName": "info",
+                "text": {"tag": "ol", "className":"m-0 pl-15px", "text": [], "name": "info"},
+                "isSortable": false
+            },
+            {
+                "tableName": "tlsr_trsr",
+                "name": "conflicting_route_indirect",
+                "heading": "Conflicting Route Signal [INDIRECT]",
                 "className": "w-200px",
                 "wordBreak": ",",
                 "wordBreakTag": "li",

@@ -207,8 +207,8 @@ RCCHandler.extend({
         }
         return finalTableRow;
     },
-    _generateConflictingRoute: function(parameter) {
-        var result = [], temp;
+    _generateConflictingRoute: function(parameter, rowEntry) {
+        var result = [], temp, temp2;
         var conflictingSignal = DataHandlerV3.parseSignal(parameter);
         if ($S.isArray(conflictingSignal)) {
             for (var i=0; i<conflictingSignal.length; i++) {
@@ -221,23 +221,41 @@ RCCHandler.extend({
                     }
                 }
                 if (temp.length > 0) {
-                    result.push({"type": "signal", "parameter": conflictingSignal[i], "conflicting_route": temp.join(",")});
+                    if ($S.isObject(rowEntry)) {
+                        temp2 = $S.clone(rowEntry);
+                        temp2["parameter"] = conflictingSignal[i];
+                        if (temp2["conflicting_route_direct"] === "YES") {
+                            temp2["conflicting_route_direct"] = temp.join(",");
+                            temp2["conflicting_route_direct_signal"] = temp;
+                        }
+                        if (temp2["conflicting_route_indirect"] === "YES") {
+                            temp2["conflicting_route_indirect"] = temp.join(",");
+                            temp2["conflicting_route_indirect_signal"] = temp;
+                        }
+                        if (rowEntry["conflicting_route_direct"] !== "YES" && rowEntry["conflicting_route_indirect"] !== "YES") {
+                            if ($S.isStringV2(rowEntry["conflicting_route"])) {
+                                temp.push(rowEntry["conflicting_route"]);
+                            }
+                            temp2["conflicting_route"] = temp.join(",");
+                            temp2["conflicting_route_signal"] = temp2["conflicting_route"].split(",");
+                        }
+                        result.push(temp2);
+                    }
                 }
             }
         }
         return result;
     },
     handleSinglePathParameter: function(tableData) {
-        var result = [], parameter;
+        var result = [];
         if ($S.isArray(tableData)) {
             for (var i=0; i<tableData.length; i++) {
                 if ($S.isObject(tableData[i])) {
                     if (tableData[i]["type"] === "single_path") {
-                        parameter = tableData[i]["parameter"];
-                        result = result.concat(this._generateConflictingRoute(parameter));
-                        tableData[i]["type"] = "signal";
+                        result = result.concat(this._generateConflictingRoute(tableData[i]["parameter"], tableData[i]));
+                    } else {
+                        result.push(tableData[i]);
                     }
-                    result.push(tableData[i]);
                 }
             }
         }
@@ -249,7 +267,7 @@ RCCHandler.extend({
         var tableName = "tlsr_trsr";
         var tableData = [];
         var temp, temp2, temp3;
-        var signalRouteKey = ["conflicting_signal", "on_route_signal", "in_isolation_signal", "conflicting_route_signal"];
+        var signalRouteKey = ["conflicting_signal", "on_route_signal", "in_isolation_signal", "conflicting_route_signal", "conflicting_route_direct_signal", "conflicting_route_indirect_signal"];
         if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName].tableData)) {
             tableData = dbViewData[tableName].tableData;
         }
@@ -291,11 +309,18 @@ RCCHandler.extend({
                     if ($S.isArray(temp3["conflicting_route_signal"]) && temp3["conflicting_route_signal"].indexOf(signalRoute) >= 0) {
                         this._updateText(temp2, "conflicting_route", temp3["parameter"]);
                     }
+                    if ($S.isArray(temp3["conflicting_route_direct_signal"]) && temp3["conflicting_route_direct_signal"].indexOf(signalRoute) >= 0) {
+                        this._updateText(temp2, "conflicting_route_direct", temp3["parameter"]);
+                    }
+                    if ($S.isArray(temp3["conflicting_route_indirect_signal"]) && temp3["conflicting_route_indirect_signal"].indexOf(signalRoute) >= 0) {
+                        this._updateText(temp2, "conflicting_route_indirect", temp3["parameter"]);
+                    }
                 }
             }
             signalMapping[signalRoute]["tableRow"] = temp2;
         }
         this._updateConflictingSignal(signalMapping);
+        this._updateFinalConflictingSignal(signalMapping);
         this._combineConflictingSignal(signalMapping);
         temp = Object.keys(signalMapping);
         temp = this._sortSignalName(temp);
@@ -323,9 +348,10 @@ RCCHandler.extend({
             this._updateText(signalMapping[route]["tableRow"], "conflicting_route", route2);
         }
     },
-    _checkConflicting: function(signalRoute, conflicting, signalMapping) {
-        var conflictingRoute;
-        for(var i=0; i<conflicting.length; i++) {
+    _checkConflicting: function(signalRoute, conflicting, conflictingDirect, conflictingIndirect, signalMapping) {
+        var conflictingRoute, conflictingRouteDirect, conflictingRouteIndirect;
+        var i;
+        for(i=0; i<conflicting.length; i++) {
             if (!$S.isObject(signalMapping[conflicting[i]])) {
                 signalMapping[conflicting[i]] = {"tableRow": {"signal_route": conflicting[i]}};
             }
@@ -338,16 +364,60 @@ RCCHandler.extend({
                 this._updateText(signalMapping[conflicting[i]]["tableRow"], "conflicting_route", signalRoute);
             }
         }
+        for(i=0; i<conflictingDirect.length; i++) {
+            if (!$S.isObject(signalMapping[conflictingDirect[i]])) {
+                signalMapping[conflictingDirect[i]] = {"tableRow": {"signal_route": conflictingDirect[i]}};
+            }
+            if (!$S.isObject(signalMapping[conflictingDirect[i]]["tableRow"])) {
+                signalMapping[conflictingDirect[i]]["tableRow"] = {"signal_route": conflictingDirect[i]}
+            }
+            conflictingRouteDirect = signalMapping[conflictingDirect[i]]["tableRow"]["conflicting_route_direct"];
+            conflictingRouteDirect = DataHandlerV3.parseSignal(conflictingRouteDirect);
+            if (conflictingRouteDirect.indexOf(signalRoute) < 0) {
+                this._updateText(signalMapping[conflictingDirect[i]]["tableRow"], "conflicting_route_direct", signalRoute);
+            }
+        }
+        for(i=0; i<conflictingIndirect.length; i++) {
+            if (!$S.isObject(signalMapping[conflictingIndirect[i]])) {
+                signalMapping[conflictingIndirect[i]] = {"tableRow": {"signal_route": conflictingIndirect[i]}};
+            }
+            if (!$S.isObject(signalMapping[conflictingIndirect[i]]["tableRow"])) {
+                signalMapping[conflictingIndirect[i]]["tableRow"] = {"signal_route": conflictingIndirect[i]}
+            }
+            conflictingRouteIndirect = signalMapping[conflictingIndirect[i]]["tableRow"]["conflicting_route_indirect"];
+            conflictingRouteIndirect = DataHandlerV3.parseSignal(conflictingRouteIndirect);
+            if (conflictingRouteIndirect.indexOf(signalRoute) < 0) {
+                this._updateText(signalMapping[conflictingIndirect[i]]["tableRow"], "conflicting_route_indirect", signalRoute);
+            }
+        }
     },
     _updateConflictingSignal: function(signalMapping) {
         if (!$S.isObject(signalMapping)) {
             return;
         }
-        var arrConflicting;
+        var arrConflicting, arrConflictingDirect, arrConflictingIndirect;
         for (var signalRoute in signalMapping) {
             if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
                 arrConflicting = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
-                this._checkConflicting(signalRoute, arrConflicting, signalMapping);
+                arrConflictingDirect = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route_direct"]);
+                arrConflictingIndirect = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route_indirect"]);
+                this._checkConflicting(signalRoute, arrConflicting, arrConflictingDirect, arrConflictingIndirect, signalMapping);
+            }
+        }
+    },
+    _updateFinalConflictingSignal: function(signalMapping) {
+        if (!$S.isObject(signalMapping)) {
+            return;
+        }
+        var arrConflicting, arrConflictingDirect, arrConflictingIndirect;
+        for (var signalRoute in signalMapping) {
+            if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
+                arrConflicting = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
+                arrConflictingDirect = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route_direct"]);
+                arrConflictingIndirect = DataHandlerV3.parseSignal(signalMapping[signalRoute]["tableRow"]["conflicting_route_indirect"]);
+                arrConflicting = arrConflicting.concat(arrConflictingDirect);
+                arrConflicting = arrConflicting.concat(arrConflictingIndirect);
+                this._checkConflicting(signalRoute, arrConflicting, [], [], signalMapping);
             }
         }
     },
@@ -528,6 +598,8 @@ RCCHandler.extend({
         for (var signalRoute in signalMapping) {
             if ($S.isObject(signalMapping[signalRoute]) && $S.isObject(signalMapping[signalRoute]["tableRow"])) {
                 signalMapping[signalRoute]["tableRow"]["conflicting_route"] = this._getFinalConflictingRoute(signalMapping[signalRoute]["tableRow"]["conflicting_route"]);
+                signalMapping[signalRoute]["tableRow"]["conflicting_route_direct"] = this._getFinalConflictingRoute(signalMapping[signalRoute]["tableRow"]["conflicting_route_direct"]);
+                signalMapping[signalRoute]["tableRow"]["conflicting_route_indirect"] = this._getFinalConflictingRoute(signalMapping[signalRoute]["tableRow"]["conflicting_route_indirect"]);
             }
         }
     }

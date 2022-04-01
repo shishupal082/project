@@ -63,7 +63,17 @@ S/C/SH-1-A/B/F
 S/C/SH-1-A/B/C/D/E (i.e. writting A-E is not allowed)
 
 Important key in excel:
-- type (signal, single_path)
+- type (signal, single_path, tlsr_trsr, ..)
+
+
+01.04.2022
+-----------
+conflicting_route_direct:
+- YES or valid route
+
+conflicting_route_indirect:
+- YES or valid route
+
 
 auth-app (15.03.2022)
 ***********************************************

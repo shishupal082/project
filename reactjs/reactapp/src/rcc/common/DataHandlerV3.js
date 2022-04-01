@@ -120,7 +120,7 @@ DataHandlerV3.extend({
         if (!$S.isObject(obj)) {
             return obj;
         }
-        var attr = ["parameter", "on_route", "conflicting", "in_isolation", "conflicting_route", "set_overlap"], value;
+        var attr = ["parameter", "on_route", "conflicting", "in_isolation", "conflicting_route", "conflicting_route_direct", "conflicting_route_indirect", "set_overlap"], value;
         for (var i=0; i<attr.length; i++) {
             if ($S.isStringV2(obj[attr[i]])) {
                 value = DataHandlerV3.parseSignal(obj[attr[i]]);
@@ -179,8 +179,7 @@ DataHandlerV3.extend({
                         }
                     }
                 }
-            }
-            if (temp.length === 2) {
+            } else if (temp.length === 2) {
                 temp2 = temp[0].split("/");
                 temp3 = temp[1].split("/");
                 for (j=0;j<temp2.length; j++) {
@@ -188,6 +187,8 @@ DataHandlerV3.extend({
                         result.push(temp2[j] + "-" + temp3[k]);
                     }
                 }
+            } else if (temp.length === 1) {
+                result.push(temp[0]);
             }
         }
         return result;
@@ -200,7 +201,7 @@ DataHandlerV3.extend({
                         if ($S.isObject(tableData[tableName].tableData[i])) {
                             for (var key in tableData[tableName].tableData[i]) {
                                 if ($S.isString(tableData[tableName].tableData[i][key])) {
-                                    if (["on_route", "conflicting", "in_isolation", "conflicting_route"].indexOf(key) >= 0) {
+                                    if (["on_route", "conflicting", "in_isolation", "conflicting_route", "conflicting_route_direct", "conflicting_route_indirect"].indexOf(key) >= 0) {
                                         tableData[tableName].tableData[i][key+"_signal"] = this.parseSignal(tableData[tableName].tableData[i][key]);
                                     }
                                 }

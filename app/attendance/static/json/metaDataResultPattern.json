@@ -8,21 +8,79 @@
         },
         {
             "tableName": "table1",
-            "name": "designation",
-            "heading": "Designation",
-            "isSortable": true
-        },
-        {
-            "tableName": "table1",
-            "name": "name",
-            "heading": "Name",
-            "isSortable": true
-        },
-        {
-            "tableName": "table1",
             "name": "userId",
             "heading": "UserId"
-        }
+        },
+        {
+            "tableName": "table1",
+            "name": "userIdDisplayName1",
+            "heading": "userIdDisplayName1",
+            "hidden": true
+        },
+        {
+            "tableName": "table1",
+            "name": "entry",
+            "heading": "Entry",
+            "fieldName": "taRowField.entry.name",
+            "text": {
+                "tag": "inputV2",
+                "name": "taRowField.entry.name",
+                "value": ""
+            }
+        },
+        {
+            "text": "Order by Type",
+            "value": [
+                {
+                    "key": "type",
+                    "text": {
+                        "tag": "h4",
+                        "text": [
+                            {
+                                "tag": "span",
+                                "className": "badge badge-primary",
+                                "name": "type"
+                            },
+                            {
+                                "tag": "button",
+                                "name": "reload",
+                                "className": "btn btn-primary pt-0 pb-0 ml-10px",
+                                "value": "reload",
+                                "text": "Reload"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "heading": "SCL",
+            "isSortable": true,
+            "searchByPattern": false,
+            "name": "special_leave",
+            "pattern": ["SCL"]
+        },
+        {
+            "heading": "PH+NH",
+            "isSortable": false,
+            "searchByPattern": true,
+            "name": "ph_nh",
+            "pattern": ["^(PH|NH)$"]
+        },
+        {
+            "heading": "Except absent",
+            "isSortable": false,
+            "searchByPattern": true,
+            "name": "except-absent",
+            "pattern": ["~A"]
+        },
+        {
+            "heading": "All Leave",
+            "isSortable": true,
+            "searchByPattern": true,
+            "name": "all_leave",
+            "pattern": ["^(LAP|CL|CCL|PL|SL|SCL|LHAP-1|LHAP-2)$"]
+        },
     ],
     "resultPatternTa": [
         {
