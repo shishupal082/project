@@ -31,6 +31,19 @@
                 "tableName": "project_link_common",
                 "apis": ["/project-tracking/csv/project_link.csv"]
             }
-        ]
+        ],
+        "template.home": {
+            "tag": "div",
+            "name": "home.link",
+            "className": "custom-home-fields-1",
+            "text": []
+        },
+        "template.home.link-field": {
+            "tag": "link",
+            "name": "link-field.url",
+            "className": "link",
+            "href": "",
+            "text": ""
+        }
     }
 }

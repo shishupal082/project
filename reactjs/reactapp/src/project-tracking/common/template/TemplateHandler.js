@@ -47,7 +47,7 @@ TemplateHandler.extend({
                         "toText": renderData[i].pName});
             }
         }
-        var template = this.getTemplate("home");
+        var template = this.getHomeTemplatePartial("home");
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
@@ -81,7 +81,7 @@ TemplateHandler.extend({
         return template;
     },
     _getLinkTemplate: function(href, text) {
-        var linkTemplate = TemplateHandler.getTemplate("link-field");
+        var linkTemplate = this.getHomeTemplatePartial("link-field");
         TemplateHelper.setTemplateAttr(linkTemplate, "link-field.url", "href", href);
         TemplateHelper.updateTemplateText(linkTemplate, {"link-field.url": text});
         return linkTemplate;
@@ -202,6 +202,20 @@ TemplateHandler.extend({
             return $S.clone(Template[pageName]);
         }
         return $S.clone(Template["templateNotFound"]);
+    },
+    getHomeTemplatePartial: function(templateName) {
+        var template = this.getTemplate(templateName);
+        var temp;
+        if (templateName === "home") {
+            temp = DataHandler.getAppData("template.home");
+        }
+        if (templateName === "link-field") {
+            temp = DataHandler.getAppData("template.home.link-field");
+        }
+        if ($S.isObject(temp)) {
+            template = temp;
+        }
+        return template;
     },
     getGoBackLinkTemplate: function(pageName) {
         var template = this.getTemplate("goBackLink");

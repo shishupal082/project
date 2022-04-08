@@ -10,6 +10,7 @@ nodejs/version.txt
 reactjs/reactapp/node_modules/
 reactjs/reactapp/build/
 reactjs/reactapp/package-lock.json
+reactjs/reactapp/public/index.html
 
 reactjs/reactapp/src/react-auth-app/node_modules/
 reactjs/reactapp/src/react-auth-app/build/
