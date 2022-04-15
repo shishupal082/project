@@ -10,6 +10,7 @@ import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import FormHandler from "./forms/FormHandler";
 import TemplateHelper from "../../common/TemplateHelper";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 var DataHandlerV2;
 
@@ -29,6 +30,27 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
+    getLinkByIndex: function(index) {
+        var pageName = DataHandler.getData("pageName", "");
+        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var link = CommonConfig.basepathname  + "/" + index;
+        var pageId;
+        if (pageName === Config.viewPage) {
+            link += "/view/" + viewPageName;
+        } else if (pageName === Config.displayPage) {
+            pageId = this.getPathParamsData("pageId");
+            link += "/display/" + pageId;
+        }
+        return link;
+    },
+    getList1Data: function() {
+        var appControlData = CommonDataHandler.getData("appControlData", []);
+        var pageName = DataHandler.getData("pageName", "");
+        if ([Config.home, Config.viewPage, Config.displayPage].indexOf(pageName) < 0) {
+            return [];
+        }
+        return appControlData;
+    },
     getList3Data: function() {
         var pageName = DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
@@ -311,7 +333,7 @@ DataHandlerV2.extend({
     },
     _addIndex: function(index, obj) {
         var field = TemplateHelper(obj).searchFieldV3("tag", "link");
-        if ($S.isStringV2(field["href"])) {
+        if ($S.isString(field["href"])) {
             field["href"] = "/" + index + field["href"];
         }
     },
@@ -322,14 +344,22 @@ DataHandlerV2.extend({
             for(i=0; i<enabledPageId.length; i++) {
                 temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);
                 this._addIndex(index, temp);
+                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageId:" + enabledPageId[i]);
+                this._addIndex(index, temp);
             }
         }
         if ($S.isArray(enabledViewPage)) {
             for(i=0; i<enabledViewPage.length; i++) {
                 temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("viewPageName:" + enabledViewPage[i]);
                 this._addIndex(index, temp);
+                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+                this._addIndex(index, temp);
             }
         }
+        temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageName:home");
+        this._addIndex(index, temp);
+        temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageName:home");
+        this._addIndex(index, temp);
     }
 });
 

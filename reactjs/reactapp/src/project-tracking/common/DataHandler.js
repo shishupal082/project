@@ -154,6 +154,9 @@ DataHandler.extend({
         }
         return "completed";
     },
+    getLinkByIndex: function(index) {
+        return DataHandlerV2.getLinkByIndex(index);
+    },
     getLinkV2: function(id1) {
         var pid = this.getPathParamsData("pid");
         return this.getLinkV3(pid, id1);
@@ -194,19 +197,9 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    setCurrentAppId: function(appId) {
-        var appControlData = CommonDataHandler.getData("appControlData", []);
-        var currentList1Id = "";
-        if ($S.isArray(appControlData) && appControlData.length > 0) {
-            if ($S.isString(appControlData[0]["id"])) {
-                currentList1Id = appControlData[0]["id"];
-            }
-        }
-        DataHandler.setData("currentList1Id", currentList1Id);
-    },
     getCurrentAppData: function() {
         var appControlData = CommonDataHandler.getData("appControlData", []);
-        var currentAppId = this.getData("currentList1Id", "");
+        var currentAppId = this.getPathParamsData("index", "");
         var currentAppData = {};
         if ($S.isArray(appControlData)) {
             for (var i = 0; i < appControlData.length; i++) {
@@ -296,12 +289,17 @@ DataHandler.extend({
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     loadDataByAppId: function(callback) {
-        var currentList1Id = DataHandler.getData("currentList1Id", "");
-        CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
-            CommonDataHandler.setDateSelectParameter(currentList1Id);
-            DataHandler.setHeaderAndFooterData();
+        var currentList1Id = DataHandler.getPathParamsData("index", "");
+        var status = CommonDataHandler.getData("metaDataLoadStatus", "");
+        if (status !== "completed") {
+            CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
+                CommonDataHandler.setDateSelectParameter(currentList1Id);
+                DataHandler.setHeaderAndFooterData();
+                DataHandler.loadDataByPage(callback);
+            });
+        } else {
             DataHandler.loadDataByPage(callback);
-        });
+        }
     },
     loadDbTableData: function(callback) {
         var tableFilterParam = this.getAppData("tableFilterParam", {});
@@ -326,15 +324,17 @@ DataHandler.extend({
 });
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
-        var pageName;
+        var pageName = DataHandler.getData("pageName", "");
+        if (pageName === Config.origin) {
+            AppHandler.LazyRedirect(CommonConfig.basepathname + "/0", 250);
+            return;
+        }
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         CommonDataHandler.loadLoginUserDetailsData(function() {
-            pageName = DataHandler.getData("pageName", "");
             AppHandler.TrackPageView(pageName);
             DataHandler.checkForRedirect(function() {
                 AppHandler.LoadStaticData(staticDataUrl, function() {
                     CommonDataHandler.loadAppControlData(function() {
-                        DataHandler.setCurrentAppId();
                         var title = DataHandler.getAppData("title", "");
                         if ($S.isStringV2(title) && CommonConfig.JQ) {
                             CommonConfig.JQ("title").html(title);
@@ -357,8 +357,7 @@ DataHandler.extend({
     },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         // AppHandler.TrackDropdownChange("list1", list1Id);
-        // DataHandler.setData("currentList1Id", list1Id);
-        // this.OnReloadClick(appStateCallback, appDataCallback, list1Id);
+        // this.OnReloadClick(appStateCallback, appDataCallback);
     },
     OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
         AppHandler.TrackDropdownChange("list2Id", list2Id);
@@ -370,9 +369,20 @@ DataHandler.extend({
     },
     HandleComponentChange: function(type) {
         DataHandler.setData("componentChangeType", type);
+        if (type === "index") {
+            CommonDataHandler.clearMetaData();
+            CommonDataHandler.setData("metaDataLoadStatus", "not-started");
+            this.setData("dbViewData", {});
+            this.setData("appRelatedDataLoadStatus", "not-started");
+            this.setData("dbViewDataLoadStatus", "not-started");
+            this.setData("dbTableDataLoadStatus", "not-started");
+            this.setData("filesInfoLoadStatus", "not-started");
+            this.setData("addentry.submitStatus", "not-started");
+            this.setData("firstTimeDataLoadStatus", "not-started");
+        }
     },
     PageComponentDidUpdate: function(appStateCallback, appDataCallback, pageName, changeType) {
-        this.loadDataByPage(function() {
+        this.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
     },
@@ -530,6 +540,7 @@ DataHandler.extend({
         var dataLoadStatus = this.isDataLoadComplete();
         var renderData = null;
         var appHeading = null;
+        var list1Data = null;
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
@@ -542,6 +553,7 @@ DataHandler.extend({
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
         if (dataLoadStatus) {
+            list1Data = DataHandlerV2.getList1Data();
             list3Data = DataHandlerV2.getList3Data();
             if (DataHandlerV2.isFilterEnabled(pageName, pageId, viewPageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
@@ -550,6 +562,8 @@ DataHandler.extend({
                 dateSelectionRequiredPages.push(pageName);
             }
         }
+        appDataCallback("list1Data", list1Data);
+        appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
 

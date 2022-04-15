@@ -45,7 +45,7 @@ FormHandlerAddProjectComment.extend({
         var isFormValid = true, commentText;
         var pid = DataHandler.getPathParamsData("pid", "");
         var tableName = DataHandler.getTableName("projectComment");
-        var filename = tableName + ".csv";
+        var filename = FormHandler.getTableNameFile(tableName);
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }

@@ -14,7 +14,7 @@ var FormHandlerUploadFile;
 UploadFileFormHandler.updateTemplate("upload_file.message", "text", Config.uploadFileInstruction);
 
 (function($S){
-var DT = $S.getDT();
+// var DT = $S.getDT();
 
 FormHandlerUploadFile = function(arg) {
     return new FormHandlerUploadFile.fn.init(arg);
@@ -56,16 +56,6 @@ FormHandlerUploadFile.extend({
         }
         return uploadFileTemplate;
     },
-    _generateStringFromPattern: function(tableName) {
-        if (!$S.isString(tableName)) {
-            return tableName;
-        }
-        var filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/") + ".csv";
-        return filename;
-    },
-    _getTableNameFile: function(tableName) {
-        return this._generateStringFromPattern(tableName);
-    },
     uploadFile: function(file, subject, callback) {
         var url = CommonConfig.getApiUrl("upload_file", null, true);
         if (!$S.isString(url)) {
@@ -76,7 +66,7 @@ FormHandlerUploadFile.extend({
             alert(FormHandler.GetAleartMessage("tableName.invalid"))
             return;
         }
-        var filename = this._getTableNameFile(tableName);
+        var filename = FormHandler.getTableNameFile(tableName);
         var pid = DataHandler.getPathParamsData("pid", "");
         UploadFileFormHandler.uploadFile(CommonConfig.JQ, url, file, function(formSubmitStatus, percentComplete, ajax, response) {
             if (formSubmitStatus === "in_progress") {
@@ -133,7 +123,7 @@ FormHandlerUploadFile.extend({
             var linkText = formData[Config.fieldsKey.AddLinkText];
             var linkUrl = formData[Config.fieldsKey.AddLinkUrl];
             var tableName = DataHandler.getTableName("projectLink");
-            var filename = tableName + ".csv";
+            var filename = FormHandler.getTableNameFile(tableName);
             FormHandler.saveProjectContent(pid, linkText, linkUrl, tableName, filename, "addProjectLink", function(formStatus, resultStatus) {
                 $S.callMethod(callback);
             });

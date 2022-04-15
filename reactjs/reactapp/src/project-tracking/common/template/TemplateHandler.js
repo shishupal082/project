@@ -94,9 +94,9 @@ TemplateHandler.extend({
         if (pageName === "projectId") {
             link = CommonConfig.basepathname + "/" + index + "/pid/" + pid;
         } else {
-            link = CommonConfig.basepathname;
+            link = CommonConfig.basepathname + "/" + index;
             if (link === "") {
-                link = "/";
+                link = "/" + index;
             }
         }
         return link;
@@ -108,7 +108,7 @@ TemplateHandler.extend({
         if (!$S.isObject(renderData["pidRow"])) {
             renderData["pidRow"] = {};
         }
-        var currentAppId = DataHandler.getData("currentList1Id", "");
+        var currentAppId = DataHandler.getPathParamsData("index", "");
         var template = this.getTemplate("projectId");
         var formName = DataHandlerV2.getFormNameByPageName(pageName);
         var tableName = DataHandler.getTableName("fileTable");
@@ -244,7 +244,7 @@ TemplateHandler.extend({
             return renderField;
         }
         var temp;
-        var currentAppId = DataHandler.getData("currentList1Id", "");
+        var currentAppId = DataHandler.getPathParamsData("index", "");
         if ($S.isObject(renderData) && renderData.status === "FAILURE") {
             return this._getInvalidField(renderData.reason);
         } else {

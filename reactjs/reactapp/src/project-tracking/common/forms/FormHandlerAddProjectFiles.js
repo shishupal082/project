@@ -65,7 +65,7 @@ FormHandlerAddProjectFiles.extend({
         var subject, filepath, pid;
         var fileTableName = DataHandler.getTableName("fileTable");
         var projectTableName = DataHandler.getTableName("projectTable");
-        var filename = fileTableName + ".csv";
+        var filename = FormHandler.getTableNameFile(fileTableName);;
         var valueArr = value.split("::");
         if (valueArr.length === 2) {
             filepath = valueArr[0];

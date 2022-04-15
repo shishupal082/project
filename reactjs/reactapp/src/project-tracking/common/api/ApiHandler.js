@@ -178,8 +178,9 @@ ApiHandler.extend({
             if (status === "not-started") {
                 DataHandler.setData("dbTableDataLoadStatus", "in-progress");
                 var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
+                var dynamicFilenamesFilterParam = DataHandler.getAppData("dynamicFilenamesFilterParam", {});
                 var dbViewData;
-                AppHandler.LoadTableData(url, tableFilterParam, null, dbTableDataIndex, function(database) {
+                AppHandler.LoadTableData(url, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, function(database) {
                     DataHandler.setData("dbTableDataLoadStatus", "completed");
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);

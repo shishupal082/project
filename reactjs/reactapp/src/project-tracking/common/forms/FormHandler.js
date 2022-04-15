@@ -16,7 +16,7 @@ import FormHandlerAddProjectFiles from "./FormHandlerAddProjectFiles";
 var FormHandler;
 
 (function($S){
-// var DT = $S.getDT();
+var DT = $S.getDT();
 
 FormHandler = function(arg) {
     return new FormHandler.fn.init(arg);
@@ -77,6 +77,20 @@ FormHandler.extend({
         formTemplate = CommonDataHandler.getFormTemplate(formTemplate, validationData, "addentry.submitStatus", status);
         return formTemplate;
     },
+    _generateStringFromPattern: function(tableName) {
+        if (!$S.isString(tableName)) {
+            return tableName;
+        }
+        var filename = tableName;
+        var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
+        if ($S.isArray(dynamicTableFileName) && dynamicTableFileName.indexOf(tableName) >= 0) {
+            filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/") + ".csv";
+        }
+        return filename;
+    },
+    getTableNameFile: function(tableName) {
+        return this._generateStringFromPattern(tableName);
+    },
     submitGenericForm: function(pageName, formName, formType, callback) {
         var status = DataHandler.getData("addentry.submitStatus", "");
         if (status === CommonConfig.IN_PROGRESS) {
@@ -91,12 +105,13 @@ FormHandler.extend({
         var tableName = DataHandler.getTableName(tableNameKey + ".tableName", "");
         var messageMapping = DataHandler.getAppData("messageMapping", {});
         var configMessageMapping = Config.getConfigData("messageMapping", {});
+        var filename = this.getTableNameFile(tableName);
         if ($S.isObject(messageMapping)) {
             messageMapping = Object.assign(configMessageMapping, messageMapping);
         } else {
             messageMapping = configMessageMapping;
         }
-        CommonDataHandler.submitForm(pageName, formName, tableName, messageMapping, requiredKeys, validationData, function(status) {
+        CommonDataHandler.submitForm(pageName, formName, tableName, filename, messageMapping, requiredKeys, validationData, function(status) {
             DataHandler.setData("addentry.submitStatus", status);
             $S.callMethod(callback);
         });

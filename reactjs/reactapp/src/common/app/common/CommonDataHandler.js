@@ -156,6 +156,9 @@ CommonDataHandler.extend({
 });
 
 CommonDataHandler.extend({
+    clearMetaData: function() {
+        this.setData("metaData", {});
+    },
     _handleMetaDataLoad: function(defaultMetaData, metaDataResponse) {
         var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = this.getData("appControlMetaData", {});
@@ -408,7 +411,7 @@ CommonDataHandler.extend({
         }
         return msg;
     },
-    _saveData: function(pageName, formName, tableName, uiEntryTime, formData, requiredKeys, callback) {
+    _saveData: function(pageName, formName, tableName, filename, uiEntryTime, formData, requiredKeys, callback) {
         var resultData = requiredKeys;
         var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         if (!$S.isString(url)) {
@@ -424,8 +427,8 @@ CommonDataHandler.extend({
         }
         var postData = {};
         postData["text"] = [finalText.join(",")];
-        postData["filename"] = tableName + ".csv";
         postData["tableName"] = tableName;
+        postData["filename"] = filename;
         postData["uiEntryTime"] = uiEntryTime;
         if ($S.isFunction(callback)) {
             callback(CommonConfig.IN_PROGRESS);
@@ -500,7 +503,7 @@ CommonDataHandler.extend({
         }
         return AppHandler.FormateString(fieldsData[key]);
     },
-    submitForm: function(pageName, formName, tableName, messageMapping, requiredKeys, validationData, callback) {
+    submitForm: function(pageName, formName, tableName, filename, messageMapping, requiredKeys, validationData, callback) {
         var fieldsData = CommonDataHandler.getData("fieldsData", {});
         var uiEntryTime = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss","/");
         var i, isFormValid = true, formData = {};
@@ -531,7 +534,7 @@ CommonDataHandler.extend({
             formData[key] = value;
         }
         if (isFormValid) {
-            this._saveData(pageName, formName, tableName, uiEntryTime, formData, requiredKeys, callback);
+            this._saveData(pageName, formName, tableName, filename, uiEntryTime, formData, requiredKeys, callback);
         }
     }
 });

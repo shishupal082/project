@@ -22,6 +22,10 @@ class App extends React.Component {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
 
+            "list1Text": "Select...",
+            "list1Data": [],
+            "currentList1Id": "",
+
             "list2Text": "Select...",
             "list2Data": [],
             "currentList2Id": "",
@@ -117,7 +121,10 @@ class App extends React.Component {
                 filterNames.push(filterOptions[i].selectName);
             }
         }
-        if (name === "list2-select") {
+        if (name === "list1-select") {
+            this.gotoPageV2(DataHandler.getLinkByIndex(value));
+            DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, name, value);
+        } else if (name === "list2-select") {
             this.gotoPage(value);
             DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (name === "list3-select") {
@@ -145,10 +152,6 @@ class App extends React.Component {
         var oldId1 = DataHandler.getPathParamsData("id1");
         var oldPageId = DataHandler.getPathParamsData("pageId");
         var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
-        if (currentPageName === Config.origin) {
-            this.gotoPageV2(CommonConfig.basepathname + "/0");
-            return false;
-        }
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
             DataHandler.HandleComponentChange("pageName");
