@@ -57,6 +57,32 @@ Template.fn = Template.prototype = {
             }
         }
         return {};
+    },
+    searchFieldV3: function(attr, value) {
+        // Similar to V2, like search item by tag
+        if (!$S.isString(attr)) {
+            return {};
+        }
+        var field = {};
+        if ($S.isArray(this.template)) {
+            for (var i = 0; i<this.template.length; i++) {
+                field = Template(this.template[i]).searchFieldV3(attr, value);
+                if (field[attr] === value) {
+                    return field;
+                }
+            }
+        } else if ($S.isObject(this.template)) {
+            if (this.template[attr] === value) {
+                return this.template;
+            }
+            for (var key in this.template) {
+                field = Template(this.template[key]).searchFieldV3(attr, value);
+                if (field[attr] === value) {
+                    return field;
+                }
+            }
+        }
+        return {};
     }
 };
 $S.extendObject(Template);

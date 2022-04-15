@@ -345,7 +345,7 @@ CommonDataHandler.extend({
         }
         return responseArray;
     },
-    setHeaderAndFooterData: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
+    setHeaderAndFooterData: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages) {
         var i;
         var username = AppHandler.GetUserData("username", "");
         var activeUserRole = AppHandler.GetUserActiveRoles();
@@ -364,6 +364,12 @@ CommonDataHandler.extend({
             for(i=0; i<enabledViewPage.length; i++) {
                 TemplateHelper.removeClassTemplate(afterLoginLinkJson, "viewPageName:" + enabledViewPage[i], "d-none");
                 TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "viewPageName:" + enabledViewPage[i], "d-none");
+            }
+        }
+        if ($S.isArray(enabledPages)) {
+            for(i=0; i<enabledPages.length; i++) {
+                TemplateHelper.removeClassTemplate(afterLoginLinkJson, "pageName:" + enabledPages[i], "d-none");
+                TemplateHelper.removeClassTemplate(footerLinkJsonAfterLogin, "pageName:" + enabledPages[i], "d-none");
             }
         }
         if ($S.isArray(addBasepathLinkName) && $S.isStringV2(basepathname)) {

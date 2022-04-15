@@ -32,21 +32,25 @@ Config.afterLoginLinkJson = [];
 Config.footerLinkJsonAfterLogin = [];
 
 var pages = {
-    "home": basepathname+"/",
-    "projectId": basepathname+"/pid/:pid",
-    "id1Page": basepathname+"/pid/:pid/id1/:id1",
-    "displayPage": basepathname+"/display/:pageId",
-    "viewPage": basepathname+"/view/:viewPageName"
+    "origin": basepathname+"/",
+    "home": basepathname+"/:index",
+    "projectId": basepathname+"/:index/pid/:pid",
+    "id1Page": basepathname+"/:index/pid/:pid/id1/:id1",
+    "displayPage": basepathname+"/:index/display/:pageId",
+    "viewPage": basepathname+"/:index/view/:viewPageName",
+    "manageFiles": basepathname+"/display/manageFiles",
 };
 
 Config.pages = pages;
 
+Config.origin = "origin";
 Config.home = "home";
 Config.noMatch = "noMatch";
 Config.projectId = "projectId";
 Config.id1Page = "id1Page";
 Config.displayPage = "displayPage";
 Config.viewPage = "viewPage";
+Config.manageFiles = "manageFiles";
 
 
 Config.dateSelection = [

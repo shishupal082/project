@@ -9,6 +9,7 @@ import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import FormHandler from "./forms/FormHandler";
+import TemplateHelper from "../../common/TemplateHelper";
 
 var DataHandlerV2;
 
@@ -232,11 +233,8 @@ DataHandlerV2.extend({
         return "pageName:" + formNameKey + ".resultPattern";
     },
     handlePageByPageId: function(pageName, pageId, dbViewData) {
-        var i, loginUsername, fileTableName, tempData, tempData2;
-        var fileInfoData, fileInfoTableName, projectTable;
+        var i, loginUsername, fileTableName, tempData;
         var result = [];
-        var addedFilePid = [];
-        var availableOn;
         switch(pageId) {
             case "displayUploadedFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
@@ -253,11 +251,23 @@ DataHandlerV2.extend({
                     }
                 }
             break;
+            default:
+            break;
+        }
+        return result;
+    },
+    handlePageByPageName: function(pageName, dbViewData) {
+        var i, loginUsername, fileTableName, tempData, tempData2;
+        var fileInfoData, fileInfoTableName, projectTable;
+        var result = [];
+        var addedFilePid = [];
+        var availableOn;
+        switch(pageName) {
             case "manageFiles":
                 loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
                 fileInfoData = DataHandler.getData("filesInfoData");
-                fileInfoTableName = DataHandler.getTableName("pageName:displayPage.fileInfoTable");
+                fileInfoTableName = DataHandler.getTableName("pageName:manageFiles.fileInfoTable");
                 projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
                 if ($S.isStringV2(fileInfoTableName)) {
                     if ($S.isArray(fileInfoData)) {
@@ -298,6 +308,28 @@ DataHandlerV2.extend({
             break;
         }
         return result;
+    },
+    _addIndex: function(index, obj) {
+        var field = TemplateHelper(obj).searchFieldV3("tag", "link");
+        if ($S.isStringV2(field["href"])) {
+            field["href"] = "/" + index + field["href"];
+        }
+    },
+    updateLinkIndex: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
+        var i, temp;
+        var index = DataHandler.getPathParamsData("index", "0");
+        if ($S.isArray(enabledPageId)) {
+            for(i=0; i<enabledPageId.length; i++) {
+                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);
+                this._addIndex(index, temp);
+            }
+        }
+        if ($S.isArray(enabledViewPage)) {
+            for(i=0; i<enabledViewPage.length; i++) {
+                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+                this._addIndex(index, temp);
+            }
+        }
     }
 });
 
@@ -401,6 +433,14 @@ DataHandlerV2.extend({
         }
         return enabledViewPage;
     },
+    getEnabledPages: function() {
+        var dynamicEnablingData = this._getDynamicEnabledData();
+        var enabledPages = [];
+        if ($S.isObject(dynamicEnablingData)) {
+            enabledPages = dynamicEnablingData["enabledPages"];
+        }
+        return enabledPages;
+    },
     isDisabled: function(type, value) {
         if (!$S.isStringV2(value)) {
             return true;
@@ -438,6 +478,8 @@ DataHandlerV2.extend({
     isFilterEnabled: function(pageName, pageId, viewPageName) {
         var status = false;
         if ([Config.projectId].indexOf(pageName) >= 0) {
+            status = true;
+        } else if ([Config.manageFiles].indexOf(pageName) >= 0) {
             status = true;
         } else if ([Config.displayPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("pageId", pageId)) {

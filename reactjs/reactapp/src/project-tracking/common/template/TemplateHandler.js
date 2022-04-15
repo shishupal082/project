@@ -90,8 +90,9 @@ TemplateHandler.extend({
     },
     _getLink: function(pageName, pid) {
         var link = "";
+        var index = DataHandler.getPathParamsData("index", "0");
         if (pageName === "projectId") {
-            link = CommonConfig.basepathname + "/pid/" + pid;
+            link = CommonConfig.basepathname + "/" + index + "/pid/" + pid;
         } else {
             link = CommonConfig.basepathname;
             if (link === "") {
@@ -268,6 +269,9 @@ TemplateHandler.extend({
                     renderField = this.getViewPageTemplate(renderData);
                 break;
                 case "viewPage":
+                    renderField = this.getViewPageTemplate(renderData);
+                break;
+                case "manageFiles":
                     renderField = this.getViewPageTemplate(renderData);
                 break;
                 case "noMatch":

@@ -159,7 +159,8 @@ DataHandler.extend({
         return this.getLinkV3(pid, id1);
     },
     getLinkV3: function(pid, id1) {
-        var link = CommonConfig.basepathname + "/pid/" + pid;
+        var index = this.getPathParamsData("index", "0");
+        var link = CommonConfig.basepathname  + "/" + index + "/pid/" + pid;
         if ($S.isStringV2(id1)) {
             link += "/id1/" + id1;
         }
@@ -175,8 +176,7 @@ DataHandler.extend({
         }
         dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
         var pageName = this.getData("pageName", "");
-        var pageId = this.getPathParamsData("pageId", "");
-        if (pageName === "displayPage" && pageId === "manageFiles") {
+        if (pageName === "manageFiles") {
             dataLoadStatusKey.push("filesInfoLoadStatus");
         }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
@@ -286,9 +286,11 @@ DataHandler.extend({
     setHeaderAndFooterData: function() {
         var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
         var footerLinkJsonAfterLogin = DataHandler.getAppData("footerLinkJsonAfterLogin", {});
+        var enabledPages = DataHandlerV2.getEnabledPages();
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
-        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage);
+        DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
+        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
         Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
@@ -478,10 +480,10 @@ DataHandler.extend({
         var dateSelect = CommonDataHandler.getData("date-select", "");
         var sortingFields = this.getData("sortingFields", []);
         var filterOptions = this.getData("filterOptions");
-        var dateParameterField;
+        var dateParameterField, configFormName;
         switch(pageName) {
             case "home":
-                var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
+                configFormName = DataHandlerV2.getFormNameByPageName(pageName);
                 renderData = DataHandlerV2.getTableData(this.getTableName(configFormName + ".tableName"));
             break;
             case "projectId":
@@ -506,6 +508,15 @@ DataHandler.extend({
                 dateParameterField = this.getAppData("viewPageName:" + viewPageName + ".dateParameterField", {});
                 renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
+                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
+                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+            break;
+            case "manageFiles":
+                if (DataHandlerV2.isDisabled("pageName", pageName)) {
+                    return {"status": "FAILURE", "reason": "Requested page disabled"};
+                }
+                dateParameterField = this.getAppData("pageName:" + pageName + ".dateParameterField", {});
+                renderData = DisplayPage.getRenderDataV3(pageName, sortingFields);
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;

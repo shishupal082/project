@@ -95,6 +95,30 @@ DisplayPage.extend({
         DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
         return finalTable;
     },
+    getRenderDataV3: function(pageName, sortingFields) {
+        var requiredDataTable = DataHandler.getAppData("pageName:" + pageName + ".requiredDataTable");
+        var filterKeyMapping = DataHandler.getAppData("pageName:" + pageName + ".filterKeyMapping");
+        var resultPattern = DataHandler.getAppData("pageName:" + pageName + ".resultPattern");
+        var resultCriteria = DataHandler.getAppData("pageName:" + pageName + ".resultCriteria");
+        var currentAppData = DataHandler.getCurrentAppData();
+        var metaData = CommonDataHandler.getData("metaData");
+        var filterOptions = DataHandler.getData("filterOptions");
+        var dbViewData = {}, i;
+        if ($S.isArray(requiredDataTable)) {
+            for (i=0; i<requiredDataTable.length; i++) {
+                if ($S.isStringV2(requiredDataTable[i])) {
+                    dbViewData[requiredDataTable[i]] = {"tableData": DataHandlerV2.getTableData(requiredDataTable[i])};
+                }
+            }
+        }
+        var finalTable = DBViewDataHandler.GetFinalTableV2(dbViewData, resultCriteria, requiredDataTable);
+        dbViewData = DataHandlerV2.handlePageByPageName(pageName, finalTable);
+        finalTable = DBViewDataHandler.ApplyResultPattern(dbViewData, resultPattern);
+        // finalTable = this._getFinalDbTable(dbViewData);
+        DataHandlerV2.generateFilterOptions(pageName, finalTable, filterKeyMapping);
+        finalTable = AppHandler.getFilteredDataV2(filterKeyMapping, currentAppData, metaData, finalTable, filterOptions, "name");
+        return finalTable;
+    },
     _generateResult: function(fileInfoDataRow, fileTableRow, loginUsername, index) {
         var result = null;
         var deleteFileTemplate = TemplateHandler.getTemplate("deleteFileTemplate");
