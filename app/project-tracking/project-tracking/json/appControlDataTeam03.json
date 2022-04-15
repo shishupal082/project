@@ -32,12 +32,26 @@
                 "apis": ["/project-tracking/csv/project_link.csv"]
             }
         ],
-        "template.home": {
+        "template.home_type1": {
             "tag": "div",
             "name": "home.link",
             "className": "custom-home-fields-1",
             "text": []
         },
+        "template.home": [
+            {
+                "tag": "div",
+                "name": "home.template",
+                "text": [
+                    {
+                        "tag": "div",
+                        "className": "custom-home-fields-1",
+                        "name": "home.link",
+                        "text": []
+                    }
+                ]
+            }
+        ],
         "template.home.link-field": {
             "tag": "link",
             "name": "link-field.url",

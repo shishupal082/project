@@ -45,6 +45,7 @@ FormHandlerAddProjectComment.extend({
         var isFormValid = true, commentText;
         var pid = DataHandler.getPathParamsData("pid", "");
         var tableName = DataHandler.getTableName("projectComment");
+        var filename = tableName + ".csv";
         if (!$S.isObject(fieldsData)) {
             fieldsData = {};
         }
@@ -55,7 +56,7 @@ FormHandlerAddProjectComment.extend({
         }
         commentText = AppHandler.ReplaceComma(commentText);
         if (isFormValid) {
-            FormHandler.saveProjectContent(pid, "Comment", commentText, tableName, "addProjectComment", function(formStatus, resultStatus) {
+            FormHandler.saveProjectContent(pid, "Comment", commentText, tableName, filename, "addProjectComment", function(formStatus, resultStatus) {
                 $S.callMethod(callback);
             });
         }

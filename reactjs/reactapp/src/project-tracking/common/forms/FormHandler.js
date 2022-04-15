@@ -169,7 +169,7 @@ FormHandler.extend({
             $S.callMethodV3(FormHandler._handleDeleteResponse, callback, "completed", response);
         });
     },
-    saveProjectContent: function(pid, arg1, arg2, tableName, gaTrackingName, callback) {
+    saveProjectContent: function(pid, arg1, arg2, tableName, filename, gaTrackingName, callback) {
         if (!$S.isStringV2(gaTrackingName)) {
             gaTrackingName = "projectContent";
         }
@@ -190,11 +190,15 @@ FormHandler.extend({
             alert(FormHandler.GetAleartMessage("tableName.invalid"));
             return;
         }
+        if (!$S.isStringV2(filename)) {
+            alert(FormHandler.GetAleartMessage("filename.invalid"));
+            return;
+        }
         var resultData = [pid, arg1, arg2];
         var postData = {};
         postData["text"] = [resultData.join(",")];
         postData["tableName"] = tableName;
-        postData["filename"] = tableName + ".csv";
+        postData["filename"] = filename;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethodV1(callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {

@@ -65,6 +65,7 @@ FormHandlerAddProjectFiles.extend({
         var subject, filepath, pid;
         var fileTableName = DataHandler.getTableName("fileTable");
         var projectTableName = DataHandler.getTableName("projectTable");
+        var filename = fileTableName + ".csv";
         var valueArr = value.split("::");
         if (valueArr.length === 2) {
             filepath = valueArr[0];
@@ -85,7 +86,7 @@ FormHandlerAddProjectFiles.extend({
             subject = "File added to Project " + projectTable[0].pName;
         }
         if (isFormValid) {
-            FormHandler.saveProjectContent(pid, subject, filepath, fileTableName, "addNewProjectFile", function(formStatus, resultStatus) {
+            FormHandler.saveProjectContent(pid, subject, filepath, fileTableName, filename, "addNewProjectFile", function(formStatus, resultStatus) {
                 $S.callMethod(callback);
             });
         }

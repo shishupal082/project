@@ -48,11 +48,13 @@ TemplateHandler.extend({
             }
         }
         var template = this.getHomeTemplatePartial("home");
+        var genericFormTemplate_0 = this.getTemplate("home.generic_form0");
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         if (!DataHandlerV2.isDisabled("form", "generic_form0")) {
+            TemplateHelper.addItemInTextArray(template, "home.template", genericFormTemplate_0);
             TemplateHelper.removeClassTemplate(template, "home.addNewProject", "d-none");
             var formTypeField = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
             TemplateHelper.addItemInTextArray(template, "home.addNewProject.formTypeField", formTypeField);
@@ -212,7 +214,7 @@ TemplateHandler.extend({
         if (templateName === "link-field") {
             temp = DataHandler.getAppData("template.home.link-field");
         }
-        if ($S.isObject(temp)) {
+        if ($S.isObject(temp) || $S.isArray(temp)) {
             template = temp;
         }
         return template;

@@ -43,47 +43,46 @@ function generateTextFile(configJson, generatedId, callback) {
             continue;
         }
         generatedId.push(projectId);
-        Logger.log("************************************************", function() {
-            generateFile.save(configJson[projectId]["source"], configJson[projectId]["destination"], function() {
-                generateTextFile(configJson, generatedId, callback);
-            }, function(textData) {
-                if ($S.isArray(textData) && textData.length === 5) {
-                    if (textData[4] === "01") {
-                        var temp = [];
-                        temp.push(textData[0]); //type
-                        temp.push(textData[1]); //filename
-                        temp.push(textData[2]); //fileExt
-                        if ($S.isString(configJson[projectId]["identifier"])) {
-                            temp.push(textData[3] + configJson[projectId]["identifier"]);
-                        } else {
-                            temp.push(textData[3]); //dir
-                        }
-                        return temp;
+        Logger.log("************************************************");
+        generateFile.save(configJson[projectId]["source"], configJson[projectId]["destination"], function() {
+            generateTextFile(configJson, generatedId, callback);
+        }, function(textData) {
+            if ($S.isArray(textData) && textData.length === 5) {
+                if (textData[4] === "01") {
+                    var temp = [];
+                    temp.push(textData[0]); //type
+                    temp.push(textData[1]); //filename
+                    temp.push(textData[2]); //fileExt
+                    if ($S.isString(configJson[projectId]["identifier"])) {
+                        temp.push(textData[3] + configJson[projectId]["identifier"]);
+                    } else {
+                        temp.push(textData[3]); //dir
                     }
-                } else if ($S.isArray(textData) && textData.length === 7) {
-                    if (["00", "01"].indexOf(textData[5]) >= 0) {
-                        var temp = [];
-                        temp.push(textData[1]); //type
-                        temp.push(textData[2]); //filename
-                        temp.push(textData[3]); //fileExt
-                        if (textData[5] === "00") {
-                            temp.push(textData[4]); //dir
-                        } else if (textData[5] === "01") {
-                            if ($S.isString(configJson[projectId]["identifier"])) {
-                                temp.push(textData[4] + configJson[projectId]["identifier"]);
-                            } else {
-                                temp.push(textData[4]);
-                            }
+                    return temp;
+                }
+            } else if ($S.isArray(textData) && textData.length === 7) {
+                if (["00", "01"].indexOf(textData[5]) >= 0) {
+                    var temp = [];
+                    temp.push(textData[1]); //type
+                    temp.push(textData[2]); //filename
+                    temp.push(textData[3]); //fileExt
+                    if (textData[5] === "00") {
+                        temp.push(textData[4]); //dir
+                    } else if (textData[5] === "01") {
+                        if ($S.isString(configJson[projectId]["identifier"])) {
+                            temp.push(textData[4] + configJson[projectId]["identifier"]);
                         } else {
                             temp.push(textData[4]);
                         }
-                        temp.push(textData[0]);
-                        temp.push(textData[6]);
-                        return temp;
+                    } else {
+                        temp.push(textData[4]);
                     }
+                    temp.push(textData[0]);
+                    temp.push(textData[6]);
+                    return temp;
                 }
-                return textData;
-            });
+            }
+            return textData;
         });
         return;
     }

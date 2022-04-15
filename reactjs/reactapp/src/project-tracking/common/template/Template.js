@@ -378,68 +378,70 @@ Template["id1Page"] = [
 Template["home"] = [
     {
         "tag": "div",
+        "name": "home.template",
         "text": [
             {
                 "tag": "div",
                 "className": "list-group",
                 "name": "home.link",
                 "text": []
-            },
+            }
+        ]
+    }
+];
+Template["home.generic_form0"] = [
+    {
+        "tag": "div",
+        "name": "home.addNewProject",
+        "text": [
             {
-                "tag": "div",
-                "name": "home.addNewProject",
-                "className": "d-none",
+                "tag": "form",
+                "name": "form.generic_form0",
+                "value": "form.generic_form0",
                 "text": [
                     {
-                        "tag": "form",
-                        "name": "form.generic_form0",
-                        "value": "form.generic_form0",
+                        "tag": "div",
+                        "text": {
+                            "tag": "span",
+                            "className": "badge badge-secondary",
+                            "text": "Add New Project"
+                        }
+                    },
+                    {
+                        "tag": "div.table.tbody",
                         "text": [
                             {
-                                "tag": "div",
-                                "text": {
-                                    "tag": "span",
-                                    "className": "badge badge-secondary",
-                                    "text": "Add New Project"
-                                }
-                            },
-                            {
-                                "tag": "div.table.tbody",
+                                "tag": "tr",
+                                "name": "home.addNewProject.formTypeField",
                                 "text": [
                                     {
-                                        "tag": "tr",
-                                        "name": "home.addNewProject.formTypeField",
-                                        "text": [
-                                            {
-                                                "tag": "td",
-                                                "text": "Project Name"
-                                            },
-                                            {
-                                                "tag": "td",
-                                                "text": {
-                                                    "tag": "input",
-                                                    "className": "form-control",
-                                                    "name": "form.generic_form0.entry.project-name",
-                                                    "value": ""
-                                                }
-                                            }
-                                        ]
+                                        "tag": "td",
+                                        "text": "Project Name"
                                     },
                                     {
-                                        "tag": "tr",
+                                        "tag": "td",
+                                        "text": {
+                                            "tag": "input",
+                                            "className": "form-control",
+                                            "name": "form.generic_form0.entry.project-name",
+                                            "value": ""
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "tr",
+                                "text": [
+                                    {
+                                        "tag": "td",
+                                        "colSpan": 4,
+                                        "className": "text-center",
                                         "text": [
                                             {
-                                                "tag": "td",
-                                                "colSpan": 4,
-                                                "className": "text-center",
-                                                "text": [
-                                                    {
-                                                        "tag": "button",
-                                                        "name": "addentry.submitStatus",
-                                                        "className": "btn btn-primary form-control",
-                                                        "text": "Save"
-                                                    }
-                                                ]
+                                                "tag": "button",
+                                                "name": "addentry.submitStatus",
+                                                "className": "btn btn-primary form-control",
+                                                "text": "Save"
                                             }
                                         ]
                                     }

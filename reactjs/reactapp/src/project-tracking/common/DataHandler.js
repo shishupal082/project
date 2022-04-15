@@ -51,6 +51,8 @@ keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
 keys.push("dbViewDataLoadStatus");
 keys.push("dbTableDataLoadStatus");
+keys.push("local.loadDataByParamsStatus");
+keys.push("local.loadDbTableDataStatus");
 keys.push("filesInfoLoadStatus");
 
 keys.push("sortingFields");
@@ -263,8 +265,23 @@ DataHandler.extend({
 DataHandler.extend({
     loadDataByPage: function(callback) {
         DataHandlerV2.findCurrentList3Id();
-        DataHandler.loadDbTableData(callback);
-        ApiHandler.loadDataByParams(callback);
+        this.setData("local.loadDataByParamsStatus", "in_progress");
+        this.setData("local.loadDbTableDataStatus", "in_progress");
+        var temp;
+        DataHandler.loadDbTableData(function() {
+            DataHandler.setData("local.loadDbTableDataStatus", "completed");
+            temp = DataHandler.getDataLoadStatusByKey(["local.loadDataByParamsStatus"]);
+            if (temp === "completed") {
+                $S.callMethod(callback);
+            }
+        });
+        ApiHandler.loadDataByParams(function() {
+            DataHandler.setData("local.loadDataByParamsStatus", "completed");
+            temp = DataHandler.getDataLoadStatusByKey(["local.loadDbTableDataStatus"]);
+            if (temp === "completed") {
+                $S.callMethod(callback);
+            }
+        });
     },
     setHeaderAndFooterData: function() {
         var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
