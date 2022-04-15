@@ -84,9 +84,9 @@ FormHandler.extend({
         var filename = tableName;
         var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
         if ($S.isArray(dynamicTableFileName) && dynamicTableFileName.indexOf(tableName) >= 0) {
-            filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/") + ".csv";
+            filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/");
         }
-        return filename;
+        return filename + ".csv";
     },
     getTableNameFile: function(tableName) {
         return this._generateStringFromPattern(tableName);
