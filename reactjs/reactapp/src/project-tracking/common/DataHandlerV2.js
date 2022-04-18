@@ -38,7 +38,7 @@ DataHandlerV2.extend({
         if (pageName === Config.viewPage) {
             link += "/view/" + viewPageName;
         } else if (pageName === Config.displayPage) {
-            pageId = this.getPathParamsData("pageId");
+            pageId = DataHandler.getPathParamsData("pageId");
             link += "/display/" + pageId;
         }
         return link;
