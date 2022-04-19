@@ -323,7 +323,7 @@ DataHandler.extend({
         }, null, Api.getAjaxApiCallMethod());
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
-        CommonDataHandler.loadAppControlData(function() {
+        CommonDataHandler.loadAppControlData(null, function() {
             DataHandler.setData("appControlDataLoadStatus", "completed");
             DataHandler.setData("appControlData", CommonDataHandler.getData("appControlData"));
             DataHandler.setCurrentAppId();

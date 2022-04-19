@@ -22,6 +22,8 @@
         }
     ],
     "metaData": {
+        "pageName:manageFiles.appIndex": "1",
+        "list1RequiredPages": ["home", "projectId", "displayPage", "viewPage"],
         "dbDataApis": [
             {
                 "tableName": "project_table_common",

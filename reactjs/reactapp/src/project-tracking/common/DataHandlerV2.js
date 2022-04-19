@@ -10,7 +10,7 @@ import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import FormHandler from "./forms/FormHandler";
 import TemplateHelper from "../../common/TemplateHelper";
-import CommonConfig from "../../common/app/common/CommonConfig";
+// import CommonConfig from "../../common/app/common/CommonConfig";
 
 var DataHandlerV2;
 
@@ -30,26 +30,14 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
-    getLinkByIndex: function(index) {
-        var pageName = DataHandler.getData("pageName", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
-        var link = CommonConfig.basepathname  + "/" + index;
-        var pageId;
-        if (pageName === Config.viewPage) {
-            link += "/view/" + viewPageName;
-        } else if (pageName === Config.displayPage) {
-            pageId = DataHandler.getPathParamsData("pageId");
-            link += "/display/" + pageId;
-        }
-        return link;
-    },
     getList1Data: function() {
         var appControlData = CommonDataHandler.getData("appControlData", []);
         var pageName = DataHandler.getData("pageName", "");
-        if ([Config.home, Config.viewPage, Config.displayPage].indexOf(pageName) < 0) {
-            return [];
+        var list1RequiredPages = DataHandler.getAppData("list1RequiredPages", []);
+        if ($S.isArray(list1RequiredPages) && list1RequiredPages.indexOf(pageName) >= 0) {
+            return appControlData;
         }
-        return appControlData;
+        return [];
     },
     getList3Data: function() {
         var pageName = DataHandler.getData("pageName", "");

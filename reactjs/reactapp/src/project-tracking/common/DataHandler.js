@@ -155,7 +155,26 @@ DataHandler.extend({
         return "completed";
     },
     getLinkByIndex: function(index) {
-        return DataHandlerV2.getLinkByIndex(index);
+        var pageName = this.getData("pageName", "");
+        var link = CommonConfig.basepathname  + "/" + index;
+        var pid, id1, pageId, viewPageName;
+        if (pageName === Config.viewPage) {
+            viewPageName = this.getPathParamsData("viewPageName", "");
+            link += "/view/" + viewPageName;
+        } else if (pageName === Config.displayPage) {
+            pageId = this.getPathParamsData("pageId");
+            link += "/display/" + pageId;
+        } else if (pageName === Config.projectId) {
+            pid = this.getPathParamsData("pid");
+            link += "/pid/" + pid;
+        } else if (pageName === Config.id1Page) {
+            pid = this.getPathParamsData("pid");
+            id1 = this.getPathParamsData("id1");
+            link += "/pid/" + pid + "/id1/" + id1;
+        } else if (pageName === Config.manageFiles) {
+            link = Config.pages.manageFiles;
+        }
+        return link;
     },
     getLinkV2: function(id1) {
         var pid = this.getPathParamsData("pid");
@@ -291,7 +310,11 @@ DataHandler.extend({
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getPathParamsData("index", "");
         var status = CommonDataHandler.getData("metaDataLoadStatus", "");
+        var pageName = this.getData("pageName", "");
         if (status !== "completed") {
+            if (pageName === Config.manageFiles) {
+                currentList1Id = this.getAppData("pageName:manageFiles.appIndex", "");
+            }
             CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                 CommonDataHandler.setDateSelectParameter(currentList1Id);
                 DataHandler.setHeaderAndFooterData();
@@ -334,7 +357,7 @@ DataHandler.extend({
             AppHandler.TrackPageView(pageName);
             DataHandler.checkForRedirect(function() {
                 AppHandler.LoadStaticData(staticDataUrl, function() {
-                    CommonDataHandler.loadAppControlData(function() {
+                    CommonDataHandler.loadAppControlData(Config.getConfigData("defaultMetaData", {}), function() {
                         var title = DataHandler.getAppData("title", "");
                         if ($S.isStringV2(title) && CommonConfig.JQ) {
                             CommonConfig.JQ("title").html(title);
@@ -367,9 +390,21 @@ DataHandler.extend({
         DataHandler.setData("currentList3Id", list3Id);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    HandleComponentChange: function(type) {
+    HandleComponentChange: function(type, oldValue, newValue) {
         DataHandler.setData("componentChangeType", type);
-        if (type === "index") {
+        var isReset = false;
+        if (type === "index" || type === "pageName") {
+            if (type === "pageName") {
+                if ($S.isStringV2(oldValue) && $S.isStringV2(newValue)) {
+                    if (oldValue === Config.manageFiles || newValue === Config.manageFiles) {
+                        isReset = true;
+                    }
+                }
+            } else {
+                isReset = true;
+            }
+        }
+        if (isReset) {
             CommonDataHandler.clearMetaData();
             CommonDataHandler.setData("metaDataLoadStatus", "not-started");
             this.setData("dbViewData", {});

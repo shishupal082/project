@@ -154,24 +154,24 @@ class App extends React.Component {
         var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
-            DataHandler.HandleComponentChange("pageName");
+            DataHandler.HandleComponentChange("pageName", prevPageName, currentPageName);
         } else {
             if ($S.isObject(params)) {
                 if ($S.isStringV2(oldIndex) && $S.isStringV2(params.index) && oldIndex !== params.index) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("index");
+                    DataHandler.HandleComponentChange("index", oldIndex, params.index);
                 } else if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pid");
+                    DataHandler.HandleComponentChange("pid", oldPid, params.pid);
                 } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("id1");
                 } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pageId");
+                    DataHandler.HandleComponentChange("pageId", oldPageId, params.pageId);
                 } else if ($S.isStringV2(oldViewPageName) && $S.isStringV2(params.viewPageName) && oldViewPageName !== params.viewPageName) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("viewPageName");
+                    DataHandler.HandleComponentChange("viewPageName", oldViewPageName, params.viewPageName);
                 }
             }
         }

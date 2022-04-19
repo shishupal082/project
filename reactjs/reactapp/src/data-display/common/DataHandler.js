@@ -391,7 +391,7 @@ DataHandler.extend({
     },
     loadAppControlData: function(callback) {
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
-        CommonDataHandler.loadAppControlData(function() {
+        CommonDataHandler.loadAppControlData(null, function() {
             DataHandler.setData("appControlData", CommonDataHandler.getData("appControlData", {}));
             DataHandler.setData("appControlDataLoadStatus", "completed");
             DataHandler.setCurrentAppId();

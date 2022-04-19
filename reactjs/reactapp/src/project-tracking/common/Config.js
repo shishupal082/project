@@ -26,6 +26,12 @@ Config.tempConfig = {
         }
     ]
 };
+var tempConfigGlobalKey = ["pageName:manageFiles.appIndex"];
+for (var i=0; i<tempConfigGlobalKey.length; i++) {
+    if ($S.isStringV2($$$[tempConfigGlobalKey[i]])) {
+        Config.tempConfig[tempConfigGlobalKey[i]] = $$$[tempConfigGlobalKey[i]];
+    }
+}
 
 Config.headingJson = [];
 Config.afterLoginLinkJson = [];

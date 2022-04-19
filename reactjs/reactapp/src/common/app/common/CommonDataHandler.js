@@ -162,11 +162,15 @@ CommonDataHandler.extend({
     _handleMetaDataLoad: function(defaultMetaData, metaDataResponse) {
         var finalMetaData = {}, i, tempMetaData, temp;
         var appControlMetaData = this.getData("appControlMetaData", {});
+        var metaData = this.getData("metaData", {});
         if ($S.isObject(defaultMetaData)) {
             finalMetaData = defaultMetaData;
         }
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = Object.assign(finalMetaData, appControlMetaData);
+        }
+        if ($S.isObject(metaData)) {
+            finalMetaData = Object.assign(finalMetaData, metaData);
         }
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
@@ -213,22 +217,22 @@ CommonDataHandler.extend({
             $S.callMethod(callback);
         }
     },
-    loadAppControlData: function(callback) {
+    loadAppControlData: function(defaultMetaData, callback) {
         var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
         this.setData("appControlDataLoadStatus", "in_progress");
         AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
             CommonDataHandler.setData("appControlData", appControlData);
             CommonDataHandler.setData("appControlMetaData", metaData);
+            CommonDataHandler._handleMetaDataLoad(defaultMetaData, null);
             $S.log("appControlData load complete");
             CommonDataHandler.setData("appControlDataLoadStatus", "completed");
             $S.callMethod(callback);
         });
     },
-    loadMetaDataByAppId: function(defaultMetaData, appId, callback) {
-        var currentAppControlData = this.getAppDataById(appId, {});//{}
-        var request = [], metaDataApi = [];
-        if ($S.isArray(currentAppControlData["metaDataApi"])) {
-            metaDataApi = currentAppControlData["metaDataApi"];
+    loadMetaDataByMetaDataApi: function(defaultMetaData, metaDataApi, callback) {
+        var request = [];
+        if (!$S.isArray(metaDataApi)) {
+            metaDataApi = [];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
             return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
@@ -249,6 +253,14 @@ CommonDataHandler.extend({
             $S.log("metaData load complete");
             $S.callMethod(callback);
         });
+    },
+    loadMetaDataByAppId: function(defaultMetaData, appId, callback) {
+        var currentAppControlData = this.getAppDataById(appId, {});//{}
+        var metaDataApi = [];
+        if ($S.isArray(currentAppControlData["metaDataApi"])) {
+            metaDataApi = currentAppControlData["metaDataApi"];
+        }
+        this.loadMetaDataByMetaDataApi(defaultMetaData, metaDataApi, callback);
     },
     loadJSONDataByApiName: function(apiName, callback) {
         var apiUrl = CommonConfig.getApiUrl(apiName, null, true);
