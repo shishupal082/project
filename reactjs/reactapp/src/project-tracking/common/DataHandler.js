@@ -396,7 +396,7 @@ DataHandler.extend({
         if (type === "index" || type === "pageName") {
             if (type === "pageName") {
                 if ($S.isStringV2(oldValue) && $S.isStringV2(newValue)) {
-                    if (oldValue === Config.manageFiles || newValue === Config.manageFiles) {
+                    if ([oldValue, newValue].indexOf(Config.manageFiles) >= 0) {
                         isReset = true;
                     }
                 }
