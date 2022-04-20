@@ -26,9 +26,9 @@ class App extends React.Component {
             "list1Data": [],
             "currentList1Id": "",
 
-            "list2Text": "Select...",
-            "list2Data": [],
-            "currentList2Id": "",
+            // "list2Text": "Select...",
+            // "list2Data": [],
+            // "currentList2Id": "",
 
             "list3Text": "Select...",
             "list3Data": [],
@@ -75,9 +75,9 @@ class App extends React.Component {
     gotoPageV2(value) {
         this.childAttribute["history"].push(value);
     }
-    gotoPage(value) {
-        this.gotoPageV2(DataHandler.getLinkV2(value));
-    }
+    // gotoPage(value) {
+    //     this.gotoPageV2(DataHandler.getLinkV2(value));
+    // }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
@@ -124,9 +124,9 @@ class App extends React.Component {
         if (name === "list1-select") {
             this.gotoPageV2(DataHandler.getLinkByIndex(value));
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, name, value);
-        } else if (name === "list2-select") {
-            this.gotoPage(value);
-            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
+        // } else if (name === "list2-select") {
+            // this.gotoPage(value);
+            // DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (name === "list3-select") {
             DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (filterNames.indexOf(name) >= 0) {

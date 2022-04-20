@@ -176,10 +176,10 @@ DataHandler.extend({
         }
         return link;
     },
-    getLinkV2: function(id1) {
-        var pid = this.getPathParamsData("pid");
-        return this.getLinkV3(pid, id1);
-    },
+    // getLinkV2: function(id1) {
+    //     var pid = this.getPathParamsData("pid");
+    //     return this.getLinkV3(pid, id1);
+    // },
     getLinkV3: function(pid, id1) {
         var index = this.getPathParamsData("index", "0");
         var link = CommonConfig.basepathname  + "/" + index + "/pid/" + pid;
@@ -382,9 +382,9 @@ DataHandler.extend({
         // AppHandler.TrackDropdownChange("list1", list1Id);
         // this.OnReloadClick(appStateCallback, appDataCallback);
     },
-    OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
-        AppHandler.TrackDropdownChange("list2Id", list2Id);
-    },
+    // OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
+    //     AppHandler.TrackDropdownChange("list2Id", list2Id);
+    // },
     OnList3Change: function(appStateCallback, appDataCallback, name, list3Id) {
         AppHandler.TrackDropdownChange("list3", list3Id);
         DataHandler.setData("currentList3Id", list3Id);
