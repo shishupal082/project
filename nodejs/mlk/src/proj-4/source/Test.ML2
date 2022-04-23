@@ -1,0 +1,159 @@
+FILE|||A1_initial_comment|||.ML2|||proj-4/|||01
+
+MICROLOK_II PROGRAM Test;
+
+%=================================================================================================
+						LOCAL INPUT AND OUTPUT SECTION
+==================================================================================================\
+
+INTERFACE
+
+LOCAL
+
+BOARD:			J1
+ADJUSTABLE ENABLE:	0
+TYPE:				NV.IN32.OUT32
+
+NV.OUTPUT:
+
+SPARE;
+
+NV.INPUT:
+
+SPARE;
+
+BOARD:			J2
+ADJUSTABLE ENABLE:	1
+TYPE:				COMM.IO
+
+E.PORT1
+ENABLE:				1
+ADJUSTABLE LOCAL.ADDRESS:	"192.168.1.101";		// A SYSTEM: 192.168.1.103; B SYSTEM: 192.168.1.203;
+ADJUSTABLE SUBNET.MASK:		"255.255.255.0";
+ADJUSTABLE GATEWAY:		"0.0.0.0";
+
+E.PORT2
+ADJUSTABLE ENABLE:		1
+ADJUSTABLE LOCAL.ADDRESS:	"0.0.0.0";		// A SYSTEM: 192.168.2.103; B SYSTEM: 192.168.2.203;
+ADJUSTABLE SUBNET.MASK:		"255.255.255.0";
+ADJUSTABLE GATEWAY:		"0.0.0.0";
+
+
+COMM
+
+%=================================================================================================
+						NOV VITAL SERIAL DATA LINK FROM C1 TO SIM
+==================================================================================================\
+LINK:						C1			// ANY USER SELECTED TEXT STRING
+ADJUSTABLE ENABLE:			1
+PROTOCOL:					MII.PEER		// GENISYS.SLAVE, GENISYS.MASTER,
+									// MICROLOK.SLAVE, MICROLOK.MASTER
+
+// PHYSICAL PORT DEFINITIONS
+ADJUSTABLE PORT:				"J2.E.PORT1";
+ADJUSTABLE PORT2:				"J2.E.PORT2";
+
+
+// ADDRESS DEFINITIONS
+ADJUSTABLE MII.NV.ADDRESS:		30001
+ADJUSTABLE ENABLE:			1
+STATION.NAME:				C1_SIM;
+ADJUSTABLE PEER.ADDRESS:		40001;
+ADJUSTABLE PEER.IP.ADDRESS.1.A:	"192.168.1.41";
+ADJUSTABLE PEER.IP.ADDRESS.2.A:	"192.168.2.41";
+ADJUSTABLE TIME.STAMP:			1;
+ADJUSTABLE ACK.TIMEOUT:			1500:MSEC;
+ADJUSTABLE HEARTBEAT.INTERVAL:	1500:MSEC;
+ADJUSTABLE INDICATION.UPDATE.CYCLE:	10;
+ADJUSTABLE STALE.DATA.TIMEOUT:	4000:MSEC;
+ADJUSTABLE CLOCK.MASTER:		0;
+
+
+NV.OUTPUT:
+
+OUT1.SIM,					OUT2.SIM,			OUT3.SIM,			SPARE,
+ALL_IN_HIGH.SIM,			ALL_IN_LOW.SIM,		OR_LOGIC.SIM,		OR_LOGIC_DELAYED.SIM,
+OR_LOGIC_DELAYED_KE.SIM;
+
+NV.INPUT:
+
+IN1.SIM,			IN2.SIM,		IN3.SIM;
+
+%=================================================================================================
+						NON-VITAL BOOLEAN BIT SECTION
+=================================================================================================\
+NV.BOOLEAN BITS
+
+FLASH,
+OR_LOGIC, OR_LOGIC_DELAYED;
+
+%=================================================================================================
+						TIMER BIT SECTION
+=================================================================================================\
+
+TIMER BITS
+FLASH:				SET = 700:MSEC		CLEAR = 700:MSEC;
+OR_LOGIC_DELAYED:	SET = |||TEXT|||08_TIMER_DELAY_120S|||.ML2|||proj-4/|||01|||:SEC		CLEAR = 3:SEC;
+%=================================================================================================
+					USER DATA LOG SECTION
+=================================================================================================\
+LOG BITS
+
+FLASH,
+OR_LOGIC, OR_LOGIC_DELAYED;
+
+%=================================================================================================
+				APPLICATION DATA VERSION CONTROL SECTION
+=================================================================================================\
+CONSTANTS
+
+BOOLEAN
+ONE=1;	ZERO=0;
+
+NUMERIC
+
+INSTALLATION_ADDRESS = 07801;
+APPLICATION_DATA_VERSION = 21;
+EXECUTIVE_SOFTWARE_VERSION = 300;
+
+CONFIGURATION
+SYSTEM
+ADJUSTABLE DEBUG_PORT_ADDRESS		: 1;
+ADJUSTABLE DEBUG_PORT_BAUDRATE	: 19200;
+ADJUSTABLE LOGIC_TIMEOUT		: 4500:MSEC;	//100MSEC-3SEC STEP 100MSEC
+ADJUSTABLE DELAY_RESET			: 100:MSEC;		//0-10SEC STEP 100MSEC
+
+USER NUMERIC
+CONFIGURATIONELEMENT_ADDRESS			: "INSTALLATION ADDRESS";
+CONFIGURATIONELEMENT_APPLICATION_DATA_VERSION	: "APPLICATION DATA VERSION";
+CONFIGURATIONELEMENT_EXECUTIVE_SOFTWARE_VERSION	: "EXECUTIVE SOFTWARE VERSION";
+
+%=================================================================================================
+				PROGRAM LOGIC
+=================================================================================================\
+
+LOGIC BEGIN
+
+ASSIGN ONE									TO CPS.ENABLE;
+
+NV.ASSIGN ~FLASH									TO FLASH;
+
+NV.ASSIGN IN1.SIM TO OUT1.SIM;
+NV.ASSIGN IN2.SIM TO OUT2.SIM;
+NV.ASSIGN IN3.SIM TO OUT3.SIM;
+
+NV.ASSIGN IN1.SIM * IN2.SIM * IN3.SIM TO ALL_IN_HIGH.SIM;
+NV.ASSIGN ~IN1.SIM * ~IN2.SIM * ~IN3.SIM TO ALL_IN_LOW.SIM;
+NV.ASSIGN IN1.SIM + IN2.SIM + IN3.SIM TO OR_LOGIC,
+										 OR_LOGIC.SIM,
+										 OR_LOGIC_DELAYED;
+
+NV.ASSIGN OR_LOGIC_DELAYED TO OR_LOGIC_DELAYED.SIM;
+NV.ASSIGN FLASH * (OR_LOGIC * ~OR_LOGIC_DELAYED + ~OR_LOGIC * OR_LOGIC_DELAYED) TO OR_LOGIC_DELAYED_KE.SIM;
+
+
+END LOGIC
+
+
+END PROGRAM
+%================================================================================================\

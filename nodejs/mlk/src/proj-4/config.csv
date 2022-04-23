@@ -1,0 +1,18 @@
+//projectId, source filepath, destination filepath, identifier
+
+
+Test_S, proj-4/source/Test.ML2, ../dist/proj-4/Service/TEST.ML2, Service/Test/
+Test_F, proj-4/source/Test.ML2, ../dist/proj-4/FAT/TEST.ML2, FAT/Test/
+
+/*
+
+Test_S, proj-4/source/Test.ML2, ../dist/proj-4/Service/TEST.ML2, Service/Test/
+Test_F, proj-4/source/Test.ML2, ../dist/proj-4/FAT/TEST.ML2, FAT/Test/
+
+*/
+
+/*
+
+".\mlk2compCC3.00.exe" Test.ML2
+
+*/

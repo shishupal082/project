@@ -149,8 +149,8 @@ ReadText.extend({
         });
     },
     read: function(filepath, obj, tempObj, callback) {
-        var text = "------------------------------------------------\nReading text file: \t\t";
-        Logger.log(text + filepath);
+        Logger.log("------------------------------------------------");
+        Logger.log("Reading text file: \t\t" + filepath);
         FS.readTextFile(filepath, [], function(fileData) {
             Logger.log("Read text file completed: \t" + filepath);
             var fileDataV2 = $S.readTextData(fileData);

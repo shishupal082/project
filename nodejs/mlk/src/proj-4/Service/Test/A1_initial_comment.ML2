@@ -1,0 +1,77 @@
+%=================================================================================================
+			MICROLOK II APPLICATION PROGRAM FOR Test INTERLOCKING (Service)
+==================================================================================================
+						WARNING
+			THIS IS A VITAL INTERLOCKING PROGRAM FOR MICROLOK II
+			CHANGING OF ANY STATEMENTS WITHIN THIS PROGRAM LISTING
+			CAN COMPROMISE THE SAFE PERFORMANCE OF THE PROGRAM
+==================================================================================================
+PROJECT			: MICROLOK II INTERLOCKING AT Test STATION ON 
+				  INDIAN RAILWAY.
+
+STATION			: Test
+
+==================================================================================================
+						 PROGRAM HISTORY
+==================================================================================================
+REVISION			:  01
+
+FILE NAME			:  Test
+
+REASON FOR REVISION		:  Test application Login Design Start
+				  
+				
+REVISED BY			:  --NAME--
+DATE				:  23.04.2022
+
+VERIFIED BY			:  NIL
+DATE				:  NIL
+
+COMPANY				:  INDIAN RAILWAY.
+==================================================================================================
+
+COMPANY			: ANSALDO STS TRANSPORTATION SYSTEMS INDIA PRIVATE LIMITED.
+==================================================================================================
+NOTE	:	THIS PROGRAM HAS BEEN DEBUGGED ON ______ BY _____ AND IS READY FOR FACTORY TESTING.
+
+NOTE	:	THIS PROGRAM HAS BEEN TESTED IN FACTORY ON _____ BY ______ AND IS READY FOR FIELD
+		TESTING BY ASTS REPRESENTATIVE
+
+NOTE	:	THIS PROGRAM HAS BEEN TESTED AT FIELD ON _____ BY _____ (ASTS) AND IS READY
+		FOR FIELD TESTING BY INDIAN RAILWAY REPRESENTATIVE
+
+NOTE	:	THIS PROGRAM HAS BEEN TESTED AT FIELD ON _____ BY _____ (INDIAN RAILWAY) AND WAS PLACED IN
+		SERVICE ON _____ BY ______ AND WITNESSED BY ________
+
+==================================================================================================
+ABBREVIATIONS:
+ASTS	-	ANSALDO STS TRANSPORTATION SYSTEMS INDIA PVT. LTD.
+IR	-	INDIAN RAILWAY
+STP	-	SLOW TO PICK
+STR	-	SLOW TO RELEASE
+F.A.T	-	FACTORY ACCEPTANCE TEST
+S.A.T	-	SITE ACCEPTANCE TEST
+TIR	-	ACCEPTANCE TEST INCIDENT REPORT
+
+MICROLOK II COMPILER VERSION	: CC3
+MICROLOK II EXECUTIVE VERSION	: CC3
+
+==================================================================================================
+							INDEX
+==================================================================================================
+BIT DEFINITION SECTION
+		LOCAL INPUT AND OUTPUT SECTION
+		VITAL SERIAL DATA LINK	TO BLOCK CABIN MICROLOK
+		VITAL SERIAL DATA LINK	TO PANEL PROCESSOR
+		NON-VITAL SERIAL DATA LINK TO DATALOGGER
+		VITAL BOOLEAN BIT SECTION
+		NON-VITAL BOOLEAN BIT SECTION
+		TIMER BIT SECTION
+		USER DATA LOG SECTION
+		APPLICATION DATA VERSION CONTROL SECTION APPLICATION LOGIC SECTION
+		SYSTEM INITIALIZATION AND COMMUNICATION LINK STATUS LOGIC CPU PANEL LED DISPLAY
+		CARDFILE IDENTIFICATION LOGIC
+
+%=================================================================================================
+						START OF PROGRAM
+==================================================================================================\
