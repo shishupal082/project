@@ -664,6 +664,205 @@ CommonDataHandler.extend({
         return finalTableData;
     }
 });
+CommonDataHandler.extend({
+    _isValidDataHandler: function(DataHandler) {
+        if (!$S.isFunction(DataHandler)) {
+            return false;
+        }
+        return true;
+    },
+    getDataLoadStatusByKeyV2: function(DataHandler, keys) {
+        if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getData)) {
+            return "";
+        }
+        var dataLoadStatus = [], i;
+        var loadStatus;
+        if ($S.isArray(keys)) {
+            for (i = 0; i < keys.length; i++) {
+                if ($S.isString(keys[i])) {
+                    loadStatus = DataHandler.getData(keys[i], "");
+                    dataLoadStatus.push(loadStatus);
+                }
+            }
+        } else {
+            return "";
+        }
+        for (i = 0; i < dataLoadStatus.length; i++) {
+            if (dataLoadStatus[i] !== "completed") {
+                return "";
+            }
+        }
+        return "completed";
+    },
+    isPageDisabled: function(DataHandler, pageName) {
+        if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getAppData)) {
+            return false;
+        }
+        var enabledPages = DataHandler.getAppData("enabledPages");
+        if ($S.isArray(enabledPages)) {
+            if (enabledPages.indexOf("all") >= 0) {
+                return false;
+            }
+            return enabledPages.indexOf(pageName) < 0;
+        }
+        return true;
+    },
+    getTableData: function(DataHandler, tableName) {
+        if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getData)) {
+            return [];
+        }
+        if (!$S.isStringV2(tableName)) {
+            return [];
+        }
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName]) && $S.isArray(dbViewData[tableName]["tableData"])) {
+            return dbViewData[tableName]["tableData"];
+        }
+        return [];
+    },
+    getList2Data: function(DataHandler, otherPagesList) {
+        if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getAppData)) {
+            return [];
+        }
+        if (!$S.isArray(otherPagesList)) {
+            otherPagesList = [];
+        }
+        var enabledPages = DataHandler.getAppData("enabledPages");
+        var redirectPages = DataHandler.getAppData("redirectPages");
+        var linkText = DataHandler.getAppData("linkText");
+        if (!$S.isArray(enabledPages)) {
+            enabledPages = [];
+        }
+        if (!$S.isObject(linkText)) {
+            linkText = {};
+        }
+        var list2Data = [];
+        var temp, i, key;
+        var pageOrder = [];
+        if (enabledPages.indexOf("all") >= 0) {
+            pageOrder = otherPagesList;
+        } else {
+            for(i=0; i<enabledPages.length; i++) {
+                if (otherPagesList.indexOf(enabledPages[i]) >= 0) {
+                    pageOrder.push(enabledPages[i]);
+                }
+            }
+        }
+        for(i=0; i<pageOrder.length; i++) {
+            key = pageOrder[i];
+            if ($S.isString(linkText[key])) {
+                temp = linkText[key];
+            } else {
+                temp = $S.capitalize(key);
+            }
+            list2Data.push({"name": key, "toText": temp, "pageName": key});
+        }
+        if ($S.isArray(redirectPages)) {
+            for(i=0; i<redirectPages.length; i++) {
+                temp = redirectPages[i];
+                if (!$S.isObject(temp)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.name)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toText)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toUrl)) {
+                    continue;
+                }
+                list2Data.push({"name": temp.name, "toText": temp.toText, "toUrl": temp.toUrl});
+            }
+        }
+        return list2Data;
+    },
+    generateDateSelectionParameter: function(allDateStr) {
+        var dailyDateSelection = [];
+        var monthlyDateSelection = [];
+        var yearlyDateSelection = [];
+        var allDateSelection = [];
+        var allDate = [];
+        if ($S.isArray(allDateStr)) {
+            allDate = allDateStr.sort();
+        }
+        var i, temp, heading, startDate, endDate;
+        /*Daily Date Selection*/
+        for (i=0; i<allDate.length; i++) {
+            temp = allDate[i];
+            dailyDateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
+        }
+        /*Monthly Date Selection*/
+        temp = [];
+        var dObj;
+        for (i=0; i<allDate.length; i++) {
+            dObj = DT.getDateObj(allDate[i]);
+            if (dObj !== null) {
+                dObj.setDate(1);
+                heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
+                startDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 00:00", "/", dObj);
+                dObj.setMonth(dObj.getMonth()+1);
+                dObj.setDate(0);
+                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
+            } else {
+                continue;
+            }
+            if (temp.indexOf(heading) < 0) {
+                monthlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                temp.push(heading);
+            }
+        }
+        /*Yearly Date Selection*/
+        temp = [];
+        for (i=0; i<allDate.length; i++) {
+            dObj = DT.getDateObj(allDate[i]);
+            if (dObj !== null) {
+                dObj.setDate(1);
+                heading = DT.formateDateTime("YYYY", "/", dObj);
+                startDate = heading +"-01-01 00:00";
+                endDate = heading +"-12-31 23:59";
+            } else {
+                continue;
+            }
+            if (temp.indexOf(heading) < 0) {
+                yearlyDateSelection.push({"dateRange": [startDate, endDate], "dateHeading": heading});
+                temp.push(heading);
+            }
+        }
+        /*All Date Selection*/
+        if (allDate.length > 0) {
+            allDateSelection.push({"dateRange": [allDate[0] + " 00:00", allDate[allDate.length-1] + " 23:59"], "dateHeading": "All"});
+        }
+        var combinedDateSelectionParameter = {};
+        combinedDateSelectionParameter["daily"] = dailyDateSelection;
+        combinedDateSelectionParameter["monthly"] = monthlyDateSelection;
+        combinedDateSelectionParameter["yearly"] = yearlyDateSelection;
+        combinedDateSelectionParameter["all"] = allDateSelection;
+        return combinedDateSelectionParameter;
+    },
+    getList3Data: function(DataHandler, list3NameIdentifier) {
+        if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getMetaData) || !$S.isFunction(DataHandler.getCurrentAppData) || !$S.isFunction(DataHandler.getPathParamsData)) {
+            return [];
+        }
+        var name = "list3Data"
+        if ($S.isStringV2(list3NameIdentifier)) {
+            name = list3NameIdentifier
+        }
+        var metaData = DataHandler.getMetaData({});
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var list3Data = $S.findParam([currentAppData, metaData], name, []);
+        if ($S.isArray(list3Data)) {
+            for (var i = 0; i < list3Data.length; i++) {
+                if ($S.isObject(list3Data[i])) {
+                    if (!$S.isString(list3Data[i].name)) {
+                        list3Data[i]["name"] = name + "-name-" + i;
+                    }
+                }
+            }
+        }
+        return list3Data;
+    },
+});
 })($S);
 
 export default CommonDataHandler;

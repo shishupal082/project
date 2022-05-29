@@ -25,6 +25,7 @@
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/account.css"/>
   </head>
@@ -46,12 +47,15 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
+    projectHeading: "Accounting",
     appControlDataPath: "/project-tracking/json/",
-    forceLogin: false
+    forceLogin: false,
+    enabledPages: ["all"]
 };
 
-GLOBAL.appControlApi = "/pvt/app-data/account/userControlV2.json";
-GLOBAL.backIconUrl = "http://localhost/static/img/icons/back-32.png";
+GLOBAL.appControlDataApi = "/pvt/app-data/account/userControlV3.json";
+GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
+GLOBAL.validAppControl = [];
 GLOBAL.gtag = null;
 GLOBAL.appVersion = "v1.0.0";
 window.GLOBAL = GLOBAL;

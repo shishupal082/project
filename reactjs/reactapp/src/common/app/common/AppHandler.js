@@ -611,6 +611,7 @@ AppHandler.extend({
                 tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
+                tableData[request[i].apiName]["skipEmpty"] = request[i].skipEmpty;
                 tableData[request[i].apiName]["response"] = request[i].response;
             }
         }
@@ -619,7 +620,7 @@ AppHandler.extend({
             wordBreak = tableData[key].wordBreak;
             if ($S.isArray(tableData[key]["response"])) {
                 for(i=0; i<tableData[key]["response"].length; i++) {
-                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, false, true, tableData[key]["request"]);
+                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, tableData[key].skipEmpty, true, tableData[key]["request"]);
                     tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
                 }
             }

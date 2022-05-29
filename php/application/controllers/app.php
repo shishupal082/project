@@ -39,6 +39,9 @@ class App extends CI_Controller {
     public function accountsv2() {
         $this->load->view("app/account.php");
     }
+    public function accountsv3() {
+        $this->load->view("app/accountv3.php");
+    }
     // Depricated
     // public function monitorv2() {
     //     $this->load->view("app/monitor.php");

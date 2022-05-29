@@ -1,3 +1,4 @@
+import Config from "./Config";
 var Template = {
     "noPageFound": [{
         "tag": "center.h1",
@@ -23,6 +24,52 @@ var Template = {
                 "name": "",
                 "text": "No Data found"
             }
+        }
+    ],
+    "heading": [
+        {
+            "tag": "div",
+            "className": "heading",
+            "text": [
+                {
+                    "tag": "center.h2",
+                    "name": "heading-text",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "center",
+            "name": "heading-link",
+            "text": [
+                {
+                    "tag": "span",
+                    "text": "Login as: "
+                },
+                {
+                    "tag": "span.b",
+                    "name": "pageHeading.username",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "link",
+                    "text": "Dashboard",
+                    "href": Config.basepathname + "/"
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "a",
+                    "text": "Logout",
+                    "href": "/logout"
+                }
+            ]
         }
     ],
     "journalByDate": [
@@ -74,6 +121,16 @@ var Template = {
                 },
                 {
                     "tag": "th",
+                    "className": "w-120px",
+                    "text": [
+                        {
+                            "tag": "span",
+                            "text": "Category"
+                        }
+                    ]
+                },
+                {
+                    "tag": "th",
                     "className": "p-0",
                     "text": {
                         "tag": "table.tbody.tr",
@@ -94,7 +151,17 @@ var Template = {
                                         "text": "Reload"
                                     }
                                 ]
-                            },
+                            }
+                        ]
+                    }
+                },
+                {
+                    "tag": "th",
+                    "className": "p-0",
+                    "text": {
+                        "tag": "table.tbody.tr",
+                        "className": "table table-bordered m-0",
+                        "text": [
                             {
                                 "tag": "td",
                                 "className": "w-120px",
@@ -127,48 +194,99 @@ var Template = {
                 },
                 {
                     "tag": "td",
-                    "name": "date",
+                    "name": "uiEntryTime",
                     "text": ""
                 },
                 {
                     "tag": "td",
-                    "name": "particular",
+                    "name": "category",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "name": "remarks",
+                    "text": ""
+                },
+                {
+                    "tag": "td",
+                    "text": {
+                        "tag": "table.tbody",
+                        "className": "table table-bordered m-0",
+                        "text": [
+                            {
+                                "tag": "tr",
+                                "text": [
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "name": "value1",
+                                        "text": ""
+                                    },
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "text": ""
+                                    },
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "name": "dr_account",
+                                        "text": ""
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "tr",
+                                "text": [
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "text": ""
+                                    },
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "name": "value2",
+                                        "text": ""
+                                    },
+                                    {
+                                        "tag": "td",
+                                        "className": "w-120px",
+                                        "name": "cr_account",
+                                        "text": ""
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "ledger": {
+        "tag": "div",
+        "className": "row LEDGER-BOOK-ROW",
+        "text": {
+            "tag": "div",
+            "className": "col",
+            "text": [
+                {
+                    "tag": "p",
+                    "text": {
+                        "tag": "b",
+                        "name": "accountDisplayName",
+                        "text": ""
+                    }
+                },
+                {
+                    "tag": "table.tbody",
+                    "className": "table table-bordered table-striped",
+                    "name": "ledgerFields",
                     "text": []
                 }
             ]
         }
-    ],
-    "journalEntryParticular": [
-        {
-            "tag": "table.tbody.tr",
-            "className": "table table-bordered m-0",
-            "text": [
-                {
-                    "tag": "td",
-                    "name": "particularText",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "className": "w-120px",
-                    "name": "dr",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "className": "w-120px",
-                    "name": "cr",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "className": "w-120px",
-                    "name": "account",
-                    "text": ""
-                }
-            ]
-        }
-    ],
+    },
     "ledgerHeading": {
         "tag": "tr",
         "text": [
@@ -1254,15 +1372,28 @@ Template["home"] = [{
         "text": []
     }
 }];
-Template["homeLink"] = [
+Template["home.link"] = [
     {
         "tag": "link",
-        "name": "homeLink.toUrl",
+        "name": "home.link.toUrl",
         "href": "",
         "text": {
             "tag": "button",
             "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
-            "name": "homeLink.toText",
+            "name": "home.link.toText",
+            "text": ""
+        }
+    }
+];
+Template["home.a"] = [
+    {
+        "tag": "a",
+        "name": "home.link.toUrl",
+        "href": "",
+        "text": {
+            "tag": "button",
+            "className": "list-group-item list-group-item-action list-group-item-primary text-center2",
+            "name": "home.link.toText",
             "text": ""
         }
     }

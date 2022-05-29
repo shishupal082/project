@@ -28,7 +28,6 @@
     <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/project-tracking/static/css/project-tracking-style.css"/>
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -36,7 +35,7 @@
     gtag('js', new Date());
     gtag('config', 'UA-75647007-1');
 </script>
-  </head>
+</head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"><center>Loading...</center></div>
@@ -64,11 +63,14 @@ var GLOBAL = {
 GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04"];
 
 GLOBAL.addBasepathLinkName = [
-                        "pageHeading:viewPageName.dashboardLink","pageHeading:viewPageName.displaySupplyStatusLink",
-                        "pageHeading:viewPageName.contingencyStatusLink","pageHeading:viewPageName.displayWorkStatus",
-                        "pageHeading:viewPageName.projectComment", "pageHeading:pageId.displayUploadedFiles",
-                        "pageFooter:pageName.manageFiles"];
-
+                        "pageHeading:viewPageName.dashboardLink",
+                        "pageHeading:viewPageName.displaySupplyStatusLink",
+                        "pageHeading:viewPageName.contingencyStatusLink",
+                        "pageHeading:viewPageName.displayWorkStatus",
+                        "pageHeading:viewPageName.projectComment",
+                        "pageHeading:pageId.displayUploadedFiles",
+                        "pageFooter:pageName.manageFiles"
+];
 GLOBAL["pageName:manageFiles.appIndex"] = "1";
 GLOBAL.appControlApi = "/project-tracking/appControlData.json";
 GLOBAL.gtag = gtag;

@@ -6,39 +6,59 @@ var Config = {};
 
 var basepathname = CommonConfig.basepathname;
 
-
-Config.baseapi = CommonConfig.baseApi;
+Config.requestId = $S.getRequestId();
+Config.baseApi = CommonConfig.baseApi;
+Config.basepathname = CommonConfig.basepathname;
 Config.appVersion = CommonConfig.appVersion;
 Config.gtag = CommonConfig.gtag;
+Config.projectHeading = $$$.projectHeading;
 
-var appControlApi = $$$.appControlApi;
 
-Config.appControlApi = [Config.baseapi + appControlApi]
+var appControlDataApi = $$$.appControlDataApi;
+var loginUserDetailsApi = $$$.loginUserDetailsApi;
 
-var pages = {
-    "home": basepathname+"/",
-    "journal": basepathname+"/journal",
-    "journalbydate": basepathname+"/journalbydate",
-    "ledger": basepathname+"/ledger",
-    "trialbalance": basepathname+"/trialbalance",
-    "currentbal": basepathname+"/currentbal",
-    "currentbalbydate": basepathname+"/currentbalbydate",
-    "currentbalbydatev2": basepathname+"/currentbalbydatev2",
-    "summary": basepathname+"/summary",
-    "accountsummarybydate": basepathname+"/summarybydate",
-    "accountsummarybycalander": basepathname+"/summarybycalander",
-    "customisedebit": basepathname+"/customisedebit",
-    "customisecredit": basepathname+"/customisecredit",
-    "custompage": basepathname+"/custompage",
-    "profitandloss": basepathname+"/profitandloss"
+Config.appControlDataPath = $$$.appControlDataPath;
+Config.validAppControl = $$$.validAppControl;
+Config.tempConfig = {
+    "enabledPages": $$$.enabledPages,
+    "redirectPages": $$$.redirectPages,
+    "linkText": $$$.linkText
 };
 
+
+var pageUrl = {
+    "projectHome": basepathname+"/",
+    "home": basepathname+"/:pid",
+    "otherPages": basepathname+"/:pid/:pageName"
+};
+
+
+// var pages = {
+//     "home": basepathname+"/",
+//     "journal": basepathname+"/journal",
+//     "journalbydate": basepathname+"/journalbydate",
+//     "ledger": basepathname+"/ledger",
+//     "trialbalance": basepathname+"/trialbalance",
+//     "currentbal": basepathname+"/currentbal",
+//     "currentbalbydate": basepathname+"/currentbalbydate",
+//     "currentbalbydatev2": basepathname+"/currentbalbydatev2",
+//     "summary": basepathname+"/summary",
+//     "accountsummarybydate": basepathname+"/summarybydate",
+//     "accountsummarybycalander": basepathname+"/summarybycalander",
+//     "customisedebit": basepathname+"/customisedebit",
+//     "customisecredit": basepathname+"/customisecredit",
+//     "custompage": basepathname+"/custompage",
+//     "profitandloss": basepathname+"/profitandloss"
+// };
+
+Config.projectHome = "projectHome";
 Config.home = "home";
+Config.otherPages = "otherPages";
+
 Config.journal = "journal";
 Config.journalbydate = "journalbydate";
 Config.ledger = "ledger";
 Config.trialbalance = "trialbalance";
-Config.currentbal = "currentbal";
 Config.currentbalbydate = "currentbalbydate";
 Config.currentbalbydatev2 = "currentbalbydatev2";
 Config.summary = "summary";
@@ -50,16 +70,13 @@ Config.custompage = "custompage";
 Config.profitandloss = "profitandloss";
 Config.noMatch = "noMatch";
 
+Config.otherPagesList = ["journalbydate", "currentbalbydate", "currentbalbydatev2", "profitandloss",
+                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "journal", "ledger","customisedebit", "customisecredit", "custompage"];
+
+
+Config.defaultDateSelect = "monthly";
 Config.dateSelectionRequired = ["journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "accountsummarybydate"];
-Config.pages = pages;
-Config.defaultPageFields = [];
-
-for(var key in pages) {
-    if (key !== "home") {
-        Config.defaultPageFields.push({"name": key, "toText": $S.capitalize(key), "toUrl": pages[key]});
-    }
-}
-
+Config.pageUrl = pageUrl;
 
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},
@@ -68,29 +85,20 @@ Config.dateSelection = [
     {"name": "All", "value": "all"}
 ];
 
-Config.goBackLinkData = [
-    {
-        "tag": "div",
-        "className": "position-absolute",
-        "text": {
-            "tag": "link",
-            "href": pages.home,
-            "text": {
-                "tag": "h2",
-                "text": [
-                    {
-                        "tag": "img",
-                        "src": $$$.backIconUrl,
-                        "className": "back-img",
-                        "alt": "<"
-                    },
-                    {
-                        "tag": "span",
-                        "text": "Back"
-                    }
-                ]
-            }
+var apiMapping = {};
+apiMapping["appControlData"] = appControlDataApi + "?v=" + Config.appVersion;
+apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
+apiMapping["loginRedirectUrl"] = "/login";
+Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
+    if ($S.isString(apiMapping[key])) {
+        if ($S.isBooleanTrue(addBaseUrl)) {
+            return Config.baseApi + apiMapping[key];
+        } else {
+            // used for redirect
+            return apiMapping[key];
         }
     }
-];
+    return defaultValue;
+};
+
 export default Config;

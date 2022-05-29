@@ -5,13 +5,12 @@ import $S from "../interface/stack.js";
 import AppHandler from "../common/app/common/AppHandler";
 
 import AppComponent from "../common/app/components/AppComponent";
-import LedgerBook from "./components/LedgerBook";
 
 import DataHandler from "./common/DataHandler";
 import Config from "./common/Config";;
 
 
-var pages = Config.pages;
+var pageUrl = Config.pageUrl;
 
 class App extends React.Component {
     constructor(props) {
@@ -24,7 +23,7 @@ class App extends React.Component {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
 
-            "list1Text": "Select User",
+            "list1Text": "Select App",
             "list1Data": [],
             "currentList1Id": "",
 
@@ -32,12 +31,18 @@ class App extends React.Component {
             "list2Data": [],
             "currentList2Id": "", // same as pageName
 
+            "list3Text": "Select...",
+            "list3Data": [],
+            "currentList3Id": "",
+
             "renderFieldRow": [],
+            "filterOptions": [],
 
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
             "enableReloadButton": true,
+            "enableToggleButton": true,
             "enableFooter": true
         };
         this.appData.pageTab = [];
@@ -46,6 +51,8 @@ class App extends React.Component {
         /* methods used in selectFilter end */
         this.appStateCallback = this.appStateCallback.bind(this);
         this.appDataCallback = this.appDataCallback.bind(this);
+        this.isComponentUpdate = this.isComponentUpdate.bind(this);
+        this.pageComponentDidUpdate = this.pageComponentDidUpdate.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
         this.getTabDisplayText = this.getTabDisplayText.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
@@ -53,6 +60,8 @@ class App extends React.Component {
         this.methods = {
             onClick: this.onClick,
             dropDownChange: this.dropDownChange,
+            isComponentUpdate: this.isComponentUpdate,
+            pageComponentDidUpdate: this.pageComponentDidUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
             getTabDisplayText: this.getTabDisplayText,
             registerChildAttribute: this.registerChildAttribute
@@ -62,21 +71,30 @@ class App extends React.Component {
         $S.updateDataObj(this.childAttribute, name, method, "checkUndefined");
     }
     gotoPage(pageName) {
-        var pages = Config.pages;
-        if ($S.isString(pages[pageName])) {
-            this.childAttribute["history"].push(pages[pageName])
+        var pages = Config.otherPagesList;
+        if ($S.isArray(pages) && pages.indexOf(pageName) >= 0) {
+            this.childAttribute["history"].push(pageName);
         } else {
             alert("page '" + pageName + "' not found");
         }
-        DataHandler.TrackPageView(pageName);
+    }
+    gotoPageV2(appId) {
+        var pageName = DataHandler.getPathParamsData("pageName", "");
+        var url = Config.basepathname + "/" + appId;
+        if ($S.isStringV2(pageName)) {
+            this.childAttribute["history"].push(url + "/" + pageName);
+        } else {
+            this.childAttribute["history"].push(url);
+        }
     }
     onClick(e) {
         var name = AppHandler.getFieldName(e);
         var value = AppHandler.getFieldValue(e);
         if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
-            DataHandler.UserChange(this.appStateCallback,
+            DataHandler.OnList1Change(this.appStateCallback,
                 this.appDataCallback, this.appData.currentList1Id);
+            DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
         } else if (name === "open-tab") {
             if (value !== this.appData.currentList2Id) {
                 this.gotoPage(value);// value is page name
@@ -95,9 +113,10 @@ class App extends React.Component {
         var value = e.currentTarget.value;
         if (name === "list1-select") {
             var currentUserName = value;
-            DataHandler.TrackSectionView("dropdownSelect", currentUserName);
-            DataHandler.UserChange(this.appStateCallback, this.appDataCallback, currentUserName);
+            DataHandler.TrackSectionView("list1Change", currentUserName);
+            this.gotoPageV2(value);
         } else if (name === "list2-select") {
+            DataHandler.TrackSectionView("list2Change", currentUserName);
             this.gotoPage(value);
         }
     }
@@ -108,15 +127,55 @@ class App extends React.Component {
     appDataCallback(name, data) {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
-    pageComponentDidMount(pageName) {
+    isComponentUpdate(arg) {
+        var currentPageName = arg["currentPageName"];
+        var prevPageName = arg["prevPageName"];
+        var params = arg["params"];
+        var isComponentUpdate = false;
+        var oldAppId = DataHandler.getPathParamsData("pid", "");
+        var oldPageName = DataHandler.getPathParamsData("pageName");
+        var displayLoading = false;
+        if (currentPageName !== prevPageName) {
+            isComponentUpdate = true;
+            if (prevPageName === Config.home && currentPageName === Config.otherPages) {
+                displayLoading = true;
+            }
+        } else if ($S.isObject(params)) {
+            if ($S.isStringV2(params.pid) && params.pid !== oldAppId) {
+                isComponentUpdate = true;
+                if ($S.isStringV2(params.pageName)) {
+                    displayLoading = true;
+                }
+                /**
+                    DataHandler.OnList1Change is required, because
+                    When user is on specific page of one pid and went back to different pid of same page or other page, then
+                    If this is not used then, metaData reload will not happen
+                */
+                DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
+            } else if ($S.isStringV2(params.pageName) && params.pageName !== oldPageName) {
+                isComponentUpdate = true;
+            }
+        }
+        DataHandler.setData("displayLoading", displayLoading);
+        return isComponentUpdate;
+    }
+    pageComponentDidMount(pageName, pathParams) {
+        $S.log("App:pageComponentDidMount"); //#1
         this.addTab(pageName);
-        DataHandler.PageComponentMount(this.appStateCallback, this.appDataCallback, pageName);
+        DataHandler.setData("pageName", pageName);
+        DataHandler.setData("pathParams", pathParams);
     }
     componentDidMount() {
-        $S.log("App:componentDidMount");
+        $S.log("App:componentDidMount"); //#2
         var appDataCallback = this.appDataCallback;
         var appStateCallback = this.appStateCallback;
-        DataHandler.AppComponentDidMount(appStateCallback, appDataCallback);
+        DataHandler.AppDidMount(appStateCallback, appDataCallback);
+    }
+    pageComponentDidUpdate(pageName, pathParams) {
+        $S.log("App:pageComponentDidUpdate"); //#3
+        DataHandler.setData("pageName", pageName);
+        DataHandler.setData("pathParams", pathParams);
+        DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
     }
     removeTab(pageName) {
         this.appData.pageTab = this.appData.pageTab.filter(function(el, i, arr) {
@@ -138,72 +197,26 @@ class App extends React.Component {
     render() {
         var commonData = this.appData;
         var methods = this.methods;
-
-        const journal = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                        renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.journal}/>);
-
-        const trial = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                            renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.trialbalance}/>);
-
-        const journalbydate = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.journalbydate}/>);
-
-        const ledger = (props) => (<LedgerBook {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.ledger}/>);
-
-        const currentbal = (props) => (<LedgerBook {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbal}/>);
-
-        const currentbalbydate = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbalbydate}/>);
-
-        const currentbalbydatev2 = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.currentbalbydatev2}/>);
-
-        const summary = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.summary}/>);
-
-        const summaryByDate = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.accountsummarybydate}/>);
-
-        const accountsummarybycalander = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.accountsummarybycalander}/>);
-
-        const customisedebit = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.customisedebit}/>);
-
-        const customisecredit = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.customisecredit}/>);
-
-        const custompage = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.custompage}/>);
-
-        const profitandloss = (props) => (<AppComponent {...props} onClick={this.onClick} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.profitandloss}/>);
         const noMatch = (props) => (<AppComponent {...props} data={commonData} methods={methods}
                     renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
 
         return (<BrowserRouter>
             <Switch>
-                <Route exact path={pages.home}
+                <Route exact path={pageUrl.projectHome}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} renderFieldRow={this.appData.renderFieldRow} methods={methods} currentPageName={Config.projectHome}/>
+                    )}
+                />
+                <Route exact path={pageUrl.home}
                     render={props => (
                         <AppComponent {...props} data={commonData} renderFieldRow={this.appData.renderFieldRow} methods={methods} currentPageName={Config.home}/>
                     )}
                 />
-                <Route path={pages.journal} component={journal}/>
-                <Route path={pages.journalbydate} component={journalbydate}/>
-                <Route path={pages.currentbal} component={currentbal}/>
-                <Route path={pages.currentbalbydate} component={currentbalbydate}/>
-                <Route path={pages.currentbalbydatev2} component={currentbalbydatev2}/>
-                <Route path={pages.ledger} component={ledger}/>
-                <Route path={pages.summary} component={summary}/>
-                <Route path={pages.accountsummarybydate} component={summaryByDate}/>
-                <Route path={pages.trialbalance} component={trial} />
-                <Route path={pages.accountsummarybycalander} component={accountsummarybycalander} />
-                <Route path={pages.customisedebit} component={customisedebit} />
-                <Route path={pages.customisecredit} component={customisecredit} />
-                <Route path={pages.custompage} component={custompage} />
-                <Route path={pages.profitandloss} component={profitandloss} />
+                <Route exact path={pageUrl.otherPages}
+                    render={props => (
+                        <AppComponent {...props} data={commonData} renderFieldRow={this.appData.renderFieldRow} methods={methods} currentPageName={Config.otherPages}/>
+                    )}
+                />
                 <Route component={noMatch}/>
             </Switch>
         </BrowserRouter>);
