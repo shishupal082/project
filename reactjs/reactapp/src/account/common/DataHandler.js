@@ -536,14 +536,16 @@ DataHandler.extend({
         // }
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
-        var pageName;
+        var pageName1, pageName2;
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
-                pageName = DataHandler.getData("pageName", "");
-                if (pageName === Config.otherPages) {
-                    pageName = DataHandler.getPathParamsData("pageName", "");
+                pageName1 = DataHandler.getData("pageName", "");
+                if (pageName1 === Config.otherPages) {
+                    pageName2 = DataHandler.getPathParamsData("pageName", "");
+                    AppHandler.TrackPageView(pageName2);
+                } else {
+                    AppHandler.TrackPageView(pageName1);
                 }
-                AppHandler.TrackPageView(pageName);
                 appStateCallback();
             });
         });

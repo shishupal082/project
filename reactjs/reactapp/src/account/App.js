@@ -23,7 +23,7 @@ class App extends React.Component {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "",
 
-            "list1Text": "Select App",
+            "list1Text": "Select App...",
             "list1Data": [],
             "currentList1Id": "",
 
@@ -112,11 +112,10 @@ class App extends React.Component {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
         if (name === "list1-select") {
-            var currentUserName = value;
-            DataHandler.TrackSectionView("list1Change", currentUserName);
+            DataHandler.TrackSectionView("list1Change", value);
             this.gotoPageV2(value);
         } else if (name === "list2-select") {
-            DataHandler.TrackSectionView("list2Change", currentUserName);
+            DataHandler.TrackSectionView("list2Change", value);
             this.gotoPage(value);
         }
     }
@@ -137,8 +136,17 @@ class App extends React.Component {
         var displayLoading = false;
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
-            if (prevPageName === Config.home && currentPageName === Config.otherPages) {
+            if (prevPageName === Config.projectHome && currentPageName === Config.home) {
                 displayLoading = true;
+            } else if (prevPageName === Config.home && currentPageName === Config.otherPages) {
+                displayLoading = true;
+            } else {
+                /**
+                    DataHandler.OnList1Change is required, because
+                    When user is on noMatch page like invalid baseurl (metaData will not load) and selected pid, then
+                    If this is not used then, metaData reload will not happen
+                */
+                DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
             }
         } else if ($S.isObject(params)) {
             if ($S.isStringV2(params.pid) && params.pid !== oldAppId) {
@@ -148,7 +156,7 @@ class App extends React.Component {
                 }
                 /**
                     DataHandler.OnList1Change is required, because
-                    When user is on specific page of one pid and went back to different pid of same page or other page, then
+                    When user is on specific page of one pid and went back to different pid of same page (or other page), then
                     If this is not used then, metaData reload will not happen
                 */
                 DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
@@ -197,9 +205,6 @@ class App extends React.Component {
     render() {
         var commonData = this.appData;
         var methods = this.methods;
-        const noMatch = (props) => (<AppComponent {...props} data={commonData} methods={methods}
-                    renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>);
-
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pageUrl.projectHome}
@@ -217,7 +222,11 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} renderFieldRow={this.appData.renderFieldRow} methods={methods} currentPageName={Config.otherPages}/>
                     )}
                 />
-                <Route component={noMatch}/>
+                <Route
+                    render={props => (
+                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.noMatch}/>
+                    )}
+                />
             </Switch>
         </BrowserRouter>);
     }

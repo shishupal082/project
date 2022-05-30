@@ -86,6 +86,7 @@ class App extends React.Component {
         When going from page-1 or page-2 to page-3 or page-4 --> page-1 componentDidMount will fire
         When toggeling b/w page-1 and page-2 --> page-1 componentDidUpdate will fire
         Note: At a time either componentDidMount or componentDidUpdate will fire but not both
+        It is always better to use single type of route like /, /page-1 and /page-2 but not mixed
         **/
         return (<BrowserRouter>
             <Switch>
