@@ -93,94 +93,62 @@ var Template = {
             "text": []
         }
     ],
+    "journalEntryDetails": {
+        "tag": "table.tbody",
+        "className": "table table-bordered m-0",
+        "text": [
+            {
+                "tag": "tr",
+                "text": [
+                    {
+                        "tag": "td",
+                        "name": "value1",
+                        "className": "w-120px",
+                        "text": "Debit"
+                    },
+                    {
+                        "tag": "td",
+                        "className": "w-120px",
+                        "text": "",
+                    },
+                    {
+                        "tag": "td",
+                        "name": "dr_account",
+                        "className": "w-120px",
+                        "text": "Account"
+                    }
+                ]
+            },
+            {
+                "tag": "tr",
+                "text": [
+                    {
+                        "tag": "td",
+                        "className": "w-120px",
+                        "text": ""
+                    },
+                    {
+                        "tag": "td",
+                        "name": "value2",
+                        "className": "w-120px",
+                        "text": "Credit",
+                    },
+                    {
+                        "tag": "td",
+                        "name": "cr_account",
+                        "className": "w-120px",
+                        "text": "Account"
+                    }
+                ]
+            }
+        ]
+    },
     "journal": [
         {
             "tag": "table.tbody",
             "className": "table-bordered table-striped",
             "name": "journalEntryTr",
             "text": []
-        }
-    ],
-    "journalEntry1stRow": [
-        {
-            "tag": "tr",
-            "text": [
-                {
-                    "tag": "th",
-                    "text": "S.No."
-                },
-                {
-                    "tag": "th",
-                    "className": "w-120px",
-                    "text": [
-                        {
-                            "tag": "span",
-                            "text": "Date"
-                        }
-                    ]
-                },
-                {
-                    "tag": "th",
-                    "className": "w-120px",
-                    "text": [
-                        {
-                            "tag": "span",
-                            "text": "Category"
-                        }
-                    ]
-                },
-                {
-                    "tag": "th",
-                    "className": "p-0",
-                    "text": {
-                        "tag": "table.tbody.tr",
-                        "className": "table table-bordered m-0",
-                        "text": [
-                            {
-                                "tag": "td",
-                                "text": [
-                                    {
-                                        "tag": "span",
-                                        "className": "pr-10px",
-                                        "text": "Particulars"
-                                    },
-                                    {
-                                        "tag": "button",
-                                        "className": "btn btn-primary pt-0 pb-0",
-                                        "value": "reload",
-                                        "text": "Reload"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "tag": "th",
-                    "className": "p-0",
-                    "text": {
-                        "tag": "table.tbody.tr",
-                        "className": "table table-bordered m-0",
-                        "text": [
-                            {
-                                "tag": "td",
-                                "className": "w-120px",
-                                "text": "Debit"
-                            },
-                            {
-                                "tag": "td",
-                                "className": "w-120px",
-                                "text": "Credit"
-                            },
-                            {
-                                "tag": "td",
-                                "className": "w-120px",
-                                "text": "Account"
-                            }
-                        ]
-                    }
-                }
-            ]
         }
     ],
     "journalEntry": [

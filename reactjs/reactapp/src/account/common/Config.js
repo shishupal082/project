@@ -70,12 +70,12 @@ Config.custompage = "custompage";
 Config.profitandloss = "profitandloss";
 Config.noMatch = "noMatch";
 
-Config.otherPagesList = ["journalbydate", "currentbalbydate", "currentbalbydatev2", "profitandloss",
-                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "journal", "ledger","customisedebit", "customisecredit", "custompage"];
+Config.otherPagesList = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2", "profitandloss",
+                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "ledger","customisedebit", "customisecredit", "custompage"];
 
 
 Config.defaultDateSelect = "monthly";
-Config.dateSelectionRequired = ["journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "accountsummarybydate"];
+Config.dateSelectionRequired = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "accountsummarybydate"];
 Config.pageUrl = pageUrl;
 
 Config.dateSelection = [

@@ -96,7 +96,7 @@ class App extends React.Component {
         } else if (name === "footer-filter-toggle") {
             AppHandler.TrackEvent("ToggleClick");
             AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.enableFooterV2);
-        }else if (value === "addentry.submit") {
+        } else if (value === "addentry.submit") {
             DataHandler.SubmitFormClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "sortable") {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);

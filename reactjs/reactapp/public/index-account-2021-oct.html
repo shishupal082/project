@@ -27,7 +27,6 @@
     <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/auth/auth-style.css"/>
     <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/account/static/css/account.css"/>
   </head>
   <body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -49,13 +48,14 @@ var GLOBAL = {
     basepathname: "",
     projectHeading: "Accounting",
     appControlDataPath: "/project-tracking/json/",
+    appControlDataPath: "/account/json/",
     forceLogin: false,
     enabledPages: ["all"]
 };
 
 GLOBAL.appControlDataApi = "/pvt/app-data/account/userControlV3.json";
 GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
-GLOBAL.validAppControl = [];
+GLOBAL.validAppControl = ["appControlDataTeam04", "appControlDataTeam07"];
 GLOBAL.gtag = null;
 GLOBAL.appVersion = "v1.0.0";
 window.GLOBAL = GLOBAL;

@@ -2,8 +2,8 @@ import $S from '../../interface/stack.js';
 // import TemplateHelper from '../../common/TemplateHelper';
 
 import TemplateHelper from "../../common/TemplateHelper";
-// import AppHandler from "../../common/app/common/AppHandler";
-// import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+import AppHandler from "../../common/app/common/AppHandler";
+import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 
 import Config from './Config';
@@ -34,26 +34,34 @@ $S.extendObject(TemplateHandler);
 
 TemplateHandler.extend({
     "journal": function(pageName, renderData) {
-        var template = this.getTemplate(pageName), temp;
-        var sNo = 1;
-        if ($S.isArray(renderData) && renderData.length > 0) {
-            TemplateHelper.addItemInTextArray(template, "journalEntryTr", this.getTemplate("journalEntry1stRow", ""));
-            for (var i=0; i<renderData.length; i++) {
-                temp = this.getTemplate("journalEntry", "");
-                if ($S.isObject(renderData[i])) {
-                    renderData[i]["value1"] = renderData[i]["value"];
-                    renderData[i]["value2"] = renderData[i]["value"];
-                }
-                renderData[i]["s.no"] = sNo++;
-                TemplateHelper.updateTemplateText(temp, renderData[i]);
-                TemplateHelper.addItemInTextArray(template, "journalEntryTr", temp);
-            }
-            return template;
-        }
-        return this.getTemplate("noDataFound");
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var sortingFields = null;
+        var renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
+        return renderField;
+        // var template = this.getTemplate(pageName), temp;
+        // var sNo = 1;
+        // if ($S.isArray(renderData) && renderData.length > 0) {
+        //     TemplateHelper.addItemInTextArray(template, "journalEntryTr", this.getTemplate("journalEntry1stRow", ""));
+        //     for (var i=0; i<renderData.length; i++) {
+        //         temp = this.getTemplate("journalEntry", "");
+        //         if ($S.isObject(renderData[i])) {
+        //             renderData[i]["value1"] = renderData[i]["value"];
+        //             renderData[i]["value2"] = renderData[i]["value"];
+        //         }
+        //         renderData[i]["s.no"] = sNo++;
+        //         TemplateHelper.updateTemplateText(temp, renderData[i]);
+        //         TemplateHelper.addItemInTextArray(template, "journalEntryTr", temp);
+        //     }
+        //     return template;
+        // }
+        // return this.getTemplate("noDataFound");
     },
     "journalbydate": function(pageName, renderData) {
-        return AccountHelper.getJournalDataByDateFields(renderData);
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var sortingFields = null;
+        var renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
+        return renderField;
+        // return AccountHelper.getJournalDataByDateFields(renderData);
     },
     "currentbalbydate": function(pageName, renderData) {
         var accountData = DataHandlerV2.getAccountData();
@@ -178,7 +186,8 @@ TemplateHandler.extend({
         }
         return template;
     },
-    SetHeadingUsername: function(username) {
+    SetHeadingUsername: function() {
+        var username = AppHandler.GetUserData("username", "");
         var heading = this.getTemplate("heading");
         if ($S.isString(username)) {
             TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
@@ -186,6 +195,16 @@ TemplateHandler.extend({
             return true;
         }
         return false;
+    },
+    SetCustomHeadingField: function() {
+        var customHeadingField = DataHandler.getAppData("customHeadingField", []);
+        var username = AppHandler.GetUserData("username", "");
+        if ($S.isArrayV2(customHeadingField) || $S.isObjectV2(customHeadingField)) {
+            if ($S.isStringV2(username)) {
+                TemplateHelper.setTemplateAttr(customHeadingField, "pageHeading.username", "text", username);
+            }
+            Template["heading"] = customHeadingField;
+        }
     },
     GetHeadingField: function(headingText) {
         var renderField = this.getTemplate("heading");
@@ -222,6 +241,19 @@ TemplateHandler.extend({
         // TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
         return renderField;
     },
+    getEntryDetails: function(accountEntry) {
+        if (!$S.isObject(accountEntry)) {
+            return "";
+        }
+        var renderField = this.getTemplate("journalEntryDetails");
+        var requiredData = {};
+        requiredData["dr_account"] = accountEntry["dr_account"];
+        requiredData["cr_account"] = accountEntry["cr_account"];
+        requiredData["value1"] = accountEntry["value"];
+        requiredData["value2"] = accountEntry["value"];
+        TemplateHelper.updateTemplateText(renderField, requiredData);
+        return renderField;
+    }
 });
 
 })($S);

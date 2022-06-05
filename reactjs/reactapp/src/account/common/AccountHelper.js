@@ -899,30 +899,30 @@ Account.extend({
 });
 //getJournalFields
 Account.extend({
-    getJournalFields: function(journalData) {
-        var journalRowData = [], i, j, count = 1, templateData;
-        var firstRowTemplate = TemplateHandler.getTemplate("journalEntry1stRow", null);;
-        var template;
-        var entry = [];
-        for (i = 0; i < journalData.length; i++) {
-            if ($S.isArray(journalData[i].entry)) {
-                for (j = 0; j < journalData[i].entry.length; j++) {
-                    if (i===0 && j===0 && firstRowTemplate !== null) {
-                        journalRowData.push(firstRowTemplate);
-                    }
-                    entry = journalData[i].entry[j];
-                    entry["s.no"] = count++;
-                    template = TemplateHandler.getTemplate("journalEntry", null);
-                    TemplateHelper.updateTemplateText(template, entry);
-                    journalRowData.push(template);
-                }
-            }
-        }
-        template = TemplateHandler.getTemplate("journal", null);
-        templateData = {"journalEntryTr": journalRowData};
-        TemplateHelper.updateTemplateText(template, templateData);
-        return template;
-    }
+    // getJournalFields: function(journalData) {
+    //     var journalRowData = [], i, j, count = 1, templateData;
+    //     var firstRowTemplate = TemplateHandler.getTemplate("journalEntry1stRow", null);;
+    //     var template;
+    //     var entry = [];
+    //     for (i = 0; i < journalData.length; i++) {
+    //         if ($S.isArray(journalData[i].entry)) {
+    //             for (j = 0; j < journalData[i].entry.length; j++) {
+    //                 if (i===0 && j===0 && firstRowTemplate !== null) {
+    //                     journalRowData.push(firstRowTemplate);
+    //                 }
+    //                 entry = journalData[i].entry[j];
+    //                 entry["s.no"] = count++;
+    //                 template = TemplateHandler.getTemplate("journalEntry", null);
+    //                 TemplateHelper.updateTemplateText(template, entry);
+    //                 journalRowData.push(template);
+    //             }
+    //         }
+    //     }
+    //     template = TemplateHandler.getTemplate("journal", null);
+    //     templateData = {"journalEntryTr": journalRowData};
+    //     TemplateHelper.updateTemplateText(template, templateData);
+    //     return template;
+    // }
 });
 //getApiJournalDataByDate
 Account.extend({
@@ -987,58 +987,58 @@ Account.extend({
 });
 //getJournalDataByDateFields
 Account.extend({
-    getJournalDataByDateFields: function(apiJournalDataByDate) {
-        var journalDataByDateFields = [], template, templateData;
-        var i, j, journalEntry;
-        var startDate, endDate, currentDate;
-        var journalDataByDateData = [];
-        var dateSelection = DataHandler.getData("dateSelectionParameter", []);
-        if (!$S.isArray(apiJournalDataByDate) || !$S.isArray(dateSelection)) {
-            return journalDataByDateFields;
-        }
-        for (i = 0; i < dateSelection.length; i++) {
-            if (!$S.isArray(dateSelection[i].dateRange) || dateSelection[i].dateRange.length < 2) {
-                continue;
-            }
-            startDate = DT.getDateObj(dateSelection[i].dateRange[0]);
-            endDate = DT.getDateObj(dateSelection[i].dateRange[1]);
-            templateData = {"dateHeading": dateSelection[i].dateHeading, "journalEntryTable": []};
-            if (startDate === null || endDate === null) {
-                console.log("Invalid date range: " + JSON.stringify(dateSelection[j].dateRange));
-                continue;
-            }
-            journalEntry = {"entry": []};
-            for (j = apiJournalDataByDate.length-1; j >= 0 ; j--) {
-                if ($S.isArray(apiJournalDataByDate[j].entry) && apiJournalDataByDate[j].entry.length) {
-                    currentDate = DT.getDateObj(apiJournalDataByDate[j].entry[0].date);
-                    if (currentDate === null) {
-                        continue;
-                    }
-                }
-                if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
-                    if (apiJournalDataByDate[j].entry !== null) {
-                        journalEntry.entry = $S.clone(journalEntry.entry.concat(apiJournalDataByDate[j].entry));
-                        apiJournalDataByDate[j].entry = null;
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-            }
-            templateData.journalEntryTable = templateData.journalEntryTable.concat(journalEntry);
-            journalDataByDateData.push(templateData);
-        }
-        for(i=journalDataByDateData.length-1; i>=0; i--) {
-            template = TemplateHandler.getTemplate("journalByDate", null);
-            templateData = {};
-            templateData["date"] = journalDataByDateData[i].dateHeading;
-            templateData["journalEntryTable"] = AccountHelper.getJournalFields(journalDataByDateData[i].journalEntryTable);
-            TemplateHelper.updateTemplateText(template, templateData);
-            journalDataByDateFields.push(template);
-        }
-        return journalDataByDateFields;
-    }
+    // getJournalDataByDateFields: function(apiJournalDataByDate) {
+    //     var journalDataByDateFields = [], template, templateData;
+    //     var i, j, journalEntry;
+    //     var startDate, endDate, currentDate;
+    //     var journalDataByDateData = [];
+    //     var dateSelection = DataHandler.getData("dateSelectionParameter", []);
+    //     if (!$S.isArray(apiJournalDataByDate) || !$S.isArray(dateSelection)) {
+    //         return journalDataByDateFields;
+    //     }
+    //     for (i = 0; i < dateSelection.length; i++) {
+    //         if (!$S.isArray(dateSelection[i].dateRange) || dateSelection[i].dateRange.length < 2) {
+    //             continue;
+    //         }
+    //         startDate = DT.getDateObj(dateSelection[i].dateRange[0]);
+    //         endDate = DT.getDateObj(dateSelection[i].dateRange[1]);
+    //         templateData = {"dateHeading": dateSelection[i].dateHeading, "journalEntryTable": []};
+    //         if (startDate === null || endDate === null) {
+    //             console.log("Invalid date range: " + JSON.stringify(dateSelection[j].dateRange));
+    //             continue;
+    //         }
+    //         journalEntry = {"entry": []};
+    //         for (j = apiJournalDataByDate.length-1; j >= 0 ; j--) {
+    //             if ($S.isArray(apiJournalDataByDate[j].entry) && apiJournalDataByDate[j].entry.length) {
+    //                 currentDate = DT.getDateObj(apiJournalDataByDate[j].entry[0].date);
+    //                 if (currentDate === null) {
+    //                     continue;
+    //                 }
+    //             }
+    //             if (currentDate.getTime() <= endDate.getTime() && currentDate.getTime() >= startDate.getTime()) {
+    //                 if (apiJournalDataByDate[j].entry !== null) {
+    //                     journalEntry.entry = $S.clone(journalEntry.entry.concat(apiJournalDataByDate[j].entry));
+    //                     apiJournalDataByDate[j].entry = null;
+    //                 } else {
+    //                     continue;
+    //                 }
+    //             } else {
+    //                 continue;
+    //             }
+    //         }
+    //         templateData.journalEntryTable = templateData.journalEntryTable.concat(journalEntry);
+    //         journalDataByDateData.push(templateData);
+    //     }
+    //     for(i=journalDataByDateData.length-1; i>=0; i--) {
+    //         template = TemplateHandler.getTemplate("journalByDate", null);
+    //         templateData = {};
+    //         templateData["date"] = journalDataByDateData[i].dateHeading;
+    //         templateData["journalEntryTable"] = AccountHelper.getJournalFields(journalDataByDateData[i].journalEntryTable);
+    //         TemplateHelper.updateTemplateText(template, templateData);
+    //         journalDataByDateFields.push(template);
+    //     }
+    //     return journalDataByDateFields;
+    // }
 });
 // convertCSVToJsonJournalData
 Account.extend({

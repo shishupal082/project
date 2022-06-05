@@ -564,6 +564,39 @@ AppHandler.extend({
         }
         return true;
     },
+    CombineTableDataV2: function(dbViewData, otherData, combineTableData) {
+        if (!$S.isObject(dbViewData)) {
+            return false;
+        }
+        if (!$S.isArray(otherData)) {
+            return false;
+        }
+        if (!$S.isArray(combineTableData)) {
+            combineTableData = [];
+        }
+        var tableName, sourceTableName, destinationTableName;
+        for (var i=0; i<combineTableData.length; i++) {
+            if ($S.isObjectV2(combineTableData[i]) && $S.isStringV2(combineTableData[i]["destinationTableName"]) && $S.isArray(combineTableData[i]["sourceTableName"])) {
+                if (combineTableData[i]["sourceTableName"].length > 0) {
+                    sourceTableName = combineTableData[i]["sourceTableName"];
+                    destinationTableName = combineTableData[i]["destinationTableName"];
+                    if (!$S.isObject(dbViewData[destinationTableName])) {
+                        dbViewData[destinationTableName] = {"tableData": []};
+                    }
+                    for (var j=0; j<otherData.length; j++) {
+                        for (tableName in otherData[j]) {
+                            if (sourceTableName.indexOf(tableName) >= 0) {
+                                if ($S.isArray(otherData[j][tableName]["tableData"])) {
+                                    dbViewData[destinationTableName]["tableData"] = dbViewData[destinationTableName]["tableData"].concat(otherData[j][tableName]["tableData"]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    },
     GenerateDatabaseV3: function(request) {
         // Response is json data
         var tableData = {}, i, j, temp;

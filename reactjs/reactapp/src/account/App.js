@@ -43,7 +43,8 @@ class App extends React.Component {
             "dateSelectionRequiredPages": [],
             "enableReloadButton": true,
             "enableToggleButton": true,
-            "enableFooter": true
+            "enableFooter": true,
+            "enableFooterV2": true
         };
         this.appData.pageTab = [];
         this.onClick = this.onClick.bind(this);
@@ -92,9 +93,11 @@ class App extends React.Component {
         var value = AppHandler.getFieldValue(e);
         if (value === "reload") {
             DataHandler.TrackSectionView("onClick", this.appData.currentList1Id);
-            DataHandler.OnList1Change(this.appStateCallback,
-                this.appDataCallback, this.appData.currentList1Id);
+            DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
             DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
+        } else if (name === "reset-filter") {
+            AppHandler.TrackEvent("ResetClick");
+            DataHandler.OnResetClick(this.appStateCallback, this.appDataCallback);
         } else if (name === "open-tab") {
             if (value !== this.appData.currentList2Id) {
                 this.gotoPage(value);// value is page name
@@ -106,17 +109,33 @@ class App extends React.Component {
             var selectedDateType = value;
             DataHandler.TrackDateSelection(selectedDateType);
             DataHandler.DateSelectionChange(this.appStateCallback, this.appDataCallback, selectedDateType);
+        } else if (name === "footer-filter-toggle") {
+            AppHandler.TrackEvent("ToggleClick");
+            AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.enableFooterV2);
         }
     }
     dropDownChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filterNames = [];
+        for(var i=0; i<filterOptions.length; i++) {
+            if ($S.isString(filterOptions[i].selectName)) {
+                filterNames.push(filterOptions[i].selectName);
+            }
+        }
         if (name === "list1-select") {
             DataHandler.TrackSectionView("list1Change", value);
             this.gotoPageV2(value);
         } else if (name === "list2-select") {
             DataHandler.TrackSectionView("list2Change", value);
             this.gotoPage(value);
+        } else if (name === "list3-select") {
+            DataHandler.TrackSectionView("list3Change", value);
+            DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, value);
+        } else if (filterNames.indexOf(name) >= 0) {
+            DataHandler.TrackSectionView("filterChange", value);
+            DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
         }
     }
     appStateCallback() {
@@ -161,6 +180,7 @@ class App extends React.Component {
                 */
                 DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback);
             } else if ($S.isStringV2(params.pageName) && params.pageName !== oldPageName) {
+                DataHandler.FirePageChange();
                 isComponentUpdate = true;
             }
         }

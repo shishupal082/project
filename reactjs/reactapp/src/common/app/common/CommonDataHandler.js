@@ -840,23 +840,42 @@ CommonDataHandler.extend({
         combinedDateSelectionParameter["all"] = allDateSelection;
         return combinedDateSelectionParameter;
     },
+    _getList3Id: function(name, index, allId, configId) {
+        if ($S.isStringV2(name) && $S.isNumeric(index) && $S.isArray(allId)) {
+            if ($S.isStringV2(configId) && allId.indexOf(configId) < 0) {
+                return configId;
+            }
+            if (allId.indexOf(name + "-name-" + index) >= 0) {
+                return name + "-name-" + index + "-" + index;
+            } else {
+                return name + "-name-" + index;
+            }
+        }
+        return "invalid-id";
+    },
     getList3Data: function(DataHandler, list3NameIdentifier) {
         if (!this._isValidDataHandler(DataHandler) || !$S.isFunction(DataHandler.getMetaData) || !$S.isFunction(DataHandler.getCurrentAppData) || !$S.isFunction(DataHandler.getPathParamsData)) {
             return [];
         }
-        var name = "list3Data"
-        if ($S.isStringV2(list3NameIdentifier)) {
-            name = list3NameIdentifier
+        if (!$S.isStringV2(list3NameIdentifier)) {
+            return [];
         }
+        var pageName = DataHandler.getPathParamsData("pageName", "");
+        if (this.isPageDisabled(DataHandler, pageName)) {
+            return [];
+        }
+        var name = list3NameIdentifier;
         var metaData = DataHandler.getMetaData({});
         var currentAppData = DataHandler.getCurrentAppData({});
         var list3Data = $S.findParam([currentAppData, metaData], name, []);
+        var temp = [], id;
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
                 if ($S.isObject(list3Data[i])) {
-                    if (!$S.isString(list3Data[i].name)) {
-                        list3Data[i]["name"] = name + "-name-" + i;
-                    }
+                    id = this._getList3Id(name, i, temp, list3Data[i].name);
+                    temp.push(id);
+                    list3Data[i]["name"] = id;
+
                 }
             }
         }

@@ -19,7 +19,7 @@ var DataHandler;
 
 var CurrentData = $S.getDataObj();
 
-var keys = ["userControlData", "apiJournalDataJson", "apiJournalDataCsv",
+var keys = ["userControlData",
             "finalJournalData", "apiJournalDataByDate",
             "customiseDebitAccountData", "customiseCreditAccountData", "customeAccountData",
             "customiseCalenderAccountData"];
@@ -32,17 +32,23 @@ keys.push("appControlData");
 keys.push("appControlMetaData");
 keys.push("displayLoading");
 keys.push("currentList3Id");
+keys.push("list3NameIdentifier");
 keys.push("sortingFields");
-keys.push("dbViewData");
 
-// keys.push("companyName");
-keys.push("dataByCompany");
+keys.push("dbDataFromApis");
+keys.push("dbDataTable");
+keys.push("dbViewData");
+keys.push("dbViewDataTable");
+keys.push("filterOptions");
+keys.push("filterValues");
+
+// keys.push("dataByCompany");
 
 keys.push("dateSelectionParameter");
 keys.push("combinedDateSelectionParameter");
 keys.push("selectedDateType");
-keys.push("homeFields");
-keys.push("dropdownFields");
+// keys.push("homeFields");
+// keys.push("dropdownFields");
 keys.push("accounts");
 
 keys.push("loginUserDetailsLoadStatus");
@@ -57,7 +63,7 @@ keys.push("errorsData");
 keys.push("currentUserName");
 keys.push("currentUserControlData");
 // keys.push("currentPageName");
-keys.push("availableDataPageName");
+// keys.push("availableDataPageName");
 
 
 CurrentData.setKeys(keys);
@@ -185,16 +191,46 @@ DataHandler.extend({
             this.setData("metaDataLoadStatus", "not-started");
             this.setData("dbDataLoadStatus", "not-started");
             this.setData("tableDataLoadStatus", "not-started");
+            this.setData("dbDataFromApis", []);
+            this.setData("dbDataTable", []);
         } else if ([Config.home].indexOf(pageName) >= 0) {
             this.setData("dbDataLoadStatus", "not-started");
             this.setData("tableDataLoadStatus", "not-started");
+            this.setData("dbDataFromApis", []);
+            this.setData("dbDataTable", []);
         }
+    },
+    setList3NameIdentifier: function() {
+        var pageName1 = this.getData("pageName", "");
+        var pageName2 = this.getPathParamsData("pageName", "");
+        var list3NameIdentifier = "", tempList3Data;
+        if ([Config.otherPages].indexOf(pageName1) >= 0) {
+            if (Config.otherPagesList.indexOf(pageName2) >= 0) {
+                tempList3Data = this.getAppData("list3Data." + pageName2);
+                if ($S.isArrayV2(tempList3Data)) {
+                    list3NameIdentifier = "list3Data." + pageName2;
+                } else {
+                    list3NameIdentifier = "list3Data";
+                }
+            }
+        }
+        this.setData("list3NameIdentifier", list3NameIdentifier);
+    },
+    applyResetFilter: function() {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                filterOptions[i].selectedValue = "";
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", {});
     }
 });
 
 DataHandler.extend({
     getList3DataById: function(list3Id) {
-        var list3Data = [];//DataHandlerV3.getList3Data();
+        var list3Data = CommonDataHandler.getList3Data(DataHandler, this.getData("list3NameIdentifier", ""));
         var currentList3Data = {};
         if ($S.isArray(list3Data)) {
             for(var i=0; i<list3Data.length; i++) {
@@ -243,6 +279,10 @@ DataHandler.extend({
         return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
     },
     getMetaData: function(defaultMetaData) {
+        var pageName = this.getData("pageName", "");
+        if (pageName === Config.projectHome) {
+            return this.getData("appControlMetaData", {});;
+        }
         var currentAppData = this.getCurrentAppData({});
         var currentAppId = this.getPathParamsData("pid", "");
         var metaData = defaultMetaData;
@@ -298,44 +338,40 @@ DataHandler.extend({
         return false;
     },
     getMetaDataAccounts: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        if ($S.isObject(metaData) && $S.isArray(metaData.accounts)) {
-            return metaData.accounts;
-        }
-        return [];
+        return this.getAppData("accounts", []);
     },
-    getMetaDataDropdownFields: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var dropdownFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.dropdownFields)) {
-            for (var i = 0; i < metaData.dropdownFields.length; i++) {
-                metaData.dropdownFields[i].toUrl = Config.pages[metaData.dropdownFields[i].name];
-                if (!this.isDisabledPage(metaData.dropdownFields[i].name)) {
-                    dropdownFields.push(metaData.dropdownFields[i]);
-                }
-            }
-        }
+    // getMetaDataDropdownFields: function() {
+        // var metaData = DataHandler.getData("metaData", {});
+        // var dropdownFields = [];
+        // if ($S.isObject(metaData) && $S.isArray(metaData.dropdownFields)) {
+        //     for (var i = 0; i < metaData.dropdownFields.length; i++) {
+        //         metaData.dropdownFields[i].toUrl = Config.pages[metaData.dropdownFields[i].name];
+        //         if (!this.isDisabledPage(metaData.dropdownFields[i].name)) {
+        //             dropdownFields.push(metaData.dropdownFields[i]);
+        //         }
+        //     }
+        // }
         // if (dropdownFields.length < 1) {
         //     dropdownFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
         // }
-        return dropdownFields;
-    },
-    getMetaDataHomeFields: function() {
-        var metaData = DataHandler.getData("metaData", {});
-        var homeFields = [];
-        if ($S.isObject(metaData) && $S.isArray(metaData.homeFields)) {
-            for (var i = 0; i < metaData.homeFields.length; i++) {
-                metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
-                if (!this.isDisabledPage(metaData.homeFields[i].name)) {
-                    homeFields.push(metaData.homeFields[i]);
-                }
-            }
-        }
-        // if (homeFields.length < 1) {
-        //     homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
-        // }
-        return homeFields;
-    },
+        // return dropdownFields;
+    // },
+    // getMetaDataHomeFields: function() {
+    //     var metaData = DataHandler.getData("metaData", {});
+    //     var homeFields = [];
+    //     if ($S.isObject(metaData) && $S.isArray(metaData.homeFields)) {
+    //         for (var i = 0; i < metaData.homeFields.length; i++) {
+    //             metaData.homeFields[i].toUrl = Config.pages[metaData.homeFields[i].name];
+    //             if (!this.isDisabledPage(metaData.homeFields[i].name)) {
+    //                 homeFields.push(metaData.homeFields[i]);
+    //             }
+    //         }
+    //     }
+    //     if (homeFields.length < 1) {
+    //         homeFields = $S.isArray(Config.defaultPageFields) ? Config.defaultPageFields : [];
+    //     }
+    //     return homeFields;
+    // },
     GetMetaDataPageHeading: function(pageName) {
         var pageHeading = "Page Not Found";
         if (this.isDisabledPage(pageName)) {
@@ -354,7 +390,7 @@ DataHandler.extend({
         return pageHeading;
     },
     isDisabledPage: function(pageName) {
-        var metaData = DataHandler.getData("metaData", {});
+        var metaData = this.getMetaData({});
         var disabledPages = metaData.disabledPages;
         if ($S.isArray(disabledPages) && $S.isString(pageName)) {
             return disabledPages.indexOf(pageName) >= 0;
@@ -371,7 +407,7 @@ DataHandler.extend({
                     AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
                     return;
                 }
-                TemplateHandler.SetHeadingUsername(AppHandler.GetUserData("username", ""));
+                TemplateHandler.SetHeadingUsername();
                 DataHandler.setData("loginUserDetailsLoadStatus", "completed");
                 $S.callMethod(callback);
             });
@@ -396,10 +432,14 @@ DataHandler.extend({
         if(CommonDataHandler.getDataLoadStatusByKeyV2(this, dataLoadStatusKey) !== "completed") {
             return false;
         }
-        var dbViewData = this.getData("dbViewData", {});
+        var dbViewData = {};
+        var dbDataFromApis = this.getData("dbDataFromApis", {});
+        var dbDataTable = this.getData("dbDataTable", {});
         var combineTableData = this.getAppData("combineTableData", []);
-        AppHandler.CombineTableData(dbViewData, combineTableData);
+        AppHandler.CombineTableDataV2(dbViewData, [dbDataFromApis, dbDataTable], combineTableData);
+        DataHandlerV2.generateCustomFieldsData(dbViewData);
         this.setData("dbViewData", dbViewData);
+        DataHandlerV2.applyDefaultSort();
         DataHandlerV2.createDateSelectionParameter();
     },
     loadDbData: function(callback) {
@@ -476,12 +516,13 @@ DataHandler.extend({
             dateSelect = DataHandler.getAppData("dateSelectionType", Config.defaultDateSelect);
         }
         DataHandler.setData("selectedDateType", dateSelect);
-        DataHandlerV2.setCurrentList3Id();
+        TemplateHandler.SetCustomHeadingField();
     },
     loadDataByAppId: function(callback) {
         var metaDataLoadStatus = this.getData("metaDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
         if ([Config.projectHome].indexOf(pageName) >= 0) {
+            TemplateHandler.SetCustomHeadingField();
             DataHandler.loadDbData(callback);
             DataHandler.loadTableData(callback);
             return;
@@ -528,6 +569,8 @@ DataHandler.extend({
         DataHandler.loadDataByAppId(function() {
             var dataLoadStatus = DataHandler.getDataLoadStatus();
             if (dataLoadStatus) {
+                DataHandler.FirePageChange();
+                DataHandlerV2.generateFilterOptions();
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
             }
         });
@@ -550,23 +593,63 @@ DataHandler.extend({
             });
         });
     },
-    OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
-        AppHandler.TrackDropdownChange("list1", list1Id);
+    OnList1Change: function(appStateCallback, appDataCallback) {
         DataHandler.setData("metaDataLoadStatus", "not-started");
         DataHandler.setData("dbDataLoadStatus", "not-started");
         DataHandler.setData("tableDataLoadStatus", "not-started");
+    },
+    OnList3Change: function(appStateCallback, appDataCallback, value) {
+        this.setData("currentList3Id", value);
+        // DataHandler.generateDateParameter();
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    FirePageChange: function() {
+        var pageName = this.getPathParamsData("pageName", "");
+        var resultCriteria = this.getAppData("resultCriteria", []);
+        var pageResultCriteria = this.getAppData("pageName:" + pageName + ":resultCriteria", null);
+        if ($S.isArray(pageResultCriteria)) {
+            resultCriteria = pageResultCriteria;
+        }
+        this.setList3NameIdentifier();
+        DataHandlerV2.setCurrentList3Id();
+        // DataHandlerV3.handleAttendanceDataLoad();
+        // DataHandlerV3.setCurrentList3Id();
+        // DataHandler.generateDateParameter();
+        DataHandlerV2.generateFinalTable(resultCriteria);
+        DataHandlerV2.generateFilterOptions();
     },
     PageComponentMount: function(appStateCallback, appDataCallback, pageName) {
         // DataHandler.setData("currentPageName", pageName);
         // DataHandler.setCurrentPageData(appStateCallback, appDataCallback);
     },
     DateSelectionChange: function(appStateCallback, appDataCallback, selectedDateType) {
-        DataHandler.setData("availableDataPageName", "");
         DataHandler.setData("selectedDateType", selectedDateType);
         var combinedDateSelectionParameter = DataHandler.getData("combinedDateSelectionParameter", {});
         DataHandler.setData("dateSelectionParameter", combinedDateSelectionParameter[selectedDateType]);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
+    OnResetClick: function(appStateCallback, appDataCallback) {
+        DataHandler.applyResetFilter();
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
+    OnFilterChange: function(appStateCallback, appDataCallback, name, value) {
+        var filterValues = DataHandler.getData("filterValues", {});
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if (!$S.isObject(filterValues)) {
+            filterValues = {};
+        }
+        filterValues[name] = value;
+        if ($S.isArray(filterOptions)) {
+            for (var i = 0; i<filterOptions.length; i++) {
+                if (filterOptions[i].selectName === name) {
+                    filterOptions[i].selectedValue = value;
+                }
+            }
+        }
+        DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", filterValues);
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    }
     // setPageData: function(appStateCallback, appDataCallback, name) {
     //     $S.log("setPageData:"+name);
     //     var currentPageName = DataHandler.getData("currentPageName", "");
@@ -758,12 +841,9 @@ DataHandler.extend({
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         console.log("handleDataLoadComplete: " + count++);
         var dataLoadStatus = DataHandler.getDataLoadStatus();
-        var renderData = null;
-        var appHeading = null;
         var list1Data = [], list2Data = [], list3Data = [];
         var dateSelectionRequired = Config.dateSelectionRequired;
         var dateSelection = Config.dateSelection;
-        var filterOptions = [];
         var footerData = null;
         var pageName1 = this.getData("pageName", "");
         var pageName2 = this.getPathParamsData("pageName", "");
@@ -773,14 +853,17 @@ DataHandler.extend({
         if ([Config.home, Config.projectHome].indexOf(pageName1) < 0) {
             list1Data = this.getData("appControlData", []);
             list2Data = CommonDataHandler.getList2Data(this, Config.otherPagesList);
+            list3Data = CommonDataHandler.getList3Data(this, this.getData("list3NameIdentifier", ""));
         }
-        appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
-        renderData = DataHandlerV2.getRenderData();
+        var appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
+        var renderData = DataHandlerV2.getRenderData();
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName2);
+        var filterOptions = [];
         if (CommonDataHandler.isPageDisabled(this, pageName2)) {
             filterOptions = [];
             dateSelectionRequired = null;
         } else if(dateSelectionRequired.indexOf(pageName2) >= 0) {
+            filterOptions = this.getData("filterOptions", []);
             dateSelectionRequired = [pageName1];
         }
         appDataCallback("renderFieldRow", renderFieldRow);
