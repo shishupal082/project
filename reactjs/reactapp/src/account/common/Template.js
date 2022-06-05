@@ -72,6 +72,17 @@ var Template = {
             ]
         }
     ],
+    "categoryHeading": [
+        {
+            "tag": "div.h2",
+            "text": {
+                "tag": "span",
+                "className": "badge badge-secondary",
+                "name": "categoryHeading",
+                "text": ""
+            }
+        }
+    ],
     "journalByDate": [
         {
             "tag": "div",

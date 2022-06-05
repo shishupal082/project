@@ -860,11 +860,12 @@ DataHandler.extend({
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, footerData, pageName2);
         var filterOptions = [];
         if (CommonDataHandler.isPageDisabled(this, pageName2)) {
-            filterOptions = [];
             dateSelectionRequired = null;
-        } else if(dateSelectionRequired.indexOf(pageName2) >= 0) {
+        } else {
+            if(dateSelectionRequired.indexOf(pageName2) >= 0) {
+                dateSelectionRequired = [pageName1];
+            }
             filterOptions = this.getData("filterOptions", []);
-            dateSelectionRequired = [pageName1];
         }
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);

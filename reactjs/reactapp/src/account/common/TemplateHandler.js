@@ -38,30 +38,12 @@ TemplateHandler.extend({
         var sortingFields = null;
         var renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
         return renderField;
-        // var template = this.getTemplate(pageName), temp;
-        // var sNo = 1;
-        // if ($S.isArray(renderData) && renderData.length > 0) {
-        //     TemplateHelper.addItemInTextArray(template, "journalEntryTr", this.getTemplate("journalEntry1stRow", ""));
-        //     for (var i=0; i<renderData.length; i++) {
-        //         temp = this.getTemplate("journalEntry", "");
-        //         if ($S.isObject(renderData[i])) {
-        //             renderData[i]["value1"] = renderData[i]["value"];
-        //             renderData[i]["value2"] = renderData[i]["value"];
-        //         }
-        //         renderData[i]["s.no"] = sNo++;
-        //         TemplateHelper.updateTemplateText(temp, renderData[i]);
-        //         TemplateHelper.addItemInTextArray(template, "journalEntryTr", temp);
-        //     }
-        //     return template;
-        // }
-        // return this.getTemplate("noDataFound");
     },
     "journalbydate": function(pageName, renderData) {
         var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = null;
         var renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
         return renderField;
-        // return AccountHelper.getJournalDataByDateFields(renderData);
     },
     "currentbalbydate": function(pageName, renderData) {
         var accountData = DataHandlerV2.getAccountData();
@@ -129,26 +111,19 @@ TemplateHandler.extend({
         }
         return $S.clone(Template["templateNotFound"]);
     },
+    _getCategoryHeadingTemplate: function() {
+        var categoryHeading = DataHandler.getAppData("categoryHeading", null);
+        if ($S.isObjectV2(categoryHeading) || $S.isArrayV2(categoryHeading)) {
+            return categoryHeading;
+        }
+        return this.getTemplate("categoryHeading", {});
+    },
     _getLinkTemplateV2: function(toUrl, toText, templateName) {
         var linkTemplate = TemplateHandler.getTemplate(templateName);
         TemplateHelper.setTemplateAttr(linkTemplate, "home.link.toUrl", "href", toUrl);
         TemplateHelper.updateTemplateText(linkTemplate, {"home.link.toText": toText});
         return linkTemplate;
     },
-    // getAppHeading: function(currentPageName) {
-    //     var goBackLinkData = Config.goBackLinkData;
-    //     if (currentPageName === "home") {
-    //         goBackLinkData = [];
-    //     }
-    //     var headingText = DataHandler.getData("companyName", "");
-    //     var pageHeading = DataHandler.GetMetaDataPageHeading(currentPageName);
-    //     var appHeading = {
-    //         "tag": "div",
-    //         "className": "container",
-    //         "text": [goBackLinkData, {"tag": "div.center.h2", "text": headingText},{"tag": "div.center.h2", "text": pageHeading}]
-    //     };
-    //     return [appHeading];
-    // },
     generateProjectHomeRenderField: function() {
         var appControlData = DataHandler.getData("appControlData", []);
         var template = this.getTemplate("home");
@@ -218,9 +193,8 @@ TemplateHandler.extend({
             $S.log("loadingCount: " + (loadingCount++));
             return renderField;
         }
-        // var currentList3Data = DataHandler.getCurrentList3Data();
-        // var sortingFields = DataHandler.getData("sortingFields", []);
         var pageName1 = DataHandler.getData("pageName", "");
+        var categoryTemplate, filterValues, filter = [];
         if (pageName1 === Config.projectHome) {
             renderField = this.generateProjectHomeRenderField();
         } else if (pageName1 === Config.home) {
@@ -229,16 +203,34 @@ TemplateHandler.extend({
             renderField = this.getTemplate("noPageFound");
         } else {
             if ($S.isFunction(TemplateHandler[pageName])) {
-                renderField = TemplateHandler[pageName](pageName, renderData);
+                if ([Config.journal, Config.journalbydate].indexOf(pageName) >= 0) {
+                    renderField = TemplateHandler[pageName](pageName, renderData);
+                } else {
+                    renderField = [];
+                    filterValues = DataHandler.getData("filterValues", {});
+                    if ($S.isObject(filterValues)) {
+                        for (var key in filterValues) {
+                            if ($S.isStringV2(filterValues[key])) {
+                                filter.push(filterValues[key]);
+                            }
+                        }
+                    }
+                    if ($S.isObject(renderData)) {
+                        for(var category in renderData) {
+                            if (filter.length > 0 && filter.indexOf(category) < 0) {
+                                continue;
+                            }
+                            categoryTemplate = this._getCategoryHeadingTemplate();
+                            TemplateHelper.updateTemplateText(categoryTemplate, {"categoryHeading": category});
+                            renderField.push(categoryTemplate);
+                            renderField.push(TemplateHandler[pageName](pageName, renderData[category]));
+                        }
+                    }
+                }
             } else {
                 renderField = this.getTemplate("noPageFound");
             }
         }
-        // var metaData = DataHandler.getMetaData({});
-        // var footerFieldHtml = AppHandler.GenerateFooterHtml(metaData, footerData);
-        // var footerField = this.getTemplate("footerField");
-        // TemplateHelper.updateTemplateText(footerField, {"footerLink": footerFieldHtml});
-        // TemplateHelper.addItemInTextArray(renderField, "footer", footerField);
         return renderField;
     },
     getEntryDetails: function(accountEntry) {

@@ -57,7 +57,7 @@ DataHandlerV2.extend({
         if ($S.isObject(entry) && $S.isStringV2(entry["uiEntryTime"])) {
             journalEntry["date"] = entry["uiEntryTime"];
             journalEntry["uiEntryTime"] = entry["uiEntryTime"];
-            journalEntry["category"] = entry["category"];
+            journalEntry["category"] = entry["category"] ? entry["category"] : "Money";
             journalEntry["remarks"] = entry["remarks"];
             journalEntry["dr_account"] = entry["dr_account"];
             journalEntry["cr_account"] = entry["cr_account"];
@@ -121,9 +121,39 @@ DataHandlerV2.extend({
         var journalDataByDate = this.getJournalDataByDate(pageName);
         var accountData = this.getAccountData();
         var finalJournalData = AccountHelper.getFinalJournalData(journalDataByDate, accountData);
-        var dataByCompany = AccountHelper.getDataByCompany(finalJournalData, accountData);
-        return dataByCompany;
+        var finalJournalDataByCategory = {}, category, dataByCompanyByCategory = {};
+        if ($S.isArray(finalJournalData)) {
+            for (var i=0; i<finalJournalData.length; i++) {
+                if ($S.isObject(finalJournalData[i]) && $S.isArray(finalJournalData[i]["entry"])) {
+                    for (var j=0; j<finalJournalData[i]["entry"].length; j++) {
+                        if ($S.isObject(finalJournalData[i]["entry"][j])) {
+                            category = finalJournalData[i]["entry"][j]["category"];
+                            if ($S.isStringV2(category) && !$S.isArray(finalJournalDataByCategory[category])) {
+                                finalJournalDataByCategory[category] = [{"entry": []}];
+                            }
+                            finalJournalDataByCategory[category][0]["entry"].push(finalJournalData[i]["entry"][j])
+                        }
+                    }
+                }
+            }
+        }
+        for (category in finalJournalDataByCategory) {
+            dataByCompanyByCategory[category] = AccountHelper.getDataByCompany(finalJournalDataByCategory[category], accountData);
+        }
+        return dataByCompanyByCategory;
     },
+    getJournalDataV2: function(pageName) {
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
+        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
+        var dateSelect = DataHandler.getData("selectedDateType", "");
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
+        var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
+        return renderData;
+    }
 });
 
 DataHandlerV2.extend({
@@ -295,11 +325,12 @@ DataHandlerV2.extend({
         var pageName = DataHandler.getPathParamsData("pageName", "");
         var dbViewData = DataHandler.getData("dbViewData", {});
         var requiredDataTable = DataHandler.getAppData("pagePathName:" + pageName + ":requiredDataTable", []);
-        // var metaData = DataHandler.getMetaData({});
-        // var currentAppData = DataHandler.getCurrentAppData({});
         var resultPatternKey = "pagePathName:" + pageName + ":resultPattern";
-        var resultPattern = DataHandler.getAppData(resultPatternKey, []);// $S.findParam([currentAppData, metaData], );
         var finalTable = [];
+        if ([Config.journal].indexOf(pageName) < 0) {
+            resultPatternKey = "pagePathName:" + Config.journalbydate + ":resultPattern";
+        }
+        var resultPattern = DataHandler.getAppData(resultPatternKey, []);
         // if ((!$S.isArray(resultPattern) || resultPattern.length < 1)) {
         //     if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0) {
         //         resultPatternKey =  "resultPattern." + Config.dbview;
@@ -347,10 +378,6 @@ DataHandlerV2.extend({
         });
     },
     generateCustomFieldsData: function(dbViewData) {
-        var pageName = DataHandler.getPathParamsData("pageName", "");
-        if ([Config.journal, Config.journalbydate].indexOf(pageName) < 0) {
-            return;
-        }
         var accountDataTableName = DataHandler.getAppData(Config.journal + ".tableName", "");
         var accountData;
         if (!$S.isObject(dbViewData) || !$S.isStringV2(accountDataTableName)) {
@@ -375,18 +402,10 @@ DataHandlerV2.extend({
             return [];
         }
         var renderData;
-        var currentAppData = DataHandler.getCurrentAppData({});
-        var metaData = DataHandler.getMetaData({});
-        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var currentList3Data = DataHandler.getCurrentList3Data();
-        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
-        var dateSelect = DataHandler.getData("selectedDateType", "");
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
         switch(pageName) {
             case "journal":
             case "journalbydate":
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
+                renderData = this.getJournalDataV2(pageName);
             break;
             case "currentbalbydate":
             case "currentbalbydatev2":
@@ -407,24 +426,13 @@ DataHandlerV2.extend({
         return renderData;
     },
     generateFilterOptions: function() {
-        var pageName = DataHandler.getPathParamsData("pageName", "");
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getMetaData({});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var filterKeyMapping = DataHandler.getAppData("pagePathName:" + pageName + ":filterKeyMapping", {});
-        var filterOptions = AppHandler.generateFilterDataV2(filterKeyMapping, currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
-        DataHandler.setData("filterOptions", filterOptions);
-        return true;
-    },
-    generateFilterOptionsOld: function() {
-        var currentAppData = DataHandler.getCurrentAppData({});
-        var metaData = DataHandler.getMetaData({});
-        var dbViewDataTable = DataHandler.getData("dbViewData", []);
-        var filterSelectedValues = DataHandler.getData("filterValues", {});
         var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
-        return dbViewDataTable;
+        return true;
     }
 });
 

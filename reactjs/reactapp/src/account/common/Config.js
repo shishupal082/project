@@ -70,8 +70,9 @@ Config.custompage = "custompage";
 Config.profitandloss = "profitandloss";
 Config.noMatch = "noMatch";
 
-Config.otherPagesList = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2", "profitandloss",
-                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "ledger","customisedebit", "customisecredit", "custompage"];
+Config.otherPagesList = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2",
+                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "ledger",
+                        "profitandloss", "customisedebit", "customisecredit", "custompage"];
 
 
 Config.defaultDateSelect = "monthly";
