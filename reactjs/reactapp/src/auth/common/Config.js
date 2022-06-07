@@ -90,7 +90,7 @@ Config.forgot_password = "forgot_password";
 Config.create_password = "create_password";
 Config.database_files = "database_files";
 Config.noMatch = "noMatch";
-
+Config.authPages = [Config.login, Config.register, Config.forgot_password, Config.create_password];
 
 var template;
 
@@ -268,5 +268,10 @@ Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     }
     return defaultValue;
 };
-
+Config.getPageData = function(key, defaultValue) {
+    if ($S.isStringV2(key) && PageData[key]) {
+        return PageData[key];
+    }
+    return defaultValue;
+};
 export default Config;

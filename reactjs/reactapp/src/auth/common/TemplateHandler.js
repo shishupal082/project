@@ -85,10 +85,19 @@ TemplateHandler.extend({
     }
 });
 TemplateHandler.extend({
-    _generateRenderField: function() {
-
-    },
     getRenderField: function(pageName, renderData) {
+        var authPages = Config.authPages;
+        var allowedAuthPages = AppHandler.GetStaticData("allowed_auth_pages", "");
+        if (authPages.indexOf(pageName) >= 0) {
+            if ($S.isStringV2(allowedAuthPages)) {
+                allowedAuthPages = allowedAuthPages.split(";");
+                if (allowedAuthPages.indexOf(pageName) < 0) {
+                    pageName = Config.noMatch;
+                }
+            } else {
+                pageName = Config.noMatch;
+            }
+        }
         if (!$S.isObject(renderData)) {
             renderData = {};
         }
@@ -160,6 +169,18 @@ TemplateHandler.extend({
             } else {
                 TemplateHelper.addClassTemplate(renderFieldRow, submitBtnName, "btn-primary");
                 TemplateHelper.removeClassTemplate(renderFieldRow, submitBtnName, "btn-link disabled");
+            }
+        }
+        var key;
+        if (authPages.indexOf(pageName) >= 0) {
+            if ($S.isArray(allowedAuthPages)) {
+                for (var i=0; i<allowedAuthPages.length; i++) {
+                    key = "allowed_auth_pages_link:"+ allowedAuthPages[i];
+                    if (key === "allowed_auth_pages_link:create_password") {
+                        key = "displayCreatePasswordLinkEnable";
+                    }
+                    TemplateHelper.removeClassTemplate(renderFieldRow, key, "d-none");
+                }
             }
         }
         var footerTemplate = AppHandler.getTemplate(Template, "footerLinkJson", []);

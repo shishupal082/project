@@ -90,14 +90,16 @@ Template["login"] = [
                                 },
                                 {
                                     "tag": "a",
+                                    "name": "allowed_auth_pages_link:forgot_password",
                                     "href": "/forgot_password",
-                                    "className": "p-5px",
+                                    "className": "p-5px d-none",
                                     "text": "Forgot Password"
                                 },
                                 {
                                     "tag": "a",
+                                    "name": "allowed_auth_pages_link:register",
                                     "href": "/register",
-                                    "className": "p-5px",
+                                    "className": "p-5px d-none",
                                     "text": "Register"
                                 }
                             ]
@@ -256,20 +258,22 @@ Template["forgot_password"] = [
                             },
                             {
                                 "tag": "a",
+                                "name": "allowed_auth_pages_link:login",
                                 "href": "/login",
-                                "className": "p-5px",
+                                "className": "p-5px d-none",
                                 "text": "Login"
                             },
                             {
                                 "tag": "a",
+                                "name": "allowed_auth_pages_link:register",
                                 "href": "/register",
-                                "className": "p-5px",
+                                "className": "p-5px d-none",
                                 "text": "Register"
                             },
                             {
                                 "tag": "a",
                                 "href": "/create_password",
-                                "className": "p-5px",
+                                "className": "p-5px d-none",
                                 "name": "displayCreatePasswordLinkEnable",
                                 "text": "Create Password"
                             }
@@ -426,14 +430,16 @@ Template["register"] = [
                                 },
                                 {
                                     "tag": "a",
+                                    "name": "allowed_auth_pages_link:login",
                                     "href": "/login",
-                                    "className": "p-5px",
+                                    "className": "p-5px d-none",
                                     "text": "Login"
                                 },
                                 {
                                     "tag": "a",
+                                    "name": "allowed_auth_pages_link:forgot_password",
                                     "href": "/forgot_password",
-                                    "className": "p-5px",
+                                    "className": "p-5px d-none",
                                     "text": "Forgot Password"
                                 }
                             ]
@@ -644,20 +650,23 @@ Template["create_password"] = [
                         },
                         {
                             "tag": "a",
+                            "name": "allowed_auth_pages_link:login",
                             "href": "/login",
-                            "className": "p-5px",
+                            "className": "p-5px d-none",
                             "text": "Login"
                         },
                         {
                             "tag": "a",
+                            "name": "allowed_auth_pages_link:forgot_password",
                             "href": "/forgot_password",
-                            "className": "p-5px",
+                            "className": "p-5px d-none",
                             "text": "Forgot Password"
                         },
                         {
                             "tag": "a",
+                            "name": "allowed_auth_pages_link:register",
                             "href": "/register",
-                            "className": "p-5px",
+                            "className": "p-5px d-none",
                             "text": "Register"
                         }
                     ]
