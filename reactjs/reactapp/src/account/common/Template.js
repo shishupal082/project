@@ -1567,4 +1567,30 @@ Template["profitandlossRow"] = {
         }
     ]
 };
+Template["custom.resultPattern"] = [
+    {
+        "tableName": "accountal_data",
+        "name": "uiEntryTime"
+    },
+    {
+        "tableName": "accountal_data",
+        "name": "category"
+    },
+    {
+        "tableName": "accountal_data",
+        "name": "value"
+    },
+    {
+        "tableName": "accountal_data",
+        "name": "cr_account"
+    },
+    {
+        "tableName": "accountal_data",
+        "name": "dr_account"
+    },
+    {
+        "tableName": "accountal_data",
+        "name": "remarks"
+    }
+];
 export default Template;

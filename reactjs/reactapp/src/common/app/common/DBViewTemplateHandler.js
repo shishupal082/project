@@ -269,6 +269,9 @@ DBViewTemplateHandler.extend({
         }
         return heading;
     },
+    generateHeading: function(headingText, key, currentList3Data, showReloadButton) {
+        return this._generateHeading(headingText, key, currentList3Data, showReloadButton);
+    },
     _recursiveGenerateHeading: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton) {
         if (!$S.isArray(tempRenderData)) {
             return;

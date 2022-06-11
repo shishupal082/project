@@ -62,6 +62,7 @@ Config.trialbalance = "trialbalance";
 Config.currentbalbydate = "currentbalbydate";
 Config.currentbalbydatev2 = "currentbalbydatev2";
 Config.summary = "summary";
+Config.summaryv2 = "summaryv2";
 Config.accountsummarybydate = "accountsummarybydate";
 Config.accountsummarybycalander = "accountsummarybycalander";
 Config.customisedebit = "customisedebit";
@@ -71,12 +72,12 @@ Config.profitandloss = "profitandloss";
 Config.noMatch = "noMatch";
 
 Config.otherPagesList = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2",
-                        "summary", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "ledger",
+                        "summary", "summaryv2", "accountsummarybydate", "accountsummarybycalander", "trialbalance", "ledger",
                         "profitandloss", "customisedebit", "customisecredit", "custompage"];
 
 
 Config.defaultDateSelect = "monthly";
-Config.dateSelectionRequired = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "accountsummarybydate"];
+Config.dateSelectionRequired = ["journal", "journalbydate", "currentbalbydate", "currentbalbydatev2", "summary", "summaryv2", "accountsummarybydate"];
 Config.pageUrl = pageUrl;
 
 Config.dateSelection = [

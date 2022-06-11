@@ -58,7 +58,7 @@ DataHandlerV2.extend({
             journalEntry["date"] = entry["uiEntryTime"];
             journalEntry["uiEntryTime"] = entry["uiEntryTime"];
             journalEntry["category"] = entry["category"] ? entry["category"] : "Money";
-            journalEntry["remarks"] = entry["remarks"];
+            journalEntry["remarks"] = entry["remarks"] + " (From " + entry["cr_account"] + " To " + entry["dr_account"] + ")";
             journalEntry["dr_account"] = entry["dr_account"];
             journalEntry["cr_account"] = entry["cr_account"];
             journalEntry["dr_amount"] = entry["value"];
@@ -66,8 +66,8 @@ DataHandlerV2.extend({
             journalEntry["value1"] = entry["value"];
             journalEntry["value2"] = entry["value"];
             journalEntry["particularEntry"] = [];
-            journalEntry["particularEntry"].push({"dr": entry["value"], "account": entry["dr_account"], "particularText": entry["remarks"]});
-            journalEntry["particularEntry"].push({"cr": entry["value"], "account": entry["cr_account"], "particularText": entry["remarks"]});
+            journalEntry["particularEntry"].push({"dr": entry["value"], "account": entry["dr_account"], "particularText": journalEntry["remarks"]});
+            journalEntry["particularEntry"].push({"cr": entry["value"], "account": entry["cr_account"], "particularText": journalEntry["remarks"]});
         }
         return journalEntry;
     },
@@ -128,10 +128,12 @@ DataHandlerV2.extend({
                     for (var j=0; j<finalJournalData[i]["entry"].length; j++) {
                         if ($S.isObject(finalJournalData[i]["entry"][j])) {
                             category = finalJournalData[i]["entry"][j]["category"];
-                            if ($S.isStringV2(category) && !$S.isArray(finalJournalDataByCategory[category])) {
-                                finalJournalDataByCategory[category] = [{"entry": []}];
+                            if ($S.isStringV2(category)) {
+                                if (!$S.isArray(finalJournalDataByCategory[category])) {
+                                    finalJournalDataByCategory[category] = [{"entry": []}];
+                                }
+                                finalJournalDataByCategory[category][0]["entry"].push(finalJournalData[i]["entry"][j]);
                             }
-                            finalJournalDataByCategory[category][0]["entry"].push(finalJournalData[i]["entry"][j])
                         }
                     }
                 }
@@ -151,6 +153,31 @@ DataHandlerV2.extend({
         var dateSelect = DataHandler.getData("selectedDateType", "");
         var filterOptions = DataHandler.getData("filterOptions", []);
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
+        var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
+        return renderData;
+    },
+    getJournalDataV3: function(pageName) {
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
+        var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
+        var dateSelect = DataHandler.getData("selectedDateType", "");
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var tempFilterOptions = [];
+        var i;
+        if ($S.isArray(filterOptions)) {
+            for (i=0; i<filterOptions.length; i++) {
+                if (!$S.isObject(filterOptions[i])) {
+                    continue;
+                }
+                if (filterOptions[i]["dataKey"] === "accountName") {
+                    continue;
+                }
+                tempFilterOptions.push(filterOptions[i]);
+            }
+        }
+        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, tempFilterOptions, "name");
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     }
@@ -326,11 +353,16 @@ DataHandlerV2.extend({
         var dbViewData = DataHandler.getData("dbViewData", {});
         var requiredDataTable = DataHandler.getAppData("pagePathName:" + pageName + ":requiredDataTable", []);
         var resultPatternKey = "pagePathName:" + pageName + ":resultPattern";
-        var finalTable = [];
+        var finalTable = [], resultPattern;
         if ([Config.journal].indexOf(pageName) < 0) {
             resultPatternKey = "pagePathName:" + Config.journalbydate + ":resultPattern";
         }
-        var resultPattern = DataHandler.getAppData(resultPatternKey, []);
+        if ([Config.summaryv2].indexOf(pageName) >= 0) {
+            requiredDataTable = "accountal_data";
+            resultPattern = TemplateHandler.getTemplate("custom.resultPattern", []);
+        } else {
+            resultPattern = DataHandler.getAppData(resultPatternKey, []);
+        }
         // if ((!$S.isArray(resultPattern) || resultPattern.length < 1)) {
         //     if ([Config.dbview_summary, Config.custom_dbview].indexOf(pageName) >= 0) {
         //         resultPatternKey =  "resultPattern." + Config.dbview;
@@ -342,6 +374,17 @@ DataHandlerV2.extend({
         //         resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData);
         //     }
         // }
+        if ($S.isObject(dbViewData)) {
+            if ($S.isObject(dbViewData["accountal_data"])) {
+                if ($S.isArray(dbViewData["accountal_data"]["tableData"])) {
+                    for (var i=0; i<dbViewData["accountal_data"]["tableData"].length; i++) {
+                        if ($S.isObject(dbViewData["accountal_data"]["tableData"][i]) && !$S.isStringV2(dbViewData["accountal_data"]["tableData"][i]["category"])) {
+                            dbViewData["accountal_data"]["tableData"][i]["category"] = "Money";
+                        }
+                    }
+                }
+            }
+        }
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
     },
@@ -407,6 +450,9 @@ DataHandlerV2.extend({
             case "journalbydate":
                 renderData = this.getJournalDataV2(pageName);
             break;
+            case "summaryv2":
+                renderData = this.getJournalDataV3(pageName);
+            break;
             case "currentbalbydate":
             case "currentbalbydatev2":
             case "summary":
@@ -430,7 +476,30 @@ DataHandlerV2.extend({
         var metaData = DataHandler.getMetaData({});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
+        var tempDbViewDataTable = [], temp, isAdded;
+        if ($S.isArray(dbViewDataTable)) {
+            for (var i=0; i<dbViewDataTable.length; i++) {
+                isAdded = false;
+                if ($S.isArray(dbViewDataTable[i]) && dbViewDataTable[i].length === 6) {
+                    if ($S.isObject(dbViewDataTable[i][3]) && $S.isObject(dbViewDataTable[i][4])) {
+                        if (dbViewDataTable[i][3]["name"] === "cr_account" && dbViewDataTable[i][4]["name"] === "dr_account") {
+                            temp = dbViewDataTable[i];
+                            temp[3]["name"] = "accountName";
+                            tempDbViewDataTable.push($S.clone(temp));
+                            temp[3]["name"] = "cr_account";
+                            temp[4]["name"] = "accountName";
+                            tempDbViewDataTable.push($S.clone(temp));
+                            temp[4]["name"] = "dr_account";
+                            isAdded = true;
+                        }
+                    }
+                }
+                if (!isAdded) {
+                    tempDbViewDataTable.push(dbViewDataTable[i]);
+                }
+            }
+        }
+        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, tempDbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return true;
     }

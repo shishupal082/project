@@ -1,0 +1,159 @@
+{
+    "list3Data.journal": [
+        {
+            "defaultSelected": true,
+            "value": [{"key": "entryTime"}],
+            "text": "Order by Entry Time"
+        }
+    ],
+    "list3Data.journalbydate": [
+        {
+            "defaultSelected": true,
+            "value": [{"key": "uiEntryTime"}],
+            "text": "Order by Date"
+        }
+    ],
+    "na_list3Data.summaryv2": [
+        {
+            "defaultSelected": true,
+            "name": "list3Data-catagory",
+            "value": [{"key": "category"}],
+            "text": "Order by Category"
+        },
+        {
+            "value": [{"key": "uiEntryTime"}, {"key": "category"}],
+            "text": "Order by Entry Time --> Category"
+        },
+        {
+            "value": [{"key": "category"}, {"key": "uiEntryTime"}],
+            "text": "Order by Category --> Entry Time"
+        }
+    ],
+    "filterKeys": ["na_category", "reset"],
+    "pagePathName:journal:requiredDataTable": ["accountal_data"],
+    "pagePathName:journal:resultPattern": [
+        {
+            "tableName": "accountal_data",
+            "name": "entryTime",
+            "heading": "Entry Time",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "uiEntryTime",
+            "heading": "Date",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "category",
+            "heading": "Category",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "remarks",
+            "heading": "Remarks",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "entry_details",
+            "heading": [
+                {
+                    "tag": "table.tbody.tr",
+                    "className": "table table-bordered m-0",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Debit"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Credit"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Account"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "journal:dateParameterField": {
+        "table": "accountal_data",
+        "fieldName": "entryTime"
+    },
+    "journalbydate:dateParameterField": {
+        "table": "accountal_data",
+        "fieldName": "uiEntryTime"
+    },
+    "summaryv2:dateParameterField": {
+        "table": "accountal_data",
+        "fieldName": "uiEntryTime"
+    },
+    "filterKeys": ["accountName", "reset"],
+    "pagePathName:journalbydate:requiredDataTable": ["accountal_data"],
+    "pagePathName:journalbydate:resultPattern": [
+        {
+            "tableName": "accountal_data",
+            "name": "uiEntryTime",
+            "heading": "Entry Time",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "category",
+            "heading": "Category",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "remarks",
+            "heading": "Remarks",
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "entry_details",
+            "heading": [
+                {
+                    "tag": "table.tbody.tr",
+                    "className": "table table-bordered m-0",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Debit"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Credit"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "w-120px",
+                            "text": "Account"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "categoryHeading": [
+        {
+            "tag": "div",
+            "text": {
+                "tag": "span",
+                "className": "d-none badge badge-primary",
+                "name": "categoryHeading",
+                "text": ""
+            }
+        }
+    ]
+}

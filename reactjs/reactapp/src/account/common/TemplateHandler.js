@@ -58,6 +58,14 @@ TemplateHandler.extend({
         var dateSelectionFields = DataHandler.getData("dateSelectionParameter", []);
         return AccountHelper.getAccountSummaryFields(renderData, accountData, dateSelectionFields);
     },
+    "summaryv2": function(pageName, renderData) {
+        var accountData = DataHandlerV2.getAccountData();
+        var dateSelectionFields = DataHandler.getData("dateSelectionParameter", []);
+        var renderField = [], r;
+        AccountHelper.getAccountSummaryFieldsV2(renderData, accountData, dateSelectionFields, renderField);
+        r = AccountHelper.getAccountSummaryFieldsV2_2(renderField, accountData, dateSelectionFields);
+        return r;
+    },
     "accountsummarybydate": function(pageName, renderData) {
         var accountData = DataHandlerV2.getAccountData();
         return AccountHelper.getAccountSummaryByDateFields(renderData, accountData);
@@ -203,7 +211,7 @@ TemplateHandler.extend({
             renderField = this.getTemplate("noPageFound");
         } else {
             if ($S.isFunction(TemplateHandler[pageName])) {
-                if ([Config.journal, Config.journalbydate].indexOf(pageName) >= 0) {
+                if ([Config.journal, Config.journalbydate, Config.summaryv2].indexOf(pageName) >= 0) {
                     renderField = TemplateHandler[pageName](pageName, renderData);
                 } else {
                     renderField = [];
