@@ -71,7 +71,7 @@ DataHandlerV2.extend({
     applyAccountNameFilter: function(dataByCompanyV2) {
         var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
         var dataByCompanyV3 = [];
-        if ($S.isArrayV2(selectedAccountArray)) {
+        if ($S.isArrayV2(selectedAccountArray) && $S.isArrayV2(dataByCompanyV2)) {
             for (var i=0; i<dataByCompanyV2.length; i++) {
                 if ($S.isObject(dataByCompanyV2[i]) && $S.isStringV2(dataByCompanyV2[i]["accountName"])) {
                     if (selectedAccountArray.indexOf(dataByCompanyV2[i]["accountName"]) >= 0) {
@@ -83,6 +83,22 @@ DataHandlerV2.extend({
             dataByCompanyV3 = dataByCompanyV2;
         }
         return dataByCompanyV3;
+    },
+    applyAccountNameFilterV2: function(dataByCompany) {
+        var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var dataByCompanyV2 = {};
+        if ($S.isArrayV2(selectedAccountArray) && $S.isObject(dataByCompany)) {
+            for (var accountName in dataByCompany) {
+                if ($S.isStringV2(accountName)) {
+                    if (selectedAccountArray.indexOf(accountName) >= 0) {
+                        dataByCompanyV2[accountName] = dataByCompany[accountName];
+                    }
+                }
+            }
+        } else {
+            dataByCompanyV2 = dataByCompany;
+        }
+        return dataByCompanyV2;
     },
     _applyAccountNameFilterV2: function(dbViewDataTable) {
         var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
@@ -212,6 +228,7 @@ DataHandlerV2.extend({
         var accountData = this.getAccountData();
         var finalJournalData = AccountHelper.getFinalJournalData(journalDataByDate, accountData);
         var finalJournalDataByCategory = {}, category, dataByCompanyByCategory = {};
+        var dataByCompany;
         if ($S.isArray(finalJournalData)) {
             for (var i=0; i<finalJournalData.length; i++) {
                 if ($S.isObject(finalJournalData[i]) && $S.isArray(finalJournalData[i]["entry"])) {
@@ -230,7 +247,11 @@ DataHandlerV2.extend({
             }
         }
         for (category in finalJournalDataByCategory) {
-            dataByCompanyByCategory[category] = AccountHelper.getDataByCompany(finalJournalDataByCategory[category], accountData);
+            dataByCompany = AccountHelper.getDataByCompany(finalJournalDataByCategory[category], accountData);
+            dataByCompany = this.applyAccountNameFilterV2(dataByCompany);
+            if ($S.isObjectV2(dataByCompany)) {
+                dataByCompanyByCategory[category] = dataByCompany;
+            }
         }
         return dataByCompanyByCategory;
     },

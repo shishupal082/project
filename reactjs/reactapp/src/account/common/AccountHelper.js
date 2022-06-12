@@ -307,20 +307,7 @@ Account.extend({
     },
     correctSign: function(fieldData) {
         var signCorrection = ["dr", "cr", "currentBal", "balance"];
-        var amount;
-        if ($S.isObject(fieldData)) {
-            for (var i=0; i<signCorrection.length; i++) {
-                amount = fieldData[signCorrection[i]];
-                if ($S.isNumeric(amount)) {
-                    amount = amount*1;
-                    if (amount < 0) {
-                        amount = "("+(-1)*amount+")";
-                        fieldData[signCorrection[i]] = amount;
-                    }
-                }
-            }
-        }
-        return true;
+        return this.correctSignV2(fieldData, signCorrection);
     },
     correctSignV2: function(fieldData, keys) {
         var signCorrection = $S.isArray(keys) ? keys : [];
@@ -1167,6 +1154,7 @@ Account.extend({
                                         accountSummaryData["cr"] = totalRow["cr"];
                                         accountSummaryData["currentBal"] = totalRow["currentBal"];
                                         accountSummaryData["balance"] = totalRow["balance"];
+                                        this.correctSign(accountSummaryData);
                                         TemplateHelper.updateTemplateText(accountSummaryRow, accountSummaryData);
                                         TemplateHelper.addItemInTextArray(accountSummary, "accountSummaryRow", accountSummaryRow);
                                     }
