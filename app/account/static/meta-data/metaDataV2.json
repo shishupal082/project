@@ -82,6 +82,20 @@
                     ]
                 }
             ]
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "cr_account",
+            "heading": "Cr Account",
+            "hidden": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "dr_account",
+            "heading": "Dr Account",
+            "hidden": true,
+            "isSortable": false
         }
     ],
     "journal:dateParameterField": {
@@ -143,6 +157,20 @@
                     ]
                 }
             ]
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "cr_account",
+            "heading": "Cr Account",
+            "hidden": true,
+            "isSortable": false
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "dr_account",
+            "heading": "Dr Account",
+            "hidden": true,
+            "isSortable": false
         }
     ],
     "categoryHeading": [

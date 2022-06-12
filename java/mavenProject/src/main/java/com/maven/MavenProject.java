@@ -1,5 +1,6 @@
 package com.maven;
 
+import com.maven.GoogleSheet.GoogleSheetTest;
 import com.maven.common.AppConstant;
 import com.maven.common.StaticService;
 
@@ -14,5 +15,6 @@ public class MavenProject {
         }
         StaticService.printLog("Program start, size: " + arguments.size() + ", arguments: " + arguments.toString());
         StaticService.printLog(AppConstant.TEST_SEPARATE);
+        GoogleSheetTest.Start();
     }
 }

@@ -30,6 +30,96 @@ DataHandlerV2.fn = DataHandlerV2.prototype = {
 $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
+    _getFilterOptions: function() {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var tempFilterOptions = [];
+        if ($S.isArray(filterOptions)) {
+            for (var i=0; i<filterOptions.length; i++) {
+                if (!$S.isObject(filterOptions[i])) {
+                    continue;
+                }
+                if (filterOptions[i]["dataKey"] === "accountName") {
+                    continue;
+                }
+                tempFilterOptions.push(filterOptions[i]);
+            }
+        }
+        return tempFilterOptions;
+    },
+    getFilterSelectedValuesByKey: function(key) {
+        var selectedAccountName, selectedAccountArray = [];
+        if (!$S.isStringV2(key)) {
+            return selectedAccountArray;
+        }
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            for (var i=0; i<filterOptions.length; i++) {
+                if (!$S.isObject(filterOptions[i])) {
+                    continue;
+                }
+                if (filterOptions[i]["dataKey"] === key) {
+                    selectedAccountName = filterOptions[i]["selectedValue"];
+                    break;
+                }
+            }
+        }
+        if ($S.isStringV2(selectedAccountName)) {
+            selectedAccountArray = selectedAccountName.split(",");
+        }
+        return selectedAccountArray;
+    },
+    applyAccountNameFilter: function(dataByCompanyV2) {
+        var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var dataByCompanyV3 = [];
+        if ($S.isArrayV2(selectedAccountArray)) {
+            for (var i=0; i<dataByCompanyV2.length; i++) {
+                if ($S.isObject(dataByCompanyV2[i]) && $S.isStringV2(dataByCompanyV2[i]["accountName"])) {
+                    if (selectedAccountArray.indexOf(dataByCompanyV2[i]["accountName"]) >= 0) {
+                        dataByCompanyV3.push(dataByCompanyV2[i]);
+                    }
+                }
+            }
+        } else {
+            dataByCompanyV3 = dataByCompanyV2;
+        }
+        return dataByCompanyV3;
+    },
+    _applyAccountNameFilterV2: function(dbViewDataTable) {
+        var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var drMatched, crMatched;
+        var tempDbViewDataTable = [];
+        if ($S.isArrayV2(dbViewDataTable) && $S.isArrayV2(selectedAccountArray)) {
+            for (var i=0; i<dbViewDataTable.length; i++) {
+                drMatched = false;
+                crMatched = false;
+                if ($S.isArray(dbViewDataTable[i])) {
+                    for (var j=0; j<dbViewDataTable[i].length; j++) {
+                        if ($S.isObject(dbViewDataTable[i][j]) && ["cr_account", "dr_account"].indexOf(dbViewDataTable[i][j]["name"]) >= 0) {
+                            if (dbViewDataTable[i][j]["name"] === "cr_account") {
+                                if (selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
+                                    crMatched = true;
+                                    break;
+                                }
+                            } else if (dbViewDataTable[i][j]["name"] === "dr_account") {
+                                if (selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
+                                    drMatched = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (crMatched || drMatched) {
+                    tempDbViewDataTable.push(dbViewDataTable[i]);
+                }
+            }
+        } else {
+            tempDbViewDataTable = dbViewDataTable;
+        }
+        return tempDbViewDataTable;
+    }
+});
+DataHandlerV2.extend({
     createDateSelectionParameter: function() {
         var journalData = this.getJournalData(Config.journal);
         var allDateStr = [], i, temp;
@@ -151,8 +241,9 @@ DataHandlerV2.extend({
         var currentList3Data = DataHandler.getCurrentList3Data();
         var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
         var dateSelect = DataHandler.getData("selectedDateType", "");
-        var filterOptions = DataHandler.getData("filterOptions", []);
+        var filterOptions = this._getFilterOptions();
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
+        dbViewDataTable = this._applyAccountNameFilterV2(dbViewDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     },
@@ -163,21 +254,8 @@ DataHandlerV2.extend({
         var currentList3Data = DataHandler.getCurrentList3Data();
         var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
         var dateSelect = DataHandler.getData("selectedDateType", "");
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        var tempFilterOptions = [];
-        var i;
-        if ($S.isArray(filterOptions)) {
-            for (i=0; i<filterOptions.length; i++) {
-                if (!$S.isObject(filterOptions[i])) {
-                    continue;
-                }
-                if (filterOptions[i]["dataKey"] === "accountName") {
-                    continue;
-                }
-                tempFilterOptions.push(filterOptions[i]);
-            }
-        }
-        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, tempFilterOptions, "name");
+        var filterOptions = this._getFilterOptions();
+        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     }
@@ -472,25 +550,27 @@ DataHandlerV2.extend({
         return renderData;
     },
     generateFilterOptions: function() {
+        var pageName = DataHandler.getPathParamsData("pageName", "");
         var currentAppData = DataHandler.getCurrentAppData();
         var metaData = DataHandler.getMetaData({});
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
-        var tempDbViewDataTable = [], temp, isAdded;
+        var filterKeyMapping = DataHandler.getAppData("pagePathName:" + pageName + ":filterKeyMapping");
+        var tempDbViewDataTable = [], temp, isAdded, orgAccountName;
         if ($S.isArray(dbViewDataTable)) {
             for (var i=0; i<dbViewDataTable.length; i++) {
                 isAdded = false;
-                if ($S.isArray(dbViewDataTable[i]) && dbViewDataTable[i].length === 6) {
-                    if ($S.isObject(dbViewDataTable[i][3]) && $S.isObject(dbViewDataTable[i][4])) {
-                        if (dbViewDataTable[i][3]["name"] === "cr_account" && dbViewDataTable[i][4]["name"] === "dr_account") {
-                            temp = dbViewDataTable[i];
-                            temp[3]["name"] = "accountName";
-                            tempDbViewDataTable.push($S.clone(temp));
-                            temp[3]["name"] = "cr_account";
-                            temp[4]["name"] = "accountName";
-                            tempDbViewDataTable.push($S.clone(temp));
-                            temp[4]["name"] = "dr_account";
-                            isAdded = true;
+                if ($S.isArray(dbViewDataTable[i])) {
+                    for (var j=0; j<dbViewDataTable[i].length; j++) {
+                        if ($S.isObject(dbViewDataTable[i][j])) {
+                            if (["cr_account", "dr_account"].indexOf(dbViewDataTable[i][j]["name"]) >= 0) {
+                                temp = dbViewDataTable[i];
+                                orgAccountName = temp[j]["name"];
+                                temp[j]["name"] = "accountName";
+                                tempDbViewDataTable.push($S.clone(temp));
+                                temp[j]["name"] = orgAccountName;
+                                isAdded = true;
+                            }
                         }
                     }
                 }
@@ -499,7 +579,7 @@ DataHandlerV2.extend({
                 }
             }
         }
-        var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, tempDbViewDataTable, filterSelectedValues, "name");
+        var filterOptions = AppHandler.generateFilterDataV2(filterKeyMapping, currentAppData, metaData, tempDbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
         return true;
     }

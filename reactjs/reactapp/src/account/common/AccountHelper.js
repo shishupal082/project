@@ -6,7 +6,7 @@ import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler
 
 import DataHandler from './DataHandler';
 import TemplateHandler from './TemplateHandler';
-// import AccountHelper2 from './AccountHelper2';
+import DataHandlerV2 from './DataHandlerV2';
 
 
 var AccountHelper;
@@ -1129,42 +1129,6 @@ Account.extend({
         }
         return renderField;
     },
-    _applyAccountNameFilter: function(dataByCompanyV2) {
-        var filterOptions = DataHandler.getData("filterOptions", []);
-        var i, selectedAccountName, selectedAccountArray;
-        var dataByCompanyV3 = [];
-        if (!$S.isArray(dataByCompanyV2)) {
-            dataByCompanyV2 = [];
-        }
-        if ($S.isArray(filterOptions)) {
-            for (i=0; i<filterOptions.length; i++) {
-                if (!$S.isObject(filterOptions[i])) {
-                    continue;
-                }
-                if (filterOptions[i]["dataKey"] === "accountName") {
-                    selectedAccountName = filterOptions[i]["selectedValue"];
-                    break;
-                }
-            }
-        }
-        if ($S.isStringV2(selectedAccountName)) {
-            selectedAccountArray = selectedAccountName.split(",");
-        } else {
-            selectedAccountArray = [];
-        }
-        if (selectedAccountArray.length > 0) {
-            for (i=0; i<dataByCompanyV2.length; i++) {
-                if ($S.isObject(dataByCompanyV2[i]) && $S.isStringV2(dataByCompanyV2[i]["accountName"])) {
-                    if (selectedAccountArray.indexOf(dataByCompanyV2[i]["accountName"]) >= 0) {
-                        dataByCompanyV3.push(dataByCompanyV2[i]);
-                    }
-                }
-            }
-        } else {
-            dataByCompanyV3 = dataByCompanyV2;
-        }
-        return dataByCompanyV3;
-    },
     _generateTableSummary: function(tableData, accountData, dateSelection) {
         var tableField = [], i, j;
         var tableDataV2 = [], temp, totalRow;
@@ -1183,7 +1147,7 @@ Account.extend({
         }
         var dataByCompany = this.getDataByCompanyV2(tableDataV2, accountData);
         var dataByCompanyV2 = AccountHelper._getCurrentBalanceDataByDateV2(dataByCompany, accountData, dateSelection);
-        var dataByCompanyV3 = this._applyAccountNameFilter(dataByCompanyV2);
+        var dataByCompanyV3 = DataHandlerV2.applyAccountNameFilter(dataByCompanyV2);
         var accountSummary, accountSummaryRow, accountSummaryData;
         if ($S.isArray(dataByCompanyV3)) {
             for (i=0; i<dataByCompanyV3.length; i++) {
@@ -1219,18 +1183,29 @@ Account.extend({
     getAccountSummaryFieldsV2_2: function(renderField, accountData, dateSelection) {
         var field = [];
         var currentList3Data = DataHandler.getCurrentList3Data();
-        var temp = [], temp2;
+        var temp;
+        var keyIndex = [];
+        var stackObj = {};
         if ($S.isArray(renderField)) {
             for (var i = 0; i<renderField.length; i++) {
                 if ($S.isObject(renderField[i])) {
-                    temp.push(DBViewTemplateHandler.generateHeading(renderField[i].name, renderField[i].key, currentList3Data, true));
-                } else if ($S.isArray(renderField[i])) {
-                    temp2 = this._generateTableSummary(renderField[i], accountData, dateSelection);
-                    if ($S.isArrayV2(temp2)) {
-                        field = field.concat(temp);
-                        field.push(temp2);
+                    if ($S.isStringV2(renderField[i].key)) {
+                        if (keyIndex.indexOf(renderField[i].key) < 0) {
+                            keyIndex.push(renderField[i].key);
+                            stackObj[renderField[i].key] = $S.getStack();
+                        }
+                        stackObj[renderField[i].key].reset();
+                        stackObj[renderField[i].key].push(DBViewTemplateHandler.generateHeading(renderField[i].name, renderField[i].key, currentList3Data, true));
                     }
-                    temp = [];
+                } else if ($S.isArray(renderField[i])) {
+                    temp = this._generateTableSummary(renderField[i], accountData, dateSelection);
+                    if ($S.isArrayV2(temp)) {
+                        for (var j=0; j<keyIndex.length; j++) {
+                            field = field.concat(stackObj[keyIndex[j]].getAll());
+                            stackObj[keyIndex[j]].reset();
+                        }
+                        field.push(temp);
+                    }
                 }
             }
         }

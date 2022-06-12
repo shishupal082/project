@@ -202,7 +202,7 @@ TemplateHandler.extend({
             return renderField;
         }
         var pageName1 = DataHandler.getData("pageName", "");
-        var categoryTemplate, filterValues, filter = [];
+        var categoryTemplate, filter;
         if (pageName1 === Config.projectHome) {
             renderField = this.generateProjectHomeRenderField();
         } else if (pageName1 === Config.home) {
@@ -215,17 +215,10 @@ TemplateHandler.extend({
                     renderField = TemplateHandler[pageName](pageName, renderData);
                 } else {
                     renderField = [];
-                    filterValues = DataHandler.getData("filterValues", {});
-                    if ($S.isObject(filterValues)) {
-                        for (var key in filterValues) {
-                            if ($S.isStringV2(filterValues[key])) {
-                                filter.push(filterValues[key]);
-                            }
-                        }
-                    }
+                    filter = DataHandlerV2.getFilterSelectedValuesByKey("category");
                     if ($S.isObject(renderData)) {
                         for(var category in renderData) {
-                            if (filter.length > 0 && filter.indexOf(category) < 0) {
+                            if ($S.isArrayV2(filter) && filter.indexOf(category) < 0) {
                                 continue;
                             }
                             categoryTemplate = this._getCategoryHeadingTemplate();
