@@ -571,11 +571,23 @@ AppHandler.extend({
         if (!$S.isArray(otherData)) {
             return false;
         }
+        var i=0;
         if (!$S.isArray(combineTableData)) {
             combineTableData = [];
         }
+        if (combineTableData.length < 1) {
+            for (i=0; i<otherData.length; i++) {
+                if ($S.isObject(otherData[i])) {
+                    combineTableData = combineTableData.concat(Object.keys(otherData[i]));
+               }
+            }
+            combineTableData = $S.removeDuplicate(combineTableData);
+            for (i=0; i<combineTableData.length; i++) {
+                combineTableData[i] = {"sourceTableName": [combineTableData[i]], "destinationTableName": combineTableData[i]};
+            }
+        }
         var tableName, sourceTableName, destinationTableName;
-        for (var i=0; i<combineTableData.length; i++) {
+        for (i=0; i<combineTableData.length; i++) {
             if ($S.isObjectV2(combineTableData[i]) && $S.isStringV2(combineTableData[i]["destinationTableName"]) && $S.isArray(combineTableData[i]["sourceTableName"])) {
                 if (combineTableData[i]["sourceTableName"].length > 0) {
                     sourceTableName = combineTableData[i]["sourceTableName"];
