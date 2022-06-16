@@ -2,7 +2,7 @@
     "list3Data.journal": [
         {
             "defaultSelected": true,
-            "value": [{"key": "entryTime"}],
+            "value": [{"key": "uiEntryTime"}],
             "text": "Order by Entry Time"
         }
     ],
@@ -100,7 +100,7 @@
     ],
     "journal:dateParameterField": {
         "table": "accountal_data",
-        "fieldName": "entryTime"
+        "fieldName": "uiEntryTime"
     },
     "journalbydate:dateParameterField": {
         "table": "accountal_data",

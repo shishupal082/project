@@ -599,6 +599,11 @@ AppHandler.extend({
                         for (tableName in otherData[j]) {
                             if (sourceTableName.indexOf(tableName) >= 0) {
                                 if ($S.isArray(otherData[j][tableName]["tableData"])) {
+                                    for (var k=0; k<otherData[j][tableName]["tableData"].length; k++) {
+                                        if ($S.isObject(otherData[j][tableName]["tableData"][k]) && $S.isStringV2(otherData[j][tableName]["tableData"][k]["tableName"])) {
+                                            otherData[j][tableName]["tableData"][k]["tableName"] = destinationTableName;
+                                        }
+                                    }
                                     dbViewData[destinationTableName]["tableData"] = dbViewData[destinationTableName]["tableData"].concat(otherData[j][tableName]["tableData"]);
                                 }
                             }
