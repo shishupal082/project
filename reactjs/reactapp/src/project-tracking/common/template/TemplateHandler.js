@@ -49,18 +49,16 @@ TemplateHandler.extend({
             }
         }
         var template = this.getHomeTemplatePartial("home");
-        var formType, genericTemplate;
+        var genericTemplate;
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
-        if (!DataHandlerV2.isDisabled("form", "generic_form0")) {
-            formType = DataHandler.getAppData("form_type");
-            genericTemplate = FormHandler.getGenericTemplate(pageName, formType, "generic_form0");
-            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
-            TemplateHelper.removeClassTemplate(template, "home.addNewProject", "d-none");
-        } else if (homeFields.length === 0) {
+        genericTemplate = FormHandler.getGenericTemplate(pageName, DataHandler.getAppData("form_type", ""), "generic_form0");
+        if (!$S.isArrayV2(homeFields) && !$S.isArray(genericTemplate) && !$S.isObject(genericTemplate)) {
             template = this.getTemplate("noDataFound");
+        } else {
+            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
         }
         return template;
     }
