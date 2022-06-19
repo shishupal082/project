@@ -99,29 +99,5 @@
                 {"tag":"span","text":{"tag":"link","name":"pageFooter:pageId.manageFiles","href":"/display/manageFiles","text":"Manage Files"}}
             ]
         }
-    ],
-    "home.formTemplate": [
-        {
-            "tag": "td",
-            "text": "Form Type"
-        },
-        {
-            "tag": "td",
-            "text": {
-                "tag": "dropdown",
-                "className": "form-control",
-                "name": "form.generic_form0.entry.form_type",
-                "text": [
-                    {
-                        "text": "Select section...",
-                        "value": ""
-                    },
-                    {
-                        "text": "Work Status",
-                        "value": "WorkStatus"
-                    }
-                ]
-            }
-        }
     ]
 }

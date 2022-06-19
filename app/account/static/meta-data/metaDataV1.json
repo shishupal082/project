@@ -1,0 +1,68 @@
+{
+    "linkText": {
+        "journal": "Journal by Entry Time",
+        "journalbydate": "Journal by User Entry Time",
+        "currentbalbydatev2": "Currentbalbydatev2",
+        "currentbalbydate": "Currentbalbydate",
+        "profitandloss": "Profit and Loss",
+        "trialbalance": "Trial Balance",
+        "ledger": "Ledger",
+        "summary": "Summary By A/C Name",
+        "accountsummarybydate": "Summary By Date",
+        "accountsummarybycalander": "Summary By Calender",
+        "custompage": "Customise Account Summary",
+        "customisedebit": "Customised Debit Account Summary",
+        "customisecredit": "Customised Credit Account Summary"
+    },
+    "dateSelectionType": "monthly",
+    "disableFooter": false,
+    "enableFooter": true,
+    "journal.tableName": "accountal_data",
+    "getTableDataApiNameKey": "getTableData",
+    "customHeadingField":[
+        {
+            "tag": "div",
+            "className": "heading",
+            "text": [
+                {
+                    "tag": "center.h2",
+                    "name": "heading-text",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "center",
+            "name": "heading-link",
+            "text": [
+                {
+                    "tag": "span",
+                    "text": "Login as: "
+                },
+                {
+                    "tag": "span.b",
+                    "name": "pageHeading.username",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "a",
+                    "text": "Dashboard",
+                    "href": "/app/project-tracking/0"
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "a",
+                    "text": "Logout",
+                    "href": "/logout"
+                }
+            ]
+        }
+    ]
+}

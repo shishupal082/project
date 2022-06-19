@@ -1,4 +1,17 @@
 {
+    "na_pagePathName:journal:filterKeyMapping": {
+        "pagePathName:journal:filterKeys": "filterKeys"
+    },
+    "pagePathName:journal:filterKeys": ["category", "accountName", "reset"],
+    "na_pagePathName:journalbydate:filterKeyMapping": {
+        "pagePathName:journalbydate:filterKeys": "filterKeys"
+    },
+    "pagePathName:journalbydate:filterKeys": ["category", "accountName", "reset"],
+    "na_pagePathName:summaryv2:filterKeyMapping": {
+        "pagePathName:summaryv2:filterKeys": "filterKeys"
+    },
+    "pagePathName:summaryv2:filterKeys": ["category", "accountName", "reset"],
+    "filterKeys": ["accountName", "reset"],
     "list3Data.journal": [
         {
             "defaultSelected": true,
@@ -29,7 +42,6 @@
             "text": "Order by Category --> Entry Time"
         }
     ],
-    "filterKeys": ["na_category", "reset"],
     "pagePathName:journal:requiredDataTable": ["accountal_data"],
     "pagePathName:journal:resultPattern": [
         {
@@ -110,7 +122,6 @@
         "table": "accountal_data",
         "fieldName": "uiEntryTime"
     },
-    "filterKeys": ["accountName", "reset"],
     "pagePathName:journalbydate:requiredDataTable": ["accountal_data"],
     "pagePathName:journalbydate:resultPattern": [
         {
@@ -171,17 +182,6 @@
             "heading": "Dr Account",
             "hidden": true,
             "isSortable": false
-        }
-    ],
-    "categoryHeading": [
-        {
-            "tag": "div",
-            "text": {
-                "tag": "span",
-                "className": "d-none badge badge-primary",
-                "name": "categoryHeading",
-                "text": ""
-            }
         }
     ]
 }

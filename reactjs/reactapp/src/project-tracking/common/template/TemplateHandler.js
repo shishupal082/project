@@ -37,6 +37,7 @@ $S.extendObject(TemplateHandler);
 DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
     generateHomeRenderField: function(pageName, renderData) {
+        // pageName = "home"
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
             for (i=0; i<renderData.length; i++) {
@@ -48,16 +49,16 @@ TemplateHandler.extend({
             }
         }
         var template = this.getHomeTemplatePartial("home");
-        var genericFormTemplate_0 = this.getTemplate("home.generic_form0");
+        var formType, genericTemplate;
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
         if (!DataHandlerV2.isDisabled("form", "generic_form0")) {
-            TemplateHelper.addItemInTextArray(template, "home.template", genericFormTemplate_0);
+            formType = DataHandler.getAppData("form_type");
+            genericTemplate = FormHandler.getGenericTemplate(pageName, formType, "generic_form0");
+            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
             TemplateHelper.removeClassTemplate(template, "home.addNewProject", "d-none");
-            var formTypeField = FormHandler.getGenericTemplate(pageName, "", "generic_form0");
-            TemplateHelper.addItemInTextArray(template, "home.addNewProject.formTypeField", formTypeField);
         } else if (homeFields.length === 0) {
             template = this.getTemplate("noDataFound");
         }

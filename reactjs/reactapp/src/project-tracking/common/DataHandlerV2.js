@@ -194,7 +194,12 @@ DataHandlerV2.extend({
     },
     getFormTypeByPageName: function(pageName) {
         var formType = "";
-        if (pageName === "projectId") {
+        if (pageName === "home") {
+            formType = DataHandler.getAppData("form_type", "");
+            if (!$S.isStringV2(formType)) {
+                formType = "";
+            }
+        } else if (pageName === "projectId") {
             var pidData = this.getProjectDataV2(pageName);
             if (pidData.status === "SUCCESS") {
                 if ($S.isObject(pidData["pidRow"]) && $S.isStringV2(pidData["pidRow"]["form_type"])) {

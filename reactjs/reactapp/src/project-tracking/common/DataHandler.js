@@ -525,11 +525,11 @@ DataHandler.extend({
         var dateSelect = CommonDataHandler.getData("date-select", "");
         var sortingFields = this.getData("sortingFields", []);
         var filterOptions = this.getData("filterOptions");
-        var dateParameterField, configFormName;
+        var dateParameterField, tableName;
         switch(pageName) {
             case "home":
-                configFormName = DataHandlerV2.getFormNameByPageName(pageName);
-                renderData = DataHandlerV2.getTableData(this.getTableName(configFormName + ".tableName"));
+                tableName = this.getTableName("projectTable");
+                renderData = DataHandlerV2.getTableData(tableName);
             break;
             case "projectId":
                 renderData = DataHandlerV2.getProjectDataV2(pageName);
