@@ -91,7 +91,6 @@ var defaultMetaData = {
     "home.Project.formTemplate": [
         {
             "tag": "div",
-            "name": "home.addNewProject",
             "text": [
                 {
                     "tag": "form",
@@ -111,7 +110,6 @@ var defaultMetaData = {
                             "text": [
                                 {
                                     "tag": "tr",
-                                    "name": "home.addNewProject.formTypeField",
                                     "text": [
                                         {
                                             "tag": "td",
