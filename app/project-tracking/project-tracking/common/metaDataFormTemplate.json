@@ -212,6 +212,48 @@
             ]
         }
     ],
+    "account": [
+        {
+            "text": "Select Dr Account ...",
+            "value": ""
+        },
+        {
+            "text": "Cash",
+            "value": "Cash"
+        },
+        {
+            "text": "Bank",
+            "value": "Bank"
+        },
+        {
+            "text": "Misc",
+            "value": "Misc"
+        },
+        {
+            "text": "Assets",
+            "value": "Assets"
+        },
+        {
+            "text": "Medical",
+            "value": "Medical"
+        },
+        {
+            "text": "Transport",
+            "value": "Transport"
+        },
+        {
+            "text": "Transport",
+            "value": "Transport"
+        },
+        {
+            "text": "Bike-Fuel",
+            "value": "Bike-Fuel"
+        }
+    ],
+    "form.generic_form1.variableFields": {
+        "form.generic_form1.entry.dr_username": "account",
+        "form.generic_form1.entry.cr_username": "account"
+    },
     "projectId.Accountal.formTemplate": [
         {
             "tag": "form",
@@ -273,6 +315,22 @@
                                     "tag": "td",
                                     "text": {
                                         "tag": "span",
+                                        "text": "Cr"
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "dropdown",
+                                        "className": "form-control w-300px",
+                                        "name": "form.generic_form1.entry.cr_username",
+                                        "text": []
+                                    }
+                                },
+                                {
+                                    "tag": "td",
+                                    "text": {
+                                        "tag": "span",
                                         "text": "Dr"
                                     }
                                 },
@@ -282,44 +340,7 @@
                                         "tag": "dropdown",
                                         "className": "form-control w-300px",
                                         "name": "form.generic_form1.entry.dr_username",
-                                        "text": [
-                                            {
-                                                "text": "Select Dr Account ...",
-                                                "value": ""
-                                            },
-                                            {
-                                                "text": "Cash",
-                                                "value": "Cash"
-                                            },
-                                            {
-                                                "text": "Bank",
-                                                "value": "Bank"
-                                            },
-                                            {
-                                                "text": "Misc",
-                                                "value": "Misc"
-                                            },
-                                            {
-                                                "text": "Assets",
-                                                "value": "Assets"
-                                            },
-                                            {
-                                                "text": "Medical",
-                                                "value": "Medical"
-                                            },
-                                            {
-                                                "text": "Transport",
-                                                "value": "Transport"
-                                            },
-                                            {
-                                                "text": "Transport",
-                                                "value": "Transport"
-                                            },
-                                            {
-                                                "text": "Bike-Fuel",
-                                                "value": "Bike-Fuel"
-                                            }
-                                        ]
+                                        "text": []
                                     }
                                 }
                             ]

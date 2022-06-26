@@ -59,6 +59,25 @@ FormHandler.extend({
         }
         return formName;
     },
+    _updateDynamicVariableFields: function(formName, formTemplate) {
+        if (!$S.isStringV2(formName)) {
+            return false;
+        }
+        if (!$S.isObjectV2(formTemplate) && !$S.isArrayV2(formTemplate)) {
+            return false;
+        }
+        var variableFields = DataHandler.getAppData(formName + ".variableFields", {});
+        if ($S.isObjectV2(variableFields)) {
+            for (var key in variableFields) {
+                variableFields[key] = DataHandler.getAppData(variableFields[key], []);
+                if ($S.isObjectV2(variableFields[key]) || $S.isArrayV2(variableFields[key])) {
+                    TemplateHelper.updateTemplateText(formTemplate, variableFields);
+                }
+            }
+            return true;
+        }
+        return false;
+    },
     getGenericTemplate: function(pageName, formType, formIdentifier) {
         // FormType parameter used for finding proper id1Page form
         // As each id1 may have different form types
@@ -69,6 +88,7 @@ FormHandler.extend({
         var formName = this._getFormName(pageName, formType);
         var formTemplate = DataHandler.getAppData(pageName + "." + formTemplateName, null);
         var finalFormName = DataHandler.getAppData(pageName + "." + formName, "");
+        this._updateDynamicVariableFields(finalFormName, formTemplate);
         var validationData = null, status = null;
         if ($S.isStringV2(finalFormName)) {
             validationData = DataHandler.getAppData(finalFormName + ".validationData");
