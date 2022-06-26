@@ -458,7 +458,10 @@ DataHandlerV2.extend({
         }
         if ([Config.summaryv2].indexOf(pageName) >= 0) {
             requiredDataTable = "accountal_data";
-            resultPattern = TemplateHandler.getTemplate("custom.resultPattern", []);
+            resultPattern = DataHandler.getAppData("custom.resultPattern", []);
+            if (!$S.isArrayV2(resultPattern)) {
+                resultPattern = TemplateHandler.getTemplate("custom.resultPattern", []);
+            }
         } else {
             resultPattern = DataHandler.getAppData(resultPatternKey, []);
         }
