@@ -14,11 +14,18 @@
         "customisedebit": "Customised Debit Account Summary",
         "customisecredit": "Customised Credit Account Summary"
     },
+    "defaultSorting": [
+        {
+            "table": "accountal_data",
+            "index": "uiEntryTime",
+            "sortableValue": "descending"
+        }
+    ],
     "dateSelectionType": "monthly",
     "disableFooter": false,
     "enableFooter": true,
     "journal.tableName": "accountal_data",
-    "getTableDataApiNameKey": "getTableData",
+    "getTableDataApiNameKey2": "getTableData",
     "customHeadingField":[
         {
             "tag": "div",
@@ -51,7 +58,7 @@
                 {
                     "tag": "a",
                     "text": "Dashboard",
-                    "href": "/app/project-tracking/0"
+                    "href": "/app/accountsv3"
                 },
                 {
                     "tag": "span",

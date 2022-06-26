@@ -1,4 +1,37 @@
 {
+    "categoryHeading": [
+        {
+            "tag": "div",
+            "text": {
+                "tag": "span",
+                "className": "d-none badge badge-primary",
+                "name": "categoryHeading",
+                "text": ""
+            }
+        }
+    ],
+    "custom.resultPattern": [
+        {
+            "tableName": "accountal_data",
+            "name": "uiEntryTime"
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "value"
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "cr_account"
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "dr_account"
+        },
+        {
+            "tableName": "accountal_data",
+            "name": "remarks"
+        }
+    ],
     "na_pagePathName:journal:filterKeyMapping": {
         "pagePathName:journal:filterKeys": "filterKeys"
     },
@@ -14,12 +47,20 @@
     "filterKeys": ["accountName", "reset"],
     "list3Data.journal": [
         {
+            "name": "show-all",
+            "text": "Show All"
+        },
+        {
             "defaultSelected": true,
             "value": [{"key": "uiEntryTime"}],
             "text": "Order by Entry Time"
         }
     ],
     "list3Data.journalbydate": [
+        {
+            "name": "show-all",
+            "text": "Show All"
+        },
         {
             "defaultSelected": true,
             "value": [{"key": "uiEntryTime"}],
@@ -34,12 +75,12 @@
             "text": "Order by Category"
         },
         {
-            "value": [{"key": "uiEntryTime"}, {"key": "category"}],
-            "text": "Order by Entry Time --> Category"
+            "value": [{"key": "uiEntryTime"}],
+            "text": "Order by Entry Time"
         },
         {
-            "value": [{"key": "category"}, {"key": "uiEntryTime"}],
-            "text": "Order by Category --> Entry Time"
+            "value": [{"key": "uiEntryTime"}],
+            "text": "Order by Entry Time"
         }
     ],
     "pagePathName:journal:requiredDataTable": ["accountal_data"],
@@ -54,12 +95,6 @@
             "tableName": "accountal_data",
             "name": "uiEntryTime",
             "heading": "Date",
-            "isSortable": false
-        },
-        {
-            "tableName": "accountal_data",
-            "name": "category",
-            "heading": "Category",
             "isSortable": false
         },
         {
@@ -128,12 +163,6 @@
             "tableName": "accountal_data",
             "name": "uiEntryTime",
             "heading": "Entry Time",
-            "isSortable": false
-        },
-        {
-            "tableName": "accountal_data",
-            "name": "category",
-            "heading": "Category",
             "isSortable": false
         },
         {

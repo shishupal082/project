@@ -20,6 +20,7 @@ var loginUserDetailsApi = $$$.loginUserDetailsApi;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
 Config.tempConfig = {
+    "journal.tableName": "accountal_data",
     "enabledPages": $$$.enabledPages,
     "redirectPages": $$$.redirectPages,
     "linkText": $$$.linkText

@@ -137,7 +137,7 @@ DataHandlerV2.extend({
 });
 DataHandlerV2.extend({
     createDateSelectionParameter: function() {
-        var journalData = this.getJournalData(Config.journal);
+        var journalData = this.getJournalData();
         var allDateStr = [], i, temp;
         if ($S.isArray(journalData)) {
             for (i = 0; i < journalData.length; i++) {
@@ -163,7 +163,7 @@ DataHandlerV2.extend({
         if ($S.isObject(entry) && $S.isStringV2(entry["uiEntryTime"])) {
             journalEntry["date"] = entry["uiEntryTime"];
             journalEntry["uiEntryTime"] = entry["uiEntryTime"];
-            journalEntry["category"] = entry["category"] ? entry["category"] : "Money";
+            journalEntry["category"] = entry["category"];
             journalEntry["remarks"] = entry["remarks"] + " (From " + entry["cr_account"] + " To " + entry["dr_account"] + ")";
             journalEntry["dr_account"] = entry["dr_account"];
             journalEntry["cr_account"] = entry["cr_account"];
@@ -178,7 +178,7 @@ DataHandlerV2.extend({
         return journalEntry;
     },
     _getApiJournalData: function() {
-        var journalData = this.getJournalData(Config.journal);
+        var journalData = this.getJournalData();
         var apiJournalData = [];
         if ($S.isArray(journalData)) {
             apiJournalData.push({"entry": []});
@@ -216,6 +216,18 @@ DataHandlerV2.extend({
     getJournalData: function(pageName) {
         var tableName = DataHandler.getAppData(Config.journal + ".tableName");
         var tableData = CommonDataHandler.getTableData(DataHandler, tableName);
+        var currentAppData = DataHandler.getCurrentAppData({});
+        var metaData = DataHandler.getMetaData({});
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        if ($S.isArray(filterOptions)) {
+            filterOptions = filterOptions.filter(function(el, i, arr) {
+                if ($S.isObject(el) && ["accountName", "category"].indexOf(el.dataKey) >= 0) {
+                    return false;
+                }
+                return true;
+            });
+        }
+        tableData = AppHandler.getFilteredData(currentAppData, metaData, tableData, filterOptions, "name");
         return tableData;
     },
     getJournalDataByDate: function(pageName) {
@@ -235,12 +247,13 @@ DataHandlerV2.extend({
                     for (var j=0; j<finalJournalData[i]["entry"].length; j++) {
                         if ($S.isObject(finalJournalData[i]["entry"][j])) {
                             category = finalJournalData[i]["entry"][j]["category"];
-                            if ($S.isStringV2(category)) {
-                                if (!$S.isArray(finalJournalDataByCategory[category])) {
-                                    finalJournalDataByCategory[category] = [{"entry": []}];
-                                }
-                                finalJournalDataByCategory[category][0]["entry"].push(finalJournalData[i]["entry"][j]);
+                            if (!$S.isStringV2(category)) {
+                                category = "";
                             }
+                            if (!$S.isArray(finalJournalDataByCategory[category])) {
+                                finalJournalDataByCategory[category] = [{"entry": []}];
+                            }
+                            finalJournalDataByCategory[category][0]["entry"].push(finalJournalData[i]["entry"][j]);
                         }
                     }
                 }
@@ -457,7 +470,7 @@ DataHandlerV2.extend({
             resultPatternKey = "pagePathName:" + Config.journalbydate + ":resultPattern";
         }
         if ([Config.summaryv2].indexOf(pageName) >= 0) {
-            requiredDataTable = "accountal_data";
+            requiredDataTable = DataHandler.getAppData(Config.journal + ".tableName", "");
             resultPattern = DataHandler.getAppData("custom.resultPattern", []);
             if (!$S.isArrayV2(resultPattern)) {
                 resultPattern = TemplateHandler.getTemplate("custom.resultPattern", []);
@@ -476,17 +489,17 @@ DataHandlerV2.extend({
         //         resultPattern = this._getResultPatternFromData(pageName, currentAppData, metaData);
         //     }
         // }
-        if ($S.isObject(dbViewData)) {
-            if ($S.isObject(dbViewData["accountal_data"])) {
-                if ($S.isArray(dbViewData["accountal_data"]["tableData"])) {
-                    for (var i=0; i<dbViewData["accountal_data"]["tableData"].length; i++) {
-                        if ($S.isObject(dbViewData["accountal_data"]["tableData"][i]) && !$S.isStringV2(dbViewData["accountal_data"]["tableData"][i]["category"])) {
-                            dbViewData["accountal_data"]["tableData"][i]["category"] = "Money";
-                        }
-                    }
-                }
-            }
-        }
+        // if ($S.isObject(dbViewData)) {
+        //     if ($S.isObject(dbViewData["accountal_data"])) {
+        //         if ($S.isArray(dbViewData["accountal_data"]["tableData"])) {
+        //             for (var i=0; i<dbViewData["accountal_data"]["tableData"].length; i++) {
+        //                 if ($S.isObject(dbViewData["accountal_data"]["tableData"][i]) && !$S.isStringV2(dbViewData["accountal_data"]["tableData"][i]["category"])) {
+        //                     dbViewData["accountal_data"]["tableData"][i]["category"] = "Money";
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
     },

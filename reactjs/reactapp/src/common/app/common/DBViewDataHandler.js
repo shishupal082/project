@@ -566,7 +566,7 @@ DBViewDataHandler.extend({
                     name = l3Data.key;
                     heading = $S.findParam(finalTableData[i], name, "", "name", "value");
                     if (!$S.isString(heading) || heading.length < 1) {
-                        heading = "Empty";
+                        heading = "Empty: " + l3Data.key;
                     }
                     temp4 = TemplateHelper(temp3).searchField(heading);
                     if ($S.isObject(temp4) && temp4.name === heading) {

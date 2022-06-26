@@ -83,27 +83,6 @@ var Template = {
             }
         }
     ],
-    "journalByDate": [
-        {
-            "tag": "div",
-            "text": [
-                {
-                    "tag": "h1",
-                    "text": {
-                        "tag": "span",
-                        "className": "badge badge-primary",
-                        "name": "date",
-                        "text": ""
-                    }
-                }
-            ]
-        },
-        {
-            "tag": "div",
-            "name": "journalEntryTable",
-            "text": []
-        }
-    ],
     "journalEntryDetails": {
         "tag": "table.tbody",
         "className": "table table-bordered m-0",
@@ -154,94 +133,6 @@ var Template = {
             }
         ]
     },
-    "journal": [
-        {
-            "tag": "table.tbody",
-            "className": "table-bordered table-striped",
-            "name": "journalEntryTr",
-            "text": []
-        }
-    ],
-    "journalEntry": [
-        {
-            "tag": "tr",
-            "text": [
-                {
-                    "tag": "td",
-                    "name": "s.no",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "name": "uiEntryTime",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "name": "category",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "name": "remarks",
-                    "text": ""
-                },
-                {
-                    "tag": "td",
-                    "text": {
-                        "tag": "table.tbody",
-                        "className": "table table-bordered m-0",
-                        "text": [
-                            {
-                                "tag": "tr",
-                                "text": [
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "name": "value1",
-                                        "text": ""
-                                    },
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "text": ""
-                                    },
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "name": "dr_account",
-                                        "text": ""
-                                    }
-                                ]
-                            },
-                            {
-                                "tag": "tr",
-                                "text": [
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "text": ""
-                                    },
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "name": "value2",
-                                        "text": ""
-                                    },
-                                    {
-                                        "tag": "td",
-                                        "className": "w-120px",
-                                        "name": "cr_account",
-                                        "text": ""
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
-    ],
     "ledger": {
         "tag": "div",
         "className": "row LEDGER-BOOK-ROW",
@@ -1571,10 +1462,6 @@ Template["custom.resultPattern"] = [
     {
         "tableName": "accountal_data",
         "name": "uiEntryTime"
-    },
-    {
-        "tableName": "accountal_data",
-        "name": "category"
     },
     {
         "tableName": "accountal_data",
