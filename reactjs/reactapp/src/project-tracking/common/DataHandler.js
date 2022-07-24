@@ -107,6 +107,10 @@ DataHandler.extend({
     getData: function(key, defaultValue, isDirect) {
         return CurrentData.getData(key, defaultValue, isDirect);
     },
+    clearFieldsData: function() {
+        this.setData("fieldsData", {});
+        CommonDataHandler.clearFieldsData();
+    },
     setFieldsData: function(key, value) {
         var fieldsData = this.getData("fieldsData", {});
         if (!$S.isObject(fieldsData)) {
@@ -407,6 +411,7 @@ DataHandler.extend({
         if (isReset) {
             CommonDataHandler.clearMetaData();
             CommonDataHandler.setData("metaDataLoadStatus", "not-started");
+            this.clearFieldsData();
             this.setData("dbViewData", {});
             this.setData("appRelatedDataLoadStatus", "not-started");
             this.setData("dbViewDataLoadStatus", "not-started");

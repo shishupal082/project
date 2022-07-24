@@ -69,6 +69,9 @@ CommonDataHandler.extend({
     getData: function(key, defaultValue, isDirect) {
         return CurrentData.getData(key, defaultValue, isDirect);
     },
+    clearFieldsData: function() {
+        this.setData("fieldsData", {});
+    },
     setFieldsData: function(key, value) {
         if (!$S.isStringV2(key)) {
             return;
