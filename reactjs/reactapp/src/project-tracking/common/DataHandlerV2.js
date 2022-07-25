@@ -521,6 +521,24 @@ DataHandlerV2.extend({
         }
         return status;
     },
+    getDateParameterField: function(identifier, value) {
+        var dateParameterField = null;
+        var currentList3Data;
+        if (identifier === "pageId") {
+            dateParameterField = DataHandler.getAppData("pageId:" + value + ".dateParameterField", {});
+        } else if (identifier === "viewPage") {
+            dateParameterField = DataHandler.getAppData("viewPageName:" + value + ".dateParameterField", {});
+            currentList3Data = DataHandler.getCurrentList3Data();
+            if ($S.isObjectV2(currentList3Data)) {
+                if ($S.isObjectV2(currentList3Data["dateParameterField"])) {
+                    dateParameterField = currentList3Data["dateParameterField"];
+                }
+            }
+        } else if (identifier === "pageName") {
+            dateParameterField = DataHandler.getAppData("pageName:" + value + ".dateParameterField", {});
+        }
+        return dateParameterField;
+    },
     isDateSelectionEnable: function(pageName, pageId, viewPageName) {
         var status, dateParameterField;
         if ([Config.home, Config.projectId, Config.id1Page].indexOf(pageName) < 0) {
@@ -529,13 +547,13 @@ DataHandlerV2.extend({
         if ([Config.displayPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("pageId", pageId)) {
                 status = true;
-                dateParameterField = DataHandler.getAppData("pageId:" + pageId + ".dateParameterField", {});
+                dateParameterField = this.getDateParameterField("pageId", pageId);
             }
         }
         if ([Config.viewPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("viewPage", viewPageName)) {
                 status = true;
-                dateParameterField = DataHandler.getAppData("viewPageName:" + viewPageName + ".dateParameterField", {});
+                dateParameterField = this.getDateParameterField("viewPage", viewPageName);
             }
         }
         if (status && $S.isObjectV2(dateParameterField)) {

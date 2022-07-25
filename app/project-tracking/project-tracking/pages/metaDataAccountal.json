@@ -10,6 +10,14 @@
             "text": "Order by Date"
         },
         {
+            "value": [{"key": "entryTime"}],
+            "text": "Order by Entry Time",
+            "dateParameterField": {
+                "table": "accountal_data",
+                "fieldName": "entryTime"
+            }
+        },
+        {
             "text": "Order by Date -- Dr username",
             "value": [{"key": "date"}, {"key": "dr_username"}]
         },
@@ -30,6 +38,7 @@
         "table": "accountal_data",
         "fieldName": "date"
     },
+    "dateSelect": "monthly",
     "viewPageName:accountal.filterKeyMapping": {
         "viewPageName:accountal.filterKeys": "filterKeys"
     },

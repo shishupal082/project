@@ -546,7 +546,7 @@ DataHandler.extend({
                 if (DataHandlerV2.isDisabled("pageId", pageId)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
-                dateParameterField = this.getAppData("pageId:" + pageId + ".dateParameterField", {});
+                dateParameterField = DataHandlerV2.getDateParameterField("pageId", pageId);
                 renderData = DisplayPage.getRenderData(pageName, pageId, sortingFields);
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
@@ -555,7 +555,7 @@ DataHandler.extend({
                 if (DataHandlerV2.isDisabled("viewPage", viewPageName)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
-                dateParameterField = this.getAppData("viewPageName:" + viewPageName + ".dateParameterField", {});
+                dateParameterField = DataHandlerV2.getDateParameterField("viewPage", viewPageName);
                 renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
@@ -565,7 +565,7 @@ DataHandler.extend({
                 if (DataHandlerV2.isDisabled("pageName", pageName)) {
                     return {"status": "FAILURE", "reason": "Requested page disabled"};
                 }
-                dateParameterField = this.getAppData("pageName:" + pageName + ".dateParameterField", {});
+                dateParameterField = DataHandlerV2.getDateParameterField("pageName", pageName);
                 renderData = DisplayPage.getRenderDataV3(pageName, sortingFields);
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
