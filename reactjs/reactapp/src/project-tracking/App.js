@@ -41,6 +41,7 @@ class App extends React.Component {
             "selectedDateType": "",
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
+            "enableReloadButton": false,
             "enableFooter": false,
             "enableToggleButton": false,
 

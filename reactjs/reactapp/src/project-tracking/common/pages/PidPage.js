@@ -95,6 +95,7 @@ PidPage.extend({
     },
     getRenderTable: function(pageName, tableName, resultPatternName, tableData) {
         var pid = DataHandler.getPathParamsData("pid", "");
+        var viewReloadOption = DataHandler.getAppData("enableReloadButton", false);
         this._updateDetailsLink(pageName, pid, tableData);
         var resultPattern = DataHandler.getAppData(resultPatternName);
         var resultCriteria = null, requiredDataTable = null, currentList3Data = null, dateParameterField = null, dateSelect = null;
@@ -106,7 +107,7 @@ PidPage.extend({
         renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
         var updateData = ($S.isArray(renderData) && renderData.length === 1) ? renderData[0].text : null;
         FeedbackPage.updateStatusText(pageName, pid, updateData);
-        var renderFieldTable = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields);
+        var renderFieldTable = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, viewReloadOption);
         return renderFieldTable;
     }
 });

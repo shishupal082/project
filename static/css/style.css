@@ -98,6 +98,15 @@ body.theme-grey {
 .w-300px {
     width: 300px;
 }
+.max-w-120px {
+    max-width: 120px;
+}
+.max-w-160px {
+    max-width: 160px;
+}
+.max-w-200px {
+    max-width: 200px;
+}
 .h-15px {
     height: 15px;
 }
@@ -118,6 +127,9 @@ body.theme-grey {
 }
 .v-align-initial {
     vertical-align: initial;
+}
+.word-break-all {
+    word-break: break-all;
 }
 table.table-padded-px-5 > thead > tr > th,
 table.table-padded-px-5 > thead > tr > td,

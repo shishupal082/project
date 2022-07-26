@@ -347,6 +347,18 @@ DataHandler.extend({
             return;
         }
         $S.callMethod(callback);
+    },
+    resetAllFields: function() {
+        CommonDataHandler.clearMetaData();
+        CommonDataHandler.setData("metaDataLoadStatus", "not-started");
+        this.clearFieldsData();
+        this.setData("dbViewData", {});
+        this.setData("appRelatedDataLoadStatus", "not-started");
+        this.setData("dbViewDataLoadStatus", "not-started");
+        this.setData("dbTableDataLoadStatus", "not-started");
+        this.setData("filesInfoLoadStatus", "not-started");
+        this.setData("addentry.submitStatus", "not-started");
+        this.setData("firstTimeDataLoadStatus", "not-started");
     }
 });
 DataHandler.extend({
@@ -376,7 +388,7 @@ DataHandler.extend({
     },
     OnReloadClick: function(appStateCallback, appDataCallback) {
         AppHandler.TrackEvent("reloadClick");
-        DataHandler.setData("filesInfoLoadStatus", "not-started");
+        this.resetAllFields();
         DataHandler.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
@@ -409,16 +421,7 @@ DataHandler.extend({
             }
         }
         if (isReset) {
-            CommonDataHandler.clearMetaData();
-            CommonDataHandler.setData("metaDataLoadStatus", "not-started");
-            this.clearFieldsData();
-            this.setData("dbViewData", {});
-            this.setData("appRelatedDataLoadStatus", "not-started");
-            this.setData("dbViewDataLoadStatus", "not-started");
-            this.setData("dbTableDataLoadStatus", "not-started");
-            this.setData("filesInfoLoadStatus", "not-started");
-            this.setData("addentry.submitStatus", "not-started");
-            this.setData("firstTimeDataLoadStatus", "not-started");
+            this.resetAllFields();
         }
     },
     PageComponentDidUpdate: function(appStateCallback, appDataCallback, pageName, changeType) {
@@ -606,7 +609,7 @@ DataHandler.extend({
         appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
-
+        appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", [renderFieldRow, {"tag": "div.center", "text": $S.clone(Config.footerLinkJsonAfterLogin)}]);
 

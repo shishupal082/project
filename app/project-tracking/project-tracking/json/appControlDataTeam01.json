@@ -113,6 +113,7 @@
             "supply_status":             ["pid", "id1", "supply_status_key", "supply_status_value", "remarks", "discription"],
             "contingency_supply_status": ["pid", "id1", "supply_status_key", "supply_status_value", "remarks", "discription"]
         },
+        "enableReloadButton": true,
         "combineTableData": [
             {
                 "sourceTableName": ["file_table", "project_comment", "project_link"],

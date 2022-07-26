@@ -67,11 +67,12 @@ TemplateHandler.extend({
     _generateFieldTable: function(tableData, tableName, resultPatternName, currentList3Data) {
         var resultPattern = DataHandler.getAppData(resultPatternName);
         var sortingFields = DataHandler.getData("sortingFields", []);
+        var viewReloadOption = DataHandler.getAppData("enableReloadButton", false);
         var dbViewData = {};
         dbViewData[tableName] = {"tableData": tableData};
         var finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, null, null);
         finalTable = $S.sortResultV2(finalTable, sortingFields, "name");
-        var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(finalTable, currentList3Data, sortingFields);
+        var htmlFields = DBViewTemplateHandler.GenerateDbViewRenderField(finalTable, currentList3Data, sortingFields, viewReloadOption);
         return htmlFields;
     }
 });
@@ -186,7 +187,7 @@ TemplateHandler.extend({
         var pageField;
         var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = DataHandler.getData("sortingFields", []);
-        var viewReloadOption = false;
+        var viewReloadOption = DataHandler.getAppData("enableReloadButton", false);
         if (!$S.isArray(renderData) || renderData.length === 0) {
             pageField = TemplateHandler.getTemplate("noDataFound");
         } else {
