@@ -1421,6 +1421,7 @@ AppHandler.extend({
             if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
                 selectedValue = "";
             }
+            filterSelectedValues[filterKeys[i] + "Selected"] = selectedValue;
             if (tempFilterOptions[filterKeys[i]].filterOption.length > 0) {
                 selectionOptions.push({"type": "dropdown",
                     "text": tempFilterOptions[filterKeys[i]].filterOption,

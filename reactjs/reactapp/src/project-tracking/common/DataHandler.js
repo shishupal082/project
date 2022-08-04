@@ -532,7 +532,7 @@ DataHandler.extend({
         var currentList3Data = this.getCurrentList3Data();
         var dateSelect = CommonDataHandler.getData("date-select", "");
         var sortingFields = this.getData("sortingFields", []);
-        var filterOptions = this.getData("filterOptions");
+        var filterOptions = null;
         var dateParameterField, tableName;
         switch(pageName) {
             case "home":
@@ -560,6 +560,7 @@ DataHandler.extend({
                 }
                 dateParameterField = DataHandlerV2.getDateParameterField("viewPage", viewPageName);
                 renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
+                filterOptions = this.getData("filterOptions");
                 renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);

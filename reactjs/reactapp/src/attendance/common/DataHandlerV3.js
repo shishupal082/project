@@ -305,6 +305,7 @@ DataHandlerV3.extend({
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var filterOptions = AppHandler.generateFilterData(currentAppData, metaData, dbViewDataTable, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", filterSelectedValues);
         return dbViewDataTable;
     }
 });

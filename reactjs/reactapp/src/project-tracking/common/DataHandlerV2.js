@@ -72,6 +72,7 @@ DataHandlerV2.extend({
         var filterSelectedValues = DataHandler.getData("filterValues", {});
         var filterOptions = AppHandler.generateFilterDataV2(filterKeyMapping, currentAppData, metaData, dbViewData, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", filterSelectedValues);
         return dbViewData;
     },
     generateFilterOptionAndApplyFilter: function(pageName, tableData) {
@@ -82,6 +83,7 @@ DataHandlerV2.extend({
         var keyMapping = DataHandler.getAppData("pageName:" + pageRef + ".filterKeyMapping", {});
         var filterOptions = AppHandler.generateFilterDataV2(keyMapping, currentAppData, metaData, tableData, filterSelectedValues, "name");
         DataHandler.setData("filterOptions", filterOptions);
+        DataHandler.setData("filterValues", filterSelectedValues);
         var result = AppHandler.getFilteredData(currentAppData, metaData, tableData, filterOptions, "name");
         return result;
     },
