@@ -525,24 +525,20 @@ DataHandlerV2.extend({
     },
     getDateParameterField: function(identifier, value) {
         var dateParameterField = null;
-        var currentList3Data;
-        if (identifier === "pageId") {
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        if ($S.isObjectV2(currentList3Data) && $S.isObjectV2(currentList3Data["dateParameterField"])) {
+            dateParameterField = currentList3Data["dateParameterField"];
+        } else if (identifier === "pageId") {
             dateParameterField = DataHandler.getAppData("pageId:" + value + ".dateParameterField", {});
         } else if (identifier === "viewPage") {
             dateParameterField = DataHandler.getAppData("viewPageName:" + value + ".dateParameterField", {});
-            currentList3Data = DataHandler.getCurrentList3Data();
-            if ($S.isObjectV2(currentList3Data)) {
-                if ($S.isObjectV2(currentList3Data["dateParameterField"])) {
-                    dateParameterField = currentList3Data["dateParameterField"];
-                }
-            }
         } else if (identifier === "pageName") {
             dateParameterField = DataHandler.getAppData("pageName:" + value + ".dateParameterField", {});
         }
         return dateParameterField;
     },
     isDateSelectionEnable: function(pageName, pageId, viewPageName) {
-        var status, dateParameterField;
+        var status, dateParameterField, currentList3Data;
         if ([Config.home, Config.projectId, Config.id1Page].indexOf(pageName) < 0) {
             status = false;
         }
@@ -559,7 +555,19 @@ DataHandlerV2.extend({
             }
         }
         if (status && $S.isObjectV2(dateParameterField)) {
-            status = true;
+            status = false;
+            currentList3Data = DataHandler.getCurrentList3Data();
+            if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
+                if ($S.isObjectV2(dateParameterField) && $S.isStringV2(dateParameterField.fieldName)) {
+                    for (var i=0; i<currentList3Data.value.length; i++) {
+                        if ($S.isObject(currentList3Data.value[i])) {
+                            if (currentList3Data.value[i].key === dateParameterField.fieldName) {
+                                status = true;
+                            }
+                        }
+                    }
+                }
+            }
         } else {
             status = false;
         }
