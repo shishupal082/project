@@ -103,8 +103,14 @@ FormHandler.extend({
         }
         var filename = tableName;
         var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
+        var dynamicTableParameter = DataHandler.getAppData("dynamicTableParameter", []);
+        var dynamicValue = CommonDataHandler.getFieldsData(dynamicTableParameter, "");
         if ($S.isArray(dynamicTableFileName) && dynamicTableFileName.indexOf(tableName) >= 0) {
-            filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/");
+            if ($S.isStringV2(dynamicValue)) {
+                filename = tableName + DT.getDateTimeV2(dynamicValue, "_/YYYY/-/MMM","/");
+            } else {
+                filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/");
+            }
         }
         return filename + ".csv";
     },

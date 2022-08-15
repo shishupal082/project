@@ -1,3 +1,7 @@
+15.08.2022 (Improvement)
+--------------------------------------------------------------------
+Added dynamic file name from variable uiEntryTime parameter or default entryTime
+
 07.08.2022 (Improvement)
 --------------------------------------------------------------------
 Display date selection only when
