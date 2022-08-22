@@ -347,7 +347,7 @@ function loadTxtExpressions(callBack) {
                 t[j] = t[j].replaceAll(" ", "");
                 t[j] = t[j].split("\r").join("");
                 t2 = t[j].split("=");
-                if (t2.length != 2) {
+                if (t2.length !== 2) {
                     console.log("Invalid expression: " + t[j]);
                     continue;
                 }

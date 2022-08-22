@@ -1,0 +1,32 @@
+{
+    "list1Data": [
+        {
+            "name": "Track Plan App",
+            "metaDataApi": [
+                "/app/track-plan/json/meta-data/metaData.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "wordBreak": ",",
+                    "singleLineComment": "//",
+                    "apis": ["/app/track-plan/json/csv/bitmap-index-mapping.csv"]
+                }
+            ]
+        },
+        {
+            "name": "MAEL SSDAC tentative circuit for L1T2XT",
+            "metaDataApi": [
+                "/app/track-plan/json/meta-data/metaData.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "wordBreak": ",",
+                    "singleLineComment": "//",
+                    "apis": ["/app/track-plan/json/csv/mael-bitmap.csv"]
+                }
+            ]
+        }
+    ]
+}

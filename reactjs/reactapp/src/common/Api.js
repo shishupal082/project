@@ -56,7 +56,7 @@ function generateReactChild(props, data, key) {
         } else if ($S.isString(data.text)) {
             reactChild = data.text;
         } else {
-            console.log("Invalid tag: " + JSON.stringify(data));
+            // console.log("Invalid tag: " + JSON.stringify(data));
         }
     } else if ($S.isArray(data)) {
         // For array of array fields
