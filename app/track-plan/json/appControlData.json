@@ -24,7 +24,7 @@
                     "tableName": "table1",
                     "wordBreak": ",",
                     "singleLineComment": "//",
-                    "apis": ["/app/track-plan/json/csv/mael-bitmap.csv"]
+                    "apis": ["/pvt/app-data/track-plan/csv/mael-bitmap.csv"]
                 }
             ]
         }

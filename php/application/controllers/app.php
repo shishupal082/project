@@ -52,4 +52,7 @@ class App extends CI_Controller {
     public function rccv2() {
         $this->load->view("app/rcc.php");
     }
+    public function track_plan() {
+        $this->load->view("app/track_plan.php");
+    }
 }

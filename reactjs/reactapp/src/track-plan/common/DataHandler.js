@@ -300,8 +300,8 @@ DataHandler.extend({
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
         CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
-        Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
-        Config.afterLoginLinkJson = afterLoginLinkJson;
+        // Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
+        // Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     loadDataByAppId: function(callback) {
@@ -403,6 +403,8 @@ DataHandler.extend({
             } else {
                 isReset = true;
             }
+        } else if (type === "indexPageName") {
+            isReset = false;
         }
         if (isReset) {
             this.resetAllFields();

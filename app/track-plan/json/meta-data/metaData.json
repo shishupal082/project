@@ -1,17 +1,19 @@
 {   
+    "enableReloadButton": true,
     "list1RequiredPages": ["projectPage"],
     "enabledPages": ["track-plan"],
     "trackDataTable": "table1",
     "dbTableDataIndex": {
         "table1":      ["tableName", "rowIndex", "colIndex", "tag", "src", "path-mapping", "text", "colSpan"]
     },
-    "dimension": [50,25],
+    "dimension": [50,50],
     "cell-size": [20,20],
     "defaultCell": {
         "tag": "span"
     },
     "path-mapping": {
         "bitmap": "http://localhost/app/track-plan/static/bitmap/",
-        "bitmap-2": "http://localhost/app/track-plan/static/bitmap-2/"
+        "bitmap-2": "http://localhost/app/track-plan/static/bitmap-2/",
+        "bitmap-3": "http://localhost/app/track-plan/static/bitmap-3/"
     }
 }

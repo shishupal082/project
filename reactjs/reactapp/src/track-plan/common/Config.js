@@ -33,7 +33,13 @@ for (var i=0; i<tempConfigGlobalKey.length; i++) {
     }
 }
 
-Config.headingJson = [];
+Config.headingJson = [
+    {
+        "tag": "div.center.h1",
+        "name": "heading-text",
+        "text": ""
+    }
+];
 Config.afterLoginLinkJson = [];
 Config.footerLinkJsonAfterLogin = [];
 

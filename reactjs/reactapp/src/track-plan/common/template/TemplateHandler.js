@@ -212,6 +212,7 @@ TemplateHandler.extend({
         return renderField;
     },
     GetHeadingField: function(headingText) {
+        TemplateHelper.updateTemplateText(Config.headingJson, {"heading-text": headingText});
         return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
     }
 });

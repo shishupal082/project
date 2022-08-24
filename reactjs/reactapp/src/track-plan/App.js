@@ -26,9 +26,9 @@ class App extends React.Component {
             "list1Data": [],
             "currentList1Id": "",
 
-            // "list2Text": "Select...",
-            // "list2Data": [],
-            // "currentList2Id": "",
+            "list2Text": "Select...",
+            "list2Data": [],
+            "currentList2Id": "",
 
             "list3Text": "Select...",
             "list3Data": [],
@@ -149,10 +149,7 @@ class App extends React.Component {
         var params = arg["params"];
         var isComponentUpdate = false;
         var oldIndex = DataHandler.getPathParamsData("index");
-        var oldPid = DataHandler.getPathParamsData("pid");
-        var oldId1 = DataHandler.getPathParamsData("id1");
-        var oldPageId = DataHandler.getPathParamsData("pageId");
-        var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
+        var oldIndexPageName = DataHandler.getPathParamsData("pageName");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
             DataHandler.HandleComponentChange("pageName", prevPageName, currentPageName);
@@ -161,18 +158,9 @@ class App extends React.Component {
                 if ($S.isStringV2(oldIndex) && $S.isStringV2(params.index) && oldIndex !== params.index) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("index", oldIndex, params.index);
-                } else if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
+                } else if ($S.isStringV2(oldIndexPageName) && $S.isStringV2(params.pageName) && oldIndexPageName !== params.pageName) {
                     isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pid", oldPid, params.pid);
-                } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("id1");
-                } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pageId", oldPageId, params.pageId);
-                } else if ($S.isStringV2(oldViewPageName) && $S.isStringV2(params.viewPageName) && oldViewPageName !== params.viewPageName) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("viewPageName", oldViewPageName, params.viewPageName);
+                    DataHandler.HandleComponentChange("indexPageName", oldIndexPageName, params.pageName);
                 }
             }
         }

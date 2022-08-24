@@ -128,6 +128,7 @@ TrackPlan.extend({
         var tableName = DataHandler.getAppData("trackDataTable", "");
         var trackData = [];
         var tableData, i, j, rowData, colData, rowIndex, colIndex, pathMapping;
+        var lastColIndex = -1, lastRowIndex = -1;
         if ($S.isStringV2(tableName)) {
             tableData = DataHandlerV2.getTableData(tableName);
             if ($S.isArray(tableData)) {
@@ -138,9 +139,19 @@ TrackPlan.extend({
                     rowIndex = tableData[i]["rowIndex"];
                     colIndex = tableData[i]["colIndex"];
                     pathMapping = tableData[i]["path-mapping"];
-                    if ($S.isNumeric(rowIndex) && $S.isNumeric(colIndex)) {
+                    if ($S.isNumeric(rowIndex)) {
                         rowIndex = Math.trunc(rowIndex * 1);
-                        colIndex = Math.trunc(colIndex * 1);
+                        if (colIndex === "auto") {
+                            if (lastRowIndex === rowIndex) {
+                                colIndex = lastColIndex+1;
+                            } else {
+                                colIndex = 0;
+                            }
+                        } else if ($S.isNumeric(colIndex)) {
+                            colIndex = Math.trunc(colIndex * 1);
+                        }
+                        lastRowIndex = rowIndex;
+                        lastColIndex = colIndex;
                         if (rowIndex >= trackData.length) {
                             for (j=0; j<rowIndex+1; j++) {
                                 trackData.push([]);
