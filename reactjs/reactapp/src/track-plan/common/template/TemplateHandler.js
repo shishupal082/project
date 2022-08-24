@@ -194,6 +194,9 @@ TemplateHandler.extend({
                 case "track-plan":
                     renderField = TrackPlan.generateTrackPlanPage(pageName, renderData);
                 break;
+                case Config.edit_image:
+                    renderField = TrackPlan.generateTrackPlanEditPage(pageName, renderData);
+                break;
                 case "noMatch":
                 default:
                     renderField = this.getTemplate("noMatch");

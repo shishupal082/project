@@ -328,6 +328,19 @@ DataHandlerV2.extend({
         }
         return tableData;
     },
+    updateTableData: function(tableName, tableData) {
+        if (!$S.isStringV2(tableName) || !$S.isArray(tableData)) {
+            return false;
+        }
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName])) {
+            if ($S.isArray(dbViewData[tableName].tableData)) {
+                dbViewData[tableName].tableData = tableData;
+            }
+        }
+        DataHandler.setData("dbViewData", dbViewData);
+        return true;
+    },
     getTableDataByAttr: function(tableName, attrName, attrValue) {
         var attr = {};
         attr[attrName] = attrValue;

@@ -100,11 +100,7 @@ class App extends React.Component {
     onChange(e) {
         var name = e.currentTarget.name;
         var value = e.currentTarget.value;
-        if (name === Config.fieldsKey.UploadFile) {
-            DataHandler.OnFileUploadChange(this.appStateCallback, this.appDataCallback, name, e.currentTarget.files[0]);
-        } else {
-            DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
-        }
+        DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
     }
     onFormSubmit(e) {
         e.preventDefault();
@@ -125,9 +121,9 @@ class App extends React.Component {
         if (name === "list1-select") {
             this.gotoPageV2(DataHandler.getLinkByIndex(value));
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, name, value);
-        // } else if (name === "list2-select") {
-            // this.gotoPage(value);
-            // DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
+        } else if (name === "list2-select") {
+            this.gotoPageV2(DataHandler.getPageUrlByPageName(value));
+            DataHandler.OnList2Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (name === "list3-select") {
             DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (filterNames.indexOf(name) >= 0) {

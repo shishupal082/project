@@ -1,10 +1,10 @@
 {   
     "enableReloadButton": true,
     "list1RequiredPages": ["projectPage"],
-    "enabledPages": ["track-plan"],
+    "enabledPages": ["track-plan", "edit-image"],
     "trackDataTable": "table1",
     "dbTableDataIndex": {
-        "table1":      ["tableName", "rowIndex", "colIndex", "tag", "src", "path-mapping", "text", "colSpan"]
+        "table1":      ["tableName", "rowIndex", "colIndex", "tag", "filename", "path-mapping", "text", "colSpan"]
     },
     "dimension": [50,50],
     "cell-size": [20,20],

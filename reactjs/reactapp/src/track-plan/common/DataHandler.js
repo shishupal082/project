@@ -161,8 +161,8 @@ DataHandler.extend({
     getLinkByIndex: function(index) {
         var pageName = this.getPathParamsData("pageName", "");
         var link = CommonConfig.basepathname  + "/" + index;
-        if (pageName === Config.track_plan) {
-            link += "/" + Config.track_plan;
+        if ($S.isStringV2(pageName)) {
+            link += "/" + pageName;
         }
         return link;
     },
@@ -381,7 +381,7 @@ DataHandler.extend({
         });
         // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
+    OnList1Change: function(appStateCallback, appDataCallback, name, list1Id) {
     },
     OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
     },
@@ -461,8 +461,16 @@ DataHandler.extend({
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnInputChange: function(appStateCallback, appDataCallback, name, value) {
-        this.setFieldsData(name, value);
-        CommonDataHandler.setFieldsData(name, value);
+        var index = [], rowIndex, colIndex;
+        if ($S.isStringV2(name)) {
+            index = name.split("-");
+            if (index.length === 2 && $S.isNumeric(index[0]) && $S.isNumeric(index[1])) {
+                rowIndex = index[0];
+                colIndex = index[1];
+                TrackPlan.updateTrackData(rowIndex, colIndex, value);
+            }
+        }
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     }
 });
 DataHandler.extend({
@@ -480,7 +488,10 @@ DataHandler.extend({
             case "home":
                 renderData = [];
             break;
-            case "track-plan":
+            case Config.track_plan:
+                renderData = TrackPlan.getTrackPlanData(pageName);
+            break;
+            case Config.edit_image:
                 renderData = TrackPlan.getTrackPlanData(pageName);
             break;
             default:
@@ -494,14 +505,17 @@ DataHandler.extend({
         var renderData = null;
         var appHeading = null;
         var list1Data = null;
+        var list2Data = null;
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
+        var viewPageName = null;
         var pageName = DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var currentList2Id = null;
         if (pageName === Config.projectPage) {
             pageName = DataHandler.getPathParamsData("pageName", "");
+            currentList2Id = pageName;
         }
         if (dataLoadStatus) {
             renderData = this.getRenderData(pageName, pageId, viewPageName);
@@ -510,6 +524,7 @@ DataHandler.extend({
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
         if (dataLoadStatus) {
             list1Data = DataHandlerV2.getList1Data();
+            list2Data = DataHandlerV2.getList2Data();
             list3Data = DataHandlerV2.getList3Data();
             if (DataHandlerV2.isFilterEnabled(pageName, pageId, viewPageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
@@ -521,6 +536,8 @@ DataHandler.extend({
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
         appDataCallback("list3Data", list3Data);
+        appDataCallback("list2Data", list2Data);
+        appDataCallback("currentList2Id", currentList2Id);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));
         appDataCallback("appHeading", appHeading);
