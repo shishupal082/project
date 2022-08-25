@@ -21,6 +21,7 @@ class App extends React.Component {
         this.appData = {
             "addContainerClass": true,
             "firstTimeDataLoadStatus": "completed",
+            "appComponentClassName": "",
 
             "list1Text": "Select...",
             "list1Data": [],
@@ -42,9 +43,9 @@ class App extends React.Component {
             "dateSelection": [],
             "dateSelectionRequiredPages": [],
             "enableReloadButton": false,
-            "enableFooter": false,
-            "enableToggleButton": false,
-
+            "enableFooter": true,
+            "enableToggleButton": true,
+            "enableFooterV2": true,
             "filterOptions": []
         };
         this.onClick = this.onClick.bind(this);
@@ -90,6 +91,9 @@ class App extends React.Component {
             DataHandler.OnDateSelectClick(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "sortable") {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
+        } else if (name === "footer-filter-toggle") {
+            AppHandler.TrackEvent("ToggleClick");
+            AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.enableFooterV2);
         } else if (name === "view_file.unique_id") {
             DataHandler.ViewFileClick(this.appStateCallback, this.appDataCallback, name, value);
         } else {

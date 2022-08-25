@@ -5,7 +5,7 @@
     "enabledPages": ["track-plan", "edit-image"],
     "trackDataTable": "table1",
     "dbTableDataIndex": {
-        "table1":      ["tableName", "rowIndex", "colIndex", "tag", "filename", "path-mapping", "text", "colSpan", "tdClass"]
+        "table1":      ["tableName", "rowIndex", "colIndex", "tag", "filename", "path-mapping", "textTop", "textBottom", "colSpan", "tdClass"]
     },
     "dimension": [50,50],
     "cell-size": [20,20],

@@ -39,7 +39,7 @@ TrackPlan.extend({
                 value = "";
             }
             inputField.push({"tag": "inputV2", "name": rowIndex+"-"+colIndex, className: "track-plan-input", "value": value});
-            inputField.push({"tag": "span", "text": rowIndex+","+colIndex});
+            inputField.push({"tag": "div", "text": rowIndex+","+colIndex});
         }
         return inputField;
     }
@@ -59,16 +59,20 @@ TrackPlan.extend({
         var tdField = [];
         if ($S.isObject(cell)) {
             if ($S.isObject(cell["text"])) {
+                if ($S.isStringV2(cell["textTop"])) {
+                    tdField.push({"tag": "span", "className": "img-text img-text-top", "text": cell["textTop"]});
+                }
                 if (cell["text"]["tag"] === "img") {
                     if (cell["text"]["filename"]) {
                         cell["text"]["src"] = this._getImgPath(cell["path-mapping"], cell["text"]["filename"]);
+                        tdField.push(cell["text"]);
                     }
                 }
-                if ($S.isStringV2(cell["text"]["text"])) {
-                    tdField.push(cell["text"], {"tag": "span", "className": "img-text", "text": cell["text"]["text"]});
-                    tdField.push(this._getInputField(pageName, cell, track, rowIndex, colIndex));
-                    return tdField;
+                tdField.push(this._getInputField(pageName, cell, track, rowIndex, colIndex));
+                if ($S.isStringV2(cell["textBottom"])) {
+                    tdField.push({"tag": "span", "className": "img-text img-text-bottom", "text": cell["textBottom"]});
                 }
+                return tdField;
             }
             tdField.push(cell["text"]);
             tdField.push(this._getInputField(pageName, cell, track, rowIndex, colIndex));
@@ -121,7 +125,7 @@ TrackPlan.extend({
         if (preCheck) {
             table = {"tag": "table.tbody", "text": []};
             for (i=0; i<dimension[0]; i++) {
-                row = {"tag": "tr", "className": "track-plan-tr r-" + i, "text": []};
+                row = {"tag": "tr", "className": pageName + " track-plan-tr r-" + i, "text": []};
                 for (j=0;j<dimension[1]; j++) {
                     cell = null;
                     if ($S.isArray(track) && i < track.length) {
@@ -225,7 +229,7 @@ TrackPlan.extend({
                             colData = {};
                         }
                         colData = Object.assign(colData, tableData[i]);
-                        colData["text"] = {"tag": "img", "filename": tableData[i]["filename"], "text": tableData[i]["text"]};
+                        colData["text"] = {"tag": "img", "filename": tableData[i]["filename"]};
                         trackData[rowIndex][colIndex] = colData;
                     }
                 }

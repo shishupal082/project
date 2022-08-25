@@ -10,28 +10,51 @@
     padding: 0;
     position: relative;
 }
+.display-border .track-plan-td {
+    border: 1px solid #00f;
+}
 .track-plan-td span,
 .track-plan-td input {
     font-family: system-ui;
 }
-.track-plan-td.text-bottom .img-text {
-    bottom: 0;
+.track-plan .img-text {
+    position: absolute;
+    z-index: 1;
+    font-size: 10px;
 }
-.track-plan-td.text-center-top .img-text {
-    bottom: 8px;
+.edit-image .img-text {
+    display: block;
+}
+.track-plan .img-text-bottom {
+    bottom: 0;
+    left: 0;
+}
+.track-plan .img-text-top {
+    left: 0;
+}
+.track-plan .track-plan-td.img-text-right .img-text {
+    right: 0px;
+    left: auto;
+}
+.track-plan .track-plan-td.img-text-center-top .img-text {
+    bottom: 12px;
 }
 .edit-image.track-plan-td {
     border: 1px solid #00f;
 }
 .track-plan-input {
+    display: block;
     width: 32px;
     font-size: 10px;
 }
 .font-size-8px {
     font-size: 8px;
 }
-.font-size-10px {
+.font-size-10px .img-text {
     font-size: 10px;
+}
+.font-size-16px .img-text {
+    font-size: 16px;
 }
 .w-10-px {
     width: 10px;
@@ -45,8 +68,4 @@
 .h-20-px {
     height: 20px;
 }
-.img-text {
-    position: absolute;
-    z-index: 1;
-    left: 0;
-}
+

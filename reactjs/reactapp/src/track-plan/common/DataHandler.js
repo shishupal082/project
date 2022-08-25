@@ -546,6 +546,7 @@ DataHandler.extend({
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));
+        appDataCallback("appComponentClassName", DataHandler.getAppData("appComponentClassName", ""));
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", [renderFieldRow, {"tag": "div.center", "text": $S.clone(Config.footerLinkJsonAfterLogin)}]);
 
