@@ -1,4 +1,5 @@
 {
+    
     "list1Data": [
         {
             "name": "Track Plan App",
@@ -15,7 +16,8 @@
             ]
         },
         {
-            "name": "MAEL SSDAC tentative circuit for L1T2XT",
+            "heading": "MAEL SSDAC tentative circuit for L1T2XT",
+            "name": "L1T2XT MAEL-1",
             "metaDataApi": [
                 "/app/track-plan/json/meta-data/metaData.json"
             ],
@@ -24,9 +26,43 @@
                     "tableName": "table1",
                     "wordBreak": ",",
                     "singleLineComment": "//",
-                    "apis": ["/pvt/app-data/track-plan/csv/mael-bitmap.csv"]
+                    "apis": ["/pvt/app-data/track-plan/csv/mael-bitmap-2.csv"]
+                }
+            ]
+        },
+        {
+            "heading": "MAEL SSDAC tentative circuit for L1T2XT",
+            "name": "L1T2XT MAEL-2",
+            "metaDataApi": [
+                "/app/track-plan/json/meta-data/metaData.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "wordBreak": ",",
+                    "singleLineComment": "//",
+                    "apis": ["/pvt/app-data/track-plan/csv/mael-bitmap-3.csv"]
+                }
+            ]
+        },
+        {
+            "name": "Auto reset CEL",
+            "metaDataApi": [
+                "/app/track-plan/json/meta-data/metaData.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "wordBreak": ",",
+                    "singleLineComment": "//",
+                    "apis": ["/pvt/app-data/track-plan/csv/auto-reset-cel.csv"]
                 }
             ]
         }
-    ]
+    ],
+    "metaData": {
+        "path-mapping": {
+            "bitmap-2": "/app/track-plan/static/bitmap-2/"
+        }
+    }
 }

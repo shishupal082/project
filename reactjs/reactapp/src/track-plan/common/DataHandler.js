@@ -474,7 +474,7 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getRenderData: function(pageName, pageId, viewPageName) {
+    getRenderData: function(pageName) {
         var renderData;
         // var currentAppData = this.getCurrentAppData();
         // var metaData = CommonDataHandler.getData("metaData");
@@ -507,37 +507,43 @@ DataHandler.extend({
         var list1Data = null;
         var list2Data = null;
         var list3Data = null;
+        var list1RequiredPages, list2RequiredPages;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
-        var viewPageName = null;
         var pageName = DataHandler.getData("pageName", "");
-        var pageId = DataHandler.getPathParamsData("pageId", "");
+        var pagePathName = DataHandler.getPathParamsData("pageName", "");
+        var finalPageName = DataHandlerV2.getFinalPageName();
         var currentList2Id = null;
         if (pageName === Config.projectPage) {
-            pageName = DataHandler.getPathParamsData("pageName", "");
-            currentList2Id = pageName;
+            currentList2Id = pagePathName;
         }
         if (dataLoadStatus) {
-            renderData = this.getRenderData(pageName, pageId, viewPageName);
+            renderData = this.getRenderData(finalPageName);
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
-        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, finalPageName);
         if (dataLoadStatus) {
-            list1Data = DataHandlerV2.getList1Data();
-            list2Data = DataHandlerV2.getList2Data();
+            list1RequiredPages = DataHandler.getAppData("list1RequiredPages", []);
+            if ($S.isArray(list1RequiredPages) && list1RequiredPages.indexOf(pageName) >= 0) {
+                list1Data = DataHandlerV2.getList1Data();
+            }
+            list2RequiredPages = DataHandler.getAppData("list2RequiredPages", []);
+            if ($S.isArray(list2RequiredPages) && list2RequiredPages.indexOf(pageName) >= 0) {
+                list2Data = DataHandlerV2.getList2Data();
+            }
             list3Data = DataHandlerV2.getList3Data();
-            if (DataHandlerV2.isFilterEnabled(pageName, pageId, viewPageName)) {
+            if (DataHandlerV2.isFilterEnabled(finalPageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
             }
-            if (DataHandlerV2.isDateSelectionEnable(pageName, pageId, viewPageName)) {
+            if (DataHandlerV2.isDateSelectionEnable(finalPageName)) {
                 dateSelectionRequiredPages.push(pageName);
             }
         }
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
-        appDataCallback("list3Data", list3Data);
         appDataCallback("list2Data", list2Data);
         appDataCallback("currentList2Id", currentList2Id);
+        appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));
         appDataCallback("appHeading", appHeading);

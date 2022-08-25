@@ -2,13 +2,13 @@ import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
 import DataHandlerV2 from "./DataHandlerV2";
+import CommonConfig from "../../common/app/common/CommonConfig";
 // // import FormHandler from "./forms/FormHandler";
 // import TemplateHandler from "./template/TemplateHandler";
 // import ApiHandler from "./api/ApiHandler";
 
 // // import Api from "../../common/Api";
 // import AppHandler from "../../common/app/common/AppHandler";
-// import CommonConfig from "../../common/app/common/CommonConfig";
 // import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 // import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
@@ -39,6 +39,7 @@ TrackPlan.extend({
                 value = "";
             }
             inputField.push({"tag": "inputV2", "name": rowIndex+"-"+colIndex, className: "track-plan-input", "value": value});
+            inputField.push({"tag": "span", "text": rowIndex+","+colIndex});
         }
         return inputField;
     }
@@ -50,58 +51,50 @@ TrackPlan.extend({
             return filename;
         }
         if ($S.isObject(pathMappingObj) && $S.isStringV2(pathMappingObj[pathMapping])) {
-            return pathMappingObj[pathMapping] + filename;
+            return CommonConfig.baseApi + pathMappingObj[pathMapping] + filename;
         }
         return filename;
     },
-    _getTdField: function(pageName, track, defaultTrack, rowIndex, colIndex) {
+    _getTdField: function(pageName, cell, track, defaultTrack, rowIndex, colIndex) {
         var tdField = [];
-        if ($S.isArray(track) && rowIndex < track.length) {
-            if ($S.isArray(track[rowIndex]) && colIndex < track[rowIndex].length) {
-                if ($S.isObject(track[rowIndex][colIndex])) {
-                    if ($S.isObject(track[rowIndex][colIndex]["text"])) {
-                        if (track[rowIndex][colIndex]["text"]["tag"] === "img") {
-                            if (track[rowIndex][colIndex]["text"]["filename"]) {
-                                track[rowIndex][colIndex]["text"]["src"] = this._getImgPath(track[rowIndex][colIndex]["path-mapping"], track[rowIndex][colIndex]["text"]["filename"]);
-                            }
-                        }
-                        if ($S.isStringV2(track[rowIndex][colIndex]["text"]["text"])) {
-                            tdField.push(track[rowIndex][colIndex]["text"], {"tag": "span", "className": "img-text", "text": track[rowIndex][colIndex]["text"]["text"]});
-                            tdField.push(this._getInputField(pageName, track[rowIndex][colIndex], track, rowIndex, colIndex));
-                            return tdField;
-                        }
+        if ($S.isObject(cell)) {
+            if ($S.isObject(cell["text"])) {
+                if (cell["text"]["tag"] === "img") {
+                    if (cell["text"]["filename"]) {
+                        cell["text"]["src"] = this._getImgPath(cell["path-mapping"], cell["text"]["filename"]);
                     }
-                    tdField.push(track[rowIndex][colIndex]["text"]);
-                    tdField.push(this._getInputField(pageName, track[rowIndex][colIndex], track, rowIndex, colIndex));
+                }
+                if ($S.isStringV2(cell["text"]["text"])) {
+                    tdField.push(cell["text"], {"tag": "span", "className": "img-text", "text": cell["text"]["text"]});
+                    tdField.push(this._getInputField(pageName, cell, track, rowIndex, colIndex));
                     return tdField;
                 }
             }
+            tdField.push(cell["text"]);
+            tdField.push(this._getInputField(pageName, cell, track, rowIndex, colIndex));
+            return tdField;
         }
         tdField.push(defaultTrack);
         tdField.push(this._getInputField(pageName, null, track, rowIndex, colIndex));
         return tdField;
     },
-    _getTdClass: function(pageName, rowIndex, colIndex, width, height) {
-        var tdClass = pageName + " track-plan-td r-" + rowIndex + " c-" + colIndex + " w-" + width + "-px h-" + height + "-px";
+    _getTdClass: function(pageName, cell, rowIndex, colIndex, width, height) {
+        var tdClass = pageName;
+        if ($S.isObject(cell) && $S.isStringV2(cell.tdClass)) {
+            tdClass += " " + cell.tdClass;
+        }
+        tdClass += " track-plan-td r-" + rowIndex + " c-" + colIndex + " w-" + width + "-px h-" + height + "-px";
         return tdClass;
     },
-    _getRowSpan: function(track, rowIndex, colIndex) {
-        if ($S.isArray(track) && rowIndex < track.length) {
-            if ($S.isArray(track[rowIndex]) && colIndex < track[rowIndex].length) {
-                if ($S.isObject(track[rowIndex][colIndex]) && $S.isNumeric(track[rowIndex][colIndex]["rowSpan"])) {
-                    return track[rowIndex][colIndex]["rowSpan"];
-                }
-            }
+    _getRowSpan: function(cell, track, rowIndex, colIndex) {
+        if ($S.isObject(cell) && $S.isNumeric(cell["rowSpan"])) {
+            return cell["rowSpan"];
         }
         return 1;
     },
-    _getColSpan: function(track, rowIndex, colIndex) {
-        if ($S.isArray(track) && rowIndex < track.length) {
-            if ($S.isArray(track[rowIndex]) && colIndex < track[rowIndex].length) {
-                if ($S.isObject(track[rowIndex][colIndex]) && $S.isNumeric(track[rowIndex][colIndex]["colSpan"])) {
-                    return track[rowIndex][colIndex]["colSpan"];
-                }
-            }
+    _getColSpan: function(cell, track, rowIndex, colIndex) {
+        if ($S.isObject(cell) && $S.isNumeric(cell["colSpan"])) {
+            return cell["colSpan"];
         }
         return 1;
     },
@@ -113,7 +106,7 @@ TrackPlan.extend({
         var defaultTrack = DataHandler.getAppData("defaultCell", {});
         
         var preCheck = false;
-        var table, row, col, i, j;
+        var table, row, col, i, j, cell;
         if ($S.isArray(dimension) && $S.isArray(cellSize) && dimension.length === 2 && cellSize.length === 2) {
             if ($S.isNumber(dimension[0]) && $S.isNumber(dimension[1]) && $S.isNumber(cellSize[0]) && $S.isNumber(cellSize[1])) {
                 if (dimension[0] > 0 && dimension[1] > 0 && cellSize[0] > 0 && cellSize[1] > 0) {
@@ -130,7 +123,15 @@ TrackPlan.extend({
             for (i=0; i<dimension[0]; i++) {
                 row = {"tag": "tr", "className": "track-plan-tr r-" + i, "text": []};
                 for (j=0;j<dimension[1]; j++) {
-                    col = {"tag": "td", rowSpan: this._getRowSpan(track, i, j), colSpan: this._getColSpan(track, i, j), "className": this._getTdClass(pageName, i, j, cellSize[0], cellSize[1]), "text": this._getTdField(pageName, track, defaultTrack, i, j)};
+                    cell = null;
+                    if ($S.isArray(track) && i < track.length) {
+                        if ($S.isArray(track[i]) && j < track[i].length) {
+                            if ($S.isObject(track[i][j])) {
+                                cell = track[i][j];
+                            }
+                        }
+                    }
+                    col = {"tag": "td", rowSpan: this._getRowSpan(cell, track, i, j), colSpan: this._getColSpan(cell, track, i, j), "className": this._getTdClass(pageName, cell, i, j, cellSize[0], cellSize[1]), "text": this._getTdField(pageName, cell, track, defaultTrack, i, j)};
                     row.text.push(col);
                 }
                 table.text.push(row);
@@ -140,38 +141,7 @@ TrackPlan.extend({
         return renderData;
     },
     generateTrackPlanEditPage: function(pageName) {
-        var renderData = [];
-        var dimension = DataHandler.getAppData("dimension", []);
-        var cellSize = DataHandler.getAppData("cell-size", []);
-        var track = this.getTrackData();
-        var defaultTrack = DataHandler.getAppData("defaultCell", {});
-
-        var preCheck = false;
-        var table, row, col, i, j;
-        if ($S.isArray(dimension) && $S.isArray(cellSize) && dimension.length === 2 && cellSize.length === 2) {
-            if ($S.isNumber(dimension[0]) && $S.isNumber(dimension[1]) && $S.isNumber(cellSize[0]) && $S.isNumber(cellSize[1])) {
-                if (dimension[0] > 0 && dimension[1] > 0 && cellSize[0] > 0 && cellSize[1] > 0) {
-                    dimension[0] = Math.trunc(dimension[0]);
-                    dimension[1] = Math.trunc(dimension[1]);
-                    cellSize[0] = Math.trunc(cellSize[0]);
-                    cellSize[1] = Math.trunc(cellSize[1]);
-                    preCheck = true;
-                }
-            }
-        }
-        if (preCheck) {
-            table = {"tag": "table.tbody", "text": []};
-            for (i=0; i<dimension[0]; i++) {
-                row = {"tag": "tr", "className": "track-plan-tr r-" + i, "text": []};
-                for (j=0;j<dimension[1]; j++) {
-                    col = {"tag": "td", rowSpan: this._getRowSpan(track, i, j), colSpan: this._getColSpan(track, i, j), "className": this._getTdClass(pageName, i, j, cellSize[0], cellSize[1]), "text": this._getTdField(pageName, track, defaultTrack, i, j)};
-                    row.text.push(col);
-                }
-                table.text.push(row);
-            }
-            renderData.push(table);
-        }
-        return renderData;
+        return this.getTrackPlanData(pageName);
     },
 });
 TrackPlan.extend({
@@ -202,7 +172,7 @@ TrackPlan.extend({
     getTrackData: function() {
         var tableName = DataHandler.getAppData("trackDataTable", "");
         var trackData = [];
-        var tableData, i, j, rowData, colData, rowIndex, colIndex, pathMapping;
+        var tableData, i, j, rowData, colData, rowIndex, colIndex;
         var lastColIndex = -1, lastRowIndex = -1;
         if ($S.isStringV2(tableName)) {
             tableData = DataHandlerV2.getTableData(tableName);
@@ -213,9 +183,18 @@ TrackPlan.extend({
                     }
                     rowIndex = tableData[i]["rowIndex"];
                     colIndex = tableData[i]["colIndex"];
-                    pathMapping = tableData[i]["path-mapping"];
-                    if ($S.isNumeric(rowIndex)) {
-                        rowIndex = Math.trunc(rowIndex * 1);
+                    if ($S.isStringV2(rowIndex)) {
+                        if (rowIndex === "auto") {
+                            if (lastRowIndex >= 0) {
+                                rowIndex = lastRowIndex;
+                            } else {
+                                rowIndex = 0;
+                            }
+                        } else if ($S.isNumeric(rowIndex)) {
+                            rowIndex = Math.trunc(rowIndex * 1);
+                        } else {
+                            continue;
+                        }
                         if (colIndex === "auto") {
                             if (lastRowIndex === rowIndex) {
                                 colIndex = lastColIndex+1;
@@ -245,9 +224,7 @@ TrackPlan.extend({
                         if (!$S.isObject(colData)) {
                             colData = {};
                         }
-                        colData["path-mapping"] = pathMapping;
-                        colData["rowSpan"] = tableData[i]["rowSpan"];
-                        colData["colSpan"] = tableData[i]["colSpan"];
+                        colData = Object.assign(colData, tableData[i]);
                         colData["text"] = {"tag": "img", "filename": tableData[i]["filename"], "text": tableData[i]["text"]};
                         trackData[rowIndex][colIndex] = colData;
                     }

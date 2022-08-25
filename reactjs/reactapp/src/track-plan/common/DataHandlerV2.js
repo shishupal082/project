@@ -32,12 +32,7 @@ $S.extendObject(DataHandlerV2);
 DataHandlerV2.extend({
     getList1Data: function() {
         var appControlData = CommonDataHandler.getData("appControlData", []);
-        var pageName = DataHandler.getData("pageName", "");
-        var list1RequiredPages = DataHandler.getAppData("list1RequiredPages", []);
-        if ($S.isArray(list1RequiredPages) && list1RequiredPages.indexOf(pageName) >= 0) {
-            return appControlData;
-        }
-        return [];
+        return appControlData;
     },
     getList2Data: function() {
         var enabledPages = DataHandler.getAppData("enabledPages");
@@ -110,6 +105,14 @@ DataHandlerV2.extend({
             }
         }
         return list3Data;
+    },
+    getFinalPageName: function() {
+        var pageName = DataHandler.getData("pageName", "");
+        var pagePathName = DataHandler.getPathParamsData("pageName", "");
+        if (pageName === Config.projectPage) {
+            return pagePathName;
+        }
+        return pageName;
     },
     generateFilterOptions: function(pageName, dbViewData, filterKeyMapping) {
         var currentAppData = DataHandler.getCurrentAppData();
@@ -469,7 +472,7 @@ DataHandlerV2.extend({
         }
         return true;
     },
-    isFilterEnabled: function(pageName, pageId, viewPageName) {
+    isFilterEnabled: function(pageName) {
         var status = false;
         if ([Config.track_plan].indexOf(pageName) >= 0) {
             status = true;
@@ -496,7 +499,7 @@ DataHandlerV2.extend({
         }
         return dateParameterField;
     },
-    isDateSelectionEnable: function(pageName, pageId, viewPageName) {
+    isDateSelectionEnable: function(pageName) {
         var status, dateParameterField, currentList3Data;
         if ([Config.home, Config.track_plan].indexOf(pageName) < 0) {
             status = false;
