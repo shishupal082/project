@@ -1,4 +1,4 @@
-import $$$ from '../../../interface/global';
+import $$$ from "../../../interface/global";
 import $S from "../../../interface/stack.js";
 
 var CommonConfig = {requestId: $S.getRequestId()};
@@ -6,18 +6,26 @@ var CommonConfig = {requestId: $S.getRequestId()};
 CommonConfig.navigator = $$$.navigator;
 CommonConfig.gtag = $$$.gtag;
 CommonConfig.JQ = $$$.JQ;
-CommonConfig.forceLogin = $$$.forceLogin;
-CommonConfig.appControlDataPath = $$$.appControlDataPath;
-CommonConfig.validAppControl = $$$.validAppControl;
+CommonConfig.forceLogin = $$$.forceLogin;//boolean = true
+CommonConfig.projectHeading = $$$.projectHeading;//String = "Project Tracking"
+CommonConfig.appControlDataPath = $$$.appControlDataPath;//String = "/project-tracking/json/"
+CommonConfig.validAppControl = $$$.validAppControl;//["appControl1", "appControl2"]
+/**
+addBasepathLinkName = [
+    "pageHeading:viewPageName.dashboardLink",
+    "pageHeading:viewPageName.displaySupplyStatusLink",
+    "pageHeading:viewPageName.contingencyStatusLink",
+    "pageHeading:viewPageName.displayWorkStatus",
+    "pageHeading:viewPageName.projectComment",
+    "pageHeading:pageId.displayUploadedFiles",
+    "pageFooter:pageName.manageFiles"
+]
+*/
 CommonConfig.addBasepathLinkName = $$$.addBasepathLinkName;
-
-
 
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
 var appVersion = $$$.appVersion;
-
-
 
 CommonConfig.baseApi = baseApi;
 CommonConfig.basepathname = basepathname;
@@ -25,9 +33,10 @@ CommonConfig.appVersion = appVersion;
 
 
 var appControlApi = $$$.appControlApi;
-
-
-
+/**
+Dynamic appControlApi
+appControlApi = appControlDataPath + validAppControl[i];
+*/
 
 CommonConfig.dateSelection = [
     {"name": "Daily", "value": "daily"},

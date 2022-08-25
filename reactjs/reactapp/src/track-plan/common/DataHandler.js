@@ -245,7 +245,7 @@ DataHandler.extend({
     },
     getHeadingText: function() {
         var currentAppData = this.getCurrentAppData();
-        return AppHandler.getHeadingText(currentAppData, "App Heading");
+        return AppHandler.getHeadingText(currentAppData, CommonConfig.projectHeading);
     },
     applyResetFilter: function() {
         var filterOptions = DataHandler.getData("filterOptions", []);
