@@ -10,36 +10,38 @@
     padding: 0;
     position: relative;
 }
-.display-border .track-plan-td {
-    border: 1px solid #00f;
-}
 .track-plan-td span,
 .track-plan-td input {
     font-family: system-ui;
 }
-.track-plan .img-text {
+.track-plan .img-text,
+.track-plan-v2 .img-text {
     position: absolute;
-    z-index: 1;
     font-size: 10px;
 }
 .edit-image .img-text {
     display: block;
 }
-.track-plan .img-text-bottom {
+.track-plan .img-text-bottom,
+.track-plan-v2 .img-text-bottom {
     bottom: 0;
     left: 0;
 }
-.track-plan .img-text-top {
+.track-plan .img-text-top,
+.track-plan-v2 .img-text-top {
     left: 0;
 }
-.track-plan .track-plan-td.img-text-right .img-text {
+.track-plan .track-plan-td.img-text-right .img-text,
+.track-plan-v2 .track-plan-td.img-text-right .img-text {
     right: 0px;
     left: auto;
 }
-.track-plan .track-plan-td.img-text-center-top .img-text {
+.track-plan .track-plan-td.img-text-center-top .img-text,
+.track-plan-v2 .track-plan-td.img-text-center-top .img-text {
     bottom: 12px;
 }
-.edit-image.track-plan-td {
+.edit-image .track-plan-td,
+.track-plan-v2 .track-plan-td {
     border: 1px solid #00f;
 }
 .track-plan-input {

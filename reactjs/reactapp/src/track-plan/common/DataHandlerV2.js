@@ -85,9 +85,6 @@ DataHandlerV2.extend({
         return list2Data;
     },
     getList3Data: function() {
-        // var pageName = DataHandler.getData("pageName", "");
-        // var pageId = DataHandler.getPathParamsData("pageId", "");
-        // var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         var key = "";
         if (!$S.isStringV2(key)) {
             return [];
@@ -106,13 +103,22 @@ DataHandlerV2.extend({
         }
         return list3Data;
     },
-    getFinalPageName: function() {
-        var pageName = DataHandler.getData("pageName", "");
-        var pagePathName = DataHandler.getPathParamsData("pageName", "");
+    getFinalPageName: function(pageName, pagePathName) {
         if (pageName === Config.projectPage) {
+            if (pagePathName === Config.track_plan_v2) {
+                pagePathName = Config.track_plan;
+            }
             return pagePathName;
         }
         return pageName;
+    },
+    getAppComponentClassName: function(pageName, pagePathName) {
+        var appComponentClassName = DataHandler.getAppData("appComponentClassName", "");
+        if (pageName !== Config.projectPage) {
+            return appComponentClassName;
+        }
+        appComponentClassName += " " + pagePathName;
+        return appComponentClassName;
     },
     generateFilterOptions: function(pageName, dbViewData, filterKeyMapping) {
         var currentAppData = DataHandler.getCurrentAppData();

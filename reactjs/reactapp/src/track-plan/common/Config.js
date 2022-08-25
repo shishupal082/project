@@ -56,9 +56,9 @@ Config.home = "home";
 Config.noMatch = "noMatch";
 Config.projectPage = "projectPage";
 Config.track_plan = "track-plan";
+Config.track_plan_v2 = "track-plan-v2";
 Config.edit_image = "edit-image";
-Config.edit_text = "edit-text";
-Config.validPages = [Config.track_plan, Config.edit_image, Config.edit_text];
+Config.validPages = [Config.track_plan, Config.track_plan_v2, Config.edit_image];
 
 Config.dateSelection = [
     {"name": "Daily", "value": "daily"},

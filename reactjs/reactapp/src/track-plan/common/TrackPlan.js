@@ -83,9 +83,9 @@ TrackPlan.extend({
         return tdField;
     },
     _getTdClass: function(pageName, cell, rowIndex, colIndex, width, height) {
-        var tdClass = pageName;
+        var tdClass = "";
         if ($S.isObject(cell) && $S.isStringV2(cell.tdClass)) {
-            tdClass += " " + cell.tdClass;
+            tdClass = cell.tdClass;
         }
         tdClass += " track-plan-td r-" + rowIndex + " c-" + colIndex + " w-" + width + "-px h-" + height + "-px";
         return tdClass;
@@ -125,7 +125,7 @@ TrackPlan.extend({
         if (preCheck) {
             table = {"tag": "table.tbody", "text": []};
             for (i=0; i<dimension[0]; i++) {
-                row = {"tag": "tr", "className": pageName + " track-plan-tr r-" + i, "text": []};
+                row = {"tag": "tr", "className": "track-plan-tr r-" + i, "text": []};
                 for (j=0;j<dimension[1]; j++) {
                     cell = null;
                     if ($S.isArray(track) && i < track.length) {

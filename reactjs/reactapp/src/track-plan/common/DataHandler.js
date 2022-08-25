@@ -512,7 +512,7 @@ DataHandler.extend({
         var dateSelectionRequiredPages = [];
         var pageName = DataHandler.getData("pageName", "");
         var pagePathName = DataHandler.getPathParamsData("pageName", "");
-        var finalPageName = DataHandlerV2.getFinalPageName();
+        var finalPageName = DataHandlerV2.getFinalPageName(pageName, pagePathName);
         var currentList2Id = null;
         if (pageName === Config.projectPage) {
             currentList2Id = pagePathName;
@@ -546,7 +546,7 @@ DataHandler.extend({
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));
-        appDataCallback("appComponentClassName", DataHandler.getAppData("appComponentClassName", ""));
+        appDataCallback("appComponentClassName", DataHandlerV2.getAppComponentClassName(pageName, pagePathName));
         appDataCallback("appHeading", appHeading);
         appDataCallback("renderFieldRow", [renderFieldRow, {"tag": "div.center", "text": $S.clone(Config.footerLinkJsonAfterLogin)}]);
 

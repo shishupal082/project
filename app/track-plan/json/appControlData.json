@@ -33,7 +33,6 @@
         {
             "heading": "MAEL SSDAC tentative circuit for L1T2XT",
             "name": "L1T2XT MAEL-2",
-            "appComponentClassName": "display-border",
             "metaDataApi": [
                 "/app/track-plan/json/meta-data/metaData.json"
             ],

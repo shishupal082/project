@@ -2,7 +2,7 @@
     "enableReloadButton": true,
     "list1RequiredPages": ["projectPage"],
     "list2RequiredPages": ["projectPage"],
-    "enabledPages": ["track-plan", "edit-image"],
+    "enabledPages": ["track-plan", "edit-image", "track-plan-v2"],
     "trackDataTable": "table1",
     "dbTableDataIndex": {
         "table1":      ["tableName", "rowIndex", "colIndex", "tag", "filename", "path-mapping", "textTop", "textBottom", "colSpan", "tdClass"]
