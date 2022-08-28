@@ -1,9 +1,7 @@
-.HEADING {
+.track-plan-app-heading {
     padding-top: 20px;
 }
-.toggle-click-3 .SELECT-FILTER {
-    display: none;
-}
+.toggle-click-3 .SELECT-FILTER,
 .toggle-click-3 .after-login-link {
     display: none;
 }
@@ -55,9 +53,9 @@
     width: 32px;
     font-size: 10px;
 }
-.font-size-10px .img-text {
+.fs-10px .img-text {
     font-size: 10px;
 }
-.font-size-16px .img-text {
+.fs-16px .img-text {
     font-size: 16px;
 }

@@ -1,0 +1,137 @@
+{
+    "status": "SUCCESS",
+    "data": {
+        "appVersion":"8.0.2.5",
+        "uploadFileApiVersion":null,
+        "headingJson":[
+            {
+                "tag":"div.center.table.tbody.tr",
+                "className":"heading",
+                "text":[
+                    {
+                        "tag":"td",
+                        "text":{
+                            "tag":"img",
+                            "className":"w-40px",
+                            "src":"/assets/static/img/railwayslogo-64.png"
+                            }
+                        },
+                    {
+                        "tag":"td",
+                        "className":"text-center pl-5px",
+                        "text": [
+                            {
+                                "tag":"div",
+                                "text":"Field Report"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "afterLoginLinkJson":[
+            {
+                "tag":"div.center",
+                "text":[
+                    {
+                        "tag":"a",
+                        "href":"/app/monitorv2/0/dbview",
+                        "name":"link.app_monitor",
+                        "className":"p-5px",
+                        "text":"View Data"
+                    },
+                    {
+                        "tag":"a",
+                        "href":"/app/data-display",
+                        "name":"link.data-display",
+                        "className":"p-5px",
+                        "text":"Data Display"
+                    },
+                    {
+                        "tag":"a",
+                        "href":"/upload_file",
+                        "name":"link.upload_file",
+                        "className":"p-5px",
+                        "text":"Upload File"
+                    },
+                    {
+                        "tag":"a",
+                        "name":"link.logout",
+                        "href":"/logout",
+                        "className":"p-5px",
+                        "text":"Logout"
+                    }
+                ]
+            },
+            {
+                "tag":"div.center",
+                "text":[
+                    {
+                        "tag":"span",
+                        "text":"Login as"
+                    },
+                    {
+                        "tag":"span",
+                        "className":"","text":": "
+                    },
+                    {
+                        "tag":"b",
+                        "name":"link.loginAs",
+                        "text":""
+                    }
+                ]
+            }
+        ],
+        "pageNotFoundJson":[
+            {
+                "tag": "center.h1",
+                "text": {
+                    "tag": "span",
+                    "className": "",
+                    "name": "date",
+                    "text": "Page not found"
+                }
+            }
+        ],
+        "footerLinkJson":null,
+        "footerLinkJsonAfterLogin":[
+            {
+                "tag":"div.center",
+                "text":[
+                    {
+                        "tag":"a",
+                        "href":"/users_control",
+                        "name":"isUsersControlEnable",
+                        "className":"p-5px d-none",
+                        "text":"Users Control"
+                    },
+                    {
+                        "tag":"a",
+                        "href":"/permission_control",
+                        "name":"isDevUser",
+                        "className":"p-5px d-none",
+                        "text":"Permission Control"
+                    },
+                    {
+                        "tag":"a",
+                        "href":"/compare_control",
+                        "name":"isDevUser2",
+                        "className":"p-5px d-none",
+                        "text":"Compare Control"
+                    },
+                    {
+                        "tag":"a",
+                        "href":"/login_other_user",
+                        "name":"isLoginOtherUserEnable",
+                        "className":"p-5px d-none",
+                        "text":"Login Other Users"
+                    }
+                ]
+            }
+        ],
+        "title":"Field report",
+        "loginWithGmail":true,
+        "googleLoginClientId":"googleLoginClientId",
+        "jsonFileData":null
+    }
+}

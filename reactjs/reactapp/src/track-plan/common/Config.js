@@ -13,6 +13,7 @@ Config.tempConfig = {
         {
             "tag": "div.center.h1",
             "name": "heading-text",
+            "className": "track-plan-app-heading",
             "text": ""
         }
     ],
