@@ -12,7 +12,7 @@
     <!-- It will use nodejs to load static file -->
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/react-app.css"/>
     <link rel="stylesheet" type="text/css" href="/app/attendance/static/css/attendance-style.css"/>
 
 <?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>

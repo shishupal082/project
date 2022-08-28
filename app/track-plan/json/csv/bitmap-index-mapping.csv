@@ -2,8 +2,8 @@
 
 table1,1,0,img,0001.bmp,bitmap-2,,1C,2
 table1,auto,auto,img,0002.bmp,bitmap-2,,2C,2
-table1,auto,auto,img,0003.bmp,bitmap-2,,3L,2
-table1,auto,auto,img,0004.bmp,bitmap-2,,4R,2
+table1,auto,auto,img,0003.bmp,bitmap-2,,3L,2,img-text-right
+table1,auto,auto,img,0004.bmp,bitmap-2,4R,,2
 table1,auto,auto,img,0005.bmp,bitmap-2,5,,2
 table1,auto,auto,img,0006.bmp,bitmap-2,,6,2
 table1,auto,auto,img,0007.bmp,bitmap-2,7,,2
@@ -31,10 +31,10 @@ table1,auto,auto,img,0027.bmp,bitmap-2,,27R,2
 table1,auto,auto,img,0028.bmp,bitmap-2,,28L,2
 table1,auto,auto,img,0029.bmp,bitmap-2,29,,2,img-text-right
 table1,auto,auto,img,0030.bmp,bitmap-2,30,,2
-table1,auto,auto,img,0031.bmp,bitmap-2,31,,2
+table1,auto,auto,img,0031.bmp,bitmap-2,,31,2
 table1,auto,auto,img,0032.bmp,bitmap-2,32,,2,img-text-right
 table1,auto,auto,img,0033.bmp,bitmap-2,33,,2
-table1,auto,auto,img,0034.bmp,bitmap-2,34,,2,img-text-right
+table1,auto,auto,img,0034.bmp,bitmap-2,,34,2,img-text-right
 table1,auto,auto,img,0035.bmp,bitmap-2,35,,2
 table1,auto,auto,img,0036.bmp,bitmap-2,36,,2
 table1,auto,auto,img,0037.bmp,bitmap-2,,37,2
@@ -48,7 +48,7 @@ table1,auto,auto,img,0044.bmp,bitmap-2,44,,2
 table1,auto,auto,img,0045.bmp,bitmap-2,45,,2
 table1,auto,auto,img,0046.bmp,bitmap-2,,46,2,img-text-right
 table1,auto,auto,img,0047.bmp,bitmap-2,,47,2
-table1,auto,auto,img,0048.bmp,bitmap-2,48,,2,img-text-right
+table1,auto,auto,img,0048.bmp,bitmap-2,,48,2
 
 
 table1,7,0,img,0049.bmp,bitmap-2,49,,2

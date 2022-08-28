@@ -293,6 +293,7 @@ DataHandler.extend({
         });
     },
     setHeaderAndFooterData: function() {
+        var headingJson = DataHandler.getAppData("headingJson", []);
         var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
         var footerLinkJsonAfterLogin = DataHandler.getAppData("footerLinkJsonAfterLogin", {});
         var enabledPages = DataHandlerV2.getEnabledPages();
@@ -300,8 +301,8 @@ DataHandler.extend({
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
         DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
         CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
-        // Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
-        // Config.afterLoginLinkJson = afterLoginLinkJson;
+        Config.headingJson = headingJson;
+        Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     loadDataByAppId: function(callback) {

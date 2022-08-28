@@ -87,7 +87,7 @@ TrackPlan.extend({
         if ($S.isObject(cell) && $S.isStringV2(cell.tdClass)) {
             tdClass = cell.tdClass;
         }
-        tdClass += " track-plan-td r-" + rowIndex + " c-" + colIndex + " w-" + width + "-px h-" + height + "-px";
+        tdClass += " track-plan-td r-" + rowIndex + " c-" + colIndex + " w-" + width + "px h-" + height + "px";
         return tdClass;
     },
     _getRowSpan: function(cell, track, rowIndex, colIndex) {

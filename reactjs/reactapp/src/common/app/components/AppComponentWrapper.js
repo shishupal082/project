@@ -23,10 +23,14 @@ class AppComponentWrapper extends React.Component {
         var appComponentClassName = this.props.currentPageName;
         var pageComponentClass = "PAGE-DATA";
         var addContainerClass = this.props.data.addContainerClass;
+        var toggleClickCount = this.props.data.toggleClickCount;
         if ($S.isString(appComponentClassName)) {
             appComponentClassName += " APP-COMPONENT";
         } else {
             appComponentClassName = "APP-COMPONENT";
+        }
+        if ($S.isNumber(toggleClickCount)) {
+            appComponentClassName += " toggle-click-" + toggleClickCount;
         }
         if ($S.isObject(this.props.data) && $S.isStringV2(this.props.data.appComponentClassName)) {
             appComponentClassName += " " + this.props.data.appComponentClassName;

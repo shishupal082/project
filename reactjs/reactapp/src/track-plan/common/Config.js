@@ -9,19 +9,32 @@ var basepathname = CommonConfig.basepathname;
 Config.uploadFileInstruction = $$$.uploadFileInstruction;
 
 Config.tempConfig = {
+    "headingJson": [
+        {
+            "tag": "div.center.h1",
+            "name": "heading-text",
+            "text": ""
+        }
+    ],
     "afterLoginLinkJson": [
         {
-            "tag": "span",
+            "tag": "div.center",
+            "className":"after-login-link",
             "text": [
-                {"tag":"span","text":"Login as: "},
-                {"tag":"span.b","name":"pageHeading.username","text":""}
-            ]
-        },
-        {
-            "tag": "span",
-            "text": [
-                {"tag":"span", "text":" |  "},
-                {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+                {
+                    "tag": "span",
+                    "text": [
+                        {"tag":"span","text":"Login as: "},
+                        {"tag":"span.b","name":"pageHeading.username","text":""}
+                    ]
+                },
+                {
+                    "tag": "span",
+                    "text": [
+                        {"tag":"span", "text":" |  "},
+                        {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+                    ]
+                }
             ]
         }
     ]
@@ -32,14 +45,7 @@ for (var i=0; i<tempConfigGlobalKey.length; i++) {
         Config.tempConfig[tempConfigGlobalKey[i]] = $$$[tempConfigGlobalKey[i]];
     }
 }
-
-Config.headingJson = [
-    {
-        "tag": "div.center.h1",
-        "name": "heading-text",
-        "text": ""
-    }
-];
+Config.headingJson = [];
 Config.afterLoginLinkJson = [];
 Config.footerLinkJsonAfterLogin = [];
 

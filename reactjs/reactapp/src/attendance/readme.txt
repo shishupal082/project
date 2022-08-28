@@ -250,3 +250,12 @@ dbViewData = {"tcp_table": {"tableData": []}}
     }
 ]
 
+26-03-2022
+----------------------------------
+Mapping for json files:
+appControlDataTeam05: (enablePageGroup07)
+- Only file system
+- Configured for seprate application
+
+appControlDataTeam06: (enablePageGroup08)
+- Work status monitoring (Similar to Feedback status monitoring)

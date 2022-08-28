@@ -44,6 +44,7 @@ class App extends React.Component {
             "dateSelectionRequiredPages": [],
             "enableReloadButton": false,
             "enableFooter": true,
+            "toggleClickCount": 0,
             "enableToggleButton": true,
             "enableFooterV2": true,
             "filterOptions": []
@@ -93,6 +94,7 @@ class App extends React.Component {
             DataHandler.SortClick(this.appStateCallback, this.appDataCallback, value);
         } else if (name === "footer-filter-toggle") {
             AppHandler.TrackEvent("ToggleClick");
+            this.appData.toggleClickCount += 1;
             AppHandler.HandleToggleClick(this.appStateCallback, this.appDataCallback, this.appData.enableFooterV2);
         } else if (name === "view_file.unique_id") {
             DataHandler.ViewFileClick(this.appStateCallback, this.appDataCallback, name, value);

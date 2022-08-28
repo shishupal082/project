@@ -5,8 +5,8 @@
     <title>Accounting Application V3</title>
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/react-app.css"/>
     <link rel="stylesheet" type="text/css" href="/app/auth/auth-style.css"/>
-    <link rel="stylesheet" type="text/css" href="/app/account/static/css/react-app.css"/>
     <link rel="stylesheet" type="text/css" href="/app/account/static/css/account.css"/>
 
 <?php echo $this->load->view("analytics_tracking_php.dev.php", true);?>
