@@ -7,8 +7,9 @@
     "dbTableDataIndex": {
         "table1":      ["tableName", "rowIndex", "colIndex", "tag", "filename", "path-mapping", "textTop", "textBottom", "colSpan", "tdClass"]
     },
-    "dimension": [50,50],
-    "cell-size": [20,20],
+    "info": "A4 sheet: 297mm x 210mm = 29.7 cm x 21cm = 1122px x 793.7px  = (35 x 24) x 32px [Height x Width]",
+    "dimension": [35,24],
+    "cell-size": [32,32],
     "defaultCell": {
         "tag": "span"
     }

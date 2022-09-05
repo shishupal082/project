@@ -266,7 +266,13 @@ DataHandlerV2.extend({
                 dataByCompanyByCategory[category] = dataByCompany;
             }
         }
-        return dataByCompanyByCategory;
+        var keys = Object.keys(dataByCompanyByCategory);
+        keys = keys.sort().reverse();
+        var finalDataByCompanyByCategory = {};
+        for (var k=0; k<keys.length; k++) {
+            finalDataByCompanyByCategory[keys[k]] = dataByCompanyByCategory[keys[k]];
+        }
+        return finalDataByCompanyByCategory;
     },
     getJournalDataV2: function(pageName) {
         var currentAppData = DataHandler.getCurrentAppData({});
@@ -279,6 +285,7 @@ DataHandlerV2.extend({
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
         dbViewDataTable = this._applyAccountNameFilterV2(dbViewDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
+        renderData = $S.sortResult(renderData, "descending", "name");
         return renderData;
     },
     getJournalDataV3: function(pageName) {
@@ -291,6 +298,7 @@ DataHandlerV2.extend({
         var filterOptions = this._getFilterOptions();
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
+        renderData = $S.sortResult(renderData, "descending", "name");
         return renderData;
     }
 });

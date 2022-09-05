@@ -46,7 +46,16 @@
 }
 .edit-image .track-plan-td,
 .track-plan-v2 .track-plan-td {
-    border: 1px solid #00f;
+    border-bottom: 1px solid #00f;
+    border-right: 1px solid #00f;
+}
+.edit-image .track-plan-td.r-0,
+.track-plan-v2 .track-plan-td.r-0 {
+    border-top: 1px solid #00f;
+}
+.edit-image .track-plan-td.c-0,
+.track-plan-v2 .track-plan-td.c-0 {
+    border-left: 1px solid #00f;
 }
 .track-plan-input {
     display: block;
