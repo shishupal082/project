@@ -141,7 +141,7 @@ DataHandler.extend({
         var pageName = DataHandler.getData("pageName", "");
         var isLogin = AppHandler.GetUserData("login", false);
         var redirectStatus = false;
-        if ([Config.change_password, Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
+        if ([Config.change_password, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
             if (!isLogin) {
                 AppHandler.LazyRedirect("/login", 250);
                 redirectStatus = true;
@@ -151,6 +151,13 @@ DataHandler.extend({
                 AppHandler.LazyRedirect(Config.loginRedirectUrl, 250);
                 redirectStatus = true;
             }
+        } else if ([Config.logout].indexOf(pageName) >= 0) {
+            if (isLogin) {
+                AppHandler.LazyRedirect(Config.basepathname + Config.login_other_user, 250);
+            } else {
+                AppHandler.LazyRedirect("/login", 250);
+            }
+            redirectStatus = true;
         }
         return redirectStatus;
     },
@@ -252,7 +259,7 @@ DataHandler.extend({
         CommonDataHandler.loadMetaDataByAppId(Config.defaultMetaData);
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         var filterKeyMapping, data;
-        if ([Config.logout, Config.login_other_user].indexOf(pageName) >= 0) {
+        if ([Config.login_other_user].indexOf(pageName) >= 0) {
             var url = CommonConfig.getApiUrl("getRelatedUsersDataV2Api", null, true);
             var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
             if ($S.isBooleanTrue(isLoginOtherUserEnable)) {
@@ -299,7 +306,7 @@ DataHandler.extend({
         AppHandler.TrackPageView(pageName);
         var redirectStatus = this.checkForRedirect();
         if (!redirectStatus) {
-            if ([Config.logout, Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
+            if ([Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
                 DataHandler.loadPageData(pageName, function() {
                     DataHandler.reRenderApp(appStateCallback, appDataCallback);
                 });
@@ -433,11 +440,11 @@ DataHandler.extend({
                 submitBtnName = pageName + ".submit";
                 fieldsName = ["create_password.username", "create_password.username", "create_password.create_password_otp", "create_password.new_password", "create_password.confirm_password"];
             break;
-            case "logout":
             case "login_other_user":
                 submitBtnName = "login_other_user.submit";
                 fieldsName = ["login_other_user.username"];
             break;
+            case "logout":
             case "noMatch":
             default:
             break;

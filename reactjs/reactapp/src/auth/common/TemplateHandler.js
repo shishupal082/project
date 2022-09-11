@@ -137,7 +137,6 @@ TemplateHandler.extend({
             case "forgot_password":
                 renderFieldRow = AppHandler.getTemplate(Template, pageName, "Page Not Found");
             break;
-            case "logout":
             case "login_other_user":
                 renderFieldRow = this.getLoginOtherUserTemplate();
             break;
@@ -153,6 +152,7 @@ TemplateHandler.extend({
             case "database_files":
                 renderFieldRow = DatabaseFiles.getRenderFieldRow();
             break;
+            case "logout":
             case "noMatch":
             default:
                 renderFieldRow = AppHandler.getTemplate(Template, "noPageFound", "Page Not Found");
