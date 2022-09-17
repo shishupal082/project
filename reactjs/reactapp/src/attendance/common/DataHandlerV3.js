@@ -271,8 +271,10 @@ DataHandlerV3.extend({
         var dynamicFilenamesFilterParam = DataHandler.getAppData("attendance.dynamicFilenamesFilterParam", {});
         var getTableDataApiNameKey = DataHandler.getAppData("attendance.getTableDataApiNameKey", null);
         var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", "");
-        if ($S.isStringV2(getTableDataApiNameKey) && $S.isObjectV2(dynamicFilenamesFilterParam)) {
-            dynamicFilenamesFilterParam["dateRange"] = this._getDateRange(dynamicFilenamesFilterParam["dateRange"]);
+        if ($S.isStringV2(getTableDataApiNameKey)) {
+            if ($S.isObjectV2(dynamicFilenamesFilterParam)) {
+                dynamicFilenamesFilterParam["dateRange"] = this._getDateRange(dynamicFilenamesFilterParam["dateRange"]);
+            }
             var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
             AppHandler.LoadTableData(url, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, function(database) {
                 AppHandler.CombineTableData(database, combineTableData);
