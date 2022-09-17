@@ -411,19 +411,16 @@ DataHandler.extend({
         }
     },
     loadAttendanceData: function(callback) {
-        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         var pageName = this.getPathParamsData("pageName", "");
         var attendanceDataLoadStatus = this.getData("attendanceDataLoadStatus", "");
         if (attendanceDataLoadStatus === "completed") {
             this.loadTableData(pageName, callback);
         } else if (attendanceDataLoadStatus === "in_progress") {
             return;
-        } else if ($S.isArrayV2(attendanceDataApis)) {
+        } else {
             DataHandlerV3.loadAttendanceData(function() {
                 DataHandler.loadTableData(pageName, callback);
             });
-        } else {
-            this.loadTableData(pageName, callback);
         }
     },
     handleApiDataLoad: function() {
