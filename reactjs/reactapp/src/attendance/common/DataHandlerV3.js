@@ -272,7 +272,9 @@ DataHandlerV3.extend({
         var getTableDataApiNameKey = DataHandler.getAppData("attendance.getTableDataApiNameKey", null);
         var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", "");
         if ($S.isStringV2(getTableDataApiNameKey)) {
-            if ($S.isObjectV2(dynamicFilenamesFilterParam)) {
+            var pageName2 = DataHandler.getPathParamsData("pageName", "");
+            var attendanceDataPage = [Config.entry, Config.update, Config.summary];
+            if ($S.isObjectV2(dynamicFilenamesFilterParam) && attendanceDataPage.indexOf(pageName2) >= 0) {
                 dynamicFilenamesFilterParam["dateRange"] = this._getDateRange(dynamicFilenamesFilterParam["dateRange"]);
             }
             var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
