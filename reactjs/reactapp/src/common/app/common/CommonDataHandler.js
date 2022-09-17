@@ -639,6 +639,20 @@ CommonDataHandler.extend({
         }
         return visibleFeedbackSection;
     },
+    getTableFilename: function(tableName, dynamicTableFileName, dynamicValue) {
+        if (!$S.isString(tableName)) {
+            return tableName;
+        }
+        var filename = tableName;
+        if ($S.isArray(dynamicTableFileName) && dynamicTableFileName.indexOf(tableName) >= 0) {
+            if ($S.isStringV2(dynamicValue)) {
+                filename = tableName + DT.getDateTimeV2(dynamicValue, "_/YYYY/-/MMM","/");
+            } else {
+                filename = tableName + DT.getDateTime("_/YYYY/-/MMM","/");
+            }
+        }
+        return filename + ".csv";
+    },
     applyRoleFilter: function(appId, tableData, filterKey) {
         if (!$S.isStringV2(filterKey)) {
             return tableData;

@@ -258,28 +258,56 @@ DataHandlerV3.extend({
             }
         }
     },
-    loadAttendanceData: function(attendanceDataApis, callback) {
+    _getDateRange: function(defaultDateRange) {
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        if ($S.isObject(currentList3Data) && $S.isArrayV2(currentList3Data["dateRange"])) {
+            return currentList3Data["dateRange"].join(",");
+        }
+        return defaultDateRange;
+    },
+    loadAttendanceTableData: function(callback) {
+        var combineTableData = DataHandler.getAppData("attendance.combineTableData", "");
+        var tableFilterParam = DataHandler.getAppData("attendance.tableFilterParam", {});
+        var dynamicFilenamesFilterParam = DataHandler.getAppData("attendance.dynamicFilenamesFilterParam", {});
+        var getTableDataApiNameKey = DataHandler.getAppData("attendance.getTableDataApiNameKey", null);
+        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", "");
+        if ($S.isStringV2(getTableDataApiNameKey) && $S.isObjectV2(dynamicFilenamesFilterParam)) {
+            dynamicFilenamesFilterParam["dateRange"] = this._getDateRange(dynamicFilenamesFilterParam["dateRange"]);
+            var url = CommonConfig.getApiUrl(getTableDataApiNameKey, null, true);
+            AppHandler.LoadTableData(url, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, function(database) {
+                AppHandler.CombineTableData(database, combineTableData);
+                $S.callMethodV1(callback, database);
+            });
+        } else {
+            $S.callMethod(callback);
+        }
+    },
+    loadAttendanceData: function(callback) {
         var dbViewData, dbViewDataTemp;
         DataHandler.setData("attendanceDataLoadStatus", "in_progress");
+        var attendanceDataApis = DataHandler.getAppData("attendanceDataApis", []);
         DataHandlerV3._loadDBViewData(attendanceDataApis, function(request) {
             DataHandler.setData("attendanceDataLoadStatus", "completed");
-            dbViewDataTemp = AppHandler.GenerateDatabaseV2(request);
-            dbViewData = DataHandler.getData("dbViewData", {});
-            if ($S.isObjectV2(dbViewDataTemp)) {
-                if (!$S.isObject(dbViewData)) {
-                    dbViewData = {};
-                }
-                for(var key in dbViewDataTemp) {
-                    if (!$S.isObject(dbViewData[key])) {
-                        dbViewData[key] = {};
+            DataHandlerV3.loadAttendanceTableData(function(database) {
+                dbViewDataTemp = AppHandler.GenerateDatabaseV2(request);
+                dbViewDataTemp = AppHandler.MergeDatabase(dbViewDataTemp, database);
+                dbViewData = DataHandler.getData("dbViewData", {});
+                if ($S.isObjectV2(dbViewDataTemp)) {
+                    if (!$S.isObject(dbViewData)) {
+                        dbViewData = {};
                     }
-                    if ($S.isArray(dbViewDataTemp[key]["tableData"])) {
-                        dbViewData[key]["tableData"] = dbViewDataTemp[key]["tableData"].reverse();
+                    for(var key in dbViewDataTemp) {
+                        if (!$S.isObject(dbViewData[key])) {
+                            dbViewData[key] = {};
+                        }
+                        if ($S.isArray(dbViewDataTemp[key]["tableData"])) {
+                            dbViewData[key]["tableData"] = dbViewDataTemp[key]["tableData"].reverse();
+                        }
                     }
+                    DataHandler.setData("dbViewData", dbViewData);
                 }
-                DataHandler.setData("dbViewData", dbViewData);
-            }
-            $S.callMethod(callback);
+                $S.callMethod(callback);
+            });
         });
     },
     loadTableData: function(getTableDataApiNameKey, tableFilterParam, dynamicFilenamesFilterParam, dbTableDataIndex, combineTableData, callback) {

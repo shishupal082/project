@@ -97,14 +97,11 @@ FormHandler.extend({
         formTemplate = CommonDataHandler.getFormTemplate(formTemplate, validationData, "addentry.submitStatus", status);
         return formTemplate;
     },
-    _generateStringFromPattern: function(tableName) {
+    _generateStringFromPattern: function(tableName, dynamicTableFileName, dynamicValue) {
         if (!$S.isString(tableName)) {
             return tableName;
         }
         var filename = tableName;
-        var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
-        var dynamicTableParameter = DataHandler.getAppData("dynamicTableParameter", []);
-        var dynamicValue = CommonDataHandler.getFieldsData(dynamicTableParameter, "");
         if ($S.isArray(dynamicTableFileName) && dynamicTableFileName.indexOf(tableName) >= 0) {
             if ($S.isStringV2(dynamicValue)) {
                 filename = tableName + DT.getDateTimeV2(dynamicValue, "_/YYYY/-/MMM","/");
@@ -115,7 +112,10 @@ FormHandler.extend({
         return filename + ".csv";
     },
     getTableNameFile: function(tableName) {
-        return this._generateStringFromPattern(tableName);
+        var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
+        var dynamicTableParameter = DataHandler.getAppData("dynamicTableParameter", []);
+        var dynamicValue = CommonDataHandler.getFieldsData(dynamicTableParameter, "");
+        return this._generateStringFromPattern(tableName, dynamicTableFileName, dynamicValue);
     },
     submitGenericForm: function(pageName, formName, formType, callback) {
         var status = DataHandler.getData("addentry.submitStatus", "");

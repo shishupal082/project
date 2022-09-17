@@ -7,11 +7,12 @@ import Config from "./Config";
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 
 var DataHandlerV2;
 
 (function($S){
-var DT = $S.getDT();
+// var DT = $S.getDT();
 DataHandlerV2 = function(arg) {
     return new DataHandlerV2.fn.init(arg);
 };
@@ -27,22 +28,45 @@ $S.extendObject(DataHandlerV2);
 
 DataHandlerV2.extend({
     callAddTextApi: function(subject, heading, callBack) {
-        var url = CommonConfig.getApiUrl("getAddTextApiV2", null, true);
+        // subject = "userId,date,displayName"
+        // heading = "PH/NH/CL/LAP/..."
+        var url = CommonConfig.getApiUrl("getAddTextApi", null, true);
         var currentAppData = DataHandler.getCurrentAppData();
+        var tableName = DataHandler.getAppData("update.tableName", "");
+        var dynamicTableFileName = DataHandler.getAppData("dynamicTableFileName", []);
+        var temp;
+        var uiEntryTime = "", userId = "", username = "";
         if (!$S.isString(url)) {
             return;
         }
         if (!$S.isObject(currentAppData)) {
             return;
         }
-        if (!$S.isString(currentAppData.saveDataFilename) || currentAppData.saveDataFilename.length < 1) {
-            alert("Invalid saveDataFilename.");
+        if (!$S.isStringV2(tableName)) {
+            alert("Invalid update.tableName.");
             return;
         }
+        if($S.isStringV2(subject)) {
+            temp = subject.split(",");
+            if (temp.length === 3) {
+                userId = temp[0];
+                uiEntryTime = temp[1];
+                username = temp[2];
+            } else {
+                alert("Invalid field parameter.");
+                return;
+            }
+        } else {
+            alert("Invalid field parameter.");
+            return;
+        }
+        var tableFilename = CommonDataHandler.getTableFilename(tableName, dynamicTableFileName, uiEntryTime);
+        var attr = userId+","+username+","+heading+",";
         var postData = {};
-        var attr = DT.getDateTime("YYYY/-/MM/-/DD/ /hh/:/mm/:/ss/./ms","/") + "," + subject+","+heading+","+AppHandler.GetUserData("username", "")+",";
         postData["text"] = [attr];
-        postData["filename"] = currentAppData.saveDataFilename;
+        postData["tableName"] = tableName;
+        postData["filename"] = tableFilename;
+        postData["uiEntryTime"] = uiEntryTime;
         var msg = "Error in saving data, Please Try again.";
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             if (status === "FAILURE" || ($S.isObject(response) && response.status === "FAILURE")) {

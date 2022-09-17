@@ -259,3 +259,9 @@ appControlDataTeam05: (enablePageGroup07)
 
 appControlDataTeam06: (enablePageGroup08)
 - Work status monitoring (Similar to Feedback status monitoring)
+
+17-09-2022
+----------------------------------
+Reload attendance data after changing list3Data for page [update,entry,summary]
+It is controlled by "attendance.realodOnDateRangeChange": true/false
+Attendance data save as tableData

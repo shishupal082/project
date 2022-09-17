@@ -419,7 +419,7 @@ DataHandler.extend({
         } else if (attendanceDataLoadStatus === "in_progress") {
             return;
         } else if ($S.isArrayV2(attendanceDataApis)) {
-            DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
+            DataHandlerV3.loadAttendanceData(function() {
                 DataHandler.loadTableData(pageName, callback);
             });
         } else {
@@ -497,7 +497,18 @@ DataHandler.extend({
         AppHandler.TrackDropdownChange("list3", list3Id);
         DataHandler.setData("currentList3Id", list3Id);
         DataHandler.generateDateParameter();
-        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        var realodOnDateRangeChange = this.getAppData("attendance.realodOnDateRangeChange", false);
+        var pageName2 = this.getPathParamsData("pageName", "");
+        var pageRequiredAttendanceDataReloadStatus = [Config.entry, Config.update, Config.summary];
+        if ($S.isBooleanTrue(realodOnDateRangeChange) && pageRequiredAttendanceDataReloadStatus.indexOf(pageName2) >= 0) {
+            DataHandler.setData("attendanceDataLoadStatus", "not-started");
+            DataHandlerV3.loadAttendanceData(function() {
+                DataHandlerV3.handleAttendanceDataLoad();
+                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+            });
+        } else {
+            DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        }
     },
     PageComponentDidMount: function(appStateCallback, appDataCallback) {
         this.setAppData();
@@ -560,11 +571,10 @@ DataHandler.extend({
             return;
         }
         var pageName = DataHandler.getPathParamsData("pageName", "");
-        var attendanceDataApis = this.getAppData("attendanceDataApis", []);
         if ([Config.update].indexOf(pageName) >= 0) {
             DataHandlerV2.callAddTextApi(name, value, function() {
                 DataHandler.setData("attendanceDataLoadStatus", "not-started");
-                DataHandlerV3.loadAttendanceData(attendanceDataApis, function() {
+                DataHandlerV3.loadAttendanceData(function() {
                     DataHandlerV3.handleAttendanceDataLoad();
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                 });

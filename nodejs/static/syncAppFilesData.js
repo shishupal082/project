@@ -86,6 +86,15 @@ var syncData = {
             "../../ftp-application/FTP/src/main/resources/assets/static/img/icons/"
         ]
     },
+    "svg-to-ftp-application": {
+        "src": [
+            "../static/img/icons/svg/back.svg",
+            "../static/img/icons/svg/left-arrow.svg"
+        ],
+        "destinationDir": [
+            "../../ftp-application/FTP/src/main/resources/assets/static/img/svg/"
+        ]
+    },
     "dist-auth-app-to-ftp-application": {
         "src": [
             "../app/auth/auth-style.css",
@@ -106,16 +115,3 @@ var syncData = {
     }
 };
 module.exports = syncData;
-
-/**
-
-    "svg-to-ftp-application": {
-        "src": [
-            "../static/img/icons/svg/back.svg",
-            "../static/img/icons/svg/left-arrow.svg"
-        ],
-        "destinationDir": [
-            "../../ftp-application/FTP/src/main/resources/assets/static/img/svg/"
-        ]
-    },
-*/

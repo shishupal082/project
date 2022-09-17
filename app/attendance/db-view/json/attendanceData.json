@@ -1,0 +1,36 @@
+{
+    "update.tableName": "attendance-adste",
+    "attendance.tableFilterParam": {
+        "filenames": "attendance-adste_.csv",
+        "table_names": "attendance-adste"
+    },
+    "attendance.dynamicFilenamesFilterParam": {
+        "preFileName": "attendance-adste_",
+        "pattern": "YYYY/-/MMM",
+        "patternSeprator": "/",
+        "dateRange": "last-2-months",
+        "postFileName": ".csv"
+    },
+    "attendance.getTableDataApiNameKey": "getTableData",
+    "attendance.realodOnDateRangeChange": true,
+    "dynamicTableFileName": ["attendance-adste", "attendance-signal", "attendance-telecom"],
+    "dbTableDataIndex": {
+        "attendance-adste": ["userId", "username", "type", "description"],
+        "attendance-signal": ["userId", "username", "type", "description"],
+        "attendance-telecom": ["userId", "username", "type", "description"]
+    },
+    "attendance.combineTableData": [
+        {
+            "sourceTableName": ["attendance-adste"],
+            "destinationTableName": "table2"
+        },
+        {
+            "sourceTableName": ["attendance-signal"],
+            "destinationTableName": "table2"
+        },
+        {
+            "sourceTableName": ["attendance-telecom"],
+            "destinationTableName": "table2"
+        }
+    ]
+}
