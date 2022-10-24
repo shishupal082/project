@@ -92,8 +92,14 @@ body.theme-grey {
 .w-75px {
     width: 75px;
 }
+.w-80px {
+    width: 80px;
+}
 .w-90px {
     width: 90px;
+}
+.w-100px {
+    width: 100px;
 }
 .w-105px {
     width: 105px;
@@ -137,6 +143,9 @@ body.theme-grey {
 .h-32px {
     height: 32px;
 }
+.h-40px {
+    height: 40px;
+}
 .h-45px {
     height: 45px;
 }
@@ -152,6 +161,9 @@ body.theme-grey {
 .fs-16px {
     font-size: 16px;
 }
+.fs-90 {
+    font-size: 90%;
+}
 .fs-80 {
     font-size: 80%;
 }
@@ -164,15 +176,32 @@ body.theme-grey {
 .fs-40 {
     font-size: 40%;
 }
-.v-align-initial {
+.v-align-initial,
+td.v-align-initial,
+th.v-align-initial {
     vertical-align: initial;
+}
+.v-align-middle,
+td.v-align-middle,
+th.v-align-middle {
+    vertical-align: middle;
 }
 .word-break-all {
     word-break: break-all;
+}
+tr.tr-bordered > td,
+tr.tr-bordered > th {
+    border: 1px solid;
 }
 table.table-padded-px-5 > thead > tr > th,
 table.table-padded-px-5 > thead > tr > td,
 table.table-padded-px-5 > tbody > tr > th,
 table.table-padded-px-5 > tbody > tr > td {
     padding: 5px;
+}
+table.table-padded-px-2 > thead > tr > th,
+table.table-padded-px-2 > thead > tr > td,
+table.table-padded-px-2 > tbody > tr > th,
+table.table-padded-px-2 > tbody > tr > td {
+    padding: 2px;
 }

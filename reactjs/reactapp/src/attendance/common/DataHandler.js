@@ -318,6 +318,16 @@ DataHandler.extend({
             $S.callMethod(callback);
         }
     },
+    getDateParameterField: function(identifier, value) {
+        var dateParameterField = null;
+        var currentList3Data = DataHandler.getCurrentList3Data();
+        if ($S.isObjectV2(currentList3Data) && $S.isObjectV2(currentList3Data["dateParameterField"])) {
+            dateParameterField = currentList3Data["dateParameterField"];
+        } else {
+            dateParameterField = this.getAppData("dateParameterField", {});
+        }
+        return dateParameterField;
+    },
     getAppData: function(key, defaultValue) {
         if (!$S.isStringV2(key)) {
             return defaultValue;
@@ -642,7 +652,7 @@ DataHandler.extend({
         // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
-        var dateParameterField = $S.findParam([currentAppData, metaData], "dateParameterField", {});
+        var dateParameterField = this.getDateParameterField();
 
         if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
