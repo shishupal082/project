@@ -1,0 +1,26 @@
+@media print{
+    @page {
+        size: landscape;
+    }
+}
+.date-row > td{
+    width: 30px;
+}
+.user-row {
+    height: 80px;
+}
+.SELECT-FILTER-FOOTER {
+    display: none;
+}
+@media print {
+  .last-div {
+    page-break-after: always;
+   }
+}
+td.last-td {
+    width: 25px;
+}
+.tr-bordered td.first-td,
+.tr-bordered td.last-td {
+    border: 0;
+}

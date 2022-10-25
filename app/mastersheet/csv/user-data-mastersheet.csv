@@ -1,0 +1,9 @@
+//Table name,Page name,S.No.,Username,Designation,PF no.,HQ,Bill unit no.
+table1,page-1,1,username-1,designation,pf-no,hq,bill-unit-no
+table1,page-1,2,username-2,designation,pf-no,hq,bill-unit-no
+table1,page-1,3,username-3,designation,pf-no,hq,bill-unit-no
+table1,page-1,4,username-4,designation,pf-no,hq,bill-unit-no
+table1,page-2,1,username-5,designation,pf-no,hq,bill-unit-no
+table1,page-2,2,username-6,designation,pf-no,hq,bill-unit-no
+table1,page-3,1,username-7,designation,pf-no,hq,bill-unit-no
+table1,page-4,2,username-8,designation,pf-no,hq,bill-unit-no

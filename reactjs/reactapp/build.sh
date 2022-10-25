@@ -27,12 +27,13 @@ distDir=dist-data-display-app
 distDir=dist-ftp-app
 distDir=dist-ml2-app
 distDir=dist-google_login-app
-distDir=dist-auth-app
-distDir=dist-attendance-app
 distDir=dist-rcc-app
-distDir=dist-account-app-2021-oct
 distDir=dist-project-tracking-app
 distDir=dist-track-plan-app
+distDir=dist-account-app-2021-oct
+distDir=dist-auth-app
+distDir=dist-attendance-app
+distDir=dist-mastersheet-app
 
 
 

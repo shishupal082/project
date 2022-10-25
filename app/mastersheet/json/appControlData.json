@@ -1,0 +1,40 @@
+{
+    "list1Data": [
+        {
+            "name": "Project Monitoring",
+            "metaDataApi": [
+                "/app/mastersheet/json/common/template.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "singleLineComment": "//",
+                    "apis": ["/pvt/app-data/mastersheet/user-data-mastersheet.csv"]
+                }
+            ]
+        }
+    ],
+    "metaData": {
+        "templateDataTableName": "table1",
+        "templateName": "mastersheetTemplate",
+        "dbTableDataIndex": {
+            "table1": ["tableName", "pageId", "s_no", "username", "designation", "pf_no", "hq", "bill_unit_no"]
+        },
+        "pageParam" : {
+            "date": "11.11.2022 -- 10.12.2022",
+            "date-param-01": "29",
+            "date-param-02": "30",
+            "date-param-03": "01",
+            "date-param-04": "02",
+            "date-param-05": "03",
+            "date-param-06": "04",
+            "date-param-07": "05",
+            "date-param-08": "06",
+            "date-param-09": "07",
+            "date-param-10": "08",
+            "date-param-11": "09",
+            "date-param-12": "10",
+            "date-param-13": ""
+        }
+    }
+}

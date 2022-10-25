@@ -1,7 +1,6 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
-import FormHandler from "./forms/FormHandler";
 import TemplateHandler from "./template/TemplateHandler";
 import ApiHandler from "./api/ApiHandler";
 
@@ -10,8 +9,6 @@ import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
-// import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
-import DisplayPage from "./pages/DisplayPage";
 
 var DataHandler;
 
@@ -51,7 +48,6 @@ keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
 keys.push("dbViewDataLoadStatus");
 keys.push("dbTableDataLoadStatus");
-keys.push("local.loadDataByParamsStatus");
 keys.push("local.loadDbTableDataStatus");
 keys.push("filesInfoLoadStatus");
 
@@ -65,8 +61,6 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 keys.push("pathParams");
-
-keys.push(Config.fieldsKey.UploadFile);
 
 //TA page
 //Add Field Report Page
@@ -159,25 +153,8 @@ DataHandler.extend({
         return "completed";
     },
     getLinkByIndex: function(index) {
-        var pageName = this.getData("pageName", "");
+        // var pageName = this.getData("pageName", "");
         var link = CommonConfig.basepathname  + "/" + index;
-        var pid, id1, pageId, viewPageName;
-        if (pageName === Config.viewPage) {
-            viewPageName = this.getPathParamsData("viewPageName", "");
-            link += "/view/" + viewPageName;
-        } else if (pageName === Config.displayPage) {
-            pageId = this.getPathParamsData("pageId");
-            link += "/display/" + pageId;
-        } else if (pageName === Config.projectId) {
-            pid = this.getPathParamsData("pid");
-            link += "/pid/" + pid;
-        } else if (pageName === Config.id1Page) {
-            pid = this.getPathParamsData("pid");
-            id1 = this.getPathParamsData("id1");
-            link += "/pid/" + pid + "/id1/" + id1;
-        } else if (pageName === Config.manageFiles) {
-            link = Config.pages.manageFiles;
-        }
         return link;
     },
     // getLinkV2: function(id1) {
@@ -281,35 +258,11 @@ DataHandler.extend({
 DataHandler.extend({
     loadDataByPage: function(callback) {
         DataHandlerV2.findCurrentList3Id();
-        this.setData("local.loadDataByParamsStatus", "in_progress");
         this.setData("local.loadDbTableDataStatus", "in_progress");
-        var temp;
         DataHandler.loadDbTableData(function() {
             DataHandler.setData("local.loadDbTableDataStatus", "completed");
-            temp = DataHandler.getDataLoadStatusByKey(["local.loadDataByParamsStatus"]);
-            if (temp === "completed") {
-                $S.callMethod(callback);
-            }
+            $S.callMethod(callback);
         });
-        ApiHandler.loadDataByParams(function() {
-            DataHandler.setData("local.loadDataByParamsStatus", "completed");
-            temp = DataHandler.getDataLoadStatusByKey(["local.loadDbTableDataStatus"]);
-            if (temp === "completed") {
-                $S.callMethod(callback);
-            }
-        });
-    },
-    setHeaderAndFooterData: function() {
-        // var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
-        // var footerLinkJsonAfterLogin = DataHandler.getAppData("footerLinkJsonAfterLogin", {});
-        // var enabledPages = DataHandlerV2.getEnabledPages();
-        // var enabledPageId = DataHandlerV2.getEnabledPageId();
-        // var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
-        // DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
-        // CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
-        // Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
-        // Config.afterLoginLinkJson = afterLoginLinkJson;
-        // Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getPathParamsData("index", "");
@@ -321,7 +274,6 @@ DataHandler.extend({
             }
             CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                 CommonDataHandler.setDateSelectParameter(currentList1Id);
-                DataHandler.setHeaderAndFooterData();
                 DataHandler.loadDataByPage(callback);
             });
         } else {
@@ -434,38 +386,7 @@ DataHandler.extend({
         CommonDataHandler.setData("date-select", value);
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
-    OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
-        var pageName = DataHandler.getData("pageName", "");
-        if (name === "upload_file_form") {
-            FormHandler.submitUploadFile(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "upload_file_form_link") {
-            FormHandler.submitAddLink(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "add-project-comment-form") {
-            FormHandler.submitAddProjectComment(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "delete_file.form") {
-            FormHandler.submitDeleteFile(pageName, value, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "add-project-files-form") {
-            FormHandler.submitAddProjectFiles(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else {
-            var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
-            if (configFormName === name) {
-                var formType = DataHandlerV2.getFormTypeByPageName(pageName);
-                FormHandler.submitGenericForm(pageName, name, formType, function() {
-                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                });
-            }
-        }
-    },
+    OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {},
     ViewFileClick: function(appStateCallback, appDataCallback, name, value) {
         console.log(name + ":" + value);
     },
@@ -527,52 +448,11 @@ DataHandler.extend({
 DataHandler.extend({
     getRenderData: function(pageName, pageId, viewPageName) {
         var renderData;
-        var currentAppData = this.getCurrentAppData();
-        var metaData = CommonDataHandler.getData("metaData");
-        var currentList3Data = this.getCurrentList3Data();
-        var dateSelect = CommonDataHandler.getData("date-select", "");
-        var sortingFields = this.getData("sortingFields", []);
-        var filterOptions = null;
-        var dateParameterField, tableName;
+        var tableName;
         switch(pageName) {
             case "home":
-                tableName = "projectTable";//this.getTableName("projectTable");
+                tableName = this.getAppData("templateDataTableName", "");
                 renderData = DataHandlerV2.getTableData(tableName);
-            break;
-            case "projectId":
-                renderData = DataHandlerV2.getProjectDataV2(pageName);
-            break;
-            case "id1Page":
-                renderData = DataHandlerV2.getProjectDataV3(pageName);
-            break;
-            case "displayPage":
-                if (DataHandlerV2.isDisabled("pageId", pageId)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
-                }
-                dateParameterField = DataHandlerV2.getDateParameterField("pageId", pageId);
-                renderData = DisplayPage.getRenderData(pageName, pageId, sortingFields);
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
-            case "viewPage":
-                if (DataHandlerV2.isDisabled("viewPage", viewPageName)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
-                }
-                dateParameterField = DataHandlerV2.getDateParameterField("viewPage", viewPageName);
-                renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
-                filterOptions = this.getData("filterOptions");
-                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
-            case "manageFiles":
-                if (DataHandlerV2.isDisabled("pageName", pageName)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
-                }
-                dateParameterField = DataHandlerV2.getDateParameterField("pageName", pageName);
-                renderData = DisplayPage.getRenderDataV3(pageName, sortingFields);
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             default:
                 renderData = [];
@@ -593,7 +473,6 @@ DataHandler.extend({
         var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         if (dataLoadStatus) {
             renderData = this.getRenderData(pageName, pageId, viewPageName);
-            appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
         if (dataLoadStatus) {

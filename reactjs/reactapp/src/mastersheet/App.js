@@ -98,13 +98,8 @@ class App extends React.Component {
     }
     // for input and textarea
     onChange(e) {
-        var name = e.currentTarget.name;
-        var value = e.currentTarget.value;
-        if (name === Config.fieldsKey.UploadFile) {
-            DataHandler.OnFileUploadChange(this.appStateCallback, this.appDataCallback, name, e.currentTarget.files[0]);
-        } else {
-            DataHandler.OnInputChange(this.appStateCallback, this.appDataCallback, name, value);
-        }
+        // var name = e.currentTarget.name;
+        // var value = e.currentTarget.value;
     }
     onFormSubmit(e) {
         e.preventDefault();
@@ -209,31 +204,6 @@ class App extends React.Component {
                 <Route exact path={pages.home}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
-                    )}
-                />
-                <Route exact path={pages.projectId}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectId}/>
-                    )}
-                />
-                <Route exact path={pages.id1Page}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id1Page}/>
-                    )}
-                />
-                <Route exact path={pages.viewPage}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.viewPage}/>
-                    )}
-                />
-                <Route exact path={pages.displayPage}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayPage}/>
-                    )}
-                />
-                <Route exact path={pages.manageFiles}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.manageFiles}/>
                     )}
                 />
                 <Route

@@ -1,0 +1,1181 @@
+{
+    "mastersheetTemplate": [
+        {
+            "tag": "table.tbody",
+            "text": [
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td h-20px",
+                            "text": " "
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td.h4",
+                            "text": "द.पू.रे./S.E.R.",
+                            "className": "text-center",
+                            "colSpan": "32"
+                        },
+                        {
+                            "tag": "td",
+                            "text": "जी-91 (L)",
+                            "colSpan": "3"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "last-td",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "32"
+                        },
+                        {
+                            "tag": "td",
+                            "text": "G-91 (L)",
+                            "colSpan": "3"
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td h-40px",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "35",
+                            "className": "text-center",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "..............................विभाग.........."
+                                },
+                                {
+                                    "tag": "span.b",
+                                    "text": "S&T"
+                                },
+                                {
+                                    "tag": "span",
+                                    "text": "............Department (Bill Unit no.: "
+                                },
+                                {
+                                    "tag": "span.b",
+                                    "name": "bill-unit-no",
+                                    "text": ""
+                                },
+                                {
+                                    "tag": "span",
+                                    "text": ")"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": "संख्या"
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "2",
+                            "text": "अनुभाग"
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "9",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "कार्यालय"
+                                },
+                                {
+                                    "tag": "span",
+                                    "text": ""
+                                },
+                                {
+                                    "tag": "span",
+                                    "text": ""
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "23",
+                            "text": "कारखाना संख्या"
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td h-40px",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": "No ........."
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "2",
+                            "text": "Section ..........................."
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "9",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "Office:"
+                                },
+                                {
+                                    "tag": "span",
+                                    "className": "ml-10px",
+                                    "text": ""
+                                },
+                                {
+                                    "tag": "span.b",
+                                    "text": "SSE/Sig/MURI"
+                                },
+                                {
+                                    "tag": "span",
+                                    "text": "..........."
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "23",
+                            "text": "Shop No .................. के लिये वेतन आदेश / W.O.................. For.................. 20 ...."
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center w-80px",
+                            "text": [
+                                {
+                                    "tag": "div",
+                                    "text": "नाम"
+                                },
+                                {
+                                    "tag": "div",
+                                    "text": "Name"
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center w-80px",
+                            "text": [
+                                {
+                                    "tag": "div",
+                                    "text": "पदनाम"
+                                },
+                                {
+                                    "tag": "div",
+                                    "text": "Designation"
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center w-100px",
+                            "text": [
+                                {
+                                    "tag": "div",
+                                    "text": "टिकट संo"
+                                },
+                                {
+                                    "tag": "div",
+                                    "text": "Ticked No."
+                                }
+                            ]
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "16",
+                            "className": "text-center v-align-middle",
+                            "text": "दिनांक / Date"
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "4",
+                            "className": "text-right v-align-middle",
+                            "text": "Period:"
+                        },
+                        {
+                            "tag": "td.b",
+                            "colSpan": "10",
+                            "className": "text-center v-align-middle",
+                            "name": "date",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center w-80px",
+                            "text": [
+                                {
+                                    "tag": "div",
+                                    "text": "दिन Total"
+                                },
+                                {
+                                    "tag": "div",
+                                    "text": "no of days"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered fs-60 date-row",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "11"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "12"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "13"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "14"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "15"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "16"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "17"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "18"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "19"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "20"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "21"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "22"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "23"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "24"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "25"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "26"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "27"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": "28"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-01",
+                            "text": "29"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-02",
+                            "text": "30"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-03",
+                            "text": "1"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-04",
+                            "text": "2"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-05",
+                            "text": "3"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-06",
+                            "text": "4"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-07",
+                            "text": "5"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-08",
+                            "text": "6"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-09",
+                            "text": "7"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-10",
+                            "text": "8"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-11",
+                            "text": "9"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-12",
+                            "text": "10"
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "name": "date-param-13",
+                            "text": " "
+                        },
+                        {
+                            "tag": "td",
+                            "className": "text-center",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td user-row",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "username-1",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-designation-1",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-pf-number-1",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td user-row",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "username-2",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-designation-2",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-pf-number-2",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td user-row",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "username-3",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-designation-3",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-pf-number-3",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "className": "tr-bordered",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td user-row",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "username-4",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-designation-4",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "name": "user-pf-number-4",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": "2",
+                            "className": "h-30px",
+                            "text": [
+                                {
+                                    "tag": "span",
+                                    "text": "HQ: "
+                                },
+                                {
+                                    "tag": "b",
+                                    "name": "hq",
+                                    "text": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": 2,
+                            "text": "द्वारा जांच की गई"
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": 2,
+                            "text": "Checked by"
+                        }
+                    ]
+                },
+                {
+                    "tag": "tr",
+                    "text": [
+                        {
+                            "tag": "td",
+                            "className": "first-td",
+                            "text": ""
+                        },
+                        {
+                            "tag": "td",
+                            "colSpan": 3,
+                            "text": "SER/PP/KGP (DTP) - 4 - 2011"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "className": "last-div"
+        }
+    ]
+}

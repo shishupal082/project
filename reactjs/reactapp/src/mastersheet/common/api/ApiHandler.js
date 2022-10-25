@@ -26,43 +26,6 @@ ApiHandler.fn = ApiHandler.prototype = {
 
 $S.extendObject(ApiHandler);
 ApiHandler.extend({
-    _loadFileInfoData: function(callback) {
-        var url = CommonConfig.getApiUrl("getFilesInfoApi", "", true);
-        DataHandler.setData("filesInfoLoadStatus", "in_progress");
-        var request = [], temp;
-        if ($S.isStringV2(url)) {
-            temp = {};
-            temp.apiName = "getFilesInfoApi";
-            temp.requestMethod = Api.getAjaxApiCallMethod();
-            temp.url = [url];
-            request.push(temp);
-            AppHandler.LoadDataFromRequestApi(request, function() {
-                DataHandler.setData("filesInfoLoadStatus", "completed");
-                if ($S.isArray(request) && request.length === 1 && $S.isArray(request[0].response) && $S.isArray(request[0].response)) {
-                    if (request[0].response.length === 1 && $S.isObject(request[0].response[0])) {
-                        if (request[0].response[0].status === "SUCCESS") {
-                            DataHandler.setData("filesInfoData", request[0].response[0].data);
-                        }
-                    }
-                }
-                $S.callMethod(callback);
-            });
-        } else {
-            DataHandler.setData("filesInfoLoadStatus", "completed");
-            $S.callMethod(callback);
-        }
-    },
-    loadDataByParams: function(callback) {
-        var pageName = DataHandler.getData("pageName", "");
-        var filesInfoLoadStatus = DataHandler.getData("filesInfoLoadStatus", "");
-        if (pageName === "manageFiles" && filesInfoLoadStatus === "not-started") {
-            this._loadFileInfoData(callback);
-        } else {
-            $S.callMethod(callback);
-        }
-    }
-});
-ApiHandler.extend({
     _isValidTableEntry: function(dbApi) {
         if (!$S.isObject(dbApi)) {
             return false;
@@ -119,26 +82,7 @@ ApiHandler.extend({
             });
         }
     },
-    _removeDeletedItem: function(dbViewData) {
-        if (!$S.isObject(dbViewData)) {
-            return;
-        }
-        var deleteTableName = DataHandler.getTableName("deleteTable");
-        var deleteTableData = [], deletedIds = [], i;
-        if ($S.isObject(dbViewData[deleteTableName])) {
-            if ($S.isArray(dbViewData[deleteTableName].tableData)) {
-                deleteTableData = dbViewData[deleteTableName].tableData;
-            }
-        }
-        for(i=0; i<deleteTableData.length; i++) {
-            if ($S.isStringV2(deleteTableData[i].deleteId)) {
-                deletedIds.push(deleteTableData[i].deleteId);
-            }
-        }
-        DBViewDataHandler.RemoveDeletedItem(dbViewData, deletedIds, deleteTableName, "tableUniqueId");
-    },
     handleDefaultSorting: function(tableData) {
-        this._removeDeletedItem(tableData);
         if (!$S.isObject(tableData)) {
             return;
         }
