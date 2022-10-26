@@ -7,6 +7,7 @@ CommonConfig.navigator = $$$.navigator;
 CommonConfig.gtag = $$$.gtag;
 CommonConfig.JQ = $$$.JQ;
 CommonConfig.forceLogin = $$$.forceLogin;//boolean = true
+CommonConfig.originPageRedirect = $$$.originPageRedirect;//boolean = true
 CommonConfig.projectHeading = $$$.projectHeading;//String = "Project Tracking"
 CommonConfig.appControlDataPath = $$$.appControlDataPath;//String = "/project-tracking/json/"
 CommonConfig.validAppControl = $$$.validAppControl;//["appControl1", "appControl2"]
