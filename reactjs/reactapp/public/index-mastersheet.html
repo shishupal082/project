@@ -42,22 +42,15 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/secondAppData/attendance/json/meta-data/",
     forceLogin: false
 };
-
 GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
 GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
-
-GLOBAL.appControlApi = "/app/mastersheet/json/appControlData.json";
-
+GLOBAL.appControlApi = "/mastersheet/json/appControlData.json";
 GLOBAL.validAppControl = ["appControlDataTeam01"];
-
-GLOBAL.headingJson = document.getElementById("headingJson").value;
-GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
-GLOBAL.JQ = $;
+GLOBAL.gtag = gtag;
 window.GLOBAL = GLOBAL;
 </script>
 </body>

@@ -3,6 +3,7 @@ import TemplateHelper from "../../common/TemplateHelper";
 
 // import Config from "./Config";
 import DataHandler from "./DataHandler";
+import TemplateHandler from "./template/TemplateHandler";
 var Mastersheet;
 (function($S){
 // var DT = $S.getDT();
@@ -61,41 +62,16 @@ Mastersheet.extend({
         return mastersheetPage;
     },
     getPageFromData: function(pageName, mastersheetData) {
-        // mastersheetData = [
-        //     {
-        //         "pageId": "GDBR",
-        //         "s_no": "1",
-        //         "username": "Tanmay Sikdar",
-        //         "designation": "Tech(SM)-I",
-        //         "pf_no": "50700770131",
-        //         "hq": "GDBR",
-        //         "bill_unit_no": "705-571"
-        //     },
-        //     {
-        //         "pageId": "GDBR",
-        //         "s_no": "2",
-        //         "username": "Dharmendra Kumar",
-        //         "designation": "Helper",
-        //         "pf_no": "18529801722",
-        //         "hq": "GDBR",
-        //         "bill_unit_no": "705-571"
-        //     },
-        //     {
-        //         "pageId": "GDBR",
-        //         "s_no": "3",
-        //         "username": "Jagdish Mahato",
-        //         "designation": "Helper",
-        //         "pf_no": "50700404871",
-        //         "hq": "XYZ",
-        //         "bill_unit_no": "705-571"
-        //     }
-        // ];
         var finalPages = [], template;
         var templateData = this._generateTemplateData(mastersheetData);
-        for (var i=0; i<templateData.length; i++) {
-            template = this.getTemplate();
-            TemplateHelper.updateTemplateText(template, templateData[i]);
-            finalPages.push(template);
+        if (templateData.length < 1) {
+            finalPages.push(TemplateHandler.getTemplate("noDataFound", []));
+        } else {
+            for (var i=0; i<templateData.length; i++) {
+                template = this.getTemplate();
+                TemplateHelper.updateTemplateText(template, templateData[i]);
+                finalPages.push(template);
+            }
         }
         return finalPages;
     }

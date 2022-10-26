@@ -257,7 +257,6 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadDataByPage: function(callback) {
-        DataHandlerV2.findCurrentList3Id();
         this.setData("local.loadDbTableDataStatus", "in_progress");
         DataHandler.loadDbTableData(function() {
             DataHandler.setData("local.loadDbTableDataStatus", "completed");
@@ -273,7 +272,6 @@ DataHandler.extend({
                 currentList1Id = this.getAppData("pageName:manageFiles.appIndex", "");
             }
             CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
-                CommonDataHandler.setDateSelectParameter(currentList1Id);
                 DataHandler.loadDataByPage(callback);
             });
         } else {

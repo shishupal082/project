@@ -76,28 +76,6 @@ DataHandlerV2.extend({
         DataHandler.setData("filterValues", filterSelectedValues);
         var result = AppHandler.getFilteredData(currentAppData, metaData, tableData, filterOptions, "name");
         return result;
-    },
-    findCurrentList3Id: function() {
-        var currentList3Data = DataHandler.getCurrentList3Data();
-        var currentList3Id = DataHandler.getData("currentList3Id", "");
-        var keys, list3Data;
-        if ($S.isObject(currentList3Data)) {
-            keys = Object.keys(currentList3Data);
-            if (keys.length < 1) {
-                list3Data = this.getList3Data();
-                if ($S.isArray(list3Data)) {
-                    for (var i = 0; i < list3Data.length; i++) {
-                        if ($S.isObject(list3Data[i])) {
-                            if ($S.isBooleanTrue(list3Data[i].defaultSelected)) {
-                                currentList3Id = list3Data[i].name;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        DataHandler.setData("currentList3Id", currentList3Id);
     }
 });
 DataHandlerV2.extend({
