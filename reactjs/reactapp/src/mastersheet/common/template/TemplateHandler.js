@@ -1,7 +1,7 @@
 import $S from "../../../interface/stack.js";
 import Template from "./Template";
 
-// import Config from "../Config";
+import Config from "../Config";
 import DataHandler from "../DataHandler";
 import Mastersheet from "../Mastersheet";
 
@@ -63,7 +63,7 @@ TemplateHandler.extend({
     },
     _getLink: function(pageName, pid) {
         var link = "";
-        var index = DataHandler.getPathParamsData("index", "0");
+        var index = DataHandler.getCurrentAppId();
         if (pageName === "projectId") {
             link = CommonConfig.basepathname + "/" + index + "/pid/" + pid;
         } else {
@@ -139,6 +139,7 @@ TemplateHandler.extend({
         } else {
             switch(pageName) {
                 case "home":
+                case Config.origin:
                     // renderField = this.generateHomeRenderField(pageName, renderData);
                     renderField = Mastersheet.getPageFromData(pageName, renderData);
                 break;

@@ -132,6 +132,14 @@ DataHandler.extend({
     getPathParamsData: function(key, defaultValue) {
         return CommonDataHandler.getPathParamsData(key, defaultValue);
     },
+    getCurrentAppId: function() {
+        var pageName= DataHandler.getData("pageName", "");
+        var currentAppId = "0";
+        if (pageName !== Config.origin) {
+            currentAppId = this.getPathParamsData("index", "");
+        }
+        return currentAppId;
+    },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
         var loadStatus;
@@ -155,18 +163,6 @@ DataHandler.extend({
     getLinkByIndex: function(index) {
         // var pageName = this.getData("pageName", "");
         var link = CommonConfig.basepathname  + "/" + index;
-        return link;
-    },
-    // getLinkV2: function(id1) {
-    //     var pid = this.getPathParamsData("pid");
-    //     return this.getLinkV3(pid, id1);
-    // },
-    getLinkV3: function(pid, id1) {
-        var index = this.getPathParamsData("index", "0");
-        var link = CommonConfig.basepathname  + "/" + index + "/pid/" + pid;
-        if ($S.isStringV2(id1)) {
-            link += "/id1/" + id1;
-        }
         return link;
     },
     isDataLoadComplete: function() {
@@ -199,7 +195,7 @@ DataHandler.extend({
 DataHandler.extend({
     getCurrentAppData: function() {
         var appControlData = CommonDataHandler.getData("appControlData", []);
-        var currentAppId = this.getPathParamsData("index", "");
+        var currentAppId = this.getCurrentAppId();
         var currentAppData = {};
         if ($S.isArray(appControlData)) {
             for (var i = 0; i < appControlData.length; i++) {
@@ -264,7 +260,7 @@ DataHandler.extend({
         });
     },
     loadDataByAppId: function(callback) {
-        var currentList1Id = DataHandler.getPathParamsData("index", "");
+        var currentList1Id = DataHandler.getCurrentAppId();
         var status = CommonDataHandler.getData("metaDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
         if (status !== "completed") {
@@ -315,8 +311,10 @@ DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         var pageName = DataHandler.getData("pageName", "");
         if (pageName === Config.origin) {
-            AppHandler.LazyRedirect(CommonConfig.basepathname + "/0", 250);
-            return;
+            if ($S.isBooleanTrue(CommonConfig.originPageRedirect)) {
+                AppHandler.LazyRedirect(CommonConfig.basepathname + "/0", 250);
+                return;
+            }
         }
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         CommonDataHandler.loadLoginUserDetailsData(function() {
@@ -449,6 +447,7 @@ DataHandler.extend({
         var tableName;
         switch(pageName) {
             case "home":
+            case Config.origin:
                 tableName = this.getAppData("templateDataTableName", "");
                 renderData = DataHandlerV2.getTableData(tableName);
             break;
@@ -484,7 +483,7 @@ DataHandler.extend({
             }
         }
         appDataCallback("list1Data", list1Data);
-        appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
+        appDataCallback("currentList1Id", DataHandler.getCurrentAppId());
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));

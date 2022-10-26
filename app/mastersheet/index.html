@@ -23,10 +23,10 @@
     -->
     <title>React App Mastersheet</title>
     <!-- It will use nodejs to load static file -->
-    <link rel="stylesheet" type="text/css" href="http://localhost/static/libs/bootstrap-v4.4.1.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/static/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/static/css/react-app.css"/>
-    <link rel="stylesheet" type="text/css" href="http://localhost/app/mastersheet/static/css/mastersheet-style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/react-app.css"/>
+    <link rel="stylesheet" type="text/css" href="/app/mastersheet/static/css/mastersheet-style.css"/>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-75647007-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -40,20 +40,23 @@
     <div id="root"><center>Loading...</center></div>
 <script type="text/javascript">
 var GLOBAL = {
-    baseApi: "http://localhost:8080",
-    basepathname: "",
+    baseApi: "",
+    basepathname: "/app/mastersheet",
     appControlDataPath: "/secondAppData/attendance/json/meta-data/",
     originPageRedirect: false,
     forceLogin: false
 };
-// GLOBAL.basepathname = window.location.pathname;
+GLOBAL.basepathname = window.location.pathname;
 GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
 GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
-GLOBAL.appControlApi = "/mastersheet/json/appControlData.json";
+GLOBAL.appControlApi = "/app/mastersheet/json/appControlData.json";
 GLOBAL.validAppControl = ["appControlDataTeam01"];
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.gtag = gtag;
 window.GLOBAL = GLOBAL;
 </script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-mastersheet-app/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-mastersheet-app/script3.js"></script>
 </body>
 </html>
