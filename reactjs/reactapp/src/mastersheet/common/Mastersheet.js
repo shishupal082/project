@@ -34,19 +34,25 @@ Mastersheet.extend({
         }
         return currentSerialNumber;
     },
-    _getRowIndex: function(orgSNo, currentSNo, lastSNo, lastPageId, pageId) {
+    _getRowIndex: function(currentSNo, maxUserPerPage) {
         var rowIndex = 1;
+        if (!$S.isNumber(maxUserPerPage)) {
+            maxUserPerPage = 4;
+        }
         if ($S.isNumber(currentSNo)) {
-            rowIndex = currentSNo % 4;
+            rowIndex = currentSNo % maxUserPerPage;
             if (rowIndex === 0) {
-                rowIndex = 4;
+                rowIndex = maxUserPerPage;
             }
         }
         return rowIndex;
     },
-    _verifyPageName: function(pageData) {
+    _verifyPageName: function(pageData, maxUserPerPage) {
         var finalPageDataArray = [];
-        var maxUserPerPage = 4, j, temp;
+        var j, temp;
+        if (!$S.isNumber(maxUserPerPage)) {
+            maxUserPerPage = 4;
+        }
         if ($S.isObject(pageData)) {
             for (var pageId in pageData) {
                 if (!$S.isArray(pageData[pageId])) {
@@ -75,22 +81,28 @@ Mastersheet.extend({
         return finalPageDataArray;
     },
     _generateTemplateData: function(mastersheetData) {
+        var maxUserPerPage = DataHandler.getAppData("maxUserPerPage", 4);
         var tempData = {}, tempData2, pageId, i;
         if ($S.isArray(mastersheetData)) {
             for (i=0; i<mastersheetData.length; i++) {
                 if ($S.isObject(mastersheetData[i]) && $S.isStringV2(mastersheetData[i]["pageId"])) {
-                    pageId = mastersheetData[i]["pageId"];
-                    if (!$S.isArray(tempData[pageId])) {
-                        tempData[pageId] = [];
+                    if ($S.isNumeric(mastersheetData[i]["s_no"]) || mastersheetData[i]["s_no"] === "auto") {
+                        pageId = mastersheetData[i]["pageId"];
+                        if (!$S.isArray(tempData[pageId])) {
+                            tempData[pageId] = [];
+                            if (mastersheetData[i]["s_no"] === "auto") {
+                                mastersheetData[i]["s_no"] = "1";
+                            }
+                        }
+                        tempData[pageId].push(mastersheetData[i]);
                     }
-                    tempData[pageId].push(mastersheetData[i]);
                 }
             }
         }
         var finalData = [];
         var lastSNo = "", lastPageId = "";
         var rowIndex, pageParam, orgSNo, currentSNo, serialNoDisplay, hq, billUnitNo;
-        tempData = this._verifyPageName(tempData);
+        tempData = this._verifyPageName(tempData, maxUserPerPage);
         for (pageId in tempData) {
             pageParam = DataHandler.getAppData("pageParam", {});
             tempData2 = $S.clone(pageParam);
@@ -105,7 +117,7 @@ Mastersheet.extend({
                         if (!$S.isNumber(currentSNo)) {
                             continue;
                         }
-                        rowIndex = this._getRowIndex(orgSNo, currentSNo, lastSNo, lastPageId, pageId);
+                        rowIndex = this._getRowIndex(currentSNo, maxUserPerPage);
                         lastSNo = currentSNo;
                         if (orgSNo === "auto") {
                             serialNoDisplay = currentSNo;

@@ -15,6 +15,7 @@
         },
         {
             "name": "Mastersheet for division",
+            "maxUserPerPage": 4,
             "metaDataApi": [
                 "/app/mastersheet/json/common/template.json"
             ],
