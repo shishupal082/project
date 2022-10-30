@@ -7,6 +7,7 @@ import Mastersheet from "../Mastersheet";
 
 import TemplateHelper from "../../../common/TemplateHelper";
 import CommonConfig from "../../../common/app/common/CommonConfig";
+import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 // import DBViewDataHandler from "../../../common/app/common/DBViewDataHandler";
 import DBViewTemplateHandler from "../../../common/app/common/DBViewTemplateHandler";
 
@@ -29,6 +30,25 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 $S.extendObject(TemplateHandler);
 DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
+    generateOriginRenderField: function() {
+        var appControlData = CommonDataHandler.getData("appControlData", []);
+        var homeFields = [], i, linkTemplate;
+        if ($S.isArray(appControlData)) {
+            for (i=0; i<appControlData.length; i++) {
+                if (!$S.isObject(appControlData[i])) {
+                    continue;
+                }
+                homeFields.push({"toUrl": DataHandler.getLinkByIndex(appControlData[i].id),
+                        "toText": appControlData[i].name});
+            }
+        }
+        var template = this.getHomeTemplatePartial("home");
+        for (i = 0; i< homeFields.length; i++) {
+            linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
+            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+        }
+        return template;
+    },
     generateHomeRenderField: function(pageName, renderData) {
         // pageName = "home"
         var homeFields = [], i, linkTemplate;
@@ -138,9 +158,10 @@ TemplateHandler.extend({
             return this._getInvalidField(renderData.reason);
         } else {
             switch(pageName) {
-                case "home":
                 case Config.origin:
-                    // renderField = this.generateHomeRenderField(pageName, renderData);
+                    renderField = this.generateOriginRenderField(pageName, renderData);
+                break;
+                case "home":
                     renderField = Mastersheet.getPageFromData(pageName, renderData);
                 break;
                 case "noMatch":
@@ -159,6 +180,9 @@ TemplateHandler.extend({
             TemplateHelper.updateTemplateText(renderField, {"goBackRow.goBackLink": goBackLink});
         }
         return renderField;
+    },
+    GetHeadingField: function(headingText) {
+        return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
     }
 });
 

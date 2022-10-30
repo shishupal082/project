@@ -216,6 +216,30 @@ DataHandlerV2.extend({
         if ($S.isString(field["href"])) {
             field["href"] = "/" + index + field["href"];
         }
+    },
+    updateLinkIndex: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
+        var i, temp;
+        var index = DataHandler.getPathParamsData("index", "0");
+        if ($S.isArray(enabledPageId)) {
+            for(i=0; i<enabledPageId.length; i++) {
+                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);
+                this._addIndex(index, temp);
+                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageId:" + enabledPageId[i]);
+                this._addIndex(index, temp);
+            }
+        }
+        if ($S.isArray(enabledViewPage)) {
+            for(i=0; i<enabledViewPage.length; i++) {
+                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+                this._addIndex(index, temp);
+                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+                this._addIndex(index, temp);
+            }
+        }
+        temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageName:home");
+        this._addIndex(index, temp);
+        temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageName:home");
+        this._addIndex(index, temp);
     }
 });
 

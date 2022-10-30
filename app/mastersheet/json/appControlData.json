@@ -1,7 +1,7 @@
 {
     "list1Data": [
         {
-            "name": "Project Monitoring",
+            "name": "Mastersheet for section",
             "metaDataApi": [
                 "/app/mastersheet/json/common/template.json"
             ],
@@ -9,12 +9,30 @@
                 {
                     "tableName": "table1",
                     "singleLineComment": "//",
-                    "apis": ["/pvt/app-data/mastersheet/user-data-mastersheet.csv"]
+                    "apis": ["/pvt/app-data/mastersheet/user-data-mastersheet-v1.csv"]
+                }
+            ]
+        },
+        {
+            "name": "Mastersheet for division",
+            "metaDataApi": [
+                "/app/mastersheet/json/common/template.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "singleLineComment": "//",
+                    "apis": ["/pvt/app-data/mastersheet/user-data-mastersheet-v2.csv"]
                 }
             ]
         }
     ],
     "metaData": {
+        "dynamicEnabling": {
+            "enablePageGroup09": {
+                "enabledViewPage": ["dashboardLink", "mastersheet"]
+            }
+        },
         "templateDataTableName": "table1",
         "templateName": "mastersheetTemplate",
         "dbTableDataIndex": {
@@ -35,6 +53,40 @@
             "date-param-11": "09",
             "date-param-12": "10",
             "date-param-13": ""
-        }
+        },
+        "afterLoginLinkJson": [
+            {
+                "tag": "span",
+                "text": [
+                    {"tag":"span","text":"Login as: "},
+                    {"tag":"span.b","name":"pageHeading.username","text":""}
+                ]
+            },
+            {
+                "tag": "span",
+                "className": "d-none",
+                "name": "viewPageName:dashboardLink",
+                "text": [
+                    {"tag":"span","text":" |  "},
+                    {"tag":"span","text":{"tag":"link","name":"pageHeading:viewPageName.dashboardLink","href":"app/project-tracking/0","text":"Dashboard"}}
+                ]
+            },
+            {
+                "tag": "span",
+                "className": "d-none",
+                "name": "viewPageName:mastersheet",
+                "text": [
+                    {"tag":"span","text":" |  "},
+                    {"tag":"span","text":{"tag":"a","name":"pageHeading:viewPageName.mastersheet","href":"/app/mastersheet/0","text":"Mastersheet"}}
+                ]
+            },
+            {
+                "tag": "span",
+                "text": [
+                    {"tag":"span", "text":" |  "},
+                    {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+                ]
+            }
+        ]
     }
 }

@@ -13,7 +13,7 @@
                         "text":{
                             "tag":"img",
                             "className":"w-40px",
-                            "src":"/assets/static/img/railwayslogo-64.png"
+                            "src":"/static/img/icons/railwayslogo-64.png"
                             }
                         },
                     {
