@@ -389,8 +389,6 @@ DataHandlerV2.extend({
         var status = false;
         if ([Config.projectId].indexOf(pageName) >= 0) {
             status = true;
-        } else if ([Config.manageFiles].indexOf(pageName) >= 0) {
-            status = true;
         } else if ([Config.viewPage].indexOf(pageName) >= 0) {
             if (!this.isDisabled("viewPage", viewPageName)) {
                 status = true;

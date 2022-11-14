@@ -52,34 +52,31 @@
 <script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript">
-
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
     loginUserDetailsApi: "/api/get_login_user_details",
     relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/project-tracking/json/",
-    projectHeading: "Project tracking",
-    forceLogin: false
+    appControlApi: "/project-tracking/json/appControlData.json",
+    projectHeading: "Project Tracking",
+    forceLogin: true
 };
-
-GLOBAL.validAppControl = ["appControlDataTeam01", "appControlDataTeam02", "appControlDataTeam03", "appControlDataTeam04", "appControlDataTeam07", "appControlDataTeam09"];
-
-GLOBAL.addBasepathLinkName = [
-                        "pageHeading:viewPageName.dashboardLink",
-                        "pageHeading:viewPageName.displaySupplyStatusLink",
-                        "pageHeading:viewPageName.contingencyStatusLink",
-                        "pageHeading:viewPageName.displayWorkStatus",
-                        "pageHeading:viewPageName.projectComment",
-                        "pageHeading:pageId.displayUploadedFiles",
-                        "pageFooter:pageName.manageFiles"
-];
-GLOBAL["pageName:manageFiles.appIndex"] = "1";
-GLOBAL.appControlApi = "/project-tracking/appControlData.json";
-GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
-GLOBAL.uploadFileInstruction = "(Only pdf less than 10MB)";
+GLOBAL.gaTrackingEnable = true;
+GLOBAL.gtag = gtag;
+GLOBAL.validAppControl = [
+  "appControlDataTeam01",
+  "appControlDataTeam02",
+  "appControlDataTeam03",
+  "appControlDataTeam04",
+  "appControlDataTeam06",
+  "appControlDataTeam07",
+  "appControlDataTeam09",
+  "appControlDataTeam10",
+];
+GLOBAL.customPageData = "pageName:manageFiles.appIndex=1";
 window.GLOBAL = GLOBAL;
 </script>
 </body>

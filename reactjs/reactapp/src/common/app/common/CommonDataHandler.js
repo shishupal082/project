@@ -363,11 +363,10 @@ CommonDataHandler.extend({
         }
         return responseArray;
     },
-    setHeaderAndFooterData: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages) {
+    setHeaderAndFooterData: function(addBasepathLinkName, afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages) {
         var i;
         var username = AppHandler.GetUserData("username", "");
         var activeUserRole = AppHandler.GetUserActiveRoles();
-        var addBasepathLinkName = this.removeDuplicateString(CommonConfig.addBasepathLinkName);
         var basepathname = CommonConfig.basepathname;
         if ($S.isStringV2(username)) {
             TemplateHelper.updateTemplateText(afterLoginLinkJson, {"pageHeading.username": username});
@@ -898,6 +897,23 @@ CommonDataHandler.extend({
         }
         return list3Data;
     },
+    getCustomePageData: function() {
+        return CommonConfig.customPageData;
+    },
+    getCustomePageDataByKey: function(key, defaultValue) {
+        var customePageData = this.getCustomePageData();
+        var temp;
+        if ($S.isString(customePageData)) {
+            customePageData = customePageData.split(",");
+            for (var i=0; i<customePageData.length; i++) {
+                temp = customePageData[i].split("=");
+                if (temp.length === 2 && temp[0] === key) {
+                    return temp[1];
+                }
+            }
+        }
+        return defaultValue;
+    }
 });
 })($S);
 

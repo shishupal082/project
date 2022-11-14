@@ -27,6 +27,10 @@ var syncData = {
         "src": "../static/libs/bootstrap-react-v3.1.1.css",
         "destinationDir": "../reactjs/reactapp/src/libs/"
     },
+    "react-base-1.0.0": {
+        "src": "../reactjs/reactapp/dist-react-base-1.0.0/script1.js",
+        "destinationDir": "../../ftp-application/FTP/src/main/resources/assets/static/dist-react-base-1.0.0/"
+    },
     "stack": {
         "src": [
             "../static/js/stack.js",

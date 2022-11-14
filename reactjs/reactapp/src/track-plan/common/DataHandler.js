@@ -299,8 +299,9 @@ DataHandler.extend({
         var enabledPages = DataHandlerV2.getEnabledPages();
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
+        var addBasepathLinkName = this.getAppData("addBasepathLinkName", []);
         DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
-        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
+        CommonDataHandler.setHeaderAndFooterData(addBasepathLinkName, afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
         Config.headingJson = headingJson;
         Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;

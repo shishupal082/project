@@ -7,26 +7,23 @@ CommonConfig.navigator = $$$.navigator;
 CommonConfig.gtag = $$$.gtag;
 CommonConfig.JQ = $$$.JQ;
 CommonConfig.forceLogin = $$$.forceLogin;//boolean = true
-CommonConfig.originPageRedirect = $$$.originPageRedirect;//boolean = true
 CommonConfig.projectHeading = $$$.projectHeading;//String = "Project Tracking"
 CommonConfig.appControlDataPath = $$$.appControlDataPath;//String = "/project-tracking/json/"
-CommonConfig.validAppControl = $$$.validAppControl;//["appControl1", "appControl2"]
-/**
-addBasepathLinkName = [
-    "pageHeading:viewPageName.dashboardLink",
-    "pageHeading:viewPageName.displaySupplyStatusLink",
-    "pageHeading:viewPageName.contingencyStatusLink",
-    "pageHeading:viewPageName.displayWorkStatus",
-    "pageHeading:viewPageName.projectComment",
-    "pageHeading:pageId.displayUploadedFiles",
-    "pageFooter:pageName.manageFiles"
-]
-*/
-CommonConfig.addBasepathLinkName = $$$.addBasepathLinkName;
+CommonConfig.customPageData = $$$.customPageData;
+CommonConfig.validAppControl = [];
 
+var validAppControl = $$$.validAppControl;
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
 var appVersion = $$$.appVersion;
+
+if ($S.isArray(validAppControl)) {
+    for (var i=0; i<validAppControl.length; i++) {
+        if ($S.isStringV2(validAppControl[i])) {
+            CommonConfig.validAppControl.push(validAppControl[i]);
+        }
+    }
+}
 
 CommonConfig.baseApi = baseApi;
 CommonConfig.basepathname = basepathname;

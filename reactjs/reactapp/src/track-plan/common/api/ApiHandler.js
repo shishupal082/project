@@ -26,40 +26,8 @@ ApiHandler.fn = ApiHandler.prototype = {
 
 $S.extendObject(ApiHandler);
 ApiHandler.extend({
-    _loadFileInfoData: function(callback) {
-        var url = CommonConfig.getApiUrl("getFilesInfoApi", "", true);
-        DataHandler.setData("filesInfoLoadStatus", "in_progress");
-        var request = [], temp;
-        if ($S.isStringV2(url)) {
-            temp = {};
-            temp.apiName = "getFilesInfoApi";
-            temp.requestMethod = Api.getAjaxApiCallMethod();
-            temp.url = [url];
-            request.push(temp);
-            AppHandler.LoadDataFromRequestApi(request, function() {
-                DataHandler.setData("filesInfoLoadStatus", "completed");
-                if ($S.isArray(request) && request.length === 1 && $S.isArray(request[0].response) && $S.isArray(request[0].response)) {
-                    if (request[0].response.length === 1 && $S.isObject(request[0].response[0])) {
-                        if (request[0].response[0].status === "SUCCESS") {
-                            DataHandler.setData("filesInfoData", request[0].response[0].data);
-                        }
-                    }
-                }
-                $S.callMethod(callback);
-            });
-        } else {
-            DataHandler.setData("filesInfoLoadStatus", "completed");
-            $S.callMethod(callback);
-        }
-    },
     loadDataByParams: function(callback) {
-        var pageName = DataHandler.getData("pageName", "");
-        var filesInfoLoadStatus = DataHandler.getData("filesInfoLoadStatus", "");
-        if (pageName === "manageFiles" && filesInfoLoadStatus === "not-started") {
-            this._loadFileInfoData(callback);
-        } else {
-            $S.callMethod(callback);
-        }
+        $S.callMethod(callback);
     }
 });
 ApiHandler.extend({

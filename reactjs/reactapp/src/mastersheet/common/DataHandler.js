@@ -174,10 +174,6 @@ DataHandler.extend({
             return false;
         }
         dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
-        var pageName = this.getData("pageName", "");
-        if (pageName === "manageFiles") {
-            dataLoadStatusKey.push("filesInfoLoadStatus");
-        }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
         }
@@ -265,8 +261,9 @@ DataHandler.extend({
         var enabledPages = DataHandlerV2.getEnabledPages();
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
+        var addBasepathLinkName = this.getAppData("addBasepathLinkName", []);
         // DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
-        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
+        CommonDataHandler.setHeaderAndFooterData(addBasepathLinkName, afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
         Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
@@ -274,11 +271,7 @@ DataHandler.extend({
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getCurrentAppId();
         var status = CommonDataHandler.getData("metaDataLoadStatus", "");
-        var pageName = this.getData("pageName", "");
         if (status !== "completed") {
-            if (pageName === Config.manageFiles) {
-                currentList1Id = this.getAppData("pageName:manageFiles.appIndex", "");
-            }
             CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                 DataHandler.setHeaderAndFooterData();
                 DataHandler.loadDataByPage(callback);

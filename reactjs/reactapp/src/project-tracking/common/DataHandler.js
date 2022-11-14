@@ -275,6 +275,9 @@ DataHandler.extend({
         var metaData = CommonDataHandler.getData("metaData", {});
         var tempConfig = Config.tempConfig;
         return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
+    },
+    getCustomePageDataByKey: function(key, defaultValue) {
+        return CommonDataHandler.getCustomePageDataByKey(key, defaultValue);
     }
 });
 
@@ -305,8 +308,9 @@ DataHandler.extend({
         var enabledPages = DataHandlerV2.getEnabledPages();
         var enabledPageId = DataHandlerV2.getEnabledPageId();
         var enabledViewPage = DataHandlerV2.getEnabledViewPageName();
+        var addBasepathLinkName = this.getAppData("addBasepathLinkName", []);
         DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
-        CommonDataHandler.setHeaderAndFooterData(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
+        CommonDataHandler.setHeaderAndFooterData(addBasepathLinkName, afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
         Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
         Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
@@ -317,7 +321,7 @@ DataHandler.extend({
         var pageName = this.getData("pageName", "");
         if (status !== "completed") {
             if (pageName === Config.manageFiles) {
-                currentList1Id = this.getAppData("pageName:manageFiles.appIndex", "");
+                currentList1Id = this.getCustomePageDataByKey("pageName:manageFiles.appIndex", "");
             }
             CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                 CommonDataHandler.setDateSelectParameter(currentList1Id);
