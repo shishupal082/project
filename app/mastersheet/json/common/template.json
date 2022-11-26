@@ -2,17 +2,8 @@
     "mastersheetTemplate": [
         {
             "tag": "table.tbody",
+            "className": "mastersheet-table",
             "text": [
-                {
-                    "tag": "tr",
-                    "text": [
-                        {
-                            "tag": "td",
-                            "className": "first-td h-20px",
-                            "text": " "
-                        }
-                    ]
-                },
                 {
                     "tag": "tr",
                     "text": [
@@ -218,6 +209,7 @@
                                 },
                                 {
                                     "tag": "div",
+                                    "className": "fs-90",
                                     "text": "Designation"
                                 }
                             ]
@@ -262,7 +254,7 @@
                         },
                         {
                             "tag": "td",
-                            "className": "text-center w-80px",
+                            "className": "text-center w-90px",
                             "text": [
                                 {
                                     "tag": "div",
@@ -270,6 +262,7 @@
                                 },
                                 {
                                     "tag": "div",
+                                    "className": "",
                                     "text": "no of days"
                                 }
                             ]
@@ -1132,8 +1125,8 @@
                         },
                         {
                             "tag": "td",
-                            "colSpan": 2,
-                            "text": "द्वारा जांच की गई"
+                            "colSpan": 8,
+                            "text": "द्वारा जांच की गई (Checked by)"
                         }
                     ]
                 },
@@ -1147,26 +1140,7 @@
                         },
                         {
                             "tag": "td",
-                            "text": ""
-                        },
-                        {
-                            "tag": "td",
-                            "colSpan": 2,
-                            "text": "Checked by"
-                        }
-                    ]
-                },
-                {
-                    "tag": "tr",
-                    "text": [
-                        {
-                            "tag": "td",
-                            "className": "first-td",
-                            "text": ""
-                        },
-                        {
-                            "tag": "td",
-                            "colSpan": 3,
+                            "colSpan": 9,
                             "text": "SER/PP/KGP (DTP) - 4 - 2011"
                         }
                     ]

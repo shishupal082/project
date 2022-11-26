@@ -20,9 +20,6 @@ Config.uploadApiVersion = $$$.uploadApiVersion;
 
 Config.defaultMetaData = {};
 
-var staticDataApi = $$$.staticDataApi;
-var loginUserDetailsApi = $$$.loginUserDetailsApi;
-
 var pages = {
     "dashboard": basepathname+"/dashboard",
     "upload_file": basepathname+"/upload_file",
@@ -41,8 +38,8 @@ Config.dateSelectionRequired = [];
 Config.defaultPageFields = [];
 
 var apiMapping = {};
-apiMapping["getStaticDataApi"] = staticDataApi;
-apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
+apiMapping["getStaticDataApi"] = "/api/get_static_data";
+apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
 apiMapping["upload_file"] = "/api/upload_file";
 apiMapping["delete_file"] = "/api/delete_file";
 apiMapping["track_event"] = "/api/track_event";

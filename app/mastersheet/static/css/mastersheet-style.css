@@ -3,6 +3,10 @@
         size: landscape;
     }
 }
+.mastersheet-table td {
+    word-break: break-all;
+    box-sizing: border-box;
+}
 .date-row > td{
     width: 30px;
 }

@@ -49,7 +49,11 @@ CommonConfig.IN_PROGRESS = "in_progress";
 CommonConfig.COMPLETED = "completed";
 
 var apiMapping = {};
-apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion;
+if ($S.isStringV2(appControlApi)) {
+    apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion;
+} else {
+    apiMapping["getAppControlApi"] = null;
+}
 apiMapping["getStaticDataApi"] = "/api/get_static_data";
 apiMapping["getLoginUserDetailsApi"] = "/api/get_login_user_details";
 apiMapping["getRelatedUsersDataApi"] = "/api/get_related_users_data";

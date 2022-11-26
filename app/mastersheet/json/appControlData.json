@@ -9,7 +9,8 @@
                 {
                     "tableName": "table1",
                     "singleLineComment": "//",
-                    "apis": ["/pvt/app-data/mastersheet/user-data-mastersheet-v1.csv"]
+                    "apis2": ["/pvt/app-data/mastersheet/user-data-mastersheet-v1.csv"],
+                    "apis": ["/app/mastersheet/csv/user-data-mastersheet.csv"]
                 }
             ]
         },

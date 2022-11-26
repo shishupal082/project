@@ -2,6 +2,7 @@ import $S from '../../interface/stack.js';
 // import TemplateHelper from '../../common/TemplateHelper';
 import Api from '../../common/Api';
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 
 import Config from "./Config";
@@ -398,16 +399,15 @@ DataHandler.extend({
         return false;
     },
     loadUserRelatedData: function(callback) {
-        var loginUserDetailsApi = Config.getApiUrl("getLoginUserDetails", null, true);
+        var loginUserDetailsApi = CommonConfig.getApiUrl("getLoginUserDetailsApi", null, true);
         if ($S.isString(loginUserDetailsApi)) {
             DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
-            AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
+            AppHandler.LoadLoginUserDetails(CommonConfig.getApiUrl("getLoginUserDetailsApi", null, true), function() {
                 var isLogin = AppHandler.GetUserData("login", false);
-                if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                    AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+                if ($S.isBooleanTrue(CommonConfig.forceLogin) && isLogin === false) {
+                    AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
                     return;
                 }
-                TemplateHandler.SetHeadingUsername();
                 DataHandler.setData("loginUserDetailsLoadStatus", "completed");
                 $S.callMethod(callback);
             });
@@ -418,8 +418,8 @@ DataHandler.extend({
     },
     loadAppControlData: function(callback) {
         DataHandler.setData("appControlDataLoadStatus", "in_progress");
-        var appControlApi = Config.getApiUrl("appControlData", null, true);
-        AppHandler.loadAppControlData(appControlApi, Config.baseApi, Config.appControlDataPath, Config.validAppControl, function(appControlData, metaData) {
+        var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
+        AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
             DataHandler.setData("appControlData", appControlData);
             DataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");

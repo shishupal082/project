@@ -136,7 +136,7 @@ TemplateHandler.extend({
         var appControlData = DataHandler.getData("appControlData", []);
         var template = this.getTemplate("home");
         var linkTemplate, toUrl;
-        if (appControlData.length === 0) {
+        if (!$S.isArray(appControlData) || appControlData.length === 0) {
             return this.getTemplate("noDataFound");
         }
         for (var i = 0; i< appControlData.length; i++) {
@@ -169,25 +169,18 @@ TemplateHandler.extend({
         }
         return template;
     },
-    SetHeadingUsername: function() {
-        var username = AppHandler.GetUserData("username", "");
-        var heading = this.getTemplate("heading");
-        if ($S.isString(username)) {
-            TemplateHelper.setTemplateAttr(heading, "pageHeading.username", "text", username);
-            Template["heading"] = heading;
-            return true;
-        }
-        return false;
-    },
     SetCustomHeadingField: function() {
         var customHeadingField = DataHandler.getAppData("customHeadingField", []);
+        var addBasepathLinkName = DataHandler.getAppData("addBasepathLinkName", []);
         var username = AppHandler.GetUserData("username", "");
-        if ($S.isArrayV2(customHeadingField) || $S.isObjectV2(customHeadingField)) {
-            if ($S.isStringV2(username)) {
-                TemplateHelper.setTemplateAttr(customHeadingField, "pageHeading.username", "text", username);
-            }
-            Template["heading"] = customHeadingField;
+        if (!$S.isArrayV2(customHeadingField) && !$S.isObjectV2(customHeadingField)) {
+            customHeadingField = Template["heading"];
         }
+        if ($S.isStringV2(username)) {
+            TemplateHelper.setTemplateAttr(customHeadingField, "pageHeading.username", "text", username);
+        }
+        CommonDataHandler.setHeaderAndFooterData(addBasepathLinkName, customHeadingField);
+        Template["heading"] = customHeadingField;
     },
     GetHeadingField: function(headingText) {
         var renderField = this.getTemplate("heading");

@@ -32,6 +32,54 @@
         {"name": "currentbal", "toText": "Current Balance"},
         {"name": "home", "toText": "Home"}
     ],
+    "addBasepathLinkName": ["TABILL.EDIT.LINK"],
+    "customHeadingField": [
+        {
+            "tag": "div",
+            "className": "heading",
+            "text": [
+                {
+                    "tag": "center.h2",
+                    "name": "heading-text",
+                    "text": ""
+                }
+            ]
+        },
+        {
+            "tag": "center",
+            "name": "heading-link",
+            "text": [
+                {
+                    "tag": "span",
+                    "text": "Login as: "
+                },
+                {
+                    "tag": "span.b",
+                    "name": "pageHeading.username",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "a",
+                    "name": "TABILL.EDIT.LINK",
+                    "href": "/app/monitorv2",
+                    "text": "Add TA Bill"
+                },
+                {
+                    "tag": "span",
+                    "text": " | "
+                },
+                {
+                    "tag": "a",
+                    "text": "Logout",
+                    "href": "/logout"
+                }
+            ]
+        }
+    ],
     "disabledPages": [],
     "accounts": [
         {

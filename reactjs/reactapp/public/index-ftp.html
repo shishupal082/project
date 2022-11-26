@@ -36,8 +36,8 @@
     gtag('config', 'UA-75647007-1');
 </script>
 
-  </head>
-  <body class="theme-grey">
+</head>
+<body class="theme-grey">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"><center>Loading...</center></div>
     <!--
@@ -53,19 +53,20 @@
 <script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript">
-
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    staticDataApi: "/api/get_static_data",
-    loginUserDetailsApi: "/api/get_login_user_details",
+    appControlDataPath: "",
+    appControlApi: "",
+    projectHeading: "FTP Application",
     forceLogin: true
 };
-GLOBAL.uploadApiVersion = "v1";
-GLOBAL.disabledPages = [];
-GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 GLOBAL.JQ = $;
+GLOBAL.gaTrackingEnable = true;
+GLOBAL.gtag = gtag;
+GLOBAL.validAppControl = [];
+GLOBAL.customPageData = {};
 window.GLOBAL = GLOBAL;
 </script>
 </body>

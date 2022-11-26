@@ -42,17 +42,16 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    appControlDataPath: "/secondAppData/attendance/json/meta-data/",
-    originPageRedirect: false,
-    forceLogin: false
+    appControlDataPath: "",
+    appControlApi: "/mastersheet/json/appControlData.json",
+    projectHeading: "Mastersheet",
+    forceLogin: true
 };
-// GLOBAL.basepathname = window.location.pathname;
-GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
-GLOBAL.appControlDataPath = "/roleAttendanceUser/json/attendance/";
-GLOBAL.appControlApi = "/app/mastersheet/json/appControlData.json";
-GLOBAL.validAppControl = ["appControlDataTeam01"];
-GLOBAL.appVersion = "v1.0.0";
+GLOBAL.appVersion = "8.0.2.010";
+GLOBAL.JQ = null;
+GLOBAL.gaTrackingEnable = true;
 GLOBAL.gtag = gtag;
+GLOBAL.customPageData = {};
 window.GLOBAL = GLOBAL;
 </script>
 </body>

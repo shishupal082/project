@@ -898,18 +898,16 @@ CommonDataHandler.extend({
         return list3Data;
     },
     getCustomePageData: function() {
-        return CommonConfig.customPageData;
+        return $S.clone(CommonConfig.customPageData);
     },
     getCustomePageDataByKey: function(key, defaultValue) {
-        var customePageData = this.getCustomePageData();
-        var temp;
-        if ($S.isString(customePageData)) {
-            customePageData = customePageData.split(",");
-            for (var i=0; i<customePageData.length; i++) {
-                temp = customePageData[i].split("=");
-                if (temp.length === 2 && temp[0] === key) {
-                    return temp[1];
-                }
+        if (!$S.isStringV2(key)) {
+            return defaultValue;
+        }
+        var customePageData = CommonConfig.customPageData;
+        if ($S.isObject(customePageData)) {
+            if ($S.isDefined(customePageData[key])) {
+                return customePageData[key];
             }
         }
         return defaultValue;

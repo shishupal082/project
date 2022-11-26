@@ -55,8 +55,6 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    loginUserDetailsApi: "/api/get_login_user_details",
-    relatedUsersDataApi: "/api/get_related_users_data_v2",
     appControlDataPath: "/project-tracking/json/",
     appControlApi: "/project-tracking/json/appControlData.json",
     projectHeading: "Project Tracking",
@@ -76,7 +74,9 @@ GLOBAL.validAppControl = [
   "appControlDataTeam09",
   "appControlDataTeam10",
 ];
-GLOBAL.customPageData = "pageName:manageFiles.appIndex=1";
+GLOBAL.customPageData = {
+    "pageName:manageFiles.appIndex": 1,
+};
 window.GLOBAL = GLOBAL;
 </script>
 </body>

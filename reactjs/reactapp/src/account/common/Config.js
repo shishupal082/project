@@ -13,12 +13,8 @@ Config.appVersion = CommonConfig.appVersion;
 Config.gtag = CommonConfig.gtag;
 Config.projectHeading = $$$.projectHeading;
 
-
-var appControlDataApi = $$$.appControlDataApi;
-var loginUserDetailsApi = $$$.loginUserDetailsApi;
-
-Config.appControlDataPath = $$$.appControlDataPath;
-Config.validAppControl = $$$.validAppControl;
+Config.appControlDataPath = CommonConfig.appControlDataPath;
+Config.validAppControl = CommonConfig.validAppControl;
 Config.tempConfig = {
     "journal.tableName": "accountal_data",
     "enabledPages": $$$.enabledPages,
@@ -87,21 +83,5 @@ Config.dateSelection = [
     {"name": "Yearly", "value": "yearly"},
     {"name": "All", "value": "all"}
 ];
-
-var apiMapping = {};
-apiMapping["appControlData"] = appControlDataApi + "?v=" + Config.appVersion;
-apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
-apiMapping["loginRedirectUrl"] = "/login";
-Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
-    if ($S.isString(apiMapping[key])) {
-        if ($S.isBooleanTrue(addBaseUrl)) {
-            return Config.baseApi + apiMapping[key];
-        } else {
-            // used for redirect
-            return apiMapping[key];
-        }
-    }
-    return defaultValue;
-};
 
 export default Config;

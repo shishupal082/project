@@ -46,19 +46,21 @@
 var GLOBAL = {
     baseApi: "http://localhost:8080",
     basepathname: "",
-    projectHeading: "Accounting",
     appControlDataPath: "/account/json/",
-    forceLogin: false,
-    enabledPages: ["all"]
+    appControlApi: "/account/json/appControlData.json",
+    projectHeading: "Accounting",
+    forceLogin: true
 };
-
-GLOBAL.appControlDataApi = "/pvt/app-data/account/userControlV3.json";
-GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
-GLOBAL.validAppControl = ["appControlDataTeam04", "appControlDataTeam07",
-                          "appControlDataTeam10"];
+GLOBAL.appVersion = "8.0.2.010";
+GLOBAL.JQ = null;
+GLOBAL.gaTrackingEnable = false;
 GLOBAL.gtag = null;
-GLOBAL.appVersion = "v1.0.0";
+GLOBAL.validAppControl = ["appControlDataTeam04","appControlDataTeam07","appControlDataTeam11",];
+GLOBAL.customPageData = {
+    loginUserDetailsApi: "/api/get_login_user_details",
+};
 window.GLOBAL = GLOBAL;
+
 </script>
 </body>
 
