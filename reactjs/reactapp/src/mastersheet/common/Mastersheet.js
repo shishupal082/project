@@ -80,6 +80,14 @@ Mastersheet.extend({
         }
         return finalPageDataArray;
     },
+    _getPageParam: function() {
+        var pageParam = DataHandler.getAppData("pageParam", {});
+        var pageParamDate = DataHandler.getAppData("pageParam.date", "");
+        if ($S.isStringV2(pageParamDate) && $S.isObject(pageParam)) {
+            pageParam["date"] = pageParamDate;
+        }
+        return pageParam;
+    },
     _generateTemplateData: function(mastersheetData) {
         var maxUserPerPage = DataHandler.getAppData("maxUserPerPage", 4);
         var tempData = {}, tempData2, pageId, i;
@@ -104,7 +112,7 @@ Mastersheet.extend({
         var rowIndex, pageParam, orgSNo, currentSNo, serialNoDisplay, hq, billUnitNo;
         tempData = this._verifyPageName(tempData, maxUserPerPage);
         for (pageId in tempData) {
-            pageParam = DataHandler.getAppData("pageParam", {});
+            pageParam = this._getPageParam();
             tempData2 = $S.clone(pageParam);
             hq = "";
             billUnitNo = "";
