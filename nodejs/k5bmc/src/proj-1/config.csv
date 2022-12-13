@@ -1,0 +1,5 @@
+//projectId, source filepath, destination filepath, identifier
+
+Test_F, proj-1/source/Test.txt, ../dist/proj-1/FAT/Test.txt, FAT/Test/
+Test_S, proj-1/source/Test.txt, ../dist/proj-1/Service/Test.txt, Service/Test/
+
