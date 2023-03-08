@@ -50,13 +50,15 @@ function main() {
     ConvertGoogleSheetToJson.convert({"appId": "001", "workId": workId}, function(status) {
       if (status === "SUCCESS") {
         var fileMapping = ConvertGoogleSheetToJson.getFinalResult();
-        console.log(fileMapping);
         ConvertGoogleSheetToJson.clearFinalResult();
         if (fileMapping) {
           for (i=0; i<fileMapping.length; i++) {
             if (fileMapping[i]) {
               for (j=0; j<fileMapping[i].length; j++) {
-                if (fileMapping[i][j] && fileMapping[i][j].length >= 4) {
+                if (fileMapping[i][j] && fileMapping[i][j].length >= 6) {
+                  if (fileMapping[i][j][5] !== workId && workId !== "all") {
+                    continue;
+                  }
                   finalData.push({
                     "status": "PENDING",
                     "fileMappingData": fileMapping[i][j],
@@ -72,6 +74,7 @@ function main() {
               }
             }
           }
+          console.log(finalData);
           generateFinalResult();
         } else {
           console.log("Invalid config parameter generated.");
