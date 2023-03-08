@@ -42,7 +42,7 @@ ReadText.fn = ReadText.prototype = {
     writeText: function(filepath, callback) {
         var self = this;
         if (FS.isFile(filepath)) {
-            Logger.log("File exist: " + filepath);
+            // Logger.log("File exist: " + filepath);
             FS.deleteContent(filepath, function() {
                 self.writeContent(filepath, function(status) {
                     $S.callMethodV1(callback, status);
