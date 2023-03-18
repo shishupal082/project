@@ -153,7 +153,7 @@ AppHandler.extend({
         /*Daily Date Selection*/
         for (i=0; i<allDate.length; i++) {
             temp = allDate[i];
-            dailyDateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59"], "dateHeading": temp});
+            dailyDateSelection.push({"dateRange": [temp+" 00:00", temp+" 23:59:59.999"], "dateHeading": temp});
         }
         /*Monthly Date Selection*/
         temp = [];
@@ -162,7 +162,7 @@ AppHandler.extend({
             dObj = DT.getDateObj(allDate[i]);
             if (dObj !== null) {
                 heading = DT.formateDateTime("MMM/ /YYYY", "/", dObj);
-                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
+                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59:59.999", "/", dObj);
                 if (temp.indexOf(heading) < 0) {
                     isDateHeadingChanged = true;
                 } else {
@@ -187,7 +187,7 @@ AppHandler.extend({
             dObj = DT.getDateObj(allDate[i]);
             if (dObj !== null) {
                 heading = DT.formateDateTime("YYYY", "/", dObj);
-                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59", "/", dObj);
+                endDate = DT.formateDateTime("YYYY/-/MM/-/DD/ 23:59:59.999", "/", dObj);
                 if (temp.indexOf(heading) < 0) {
                     isDateHeadingChanged = true;
                 } else {
@@ -208,7 +208,7 @@ AppHandler.extend({
         }
         /*All Date Selection*/
         if (allDate.length > 0) {
-            allDateSelection.push({"dateRange": [allDate[0] + " 00:00", allDate[allDate.length-1] + " 23:59"], "dateHeading": "All"});
+            allDateSelection.push({"dateRange": [allDate[0] + " 00:00", allDate[allDate.length-1] + " 23:59:59.999"], "dateHeading": "All"});
         }
         var combinedDateSelectionParameter = {};
         combinedDateSelectionParameter["daily"] = dailyDateSelection;
