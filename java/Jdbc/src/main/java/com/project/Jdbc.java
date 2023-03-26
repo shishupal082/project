@@ -1,5 +1,6 @@
 package com.project;
 
+import com.project.sql.MysqlCredentials;
 import com.project.sql.MysqlExecutor;
 
 import java.util.Scanner;
@@ -21,16 +22,18 @@ public class Jdbc {
         String baseurl = args[0];
         String username = args[1];
         String password = args[2];
-        MysqlExecutor mysqlExecutor = new MysqlExecutor(baseurl, username, password);
+        MysqlCredentials mysqlCredentials = new MysqlCredentials(null, baseurl, username, password);
+        MysqlExecutor mysqlExecutor = new MysqlExecutor(mysqlCredentials);
         StaticService.printLog("Hello Jdbc");
         String query;
         if (args.length >= 4) {
-            for(int i=3; i< args.length; i++) {
-                query = args[i];
-                mysqlExecutor.executeQuery(query);
-            }
+//            for(int i=3; i< args.length; i++) {
+//                query = args[i];
+//                mysqlExecutor.executeQuery(query);
+//            }
+            StaticService.printLogSameLine("Invalid config parameter.");
         } else {
-            StaticService.printLogSameLine("Entry sql query (city table): ");
+            StaticService.printLogSameLine("Entry sql query (city / users table): ");
             query = sc.nextLine();
             mysqlExecutor.executeQuery(query);
         }

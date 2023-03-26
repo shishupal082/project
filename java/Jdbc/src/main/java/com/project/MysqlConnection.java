@@ -1,5 +1,6 @@
 package com.project;
 
+import com.project.sql.MysqlCredentials;
 import com.project.tables.City;
 import com.project.tables.User;
 
@@ -10,20 +11,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MysqlConnection {
-    private final String driver = "com.mysql.jdbc.Driver";
     //"jdbc:mysql://127.0.0.1:3306/world??autoReconnect=true&useSSL=false"; (Here database name is world)
     private final String url;
-    private final String username;
-    private final String password;
+    private final MysqlCredentials mysqlCredentials;
     private Connection con;
-    public MysqlConnection(String url, String username, String password) {
+    public MysqlConnection(String url, MysqlCredentials mysqlCredentials) {
         this.url = url;
-        this.username = username;
-        this.password = password;
+        this.mysqlCredentials = mysqlCredentials;
     }
     private void logParam() {
-        String connectionRequest = driver+";"+url+";"+username+";"+password;
-        StaticService.printLog(connectionRequest);
+        StaticService.printLog(mysqlCredentials.toString());
     }
     public void close() {
         if (con == null) {
@@ -41,15 +38,15 @@ public class MysqlConnection {
     public void Connect() {
         this.logParam();
         try {
-            Class.forName(driver);
-            con = DriverManager.getConnection(url, username, password);
+            Class.forName(mysqlCredentials.getDriver());
+            con = DriverManager.getConnection(url, mysqlCredentials.getUsername(), mysqlCredentials.getPassword());
             StaticService.printLog("Connection success");
         } catch (Exception e) {
             StaticService.printLog("Connection fail");
             e.printStackTrace();
         }
     }
-    public void query(String query) {
+    public void executeCityTableQuery(String query) {
         String str = "Requested query: " + query;
         StaticService.printLog(str);
         ArrayList<City> cities = new ArrayList<>();
@@ -66,7 +63,7 @@ public class MysqlConnection {
             StaticService.printLog(city.toString());
         }
     }
-    public void queryV2(String query) {
+    public void executeUsersQuery(String query) {
         String str = "Requested query: " + query;
         StaticService.printLog(str);
         ArrayList<User> users = new ArrayList<>();

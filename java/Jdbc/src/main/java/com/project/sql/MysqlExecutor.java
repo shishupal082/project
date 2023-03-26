@@ -6,25 +6,23 @@ import com.project.StaticService;
 public class MysqlExecutor {
     private final String worldDB;
     private final String ftpAppDB;
-    private final String username;
-    private final String password;
-    public MysqlExecutor(String baseurl, String username, String password) {
+    private final MysqlCredentials mysqlCredentials;
+    public MysqlExecutor(MysqlCredentials mysqlCredentials) {
 //        baseurl = "jdbc:mysql://localhost:3306"
-        this.worldDB = baseurl + "/world?autoReconnect=true&useSSL=false";
-        this.ftpAppDB = baseurl + "/ftpapp?autoReconnect=true&useSSL=false";
-        this.username = username;
-        this.password = password;
+        this.worldDB = mysqlCredentials.getBaseUrl() + "/world?autoReconnect=true&useSSL=false";
+        this.ftpAppDB = mysqlCredentials.getBaseUrl() + "/ftpapp?autoReconnect=true&useSSL=false";
+        this.mysqlCredentials = mysqlCredentials;
     }
     private void executeWorldDBQuery(String query) {
-        MysqlConnection mysqlConnection = new MysqlConnection(worldDB, username, password);
+        MysqlConnection mysqlConnection = new MysqlConnection(worldDB, mysqlCredentials);
         mysqlConnection.Connect();
-        mysqlConnection.query(query);
+        mysqlConnection.executeCityTableQuery(query);
         mysqlConnection.close();
     }
     private void executeFtpAppDBQuery(String query) {
-        MysqlConnection mysqlConnection = new MysqlConnection(ftpAppDB, username, password);
+        MysqlConnection mysqlConnection = new MysqlConnection(ftpAppDB, mysqlCredentials);
         mysqlConnection.Connect();
-        mysqlConnection.queryV2(query);
+        mysqlConnection.executeUsersQuery(query);
         mysqlConnection.close();
     }
     public void executeQuery(String query) {
