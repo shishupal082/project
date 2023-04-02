@@ -33,7 +33,7 @@ public class EmployeeDB {
     }
     public Employee createEmployee(String name, Integer age){
         Integer personId = this.getNewPersonId();
-        String recordDate = DateService.getDateStrFromPattern("YYYY-MM-DD");
+        String recordDate = DateService.getDateStrFromPattern("YYYY-MM-dd");
         Employee employee = new Employee(personId, name, age, recordDate);
         employees.put(personId, employee);
         return employee;
