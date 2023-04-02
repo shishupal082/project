@@ -27,11 +27,10 @@ public class Jdbc {
         StaticService.printLog("Hello Jdbc");
         String query;
         if (args.length >= 4) {
-//            for(int i=3; i< args.length; i++) {
-//                query = args[i];
-//                mysqlExecutor.executeQuery(query);
-//            }
-            StaticService.printLogSameLine("Invalid config parameter.");
+            for(int i=3; i< args.length; i++) {
+                query = args[i];
+                mysqlExecutor.executeQuery(query);
+            }
         } else {
             StaticService.printLogSameLine("Entry sql query (city / users table): ");
             query = sc.nextLine();

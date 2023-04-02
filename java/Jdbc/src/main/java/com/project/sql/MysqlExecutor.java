@@ -29,7 +29,7 @@ public class MysqlExecutor {
         if (query == null) {
             return;
         }
-        if (query.contains("user")) {
+        if (query.contains("users")) {
             this.executeFtpAppDBQuery(query);
         } else if (query.contains("city")) {
             this.executeWorldDBQuery(query);

@@ -1,5 +1,4 @@
 
-
 ---- Temp path above this line ----
 
 nodejs/node_modules/
@@ -11,6 +10,7 @@ reactjs/reactapp/node_modules/
 reactjs/reactapp/build/
 reactjs/reactapp/package-lock.json
 reactjs/reactapp/public/index.html
+
 
 reactjs/reactapp/src/react-auth-app/node_modules/
 reactjs/reactapp/src/react-auth-app/build/
@@ -75,12 +75,13 @@ java/todo/todo.iml
 java/todo/target/
 java/todo/meta-data/todo-*.jar
 
-java/yard/.idea/
-java/yard/src/main/main.iml
-java/yard/src/test/test.iml
-java/yard/yard.iml
-java/yard/target/
-java/yard/meta-data/yard-*.jar
+java/*/.idea/
+java/*/src/main/main.iml
+java/*/src/test/test.iml
+java/*/*.iml
+java/*/target/
+java/*/meta-data/*-*.jar
+
 java/yard/readme.pdf
 
 java/pdf/.idea/
