@@ -39,7 +39,22 @@ ReadText.fn = ReadText.prototype = {
             return;
         }
     },
+    deleteText: function(filepath, callback) {
+        var self = this;
+        if (FS.isFile(filepath)) {
+            FS.deleteContent(filepath, callback);
+        } else {
+            Logger.log("File does not exist: " + filepath);
+            $S.callMethodV1(callback, false);
+        }
+    },
     writeText: function(filepath, callback) {
+        /**
+         * If file exist,
+         * It will remove old content and add new text.
+         * Othewise,
+         * Do nothing.
+         * */
         var self = this;
         if (FS.isFile(filepath)) {
             // Logger.log("File exist: " + filepath);
@@ -54,6 +69,10 @@ ReadText.fn = ReadText.prototype = {
         }
     },
     writeTextV2: function(filepath, callback) {
+        /**
+         * It will create file if not exist then writeText.
+         * If file exist then delete old content and write new text.
+         * */
         var self = this;
         if (!FS.isFile(filepath)) {
             FS.appendTextFile(filepath, "", function() {
@@ -61,6 +80,24 @@ ReadText.fn = ReadText.prototype = {
             });
         } else {
             this.writeText(filepath, callback);
+        }
+    },
+    writeTextV3: function(filepath, callback) {
+        /**
+         * It will create file if not exist then addText in file.
+         * If file exist then add new text in file.
+         * */
+        var self = this;
+        if (!FS.isFile(filepath)) {
+            FS.appendTextFile(filepath, "", function() {
+                self.writeContent(filepath, function(status) {
+                    $S.callMethodV1(callback, status);
+                });
+            });
+        } else {
+            self.writeContent(filepath, function(status) {
+                $S.callMethodV1(callback, status);
+            });
         }
     }
 };
@@ -171,13 +208,23 @@ var generateFile = {
             });
         });
     },
+    deleteText: function(destinationPath, callback) {
+        ReadText({"i": 0}).deleteText(destinationPath, function(status) {
+            $S.callMethodV1(callback, status);
+        });
+    },
     saveText: function(textDataArr, destinationPath, callback) {
         ReadText({"i": 0, "textData": textDataArr}).writeText(destinationPath, function(status) {
-            $S.callMethod(callback);
+            $S.callMethodV1(callback, status);
         });
     },
     saveTextV2: function(textDataArr, destinationPath, callback) {
         ReadText({"i": 0, "textData": textDataArr}).writeTextV2(destinationPath, function(status) {
+            $S.callMethodV1(callback, status);
+        });
+    },
+    saveTextV3: function(textDataArr, destinationPath, callback) {
+        ReadText({"i": 0, "textData": textDataArr}).writeTextV3(destinationPath, function(status) {
             $S.callMethodV1(callback, status);
         });
     },

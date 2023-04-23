@@ -153,9 +153,15 @@ FS.extend({
     },
     deleteContent: function(filepath, callback) {
         if (this.isFile(filepath)) {
-            fs.writeFile(filepath, '', callback);
+            fs.writeFile(filepath, '', function(err) {
+                if (err) {
+                    $S.callMethodV1(callback, false);
+                } else {
+                    $S.callMethodV1(callback, true);
+                }
+            });
         } else {
-            $S.callMethod(callback);
+            $S.callMethodV1(callback, false);
         }
     }
 });

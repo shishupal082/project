@@ -67,26 +67,58 @@ ConvertGoogleSheetToJson.extend({
     }
 });
 ConvertGoogleSheetToJson.extend({
-    _saveData: function(data, config) {
-        if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
-            var destination = config["fileMappingData"][4];
-            generateFile.saveText([data.join(",")], destination, function(status) {
-                // Logger.log("File read and write completed.");
-            });
+    _saveData: function(que) {
+        var self = this;
+        if (que.getSize() > 0) {
+            var queElement = que.Deque();
+            if ($S.isArray(queElement) && queElement.length === 2) {
+                var data = queElement[0];
+                var config = queElement[1];
+                if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
+                    var destination = config["fileMappingData"][4];
+                    generateFile.saveTextV3([data.join(",")], destination, function(status) {
+                        // Logger.log("File read and write completed.");
+                        self._saveData(que);
+                    });
+                }
+            }
+        }
+    },
+    _clearOldContentAndSaveNewData: function(configQue, que) {
+        var self = this;
+        if (configQue.getSize() > 0) {
+            var config = configQue.Deque();
+            if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
+                var destination = config["fileMappingData"][4];
+                generateFile.deleteText(destination, function(status) {
+                    // if (status) {
+                    //     Logger.log("Old content deleted: " + destination);
+                    // } else {
+                    //     Logger.log("Error in deleting old content.");
+                    // }
+                    self._clearOldContentAndSaveNewData(configQue, que);
+                });
+            }
+        } else {
+            self._saveData(que);
         }
     },
     saveCSVData: function(finalData) {
+        var que = $S.getQue();
+        var configQue = $S.getQue();
         for (var i=0; i<finalData.length; i++) {
+            configQue.Enque(finalData[i]);
             if ($S.isArray(finalData[i]["excelData"])) {
                 for (var j=0; j<finalData[i]["excelData"].length; j++) {
                     if ($S.isArray(finalData[i]["excelData"][j])) {
                         for (var k=0; k<finalData[i]["excelData"][j].length; k++) {
-                            this._saveData(finalData[i]["excelData"][j][k], finalData[i]);
+                            que.Enque([finalData[i]["excelData"][j][k], finalData[i]]);
                        }
                     }
                 }
             }
         }
+        this._clearOldContentAndSaveNewData(configQue, que);
     }
 });
 ConvertGoogleSheetToJson.extend({
