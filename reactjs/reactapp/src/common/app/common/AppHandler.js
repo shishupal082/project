@@ -85,16 +85,23 @@ AppHandler.extend({
         var p3 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9].[0-9]{3}/i;
         var p4 = /[1-9]{1}[0-9]{3}-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]/i;
         var dateObj;
-        if ($S.isString(dateStr) && (dateStr.length === 16 || dateStr.length === 10 || dateStr.length === 23 || dateStr.length === 19)) {
-            dateObj = DT.getDateObj(dateStr);
-            if (dateObj !== null) {
-                if (dateStr.search(p3) >= 0 && dateStr === DT.formateDateTime(p3Formate, "/", dateObj)) {
-                    return true;
-                } else if (dateStr.search(p4) >= 0 && dateStr === DT.formateDateTime(p4Formate, "/", dateObj)) {
-                    return true;
-                } else if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
-                    return true;
-                } else if (dateStr.search(p1) >= 0 && dateStr === DT.formateDateTime(p1Formate, "/", dateObj)) {
+        if ($S.isString(dateStr)) {
+            if ((dateStr.length === 16 || dateStr.length === 10 || dateStr.length === 23 || dateStr.length === 19)) {
+                dateObj = DT.getDateObj(dateStr);
+                if (dateObj !== null) {
+                    if (dateStr.search(p3) >= 0 && dateStr === DT.formateDateTime(p3Formate, "/", dateObj)) {
+                        return true;
+                    } else if (dateStr.search(p4) >= 0 && dateStr === DT.formateDateTime(p4Formate, "/", dateObj)) {
+                        return true;
+                    } else if (dateStr.search(p2) >= 0 && dateStr === DT.formateDateTime(p2Formate, "/", dateObj)) {
+                        return true;
+                    } else if (dateStr.search(p1) >= 0 && dateStr === DT.formateDateTime(p1Formate, "/", dateObj)) {
+                        return true;
+                    }
+                }
+            } else {
+                dateObj = DT.getDateObj(dateStr);
+                if (dateObj !== null) {
                     return true;
                 }
             }
