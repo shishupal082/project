@@ -1816,6 +1816,16 @@ Stack.extend({
         }
         return false;
     },
+    isStringStartWith: function(str, subStr, startIndex) {
+        if (this.isStringV2(str) && this.isStringV2(subStr)) {
+            if (this.isNumber(startIndex) && startIndex >= 0) {
+                return str.startsWith(subStr, startIndex);
+            } else {
+                return str.startsWith(subStr);
+            }
+        }
+        return false;
+    },
     addElAt: function(arr, index, el) {
         return addElAt(arr, index, el);
     },

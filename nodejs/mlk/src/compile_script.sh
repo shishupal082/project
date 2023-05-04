@@ -1,2 +1,2 @@
-cd ./proj-3.2/
+cd ./proj-3/
 sh compile.sh

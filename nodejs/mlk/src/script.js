@@ -121,7 +121,7 @@ function generateAllFile(csvConfigData, callback) {
 }
 
 var CRC = function(config) {
-    return new UDP.fn.init(config);
+    return new CRC.fn.init(config);
 };
 
 CRC.fn = CRC.prototype = {

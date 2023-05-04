@@ -18,8 +18,13 @@ proj-2
 -----------
 Center to South and vice-versa relay repeater
 
+proj-3
+-----------
+Running MLK logic
+
 proj-4
 -----------
+Repeater circuit
 Boolean expression evaluator with timer facility
 C1 IP address: 192.168.1.101
 C1_SIM IP address: 192.168.1.41
