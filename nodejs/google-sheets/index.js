@@ -1,4 +1,5 @@
 const ConvertGoogleSheetToJson = require("../src/google-sheets/ConvertGoogleSheetToJson.js");
+const CsvDataFormate = require("../src/common/CsvDataFormate.js");
 var arg = process.argv;
 var workId = "";
 if (arg.length >= 3 && arg[2].length > 0) {
@@ -10,6 +11,7 @@ if (arg.length >= 3 && arg[2].length > 0) {
 var finalData = [];
 var i, j, spreadsheetId, sheetName;
 var isAllDataLoaded;
+
 function generateFinalResult() {
   for (i=0; i<finalData.length; i++) {
     if (finalData[i]["status"] === "PENDING") {
@@ -33,6 +35,8 @@ function generateFinalResult() {
             }
             if (isAllDataLoaded){
               console.log("Data load completed.");
+              CsvDataFormate.replaceSpecialCharacterEachCell(finalData);
+              CsvDataFormate.format(finalData);
               ConvertGoogleSheetToJson.saveCSVData(finalData);
             } else {
               generateFinalResult();
@@ -47,7 +51,10 @@ function generateFinalResult() {
 
 function main() {
   ConvertGoogleSheetToJson.readConfigData("./google-sheets/config.json", function() {
-    ConvertGoogleSheetToJson.convert({"appId": "001", "workId": workId}, function(status) {
+    var request = {"appId": "001", "workId": workId};
+    var excelConfig = ConvertGoogleSheetToJson.getExcelConfig(request);
+    CsvDataFormate.updateConfigData(workId, excelConfig);
+    ConvertGoogleSheetToJson.convert(request, excelConfig, function(status) {
       if (status === "SUCCESS") {
         var fileMapping = ConvertGoogleSheetToJson.getFinalResult();
         ConvertGoogleSheetToJson.clearFinalResult();

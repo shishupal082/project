@@ -169,9 +169,8 @@ ConvertGoogleSheetToJson.extend({
         }
         return $S.callMethodV1(callback, "IN_PROGRESS");
     },
-    convert: function(request, callback) {
+    convert: function(request, excelConfig, callback) {
         Logger.logV2(request);
-        var excelConfig = ConvertGoogleSheetToJson.getExcelConfig(request);
         ConvertGoogleSheetToJson.generateResult(excelConfig, function(status) {
             $S.callMethodV1(callback, status);
         });

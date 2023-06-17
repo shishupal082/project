@@ -1,0 +1,10 @@
+{
+    "rbp-rnc": [
+        {
+            "info": "MB-00-ref-data",
+            "spreadsheetId": "file-mapping-spreadsheet-id",
+            "sheetName": "file-mapping",
+            "copyCellDataIndex": [0,1]
+        }
+    ]
+}
