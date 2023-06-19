@@ -2,7 +2,16 @@ const $S = require("../libs/stack.js");
 
 (function() {
 var CONFIGDATA = {
-    "workId": [0]
+    "workId": {
+        "copyCellDataIndex": [0],
+        "appendCellDataIndex": [[0,5],[7,-1]],
+        "cellMapping": [
+            {
+                "gs_index": -1,
+                "defaultCellData": "defaultText"
+            }
+        ]
+    }
 };
 var CsvDataFormate = function(config) {
     return new CsvDataFormate.fn.init(config);
@@ -24,12 +33,16 @@ CsvDataFormate.extend({
         }
         var config = {};
         if ($S.isArray(excelConfig) && excelConfig.length === 1) {
-            if ($S.isObject(excelConfig[0]) && $S.isArray(excelConfig[0]["copyCellDataIndex"])) {
-                config[workId] = [];
-                for (var i=0; i<excelConfig[0]["copyCellDataIndex"].length; i++) {
-                    if ($S.isNumber(excelConfig[0]["copyCellDataIndex"][i]) && excelConfig[0]["copyCellDataIndex"][i] >= 0) {
-                        config[workId].push(excelConfig[0]["copyCellDataIndex"][i]);
-                    }
+            config[workId] = {"copyCellDataIndex": [], "cellMapping": []};
+            if ($S.isObject(excelConfig[0])) {
+                if ($S.isArray(excelConfig[0]["copyCellDataIndex"])) {
+                    config[workId]["copyCellDataIndex"] = excelConfig[0]["copyCellDataIndex"];
+                }
+                if ($S.isArray(excelConfig[0]["cellMapping"])) {
+                    config[workId]["cellMapping"] = excelConfig[0]["cellMapping"];
+                }
+                if ($S.isArray(excelConfig[0]["appendCellDataIndex"])) {
+                    config[workId]["appendCellDataIndex"] = excelConfig[0]["appendCellDataIndex"];
                 }
             }
         }
@@ -47,12 +60,42 @@ CsvDataFormate.extend({
         var configData = [], temp;
         if ($S.isStringV2(name) && $S.isObject(CONFIGDATA) && CONFIGDATA[name]) {
             temp = $S.clone(CONFIGDATA[name]);
-            if ($S.isArray(temp)) {
-                for (var i=0; i<temp.length; i++) {
-                    if ($S.isNumber(temp[i]) && temp[i] >= 0) {
-                        configData.push({"index": temp[i], "previousData": ""});
+            if ($S.isObject(temp) && $S.isArray(temp["copyCellDataIndex"])) {
+                for (var i=0; i<temp["copyCellDataIndex"].length; i++) {
+                    if ($S.isNumber(temp["copyCellDataIndex"][i]) && temp["copyCellDataIndex"][i] >= 0) {
+                        configData.push({"index": temp["copyCellDataIndex"][i], "previousData": ""});
                     }
                 }
+            }
+            return configData;
+        }
+        return [];
+    },
+    getCellMappingConfig: function(fileMappingData) {
+        var name = "";
+        if ($S.isArray(fileMappingData) && fileMappingData.length >= 6) {
+            name = fileMappingData[5];
+        }
+        var configData = [], excelConfigData;
+        if ($S.isStringV2(name) && $S.isObject(CONFIGDATA) && CONFIGDATA[name]) {
+            excelConfigData = $S.clone(CONFIGDATA[name]);
+            if ($S.isObject(excelConfigData) && $S.isArray(excelConfigData["cellMapping"])) {
+                configData = excelConfigData["cellMapping"];
+            }
+            return configData;
+        }
+        return [];
+    },
+    getAppendCellDataConfig: function(fileMappingData) {
+        var name = "";
+        if ($S.isArray(fileMappingData) && fileMappingData.length >= 6) {
+            name = fileMappingData[5];
+        }
+        var configData = [], appendCellDataConfig;
+        if ($S.isStringV2(name) && $S.isObject(CONFIGDATA) && CONFIGDATA[name]) {
+            appendCellDataConfig = $S.clone(CONFIGDATA[name]);
+            if ($S.isObject(appendCellDataConfig) && $S.isArray(appendCellDataConfig["appendCellDataIndex"])) {
+                configData = appendCellDataConfig["appendCellDataIndex"];
             }
             return configData;
         }
@@ -85,31 +128,91 @@ CsvDataFormate.extend({
         }
         return true;
     },
+    _copyCellDataIndex: function(rowData, copyCellDataConfig) {
+        var colIndex = 0;
+        if ($S.isArray(rowData) && $S.isArray(copyCellDataConfig)) {
+            for (var l=0; l<copyCellDataConfig.length; l++) {
+                if ($S.isObject(copyCellDataConfig[l]) && $S.isNumber(copyCellDataConfig[l]["index"]) && copyCellDataConfig[l]["index"] >= 0) {
+                    colIndex = copyCellDataConfig[l]["index"];
+                    if (colIndex < rowData.length) {
+                        if ($S.isStringV2(rowData[colIndex])) {
+                            copyCellDataConfig[l]["previousData"] = rowData[colIndex];
+                        }
+                        rowData[colIndex] = copyCellDataConfig[l]["previousData"];
+                    }
+                }
+            }
+        }
+        return rowData;
+    },
+    _applyCellMapping: function(rowData, cellMappingConfig, appendCellDataConfig) {
+        if (!$S.isArray(rowData)) {
+            return rowData;
+        }
+        var i, startIndex, endIndex;
+        var finalRowData = [], cellData;
+        var isValidConfig = false;
+        if ($S.isArray(cellMappingConfig) && cellMappingConfig.length > 0) {
+            isValidConfig = true;
+            for (i=0; i<cellMappingConfig.length; i++) {
+                cellData = "";
+                if ($S.isObject(cellMappingConfig[i]) && $S.isNumber(cellMappingConfig[i]["gs_index"]) && cellMappingConfig[i]["gs_index"] >= -1) {
+                    if (cellMappingConfig[i]["gs_index"] < 0) {
+                        if ($S.isStringV2(cellMappingConfig[i]["defaultCellData"])) {
+                            cellData = cellMappingConfig[i]["defaultCellData"];
+                        }
+                    } else if (cellMappingConfig[i]["gs_index"] >= 0) {
+                        if (rowData.length > cellMappingConfig[i]["gs_index"]) {
+                            cellData = rowData[cellMappingConfig[i]["gs_index"]];
+                        }
+                    }
+                }
+                finalRowData.push(cellData);
+            }
+        }
+        if ($S.isArray(appendCellDataConfig) && appendCellDataConfig.length > 0) {
+            isValidConfig = true;
+            for (i=0; i<appendCellDataConfig.length; i++) {
+                if ($S.isArray(appendCellDataConfig[i]) && appendCellDataConfig[i].length === 2) {
+                    if ($S.isNumber(appendCellDataConfig[i][0]) && appendCellDataConfig[i][0] >= 0) {
+                        startIndex = appendCellDataConfig[i][0];
+                        if ($S.isNumber(appendCellDataConfig[i][1]) && appendCellDataConfig[i][1] >= 0) {
+                            endIndex = appendCellDataConfig[i][1];
+                        } else {
+                            endIndex = rowData.length - 1;
+                        }
+                        for (var j=startIndex; j<=endIndex; j++) {
+                            if (j < rowData.length) {
+                                finalRowData.push(rowData[j]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (isValidConfig) {
+            return finalRowData;
+        }
+        return rowData;
+    },
     format: function(finalData) {
         var previousData = "";
         var rowData = [];
         var colIndex = 0;
+        var copyCellDataConfig, cellMappingConfig;
         if ($S.isArray(finalData)) {
             for (var i=0; i<finalData.length; i++) {
                 if ($S.isObject(finalData[i]) && $S.isArray(finalData[i]["excelData"])) {
-                    var configData = this.getConfigData(finalData[i]["fileMappingData"]);
+                    copyCellDataConfig = this.getConfigData(finalData[i]["fileMappingData"]);
+                    cellMappingConfig = this.getCellMappingConfig(finalData[i]["fileMappingData"]);
+                    appendCellDataConfig = this.getAppendCellDataConfig(finalData[i]["fileMappingData"]);
                     for (var j=0; j<finalData[i]["excelData"].length; j++) {
                         if ($S.isArray(finalData[i]["excelData"][j])) {
                             for (var k=0; k<finalData[i]["excelData"][j].length; k++) {
                                 rowData = finalData[i]["excelData"][j][k];
-                                if ($S.isArray(rowData) && $S.isArray(configData)) {
-                                    for (var l=0; l<configData.length; l++) {
-                                        if ($S.isObject(configData[l]) && $S.isNumber(configData[l]["index"]) && configData[l]["index"] >= 0) {
-                                            colIndex = configData[l]["index"];
-                                            if (colIndex < rowData.length) {
-                                                if ($S.isStringV2(rowData[colIndex])) {
-                                                    configData[l]["previousData"] = rowData[colIndex];
-                                                }
-                                                rowData[colIndex] = configData[l]["previousData"];
-                                            }
-                                        }
-                                    }
-                                }
+                                this._copyCellDataIndex(rowData, copyCellDataConfig);
+                                rowData = this._applyCellMapping(rowData, cellMappingConfig, appendCellDataConfig);
+                                finalData[i]["excelData"][j][k] = rowData;
                             }
                         }
                     }

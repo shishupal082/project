@@ -4,7 +4,42 @@
             "info": "MB-00-ref-data",
             "spreadsheetId": "file-mapping-spreadsheet-id",
             "sheetName": "file-mapping",
-            "copyCellDataIndex": [0,1]
+            "copyCellDataIndex": [0,1],
+            "appendCellDataIndex": [[3,10], [12,-1]],
+            "cellMapping": [
+                {
+                    "gs_index": -1,
+                    "defaultCellData": "data1"
+                },
+                {
+                    "gs_index": 0,
+                    "defaultCellData": ""
+                },
+                {
+                    "gs_index": -1,
+                    "defaultCellData": "data1"
+                },
+                {
+                    "gs_index": -1,
+                    "defaultCellData": "data2"
+                },
+                {
+                    "gs_index": 1,
+                    "defaultCellData": ""
+                },
+                {
+                    "gs_index": 2,
+                    "defaultCellData": ""
+                },
+                {
+                    "gs_index": -1,
+                    "defaultCellData": "data3"
+                },
+                {
+                    "gs_index": -1,
+                    "defaultCellData": "data4"
+                }
+            ]
         }
     ]
 }
