@@ -9,7 +9,14 @@
             "cellMapping": [
                 {
                     "gs_index": -1,
-                    "defaultCellData": "data1"
+                    "defaultCellData": "data1",
+                    "mappingData": [
+                        {
+                            "gs_index": 6,
+                            "value": "XYZ",
+                            "range": ["ABC", "DEF", "GHI", "JKL", "MNOP", "QRS", "TUVW"]
+                        }
+                    ]
                 },
                 {
                     "gs_index": 0,

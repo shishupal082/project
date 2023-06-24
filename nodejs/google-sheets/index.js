@@ -77,6 +77,7 @@ function main() {
                   });
                 } else {
                   console.log("Invalid file-mapping data.");
+                  console.log(fileMapping[i][j]);
                 }
               }
             }

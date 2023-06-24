@@ -8,7 +8,14 @@ var CONFIGDATA = {
         "cellMapping": [
             {
                 "gs_index": -1,
-                "defaultCellData": "defaultText"
+                "defaultCellData": "defaultText",
+                "mappingData": [
+                    {
+                        "gs_index": 6,
+                        "value": "XYZ",
+                        "range": ["ABC", "DEF", "GHI", "JKL", "MNOP", "QRS", "TUVW"]
+                    }
+                ]
             }
         ]
     }
@@ -152,14 +159,28 @@ CsvDataFormate.extend({
         var i, startIndex, endIndex;
         var finalRowData = [], cellData;
         var isValidConfig = false;
+        var gsIndex;
         if ($S.isArray(cellMappingConfig) && cellMappingConfig.length > 0) {
             isValidConfig = true;
             for (i=0; i<cellMappingConfig.length; i++) {
                 cellData = "";
                 if ($S.isObject(cellMappingConfig[i]) && $S.isNumber(cellMappingConfig[i]["gs_index"]) && cellMappingConfig[i]["gs_index"] >= -1) {
-                    if (cellMappingConfig[i]["gs_index"] < 0) {
-                        if ($S.isStringV2(cellMappingConfig[i]["defaultCellData"])) {
-                            cellData = cellMappingConfig[i]["defaultCellData"];
+                    if ($S.isStringV2(cellMappingConfig[i]["defaultCellData"])) {
+                        cellData = cellMappingConfig[i]["defaultCellData"];
+                    }
+                    if ($S.isArray(cellMappingConfig[i]["mappingData"])) {
+                        for (var j=0; j<cellMappingConfig[i]["mappingData"].length; j++) {
+                            if ($S.isArray(cellMappingConfig[i]["mappingData"][j]["range"])) {
+                                gsIndex = cellMappingConfig[i]["mappingData"][j]["gs_index"];
+                                if ($S.isNumber(gsIndex) && gsIndex >= 0 && gsIndex < rowData.length) {
+                                    if (cellMappingConfig[i]["mappingData"][j]["range"].indexOf(rowData[gsIndex]) >= 0) {
+                                        if ($S.isStringV2(cellMappingConfig[i]["mappingData"][j]["value"])) {
+                                            cellData = cellMappingConfig[i]["mappingData"][j]["value"];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     } else if (cellMappingConfig[i]["gs_index"] >= 0) {
                         if (rowData.length > cellMappingConfig[i]["gs_index"]) {
