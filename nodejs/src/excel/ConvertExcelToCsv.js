@@ -77,7 +77,7 @@ ConvertExcelToCsv.extend({
                         }
                     }
                     CsvDataFormate.format(finalData);
-                    ConvertGoogleSheetsToCsv.saveCSVData(finalData);
+                    ConvertGoogleSheetsToCsv.saveCSVData(finalData, callback);
                     return;
                 }
             }

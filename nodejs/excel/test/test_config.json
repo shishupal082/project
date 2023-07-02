@@ -20,6 +20,20 @@
             "sheetName": "invalid_sheet_name"
         }
     ],
+    "test-2": [
+        {
+            "source": "test_data.xlsx",
+            "destination": "test_data_2.csv",
+            "sheetName": "test-2"
+        }
+    ],
+    "test-4": [
+        {
+            "source": "test_data.xlsx",
+            "destination": "test_data_4.csv",
+            "sheetName": "test-4"
+        }
+    ],
     "002": [
         {
             "source": "test_data_not_found.xlsx",

@@ -118,6 +118,8 @@ ReadExcel.extend({
 });
 var Excel = {
    readFile: function(filepath, sheetName) {
+      FirstRowData = [];
+      FirstRowIndex = [];
       return ReadExcel.readFile(filepath, sheetName);
    }
 };

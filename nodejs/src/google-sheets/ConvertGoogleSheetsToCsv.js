@@ -54,7 +54,7 @@ ConvertGoogleSheetsToCsv.extend({
     }
 });
 ConvertGoogleSheetsToCsv.extend({
-    _saveData: function(que) {
+    _saveData: function(que, callback) {
         var self = this;
         if (que.getSize() > 0) {
             var queElement = que.Deque();
@@ -65,10 +65,12 @@ ConvertGoogleSheetsToCsv.extend({
                     var destination = config["fileMappingData"][4];
                     generateFile.saveTextV3([data.join(",")], destination, function(status) {
                         // Logger.log("File read and write completed.");
-                        self._saveData(que);
+                        self._saveData(que, callback);
                     });
                 }
             }
+        } else {
+            $S.callMethod(callback);
         }
     },
     _isCopyRequired: function(excelConfig) {
@@ -77,7 +79,7 @@ ConvertGoogleSheetsToCsv.extend({
         }
         return false;
     },
-    _copyOldContentAndSaveNewData: function(configQue, que) {
+    _copyOldContentAndSaveNewData: function(configQue, que, callback) {
         var self = this;
         if (configQue.getSize() > 0) {
             var config = configQue.Deque();
@@ -86,20 +88,20 @@ ConvertGoogleSheetsToCsv.extend({
                 if (this._isCopyRequired(config["excelConfig"])) {
                     generateFile.copyFileWithTimeStamp(destination, function(status) {
                         generateFile.deleteText(destination, function(status) {
-                            self._copyOldContentAndSaveNewData(configQue, que);
+                            self._copyOldContentAndSaveNewData(configQue, que, callback);
                         });
                     });
                 } else {
                     generateFile.deleteText(destination, function(status) {
-                        self._copyOldContentAndSaveNewData(configQue, que);
+                        self._copyOldContentAndSaveNewData(configQue, que, callback);
                     });
                 }
             }
         } else {
-            self._saveData(que);
+            self._saveData(que, callback);
         }
     },
-    saveCSVData: function(finalData) {
+    saveCSVData: function(finalData, callback) {
         var que = $S.getQue();
         var configQue = $S.getQue();
         for (var i=0; i<finalData.length; i++) {
@@ -114,7 +116,9 @@ ConvertGoogleSheetsToCsv.extend({
                 }
             }
         }
-        this._copyOldContentAndSaveNewData(configQue, que);
+        this._copyOldContentAndSaveNewData(configQue, que, function(status) {
+            $S.callMethodV1(callback, status);
+        });
     }
 });
 ConvertGoogleSheetsToCsv.extend({

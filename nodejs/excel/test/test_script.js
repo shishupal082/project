@@ -15,6 +15,8 @@ function _convertExcelToJson(requestData) {
     }
 }
 var request = [];
+request.push({"workId": "test-2"});
+request.push({"workId": "test-4"});
 request.push({"workId": "000"});
 request.push({"workId": "004"});
 request.push({"workId": "003"});
