@@ -1,4 +1,5 @@
-var ConvertExcelToJson = require("../../src/excel/ConvertExcelToJson.js");
+const ReadConfigData = require("../../src/common/ReadConfigData.js");
+const ConvertExcelToCsv = require("../../src/excel/ConvertExcelToCsv.js");
 
 function _convertExcelToJson(requestData) {
     for (var i=0; i<requestData.length; i++) {
@@ -7,7 +8,7 @@ function _convertExcelToJson(requestData) {
         }
         requestData[i]["isVisited"] = "true";
         console.log("--------------------------------------------------");
-        ConvertExcelToJson.convert({"workId": requestData[i]["workId"]}, function(status) {
+        ConvertExcelToCsv.convert({"workId": requestData[i]["workId"]}, function(status) {
             _convertExcelToJson(requestData);
         });
         return;
@@ -20,7 +21,8 @@ request.push({"workId": "003"});
 request.push({"workId": "002"});
 request.push({"workId": "001"});
 
-ConvertExcelToJson.readConfigData("test_config.json", function() {
+
+ReadConfigData.readData("./test_config.json", function() {
+    ConvertExcelToCsv.setConfigData(ReadConfigData.getData());
     _convertExcelToJson(request);
 });
-

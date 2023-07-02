@@ -4,6 +4,7 @@
             "info": "MB-00-ref-data",
             "spreadsheetId": "file-mapping-spreadsheet-id",
             "sheetName": "file-mapping",
+            "copyOldData": false,
             "copyCellDataIndex": [0,1],
             "appendCellDataIndex": [[3,10], [12,-1]],
             "cellMapping": [

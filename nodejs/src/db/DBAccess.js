@@ -1,5 +1,4 @@
 var $S = require("../libs/stack.js");
-var ConvertExcelToJson = require("../excel/ConvertExcelToJson.js");
 var Logger = require("../common/logger-v2.js");
 var FS = require("../common/fsmodule.js");
 var DB = require("../common/db.js");
@@ -41,7 +40,10 @@ DBAccess.extend({
             Logger.log("Invalid config path: " + configFilePath);
             $S.callMethod(callback);
         }
-    }
+    },
+    setConfigData: function(_configData) {
+        ConfigData = _configData;
+    },
 });
 
 DBAccess.extend({

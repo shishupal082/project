@@ -2,32 +2,28 @@
     "000": [
         {
             "source": "test_data.xlsx",
-            "index": 0
+            "sheetName": "test-1"
         }
     ],
     "001": [
         {
             "source": "test_data.xlsx",
-            "destination": "test_data.json",
-            "index": 1
+            "destination": "test_data.csv",
+            "sheetName": "test-2"
         },
         {
             "source": "test_data.xlsx",
-            "index": 1
+            "sheetName": "test-2"
         },
         {
             "source": "test_data.xlsx",
-            "index": 10
-        },
-        {
-            "source": "test_data.xlsx",
-            "index": -1
+            "sheetName": "invalid_sheet_name"
         }
     ],
     "002": [
         {
             "source": "test_data_not_found.xlsx",
-            "index": 1
+            "sheetName": "test-2"
         }
     ],
     "003": [

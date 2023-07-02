@@ -67,7 +67,10 @@ NmsService.extend({
             }
         }
         return result;
-    }
+    },
+    setConfigData: function(_configData) {
+        ConfigData = _configData;
+    },
 });
 NmsService.extend({
     readConfigData: function(configFilePath, callback) {

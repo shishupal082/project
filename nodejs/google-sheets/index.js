@@ -1,4 +1,5 @@
-const ConvertGoogleSheetToJson = require("../src/google-sheets/ConvertGoogleSheetToJson.js");
+const ReadConfigData = require("../src/common/ReadConfigData.js");
+const ConvertGoogleSheetsToCsv = require("../src/google-sheets/ConvertGoogleSheetsToCsv.js");
 const CsvDataFormate = require("../src/common/CsvDataFormate.js");
 var arg = process.argv;
 var workId = "";
@@ -16,10 +17,10 @@ function generateFinalResult() {
   for (i=0; i<finalData.length; i++) {
     if (finalData[i]["status"] === "PENDING") {
       finalData[i]["status"] = "IN_PROGRESS";
-      ConvertGoogleSheetToJson.generateResult([finalData[i]["excelConfig"]], function(status) {
+      ConvertGoogleSheetsToCsv.generateResult([finalData[i]["excelConfigSpreadsheets"]], function(status) {
           if (status === "SUCCESS") {
-            var result = ConvertGoogleSheetToJson.getFinalResult();
-            ConvertGoogleSheetToJson.clearFinalResult();
+            var result = ConvertGoogleSheetsToCsv.getFinalResult();
+            ConvertGoogleSheetsToCsv.clearFinalResult();
             for (j=0; j<finalData.length; j++) {
               if (finalData[j]["status"] === "IN_PROGRESS") {
                 finalData[i]["status"] = "SUCCESS";
@@ -37,7 +38,7 @@ function generateFinalResult() {
               console.log("Data load completed.");
               CsvDataFormate.replaceSpecialCharacterEachCell(finalData);
               CsvDataFormate.format(finalData);
-              ConvertGoogleSheetToJson.saveCSVData(finalData);
+              ConvertGoogleSheetsToCsv.saveCSVData(finalData);
             } else {
               generateFinalResult();
             }
@@ -50,29 +51,30 @@ function generateFinalResult() {
 }
 
 function main() {
-  ConvertGoogleSheetToJson.readConfigData("./google-sheets/config.json", function() {
-    var request = {"appId": "001", "workId": workId};
-    var excelConfig = ConvertGoogleSheetToJson.getExcelConfig(request);
+  ReadConfigData.readData("./google-sheets/config.json", function() {
+    var request = {"appId": "004", "workId": workId};
+    var excelConfig = ReadConfigData.getExcelConfigByWorkId(request);
     CsvDataFormate.updateConfigData(workId, excelConfig);
-    ConvertGoogleSheetToJson.convert(request, excelConfig, function(status) {
+    ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
       if (status === "SUCCESS") {
-        var fileMapping = ConvertGoogleSheetToJson.getFinalResult();
-        ConvertGoogleSheetToJson.clearFinalResult();
+        var fileMapping = ConvertGoogleSheetsToCsv.getFinalResult();
+        ConvertGoogleSheetsToCsv.clearFinalResult();
         if (fileMapping) {
           for (i=0; i<fileMapping.length; i++) {
             if (fileMapping[i]) {
               for (j=0; j<fileMapping[i].length; j++) {
                 if (fileMapping[i][j] && fileMapping[i][j].length >= 6) {
-                  if (fileMapping[i][j][5] !== workId && workId !== "all") {
+                  if (fileMapping[i][j][5] !== workId) {
                     continue;
                   }
                   finalData.push({
                     "status": "PENDING",
                     "fileMappingData": fileMapping[i][j],
-                    "excelConfig": {
+                    "excelConfigSpreadsheets": {
                       "spreadsheetId": fileMapping[i][j][2],
                       "sheetName": fileMapping[i][j][3]
                     },
+                    "excelConfig": excelConfig,
                     "excelData": []
                   });
                 } else {

@@ -1,5 +1,7 @@
 var $S = require("../libs/stack.js");
-var ConvertExcelToJson = require("../excel/ConvertExcelToJson.js");
+const ReadConfigData = require("../../src/common/ReadConfigData.js");
+var ConvertExcelToCsv = require("../excel/ConvertExcelToCsv.js");
+var ConvertGoogleSheetsToCsv = require("../google-sheets/ConvertGoogleSheetsToCsv.js");
 var Logger = require("../common/logger-v2.js");
 var NmsService = require("../nms/nms_service.js");
 var DBAccess = require("../db/DBAccess.js");
@@ -13,9 +15,10 @@ var FinalResponse = {
 };
 var EnableAppId = [];
 var appIdMappingFunction = {
-    "001": ConvertExcelToJson.convert,
+    "001": ConvertExcelToCsv.convert,
     "002": NmsService.getTcpResponse,
-    "003": DBAccess.HandleDbAccess
+    "003": DBAccess.HandleDbAccess,
+    "004": ConvertGoogleSheetsToCsv.convert,
 };
 var TcpHandler = function(config) {
     return new UDP.fn.init(config);
@@ -30,7 +33,7 @@ TcpHandler.fn = TcpHandler.prototype = {
 };
 TcpHandler.fn.init.prototype = TcpHandler.fn;
 $S.extendObject(TcpHandler);
-var Q = $S.getQue(3);
+var Q = $S.getQue(4);
 TcpHandler.extend({
     _readApplicationConfigData: function(callback) {
         if (Q.getSize() < 1) {
@@ -38,12 +41,14 @@ TcpHandler.extend({
             return;
         }
         var qItem = Q.Deque();
-        if ($S.isObject(qItem) && $S.isStringV2(qItem["config_path"]) && $S.isFunction(qItem["readConfigData"])) {
-            qItem["readConfigData"](qItem["config_path"], function() {
+        if ($S.isObject(qItem) && $S.isStringV2(qItem["config_path"]) && $S.isFunction(qItem["setConfigData"])) {
+            ReadConfigData.readData(qItem["config_path"], function() {
+                qItem["setConfigData"](ReadConfigData.getData());
                 TcpHandler._readApplicationConfigData(callback);
             });
         } else {
             Logger.log("Invalid qItem.");
+            console.log(qItem);
             this._readApplicationConfigData(callback);
         }
     },
@@ -71,17 +76,22 @@ TcpHandler.extend({
             Logger.log("EnableAppId: " + JSON.stringify(EnableAppId));
             if (EnableAppId.indexOf("001") >= 0) {
                 if ($S.isStringV2(jsonData["excel_configpath"])) {
-                    Q.Enque({"config_path": jsonData["excel_configpath"], "readConfigData": ConvertExcelToJson.readConfigData});
+                    Q.Enque({"config_path": jsonData["excel_configpath"], "setConfigData": ConvertExcelToCsv.setConfigData});
                 }
             }
             if (EnableAppId.indexOf("002") >= 0) {
                 if ($S.isStringV2(jsonData["nms_service_configpath"])) {
-                    Q.Enque({"config_path": jsonData["nms_service_configpath"], "readConfigData": NmsService.readConfigData});
+                    Q.Enque({"config_path": jsonData["nms_service_configpath"], "setConfigData": NmsService.setConfigData});
                 }
             }
             if (EnableAppId.indexOf("003") >= 0) {
                 if ($S.isStringV2(jsonData["db_access_configpath"])) {
-                    Q.Enque({"config_path": jsonData["db_access_configpath"], "readConfigData": DBAccess.readConfigData});
+                    Q.Enque({"config_path": jsonData["db_access_configpath"], "setConfigData": DBAccess.setConfigData});
+                }
+            }
+            if (EnableAppId.indexOf("004") >= 0) {
+                if ($S.isStringV2(jsonData["google_sheets_configpath"])) {
+                    Q.Enque({"config_path": jsonData["google_sheets_configpath"], "setConfigData": ConvertGoogleSheetsToCsv.setConfigData});
                 }
             }
             this._readApplicationConfigData(function() {

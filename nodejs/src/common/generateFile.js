@@ -1,9 +1,11 @@
 const $S = require("../libs/stack.js");
 const FS = require("./fsmodule.js");
+const File = require("./apis/file.js");
 const Logger = require("./logger-v2.js");
 
 
 (function() {
+var DT = $S.getDT();
 var ReadText = function(config) {
     return new ReadText.fn.init(config);
 };
@@ -225,6 +227,14 @@ var generateFile = {
     },
     saveTextV3: function(textDataArr, destinationPath, callback) {
         ReadText({"i": 0, "textData": textDataArr}).writeTextV3(destinationPath, function(status) {
+            $S.callMethodV1(callback, status);
+        });
+    },
+    copyFileWithTimeStamp: function(srcFilepath, callback) {
+        var dateTime = DT.getDateTime("YYYY/-/MM/-/DD/-/hh/-/mm/-/ss", "/");
+        var fileObj = File.getFileV2(srcFilepath).getAll();
+        var destinationFilepath = fileObj["fileDir"] + fileObj["fileNameWithoutDir"] + "-" + dateTime + fileObj["extention"];
+        FS.copyFileV2(srcFilepath, destinationFilepath, function(status) {
             $S.callMethodV1(callback, status);
         });
     },

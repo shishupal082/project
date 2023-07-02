@@ -28,36 +28,23 @@ async function getSpreadSheetValuesData(spreadsheetId, sheetName, callback) {
 (function() {
 var ConfigData = {};
 var FinalResult = [];
-var ConvertGoogleSheetToJson = function(config) {
-    return new ConvertGoogleSheetToJson.fn.init(config);
+var ConvertGoogleSheetsToCsv = function(config) {
+    return new ConvertGoogleSheetsToCsv.fn.init(config);
 };
 
-ConvertGoogleSheetToJson.fn = ConvertGoogleSheetToJson.prototype = {
-    constructor: ConvertGoogleSheetToJson,
+ConvertGoogleSheetsToCsv.fn = ConvertGoogleSheetsToCsv.prototype = {
+    constructor: ConvertGoogleSheetsToCsv,
     init: function(config) {
         this.config = config;
         return this;
     }
 };
-ConvertGoogleSheetToJson.fn.init.prototype = ConvertGoogleSheetToJson.fn;
+ConvertGoogleSheetsToCsv.fn.init.prototype = ConvertGoogleSheetsToCsv.fn;
 
-$S.extendObject(ConvertGoogleSheetToJson);
-ConvertGoogleSheetToJson.extend({
-    readConfigData: function(configFilePath, callback) {
-        if ($S.isStringV2(configFilePath)) {
-            FS.readJsonFile(configFilePath, {}, function(jsonData) {
-                if ($S.isObject(jsonData)) {
-                    ConfigData = jsonData;
-                    Logger.log("ConvertGoogleSheetToJson: Config data read success.");
-                } else {
-                    Logger.log("Invalid config data.");
-                }
-                $S.callMethod(callback);
-            });
-        } else {
-            Logger.log("Invalid config path.");
-            $S.callMethod(callback);
-        }
+$S.extendObject(ConvertGoogleSheetsToCsv);
+ConvertGoogleSheetsToCsv.extend({
+    setConfigData: function(_configData) {
+        ConfigData = _configData;
     },
     getFinalResult: function() {
         return $S.clone(FinalResult);
@@ -66,7 +53,7 @@ ConvertGoogleSheetToJson.extend({
         FinalResult = [];
     }
 });
-ConvertGoogleSheetToJson.extend({
+ConvertGoogleSheetsToCsv.extend({
     _saveData: function(que) {
         var self = this;
         if (que.getSize() > 0) {
@@ -84,20 +71,29 @@ ConvertGoogleSheetToJson.extend({
             }
         }
     },
-    _clearOldContentAndSaveNewData: function(configQue, que) {
+    _isCopyRequired: function(excelConfig) {
+        if ($S.isArrayV2(excelConfig) && $S.isObject(excelConfig[0]) && $S.isBooleanTrue(excelConfig[0]["copyOldData"])) {
+            return true;
+        }
+        return false;
+    },
+    _copyOldContentAndSaveNewData: function(configQue, que) {
         var self = this;
         if (configQue.getSize() > 0) {
             var config = configQue.Deque();
             if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
                 var destination = config["fileMappingData"][4];
-                generateFile.deleteText(destination, function(status) {
-                    // if (status) {
-                    //     Logger.log("Old content deleted: " + destination);
-                    // } else {
-                    //     Logger.log("Error in deleting old content.");
-                    // }
-                    self._clearOldContentAndSaveNewData(configQue, que);
-                });
+                if (this._isCopyRequired(config["excelConfig"])) {
+                    generateFile.copyFileWithTimeStamp(destination, function(status) {
+                        generateFile.deleteText(destination, function(status) {
+                            self._copyOldContentAndSaveNewData(configQue, que);
+                        });
+                    });
+                } else {
+                    generateFile.deleteText(destination, function(status) {
+                        self._copyOldContentAndSaveNewData(configQue, que);
+                    });
+                }
             }
         } else {
             self._saveData(que);
@@ -118,26 +114,10 @@ ConvertGoogleSheetToJson.extend({
                 }
             }
         }
-        this._clearOldContentAndSaveNewData(configQue, que);
+        this._copyOldContentAndSaveNewData(configQue, que);
     }
 });
-ConvertGoogleSheetToJson.extend({
-    getExcelConfig: function(request) {
-        var excelConfig = [];
-        if (!$S.isObject(request)) {
-            return excelConfig;
-        }
-        var workId = request["workId"];
-        if (!$S.isStringV2(workId)) {
-            return excelConfig;
-        }
-        if ($S.isArrayV2(ConfigData[workId])) {
-            excelConfig = $S.clone(ConfigData[workId]);
-        } else {
-            Logger.log("Invalid workId: " + workId);
-        }
-        return excelConfig;
-    },
+ConvertGoogleSheetsToCsv.extend({
     generateResult: function(excelConfig, callback) {
         if (!$S.isArray(excelConfig)) {
             Logger.log("Invalid excelConfig.", callback);
@@ -171,12 +151,12 @@ ConvertGoogleSheetToJson.extend({
     },
     convert: function(request, excelConfig, callback) {
         Logger.logV2(request);
-        ConvertGoogleSheetToJson.generateResult(excelConfig, function(status) {
+        ConvertGoogleSheetsToCsv.generateResult(excelConfig, function(status) {
             $S.callMethodV1(callback, status);
         });
     }
 });
 
-module.exports = ConvertGoogleSheetToJson;
+module.exports = ConvertGoogleSheetsToCsv;
 
 })();

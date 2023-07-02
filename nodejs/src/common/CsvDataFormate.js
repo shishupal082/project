@@ -52,8 +52,8 @@ CsvDataFormate.extend({
                     config[workId]["appendCellDataIndex"] = excelConfig[0]["appendCellDataIndex"];
                 }
             }
+            CONFIGDATA[workId] = config[workId];
         }
-        CONFIGDATA = config;
         return true;
     }
 });
@@ -109,25 +109,37 @@ CsvDataFormate.extend({
         return [];
     },
     _replaceCellData: function(rowData) {
-        // console.log(rowData.join("---"));
+        // console.log(rowData);
         if ($S.isArray(rowData)) {
             for (var i=0; i<rowData.length; i++) {
-                rowData[i] = $S.replaceString(rowData[i], ",", "...");
-                rowData[i] = $S.replaceString(rowData[i], "\n", ";");
+                if ($S.isStringV2(rowData[i])) {
+                    rowData[i] = rowData[i].split("\r\n").join(";");
+                    rowData[i] = rowData[i].split("\n").join(";");
+                    rowData[i] = rowData[i].split("\r").join("");
+                    rowData[i] = $S.replaceString(rowData[i], ",", "...");
+                }
             }
         }
-        // console.log(rowData.join("---"));
+        // console.log(rowData);
+        return true;
+    },
+    replaceSpecialCharacterEachCellV2: function(excelSheetData) {
+        if ($S.isArray(excelSheetData)) {
+            for (var i=0; i<excelSheetData.length; i++) {
+                if ($S.isArray(excelSheetData[i])) {
+                    this._replaceCellData(excelSheetData[i]);
+                }
+            }
+        }
         return true;
     },
     replaceSpecialCharacterEachCell: function(finalData) {
         if ($S.isArray(finalData)) {
             for (var i=0; i<finalData.length; i++) {
                 if ($S.isObject(finalData[i]) && $S.isArray(finalData[i]["excelData"])) {
-                    for (var j=0; j<finalData[i]["excelData"].length; j++) {
-                        if ($S.isArray(finalData[i]["excelData"][j])) {
-                            for (var k=0; k<finalData[i]["excelData"][j].length; k++) {
-                                this._replaceCellData(finalData[i]["excelData"][j][k]);
-                            }
+                    if ($S.isArray(finalData[i]["excelData"])) {
+                        for (var j=0; j<finalData[i]["excelData"].length; j++) {
+                            this.replaceSpecialCharacterEachCellV2(finalData[i]["excelData"][j]);
                         }
                     }
                 }
@@ -217,9 +229,7 @@ CsvDataFormate.extend({
         return rowData;
     },
     format: function(finalData) {
-        var previousData = "";
         var rowData = [];
-        var colIndex = 0;
         var copyCellDataConfig, cellMappingConfig;
         if ($S.isArray(finalData)) {
             for (var i=0; i<finalData.length; i++) {

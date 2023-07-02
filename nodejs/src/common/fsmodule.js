@@ -43,6 +43,25 @@ FS.extend({
     }
 });
 FS.extend({
+    _parseData: function(str1, str2) {
+        var result = "";
+        var temp = [], temp2 = [];
+        if ($S.isStringV2(str1)) {
+            result = str1;
+        }
+        if ($S.isStringV2(str2)) {
+            temp = str1.split(str2);
+            if (temp.length >= 2) {
+                for (var i=0; i<temp.length-1; i++) {
+                    temp2.push(temp[i]);
+                }
+                result = temp2.join(str2);
+            }
+        }
+        return result;
+    }
+});
+FS.extend({
     isFile: function(pathname) {
         try {
             var isFile = fs.statSync(pathname).isFile();
@@ -81,11 +100,28 @@ FS.extend({
         });
         return false;
     },
+    getFileDir: function(filepath, filename) {
+        return this._parseData(filepath, filename);
+    },
+    getFileNameWithoutDir: function(filename, extension) {
+        return this._parseData(filename, extension);
+    },
     copyFile: function(srcFilePath, destinationDir) {
         var filename = path.basename(srcFilePath);
         fs.copyFile(srcFilePath, destinationDir + filename, (err) => {
           if (err) {
             console.log(`Error in coping file '${srcFilePath}' to '${destinationDir}'`);
+          }
+        });
+    },
+    copyFileV2: function(srcFilePath, destinationFilepath, callback) {
+        var filename = path.basename(srcFilePath);
+        fs.copyFile(srcFilePath, destinationFilepath, (err) => {
+          if (err) {
+            console.log(`Error in coping file '${srcFilePath}' to '${destinationDir}'`);
+            $S.callMethodV1(callback, "FAILURE");
+          } else {
+            $S.callMethodV1(callback, "SUCCESS");
           }
         });
     },

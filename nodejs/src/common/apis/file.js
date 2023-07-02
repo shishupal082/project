@@ -39,9 +39,13 @@ var FileObj = (function() {
         if (this._isFile) {
             this._extention = FS.getExtention(this._path);
             this._fileName = FS.getFileName(this._path);
+            this._fileDir = FS.getFileDir(this._path, this._fileName);
+            this._fileNameWithoutDir = FS.getFileNameWithoutDir(this._fileName, this._extention);
         } else {
             this._extention = "";
             this._fileName = "";
+            this._fileDir = "";
+            this._fileNameWithoutDir = "";
         }
     }
     FileObj.prototype.getPath = function() {
@@ -58,6 +62,12 @@ var FileObj = (function() {
     };
     FileObj.prototype.getFileName = function() {
         return this._fileName;
+    };
+    FileObj.prototype.getFileDir = function() {
+        return this._fileDir;
+    };
+    FileObj.prototype.getFileNameWithoutDir = function() {
+        return this._fileNameWithoutDir;
     };
     FileObj.prototype.getFileMediaType = function(defaulMediaType) {
         if (!this.isFile()) {
@@ -81,6 +91,8 @@ var FileObj = (function() {
         response["extention"] = this.getExtention();
         response["fileName"] = this.getFileName();
         response["mediaType"] = this.getFileMediaType();
+        response["fileDir"] = this.getFileDir();
+        response["fileNameWithoutDir"] = this.getFileNameWithoutDir();
         return response;
     };
     return FileObj;
@@ -95,7 +107,12 @@ File.extend({
         }
         return new FileObj(AppConstant.PUBLIC_DIR + filePath);
     },
-
+    getFileV2: function(filePath) {
+        if (!$S.isString(filePath)) {
+            filePath = "";
+        }
+        return new FileObj(filePath);
+    }
 });
 module.exports = File;
 })();
