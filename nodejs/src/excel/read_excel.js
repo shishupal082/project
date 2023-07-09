@@ -43,14 +43,54 @@ ReadExcel.extend({
       }
       return [];
    },
+   _readFirstLineCSVData: function(csvData) {
+      var firstLine = "";
+      if ($S.isString(csvData)) {
+         for (var i=0; i<csvData.length; i++) {
+            if (csvData[i] === "\n") {
+               if (i > 0 && csvData[i-1] === "\r") {
+                  firstLine += csvData[i];
+                  continue;
+               } else {
+                  break;
+               }
+            }
+            firstLine += csvData[i];
+         }
+      }
+      return firstLine;
+   },
    _createIndex: function(csvData, excelJsonData) {
       var i;
-      var tempKeyIndex = {};
-      var temp2 = [], csvDataTemp;
+      var tempKeyIndex = {}, index;
+      var temp2 = [], firstLine;
+      var isDoubleCortStart;
       if ($S.isString(csvData)) {
-         csvDataTemp = $S.replaceString(csvData, "\r\n", "\n").split("\n");
-         if ($S.isArray(csvDataTemp) && csvDataTemp.length > 0) {
-            temp2 = csvDataTemp[0].split(",");
+         firstLine = this._readFirstLineCSVData(csvData);
+         if ($S.isString(firstLine)) {
+            isDoubleCortStart = false;
+            index = "";
+            for (i = 0; i<firstLine.length; i++) {
+               if (firstLine[i] === '"') {
+                  if (isDoubleCortStart) {
+                     isDoubleCortStart = false;
+                  } else {
+                     isDoubleCortStart = true;
+                  }
+                  continue;
+               }
+               if (firstLine[i] === ',') {
+                  if (isDoubleCortStart) {
+                     index += firstLine[i];
+                  } else {
+                     temp2.push(index);
+                     index = "";
+                  }
+                  continue;
+               }
+               index += firstLine[i];
+            }
+            temp2.push(index);
          }
       }
       for (i=0; i<temp2.length; i++) {

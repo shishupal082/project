@@ -5,6 +5,7 @@ var CONFIGDATA = {
     "workId": {
         "copyCellDataIndex": [0],
         "appendCellDataIndex": [[0,5],[7,-1]],
+        "skipRowIndex": [[0,9]],
         "cellMapping": [
             {
                 "gs_index": -1,
@@ -51,6 +52,9 @@ CsvDataFormate.extend({
                 if ($S.isArray(excelConfig[0]["appendCellDataIndex"])) {
                     config[workId]["appendCellDataIndex"] = excelConfig[0]["appendCellDataIndex"];
                 }
+                if ($S.isArray(excelConfig[0]["skipRowIndex"])) {
+                    config[workId]["skipRowIndex"] = excelConfig[0]["skipRowIndex"];
+                }
             }
             CONFIGDATA[workId] = config[workId];
         }
@@ -92,6 +96,31 @@ CsvDataFormate.extend({
             return configData;
         }
         return [];
+    },
+    getSkipRowIndexConfig: function(fileMappingData) {
+        var name = "";
+        if ($S.isArray(fileMappingData) && fileMappingData.length >= 6) {
+            name = fileMappingData[5];
+        }
+        var skipRowIndex = [], configData = [], excelConfigData;
+        if ($S.isStringV2(name) && $S.isObject(CONFIGDATA) && CONFIGDATA[name]) {
+            excelConfigData = $S.clone(CONFIGDATA[name]);
+            if ($S.isObject(excelConfigData) && $S.isArray(excelConfigData["skipRowIndex"])) {
+                configData = excelConfigData["skipRowIndex"];
+            }
+            if ($S.isArray(configData)) {
+                for (var i=0; i<configData.length; i++) {
+                    if ($S.isArray(configData[i]) && configData[i].length === 2 && $S.isNumber(configData[i][0]) && configData[i][1]) {
+                        for (var j=configData[i][0]; j<=configData[i][1]; j++) {
+                            if (skipRowIndex.indexOf(j) < 0) {
+                                skipRowIndex.push(j);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return skipRowIndex;
     },
     getAppendCellDataConfig: function(fileMappingData) {
         var name = "";
@@ -230,16 +259,23 @@ CsvDataFormate.extend({
     },
     format: function(finalData) {
         var rowData = [];
-        var copyCellDataConfig, cellMappingConfig;
+        var skipRowIndexConfig, copyCellDataConfig, cellMappingConfig;
         if ($S.isArray(finalData)) {
             for (var i=0; i<finalData.length; i++) {
                 if ($S.isObject(finalData[i]) && $S.isArray(finalData[i]["excelData"])) {
+                    skipRowIndexConfig = this.getSkipRowIndexConfig(finalData[i]["fileMappingData"]);
                     copyCellDataConfig = this.getConfigData(finalData[i]["fileMappingData"]);
                     cellMappingConfig = this.getCellMappingConfig(finalData[i]["fileMappingData"]);
                     appendCellDataConfig = this.getAppendCellDataConfig(finalData[i]["fileMappingData"]);
                     for (var j=0; j<finalData[i]["excelData"].length; j++) {
                         if ($S.isArray(finalData[i]["excelData"][j])) {
                             for (var k=0; k<finalData[i]["excelData"][j].length; k++) {
+                                if ($S.isArray(skipRowIndexConfig) && skipRowIndexConfig.length > 0) {
+                                    if (skipRowIndexConfig.indexOf(k) >= 0) {
+                                        finalData[i]["excelData"][j][k] = null;
+                                        continue;
+                                    }
+                                }
                                 rowData = finalData[i]["excelData"][j][k];
                                 this._copyCellDataIndex(rowData, copyCellDataConfig);
                                 rowData = this._applyCellMapping(rowData, cellMappingConfig, appendCellDataConfig);

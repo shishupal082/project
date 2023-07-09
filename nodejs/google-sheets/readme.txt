@@ -2,6 +2,7 @@ Important config data:
 copyCellDataIndex: [0,1],
 appendCellDataIndex: [[3,10], [12,-1]],
 copyOldData: false,
+skipRowIndex: [[0,9]]
 "cellMapping": [
     {
         "gs_index": -1,
@@ -38,10 +39,17 @@ copyOldData: false,
 ]
 
 Sequence of operations:
-1) Replace comma (,) with ... and new line (\n) with ; for each cell
-2) CopyCellDataIndex: [0]
-    It will copy cell no. 0 data previous data into current current row (If current rowData[0] is invalid)
-3) cellMappingConfig:
+1) skipRowIndex: [[0,9]]
+It will skip first 9 entry of google sheet read data
+2) Replace comma (,) with ...
+   new line (\r\n) with ;
+   new line (\n) with ;
+   new line (\r) with ""
+for each cell
+
+3) CopyCellDataIndex: [0]
+    It will copy cell no. 0 data previous data into current current row (If current rowData[0] is invalid i.e. empty)
+4) cellMappingConfig:
     It will create a new rowData and copy each cell data as per configuration
     [{
         "gs_index": -1,
@@ -73,7 +81,7 @@ Sequence of operations:
         }
     ]
 
-4) appendCellDataIndex: [[3,10], [12,-1]]
+5) appendCellDataIndex: [[3,10], [12,-1]]
     It will append into new row data as per original rowData
     Here, After creating new row using cellMappingConfig it will append cell no. 3 to 10 and 12 to end
 

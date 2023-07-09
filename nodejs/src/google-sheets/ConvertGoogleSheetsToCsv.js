@@ -63,10 +63,14 @@ ConvertGoogleSheetsToCsv.extend({
                 var config = queElement[1];
                 if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
                     var destination = config["fileMappingData"][4];
-                    generateFile.saveTextV3([data.join(",")], destination, function(status) {
-                        // Logger.log("File read and write completed.");
+                    if ($S.isArray(data)) {
+                        generateFile.saveTextV3([data.join(",")], destination, function(status) {
+                            // Logger.log("File read and write completed.");
+                            self._saveData(que, callback);
+                        });
+                    } else {
                         self._saveData(que, callback);
-                    });
+                    }
                 }
             }
         } else {
