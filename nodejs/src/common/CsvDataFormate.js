@@ -110,7 +110,7 @@ CsvDataFormate.extend({
             }
             if ($S.isArray(configData)) {
                 for (var i=0; i<configData.length; i++) {
-                    if ($S.isArray(configData[i]) && configData[i].length === 2 && $S.isNumber(configData[i][0]) && configData[i][1]) {
+                    if ($S.isArray(configData[i]) && configData[i].length === 2 && $S.isNumber(configData[i][0]) && $S.isNumber(configData[i][1])) {
                         for (var j=configData[i][0]; j<=configData[i][1]; j++) {
                             if (skipRowIndex.indexOf(j) < 0) {
                                 skipRowIndex.push(j);
@@ -203,11 +203,15 @@ CsvDataFormate.extend({
         var gsIndex;
         if ($S.isArray(cellMappingConfig) && cellMappingConfig.length > 0) {
             isValidConfig = true;
+            cellData = "";
             for (i=0; i<cellMappingConfig.length; i++) {
-                cellData = "";
                 if ($S.isObject(cellMappingConfig[i]) && $S.isNumber(cellMappingConfig[i]["gs_index"]) && cellMappingConfig[i]["gs_index"] >= -1) {
+                    gsIndex = cellMappingConfig[i]["gs_index"];
                     if ($S.isStringV2(cellMappingConfig[i]["defaultCellData"])) {
                         cellData = cellMappingConfig[i]["defaultCellData"];
+                    }
+                    if (gsIndex >= 0 && rowData.length > gsIndex) {
+                        cellData = rowData[gsIndex];
                     }
                     if ($S.isArray(cellMappingConfig[i]["mappingData"])) {
                         for (var j=0; j<cellMappingConfig[i]["mappingData"].length; j++) {
@@ -222,10 +226,6 @@ CsvDataFormate.extend({
                                     }
                                 }
                             }
-                        }
-                    } else if (cellMappingConfig[i]["gs_index"] >= 0) {
-                        if (rowData.length > cellMappingConfig[i]["gs_index"]) {
-                            cellData = rowData[cellMappingConfig[i]["gs_index"]];
                         }
                     }
                 }
