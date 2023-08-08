@@ -35,10 +35,22 @@ DBViewTemplateHandler.extend({
         var value = $S.findParam([tdData], "value", "");
         var fieldName = $S.findParam([tdData], "fieldName", "");
         var text = $S.findParam([tdData], "text", "");
+        var replaceString = $S.findParam([tdData], "replaceString", []);
         var valueField = $S.findParam([tdData], "valueField", "");
         var wordBreak = $S.findParam([tdData], "wordBreak", "");
         var wordBreakTag = $S.findParam([tdData], "wordBreakTag", "");
         var temp = {};
+        if ($S.isArrayV2(replaceString)) {
+            if ($S.isStringV2(value)) {
+                for (var i=0; i<replaceString.length; i++) {
+                    if ($S.isArray(replaceString[i]) && replaceString[i].length === 2) {
+                        if ($S.isString(replaceString[i][0]) && $S.isString(replaceString[i][1])) {
+                            value = $S.replaceString(value, replaceString[i][0], replaceString[i][1]);
+                        }
+                    }
+                }
+            }
+        }
         if ($S.isStringV2(wordBreak) && $S.isString(value)) {
             if (!$S.isStringV2(wordBreakTag)) {
                 wordBreakTag = "li";

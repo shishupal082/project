@@ -19,6 +19,9 @@ attendance table should contains: userId, date
         "name": "data2",
         "heading": "Data2",
         "fieldName": "data1",
+        "replaceString": [["...",","]],
+        "wordBreak": ";",
+        "wordBreakTag": "div",
         "text": {"tag": "div","text": {"tag": "b", "name": "data1", "text": ""}}
     },
     {

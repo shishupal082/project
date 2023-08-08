@@ -137,26 +137,23 @@ CsvDataFormate.extend({
         }
         return [];
     },
-    _replaceCellData: function(rowData) {
-        // console.log(rowData);
-        if ($S.isArray(rowData)) {
-            for (var i=0; i<rowData.length; i++) {
-                if ($S.isStringV2(rowData[i])) {
-                    rowData[i] = rowData[i].split("\r\n").join(";");
-                    rowData[i] = rowData[i].split("\n").join(";");
-                    rowData[i] = rowData[i].split("\r").join("");
-                    rowData[i] = $S.replaceString(rowData[i], ",", "...");
-                }
-            }
+    _replaceCellData: function(cellData) {
+        if ($S.isString(cellData)) {
+            cellData = cellData.split("\r\n").join(";");
+            cellData = cellData.split("\n").join(";");
+            cellData = cellData.split("\r").join("");
+            cellData = $S.replaceString(cellData, ",", "...");
+            cellData = cellData.trim();
         }
-        // console.log(rowData);
-        return true;
+        return cellData;
     },
     replaceSpecialCharacterEachCellV2: function(excelSheetData) {
         if ($S.isArray(excelSheetData)) {
             for (var i=0; i<excelSheetData.length; i++) {
                 if ($S.isArray(excelSheetData[i])) {
-                    this._replaceCellData(excelSheetData[i]);
+                    for (var j=0; j<excelSheetData[i].length; j++) {
+                        excelSheetData[i][j] = this._replaceCellData(excelSheetData[i][j]);
+                    }
                 }
             }
         }
@@ -218,7 +215,7 @@ CsvDataFormate.extend({
                             if ($S.isArray(cellMappingConfig[i]["mappingData"][j]["range"])) {
                                 gsIndex = cellMappingConfig[i]["mappingData"][j]["gs_index"];
                                 if ($S.isNumber(gsIndex) && gsIndex >= 0 && gsIndex < rowData.length) {
-                                    if (cellMappingConfig[i]["mappingData"][j]["range"].indexOf(rowData[gsIndex]) >= 0) {
+                                    if (cellMappingConfig[i]["mappingData"][j]["range"].indexOf(this._replaceCellData(rowData[gsIndex])) >= 0) {
                                         if ($S.isStringV2(cellMappingConfig[i]["mappingData"][j]["value"])) {
                                             cellData = cellMappingConfig[i]["mappingData"][j]["value"];
                                             break;
