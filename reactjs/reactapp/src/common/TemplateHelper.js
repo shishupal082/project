@@ -83,6 +83,32 @@ Template.fn = Template.prototype = {
             }
         }
         return {};
+    },
+    searchFieldV4: function(key, name) {
+        // Only used in DBViewDataHandler.js --> GenerateFinalDBViewData method
+        if (!$S.isString(key) || !$S.isString(name)) {
+            return {};
+        }
+        var field = {};
+        if ($S.isArray(this.template)) {
+            for (var i = 0; i<this.template.length; i++) {
+                field = Template(this.template[i]).searchFieldV4(key, name);
+                if (key === field["key"] && name === field["name"]) {
+                    return field;
+                }
+            }
+        } else if ($S.isObject(this.template)) {
+            if (key === this.template["key"] && name === this.template["name"]) {
+                return this.template;
+            }
+            for (var localKey in this.template) {
+                field = Template(this.template[localKey]).searchFieldV4(key, name);
+                if (key === field["key"] && name === field["name"]) {
+                    return field;
+                }
+            }
+        }
+        return {};
     }
 };
 $S.extendObject(Template);

@@ -543,6 +543,28 @@ DBViewDataHandler.extend({
         }
         return renderData;
     },
+    _enterDetailEntry: function(finalDataV2, finalTableData) {
+        if (!$S.isArray(finalDataV2) || !$S.isArray(finalTableData)) {
+            return;
+        }
+        for(var i=0; i<finalDataV2.length; i++) {
+            if ($S.isObject(finalDataV2[i]) && $S.isArray(finalDataV2[i]["text"])) {
+                for (var j=0; j<finalDataV2[i]["text"].length; j++) {
+                    if ($S.isNumber(finalDataV2[i]["text"][j]) && finalDataV2[i]["text"][j] < finalTableData.length) {
+                        finalDataV2[i]["text"][j] = finalTableData[finalDataV2[i]["text"][j]];
+                    } else if ($S.isObject(finalDataV2[i]["text"][j]) && $S.isArray(finalDataV2[i]["text"][j]["text"])) {
+                        for (var k=0; k<finalDataV2[i]["text"][j]["text"].length; k++) {
+                            if ($S.isNumber(finalDataV2[i]["text"][j]["text"][k]) && finalDataV2[i]["text"][j]["text"][k] < finalTableData.length) {
+                                finalDataV2[i]["text"][j]["text"][k] = finalTableData[finalDataV2[i]["text"][j]["text"][k]];
+                            } else {
+                                this._enterDetailEntry(finalDataV2[i]["text"][j]["text"][k], finalTableData);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
     GenerateFinalDBViewData: function(finalTableData, currentList3Data, dateParameterField, dateSelect) {
         // finalTableData = data with result pattern
         var finalDataV2 = [], temp3, temp4;
@@ -568,7 +590,7 @@ DBViewDataHandler.extend({
                     if (!$S.isString(heading) || heading.length < 1) {
                         heading = "Empty: " + l3Data.key;
                     }
-                    temp4 = TemplateHelper(temp3).searchField(heading);
+                    temp4 = TemplateHelper(temp3).searchFieldV4(name, heading);
                     if ($S.isObject(temp4) && temp4.name === heading) {
 
                     } else {
@@ -583,16 +605,15 @@ DBViewDataHandler.extend({
                 }
                 if ($S.isObject(temp4)) {
                     if ($S.isArray(temp4.text)) {
-                        TemplateHelper.addItemInTextArray(temp4, heading, finalTableData[i]);
-                        temp3 = temp4;
+                        temp4.text.push(i);
+                        // TemplateHelper.addItemInTextArray(temp4, heading, finalTableData[i]);
                     }
                 }
                 temp4 = null;
             }
-            /**
-                Cloned value of currentList3Data is passed because
-                this method again will be called with different currentList3Data and it will be changed
-            **/
+            this._enterDetailEntry(finalDataV2, finalTableData);
+            //    Cloned value of currentList3Data is passed because
+            //    this method again will be called with different currentList3Data and it will be changed
             finalDataV2 = this._handleDateParameter(finalDataV2, $S.clone(currentList3Data), dateParameterField, dateSelect);
             return finalDataV2;
         } else {

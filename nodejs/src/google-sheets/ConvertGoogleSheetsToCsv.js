@@ -5,8 +5,7 @@ const generateFile = require("../common/generateFile.js");
 const {
   getAuthToken,
   getSpreadSheet,
-  getSpreadSheetValues,
-  getSpreadSheetValuesV2
+  getSpreadSheetValues
 } = require('./googleSheetsService.js');
 
 async function getSpreadSheetValuesData(spreadsheetId, sheetName, callback) {

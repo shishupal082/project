@@ -21,30 +21,13 @@ async function getSpreadSheet({spreadsheetId, auth}) {
   return res;
 }
 
-async function getSpreadSheetValues({spreadsheetId, auth, sheetName}) {
+async function getSpreadSheetValues({spreadsheetId, sheetName, auth}) {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
     auth,
     range: sheetName
   });
   return res;
-}
-
-async function getSpreadSheetValuesV2(spreadsheetId, sheetName) {
-      console.log(333333 + spreadsheetId + sheetName);
-  try {
-      const auth = await getAuthToken();
-      const response = await getSpreadSheetValues({
-        spreadsheetId,
-        sheetName,
-        auth
-      });
-      return response.data;
-      // console.log('output for getSpreadSheetValues', JSON.stringify(response.data, null, 2));
-  } catch(error) {
-      console.log(error.message, error.stack);
-      return null;
-  }
 }
 
 module.exports = {
