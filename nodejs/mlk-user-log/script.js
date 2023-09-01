@@ -53,59 +53,10 @@ function readTextFile(configJson, processedId, callback) {
                 var temp, result = [];
                 if ($S.isArray(textData)) {
                     MLKUserLog.addFinalCsvData(textData);
-                    // for(var i=0; i<textData.length; i++) {
-                    //     if ($S.isStringV2(textData[i])) {
-                    //         temp = textData[i].split(",");
-                    //         if (temp.length === 2) {
-                    //             result.push(temp[1].trim());
-                    //         }
-                    //     }
-                    // }
                 }
                 readTextFile(configJson, processedId, callback);
             });
         }
-
-        // generateFile.save(configJson[pId]["source"], configJson[pId]["destination"], function() {
-        //     readTextFile(configJson, processedId, callback);
-        // }, function(textData) {
-        //     if ($S.isArray(textData) && textData.length === 5) {
-        //         if (textData[4] === "01") {
-        //             var temp = [];
-        //             temp.push(textData[0]); //type
-        //             temp.push(textData[1]); //filename
-        //             temp.push(textData[2]); //fileExt
-        //             if ($S.isString(configJson[pId]["identifier"])) {
-        //                 temp.push(textData[3] + configJson[pId]["identifier"]);
-        //             } else {
-        //                 temp.push(textData[3]); //dir
-        //             }
-        //             return temp;
-        //         }
-        //     } else if ($S.isArray(textData) && textData.length === 7) {
-        //         if (["00", "01"].indexOf(textData[5]) >= 0) {
-        //             var temp = [];
-        //             temp.push(textData[1]); //type
-        //             temp.push(textData[2]); //filename
-        //             temp.push(textData[3]); //fileExt
-        //             if (textData[5] === "00") {
-        //                 temp.push(textData[4]); //dir
-        //             } else if (textData[5] === "01") {
-        //                 if ($S.isString(configJson[pId]["identifier"])) {
-        //                     temp.push(textData[4] + configJson[pId]["identifier"]);
-        //                 } else {
-        //                     temp.push(textData[4]);
-        //                 }
-        //             } else {
-        //                 temp.push(textData[4]);
-        //             }
-        //             temp.push(textData[0]);
-        //             temp.push(textData[6]);
-        //             return temp;
-        //         }
-        //     }
-        //     return textData;
-        // });
         return;
     }
     return $S.callMethod(callback);

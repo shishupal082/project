@@ -549,19 +549,9 @@ DBViewDataHandler.extend({
         }
         for(var i=0; i<finalDataV2.length; i++) {
             if ($S.isObject(finalDataV2[i]) && $S.isArray(finalDataV2[i]["text"])) {
-                for (var j=0; j<finalDataV2[i]["text"].length; j++) {
-                    if ($S.isNumber(finalDataV2[i]["text"][j]) && finalDataV2[i]["text"][j] < finalTableData.length) {
-                        finalDataV2[i]["text"][j] = finalTableData[finalDataV2[i]["text"][j]];
-                    } else if ($S.isObject(finalDataV2[i]["text"][j]) && $S.isArray(finalDataV2[i]["text"][j]["text"])) {
-                        for (var k=0; k<finalDataV2[i]["text"][j]["text"].length; k++) {
-                            if ($S.isNumber(finalDataV2[i]["text"][j]["text"][k]) && finalDataV2[i]["text"][j]["text"][k] < finalTableData.length) {
-                                finalDataV2[i]["text"][j]["text"][k] = finalTableData[finalDataV2[i]["text"][j]["text"][k]];
-                            } else {
-                                this._enterDetailEntry(finalDataV2[i]["text"][j]["text"][k], finalTableData);
-                            }
-                        }
-                    }
-                }
+                this._enterDetailEntry(finalDataV2[i]["text"], finalTableData);
+            } else if ($S.isNumber(finalDataV2[i]) && finalDataV2[i] < finalTableData.length) {
+                finalDataV2[i] = finalTableData[finalDataV2[i]];
             }
         }
     },
