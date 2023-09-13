@@ -279,7 +279,7 @@ DataHandlerV2.extend({
         var metaData = DataHandler.getMetaData({});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
         var currentList3Data = DataHandler.getCurrentList3Data();
-        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
+        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", {});
         var dateSelect = DataHandler.getData("selectedDateType", "");
         var filterOptions = this._getFilterOptions();
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
@@ -293,7 +293,7 @@ DataHandlerV2.extend({
         var metaData = DataHandler.getMetaData({});
         var dbViewDataTable = DataHandler.getData("dbViewDataTable", []);
         var currentList3Data = DataHandler.getCurrentList3Data();
-        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", []);
+        var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", {});
         var dateSelect = DataHandler.getData("selectedDateType", "");
         var filterOptions = this._getFilterOptions();
         dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
@@ -511,7 +511,7 @@ DataHandlerV2.extend({
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
     },
-    handlePageLoad: function(dbDataApis, callback) {
+    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKeyV2(DataHandler, keys);
         var tableData;
@@ -521,7 +521,7 @@ DataHandlerV2.extend({
             if (status === "not-started") {
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
-                    tableData = AppHandler.GenerateDatabaseV2(request);
+                    tableData = AppHandler.GenerateDatabase(request, dbTableDataIndex);
                     self._callTcpService(function(jsonResponse) {
                         DataHandler.setData("dbDataLoadStatus", "completed");
                         tableData = AppHandler.MergeDatabase(tableData, jsonResponse);

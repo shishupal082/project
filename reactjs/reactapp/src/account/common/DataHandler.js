@@ -445,6 +445,7 @@ DataHandler.extend({
     loadDbData: function(callback) {
         var dbDataLoadStatus = this.getData("dbDataLoadStatus", "");
         var pageName = this.getPathParamsData("pageName", "");
+        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
         var pageRequiredDbDataLoadStatus = Config.otherPagesList;
         if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
             if (dbDataLoadStatus === "in_progress") {
@@ -453,7 +454,7 @@ DataHandler.extend({
                 $S.callMethod(callback);
             } else {
                 var dbDataApis = this.getAppData("dbDataApis", []);
-                DataHandlerV2.handlePageLoad(dbDataApis, function() {
+                DataHandlerV2.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
                     DataHandler._handleDataLoadComplete();
                     $S.callMethod(callback);
                 });
