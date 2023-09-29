@@ -23,7 +23,7 @@ FS.extend = FS.fn.extend = function(options) {
             if (typeof options[key] == "function") {
                 /*If method already exist then it will be overwritten*/
                 if (typeof FS[key]  == "function") {
-                    console.log('Method "' + FS.name + "." + key + '" is overwritten.');
+                    console.log('FS: Method "' + FS.name + "." + key + '" is overwritten.');
                 }
                 FS[key] = options[key];
             }
@@ -37,7 +37,7 @@ FS.extend({
             try {
                 fs.mkdirSync(dir);
             } catch(e) {
-                console.log("Error in createDir: " + dir);
+                console.log("FS: Error in createDir: " + dir);
             }
         }
     }
@@ -110,7 +110,7 @@ FS.extend({
         var filename = path.basename(srcFilePath);
         fs.copyFile(srcFilePath, destinationDir + filename, (err) => {
           if (err) {
-            console.log(`Error in coping file '${srcFilePath}' to '${destinationDir}'`);
+            console.log(`FS: Error in coping file '${srcFilePath}' to '${destinationDir}'`);
           }
         });
     },
@@ -118,7 +118,7 @@ FS.extend({
         var filename = path.basename(srcFilePath);
         fs.copyFile(srcFilePath, destinationFilepath, (err) => {
           if (err) {
-            console.log(`Error in coping file '${srcFilePath}' to '${destinationDir}'`);
+            console.log(`FS: Error in coping file '${srcFilePath}' to '${destinationDir}'`);
             $S.callMethodV1(callback, "FAILURE");
           } else {
             $S.callMethodV1(callback, "SUCCESS");
@@ -150,7 +150,7 @@ FS.extend({
                     var jsonData = JSON.parse(rawdata);
                     callback(jsonData);
                 } catch(e) {
-                    console.log("Error in reading file: " + filepath);
+                    console.log("FS: Error in reading file: " + filepath);
                     callback(defaultData);
                 }
             } else {
@@ -166,7 +166,7 @@ FS.extend({
                     callback(data);
                 });
             } else {
-                console.log("Filepath does not exist: " + filepath);
+                console.log("FS: Filepath does not exist: " + filepath);
                 callback(defaultData);
             }
         });

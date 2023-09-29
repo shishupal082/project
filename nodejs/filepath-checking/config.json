@@ -1,0 +1,13 @@
+{
+    "gs-nodejs-available-files": [
+        {
+            "fileConfig": [
+                {
+                    "filepathApi": "http://localhost:8082/api/get_excel_data?requestId=",
+                    "filepath-index": 4,
+                    "result": ["inValidFilepath"]
+                }
+            ]
+        }
+    ]
+}
