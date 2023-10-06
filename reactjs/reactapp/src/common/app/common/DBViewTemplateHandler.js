@@ -332,10 +332,10 @@ DBViewTemplateHandler.extend({
                 trData.push(temp);
             }
         }
+        trData = $S.sortResultV2(trData, sortingFields, "name");
         if (trData.length > 1) {
             trData.push({"description": {"tag": "b", "text": "Total"}, "count": totalCount});
         }
-        trData = $S.sortResultV2(trData, sortingFields, "name");
         return trData;
     },
     _highlightSortingButton: function(field, sortingFields) {
