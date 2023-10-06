@@ -8,3 +8,15 @@ If it is giving error "the import javax.servlet cannot be resolved"
 	Open properties of project
 		select targeted runtime
                 run on server
+
+Java installation
+-----------------------------
+Download java installer (Not x64 Compressed Archive	 or x64 MSI Installer)
+- https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.exe (sha256)
+
+If we are installing jdk then we don't need to download jre seprately.
+
+Now install it and configure as below
+Set environment variable (System variable not User variable)
+1) JAVA_HOME
+2) PATH (%Java_HOME%\bin;C:\Program Files\Oracle\)

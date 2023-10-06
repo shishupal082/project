@@ -301,7 +301,7 @@ DBViewTemplateHandler.extend({
         }
     },
     _generateSummaryData: function(trsData, sortingFields) {
-        var trData = [], temp;
+        var trData = [], temp, totalCount = 0;
         if ($S.isArray(trsData) && trsData.length > 0) {
             for(var i=0; i<trsData.length; i++) {
                 temp = {};
@@ -317,17 +317,23 @@ DBViewTemplateHandler.extend({
                     if ($S.isObject(trsData[i].text[0])) {
                         if ($S.isArray(trsData[i].text[0].text)) {
                             temp["count"] = trsData[i].text[0].text.length;
+                            totalCount += temp["count"];
                         } else {
                             temp["count"] = trsData[i].text.length;
+                            totalCount += temp["count"];
                         }
                     } else {
                         temp["count"] = trsData[i].text.length;
+                        totalCount += temp["count"];
                     }
                 } else {
                     temp["count"] = 0;
                 }
                 trData.push(temp);
             }
+        }
+        if (trData.length > 1) {
+            trData.push({"description": {"tag": "b", "text": "Total"}, "count": totalCount});
         }
         trData = $S.sortResultV2(trData, sortingFields, "name");
         return trData;
@@ -381,11 +387,7 @@ DBViewTemplateHandler.extend({
                 if (!$S.isObject(summaryData[i])) {
                     continue;
                 }
-                if ($S.isString(summaryData[i]["description"]) && summaryData[i]["description"].length > 0) {
-                    temp["dbviewSummaryField.tr.description"] = summaryData[i]["description"];
-                } else {
-                    temp["dbviewSummaryField.tr.description"] = "Total";
-                }
+                temp["dbviewSummaryField.tr.description"] = summaryData[i]["description"];
                 if ($S.isNumeric(summaryData[i]["count"])) {
                     temp["dbviewSummaryField.tr.count"] = summaryData[i]["count"];
                 } else {
