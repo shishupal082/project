@@ -385,15 +385,16 @@ DataHandler.extend({
         var pageRequiredDbDataLoadStatus = [Config.entry, Config.update,
                     Config.summary, Config.ta, Config.dbview,
                     Config.dbview_summary, Config.custom_dbview, Config.add_field_report];
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", {});
         if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
             if (dbDataLoadStatus === "in_progress") {
                 return;
             } else if (dbDataLoadStatus === "completed") {
-                this.loadAttendanceData(callback);
+                this.loadAttendanceData(callback, dbTableDataIndex);
             } else {
                 var dbDataApis = this.getAppData("dbDataApis", []);
-                DataHandlerV3.handlePageLoad(dbDataApis, function() {
-                    DataHandler.loadAttendanceData(callback);
+                DataHandlerV3.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
+                    DataHandler.loadAttendanceData(callback, dbTableDataIndex);
                 });
             }
         } else {
@@ -423,6 +424,7 @@ DataHandler.extend({
     loadAttendanceData: function(callback) {
         var pageName = this.getPathParamsData("pageName", "");
         var attendanceDataLoadStatus = this.getData("attendanceDataLoadStatus", "");
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", {});
         if (attendanceDataLoadStatus === "completed") {
             this.loadTableData(pageName, callback);
         } else if (attendanceDataLoadStatus === "in_progress") {
@@ -430,7 +432,7 @@ DataHandler.extend({
         } else {
             DataHandlerV3.loadAttendanceData(function() {
                 DataHandler.loadTableData(pageName, callback);
-            });
+            }, dbTableDataIndex);
         }
     },
     handleApiDataLoad: function() {
@@ -506,13 +508,14 @@ DataHandler.extend({
         DataHandler.generateDateParameter();
         var realodOnDateRangeChange = this.getAppData("attendance.realodOnDateRangeChange", false);
         var pageName2 = this.getPathParamsData("pageName", "");
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", {});
         var pageRequiredAttendanceDataReloadStatus = [Config.entry, Config.update, Config.summary];
         if ($S.isBooleanTrue(realodOnDateRangeChange) && pageRequiredAttendanceDataReloadStatus.indexOf(pageName2) >= 0) {
             DataHandler.setData("attendanceDataLoadStatus", "not-started");
             DataHandlerV3.loadAttendanceData(function() {
                 DataHandlerV3.handleAttendanceDataLoad();
                 DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
+            }, dbTableDataIndex);
         } else {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         }
@@ -578,13 +581,14 @@ DataHandler.extend({
             return;
         }
         var pageName = DataHandler.getPathParamsData("pageName", "");
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", {});
         if ([Config.update].indexOf(pageName) >= 0) {
             DataHandlerV2.callAddTextApi(name, value, function() {
                 DataHandler.setData("attendanceDataLoadStatus", "not-started");
                 DataHandlerV3.loadAttendanceData(function() {
                     DataHandlerV3.handleAttendanceDataLoad();
                     DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                });
+                }, dbTableDataIndex);
             });
         } else {
             DataHandler.setFieldsData(name, value);

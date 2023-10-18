@@ -235,7 +235,7 @@ DataHandlerV3.extend({
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
     },
-    handlePageLoad: function(dbDataApis, callback) {
+    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
         var tableData;
@@ -245,7 +245,7 @@ DataHandlerV3.extend({
             if (status === "not-started") {
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
-                    tableData = AppHandler.GenerateDatabaseV2(request);
+                    tableData = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
                     self._callTcpService(function(jsonResponse) {
                         DataHandler.setData("dbDataLoadStatus", "completed");
                         tableData = AppHandler.MergeDatabase(tableData, jsonResponse);
@@ -286,14 +286,14 @@ DataHandlerV3.extend({
             $S.callMethod(callback);
         }
     },
-    loadAttendanceData: function(callback) {
+    loadAttendanceData: function(callback, dbTableDataIndex) {
         var dbViewData, dbViewDataTemp;
         DataHandler.setData("attendanceDataLoadStatus", "in_progress");
         var attendanceDataApis = DataHandler.getAppData("attendanceDataApis", []);
         DataHandlerV3._loadDBViewData(attendanceDataApis, function(request) {
             DataHandler.setData("attendanceDataLoadStatus", "completed");
             DataHandlerV3.loadAttendanceTableData(function(database) {
-                dbViewDataTemp = AppHandler.GenerateDatabaseV2(request);
+                dbViewDataTemp = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
                 dbViewDataTemp = AppHandler.MergeDatabase(dbViewDataTemp, database);
                 dbViewData = DataHandler.getData("dbViewData", {});
                 if ($S.isObjectV2(dbViewDataTemp)) {

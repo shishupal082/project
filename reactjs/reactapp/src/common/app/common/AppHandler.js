@@ -649,9 +649,12 @@ AppHandler.extend({
         }
         return tableData;
     },
-    GenerateDatabaseV2: function(request) {
+    GenerateDatabaseV2: function(request, dbTableDataIndex) {
         var tableData = {}, i, temp;
-        var wordBreak;
+        var wordBreak, dataIndex;
+        if (!$S.isObject(dbTableDataIndex)) {
+            dbTableDataIndex = {};
+        }
         if ($S.isArray(request)) {
             for(i=0; i<request.length; i++) {
                 if (!$S.isObject(request[i])) {
@@ -663,9 +666,15 @@ AppHandler.extend({
                 if ($S.isUndefined(tableData[request[i].apiName])) {
                     tableData[request[i].apiName] = {};
                 }
+                dataIndex = request[i].dataIndex;
+                if (!$S.isArrayV2(dataIndex)) {
+                    if ($S.isStringV2(request[i].apiName) && $S.isArray(dbTableDataIndex[request[i].apiName])) {
+                        dataIndex = dbTableDataIndex[request[i].apiName];
+                    }
+                }
                 tableData[request[i].apiName]["request"] = request[i];
                 tableData[request[i].apiName]["tableName"] = request[i].apiName;
-                tableData[request[i].apiName]["dataIndex"] = request[i].dataIndex;
+                tableData[request[i].apiName]["dataIndex"] = dataIndex;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
                 tableData[request[i].apiName]["skipEmpty"] = request[i].skipEmpty;
