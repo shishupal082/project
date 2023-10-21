@@ -1356,6 +1356,7 @@ AppHandler.extend({
         var preFilter = metaDataTemp["preFilter"];
         var onlyPreFilterKeys = metaDataTemp["onlyPreFilterKeys"];
         var i, j, temp, temp2;
+        var allFieldValue, localAllFieldValue = {};
 
         var tempFilterOptions = {};
         for(i=0; i<filterKeys.length; i++) {
@@ -1384,6 +1385,20 @@ AppHandler.extend({
             }
             return null;
         }
+        function getAllFieldValue(filterIndex) {
+            if ($S.isString(localAllFieldValue[filterIndex])) {
+                return localAllFieldValue[filterIndex];
+            }
+            var tempAllFilterValueOptions = $S.findParam([currentAppData, metaData], "allFilterValue", {});
+            var allFilterValueOptions = {};
+            if ($S.isObject(allFilterValueOptions)) {
+                for(var tempFilterIndex in tempAllFilterValueOptions) {
+                    allFilterValueOptions["allFilterValue:"+tempFilterIndex] = tempAllFilterValueOptions[tempFilterIndex];
+                }
+            }
+            localAllFieldValue[filterIndex] = $S.findParam([currentAppData, metaData, allFilterValueOptions], "allFilterValue:"+filterIndex, "allFilterValue:"+filterIndex);
+            return localAllFieldValue[filterIndex];
+        }
         for(i=0; i<csvData.length; i++) {
             for(j=0; j<filterKeys.length; j++) {
                 if (onlyPreFilterKeys.indexOf(filterKeys[j]) >= 0) {
@@ -1391,12 +1406,15 @@ AppHandler.extend({
                 }
                 temp = getFilterText(csvData[i], tempFilterOptions[filterKeys[j]].dataKey);//csvData[i][tempFilterOptions[filterKeys[j]].dataKey];
                 if (!$S.isString(temp) || temp.trim().length < 1) {
-                    continue;
+                    temp = "";
                 }
                 temp = temp.trim();
                 temp2 = getFilterText(csvData[i], tempFilterOptions[filterKeys[j]].dataDisplay);
                 if (!$S.isString(temp2)) {
                     temp2 = $S.capitalize(temp);
+                }
+                if (temp === "") {
+                    temp2 = "Empty:"+filterKeys[j];
                 }
                 if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
                     tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
@@ -1417,8 +1435,13 @@ AppHandler.extend({
                         $S.addElAt(tempFilterOptions[temp].filterOption, 0, tempFilterOptions[temp].preFilter[i]);
                     }
                 }
-            } else if (tempFilterOptions[temp].filterOption.length > 0) {
-                $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "All"});
+            }
+            if (tempFilterOptions[temp].filterOption.length > 0) {
+                allFieldValue = getAllFieldValue(temp);
+                if (tempFilterOptions[temp].possibleIds.indexOf(allFieldValue) < 0) {
+                    tempFilterOptions[temp].possibleIds.push(allFieldValue);
+                    $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": allFieldValue, "option": "All"});
+                }
             }
         }
         var selectionOptions = [];
@@ -1432,7 +1455,7 @@ AppHandler.extend({
             }
             selectedValue = filterSelectedValues[tempFilterOptions[filterKeys[i]].selectName];
             if (!$S.isString(selectedValue)) {
-                selectedValue = "";
+                selectedValue = getAllFieldValue(filterKeys[i]);
             }
             if (tempFilterOptions[filterKeys[i]].possibleIds.indexOf(selectedValue) < 0) {
                 selectedValue = "";
@@ -1444,7 +1467,8 @@ AppHandler.extend({
                     "selectName": tempFilterOptions[filterKeys[i]].selectName,
                     "dataKey": tempFilterOptions[filterKeys[i]].dataKey,
                     "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds,
-                    "selectedValue": selectedValue
+                    "selectedValue": selectedValue,
+                    "allFieldValue": getAllFieldValue(filterKeys[i])
                 });
             }
         }
@@ -1461,7 +1485,7 @@ AppHandler.extend({
         var reportData = csvData;
         var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);
         var preFilter = metaDataTemp["preFilter"];
-        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, searchByPattern;
+        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, allFieldValue, searchByPattern;
         var isRevert;
         function _isResultRevert(filterIndex, filterValue) {
             if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
@@ -1488,6 +1512,7 @@ AppHandler.extend({
         for(k=0; k<filterOptions.length; k++) {
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;
+            allFieldValue = filterOptions[k].allFieldValue
             isRevert = _isResultRevert(filterIndex, filterValue);
             if (isRevert && $S.isString(filterValue)) {
                 temp = filterValue.split("~");
@@ -1500,7 +1525,10 @@ AppHandler.extend({
             if (!$S.isString(filterIndex) || filterIndex === "") {
                 continue;
             }
-            if (!$S.isString(filterValue) || filterValue === "") {
+            if (!$S.isString(filterValue)) {
+                continue;
+            }
+            if (filterValue === allFieldValue) {
                 continue;
             }
             temp3 = [];

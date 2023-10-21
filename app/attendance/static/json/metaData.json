@@ -1,5 +1,9 @@
 {
     "filterKeys": ["station", "team", "designation", "username", "reset"],
+    "allFilterValue": {
+        "station": "__all_station__"
+    },
+    "allFilterValue:designation": "__all_designation__",
     "onlyPreFilterKeys": ["team"],
     "stationPrefilter": [
         {
@@ -14,8 +18,8 @@
             "searchByPattern": true
         },
         {
-            "value": "",
-            "option": "All"
+            "value": "allFilterValue:station",
+            "option": "All Station"
         }
     ],
     "preFilter": {
