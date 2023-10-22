@@ -28,10 +28,10 @@ addLog() {
 # distDir=dist-data-display-app
 # distDir=dist-ml2-app
 # distDir=dist-ftp-app
-distDir=dist-project-tracking-app
+# distDir=dist-project-tracking-app
 # distDir=dist-auth-app
 # distDir=dist-rcc-app
-# distDir=dist-attendance-app
+distDir=dist-attendance-app
 # distDir=dist-google_login-app
 # distDir=dist-track-plan-app
 # distDir=dist-mastersheet-app
