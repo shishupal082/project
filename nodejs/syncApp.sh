@@ -1,3 +1,3 @@
 node syncApp.js
-cd ../reactjs/reactapp/
+cd ../reactjs/reactapp-2/
 sh sync.sh

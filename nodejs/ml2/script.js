@@ -1,5 +1,5 @@
 const $S = require("../../static/js/stack.js");
-const $M = require("../../reactjs/reactapp/src/libs/nodejs/modelV2.js");
+const $M = require("../../reactjs/reactapp-2/src/libs/nodejs/modelV2.js");
 const Logger = require("../static/logger.js");
 const File = require("../static/apis/file.js");
 

@@ -32,8 +32,8 @@ GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.1";
 window.GLOBAL = GLOBAL;
 </script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-react-base-1.0.0/script1.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-account-app-2021-oct/script2.js"></script>
-<script type="text/javascript" src="/reactjs/reactapp/dist-account-app-2021-oct/script3.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp-2/dist-react-base-1.0.0/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp-2/dist-account-app-2021-oct/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp-2/dist-account-app-2021-oct/script3.js"></script>
 </body>
 </html>
