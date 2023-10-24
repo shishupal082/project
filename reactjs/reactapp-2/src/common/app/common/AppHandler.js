@@ -1356,7 +1356,7 @@ AppHandler.extend({
         var preFilter = metaDataTemp["preFilter"];
         var onlyPreFilterKeys = metaDataTemp["onlyPreFilterKeys"];
         var i, j, temp, temp2;
-        var allFieldValue, localAllFieldValue = {};
+        var allFieldValue, nonEmptyFieldValue, localAllFieldValue = {};
 
         var tempFilterOptions = {};
         for(i=0; i<filterKeys.length; i++) {
@@ -1398,6 +1398,9 @@ AppHandler.extend({
             }
             localAllFieldValue[filterIndex] = $S.findParam([currentAppData, metaData, allFilterValueOptions], "allFilterValue:"+filterIndex, "allFilterValue:"+filterIndex);
             return localAllFieldValue[filterIndex];
+        }
+        function getNonEmptyFieldValue(filterIndex) {
+            return "NonEmptyFieldValue:"+filterIndex;
         }
         var isEmptyFilterKeys = {};
         for(j=0; j<filterKeys.length; j++) {
@@ -1442,8 +1445,11 @@ AppHandler.extend({
             if (tempFilterOptions[temp].filterOption.length > 0) {
                 if ($S.isBooleanTrue(isEmptyFilterKeys[temp])) {
                     tempFilterOptions[temp].possibleIds.push("");
-                    tempFilterOptions[temp].possibleIds.push("NonEmptyFieldValue:"+temp);
-                    $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "NonEmptyFieldValue:"+temp, "option": "Non Empty:"+temp});
+                    nonEmptyFieldValue = getNonEmptyFieldValue(temp);
+                    if (tempFilterOptions[temp].possibleIds.indexOf(nonEmptyFieldValue) < 0) {
+                        tempFilterOptions[temp].possibleIds.push(nonEmptyFieldValue);
+                        $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": nonEmptyFieldValue, "option": "Non Empty:"+temp});
+                    }
                     $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "Empty:"+temp});
                 }
                 allFieldValue = getAllFieldValue(temp);
@@ -1477,7 +1483,8 @@ AppHandler.extend({
                     "dataKey": tempFilterOptions[filterKeys[i]].dataKey,
                     "possibleIds": tempFilterOptions[filterKeys[i]].possibleIds,
                     "selectedValue": selectedValue,
-                    "allFieldValue": getAllFieldValue(filterKeys[i])
+                    "allFieldValue": getAllFieldValue(filterKeys[i]),
+                    "nonEmptyFieldValue": getNonEmptyFieldValue(filterKeys[i])
                 });
             }
         }
@@ -1494,7 +1501,7 @@ AppHandler.extend({
         var reportData = csvData;
         var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);
         var preFilter = metaDataTemp["preFilter"];
-        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, allFieldValue, searchByPattern;
+        var temp, temp2, temp3, i, j, k, l, filterIndex, filterValue, allFieldValue, nonEmptyFieldValue, searchByPattern;
         var isRevert;
         function _isResultRevert(filterIndex, filterValue) {
             if ($S.isUndefined(filterIndex) || !$S.isString(filterValue)) {
@@ -1521,9 +1528,10 @@ AppHandler.extend({
         for(k=0; k<filterOptions.length; k++) {
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;
-            allFieldValue = filterOptions[k].allFieldValue
+            allFieldValue = filterOptions[k].allFieldValue;
+            nonEmptyFieldValue = filterOptions[k].nonEmptyFieldValue;
             isRevert = _isResultRevert(filterIndex, filterValue);
-            if (filterValue === "NonEmptyFieldValue:" + filterIndex) {
+            if (filterValue === nonEmptyFieldValue) {
                 isRevert = true;
                 filterValue = "";
             }
