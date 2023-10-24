@@ -1418,7 +1418,13 @@ AppHandler.extend({
                 }
                 if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
                     tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
-                    tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});//csvData[i][tempFilterOptions[filterKeys[j]].dataDisplay]});
+                    tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});
+                    if (temp === "") {
+                        temp = "NonEmptyFieldValue:"+filterKeys[j];
+                        temp2 = "Empty (Not):"+filterKeys[j];
+                        tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
+                        tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});
+                    }
                 }
             }
         }
@@ -1514,6 +1520,10 @@ AppHandler.extend({
             filterValue = filterOptions[k].selectedValue;
             allFieldValue = filterOptions[k].allFieldValue
             isRevert = _isResultRevert(filterIndex, filterValue);
+            if (filterValue === "NonEmptyFieldValue:" + filterIndex) {
+                isRevert = true;
+                filterValue = "";
+            }
             if (isRevert && $S.isString(filterValue)) {
                 temp = filterValue.split("~");
                 if (temp.length > 1) {
