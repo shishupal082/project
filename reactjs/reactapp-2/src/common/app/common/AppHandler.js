@@ -1399,8 +1399,10 @@ AppHandler.extend({
             localAllFieldValue[filterIndex] = $S.findParam([currentAppData, metaData, allFilterValueOptions], "allFilterValue:"+filterIndex, "allFilterValue:"+filterIndex);
             return localAllFieldValue[filterIndex];
         }
-        for(i=0; i<csvData.length; i++) {
-            for(j=0; j<filterKeys.length; j++) {
+        var isEmptyFilterKeys = {};
+        for(j=0; j<filterKeys.length; j++) {
+            isEmptyFilterKeys[filterKeys[j]] = false;
+            for(i=0; i<csvData.length; i++) {
                 if (onlyPreFilterKeys.indexOf(filterKeys[j]) >= 0) {
                     continue;
                 }
@@ -1414,17 +1416,12 @@ AppHandler.extend({
                     temp2 = $S.capitalize(temp);
                 }
                 if (temp === "") {
-                    temp2 = "Empty:"+filterKeys[j];
+                    isEmptyFilterKeys[filterKeys[j]] = true;
+                    continue;
                 }
                 if (tempFilterOptions[filterKeys[j]].possibleIds.indexOf(temp) < 0) {
                     tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
                     tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});
-                    if (temp === "") {
-                        temp = "NonEmptyFieldValue:"+filterKeys[j];
-                        temp2 = "Empty (Not):"+filterKeys[j];
-                        tempFilterOptions[filterKeys[j]].possibleIds.push(temp);
-                        tempFilterOptions[filterKeys[j]].filterOption.push({"value": temp, "option": temp2});
-                    }
                 }
             }
         }
@@ -1443,6 +1440,12 @@ AppHandler.extend({
                 }
             }
             if (tempFilterOptions[temp].filterOption.length > 0) {
+                if ($S.isBooleanTrue(isEmptyFilterKeys[temp])) {
+                    tempFilterOptions[temp].possibleIds.push("");
+                    tempFilterOptions[temp].possibleIds.push("NonEmptyFieldValue:"+temp);
+                    $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "NonEmptyFieldValue:"+temp, "option": "Non Empty:"+temp});
+                    $S.addElAt(tempFilterOptions[temp].filterOption, 0, {"value": "", "option": "Empty:"+temp});
+                }
                 allFieldValue = getAllFieldValue(temp);
                 if (tempFilterOptions[temp].possibleIds.indexOf(allFieldValue) < 0) {
                     tempFilterOptions[temp].possibleIds.push(allFieldValue);
