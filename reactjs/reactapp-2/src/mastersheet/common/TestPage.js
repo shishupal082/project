@@ -135,8 +135,19 @@ TestPage.extend({
             table = this.getTemplate("page-template-table");
             for (var i=0; i<templateData.length; i++) {
                 template = this.getTemplate("page-template-table-body-row");
-                if ($S.isObject(templateData[i]) && $S.isString(templateData[i]["option-1"]) && templateData[i]["option-1"].length === 0) {
-                    TemplateHelper.addClassTemplate(template, "page-template-table-body-row.option-fields", "d-none");
+                if ($S.isObject(templateData[i])) {
+                    if ($S.isString(templateData[i]["option-1"]) && templateData[i]["option-1"].length === 0) {
+                        TemplateHelper.addClassTemplate(template, "page-template-table-body-row.option-1-fields", "d-none");
+                    }
+                    if ($S.isString(templateData[i]["option-2"]) && templateData[i]["option-2"].length === 0) {
+                        TemplateHelper.addClassTemplate(template, "page-template-table-body-row.option-2-fields", "d-none");
+                    }
+                    if ($S.isString(templateData[i]["option-3"]) && templateData[i]["option-3"].length === 0) {
+                        TemplateHelper.addClassTemplate(template, "page-template-table-body-row.option-3-fields", "d-none");
+                    }
+                    if ($S.isString(templateData[i]["option-4"]) && templateData[i]["option-4"].length === 0) {
+                        TemplateHelper.addClassTemplate(template, "page-template-table-body-row.option-4-fields", "d-none");
+                    }
                 }
                 TemplateHelper.updateTemplateText(template, templateData[i]);
                 TemplateHelper.addItemInTextArray(table, "page-template-table.name", template);
