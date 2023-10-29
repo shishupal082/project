@@ -1,6 +1,20 @@
 {
     "list1Data": [
         {
+            "name": "Test Page",
+            "metaDataApi": [
+                "/app/mastersheet/json/test-page/template.json",
+                "/app/mastersheet/json/test-page/meta-data.json"
+            ],
+            "dbDataApis": [
+                {
+                    "tableName": "table1",
+                    "singleLineComment": "//",
+                    "apis": ["/app/mastersheet/csv/user-data-test-page.csv"]
+                }
+            ]
+        },
+        {
             "name": "Mastersheet for section",
             "metaDataApi": [
                 "/app/mastersheet/json/common/template.json"
@@ -30,6 +44,7 @@
         }
     ],
     "metaData": {
+        "pageType": "mastersheet",
         "dynamicEnabling": {
             "enablePageGroup09": {
                 "enabledViewPage": ["dashboardLink", "mastersheet"]

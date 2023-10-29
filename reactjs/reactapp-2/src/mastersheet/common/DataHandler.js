@@ -316,12 +316,6 @@ DataHandler.extend({
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         var pageName = DataHandler.getData("pageName", "");
-        // if (pageName === Config.origin) {
-        //     if ($S.isBooleanTrue(CommonConfig.originPageRedirect)) {
-        //         AppHandler.LazyRedirect(CommonConfig.basepathname + "/0", 250);
-        //         return;
-        //     }
-        // }
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         CommonDataHandler.loadLoginUserDetailsData(function() {
             AppHandler.TrackPageView(pageName);
@@ -474,11 +468,12 @@ DataHandler.extend({
         var pageName= DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
         var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var pageType = DataHandler.getAppData("pageType", "");
         var addContainerClass = false;
         if (dataLoadStatus) {
             renderData = this.getRenderData(pageName, pageId, viewPageName);
         }
-        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
+        var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName, pageType);
         if (dataLoadStatus) {
             list1Data = DataHandlerV2.getList1Data();
             list3Data = DataHandlerV2.getList3Data();

@@ -1,0 +1,5 @@
+//Table name,q_no,question,option-1,option-2,option-3,option-4
+
+table1,1,question-1,option-A,option-B,option-C,option-D
+table1,2,question-2;Sub optons-1;Sub optons-2
+table1,,question-hindi-2;Sub optons-1;Sub optons-2,option-A,option-B,option-C,option-D

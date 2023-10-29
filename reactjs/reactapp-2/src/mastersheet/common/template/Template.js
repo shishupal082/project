@@ -36,6 +36,14 @@ Template["templateNotFound"] = [{
         "text": "Template not Found"
     }
 }];
+Template["invalidPageType"] = [{
+    "tag": "center.h1",
+    "text": {
+        "tag": "span",
+        "className": "badge badge-primary",
+        "text": "Invalid pageType"
+    }
+}];
 Template["loading"] = [
     {
         "tag": "center.h2",

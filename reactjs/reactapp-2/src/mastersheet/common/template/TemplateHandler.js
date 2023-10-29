@@ -4,6 +4,7 @@ import Template from "./Template";
 import Config from "../Config";
 import DataHandler from "../DataHandler";
 import Mastersheet from "../Mastersheet";
+import TestPage from "../TestPage";
 
 import TemplateHelper from "../../../common/TemplateHelper";
 import CommonConfig from "../../../common/app/common/CommonConfig";
@@ -147,7 +148,7 @@ TemplateHandler.extend({
         TemplateHelper.setTemplateAttr(template, "goBackLink.a", "href", backUrl);
         return template;
     },
-    GetPageRenderField: function(dataLoadStatus, renderData, pageName) {
+    GetPageRenderField: function(dataLoadStatus, renderData, pageName, pageType) {
         var renderField;
         if (!dataLoadStatus) {
             renderField = this.getTemplate("loading");
@@ -162,7 +163,13 @@ TemplateHandler.extend({
                     renderField = this.generateOriginRenderField(pageName, renderData);
                 break;
                 case "home":
-                    renderField = Mastersheet.getPageFromData(pageName, renderData);
+                    if (pageType === "mastersheet") {
+                        renderField = Mastersheet.getPageFromData(pageName, renderData, pageType);
+                    } else if (pageType === "test-page") {
+                        renderField = TestPage.getPageFromData(pageName, renderData, pageType);
+                    } else {
+                        renderField = this.getTemplate("invalidPageType");
+                    }
                 break;
                 case "noMatch":
                 default:

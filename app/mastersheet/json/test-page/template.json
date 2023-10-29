@@ -1,0 +1,138 @@
+{
+    "app-field": [
+        {
+            "tag": "div",
+            "name": "app-field.name",
+            "text": []
+        }
+    ],
+    "app-header": [
+        {
+            "tag": "div.h2",
+            "className": "text-center",
+            "text": "App Heading (English)"
+        },
+        {
+            "tag": "div.h2",
+            "className": "text-center",
+            "text": "App Heading (Hindi)"
+        },
+        {
+            "tag": "div",
+            "className": "",
+            "text": [
+                {
+
+                    "tag": "div",
+                    "className": "text-center",
+                    "text": "Instruction (English)"
+                },
+                {
+                    "tag": "div",
+                    "className": "text-center",
+                    "text": "Instruction (Hindi)"
+                }
+            ]
+        }
+    ],
+    "page-header": [
+        
+    ],
+    "page-footer": [
+        
+    ],
+    "page-template-sub_options": [
+        {"tag": "div.b", "text": "", "name": "page-template-sub_options.name"}
+    ],
+    "page-template-table": [
+        {
+            "tag": "table.tbody",
+            "name": "page-template-table.name",
+            "className": "",
+            "text": []
+        }
+    ],
+    "page-template-table-body-row": {
+        "tag": "tr",
+        "text": [
+            {
+                "tag": "td",
+                "name": "q_no",
+                "className": "v-align-initial",
+                "text": ""
+            },
+            {
+                "tag": "td",
+                "text": [
+                    {
+                        "tag": "div",
+                        "name": "question"
+                    },
+                    {
+                        "tag": "div",
+                        "name": "sub_options",
+                        "text": []
+                    },
+                    {
+                        "tag": "div",
+                        "name": "page-template-table-body-row.option-fields",
+                        "text": [
+                            {
+                                "tag": "div",
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "text": "(A)  "
+                                    },
+                                    {
+                                        "tag": "span",
+                                        "name": "option-1"
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "div",
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "text": "(B)  "
+                                    },
+                                    {
+                                        "tag": "span",
+                                        "name": "option-2"
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "div",
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "text": "(C)  "
+                                    },
+                                    {
+                                        "tag": "span",
+                                        "name": "option-3"
+                                    }
+                                ]
+                            },
+                            {
+                                "tag": "div",
+                                "text": [
+                                    {
+                                        "tag": "span",
+                                        "text": "(D)  "
+                                    },
+                                    {
+                                        "tag": "span",
+                                        "name": "option-4"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

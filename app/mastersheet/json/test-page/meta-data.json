@@ -1,0 +1,47 @@
+{
+    "maxUserPerPage": 4,
+    "pageType": "test-page",
+    "dynamicEnabling": {
+        "enablePageGroup09": {
+            "enabledViewPage": ["dashboardLink", "mastersheet"]
+        }
+    },
+    "templateDataTableName": "table1",
+    "dbTableDataIndex": {
+        "table1": ["tableName", "q_no", "question", "option-1", "option-2", "option-3", "option-4"]
+    },
+    "afterLoginLinkJson": [
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span","text":"Login as: "},
+                {"tag":"span.b","name":"pageHeading.username","text":""}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:dashboardLink",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"a","name":"pageHeading:viewPageName.dashboardLink","href":"/app/project-tracking/0","text":"Dashboard"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "className": "d-none",
+            "name": "viewPageName:mastersheet",
+            "text": [
+                {"tag":"span","text":" |  "},
+                {"tag":"span","text":{"tag":"a","name":"pageHeading:viewPageName.mastersheet","href":"/app/mastersheet","text":"Mastersheet"}}
+            ]
+        },
+        {
+            "tag": "span",
+            "text": [
+                {"tag":"span", "text":" |  "},
+                {"tag":"span", "text":{"tag":"a","name":"pageHeading.logoutLink","href":"/logout","text":"Logout"}}
+            ]
+        }
+    ]
+}
