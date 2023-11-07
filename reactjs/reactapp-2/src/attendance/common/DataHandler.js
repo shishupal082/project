@@ -10,6 +10,7 @@ import TemplateHandler from "./TemplateHandler";
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
+import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 
 var DataHandler;
 
@@ -686,11 +687,29 @@ DataHandler.extend({
                 renderData = DataHandlerV2.GenerateFinalTaUserData(filteredUserData);
             break;
             case "dbview":
-            case "dbview_summary":
             case "custom_dbview":
                 currentList3Data = this.getCurrentList3Data();
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField, dateSelect);
                 renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
+            break;
+            case "dbview_summary":
+                currentList3Data = this.getCurrentList3Data();
+                var tempRenderData;
+                var currentList3DataItems = DBViewDataHandler.bifercateCurrentList3DataItems(currentList3Data);
+                if ($S.isArray(currentList3DataItems) && currentList3DataItems.length > 0) {
+                    for(i=0; i<currentList3DataItems.length; i++) {
+                        if (currentList3DataItems.length > 1) {
+                            if ($S.isObject(currentList3DataItems[i])) {
+                                if ($S.isStringV2(currentList3DataItems[i]["text"]) || $S.isObject(currentList3DataItems[i]["text"]) || $S.isArray(currentList3DataItems[i]["text"])) {
+                                    renderData.push({"tag": "div", "text": currentList3DataItems[i]["text"]});
+                                }
+                            }
+                        }
+                        tempRenderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3DataItems[i], dateParameterField, dateSelect);
+                        tempRenderData = DBViewDataHandler.SortDbViewResult(tempRenderData, sortingFields, dateParameterField);
+                        renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true));
+                    }
+                }
             break;
             default:
                 renderData = [];

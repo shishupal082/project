@@ -3,6 +3,27 @@
     "allFilterValue": {
         "station": "__all_station__"
     },
+    "list3Data_2": [
+        {
+            "name": "",
+            "text": "All"
+        },
+        {
+            "text": "Order by Type",
+            "value": [{"key": "type"}]
+        },
+        {
+            "text": "Order by Relevant",
+            "value": [
+                {"key": "parameter"},
+                {"key": "station", "split": true},
+                {"key": "station"},
+                {"key": "parameter", "split": true},
+                {"key": "type", "split": true},
+                {"key": "parameter", "split": true}
+            ]
+        },
+    ],
     "allFilterValue:designation": "__all_designation__",
     "onlyPreFilterKeys": ["team"],
     "stationPrefilter": [
