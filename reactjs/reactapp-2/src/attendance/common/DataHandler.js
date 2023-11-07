@@ -647,7 +647,7 @@ DataHandler.extend({
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateArray = dateParameters[dateSelect];
         }
-        var renderData = [], i, currentList3Data;
+        var renderData = [], i, currentList3Data, tempRenderData, currentList3DataItems, isAdded;
         var currentAppData = DataHandler.getCurrentAppData({});
         var metaData = DataHandler.getMetaData({});
         var userData = DataHandler.getData("dbViewDataTable", []);
@@ -688,27 +688,34 @@ DataHandler.extend({
             break;
             case "dbview":
             case "custom_dbview":
-                currentList3Data = this.getCurrentList3Data();
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3Data, dateParameterField, dateSelect);
-                renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
             case "dbview_summary":
+                isAdded = false;
                 currentList3Data = this.getCurrentList3Data();
-                var tempRenderData;
-                var currentList3DataItems = DBViewDataHandler.bifercateCurrentList3DataItems(currentList3Data);
+                currentList3DataItems = DBViewDataHandler.bifercateCurrentList3DataItems(currentList3Data);
                 if ($S.isArray(currentList3DataItems) && currentList3DataItems.length > 0) {
                     for(i=0; i<currentList3DataItems.length; i++) {
                         if (currentList3DataItems.length > 1) {
                             if ($S.isObject(currentList3DataItems[i])) {
-                                if ($S.isStringV2(currentList3DataItems[i]["text"]) || $S.isObject(currentList3DataItems[i]["text"]) || $S.isArray(currentList3DataItems[i]["text"])) {
-                                    renderData.push({"tag": "div", "text": currentList3DataItems[i]["text"]});
+                                if ($S.isStringV2(currentList3DataItems[i]["headingText"]) || $S.isObject(currentList3DataItems[i]["headingText"]) || $S.isArray(currentList3DataItems[i]["headingText"])) {
+                                    renderData.push({"tag": "div", "text": currentList3DataItems[i]["headingText"]});
                                 }
                             }
                         }
                         tempRenderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3DataItems[i], dateParameterField, dateSelect);
                         tempRenderData = DBViewDataHandler.SortDbViewResult(tempRenderData, sortingFields, dateParameterField);
-                        renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true));
+                        if (tempRenderData === null || ($S.isArray(tempRenderData) && tempRenderData.length === 0)) {
+                        } else {
+                            isAdded = true;
+                            if (pageName === "dbview_summary") {
+                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true));
+                            } else {
+                                renderData.push(DBViewTemplateHandler.GenerateDbViewRenderField(tempRenderData, currentList3DataItems[i], sortingFields, true));
+                            }
+                        }
                     }
+                }
+                if (isAdded === false) {
+                    renderData = DBViewTemplateHandler.getTemplate("noDataFound");
                 }
             break;
             default:

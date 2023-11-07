@@ -626,26 +626,29 @@ DBViewDataHandler.extend({
                         count++;
                     }
                 }
-                if (valueItems.length > 0) {
+                if (valueItems.length > 1) {
                     for (i=0; i<valueItems.length; i++) {
                         temp = $S.clone(currentList3Data);
                         temp["value"] = [];
+                        temp["text"] = [];
                         tempText = {"tag":"h1", "text": "Starting ... " + (i+1)};
                         if ($S.isArray(valueItems[i]) && valueItems[i].length > 0) {
                             tempValueItem = valueItems[i][valueItems[i].length-1];
                             if ($S.isObject(tempValueItem)) {
-                                if ($S.isStringV2(tempValueItem["text"]) || $S.isObject(tempValueItem["text"]) || $S.isArray(tempValueItem["text"])) {
-                                    tempText = tempValueItem["text"];
+                                if ($S.isStringV2(tempValueItem["headingText"]) || $S.isObject(tempValueItem["headingText"]) || $S.isArray(tempValueItem["headingText"])) {
+                                    tempText = tempValueItem["headingText"];
                                 }
                                 if ($S.isStringV2(tempValueItem["key"])) {
                                     temp["value"] = valueItems[i];
                                 }
                             }
                         }
-                        temp["text"] = tempText;
+                        temp["headingText"] = tempText;
                         temp["name"] = currentList3Data["name"]+"-"+i;
                         currentList3DataItems.push(temp);
                     }
+                } else {
+                    return [currentList3Data];
                 }
             } else {
                 return [currentList3Data];

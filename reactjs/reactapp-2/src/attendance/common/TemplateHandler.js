@@ -198,7 +198,6 @@ TemplateHandler.extend({
             $S.log("loadingCount: " + (loadingCount++));
             return renderField;
         }
-        var currentList3Data = DataHandler.getCurrentList3Data();
         var sortingFields = DataHandler.getData("sortingFields", []);
         var pageName1 = DataHandler.getData("pageName", "");
         if (pageName1 === Config.home) {
@@ -219,8 +218,6 @@ TemplateHandler.extend({
                 break;
                 case "dbview":
                 case "custom_dbview":
-                    renderField = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, true);
-                break;
                 case "dbview_summary":
                     renderField = renderData;
                 break;
