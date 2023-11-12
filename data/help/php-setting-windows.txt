@@ -1,14 +1,14 @@
-To configure change conf/httpd.conf in apache
+PHP installation
 --------------------------------------------------
-Php setup
 Download php (preferably 5)
 Keep it into C drive
 Configure php 5 properly with apache
-Then it should work properly
+Then it should work properly after following configuration
 
-add environment variable C:\php-5.4.5
-copy php.ini-development as php.ini
+1) add environment variable C:\php-5.4.5
+2) copy php.ini-development as php.ini
 uncomment extension_dir = "ext"
+After that restart terminal and check
 
 Verify php is installed or not
 php -v
@@ -16,16 +16,23 @@ create index.php and add bellow line
 
 <? phpinfo(); ?>
 
+To configure change conf/httpd.conf in apache
+--------------------------------------------------
 /*Configure php with apache */
+1) Change dir_module -- DirectoryIndex as below
 
-Add below line at the bottom of https.conf
+<IfModule dir_module>
+    DirectoryIndex index.php index.html
+</IfModule>
+
+
+2) Add below line at the bottom of https.conf
 
 PHPIniDir "C:/php-5.4.5"
 AddHandler application/x-httpd-php .php
 LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
 
+3) Set environment and config_file_path for access in php files
 
-Set environment and config_file_path for access in php files
--------------------------------------------------------------
-Temporarly we have set config_file_path and environment in windows
+Temporarly we have set config_file_path and environment in windows (C:/Apache24/httpd.conf)
 - SERVER_ADMIN (old admin@example.com new D:/workspace/venv/env_config.ini;development)

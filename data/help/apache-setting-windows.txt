@@ -1,10 +1,44 @@
 Download apache
-Put it into C drive
+Put it into C drive (Apache24)
 Run httpd.exe using command line or from services
-After configuration it should server
+
+Testing of apache installation:
+--------------------------------------------------
+.\httpd.exe -k install
+type http://localhost (It should work)
 
 To configure change conf/httpd.conf
 --------------------------------------------------
+Restart apache
+Go to
+c/Apache/bin
+.\httpd.exe -k restart
+
+If not working (from command line do it from windows service app)
+	- open service app (in search)
+		- stop then start manually
+
+Enable
+
+LoadModule rewrite_module modules/mod_rewrite.so
+
+DocumentRoot "${SRVROOT}/htdocs"
+<Directory "${SRVROOT}/htdocs">
+
+Change to 
+
+DocumentRoot "d:/workspace/project"
+<Directory "d:/workspace/project">
+
+Inside directory tag
+=> Options Indexes FollowSymLinks Multiviews
+Here Indexes tag allow your folder to access if index.html or index.php file is missing
+Comment # Options Indexes FollowSymLinks
+
+--------------------------------------------------
+Configure apache with php
+--------------------------------------------------
+
 Verify php is installed or not
 php -v
 create index.php and add bellow line
@@ -19,32 +53,13 @@ PHPIniDir "C:/php-5.4.5"
 AddHandler application/x-httpd-php .php
 LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
 
--------------------------------------------------
-Restart apache
--------------------------------------------------
-Go to
-c/Apache/bin
-httpd -k restart
+or
 
-If not working (from command line do it from windows service app)
-	- open service app (in search)
-		- stop then start manually
-
-
-
-DocumentRoot "${SRVROOT}/htdocs"
-<Directory "${SRVROOT}/htdocs">
-
-Change to 
-
-DocumentRoot "d:/project"
-<Directory "d:/project">
-
-Inside directory tag
-=> Options Indexes FollowSymLinks Multiviews
-Here Indexes tag allow your folder to access if index.html or index.php file is missing
+PHPIniDir "C:/php-8.2.12-Win32-vs16-x64"
+AddHandler application/x-httpd-php .php
+LoadModule php8_module "C:/php-8.2.12-Win32-vs16-x64/php8apache2_4.dll"
 
 Start /stop Apache in windows 10
 ----------------------------------
 Open Services
---> Choose service to start / stop
+--> Choose service Apache24 to start / stop

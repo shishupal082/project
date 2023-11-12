@@ -13,12 +13,11 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
-    "typescript": "^2.8.0",
     "caniuse-lite": "^1.0.30000974"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

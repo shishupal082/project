@@ -1,3 +1,7 @@
+Install node.js
+------------------------------------------
+Download node-***.msi and install
+------------------------------------------
 To install dependencies from package.json
 ------------------------------------------
 npm i
