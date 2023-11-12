@@ -5,3 +5,7 @@ Now copy id_rsa.pub text and save on github.com.
 
 Test ssh connection:
 - ssh -T git@github.com
+
+Do github config setting
+- git config --global user.email "you@example.com"
+- git config --global user.name "Your Name"
