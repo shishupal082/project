@@ -1,6 +1,7 @@
 const $S = require("../libs/stack.js");
 const FS = require("../common/fsmodule.js");
 const Logger = require("../common/logger-v2.js");
+const Get = require("./apis/getapi.js");
 
 (function() {
 var ConfigData = {};
@@ -24,6 +25,23 @@ ReadConfigData.extend({
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
                 if ($S.isObject(jsonData)) {
                     ConfigData = jsonData;
+                    Logger.log("ReadConfigData: Config data read success.");
+                } else {
+                    Logger.log("Invalid config data.");
+                }
+                $S.callMethod(callback);
+            });
+        } else {
+            Logger.log("Invalid config path.");
+            $S.callMethod(callback);
+        }
+    },
+    readApiData: function(api, callback) {
+        if ($S.isStringV2(api)) {
+            Get.api(api, "requestId", function(jsonData) {
+                Logger.log("---------------");
+                if ($S.isObject(jsonData) && $S.isArray(jsonData["data"])) {
+                    ConfigData = jsonData["data"];
                     Logger.log("ReadConfigData: Config data read success.");
                 } else {
                     Logger.log("Invalid config data.");

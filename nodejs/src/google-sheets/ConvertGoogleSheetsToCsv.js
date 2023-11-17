@@ -8,7 +8,7 @@ const {
   getSpreadSheetValues
 } = require('./googleSheetsService.js');
 
-async function getSpreadSheetValuesData(spreadsheetId, sheetName, callback) {
+async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callback) {
   try {
     const auth = await getAuthToken();
     const response = await getSpreadSheetValues({
@@ -16,10 +16,10 @@ async function getSpreadSheetValuesData(spreadsheetId, sheetName, callback) {
       sheetName,
       auth
     });
-    $S.callMethodV1(callback, response.data);
+    $S.callMethodV2(callback, config, response.data);
   } catch(error) {
     console.log(error.message, error.stack);
-    $S.callMethodV1(callback, null);
+    $S.callMethodV2(callback, config, null);
   }
 }
 
@@ -141,7 +141,7 @@ ConvertGoogleSheetsToCsv.extend({
                 spreadsheetId = excelConfig[i]["spreadsheetId"];
                 sheetName = excelConfig[i]["sheetName"];
                 excelConfig[i]["isVisited"] = "true";
-                getSpreadSheetValuesData(spreadsheetId, sheetName, function(response) {
+                getSpreadSheetValuesData(spreadsheetId, sheetName, {}, function(config, response) {
                     if ($S.isObject(response) && $S.isArrayV2(response["values"])) {
                         FinalResult.push(response["values"]);
                     }
@@ -156,9 +156,98 @@ ConvertGoogleSheetsToCsv.extend({
         }
         return $S.callMethodV1(callback, "IN_PROGRESS");
     },
+    _getSpreadsheetId: function(gsConfigData) {
+        var spreadsheetId = "";
+        if ($S.isObject(gsConfigData) && $S.isObject(gsConfigData["fileConfigMapping"])) {
+            if ($S.isArray(gsConfigData["fileConfigMapping"]["fileConfig"])) {
+                if (gsConfigData["fileConfigMapping"]["fileConfig"].length > 0) {
+                    spreadsheetId = gsConfigData["fileConfigMapping"]["fileConfig"][0];
+                }
+            }
+        }
+        return spreadsheetId;
+    },
+    _getSpreadsheetName: function(gsConfigData) {
+        var spreadsheetName = "";
+        if ($S.isObject(gsConfigData) && $S.isObject(gsConfigData["fileConfigMapping"])) {
+            if ($S.isArray(gsConfigData["fileConfigMapping"]["fileConfig"])) {
+                if (gsConfigData["fileConfigMapping"]["fileConfig"].length > 1) {
+                    spreadsheetName = gsConfigData["fileConfigMapping"]["fileConfig"][1];
+                }
+            }
+        }
+        return spreadsheetName;
+    },
+    _fireCallback: function(excelConfig, callback) {
+        if (!$S.isArray(excelConfig)) {
+            return $S.callMethodV1(callback, "SUCCESS");
+        }
+        var isVisited = true, isBreak;
+        for (var i=0; i<excelConfig.length; i++) {
+            if ($S.isObject(excelConfig[i]) && excelConfig[i]["isVisited"] !== "true") {
+                isVisited = false;
+                break;
+            }
+            if ($S.isObject(excelConfig[i]) && $S.isArrayV2(excelConfig[i]["gsConfig"])) {
+                isBreak = false;
+                for (var j=0; j<excelConfig[i]["gsConfig"].length; j++) {
+                    if ($S.isObject(excelConfig[i]["gsConfig"][j]) && excelConfig[i]["gsConfig"][j]["isVisited"] !== "true") {
+                        isBreak = true;
+                    }
+                }
+                if (isBreak) {
+                    isVisited = false;
+                }
+            }
+        }
+        if (isVisited) {
+            $S.callMethodV1(callback, "SUCCESS");
+        }
+    },
+    generateResultV2: function(excelConfig, callback) {
+        if (!$S.isArray(excelConfig)) {
+            Logger.log("Invalid excelConfig.", callback);
+            return;
+        }
+        if (excelConfig.length < 1) {
+            Logger.log("excelConfig not found.", callback);
+            return;
+        }
+        var self = this;
+        var data, id, spreadsheetId, sheetName, index;
+        var destination, finalList = [], isBreak;
+        for (var i=0; i<excelConfig.length; i++) {
+            if ($S.isObject(excelConfig[i]) && $S.isArray(excelConfig[i]["gsConfig"])) {
+                id = excelConfig[i]["id"];
+                for (var j=0; j<excelConfig[i]["gsConfig"].length; j++) {
+                    if ($S.isObject(excelConfig[i]["gsConfig"][j]) && excelConfig[i]["gsConfig"][j]["isVisited"] !== "true") {
+                        spreadsheetId = this._getSpreadsheetId(excelConfig[i]["gsConfig"][j]);
+                        sheetName = this._getSpreadsheetName(excelConfig[i]["gsConfig"][j]);
+                        getSpreadSheetValuesData(spreadsheetId, sheetName, {i: i, j: j, id: id, excelConfig: excelConfig}, function(config, response) {
+                            if ($S.isObject(response) && $S.isArray(response.values)) {
+                                for (var k=0; k<response.values.length; k++) {
+                                    if ($S.isArray(response.values[k]) && response.values[k].length >= 6) {
+                                        if (response.values[k][5] === config["id"]) {
+                                            FinalResult.push(response.values[k]);
+                                        }
+                                    }
+                                }
+                            }
+                            config["excelConfig"][config["i"]]["gsConfig"][config["j"]]["isVisited"] = "true";
+                            self._fireCallback(excelConfig, callback);
+                        });
+                    }
+                }
+            }
+            if ($S.isObject(excelConfig[i])) {
+                excelConfig[i]["isVisited"] = "true";
+            }
+        }
+        return this._fireCallback(excelConfig, callback);
+    },
     convert: function(request, excelConfig, callback) {
         Logger.logV2(request);
-        ConvertGoogleSheetsToCsv.generateResult(excelConfig, function(status) {
+        ConvertGoogleSheetsToCsv.generateResultV2(excelConfig, function(status) {
             $S.callMethodV1(callback, status);
         });
     }

@@ -25,6 +25,7 @@ function generateFinalResult() {
               if (finalData[j]["status"] === "IN_PROGRESS") {
                 finalData[i]["status"] = "SUCCESS";
                 finalData[j]["excelData"] = result;
+                console.log(result);
                 break;
               }
             }
@@ -37,7 +38,7 @@ function generateFinalResult() {
             if (isAllDataLoaded){
               console.log("Data load completed.");
               CsvDataFormate.replaceSpecialCharacterEachCell(finalData);
-              CsvDataFormate.format(finalData);
+              // CsvDataFormate.format(finalData);
               ConvertGoogleSheetsToCsv.saveCSVData(finalData);
             } else {
               generateFinalResult();
@@ -47,13 +48,12 @@ function generateFinalResult() {
       break;
     }
   }
-
 }
 
 function main() {
-  ReadConfigData.readData("./google-sheets/config.json", function() {
+  ReadConfigData.readApiData("http://localhost:8080/api/get_excel_data_config?requestId=" + workId, function() {
     var request = {"appId": "004", "workId": workId};
-    var excelConfig = ReadConfigData.getExcelConfigByWorkId(request);
+    var excelConfig = ReadConfigData.getData();
     CsvDataFormate.updateConfigData(workId, excelConfig);
     ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
       if (status === "SUCCESS") {
@@ -62,29 +62,27 @@ function main() {
         if (fileMapping) {
           for (i=0; i<fileMapping.length; i++) {
             if (fileMapping[i]) {
-              for (j=0; j<fileMapping[i].length; j++) {
-                if (fileMapping[i][j] && fileMapping[i][j].length >= 6) {
-                  if (fileMapping[i][j][5] !== workId) {
-                    continue;
-                  }
-                  finalData.push({
-                    "status": "PENDING",
-                    "fileMappingData": fileMapping[i][j],
-                    "excelConfigSpreadsheets": {
-                      "spreadsheetId": fileMapping[i][j][2],
-                      "sheetName": fileMapping[i][j][3]
-                    },
-                    "excelConfig": excelConfig,
-                    "excelData": []
-                  });
-                } else {
-                  console.log("Invalid file-mapping data.");
-                  console.log(fileMapping[i][j]);
-                }
+              if (fileMapping[i] && fileMapping[i].length >= 6) {
+                finalData.push({
+                  "status": "PENDING",
+                  "fileMappingData": fileMapping[i],
+                  "excelConfigSpreadsheets": {
+                    "spreadsheetId": fileMapping[i][2],
+                    "sheetName": fileMapping[i][3]
+                  },
+                  "excelConfig": excelConfig,
+                  "excelData": []
+                });
+              } else {
+                console.log("Invalid file-mapping data: 1");
+                console.log(fileMapping[i]);
               }
+            } else {
+              console.log("Invalid file-mapping data: 2");
             }
           }
-          console.log(finalData);
+          // console.log(finalData);
+          // console.log("--------finalData end-------------");
           generateFinalResult();
         } else {
           console.log("Invalid config parameter generated.");

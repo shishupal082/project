@@ -15,12 +15,13 @@
         {
             "text": "Order by Relevant",
             "value": [
+                {"split": true},
                 {"key": "parameter"},
-                {"key": "station", "split": true},
+                {"key": "station", "split": true, "headingText": "Order by Station"},
                 {"key": "station"},
-                {"key": "parameter", "split": true},
-                {"key": "type", "split": true},
-                {"key": "parameter", "split": true}
+                {"key": "parameter", "split": true, "headingText": "Order by Station -- Parameter"},
+                {"key": "type", "split": true, "headingText": "Order by Type"},
+                {"key": "parameter", "split": true, "headingText": "Order by Parameter"}
             ]
         },
     ],
