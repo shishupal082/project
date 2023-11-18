@@ -49,8 +49,19 @@ ReadConfigData.extend({
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path.");
+            Logger.log("Invalid api.");
             $S.callMethod(callback);
+        }
+    },
+    callApi: function(api, callback) {
+        if ($S.isStringV2(api)) {
+            Get.api(api, "requestId", function(jsonData) {
+                Logger.log("---------------");
+                $S.callMethodV1(callback, jsonData);
+            });
+        } else {
+            Logger.log("Invalid api.");
+            $S.callMethodV1(callback, null);
         }
     },
     getData: function() {

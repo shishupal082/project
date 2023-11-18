@@ -3,17 +3,31 @@ const ConvertGoogleSheetsToCsv = require("../src/google-sheets/ConvertGoogleShee
 const CsvDataFormate = require("../src/common/CsvDataFormate.js");
 var arg = process.argv;
 var workId = "";
+var port = "8082";
 if (arg.length >= 3 && arg[2].length > 0) {
     workId = arg[2];
+    if (arg.length >= 4 && arg[3].length > 0) {
+      port = arg[2];
+      workId = arg[3];
+    }
 } else {
     console.log("-----Command line argument 'workId' required.-----");
     return;
 }
+var finalCallingConfig = {
+  "gs-drawing-status": "csv-drawing-status",
+  "gs-expenditure": "csv-expenditure",
+  "gs-bill-register": "23-csv-bill-register"
+};
+var baseUrl = "http://localhost:" + port;
 var finalData = [];
-var i, j, spreadsheetId, sheetName;
 var isAllDataLoaded;
 
-function generateFinalResult() {
+function generateFinalResult(callback) {
+  if (finalData.length < 1) {
+    return callback();
+  }
+  var i,j;
   for (i=0; i<finalData.length; i++) {
     if (finalData[i]["status"] === "PENDING") {
       finalData[i]["status"] = "IN_PROGRESS";
@@ -40,8 +54,9 @@ function generateFinalResult() {
               CsvDataFormate.replaceSpecialCharacterEachCell(finalData);
               // CsvDataFormate.format(finalData);
               ConvertGoogleSheetsToCsv.saveCSVData(finalData);
+              callback();
             } else {
-              generateFinalResult();
+              generateFinalResult(callback);
             }
           }
       });
@@ -51,7 +66,7 @@ function generateFinalResult() {
 }
 
 function main() {
-  ReadConfigData.readApiData("http://localhost:8080/api/get_excel_data_config?requestId=" + workId, function() {
+  ReadConfigData.readApiData(baseUrl + "/api/get_excel_data_config?requestId=" + workId, function() {
     var request = {"appId": "004", "workId": workId};
     var excelConfig = ReadConfigData.getData();
     CsvDataFormate.updateConfigData(workId, excelConfig);
@@ -60,7 +75,7 @@ function main() {
         var fileMapping = ConvertGoogleSheetsToCsv.getFinalResult();
         ConvertGoogleSheetsToCsv.clearFinalResult();
         if (fileMapping) {
-          for (i=0; i<fileMapping.length; i++) {
+          for (var i=0; i<fileMapping.length; i++) {
             if (fileMapping[i]) {
               if (fileMapping[i] && fileMapping[i].length >= 6) {
                 finalData.push({
@@ -82,13 +97,19 @@ function main() {
             }
           }
           // console.log(finalData);
-          // console.log("--------finalData end-------------");
-          generateFinalResult();
+          console.log("--------finalData length------------- " + finalData.length);
+          generateFinalResult(function() {
+            if (finalCallingConfig[workId]) {
+              ReadConfigData.callApi(baseUrl + "/api/update_excel_data?requestId=" + finalCallingConfig[workId]);
+            } else {
+              console.log("finalCallingConfig not defined for: " + workId);
+            }
+          });
         } else {
           console.log("Invalid config parameter generated.");
         }
       }
     });
-  });  
+  });
 }
 main();

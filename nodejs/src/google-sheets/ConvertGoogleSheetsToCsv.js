@@ -8,7 +8,38 @@ const {
   getSpreadSheetValues
 } = require('./googleSheetsService.js');
 
+var googleSheetsData = {};
+
+function _returnCallback(spreadsheetId, sheetName, _config, _callback) {
+    var config, callback, data, status;
+    if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
+        callback = googleSheetsData[spreadsheetId + "-" + sheetName]["callback"];
+        config = googleSheetsData[spreadsheetId + "-" + sheetName]["config"];
+        status = googleSheetsData[spreadsheetId + "-" + sheetName]["status"];
+        data = googleSheetsData[spreadsheetId + "-" + sheetName]["data"];
+        if (_config) {
+            config = _config;
+        }
+        if (_callback) {
+            callback = _callback;
+        }
+        if (status === "completed") {
+            return $S.callMethodV2(callback, config, data);
+        } else {
+            console.log("IN_PROGRESS: " + sheetName);
+        }
+    }
+}
+
 async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callback) {
+    if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
+        return _returnCallback(spreadsheetId, sheetName, config, callback);
+    }
+    googleSheetsData[spreadsheetId + "-" + sheetName] = {};
+    googleSheetsData[spreadsheetId + "-" + sheetName]["callback"] = callback;
+    googleSheetsData[spreadsheetId + "-" + sheetName]["config"] = config;
+    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "IN_PROGRESS";
+    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = null;
   try {
     const auth = await getAuthToken();
     const response = await getSpreadSheetValues({
@@ -16,10 +47,16 @@ async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callba
       sheetName,
       auth
     });
-    $S.callMethodV2(callback, config, response.data);
+    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "completed";
+    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = response.data;
+    console.log("Completed googleRequest: " + sheetName);
+    _returnCallback(spreadsheetId, sheetName);
   } catch(error) {
     console.log(error.message, error.stack);
-    $S.callMethodV2(callback, config, null);
+    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "completed";
+    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = null;
+    console.log("Completed googleRequest: " + sheetName);
+    _returnCallback(spreadsheetId, sheetName);
   }
 }
 
@@ -215,15 +252,20 @@ ConvertGoogleSheetsToCsv.extend({
         }
         var self = this;
         var data, id, spreadsheetId, sheetName, index;
-        var destination, finalList = [], isBreak;
+        var destination, finalList = [], isBreak = false, requestSent = false;
         for (var i=0; i<excelConfig.length; i++) {
+            if ($S.isObject(excelConfig[i])) {
+                excelConfig[i]["isVisited"] = "true";
+            }
             if ($S.isObject(excelConfig[i]) && $S.isArray(excelConfig[i]["gsConfig"])) {
                 id = excelConfig[i]["id"];
                 for (var j=0; j<excelConfig[i]["gsConfig"].length; j++) {
                     if ($S.isObject(excelConfig[i]["gsConfig"][j]) && excelConfig[i]["gsConfig"][j]["isVisited"] !== "true") {
                         spreadsheetId = this._getSpreadsheetId(excelConfig[i]["gsConfig"][j]);
                         sheetName = this._getSpreadsheetName(excelConfig[i]["gsConfig"][j]);
-                        getSpreadSheetValuesData(spreadsheetId, sheetName, {i: i, j: j, id: id, excelConfig: excelConfig}, function(config, response) {
+                        excelConfig[i]["gsConfig"][j]["isVisited"] = "true";
+                        requestSent = true;
+                        getSpreadSheetValuesData(spreadsheetId, sheetName, {i: i, j: j, id: id, excelConfig: excelConfig, callback: callback}, function(config, response) {
                             if ($S.isObject(response) && $S.isArray(response.values)) {
                                 for (var k=0; k<response.values.length; k++) {
                                     if ($S.isArray(response.values[k]) && response.values[k].length >= 6) {
@@ -233,17 +275,20 @@ ConvertGoogleSheetsToCsv.extend({
                                     }
                                 }
                             }
-                            config["excelConfig"][config["i"]]["gsConfig"][config["j"]]["isVisited"] = "true";
-                            self._fireCallback(excelConfig, callback);
+                            self.generateResultV2(config["excelConfig"], config["callback"]);
                         });
+                        isBreak = true;
+                        break;
                     }
                 }
             }
-            if ($S.isObject(excelConfig[i])) {
-                excelConfig[i]["isVisited"] = "true";
+            if (isBreak) {
+                break;
             }
         }
-        return this._fireCallback(excelConfig, callback);
+        if (!requestSent) {
+            return this._fireCallback(excelConfig, callback);
+        }
     },
     convert: function(request, excelConfig, callback) {
         Logger.logV2(request);
