@@ -99,11 +99,13 @@ function main() {
           // console.log(finalData);
           console.log("--------finalData length------------- " + finalData.length);
           generateFinalResult(function() {
-            if (finalCallingConfig[workId]) {
-              ReadConfigData.callApi(baseUrl + "/api/update_excel_data?requestId=" + finalCallingConfig[workId]);
-            } else {
-              console.log("finalCallingConfig not defined for: " + workId);
-            }
+            setTimeout(function(){
+              if (finalCallingConfig[workId]) {
+                ReadConfigData.callApi(baseUrl + "/api/update_excel_data?requestId=" + finalCallingConfig[workId]);
+              } else {
+                console.log("finalCallingConfig not defined for: " + workId);
+              }
+            }, 3000);
           });
         } else {
           console.log("Invalid config parameter generated.");
