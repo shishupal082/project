@@ -5,6 +5,7 @@ const Get = require("./apis/getapi.js");
 
 (function() {
 var ConfigData = {};
+var ConfigApiData = {};
 var ReadConfigData = function(config) {
     return new ReadConfigData.fn.init(config);
 };
@@ -41,7 +42,7 @@ ReadConfigData.extend({
             Get.api(api, "requestId", function(jsonData) {
                 Logger.log("---------------");
                 if ($S.isObject(jsonData) && $S.isArray(jsonData["data"])) {
-                    ConfigData = jsonData["data"];
+                    ConfigApiData = jsonData["data"];
                     Logger.log("ReadConfigData: Config data read success.");
                 } else {
                     Logger.log("Invalid config data.");
@@ -66,6 +67,9 @@ ReadConfigData.extend({
     },
     getData: function() {
         return $S.clone(ConfigData);
+    },
+    getApiData: function() {
+        return $S.clone(ConfigApiData);
     }
 });
 ReadConfigData.extend({

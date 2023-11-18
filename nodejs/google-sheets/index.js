@@ -1,9 +1,14 @@
 const ReadConfigData = require("../src/common/ReadConfigData.js");
 const ConvertGoogleSheetsToCsv = require("../src/google-sheets/ConvertGoogleSheetsToCsv.js");
 const CsvDataFormate = require("../src/common/CsvDataFormate.js");
+const $S = require("../src/libs/stack.js");
 var arg = process.argv;
+
 var workId = "";
-var port = "8082";
+var port = "";
+var baseUrl = "";
+var finalCallingConfig = {};
+
 if (arg.length >= 3 && arg[2].length > 0) {
     workId = arg[2];
     if (arg.length >= 4 && arg[3].length > 0) {
@@ -14,12 +19,6 @@ if (arg.length >= 3 && arg[2].length > 0) {
     console.log("-----Command line argument 'workId' required.-----");
     return;
 }
-var finalCallingConfig = {
-  "gs-drawing-status": "csv-drawing-status",
-  "gs-expenditure": "csv-expenditure",
-  "gs-bill-register": "23-csv-bill-register"
-};
-var baseUrl = "http://localhost:" + port;
 var finalData = [];
 var isAllDataLoaded;
 
@@ -65,10 +64,10 @@ function generateFinalResult(callback) {
   }
 }
 
-function main() {
+function readApiData() {
   ReadConfigData.readApiData(baseUrl + "/api/get_excel_data_config?requestId=" + workId, function() {
     var request = {"appId": "004", "workId": workId};
-    var excelConfig = ReadConfigData.getData();
+    var excelConfig = ReadConfigData.getApiData();
     CsvDataFormate.updateConfigData(workId, excelConfig);
     ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
       if (status === "SUCCESS") {
@@ -113,5 +112,26 @@ function main() {
       }
     });
   });
+}
+
+function main() {
+    ReadConfigData.readData("./google-sheets/config.json", function() {
+        var tempData = ReadConfigData.getData();
+        if ($S.isObject(tempData)) {
+            if (!$S.isStringV2(port) && $S.isStringV2(tempData["port"])) {
+                port = tempData["port"];
+            }
+            if ($S.isStringV2(tempData["baseUrl"])) {
+                baseUrl = tempData["baseUrl"];
+                if ($S.isStringV2(port)) {
+                    baseUrl += ":" + port;
+                }
+            }
+            if ($S.isObject(tempData["finalCallingConfig"])) {
+                finalCallingConfig = tempData["finalCallingConfig"];
+            }
+        }
+        readApiData();
+    });
 }
 main();
