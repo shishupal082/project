@@ -63,11 +63,50 @@ function generateFinalResult(callback) {
     }
   }
 }
+function getNextWorkId(fileMapping) {
+    if (finalCallingConfig[workId]) {
+        return finalCallingConfig[workId];
+    }
+    var fileMappingEntry;
+    var requiredColIndex;
+    var csvRequestIdIndex;
+    if ($S.isArray(fileMapping) && fileMapping.length === 1 && $S.isObject(fileMapping[0])) {
+        fileMappingEntry = fileMapping[0];
+        requiredColIndex = fileMappingEntry["requiredColIndex"];
+        if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 5) {
+            csvRequestIdIndex = requiredColIndex[4];
+            if ($S.isNumeric(csvRequestIdIndex)) {
+                csvRequestIdIndex = csvRequestIdIndex*1;
+                if (csvRequestIdIndex >= 0 && $S.isArray(fileMappingEntry["data"])) {
+                    if (fileMappingEntry["data"].length > csvRequestIdIndex) {
+                        if (fileMappingEntry["data"][csvRequestIdIndex]) {
+                            return fileMappingEntry["data"][csvRequestIdIndex];
+                        } else {
+                            console.log("Invalid config for next work id.");
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
+    }
+    console.log("next work id not defined for: " + workId);
+    return "";
+}
+function sendNextRequest(fileMapping) {
+    var nextWorkId = getNextWorkId(fileMapping);
+    if ($S.isStringV2(nextWorkId)) {
+        setTimeout(function(){
+            ReadConfigData.callApi(baseUrl + "/api/update_excel_data?requestId=" + nextWorkId);
+        }, 3000);
+    }
+}
 function readApiData() {
   ReadConfigData.readApiData(baseUrl + "/api/get_excel_data_config?requestId=" + workId, function() {
     var request = {"appId": "004", "workId": workId};
     var excelConfig = ReadConfigData.getApiData();
+    var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
     CsvDataFormate.updateConfigData(workId, excelConfig);
     ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
       if (status === "SUCCESS") {
@@ -75,16 +114,21 @@ function readApiData() {
         ConvertGoogleSheetsToCsv.clearFinalResult();
         if (fileMapping) {
           for (var i=0; i<fileMapping.length; i++) {
-            if (fileMapping[i]) {
-              if (fileMapping[i] && fileMapping[i].length >= 6) {
+            if ($S.isObject(fileMapping[i]) && $S.isArray(fileMapping[i]["data"])) {
+              requiredColIndex = fileMapping[i]["requiredColIndex"];
+              if (requiredColIndex.length >= 3) {
+                 spreadsheetIdIndex = requiredColIndex[1];
+                 sheetNameIndex = requiredColIndex[2];
+              }
+              if (fileMapping[i]["data"].length > spreadsheetIdIndex && fileMapping[i]["data"].length > sheetNameIndex) {
                 finalData.push({
                   "status": "PENDING",
-                  "fileMappingData": fileMapping[i],
+                  "fileMappingData": fileMapping[i]["data"],
                   "excelConfigSpreadsheets": {
-                    "spreadsheetId": fileMapping[i][2],
-                    "sheetName": fileMapping[i][3]
+                    "spreadsheetId": fileMapping[i]["data"][spreadsheetIdIndex],
+                    "sheetName": fileMapping[i]["data"][sheetNameIndex]
                   },
-                  "excelConfig": excelConfig,
+                  "requiredColIndex": requiredColIndex,
                   "excelData": []
                 });
               } else {
@@ -97,14 +141,11 @@ function readApiData() {
           }
           // console.log(finalData);
           console.log("--------finalData length------------- " + finalData.length);
+          // console.log(fileMapping);
+          // console.log(finalData);
+          // console.log(finalData[0]["excelConfig"]);
           generateFinalResult(function() {
-            setTimeout(function(){
-              if (finalCallingConfig[workId]) {
-                ReadConfigData.callApi(baseUrl + "/api/update_excel_data?requestId=" + finalCallingConfig[workId]);
-              } else {
-                console.log("finalCallingConfig not defined for: " + workId);
-              }
-            }, 3000);
+            sendNextRequest(fileMapping);
           });
         } else {
           console.log("Invalid config parameter generated.");

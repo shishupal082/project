@@ -52,6 +52,7 @@ async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callba
     console.log("Completed googleRequest: " + sheetName);
     _returnCallback(spreadsheetId, sheetName);
   } catch(error) {
+    console.log("Error in reading googleSheet data: spreadsheetId=" + spreadsheetId + ", sheetName=" + sheetName);
     console.log(error.message, error.stack);
     googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "completed";
     googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = null;
@@ -97,8 +98,19 @@ ConvertGoogleSheetsToCsv.extend({
             if ($S.isArray(queElement) && queElement.length === 2) {
                 var data = queElement[0];
                 var config = queElement[1];
-                if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
-                    var destination = config["fileMappingData"][4];
+                var destinationDirIndex = -1;
+                var requiredColIndex;
+                if ($S.isObject(config)) {
+                    requiredColIndex = config["requiredColIndex"];
+                    if (requiredColIndex.length >= 4) {
+                        destinationDirIndex = requiredColIndex[3];
+                        if ($S.isNumeric(destinationDirIndex)) {
+                            destinationDirIndex = destinationDirIndex * 1;
+                        }
+                    }
+                }
+                if (destinationDirIndex >= 0 && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= destinationDirIndex) {
+                    var destination = config["fileMappingData"][destinationDirIndex];
                     if ($S.isArray(data)) {
                         generateFile.saveTextV3([data.join(",")], destination, function(status) {
                             // Logger.log("File read and write completed.");
@@ -123,8 +135,19 @@ ConvertGoogleSheetsToCsv.extend({
         var self = this;
         if (configQue.getSize() > 0) {
             var config = configQue.Deque();
-            if ($S.isObject(config) && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= 5) {
-                var destination = config["fileMappingData"][4];
+            var destinationDirIndex = -1;
+            var requiredColIndex;
+            if ($S.isObject(config)) {
+                requiredColIndex = config["requiredColIndex"];
+                if (requiredColIndex.length >= 4) {
+                    destinationDirIndex = requiredColIndex[3];
+                    if ($S.isNumeric(destinationDirIndex)) {
+                        destinationDirIndex = destinationDirIndex * 1;
+                    }
+                }
+            }
+            if (destinationDirIndex >= 0 && $S.isArrayV2(config["fileMappingData"]) && config["fileMappingData"].length >= destinationDirIndex) {
+                var destination = config["fileMappingData"][destinationDirIndex];
                 if (this._isCopyRequired(config["excelConfig"])) {
                     generateFile.copyFileWithTimeStamp(destination, function(status) {
                         generateFile.deleteText(destination, function(status) {
@@ -253,6 +276,7 @@ ConvertGoogleSheetsToCsv.extend({
         var self = this;
         var data, id, spreadsheetId, sheetName, index;
         var destination, finalList = [], isBreak = false, requestSent = false;
+        var excelConfigById, workIdIndexInData, requiredColIndex;
         for (var i=0; i<excelConfig.length; i++) {
             if ($S.isObject(excelConfig[i])) {
                 excelConfig[i]["isVisited"] = "true";
@@ -266,11 +290,19 @@ ConvertGoogleSheetsToCsv.extend({
                         excelConfig[i]["gsConfig"][j]["isVisited"] = "true";
                         requestSent = true;
                         getSpreadSheetValuesData(spreadsheetId, sheetName, {i: i, j: j, id: id, excelConfig: excelConfig, callback: callback}, function(config, response) {
-                            if ($S.isObject(response) && $S.isArray(response.values)) {
-                                for (var k=0; k<response.values.length; k++) {
-                                    if ($S.isArray(response.values[k]) && response.values[k].length >= 6) {
-                                        if (response.values[k][5] === config["id"]) {
-                                            FinalResult.push(response.values[k]);
+                            excelConfigById = config["excelConfig"][config["i"]]["gsConfig"][config["j"]];
+                            if ($S.isObject(excelConfigById) && $S.isObject(excelConfigById["fileConfigMapping"])) {
+                                requiredColIndex = excelConfigById["fileConfigMapping"]["requiredColIndex"];
+                                if ($S.isArrayV2(requiredColIndex)) {
+                                    workIdIndexInData = requiredColIndex[0];
+                                    if ($S.isObject(response) && $S.isArray(response.values) && $S.isNumeric(workIdIndexInData)) {
+                                        workIdIndexInData = workIdIndexInData*1;
+                                        for (var k=0; k<response.values.length; k++) {
+                                            if ($S.isArray(response.values[k]) && response.values[k].length > workIdIndexInData) {
+                                                if (response.values[k][workIdIndexInData] === config["id"]) {
+                                                    FinalResult.push({"data": response.values[k],"requiredColIndex":requiredColIndex});
+                                                }
+                                            }
                                         }
                                     }
                                 }
