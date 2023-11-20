@@ -70,11 +70,11 @@ function getNextWorkId(fileMapping) {
     var fileMappingEntry;
     var requiredColIndex;
     var csvRequestIdIndex;
-    if ($S.isArray(fileMapping) && fileMapping.length === 1 && $S.isObject(fileMapping[0])) {
+    if ($S.isArray(fileMapping) && fileMapping.length >= 0 && $S.isObject(fileMapping[0])) {
         fileMappingEntry = fileMapping[0];
         requiredColIndex = fileMappingEntry["requiredColIndex"];
-        if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 5) {
-            csvRequestIdIndex = requiredColIndex[4];
+        if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 6) {
+            csvRequestIdIndex = requiredColIndex[5];
             if ($S.isNumeric(csvRequestIdIndex)) {
                 csvRequestIdIndex = csvRequestIdIndex*1;
                 if (csvRequestIdIndex >= 0 && $S.isArray(fileMappingEntry["data"])) {
