@@ -289,6 +289,9 @@ ConvertGoogleSheetsToCsv.extend({
                         sheetName = this._getSpreadsheetName(excelConfig[i]["gsConfig"][j]);
                         excelConfig[i]["gsConfig"][j]["isVisited"] = "true";
                         requestSent = true;
+                        if ($S.isObject(excelConfig[i]["gsConfig"][j]["fileConfigMapping"]) && excelConfig[i]["gsConfig"][j]["fileConfigMapping"]["fileDataSource"] != "google") {
+                            continue;
+                        }
                         getSpreadSheetValuesData(spreadsheetId, sheetName, {i: i, j: j, id: id, excelConfig: excelConfig, callback: callback}, function(config, response) {
                             excelConfigById = config["excelConfig"][config["i"]]["gsConfig"][config["j"]];
                             if ($S.isObject(excelConfigById) && $S.isObject(excelConfigById["fileConfigMapping"])) {
