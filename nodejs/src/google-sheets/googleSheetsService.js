@@ -2,7 +2,7 @@ const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const KEY_FILE = "./google-sheets/google-sheets-api-credentials.json";
+const KEY_FILE = "D:/workspace/venv/google/sheet-service/google-sheets-api-credentials.json";
 
 async function getAuthToken() {
   const auth = new google.auth.GoogleAuth({

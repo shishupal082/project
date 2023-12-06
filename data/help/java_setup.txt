@@ -20,3 +20,12 @@ Now install it and configure as below
 Set environment variable (System variable not User variable)
 1) JAVA_HOME
 2) PATH (%Java_HOME%\bin;C:\Program Files\Oracle\)
+
+MAVEN installation
+-----------------------------
+Download and keep in program files
+Add user variable --> Path
+bin directory to maven
+Pre requisite:
+- JAVA_HOME path should be set (jdk bin folder path)
+> Environment variable --> User variable

@@ -5,8 +5,8 @@ const $S = require("../src/libs/stack.js");
 var arg = process.argv;
 
 var workId = "";
-var port = "";
-var baseUrl = "";
+var port = "8082";
+var baseUrl = "http://localhost";
 var finalCallingConfig = {};
 
 if (arg.length >= 3 && arg[2].length > 0) {
@@ -19,6 +19,7 @@ if (arg.length >= 3 && arg[2].length > 0) {
     console.log("-----Command line argument 'workId' required.-----");
     return;
 }
+workId = "nodejs-"+workId;
 var finalData = [];
 var isAllDataLoaded;
 
@@ -167,6 +168,8 @@ function main() {
                 if ($S.isStringV2(port)) {
                     baseUrl += ":" + port;
                 }
+            } else {
+                baseUrl += ":" + port;
             }
             if ($S.isObject(tempData["finalCallingConfig"])) {
                 finalCallingConfig = tempData["finalCallingConfig"];
