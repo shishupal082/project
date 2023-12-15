@@ -4,10 +4,13 @@ const CsvDataFormate = require("../src/common/CsvDataFormate.js");
 const $S = require("../src/libs/stack.js");
 var arg = process.argv;
 
+var nodejsWorkIdIndex = 7;
+var nodejsWorkId = [];
 var workId = "";
 var port = "8082";
 var baseUrl = "http://localhost";
 var finalCallingConfig = {};
+var isInvalidWorkId = false;
 
 if (arg.length >= 3 && arg[2].length > 0) {
     workId = arg[2];
@@ -16,13 +19,28 @@ if (arg.length >= 3 && arg[2].length > 0) {
       workId = arg[3];
     }
 } else {
+    isInvalidWorkId = true;
+    workId = "gs-csv-file-data-nodejs";
     console.log("-----Command line argument 'workId' required.-----");
-    return;
 }
 workId = "nodejs-"+workId;
 var finalData = [];
 var isAllDataLoaded;
 
+function generateNodejsWorkId(_result) {
+    if ($S.isArray(_result) && nodejsWorkIdIndex >= 0) {
+        for (var i=0; i<_result.length; i++) {
+            if ($S.isArray(_result[i])) {
+                for(var j=0; j<_result[i].length; j++) {
+                    if ($S.isArray(_result[i][j]) && _result[i][j].length > nodejsWorkIdIndex) {
+                        nodejsWorkId.push(_result[i][j][nodejsWorkIdIndex]);
+                    }
+                }
+            }
+        }
+    }
+    console.log(nodejsWorkId.sort());
+}
 function generateFinalResult(callback) {
   if (finalData.length < 1) {
     return callback();
@@ -42,6 +60,10 @@ function generateFinalResult(callback) {
                 console.log(result);
                 break;
               }
+            }
+            if (isInvalidWorkId) {
+                generateNodejsWorkId(result);
+                return;
             }
             isAllDataLoaded = true;
             for (j=0; j<finalData.length; j++) {
@@ -70,21 +92,27 @@ function getNextWorkId(fileMapping) {
     }
     var fileMappingEntry;
     var requiredColIndex;
-    var csvRequestIdIndex;
+    var csvRequestIdIndex, callNext;
     if ($S.isArray(fileMapping) && fileMapping.length >= 0 && $S.isObject(fileMapping[0])) {
         fileMappingEntry = fileMapping[0];
         requiredColIndex = fileMappingEntry["requiredColIndex"];
-        if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 6) {
+        if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 7) {
             csvRequestIdIndex = requiredColIndex[5];
-            if ($S.isNumeric(csvRequestIdIndex)) {
+            callNext = requiredColIndex[6];
+            if ($S.isNumeric(csvRequestIdIndex) && $S.isNumeric(callNext)) {
                 csvRequestIdIndex = csvRequestIdIndex*1;
-                if (csvRequestIdIndex >= 0 && $S.isArray(fileMappingEntry["data"])) {
+                callNext = callNext * 1;
+                if (csvRequestIdIndex >= 0 && callNext >= 0 && $S.isArray(fileMappingEntry["data"])) {
                     if (fileMappingEntry["data"].length > csvRequestIdIndex) {
-                        if (fileMappingEntry["data"][csvRequestIdIndex]) {
-                            return fileMappingEntry["data"][csvRequestIdIndex];
-                        } else {
-                            console.log("Invalid config for next work id.");
-                            return;
+                        if (fileMappingEntry["data"].length > callNext) {                            if (fileMappingEntry["data"][callNext] === "TRUE") {
+                                if (fileMappingEntry["data"][csvRequestIdIndex]) {
+                                    return fileMappingEntry["data"][csvRequestIdIndex];
+                                } else {
+                                    // console.log("next work id not defined for: " + workId);
+                                    // console.log("Invalid config for next work id.");
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
@@ -92,7 +120,6 @@ function getNextWorkId(fileMapping) {
         }
 
     }
-    console.log("next work id not defined for: " + workId);
     return "";
 }
 function sendNextRequest(fileMapping) {
@@ -145,9 +172,9 @@ function readApiData() {
           // console.log(fileMapping);
           // console.log(finalData);
           // console.log(finalData[0]["excelConfig"]);
-          generateFinalResult(function() {
-            sendNextRequest(fileMapping);
-          });
+            generateFinalResult(function() {
+                sendNextRequest(fileMapping);
+            });
         } else {
           console.log("Invalid config parameter generated.");
         }
@@ -173,6 +200,9 @@ function main() {
             }
             if ($S.isObject(tempData["finalCallingConfig"])) {
                 finalCallingConfig = tempData["finalCallingConfig"];
+            }
+            if ($S.isNumeric(tempData["nodejsWorkIdIndex"])) {
+                nodejsWorkIdIndex = tempData["nodejsWorkIdIndex"]*1;
             }
         }
         readApiData();
