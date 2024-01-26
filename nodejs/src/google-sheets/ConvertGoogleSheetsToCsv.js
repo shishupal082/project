@@ -102,7 +102,7 @@ ConvertGoogleSheetsToCsv.extend({
                 var requiredColIndex;
                 if ($S.isObject(config)) {
                     requiredColIndex = config["requiredColIndex"];
-                    if (requiredColIndex.length >= 4) {
+                    if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 4) {
                         destinationDirIndex = requiredColIndex[3];
                         if ($S.isNumeric(destinationDirIndex)) {
                             destinationDirIndex = destinationDirIndex * 1;
@@ -139,7 +139,7 @@ ConvertGoogleSheetsToCsv.extend({
             var requiredColIndex;
             if ($S.isObject(config)) {
                 requiredColIndex = config["requiredColIndex"];
-                if (requiredColIndex.length >= 4) {
+                if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 4) {
                     destinationDirIndex = requiredColIndex[3];
                     if ($S.isNumeric(destinationDirIndex)) {
                         destinationDirIndex = destinationDirIndex * 1;
@@ -267,10 +267,12 @@ ConvertGoogleSheetsToCsv.extend({
     generateResultV2: function(excelConfig, callback) {
         if (!$S.isArray(excelConfig)) {
             Logger.log("Invalid excelConfig.", callback);
+            $S.callMethodV1(callback, "FAILURE");
             return;
         }
         if (excelConfig.length < 1) {
             Logger.log("excelConfig not found.", callback);
+            $S.callMethodV1(callback, "FAILURE");
             return;
         }
         var self = this;

@@ -1,7 +1,8 @@
 var $S = require("../libs/stack.js");
-const ReadConfigData = require("../../src/common/ReadConfigData.js");
+const ReadConfigData = require("../common/ReadConfigData.js");
 var ConvertExcelToCsv = require("../excel/ConvertExcelToCsv.js");
 var ConvertGoogleSheetsToCsv = require("../google-sheets/ConvertGoogleSheetsToCsv.js");
+var JavaExcelService = require("../java-excel-service/JavaExcelService.js");
 var Logger = require("../common/logger-v2.js");
 var NmsService = require("../nms/nms_service.js");
 var DBAccess = require("../db/DBAccess.js");
@@ -19,7 +20,9 @@ var appIdMappingFunction = {
     "002": NmsService.getTcpResponse,
     "003": DBAccess.HandleDbAccess,
     "004": ConvertGoogleSheetsToCsv.convert,
+    "005": JavaExcelService.handleRequest
 };
+var Q = $S.getQue(10);
 var TcpHandler = function(config) {
     return new UDP.fn.init(config);
 };
@@ -33,7 +36,7 @@ TcpHandler.fn = TcpHandler.prototype = {
 };
 TcpHandler.fn.init.prototype = TcpHandler.fn;
 $S.extendObject(TcpHandler);
-var Q = $S.getQue(4);
+
 TcpHandler.extend({
     _readApplicationConfigData: function(callback) {
         if (Q.getSize() < 1) {
@@ -92,6 +95,11 @@ TcpHandler.extend({
             if (EnableAppId.indexOf("004") >= 0) {
                 if ($S.isStringV2(jsonData["google_sheets_configpath"])) {
                     Q.Enque({"config_path": jsonData["google_sheets_configpath"], "setConfigData": ConvertGoogleSheetsToCsv.setConfigData});
+                }
+            }
+            if (EnableAppId.indexOf("005") >= 0) {
+                if ($S.isStringV2(jsonData["java_excel_config"])) {
+                    Q.Enque({"config_path": jsonData["java_excel_config"], "setConfigData": JavaExcelService.setConfigData});
                 }
             }
             this._readApplicationConfigData(function() {

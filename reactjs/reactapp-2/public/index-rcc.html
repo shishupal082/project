@@ -49,6 +49,11 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 <script type="text/javascript">
+
+//Program to be run
+//F:\ftp-app-run-files\run_files\run-app-project.bat
+//Additional application required: PROJECT:/nodejs/run_tcp_server.sh
+
 var GLOBAL = {
   baseApi: "http://localhost:8080",
   basepathname: "",
@@ -57,7 +62,7 @@ var GLOBAL = {
 GLOBAL.JQ = $;
 GLOBAL.isSinglePageApp = false;
 GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
-GLOBAL.loginUserDetailsApi = "/api/login_user_details.json";
+GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
 GLOBAL.tcpServicePostApi = "/api/call_tcp";
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";

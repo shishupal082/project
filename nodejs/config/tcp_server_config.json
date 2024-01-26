@@ -1,10 +1,10 @@
 {
     "localPort": 8086,
-    "log_filepath": "C:/java/server_tcp_port8086/",
+    "log_filepath": "F:/ftp-app-log/server_tcp_port8086/",
     "excel_configpath": "./excel/config.json",
+    "java_excel_config": "./google-sheets/config.json",
     "google_sheets_configpath": "./google-sheets/config.json",
     "nms_service_configpath": "./config/nms_service_config.json",
     "db_access_configpath": "./config/db_access_configpath.json",
-    "enableAppId": ["001", "002", "003", "004"]
+    "enableAppId": ["001", "002", "003", "004", "005"]
 }
-

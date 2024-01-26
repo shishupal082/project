@@ -34,6 +34,7 @@ function readUserInput(callback) {
     Logger.log("----------------------------------------");
     rl.question("Enter text: ", function(text) {
         // text = removeSpace(text);
+        //appId|workId|msg
         $S.callMethodV1(callback, text);
     });
 }
@@ -48,7 +49,7 @@ function sendData(data) {
     var tcpClient = new net.Socket();
     tcpClient.connect(localPort, serverHost, function() {
         TCP.register(tcpClient, onReceive, onClose, function(remoteAddress, remotePort) {
-            Logger.log("remoteAddress:"+remoteAddress+", remotePort:"+remotePort);
+            Logger.log("Destination- "+remoteAddress+":"+remotePort);
             TCP.sendData(tcpClient, data, remotePort, serverHost);
             setTimeout(function() {
                 TCP.close(tcpClient);
