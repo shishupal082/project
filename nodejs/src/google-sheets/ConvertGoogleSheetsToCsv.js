@@ -32,9 +32,9 @@ function _returnCallback(spreadsheetId, sheetName, _config, _callback) {
 }
 
 async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callback) {
-    if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
-        return _returnCallback(spreadsheetId, sheetName, config, callback);
-    }
+    // if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
+    //     return _returnCallback(spreadsheetId, sheetName, config, callback);
+    // }
     googleSheetsData[spreadsheetId + "-" + sheetName] = {};
     googleSheetsData[spreadsheetId + "-" + sheetName]["callback"] = callback;
     googleSheetsData[spreadsheetId + "-" + sheetName]["config"] = config;
@@ -79,6 +79,7 @@ ConvertGoogleSheetsToCsv.fn = ConvertGoogleSheetsToCsv.prototype = {
 ConvertGoogleSheetsToCsv.fn.init.prototype = ConvertGoogleSheetsToCsv.fn;
 
 $S.extendObject(ConvertGoogleSheetsToCsv);
+var _self = ConvertGoogleSheetsToCsv;
 ConvertGoogleSheetsToCsv.extend({
     setConfigData: function(_configData) {
         ConfigData = _configData;
@@ -119,7 +120,11 @@ ConvertGoogleSheetsToCsv.extend({
                     } else {
                         self._saveData(que, callback);
                     }
+                } else {
+                    $S.callMethod(callback);
                 }
+            } else {
+                $S.callMethod(callback);
             }
         } else {
             $S.callMethod(callback);
@@ -159,6 +164,8 @@ ConvertGoogleSheetsToCsv.extend({
                         self._copyOldContentAndSaveNewData(configQue, que, callback);
                     });
                 }
+            } else {
+                self._saveData(que, callback);
             }
         } else {
             self._saveData(que, callback);
@@ -173,6 +180,8 @@ ConvertGoogleSheetsToCsv.extend({
                 for (var j=0; j<finalData[i]["excelData"].length; j++) {
                     if ($S.isArray(finalData[i]["excelData"][j])) {
                         for (var k=0; k<finalData[i]["excelData"][j].length; k++) {
+                            // console.log(finalData[i]["excelData"][j][k]);
+                            // console.log(finalData[i]);
                             que.Enque([finalData[i]["excelData"][j][k], finalData[i]]);
                        }
                     }
@@ -329,7 +338,7 @@ ConvertGoogleSheetsToCsv.extend({
     },
     convert: function(request, excelConfig, callback) {
         Logger.logV2(request);
-        ConvertGoogleSheetsToCsv.generateResultV2(excelConfig, function(status) {
+        _self.generateResultV2(excelConfig, function(status) {
             $S.callMethodV1(callback, status);
         });
     }

@@ -3,7 +3,6 @@ const FS = require("../common/fsmodule.js");
 const Logger = require("../common/logger-v2.js");
 const generateFile = require("../common/generateFile.js");
 const CsvDataFormate = require("../common/CsvDataFormate.js");
-const ConvertGoogleSheetsToCsv = require("../google-sheets/ConvertGoogleSheetsToCsv.js");
 const Excel = require("./read_excel.js");
 
 (function() {
@@ -22,6 +21,7 @@ ConvertExcelToCsv.fn = ConvertExcelToCsv.prototype = {
 ConvertExcelToCsv.fn.init.prototype = ConvertExcelToCsv.fn;
 
 $S.extendObject(ConvertExcelToCsv);
+var _self = ConvertExcelToCsv;
 ConvertExcelToCsv.extend({
     setConfigData: function(excelConfigData) {
         ConfigData = excelConfigData;
@@ -77,7 +77,10 @@ ConvertExcelToCsv.extend({
                         }
                     }
                     CsvDataFormate.format(finalData);
-                    ConvertGoogleSheetsToCsv.saveCSVData(finalData, callback);
+                    // ConvertGoogleSheetsToCsv.saveCSVData(finalData, function(status) {
+                    //     $S.callMethodV1(callback, status);
+                    // });
+                    $S.callMethodV1(callback, "METHOD_DEPRICATED");
                     return;
                 }
             }
@@ -87,7 +90,7 @@ ConvertExcelToCsv.extend({
     convert: function(request, callback) {
         Logger.logV2(request);
         var workId = "", destination = "", sheetName = "";
-        var excelConfig = ConvertExcelToCsv.getExcelConfig(request);
+        var excelConfig = _self.getExcelConfig(request);
         if ($S.isObject(request) && $S.isStringV2(request["workId"])) {
             workId = request["workId"];
         }
@@ -110,7 +113,10 @@ ConvertExcelToCsv.extend({
             "excelConfig": excelConfig,
             "excelData": []
         }];
-        ConvertExcelToCsv.generateFile(finalData, function(status) {
+        _self.generateFile(finalData, function(status) {
+            if (!$S.isStringV2(status)) {
+                status = "UNKNOWN";
+            }
             $S.callMethodV1(callback, status);
         });
     }

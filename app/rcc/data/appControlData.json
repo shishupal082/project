@@ -1,15 +1,48 @@
 {
     "list1Data": [
         {
-            "name": "RCC Parameter Station-1",
+            "name": "RCC ILO Excel",
             "isSinglePageApp": false,
             "singleLineComment": "//",
             "dbDataApis": [
                 {
                     "tableName": "tlsr_trsr",
-                    "apis": ["/app/rcc/data/rcc_data.json"]
+                    "dataIndex": [
+                        "s_no","parameter","type","on_route","conflicting",
+                        "in_isolation","conflicting_route_direct",
+                        "conflicting_route_indirect","conflicting_route",
+                        "set_overlap","remarks"
+                    ],
+                    "apis": [
+                        "/api/get_excel_data_csv?requestId=ILO_RCC_V3"
+                    ]
                 }
             ],
+            "metaDataApi_1": ["/app/rcc/data/metaData.json"]
+        },
+        {
+            "name": "RCC ILO Googlesheet",
+            "isSinglePageApp": false,
+            "singleLineComment": "//",
+            "dbDataApis": [
+                {
+                    "tableName": "tlsr_trsr",
+                    "dataIndex": [
+                        "s_no","parameter","type","on_route","conflicting",
+                        "in_isolation","conflicting_route_direct",
+                        "conflicting_route_indirect","conflicting_route",
+                        "set_overlap","remarks"
+                    ],
+                    "apis": [
+                        "/api/get_excel_data_csv?requestId=csv-ilo-rcc"
+                    ]
+                }
+            ],
+            "tcpConfig": {
+                "info": "appId:001, wordId:001",
+                "tcpId": "id_local_001",
+                "data": "005|gs-ilo-rcc"
+            },
             "metaDataApi_1": ["/app/rcc/data/metaData.json"]
         }
     ],

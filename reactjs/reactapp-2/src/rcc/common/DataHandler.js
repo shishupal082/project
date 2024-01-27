@@ -380,6 +380,7 @@ DataHandler.extend({
         var dbDataLoadStatus = this.getData("dbDataLoadStatus", "");
         var pageName = this.getPathParamsData("pageName", "");
         var pageRequiredDbDataLoadStatus = [Config.dbview, Config.dbview_rcc, Config.rcc_view, Config.rcc_summary];
+        var dbTableDataIndex = this.getAppData("dbTableDataIndex", {});
         if (pageRequiredDbDataLoadStatus.indexOf(pageName) >= 0) {
             if (dbDataLoadStatus === "in_progress") {
                 return;
@@ -387,7 +388,7 @@ DataHandler.extend({
                 this.loadTableData(pageName, callback);
             } else {
                 var dbDataApis = this.getAppData("dbDataApis", []);
-                DataHandlerV3.handlePageLoad(dbDataApis, function() {
+                DataHandlerV3.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
                     DataHandler.loadTableData(pageName, callback);
                 });
             }

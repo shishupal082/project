@@ -25,6 +25,7 @@ DataHandlerV3.fn = DataHandlerV3.prototype = {
 };
 
 $S.extendObject(DataHandlerV3);
+var _self = DataHandlerV3;
 DataHandlerV3.extend({
     _callTcpService: function(callback) {
         var tcpConfig = DataHandler.getAppData("tcpConfig", {});
@@ -32,10 +33,16 @@ DataHandlerV3.extend({
         var postData = {};
         if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
             if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
-                    postData["data"] = tcpConfig["data"];
-                    postData["tcp_id"] = tcpConfig["tcpId"];
-                    $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
-                    $S.callMethod(callback);
+                postData["data"] = tcpConfig["data"];
+                postData["tcp_id"] = tcpConfig["tcpId"];
+                $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
+                    if ($S.isObject(response) && response["status"] === "SUCCESS") {
+                        setTimeout(function() {
+                            $S.callMethod(callback);
+                        }, 3000);
+                    } else {
+                        $S.callMethod(callback);
+                    }
                 });
             } else {
                 $S.callMethod(callback);
@@ -46,7 +53,7 @@ DataHandlerV3.extend({
     },
     _loadDBViewData: function(dbDataApis, callback) {
         this._callTcpService(function() {
-            var ajaxApiCallMethod = Api.getAjaxApiCallMethod();
+            var ajaxApiCallMethod = Api.getAjaxApiCallMethodV2();
             var requestId = $S.getUniqueNumber();
             var request = AppHandler.GenerateApiRequest(dbDataApis, ajaxApiCallMethod, Config.baseApi, requestId);
             if (request.length < 1) {
@@ -68,6 +75,24 @@ DataHandlerV3.extend({
         var metaData = DataHandler.getMetaData({});
         var defaultSorting = $S.findParam([currentAppData, metaData], "defaultSorting", []);
         return DBViewDataHandler.SortTableData(tableData, defaultSorting);
+    },
+    _generateComma: function(tableData) {
+        if ($S.isObject(tableData)) {
+            for (var tableName in tableData) {
+                if ($S.isObject(tableData[tableName]) && $S.isArray(tableData[tableName].tableData)) {
+                    for (var i=0; i<tableData[tableName].tableData.length; i++) {
+                        if ($S.isObject(tableData[tableName].tableData[i])) {
+                            for (var key in tableData[tableName].tableData[i]) {
+                                if ($S.isString(tableData[tableName].tableData[i][key])) {
+                                    tableData[tableName].tableData[i][key] = tableData[tableName].tableData[i][key].replaceAll("...",",");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return tableData;
     },
     // _getResultPatternFromData: function(pageName, currentAppData, metaData) {
     //     var resultPattern = $S.findParam([currentAppData, metaData], "resultPattern.entry" , []);
@@ -213,7 +238,7 @@ DataHandlerV3.extend({
         }
         return tableData;
     },
-    handlePageLoad: function(dbDataApis, callback) {
+    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
         var tableData;
@@ -223,7 +248,8 @@ DataHandlerV3.extend({
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
                     DataHandler.setData("dbDataLoadStatus", "completed");
-                    tableData = AppHandler.GenerateDatabaseV3(request);
+                    tableData = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
+                    tableData = _self._generateComma(tableData);
                     tableData = DataHandlerV3.generateRCCTableParameter(tableData);
                     DataHandler.setData("dbViewData", tableData);
                     $S.callMethod(callback);

@@ -19,9 +19,9 @@ var nodejsWorkIdIndex = 7;
 var nodejsWorkId = [];
 
 var FINAL_CALLING_CONFIG = {};
-var IS_INVALID_WORK_ID = false;
 var FINAL_DATA = [];
-var isAllDataLoaded;
+var IS_INVALID_WORK_ID = false;
+var IS_ALL_DATA_LOADED = false;
 
 var JavaExcelService = function(config) {
     return new JavaExcelService.fn.init(config);
@@ -93,7 +93,7 @@ JavaExcelService.extend({
       if (FINAL_DATA.length < 1) {
         return _callback();
       }
-      var i,j;
+      var i,j,k;
       for (i=0; i<FINAL_DATA.length; i++) {
         if (FINAL_DATA[i]["status"] === "PENDING") {
           FINAL_DATA[i]["status"] = "IN_PROGRESS";
@@ -105,7 +105,11 @@ JavaExcelService.extend({
                   if (FINAL_DATA[j]["status"] === "IN_PROGRESS") {
                     FINAL_DATA[i]["status"] = "SUCCESS";
                     FINAL_DATA[j]["excelData"] = result;
-                    console.log(result);
+                    if ($S.isArray(result)) {
+                        for(k=0;k<result.length;k++) {
+                            console.log("Total row count: " + result[k].length);
+                        }
+                    }
                     break;
                   }
                 }
@@ -114,13 +118,13 @@ JavaExcelService.extend({
                     _callback();
                     return;
                 }
-                isAllDataLoaded = true;
+                IS_ALL_DATA_LOADED = true;
                 for (j=0; j<FINAL_DATA.length; j++) {
                   if (FINAL_DATA[j]["status"] !== "SUCCESS") {
-                    isAllDataLoaded = false;
+                    IS_ALL_DATA_LOADED = false;
                   }
                 }
-                if (isAllDataLoaded){
+                if (IS_ALL_DATA_LOADED){
                   console.log("Data load completed.");
                   CsvDataFormate.replaceSpecialCharacterEachCell(FINAL_DATA);
                   // CsvDataFormate.format(FINAL_DATA);
@@ -243,6 +247,8 @@ JavaExcelService.extend({
 JavaExcelService.extend({
     handleRequest: function(request, callback) {
         FINAL_DATA = [];
+        IS_INVALID_WORK_ID = false;
+        IS_ALL_DATA_LOADED = false;
         var reqMsg, _reqArg = [];
         if ($S.isObject(request)) {
             if ($S.isStringV2(request["appId"])) {
