@@ -20,7 +20,7 @@ var nodejsWorkId = [];
 
 var FINAL_CALLING_CONFIG = {};
 var IS_INVALID_WORK_ID = false;
-var finalData = [];
+var FINAL_DATA = [];
 var isAllDataLoaded;
 
 var JavaExcelService = function(config) {
@@ -90,21 +90,21 @@ JavaExcelService.extend({
         console.log(nodejsWorkId.sort());
     },
     generateFinalResult: function(_callback) {
-      if (finalData.length < 1) {
+      if (FINAL_DATA.length < 1) {
         return _callback();
       }
       var i,j;
-      for (i=0; i<finalData.length; i++) {
-        if (finalData[i]["status"] === "PENDING") {
-          finalData[i]["status"] = "IN_PROGRESS";
-          ConvertGoogleSheetsToCsv.generateResult([finalData[i]["excelConfigSpreadsheets"]], function(status) {
+      for (i=0; i<FINAL_DATA.length; i++) {
+        if (FINAL_DATA[i]["status"] === "PENDING") {
+          FINAL_DATA[i]["status"] = "IN_PROGRESS";
+          ConvertGoogleSheetsToCsv.generateResult([FINAL_DATA[i]["excelConfigSpreadsheets"]], function(status) {
               if (status === "SUCCESS") {
                 var result = ConvertGoogleSheetsToCsv.getFinalResult();
                 ConvertGoogleSheetsToCsv.clearFinalResult();
-                for (j=0; j<finalData.length; j++) {
-                  if (finalData[j]["status"] === "IN_PROGRESS") {
-                    finalData[i]["status"] = "SUCCESS";
-                    finalData[j]["excelData"] = result;
+                for (j=0; j<FINAL_DATA.length; j++) {
+                  if (FINAL_DATA[j]["status"] === "IN_PROGRESS") {
+                    FINAL_DATA[i]["status"] = "SUCCESS";
+                    FINAL_DATA[j]["excelData"] = result;
                     console.log(result);
                     break;
                   }
@@ -115,16 +115,16 @@ JavaExcelService.extend({
                     return;
                 }
                 isAllDataLoaded = true;
-                for (j=0; j<finalData.length; j++) {
-                  if (finalData[j]["status"] !== "SUCCESS") {
+                for (j=0; j<FINAL_DATA.length; j++) {
+                  if (FINAL_DATA[j]["status"] !== "SUCCESS") {
                     isAllDataLoaded = false;
                   }
                 }
                 if (isAllDataLoaded){
                   console.log("Data load completed.");
-                  CsvDataFormate.replaceSpecialCharacterEachCell(finalData);
-                  // CsvDataFormate.format(finalData);
-                  ConvertGoogleSheetsToCsv.saveCSVData(finalData);
+                  CsvDataFormate.replaceSpecialCharacterEachCell(FINAL_DATA);
+                  // CsvDataFormate.format(FINAL_DATA);
+                  ConvertGoogleSheetsToCsv.saveCSVData(FINAL_DATA);
                   _callback();
                 } else {
                   JavaExcelService.generateFinalResult(_callback);
@@ -203,7 +203,7 @@ JavaExcelService.extend({
                      sheetNameIndex = requiredColIndex[2];
                   }
                   if (fileMapping[i]["data"].length > spreadsheetIdIndex && fileMapping[i]["data"].length > sheetNameIndex) {
-                    finalData.push({
+                    FINAL_DATA.push({
                       "status": "PENDING",
                       "fileMappingData": fileMapping[i]["data"],
                       "excelConfigSpreadsheets": {
@@ -221,11 +221,11 @@ JavaExcelService.extend({
                   console.log("Invalid file-mapping data: 2");
                 }
               }
-              // console.log(finalData);
-              console.log("--------finalData length------------- " + finalData.length);
+              // console.log(FINAL_DATA);
+              console.log("--------FINAL_DATA length------------- " + FINAL_DATA.length);
               // console.log(fileMapping);
-              // console.log(finalData);
-              // console.log(finalData[0]["excelConfig"]);
+              // console.log(FINAL_DATA);
+              // console.log(FINAL_DATA[0]["excelConfig"]);
                 JavaExcelService.generateFinalResult(function() {
                     JavaExcelService.sendNextRequest(callback, fileMapping);
                 });
@@ -242,6 +242,7 @@ JavaExcelService.extend({
 });
 JavaExcelService.extend({
     handleRequest: function(request, callback) {
+        FINAL_DATA = [];
         var reqMsg, _reqArg = [];
         if ($S.isObject(request)) {
             if ($S.isStringV2(request["appId"])) {
