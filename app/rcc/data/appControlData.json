@@ -41,7 +41,9 @@
             "tcpConfig": {
                 "info": "appId:001, wordId:001",
                 "tcpId": "id_local_001",
-                "data": "005|gs-ilo-rcc"
+                "data": "005|gs-ilo-rcc",
+                "enabled": "TRUE",
+                "delay": 3000
             },
             "metaDataApi_1": ["/app/rcc/data/metaData.json"]
         }
@@ -49,7 +51,7 @@
     "metaData": {
         "enableFooter": true,
         "enableToggleButton": true,
-        "tcpConfig": {
+        "tcpConfig_na": {
             "info": "appId:001, wordId:001",
             "tcpId": "id_local_001",
             "data": "001|001"

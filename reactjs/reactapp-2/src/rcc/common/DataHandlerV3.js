@@ -30,16 +30,20 @@ DataHandlerV3.extend({
     _callTcpService: function(callback) {
         var tcpConfig = DataHandler.getAppData("tcpConfig", {});
         var apiUrl = Config.getApiUrl("tcpServicePostApi", "", true);
+        var delay = 3000;
         var postData = {};
         if ($S.isStringV2(apiUrl) && $S.isObject(tcpConfig)) {
-            if ($S.isStringV2(tcpConfig["tcpId"]) && $S.isStringV2(tcpConfig["data"])) {
+            if ($S.isStringV2(tcpConfig["tcpId"]) && tcpConfig["enabled"] === "TRUE" && $S.isStringV2(tcpConfig["data"])) {
                 postData["data"] = tcpConfig["data"];
                 postData["tcp_id"] = tcpConfig["tcpId"];
+                if ($S.isNumber(tcpConfig["delay"]) && tcpConfig["delay"] > 0) {
+                    delay = tcpConfig["delay"];
+                }
                 $S.sendPostRequest(Config.JQ, apiUrl, postData, function(ajax, status, response) {
                     if ($S.isObject(response) && response["status"] === "SUCCESS") {
                         setTimeout(function() {
                             $S.callMethod(callback);
-                        }, 3000);
+                        }, delay);
                     } else {
                         $S.callMethod(callback);
                     }
