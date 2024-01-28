@@ -5,7 +5,6 @@ const Get = require("./apis/getapi.js");
 
 (function() {
 var ConfigData = {};
-var ConfigApiData = {};
 var ReadConfigData = function(config) {
     return new ReadConfigData.fn.init(config);
 };
@@ -42,17 +41,22 @@ ReadConfigData.extend({
             Get.api(api, "requestId", function(jsonData) {
                 Logger.log("---------------");
                 if ($S.isObject(jsonData) && $S.isArray(jsonData["data"])) {
-                    ConfigApiData = jsonData["data"];
                     Logger.log("ReadConfigData: Config data read success.");
+                    $S.callMethodV1(callback, jsonData["data"]);
                 } else {
-                    Logger.log("Invalid config data.");
+                    Logger.log("Invalid api data.");
+                    $S.callMethodV1(callback, {});
                 }
-                $S.callMethod(callback);
             });
         } else {
             Logger.log("Invalid api.");
-            $S.callMethod(callback);
+            $S.callMethodV1(callback, {});
         }
+    },
+    readApiDataV2: function(api, request, callback) {
+        this.readApiData(api, function(response) {
+            $S.callMethodV2(callback, response, request);
+        });
     },
     callApi: function(api, callback) {
         if ($S.isStringV2(api)) {
@@ -68,9 +72,9 @@ ReadConfigData.extend({
     getData: function() {
         return $S.clone(ConfigData);
     },
-    getApiData: function() {
-        return $S.clone(ConfigApiData);
-    }
+    // getApiData: function() {
+    //     return $S.clone(ConfigApiData);
+    // }
 });
 ReadConfigData.extend({
     getExcelConfigByWorkId: function(request) {

@@ -36,29 +36,29 @@ $S.extendObject(CsvDataFormate);
 
 CsvDataFormate.extend({
     updateConfigData: function(workId, excelConfig) {
-        if (!$S.isStringV2(workId)) {
-            return false;
-        }
-        var config = {};
-        if ($S.isArray(excelConfig) && excelConfig.length === 1) {
-            config[workId] = {"copyCellDataIndex": [], "cellMapping": []};
-            if ($S.isObject(excelConfig[0])) {
-                if ($S.isArray(excelConfig[0]["copyCellDataIndex"])) {
-                    config[workId]["copyCellDataIndex"] = excelConfig[0]["copyCellDataIndex"];
-                }
-                if ($S.isArray(excelConfig[0]["cellMapping"])) {
-                    config[workId]["cellMapping"] = excelConfig[0]["cellMapping"];
-                }
-                if ($S.isArray(excelConfig[0]["appendCellDataIndex"])) {
-                    config[workId]["appendCellDataIndex"] = excelConfig[0]["appendCellDataIndex"];
-                }
-                if ($S.isArray(excelConfig[0]["skipRowIndex"])) {
-                    config[workId]["skipRowIndex"] = excelConfig[0]["skipRowIndex"];
-                }
-            }
-            CONFIGDATA[workId] = config[workId];
-        }
-        return true;
+        // if (!$S.isStringV2(workId)) {
+        //     return false;
+        // }
+        // var config = {};
+        // if ($S.isArray(excelConfig) && excelConfig.length === 1) {
+        //     config[workId] = {"copyCellDataIndex": [], "cellMapping": []};
+        //     if ($S.isObject(excelConfig[0])) {
+        //         if ($S.isArray(excelConfig[0]["copyCellDataIndex"])) {
+        //             config[workId]["copyCellDataIndex"] = excelConfig[0]["copyCellDataIndex"];
+        //         }
+        //         if ($S.isArray(excelConfig[0]["cellMapping"])) {
+        //             config[workId]["cellMapping"] = excelConfig[0]["cellMapping"];
+        //         }
+        //         if ($S.isArray(excelConfig[0]["appendCellDataIndex"])) {
+        //             config[workId]["appendCellDataIndex"] = excelConfig[0]["appendCellDataIndex"];
+        //         }
+        //         if ($S.isArray(excelConfig[0]["skipRowIndex"])) {
+        //             config[workId]["skipRowIndex"] = excelConfig[0]["skipRowIndex"];
+        //         }
+        //     }
+        //     CONFIGDATA[workId] = config[workId];
+        // }
+        // return true;
     }
 });
 

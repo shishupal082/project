@@ -8,38 +8,7 @@ const {
   getSpreadSheetValues
 } = require('./googleSheetsService.js');
 
-var googleSheetsData = {};
-
-function _returnCallback(spreadsheetId, sheetName, _config, _callback) {
-    var config, callback, data, status;
-    if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
-        callback = googleSheetsData[spreadsheetId + "-" + sheetName]["callback"];
-        config = googleSheetsData[spreadsheetId + "-" + sheetName]["config"];
-        status = googleSheetsData[spreadsheetId + "-" + sheetName]["status"];
-        data = googleSheetsData[spreadsheetId + "-" + sheetName]["data"];
-        if (_config) {
-            config = _config;
-        }
-        if (_callback) {
-            callback = _callback;
-        }
-        if (status === "completed") {
-            return $S.callMethodV2(callback, config, data);
-        } else {
-            console.log("IN_PROGRESS: " + sheetName);
-        }
-    }
-}
-
 async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callback) {
-    // if (googleSheetsData[spreadsheetId + "-" + sheetName]) {
-    //     return _returnCallback(spreadsheetId, sheetName, config, callback);
-    // }
-    googleSheetsData[spreadsheetId + "-" + sheetName] = {};
-    googleSheetsData[spreadsheetId + "-" + sheetName]["callback"] = callback;
-    googleSheetsData[spreadsheetId + "-" + sheetName]["config"] = config;
-    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "IN_PROGRESS";
-    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = null;
   try {
     const auth = await getAuthToken();
     const response = await getSpreadSheetValues({
@@ -47,24 +16,19 @@ async function getSpreadSheetValuesData(spreadsheetId, sheetName, config, callba
       sheetName,
       auth
     });
-    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "completed";
-    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = response.data;
     console.log("Completed googleRequest: " + sheetName);
-    _returnCallback(spreadsheetId, sheetName);
+    $S.callMethodV2(callback, config, response.data);
   } catch(error) {
     console.log("Error in reading googleSheet data: spreadsheetId=" + spreadsheetId + ", sheetName=" + sheetName);
     console.log(error.message, error.stack);
-    googleSheetsData[spreadsheetId + "-" + sheetName]["status"] = "completed";
-    googleSheetsData[spreadsheetId + "-" + sheetName]["data"] = null;
     console.log("Completed googleRequest: " + sheetName);
-    _returnCallback(spreadsheetId, sheetName);
+    $S.callMethodV2(callback, config, null);
   }
 }
 
 
 (function() {
 var ConfigData = {};
-var FinalResult = [];
 var ConvertGoogleSheetsToCsv = function(config) {
     return new ConvertGoogleSheetsToCsv.fn.init(config);
 };
@@ -83,12 +47,6 @@ var _self = ConvertGoogleSheetsToCsv;
 ConvertGoogleSheetsToCsv.extend({
     setConfigData: function(_configData) {
         ConfigData = _configData;
-    },
-    getFinalResult: function() {
-        return $S.clone(FinalResult);
-    },
-    clearFinalResult: function() {
-        FinalResult = [];
     }
 });
 ConvertGoogleSheetsToCsv.extend({
@@ -194,7 +152,7 @@ ConvertGoogleSheetsToCsv.extend({
     }
 });
 ConvertGoogleSheetsToCsv.extend({
-    generateResult: function(excelConfig, callback) {
+    generateResult: function(excelConfig, finalResult, callback) {
         if (!$S.isArray(excelConfig)) {
             Logger.log("Invalid excelConfig.", callback);
             return;
@@ -202,6 +160,9 @@ ConvertGoogleSheetsToCsv.extend({
         if (excelConfig.length < 1) {
             Logger.log("excelConfig not found.", callback);
             return;
+        }
+        if (!$S.isArray(finalResult)) {
+            finalResult = [];
         }
         var self = this;
         var data, spreadsheetId, sheetName, index;
@@ -212,18 +173,18 @@ ConvertGoogleSheetsToCsv.extend({
                 excelConfig[i]["isVisited"] = "true";
                 getSpreadSheetValuesData(spreadsheetId, sheetName, {}, function(config, response) {
                     if ($S.isObject(response) && $S.isArrayV2(response["values"])) {
-                        FinalResult.push(response["values"]);
+                        finalResult.push(response["values"]);
                     }
                     for (var j=0; j<excelConfig.length; j++) {
                         if (excelConfig[j]["isVisited"] !== "true") {
                             break;
                         }
                     }
-                    $S.callMethodV1(callback, "SUCCESS");
+                    $S.callMethodV2(callback, "SUCCESS", finalResult);
                 });
             }
         }
-        return $S.callMethodV1(callback, "IN_PROGRESS");
+        return $S.callMethodV2(callback, "IN_PROGRESS", finalResult);
     },
     _getSpreadsheetId: function(gsConfigData) {
         var spreadsheetId = "";
@@ -273,7 +234,7 @@ ConvertGoogleSheetsToCsv.extend({
             $S.callMethodV1(callback, "SUCCESS");
         }
     },
-    generateResultV2: function(excelConfig, callback) {
+    generateResultV2: function(excelConfig, _container, callback) {
         if (!$S.isArray(excelConfig)) {
             Logger.log("Invalid excelConfig.", callback);
             $S.callMethodV1(callback, "FAILURE");
@@ -314,14 +275,14 @@ ConvertGoogleSheetsToCsv.extend({
                                         for (var k=0; k<response.values.length; k++) {
                                             if ($S.isArray(response.values[k]) && response.values[k].length > workIdIndexInData) {
                                                 if (response.values[k][workIdIndexInData] === config["id"]) {
-                                                    FinalResult.push({"data": response.values[k],"requiredColIndex":requiredColIndex});
+                                                    _container["FinalResult"].push({"data": response.values[k],"requiredColIndex":requiredColIndex});
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                            self.generateResultV2(config["excelConfig"], config["callback"]);
+                            self.generateResultV2(config["excelConfig"], _container, config["callback"]);
                         });
                         isBreak = true;
                         break;
@@ -337,9 +298,11 @@ ConvertGoogleSheetsToCsv.extend({
         }
     },
     convert: function(request, excelConfig, callback) {
+        var Container = {};
+        Container["FinalResult"] = [];
         Logger.logV2(request);
-        _self.generateResultV2(excelConfig, function(status) {
-            $S.callMethodV1(callback, status);
+        _self.generateResultV2(excelConfig, Container, function(status) {
+            $S.callMethodV2(callback, status, Container["FinalResult"]);
         });
     }
 });

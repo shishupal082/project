@@ -50,7 +50,7 @@ JavaExcelService.extend({
     }
 });
 JavaExcelService.extend({
-    _updateConfigData: function(_arg, _container) {
+    _updateContainer: function(_arg, _container) {
         if (_arg.length >= 1 && $S.isString(_arg[0]) && _arg[0].length > 0) {
             _container["WORK_ID"] = _arg[0];
         } else {
@@ -89,18 +89,15 @@ JavaExcelService.extend({
       for (i=0; i<_container["FINAL_DATA"].length; i++) {
         if (_container["FINAL_DATA"][i]["status"] === "PENDING") {
           _container["FINAL_DATA"][i]["status"] = "IN_PROGRESS";
-          ConvertGoogleSheetsToCsv.generateResult([_container["FINAL_DATA"][i]["excelConfigSpreadsheets"]], function(status) {
+          ConvertGoogleSheetsToCsv.generateResult([_container["FINAL_DATA"][i]["excelConfigSpreadsheets"]], [], function(status, result) {
               if (status === "SUCCESS") {
-                var result = ConvertGoogleSheetsToCsv.getFinalResult();
-                ConvertGoogleSheetsToCsv.clearFinalResult();
                 for (j=0; j<_container["FINAL_DATA"].length; j++) {
                   if (_container["FINAL_DATA"][j]["status"] === "IN_PROGRESS") {
                     _container["FINAL_DATA"][i]["status"] = "SUCCESS";
                     _container["FINAL_DATA"][j]["excelData"] = result;
                     if ($S.isArray(result)) {
                         for(k=0;k<result.length;k++) {
-                            console.log(_container["WORK_ID"]);
-                            console.log("Total row count: " + result[k].length);
+                            console.log("Total row count: " + _container["WORK_ID"] + ": " + result[k].length);
                         }
                     }
                     break;
@@ -113,14 +110,13 @@ JavaExcelService.extend({
                 }
                 _container["IS_ALL_DATA_LOADED"] = true;
                 for (j=0; j<_container["FINAL_DATA"].length; j++) {
-                  if (_container["FINAL_DATA"][j]["status"] !== "SUCCESS") {
-                    _container["IS_ALL_DATA_LOADED"] = false;
-                  }
+                    if (_container["FINAL_DATA"][j]["status"] !== "SUCCESS") {
+                        _container["IS_ALL_DATA_LOADED"] = false;
+                    }
                 }
                 if (_container["IS_ALL_DATA_LOADED"]){
                   console.log("Data load completed.");
                   CsvDataFormate.replaceSpecialCharacterEachCell(_container["FINAL_DATA"]);
-                  // CsvDataFormate.format(_container["FINAL_DATA"]);
                   ConvertGoogleSheetsToCsv.saveCSVData(_container["FINAL_DATA"]);
                   _callback();
                 } else {
@@ -182,65 +178,57 @@ JavaExcelService.extend({
         }
     },
     readApiData: function(_container, callback) {
-      ReadConfigData.readApiData(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/get_excel_data_config?requestId=" + _container["WORK_ID"], function() {
-        var request = {"appId": _container["APP_ID"], "workId": _container["WORK_ID"]};
-        var excelConfig = ReadConfigData.getApiData();
-        var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
-        CsvDataFormate.updateConfigData(_container["WORK_ID"], excelConfig);
-        ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
-          if (status === "SUCCESS") {
-            var fileMapping = ConvertGoogleSheetsToCsv.getFinalResult();
-            ConvertGoogleSheetsToCsv.clearFinalResult();
-            if (fileMapping) {
-              for (var i=0; i<fileMapping.length; i++) {
-                if ($S.isObject(fileMapping[i]) && $S.isArray(fileMapping[i]["data"])) {
-                  requiredColIndex = fileMapping[i]["requiredColIndex"];
-                  if (requiredColIndex.length >= 3) {
-                     spreadsheetIdIndex = requiredColIndex[1];
-                     sheetNameIndex = requiredColIndex[2];
+        var api = _self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/get_excel_data_config?requestId=" + _container["WORK_ID"];
+        ReadConfigData.readApiDataV2(api, _container, function(excelConfig, __container) {
+            var request = {"appId": __container["APP_ID"], "workId": __container["WORK_ID"]};
+            var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
+            ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status, result) {
+              if (status === "SUCCESS") {
+                if ($S.isArray(result)) {
+                  for (var i=0; i<result.length; i++) {
+                    if ($S.isObject(result[i]) && $S.isArray(result[i]["data"])) {
+                      requiredColIndex = result[i]["requiredColIndex"];
+                      if (requiredColIndex.length >= 3) {
+                         spreadsheetIdIndex = requiredColIndex[1];
+                         sheetNameIndex = requiredColIndex[2];
+                      }
+                      if (result[i]["data"].length > spreadsheetIdIndex && result[i]["data"].length > sheetNameIndex) {
+                        __container["FINAL_DATA"].push({
+                          "status": "PENDING",
+                          "fileMappingData": result[i]["data"],
+                          "excelConfigSpreadsheets": {
+                            "spreadsheetId": result[i]["data"][spreadsheetIdIndex],
+                            "sheetName": result[i]["data"][sheetNameIndex]
+                          },
+                          "requiredColIndex": requiredColIndex,
+                          "excelData": []
+                        });
+                      } else {
+                        console.log("Invalid file-mapping data: 1");
+                        console.log(result[i]);
+                      }
+                    } else {
+                      console.log("Invalid file-mapping data: 2");
+                    }
                   }
-                  if (fileMapping[i]["data"].length > spreadsheetIdIndex && fileMapping[i]["data"].length > sheetNameIndex) {
-                    _container["FINAL_DATA"].push({
-                      "status": "PENDING",
-                      "fileMappingData": fileMapping[i]["data"],
-                      "excelConfigSpreadsheets": {
-                        "spreadsheetId": fileMapping[i]["data"][spreadsheetIdIndex],
-                        "sheetName": fileMapping[i]["data"][sheetNameIndex]
-                      },
-                      "requiredColIndex": requiredColIndex,
-                      "excelData": []
+                  console.log("--------FINAL_DATA length------------- " + __container["WORK_ID"] + "  " + __container["FINAL_DATA"].length);
+                    _self.generateFinalResult(__container, function() {
+                        _self.sendNextRequest(__container, result, callback);
                     });
-                  } else {
-                    console.log("Invalid file-mapping data: 1");
-                    console.log(fileMapping[i]);
-                  }
                 } else {
-                  console.log("Invalid file-mapping data: 2");
+                  console.log("Invalid config parameter generated.");
+                  $S.callMethodV1(callback, "FAILURE");
                 }
+              } else {
+                $S.callMethodV1(callback, "FAILURE");
               }
-              // console.log(_container["FINAL_DATA"]);
-              console.log("--------FINAL_DATA length------------- " + _container["FINAL_DATA"].length);
-              // console.log(fileMapping);
-              // console.log(_container["FINAL_DATA"]);
-              // console.log(_container["FINAL_DATA"][0]["excelConfig"]);
-                _self.generateFinalResult(_container, function() {
-                    _self.sendNextRequest(_container, fileMapping, callback);
-                });
-            } else {
-              console.log("Invalid config parameter generated.");
-              $S.callMethodV1(callback, "FAILURE");
-            }
-          } else {
-            $S.callMethodV1(callback, "FAILURE");
-          }
+            });
         });
-      });
     }
 });
 JavaExcelService.extend({
     handleRequest: function(request, callback) {
         var Container = {};
-        Container["FinalResult"] = [];
         Container["FINAL_DATA"] = [];
         Container["IS_INVALID_WORK_ID"] = false;
         Container["IS_ALL_DATA_LOADED"] = false;
@@ -262,7 +250,7 @@ JavaExcelService.extend({
             return;
         }
         runningIds.push(Container["WORK_ID"]);
-        _self._updateConfigData(_reqArg, Container);
+        _self._updateContainer(_reqArg, Container);
         _self.readApiData(Container, function(status) {
             runningIds = runningIds.filter(function(el, i, arr) {
                 if (!$S.isString(el) || !$S.isStringV2(el)) {
@@ -273,7 +261,7 @@ JavaExcelService.extend({
                 }
                 return true;
             });
-            $S.callMethodV1(callback, status);
+            $S.callMethodV2(callback, status+"|"+Container["WORK_ID"], Container["FINAL_DATA"]);
         });
     }
 });

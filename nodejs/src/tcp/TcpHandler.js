@@ -127,9 +127,9 @@ TcpHandler.extend({
             if ($S.isFunction(appIdMappingFunction[request["appId"]])) {
                 status = FinalResponse.statusValidRequest;
                 Logger.log("Request: appId: " + request["appId"] + ", workId: " + request["workId"]);
-                appIdMappingFunction[request["appId"]](request, function(result) {
-                    if ($S.isString(result)) {
-                        response = result;
+                appIdMappingFunction[request["appId"]](request, function(status, result) {
+                    if ($S.isString(status)) {
+                        response = status;
                     } else {
                         response = "INVALID_RESPONSE";
                     }
