@@ -8,7 +8,7 @@ const CsvDataFormate = require("../common/CsvDataFormate.js");
 
 (function() {
 var ConfigData = {};
-
+var runningIds = [];
 
 var FINAL_CALLING_CONFIG = {};
 
@@ -51,7 +51,7 @@ JavaExcelService.extend({
 });
 JavaExcelService.extend({
     _updateConfigData: function(_arg, _container) {
-        if (_arg.length >= 1 && _arg[0].length > 0) {
+        if (_arg.length >= 1 && $S.isString(_arg[0]) && _arg[0].length > 0) {
             _container["WORK_ID"] = _arg[0];
         } else {
             _container["IS_INVALID_WORK_ID"] = true;
@@ -59,7 +59,6 @@ JavaExcelService.extend({
             Logger.log("-----Command line argument 'workId' required.-----");
         }
         _container["WORK_ID"] = "nodejs-"+_container["WORK_ID"];
-        console.log(JSON.stringify(_container));
     }
 });
 JavaExcelService.extend({
@@ -258,9 +257,23 @@ JavaExcelService.extend({
             }
             _reqArg.push(Container["WORK_ID"]);
         }
+        if (runningIds.indexOf(Container["WORK_ID"]) >= 0) {
+            $S.callMethodV1(callback, "IN_PROGRESS");
+            return;
+        }
+        runningIds.push(Container["WORK_ID"]);
         _self._updateConfigData(_reqArg, Container);
         _self.readApiData(Container, function(status) {
-            $S.callMethodV1(callback, status)
+            runningIds = runningIds.filter(function(el, i, arr) {
+                if (!$S.isString(el) || !$S.isStringV2(el)) {
+                    el = "gs-csv-file-data-nodejs";
+                }
+                if ("nodejs-"+el === Container["WORK_ID"]) {
+                    return false;
+                }
+                return true;
+            });
+            $S.callMethodV1(callback, status);
         });
     }
 });
