@@ -57,13 +57,15 @@
 var GLOBAL = {
   baseApi: "http://localhost:8080",
   basepathname: "",
+  loginUserDetailsApi: "/api/get_login_user_details",
   projectHeading: "App Heading"
 };
 GLOBAL.JQ = $;
 GLOBAL.isSinglePageApp = false;
-GLOBAL.appControlApi = "/app/rcc/data/appControlData.json";
-GLOBAL.loginUserDetailsApi = "/api/get_login_user_details";
-GLOBAL.tcpServicePostApi = "/api/call_tcp";
+GLOBAL.appControlApi = "/rcc/json/appControlData.json";
+GLOBAL.customPageData = {
+  tcpServicePostApi: "/api/call_tcp"
+};
 GLOBAL.gtag = gtag;
 GLOBAL.appVersion = "v1.0.0";
 window.GLOBAL = GLOBAL;
