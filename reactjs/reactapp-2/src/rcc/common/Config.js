@@ -1,43 +1,35 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
 
-import Template from "./Template";
+// import Template from "./Template";
 
 var Config = {requestId: $S.getRequestId()};
 
 Config.navigator = $$$.navigator;
 var baseApi = $$$.baseApi;
 var basepathname = $$$.basepathname;
-var appVersion = $$$.appVersion;
-
+var loginUserDetailsApi = $$$.loginUserDetailsApi;
 Config.baseApi = baseApi;
 Config.basepathname = basepathname;
-Config.appVersion = appVersion;
-Config.forceLogin = $$$.forceLogin;
-Config.gtag = $$$.gtag;
-Config.JQ = $$$.JQ;
+Config.loginUserDetailsApi = loginUserDetailsApi;
+
 Config.appControlDataPath = $$$.appControlDataPath;
-Config.validAppControl = $$$.validAppControl;
-Config.projectHeading = $$$.projectHeading;
-
-Config.tempConfig = {
-    "enabledPages": $$$.enabledPages,
-    "redirectPages": $$$.redirectPages,
-    "linkText": $$$.linkText,
-    "isSinglePageApp": $$$.isSinglePageApp
-};
-
-
-var loginUserDetailsApi = $$$.loginUserDetailsApi;
-var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
-var tcpServicePostApi = $$$.tcpServicePostApi;
+Config.projectHeading = $$$.projectHeading;
+Config.forceLogin = $$$.forceLogin;
+var appVersion = $$$.appVersion;
+Config.appVersion = appVersion;
+Config.JQ = $$$.JQ;
+Config.gtag = $$$.gtag;
+Config.validAppControl = $$$.validAppControl;
 
+Config.tempConfig = {};
 
-try {
-    headingJson = JSON.parse(headingJson);
-    Template["heading"][1].text = headingJson;
-} catch(e) {}
+var tcpServicePostApi = "";
+var customPageData = $$$.customPageData;
+if ($S.isObject(customPageData) && $S.isStringV2(customPageData["tcpServicePostApi"])) {
+    tcpServicePostApi = customPageData["tcpServicePostApi"];
+}
 
 var pageUrl = {
     "projectHome": basepathname+"/",
