@@ -18,7 +18,10 @@ function main() {
     ReadConfigData.readData("./google-sheets/config.json", function() {
         var tempData = ReadConfigData.getData();
         JavaExcelService.setConfigData(tempData);
-        JavaExcelService.handleRequest({"appId": "005", "workId": workId, "msg": workId}, function(status) {
+        JavaExcelService.handleRequest({"appId": "005", "workId": workId, "msg": workId}, function(status, result) {
+            if ($S.isArray(result)) {
+                status = status + "|" + result.length;
+            }
             console.log("---"+status+"---");
         });
     });

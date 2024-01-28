@@ -166,7 +166,7 @@ JavaExcelService.extend({
         return "";
     },
     sendNextRequest: function(_container, fileMapping, callback) {
-        var nextWorkId = this.getNextWorkId(fileMapping);
+        var nextWorkId = this.getNextWorkId(_container, fileMapping);
         if ($S.isStringV2(nextWorkId)) {
             setTimeout(function(){
                 ReadConfigData.callApi(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/update_excel_data?requestId=" + nextWorkId, function() {
