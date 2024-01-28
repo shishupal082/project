@@ -8,20 +8,9 @@ const CsvDataFormate = require("../common/CsvDataFormate.js");
 
 (function() {
 var ConfigData = {};
-var FinalResult = [];
 
-var APP_ID = "";
-var WORK_ID = "";
-var PORT = "8082";
-var BASE_URL = "http://localhost";
-
-var nodejsWorkIdIndex = 7;
-var nodejsWorkId = [];
 
 var FINAL_CALLING_CONFIG = {};
-var FINAL_DATA = [];
-var IS_INVALID_WORK_ID = false;
-var IS_ALL_DATA_LOADED = false;
 
 var JavaExcelService = function(config) {
     return new JavaExcelService.fn.init(config);
@@ -37,45 +26,49 @@ JavaExcelService.fn = JavaExcelService.prototype = {
 JavaExcelService.fn.init.prototype = JavaExcelService.fn;
 
 $S.extendObject(JavaExcelService);
+var _self = JavaExcelService;
 JavaExcelService.extend({
-    setConfigData: function(_configData) {
-        ConfigData = _configData;
-        if ($S.isObject(ConfigData)) {
-            if ($S.isStringV2(ConfigData["port"]) && $S.isNumeric(PORT)) {
-                PORT = ConfigData["port"];
-            }
-            if ($S.isStringV2(ConfigData["baseUrl"])) {
-                BASE_URL = ConfigData["baseUrl"];
-            }
+    setConfigData: function(_configData, _container) {
+        if ($S.isObject(_configData)) {
+            ConfigData = _configData;
             if ($S.isObject(ConfigData["FINAL_CALLING_CONFIG"])) {
                 FINAL_CALLING_CONFIG = ConfigData["FINAL_CALLING_CONFIG"];
             }
-            if ($S.isNumeric(ConfigData["nodejsWorkIdIndex"])) {
-                nodejsWorkIdIndex = ConfigData["nodejsWorkIdIndex"]*1;
-            }
         }
     },
-    getFinalResult: function() {
-        return $S.clone(FinalResult);
+    getPortNumber: function() {
+        if ($S.isStringV2(ConfigData["port"]) && $S.isNumeric(ConfigData["port"])) {
+            return ConfigData["port"];
+        }
+        return 8082;
     },
-    clearFinalResult: function() {
-        FinalResult = [];
+    getBaseUrl: function() {
+        if ($S.isStringV2(ConfigData["baseUrl"])) {
+            return ConfigData["baseUrl"];
+        }
+        return "http://localhost";
     }
 });
 JavaExcelService.extend({
-    _updateConfigData: function(_arg) {
+    _updateConfigData: function(_arg, _container) {
         if (_arg.length >= 1 && _arg[0].length > 0) {
-            WORK_ID = _arg[0];
+            _container["WORK_ID"] = _arg[0];
         } else {
-            IS_INVALID_WORK_ID = true;
-            WORK_ID = "gs-csv-file-data-nodejs";
+            _container["IS_INVALID_WORK_ID"] = true;
+            _container["WORK_ID"] = "gs-csv-file-data-nodejs";
             Logger.log("-----Command line argument 'workId' required.-----");
         }
-        WORK_ID = "nodejs-"+WORK_ID;
+        _container["WORK_ID"] = "nodejs-"+_container["WORK_ID"];
+        console.log(JSON.stringify(_container));
     }
 });
 JavaExcelService.extend({
     generateNodejsWorkId: function(_result) {
+        var nodejsWorkId = [];
+        var nodejsWorkIdIndex = 7;
+        if ($S.isNumeric(ConfigData["nodejsWorkIdIndex"])) {
+            nodejsWorkIdIndex = ConfigData["nodejsWorkIdIndex"]*1;
+        }
         if ($S.isArray(_result) && nodejsWorkIdIndex >= 0) {
             for (var i=0; i<_result.length; i++) {
                 if ($S.isArray(_result[i])) {
@@ -89,49 +82,50 @@ JavaExcelService.extend({
         }
         console.log(nodejsWorkId.sort());
     },
-    generateFinalResult: function(_callback) {
-      if (FINAL_DATA.length < 1) {
+    generateFinalResult: function(_container, _callback) {
+      if (_container["FINAL_DATA"].length < 1) {
         return _callback();
       }
       var i,j,k;
-      for (i=0; i<FINAL_DATA.length; i++) {
-        if (FINAL_DATA[i]["status"] === "PENDING") {
-          FINAL_DATA[i]["status"] = "IN_PROGRESS";
-          ConvertGoogleSheetsToCsv.generateResult([FINAL_DATA[i]["excelConfigSpreadsheets"]], function(status) {
+      for (i=0; i<_container["FINAL_DATA"].length; i++) {
+        if (_container["FINAL_DATA"][i]["status"] === "PENDING") {
+          _container["FINAL_DATA"][i]["status"] = "IN_PROGRESS";
+          ConvertGoogleSheetsToCsv.generateResult([_container["FINAL_DATA"][i]["excelConfigSpreadsheets"]], function(status) {
               if (status === "SUCCESS") {
                 var result = ConvertGoogleSheetsToCsv.getFinalResult();
                 ConvertGoogleSheetsToCsv.clearFinalResult();
-                for (j=0; j<FINAL_DATA.length; j++) {
-                  if (FINAL_DATA[j]["status"] === "IN_PROGRESS") {
-                    FINAL_DATA[i]["status"] = "SUCCESS";
-                    FINAL_DATA[j]["excelData"] = result;
+                for (j=0; j<_container["FINAL_DATA"].length; j++) {
+                  if (_container["FINAL_DATA"][j]["status"] === "IN_PROGRESS") {
+                    _container["FINAL_DATA"][i]["status"] = "SUCCESS";
+                    _container["FINAL_DATA"][j]["excelData"] = result;
                     if ($S.isArray(result)) {
                         for(k=0;k<result.length;k++) {
+                            console.log(_container["WORK_ID"]);
                             console.log("Total row count: " + result[k].length);
                         }
                     }
                     break;
                   }
                 }
-                if (IS_INVALID_WORK_ID) {
-                    JavaExcelService.generateNodejsWorkId(result);
+                if (_container["IS_INVALID_WORK_ID"]) {
+                    _self.generateNodejsWorkId(result);
                     _callback();
                     return;
                 }
-                IS_ALL_DATA_LOADED = true;
-                for (j=0; j<FINAL_DATA.length; j++) {
-                  if (FINAL_DATA[j]["status"] !== "SUCCESS") {
-                    IS_ALL_DATA_LOADED = false;
+                _container["IS_ALL_DATA_LOADED"] = true;
+                for (j=0; j<_container["FINAL_DATA"].length; j++) {
+                  if (_container["FINAL_DATA"][j]["status"] !== "SUCCESS") {
+                    _container["IS_ALL_DATA_LOADED"] = false;
                   }
                 }
-                if (IS_ALL_DATA_LOADED){
+                if (_container["IS_ALL_DATA_LOADED"]){
                   console.log("Data load completed.");
-                  CsvDataFormate.replaceSpecialCharacterEachCell(FINAL_DATA);
-                  // CsvDataFormate.format(FINAL_DATA);
-                  ConvertGoogleSheetsToCsv.saveCSVData(FINAL_DATA);
+                  CsvDataFormate.replaceSpecialCharacterEachCell(_container["FINAL_DATA"]);
+                  // CsvDataFormate.format(_container["FINAL_DATA"]);
+                  ConvertGoogleSheetsToCsv.saveCSVData(_container["FINAL_DATA"]);
                   _callback();
                 } else {
-                  JavaExcelService.generateFinalResult(_callback);
+                  _self.generateFinalResult(_container, _callback);
                 }
               }
           });
@@ -139,9 +133,9 @@ JavaExcelService.extend({
         }
       }
     },
-    getNextWorkId: function(fileMapping) {
-        if (FINAL_CALLING_CONFIG[WORK_ID]) {
-            return FINAL_CALLING_CONFIG[WORK_ID];
+    getNextWorkId: function(_container, fileMapping) {
+        if (FINAL_CALLING_CONFIG[_container["WORK_ID"]]) {
+            return FINAL_CALLING_CONFIG[_container["WORK_ID"]];
         }
         var fileMappingEntry;
         var requiredColIndex;
@@ -162,7 +156,7 @@ JavaExcelService.extend({
                                     if (fileMappingEntry["data"][csvRequestIdIndex]) {
                                         return fileMappingEntry["data"][csvRequestIdIndex];
                                     } else {
-                                        // console.log("next work id not defined for: " + WORK_ID);
+                                        // console.log("next work id not defined for: " + _container["WORK_ID"]);
                                         // console.log("Invalid config for next work id.");
                                         return;
                                     }
@@ -176,11 +170,11 @@ JavaExcelService.extend({
         }
         return "";
     },
-    sendNextRequest: function(callback, fileMapping) {
+    sendNextRequest: function(_container, fileMapping, callback) {
         var nextWorkId = this.getNextWorkId(fileMapping);
         if ($S.isStringV2(nextWorkId)) {
             setTimeout(function(){
-                ReadConfigData.callApi(BASE_URL + ":" + PORT + "/api/update_excel_data?requestId=" + nextWorkId, function() {
+                ReadConfigData.callApi(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/update_excel_data?requestId=" + nextWorkId, function() {
                     $S.callMethodV1(callback, "SUCCESS");
                 });
             }, 3000);
@@ -188,12 +182,12 @@ JavaExcelService.extend({
             $S.callMethodV1(callback, "SUCCESS");
         }
     },
-    readApiData: function(callback) {
-      ReadConfigData.readApiData(BASE_URL + ":" + PORT + "/api/get_excel_data_config?requestId=" + WORK_ID, function() {
-        var request = {"appId": APP_ID, "workId": WORK_ID};
+    readApiData: function(_container, callback) {
+      ReadConfigData.readApiData(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/get_excel_data_config?requestId=" + _container["WORK_ID"], function() {
+        var request = {"appId": _container["APP_ID"], "workId": _container["WORK_ID"]};
         var excelConfig = ReadConfigData.getApiData();
         var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
-        CsvDataFormate.updateConfigData(WORK_ID, excelConfig);
+        CsvDataFormate.updateConfigData(_container["WORK_ID"], excelConfig);
         ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status) {
           if (status === "SUCCESS") {
             var fileMapping = ConvertGoogleSheetsToCsv.getFinalResult();
@@ -207,7 +201,7 @@ JavaExcelService.extend({
                      sheetNameIndex = requiredColIndex[2];
                   }
                   if (fileMapping[i]["data"].length > spreadsheetIdIndex && fileMapping[i]["data"].length > sheetNameIndex) {
-                    FINAL_DATA.push({
+                    _container["FINAL_DATA"].push({
                       "status": "PENDING",
                       "fileMappingData": fileMapping[i]["data"],
                       "excelConfigSpreadsheets": {
@@ -225,13 +219,13 @@ JavaExcelService.extend({
                   console.log("Invalid file-mapping data: 2");
                 }
               }
-              // console.log(FINAL_DATA);
-              console.log("--------FINAL_DATA length------------- " + FINAL_DATA.length);
+              // console.log(_container["FINAL_DATA"]);
+              console.log("--------FINAL_DATA length------------- " + _container["FINAL_DATA"].length);
               // console.log(fileMapping);
-              // console.log(FINAL_DATA);
-              // console.log(FINAL_DATA[0]["excelConfig"]);
-                JavaExcelService.generateFinalResult(function() {
-                    JavaExcelService.sendNextRequest(callback, fileMapping);
+              // console.log(_container["FINAL_DATA"]);
+              // console.log(_container["FINAL_DATA"][0]["excelConfig"]);
+                _self.generateFinalResult(_container, function() {
+                    _self.sendNextRequest(_container, fileMapping, callback);
                 });
             } else {
               console.log("Invalid config parameter generated.");
@@ -246,24 +240,26 @@ JavaExcelService.extend({
 });
 JavaExcelService.extend({
     handleRequest: function(request, callback) {
-        FINAL_DATA = [];
-        IS_INVALID_WORK_ID = false;
-        IS_ALL_DATA_LOADED = false;
+        var Container = {};
+        Container["FinalResult"] = [];
+        Container["FINAL_DATA"] = [];
+        Container["IS_INVALID_WORK_ID"] = false;
+        Container["IS_ALL_DATA_LOADED"] = false;
         var reqMsg, _reqArg = [];
         if ($S.isObject(request)) {
             if ($S.isStringV2(request["appId"])) {
-                APP_ID = request["appId"];
+                Container["APP_ID"] = request["appId"];
             }
             if ($S.isStringV2(request["workId"])) {
-                WORK_ID = request["workId"];
+                Container["WORK_ID"] = request["workId"];
             }
             if ($S.isStringV2(request["msg"])) {
                 reqMsg = request["msg"];
             }
-            _reqArg.push(WORK_ID);
+            _reqArg.push(Container["WORK_ID"]);
         }
-        JavaExcelService._updateConfigData(_reqArg);
-        JavaExcelService.readApiData(function(status) {
+        _self._updateConfigData(_reqArg, Container);
+        _self.readApiData(Container, function(status) {
             $S.callMethodV1(callback, status)
         });
     }
