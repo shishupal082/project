@@ -1,0 +1,108 @@
+logging:
+  level: INFO
+  loggers:
+    com.todo: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      threshold: ALL
+      timeZone: UTC
+    - type: file
+      threshold: ALL
+      timeZone: UTC
+      archive: true
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      currentLogFilename: F:/ftp-app-log/log_port8085/application.log
+      # archivedLogFilenamePattern: F:/ftp-app-log/log_port8085/application-%d{yyyy-MM-dd}-%i.log
+      # maxFileSize: 1MB
+      archivedLogFilenamePattern: F:/ftp-app-log/log_port8085/application-%d{yyyy-MM-dd}.log
+      archivedFileCount: 5
+
+logFilePath: "F:/ftp-app-log/log_port8085/"
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8085
+    type: http
+  rootPath: /*
+
+fileSaveDir: "D:/workspace/project/ftp-app/app-data-v8/saved-files/"
+configDataFilePath: "D:/workspace/project/ftp-app/app-data-v8/config-files/"
+publicDir: "../../.."
+publicPostDir: "D:/workspace/project/ftp-app/app-data-v8/public"
+assetsDir: "F:/ftp-app/OneDrive/ftp/common-data/"
+supportedFileType:
+  - pdf
+  - jpeg
+  - png
+  - jpg
+
+cookieName: ftp-coockie-appv8
+
+enabledAuthPages:
+  - login
+  - forgot_password
+  - create_password
+  - register
+
+#  forgotPasswordMessage: "Forgot password request submitted, Please check your email."
+forgotPasswordMessage: "Forgot password request submitted, Please create password."
+loadRoleStatusOnPageLoad: "FromRoleConfig"
+staticDataFilename: "app_static_data.json"
+
+userDataFilename: "specific/user_data_2019.csv"
+rolesFileName:
+  - "roles/users_role_common.yml"
+  - "specific/roles/users_role_2019.yml"
+
+fileNotFoundMapping:
+  - "file_not_found_config/file_not_found_config.yml"
+
+rateLimitThreshold: 3
+forgotPasswordEnable: true
+addTextV2TimeStamp: "yyyy-MM-dd HH:mm:ss.SSS','"
+
+fileDataFilename: "specific/file_details.csv"
+
+createPasswordEmailConfig:
+  createPasswordLink: "http://localhost:8085/create_password"
+  createPasswordSubject: "Forgot your password?"
+  createPasswordMessage: '<div>
+                                <div>Dear <b>%s</b>,</div>
+                                <br></br><div>Please find OTP for creating new password: <b>%s</b></div>
+                                <br></br><div><a href="%s">Click here</a> for creating new password or, open %s</div>
+                                <br></br><div>Please do not reply to this email.</div>
+                             </div>'
+
+ftlConfig:
+  description: "Field report"
+  keywords: "Field report, File upload, PDF, JPEG, JPG, PNG, CSV, TXT"
+  author: "Field report Author"
+  title: "Field report"
+  gaTrackingId: "gs-tracking-id"
+  gaTrackingEnable: true
+  displayCreatePasswordLinkEnable: false
+  loginRedirectUrl: "/dashboard"
+  forgotPasswordPageInstruction: "Please contact admin."
+  # forgotPasswordPageInstruction: "Please contact admin to get create password otp."
+  createPasswordOtpInstruction: "(Receive from admin)"
+  # createPasswordOtpInstruction: "(Check your email)"
+  headingJson: '[{"tag":"div.center.table.tbody.tr","className":"heading","text":[{"tag":"td","text":{"tag":"img","className":"w-40px","src":"/assets/static/img/railwayslogo-128.png"}},{"tag":"td","className":"text-center pl-5px","text":[{"tag":"div","text":"Field Report"}]}]}]'
+  # headingJson: '[{"tag":"div.center.table.tbody.tr","className":"heading","text":[{"tag":"td","text":{"tag":"img","className":"w-40px","src":"/assets/static/img/railwayslogo-64.png"}},{"tag":"td","className":"text-center pl-5px","text":[{"tag":"div","text":"Field Report"}]}]}]'
+  afterLoginLinkJson: '[{"tag":"div.center","text":[{"tag":"a","href":"/dashboard","name":"link.app_monitor","className":"p-5px","text":"Dashboard"},{"tag":"a","href":"/upload_file","name":"link.upload_file","className":"p-5px","text":"Upload File"},{"tag":"a","href":"/change_password","name":"link.change_password","className":"p-5px","text":"Change_password"},{"tag":"a","name":"link.logout","href":"/logout","className":"p-5px","text":"Logout"}]},{"tag":"div.center","text":[{"tag":"span","text":"Login as"},{"tag":"span.b","name":"isAdminTextDisplayEnable","className":"d-none","text":" (admin)"},{"tag":"span","className":"","text":": "},{"tag":"b","name":"link.loginAs","text":""}]}]'
+  pageNotFoundJson: '[{"tag": "center.h1","text": {"tag": "span","className": "","name": "date","text": "Page not found"}}]'
+  footerLinkJsonAfterLogin: '[{"tag":"div.center","text":[{"tag":"a","href":"/users_control","name":"isUsersControlEnable","className":"p-5px d-none","text":"Users Control"},{"tag":"a","href":"/permission_control","name":"isDevUser","className":"p-5px d-none","text":"Permission Control"},{"tag":"a","href":"/compare_control","name":"isDevUser2","className":"p-5px d-none","text":"Compare Control"},{"tag":"a","href":"/login_other_user","name":"isLoginOtherUserEnable","className":"p-5px d-none","text":"Login Other Users"}]}]'
+
+fileDeleteAccess: "self" #(self|admin|self_admin)
+permanentlyDeleteFile: false #File will saved in trash folder
+maxFileSize: 10240001 #i.e. 2048000 = 2048 kB = 2MB, 10240001 = 10MB
+# filenameFormat: "yyyy-MM-dd-HH-mm'-filename'"
+filenameFormat: "yyyy-MM-dd-HH-mm'-filename'"
+
+uploadFileApiVersion: "v2" #(v1|v2)
+aesEncryptionPassword: "onlineDiaryEncryptionPassword"
+androidCheckEnable: true
+indexPageReRoute: /login

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -jar F:/app-auth/ftp-app-8.0.2.015/FTP-8.0.2.015-SNAPSHOT.jar false true "D:/workspace/project/ftp-app/app-data-v8/config-files/env_config/env_config-8.0.0.1_local_initial_port8085.yml" "D:/workspace/project/ftp-app/app-data-v8/config-files/specific/env_config-8.0.0.6_base.yml"

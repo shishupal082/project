@@ -1,0 +1,31 @@
+roleAccess:
+  DEV_USERS:
+    - SHISHUPAL
+  PUBLIC_USERS:
+    - public
+roleAccessMapping:
+  isDeleteFileEnable: true
+  isUploadFileEnable: true
+  isAdminTextDisplayEnable: (ADMIN_USERS|DEV_USERS)
+  isLoginOtherUserEnable: DEV_USERS
+  isUsersControlEnable: DEV_USERS
+  isDevUser: DEV_USERS
+  isDevUser2: DEV_USERS
+
+coRelatedUsers:
+  - ADMIN_USERS
+groupRelatedUsers:
+  DEV_USERS:
+    - ADMIN_USERS
+    - APP_USERS
+    - PUBLIC_USERS
+  ADMIN_USERS:
+    - APP_USERS
+    - PUBLIC_USERS
+  APP_USERS:
+    - PUBLIC_USERS
+relatedUsers:
+  SHISHUPAL:
+    - ADMIN_USERS
+    - APP_USERS
+    - PUBLIC_USERS

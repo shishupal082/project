@@ -1,0 +1,30 @@
+pageMapping404:
+  default:
+    viewType: "ftl.view"
+    fileName: "ftl-view-mapping-ftp-1"
+  un_authorised:
+    fileName: "/src/unathorised_page.json"
+  /(dashboard|upload_file):
+    viewType: "ftl.view"
+    fileName: "ftl-view-mapping-ftp-1"
+
+  /roleAttendanceUser/:
+    roleAccess: "isLogin"
+  /devUser/:
+    roleAccess: "isDevUser"
+
+ftlViewMapping:
+  ftl-view-mapping-ftp-1:
+    pageTitle: "FTP Application"
+    bodyClass: "theme-grey"
+    jQueryFilePath: "/assets/static/libs/jquery-2.1.3.js"
+    cssFiles:
+      - /assets/static/libs/bootstrap-v4.4.1.css
+      - /assets-dir/static/css/style.css
+      - /assets-dir/static/css/react-app.css
+      - /assets/static/dist-auth-app/auth-style.css
+      - /assets-dir/static/css/ftp/ftp-style.css
+    jsFiles:
+      - /assets/static/dist-react-base-1.0.0/script1.js
+      - /assets-dir/static/js/dist-ftp-app/script2.js
+      - /assets-dir/static/js/dist-ftp-app/script3.js
