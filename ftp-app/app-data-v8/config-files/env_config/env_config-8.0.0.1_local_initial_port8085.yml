@@ -65,8 +65,6 @@ rateLimitThreshold: 3
 forgotPasswordEnable: true
 addTextV2TimeStamp: "yyyy-MM-dd HH:mm:ss.SSS','"
 
-fileDataFilename: "specific/file_details.csv"
-
 createPasswordEmailConfig:
   createPasswordLink: "http://localhost:8085/create_password"
   createPasswordSubject: "Forgot your password?"
@@ -96,13 +94,10 @@ ftlConfig:
   pageNotFoundJson: '[{"tag": "center.h1","text": {"tag": "span","className": "","name": "date","text": "Page not found"}}]'
   footerLinkJsonAfterLogin: '[{"tag":"div.center","text":[{"tag":"a","href":"/users_control","name":"isUsersControlEnable","className":"p-5px d-none","text":"Users Control"},{"tag":"a","href":"/permission_control","name":"isDevUser","className":"p-5px d-none","text":"Permission Control"},{"tag":"a","href":"/compare_control","name":"isDevUser2","className":"p-5px d-none","text":"Compare Control"},{"tag":"a","href":"/login_other_user","name":"isLoginOtherUserEnable","className":"p-5px d-none","text":"Login Other Users"}]}]'
 
-fileDeleteAccess: "self" #(self|admin|self_admin)
-permanentlyDeleteFile: false #File will saved in trash folder
 maxFileSize: 10240001 #i.e. 2048000 = 2048 kB = 2MB, 10240001 = 10MB
 # filenameFormat: "yyyy-MM-dd-HH-mm'-filename'"
 filenameFormat: "yyyy-MM-dd-HH-mm'-filename'"
 
-uploadFileApiVersion: "v2" #(v1|v2)
 aesEncryptionPassword: "onlineDiaryEncryptionPassword"
 androidCheckEnable: true
 indexPageReRoute: /login
