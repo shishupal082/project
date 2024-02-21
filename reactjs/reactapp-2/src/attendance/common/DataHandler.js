@@ -291,7 +291,11 @@ DataHandler.extend({
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
-                filterOptions[i].selectedValue = "";
+                if ($S.isStringV2(filterOptions[i].allFieldValue)) {
+                    filterOptions[i].selectedValue = filterOptions[i].allFieldValue;
+                } else {
+                    filterOptions[i].selectedValue = "";
+                }
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
