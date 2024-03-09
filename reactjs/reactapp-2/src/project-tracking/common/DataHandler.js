@@ -569,7 +569,7 @@ DataHandler.extend({
                 dateParameterField = DataHandlerV2.getDateParameterField("viewPage", viewPageName);
                 renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
                 filterOptions = this.getData("filterOptions");
-                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name");
+                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name", dateParameterField);
                 renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
                 DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;

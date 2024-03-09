@@ -656,12 +656,12 @@ DataHandler.extend({
         var metaData = DataHandler.getMetaData({});
         var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name");
+        var dateParameterField = this.getDateParameterField();
+        var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name", dateParameterField);
         // var sortableValue = DataHandler.getData("sortableValue", "");
         // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
-        var dateParameterField = this.getDateParameterField();
 
         if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);

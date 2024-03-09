@@ -11,7 +11,8 @@ var AppHandler;
 var DT = $S.getDT();
 var requestId = $S.getRequestId();
 var configGtag = false;
-
+var FilterIndexStartDate = "dateFilter:startDate";
+var FilterIndexEndDate = "dateFilter:endDate";
 AppHandler = function(arg) {
     return new AppHandler.fn.init(arg);
 };
@@ -1497,7 +1498,88 @@ AppHandler.extend({
         this._applyKeyMapping(keyMapping, currentAppData, metaData);
         return this.generateFilterData(currentAppData, metaData, csvData, filterSelectedValues, searchParam);
     },
-    getFilteredData: function(currentAppData, metaData, csvData, filterOptions, searchParam) {
+    _getDateFilterData: function(reportData, filterOptions, searchParam, dateParameterField) {
+        var i, j, k;
+        var temp, temp3, fieldValue;
+        var filterIndex, filterValue, allFieldValue;
+        var start, end, startDateFilterValue, endDateFilterValue;
+        if (!$S.isArray(reportData)) {
+            reportData = [];
+        }
+        if (!$S.isArray(filterOptions)) {
+            filterOptions = [];
+        }
+        if (!$S.isStringV2(searchParam)) {
+            searchParam = "name";
+        }
+        if (!$S.isObject(dateParameterField)) {
+            dateParameterField = {};
+        }
+        for(k=0; k<filterOptions.length; k++) {
+            filterIndex = filterOptions[k].dataKey;
+            filterValue = filterOptions[k].selectedValue;
+            allFieldValue = filterOptions[k].allFieldValue;
+            if (filterIndex === FilterIndexStartDate) {
+                if (allFieldValue !== filterValue && this.isValidDateStr(filterValue)) {
+                    startDateFilterValue = filterValue;
+                }
+            }
+            if (filterIndex === FilterIndexEndDate) {
+                if (allFieldValue !== filterValue && this.isValidDateStr(filterValue)) {
+                    endDateFilterValue = filterValue;
+                }
+            }
+        }
+        if ($S.isStringV2(startDateFilterValue) || $S.isStringV2(endDateFilterValue)) {
+            temp3 = [];
+            for (i = 0; i < reportData.length; i++) {
+                temp = reportData[i];
+                filterIndex = dateParameterField["fieldName"];
+                if ($S.isObject(temp) && $S.isString(temp[filterIndex])) {
+                    fieldValue = temp[filterIndex];
+                    if ($S.isStringV2(startDateFilterValue)) {
+                        start = startDateFilterValue;
+                    } else {
+                        start = fieldValue;
+                    }
+                    if ($S.isStringV2(endDateFilterValue)) {
+                        end = endDateFilterValue;
+                    } else {
+                        end = fieldValue;
+                    }
+                    if (this.isDateLiesInRange(start, end, fieldValue)) {
+                        temp3.push(temp);
+                    }
+                } else if ($S.isArray(temp)) {
+                    for (j=0; j<temp.length; j++) {
+                        if (!$S.isObject(temp[j])) {
+                            continue;
+                        }
+                        if (temp[j][searchParam] === filterIndex) {
+                            fieldValue = temp[j]["value"];
+                            if ($S.isStringV2(startDateFilterValue)) {
+                                start = startDateFilterValue;
+                            } else {
+                                start = fieldValue;
+                            }
+                            if ($S.isStringV2(endDateFilterValue)) {
+                                end = endDateFilterValue;
+                            } else {
+                                end = fieldValue;
+                            }
+                            if (this.isDateLiesInRange(start, end, fieldValue)) {
+                                temp3.push(temp);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            reportData = temp3;
+        }
+        return reportData;
+    },
+    getFilteredData: function(currentAppData, metaData, csvData, filterOptions, searchParam, dateParameterField) {
         var reportData = csvData;
         var metaDataTemp = this._getRequiredMetaData(currentAppData, metaData);
         var preFilter = metaDataTemp["preFilter"];
@@ -1525,6 +1607,7 @@ AppHandler.extend({
         if (!$S.isArray(filterOptions)) {
             filterOptions = [];
         }
+        reportData = this._getDateFilterData(reportData, filterOptions, searchParam, dateParameterField);
         for(k=0; k<filterOptions.length; k++) {
             filterIndex = filterOptions[k].dataKey;
             filterValue = filterOptions[k].selectedValue;
@@ -1543,7 +1626,7 @@ AppHandler.extend({
                    }
                 }
             }
-            if (!$S.isString(filterIndex) || filterIndex === "") {
+            if (!$S.isString(filterIndex) || filterIndex === "" || [FilterIndexStartDate, FilterIndexEndDate].indexOf(filterIndex) >= 0) {
                 continue;
             }
             if (!$S.isString(filterValue)) {
@@ -1581,9 +1664,9 @@ AppHandler.extend({
         }
         return reportData;
     },
-    getFilteredDataV2: function(keyMapping, currentAppData, metaData, csvData, filterOptions, searchParam) {
+    getFilteredDataV2: function(keyMapping, currentAppData, metaData, csvData, filterOptions, searchParam, dateParameterField) {
         this._applyKeyMapping(keyMapping, currentAppData, metaData);
-        return this.getFilteredData(currentAppData, metaData, csvData, filterOptions, searchParam);
+        return this.getFilteredData(currentAppData, metaData, csvData, filterOptions, searchParam, dateParameterField);
     }
 });
 AppHandler.extend({

@@ -1,5 +1,6 @@
 {
     "filterKeys": ["station", "team", "designation", "username", "reset"],
+    "onlyPreFilterKeys": ["dateFilter:startDate","dateFilter:endDate"],
     "allFilterValue": {
         "station": "__all_station__"
     },

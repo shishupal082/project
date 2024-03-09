@@ -282,7 +282,7 @@ DataHandlerV2.extend({
         var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", {});
         var dateSelect = DataHandler.getData("selectedDateType", "");
         var filterOptions = this._getFilterOptions();
-        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
+        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name", dateParameterField);
         dbViewDataTable = this._applyAccountNameFilterV2(dbViewDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
         renderData = $S.sortResult(renderData, "descending", "name");
@@ -296,7 +296,7 @@ DataHandlerV2.extend({
         var dateParameterField = DataHandler.getAppData(pageName + ":dateParameterField", {});
         var dateSelect = DataHandler.getData("selectedDateType", "");
         var filterOptions = this._getFilterOptions();
-        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name");
+        dbViewDataTable = AppHandler.getFilteredData(currentAppData, metaData, dbViewDataTable, filterOptions, "name", dateParameterField);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(dbViewDataTable, currentList3Data, dateParameterField, dateSelect);
         renderData = $S.sortResult(renderData, "descending", "name");
         return renderData;
