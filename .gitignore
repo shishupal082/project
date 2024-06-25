@@ -6,14 +6,14 @@ nodejs/build/
 nodejs/package-lock.json
 nodejs/version.txt
 
-reactjs/reactapp-2/node_modules/
-reactjs/reactapp-2/build/
-reactjs/reactapp-2/package-lock.json
-reactjs/reactapp-2/public/index.html
+reactjs/reactapp/node_modules/
+reactjs/reactapp/build/
+reactjs/reactapp/package-lock.json
+reactjs/reactapp/public/index.html
 
 
-reactjs/reactapp-2/src/react-auth-app/node_modules/
-reactjs/reactapp-2/src/react-auth-app/build/
+reactjs/reactapp/src/react-auth-app/node_modules/
+reactjs/reactapp/src/react-auth-app/build/
 
 */a.out
 */*/a.out

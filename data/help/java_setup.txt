@@ -17,15 +17,30 @@ Download java installer (Not x64 Compressed Archive	 or x64 MSI Installer)
 If we are installing jdk then we don't need to download jre seprately.
 
 Now install it and configure as below
-Set environment variable (System variable not User variable)
-1) JAVA_HOME
-2) PATH (%Java_HOME%\bin;C:\Program Files\Oracle\)
+
+Set System environment variable
+1) Path (C:\Program Files\Java\jdk-22\bin; or %Java_HOME%\bin; or C:\Program Files\Oracle\;)
+
+Set User environment variable
+1) JAVA_HOME (C:\Program Files\Java\jdk-22)
+
+System variable --> Edit --> New --> Add bin path C:\Program Files\Java\jdk-22\bin
+User variable --> New --> JAVA_HOME: C:\Program Files\Java\jdk-22
+
+Now you can check
+1) java -version
+2) javac -version
+
 
 MAVEN installation
 -----------------------------
-Download and keep in program files
-Add user variable --> Path
-bin directory to maven
-Pre requisite:
+Download bin zip file --> extract and keep in program files
+Add System variable --> Path
+
+Pre requisite (System user variable):
 - JAVA_HOME path should be set (jdk bin folder path)
-> Environment variable --> User variable
+
+Set System environment variable
+
+1) Path --> Edit --> New (C:\Program-Files\apache-maven-3.9.8-bin\apache-maven-3.9.8\bin)
+

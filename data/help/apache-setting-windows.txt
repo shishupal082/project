@@ -1,4 +1,4 @@
-Download apache
+Download apache (https://www.apachelounge.com/download/#google_vignette)
 Put it into C drive (Apache24)
 Run httpd.exe using command line or from services
 
@@ -39,6 +39,8 @@ Comment # Options Indexes FollowSymLinks
 Configure apache with php
 --------------------------------------------------
 
+>> Details is available in php-setting-window.txt
+
 Verify php is installed or not
 php -v
 create index.php and add bellow line
@@ -49,15 +51,6 @@ create index.php and add bellow line
 
 Add below line at the bottom of https.conf
 
-PHPIniDir "C:/php-5.4.5"
-AddHandler application/x-httpd-php .php
-LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
-
-or
-
-PHPIniDir "C:/php-8.2.12-Win32-vs16-x64"
-AddHandler application/x-httpd-php .php
-LoadModule php8_module "C:/php-8.2.12-Win32-vs16-x64/php8apache2_4.dll"
 
 Start /stop Apache in windows 10
 ----------------------------------

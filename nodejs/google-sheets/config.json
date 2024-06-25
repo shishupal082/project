@@ -1,0 +1,9 @@
+{
+    "baseUrl": "http://localhost",
+    "port": "8082",
+    "finalCallingConfig": {
+        "nodejs-gs-csv-file-data-nodejs": "csv-file-data-nodejs",
+        "nodejs-gs-drawing-status": "csv-drawing-status",
+        "gs-expenditure": "csv-expenditure"
+    }
+}

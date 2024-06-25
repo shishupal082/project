@@ -1,0 +1,38 @@
+23.06.2024
+
+Follow youtub video for ref
+
+Download mysql software
+-----------------------------------------------------
+https://www.mysql.com/downloads/
+-- Mysql
+-- Downloads
+-- Click on (MySQL Community (GPL) Downloads)
+-- Click on (MySQL Installer for Windows)
+-- Select version
+
+Now run exe file
+-- Choose custom
+-- Select MySQL Server 8.0.37 x64
+-- Select MySQL Workbench 8.0.37 x64
+-- Select MySQL Shell 8.0.37 x64
+Note: router not required
+
+-- Click on next
+
+
+Set root password
+
+One installation done
+Do setup for environment variable
+
+Copy mysql server bin path: C:\Program Files\MySQL\MySQL Server 8.0\bin
+Open edit system variable
+System variable --> Path --> Edit --> New and paste above path
+
+Now open cmd line and check version
+$ mysql --version
+$ mysql -u root -p
+root@123
+show databases;
+

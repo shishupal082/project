@@ -5,14 +5,18 @@ Keep it into C drive
 Configure php 5 properly with apache
 Then it should work properly after following configuration
 
+Set System environment variable
+1) Path (C:\Program-Files\php-8.3.8)
+
+Verify php is installed or not
+php -v
+
 1) add environment variable C:\php-5.4.5
 2) copy php.ini-development as php.ini
 uncomment extension_dir = "ext"
 After that restart terminal and check
 
-Verify php is installed or not
-php -v
-create index.php and add bellow line
+create index.php and add below line
 
 <? phpinfo(); ?>
 
@@ -31,6 +35,19 @@ To configure change conf/httpd.conf in apache
 PHPIniDir "C:/php-5.4.5"
 AddHandler application/x-httpd-php .php
 LoadModule php5_module "C:/php-5.4.5/php5apache2_4.dll"
+
+or
+
+PHPIniDir "C:/php-8.2.12-Win32-vs16-x64"
+AddHandler application/x-httpd-php .php
+LoadModule php8_module "C:/php-8.2.12-Win32-vs16-x64/php8apache2_4.dll"
+
+or
+
+PHPIniDir "C:/Program-Files/php-8.3.8"
+AddHandler application/x-httpd-php .php
+LoadModule php_module "C:/Program-Files/php-8.3.8/php8apache2_4.dll"
+
 
 3) Set environment and config_file_path for access in php files
 
