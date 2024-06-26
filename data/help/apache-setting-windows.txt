@@ -34,6 +34,10 @@ Change to
 DocumentRoot "d:/workspace/project"
 <Directory "d:/workspace/project">
 
+********** <Directory/> config **********
+AllowOverride All     // It will allow .htaccess rule to be follow
+Require all granted   // No permission required
+
 Inside directory tag
 => Options Indexes FollowSymLinks Multiviews
 Here Indexes tag allow your folder to access if index.html or index.php file is missing

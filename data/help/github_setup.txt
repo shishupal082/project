@@ -1,11 +1,12 @@
 Generate ssh key
-- ssh-keygen -t rsa -C "your_email@example.com"
+- ssh-keygen -t rsa -C "shishupal082@gmail.com"
 This will create both id_rsa and id_rsa.pub files.
+
 Now copy id_rsa.pub text and save on github.com.
 
 Test ssh connection:
 - ssh -T git@github.com
 
 Do github config setting
-- git config --global user.email "you@example.com"
-- git config --global user.name "Your Name"
+- git config --global user.email "shishupal082@gmail.com"
+- git config --global user.name "Shishupal Kumar"
