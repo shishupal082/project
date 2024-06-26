@@ -3,7 +3,10 @@
 // define('CONFIG_FILE', $_SERVER['ENVIRONMENT_FILE']);
 // define('ENVIRONMENT', $_SERVER['ENVIRONMENT']);
 
+// print_r($_SERVER);
+
 $ServerAdmin = $_SERVER['SERVER_ADMIN'];
+
 $arr = explode(";", $ServerAdmin);
 $configFilePath = $arr[0];
 $environment = $arr[1];

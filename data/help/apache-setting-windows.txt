@@ -1,5 +1,9 @@
-Download apache (https://www.apachelounge.com/download/#google_vignette)
+Download apache zip file (https://www.apachelounge.com/download/#google_vignette)
+
+-- Copy from workspace/project/software/Apache24.zip
+
 Put it into C drive (Apache24)
+
 Run httpd.exe using command line or from services
 
 Testing of apache installation:
@@ -46,11 +50,6 @@ php -v
 create index.php and add bellow line
 
 <? phpinfo(); ?>
-
-/*Configure php with apache */
-
-Add below line at the bottom of https.conf
-
 
 Start /stop Apache in windows 10
 ----------------------------------
