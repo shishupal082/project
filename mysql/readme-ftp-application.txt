@@ -3,10 +3,7 @@ Database required for ftp-application:
 username: mysql
 password: mysql
 
-mysql user details
-----------------------
-Role --> Custom
-Global privilage --> Select, Update, Insert
+mysql user details under: mysql --> readme.txt
 
 ftpapp database
 ----------------------
