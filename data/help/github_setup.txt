@@ -10,3 +10,4 @@ Test ssh connection:
 Do github config setting
 - git config --global user.email "shishupal082@gmail.com"
 - git config --global user.name "Shishupal Kumar"
+- git config --global core.autocrlf false

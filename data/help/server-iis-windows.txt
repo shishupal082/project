@@ -1,0 +1,12 @@
+IIS (Internet information services) setup
+---------------------------------------------
+Go to
+Control panel (View by category) --> Programs --> Programs and Features (Turn Windows features on or off)
+New window will open (Windows Features)
+
+For windows 8 server
+Open server manager
+Roles (Right click) --> Add role --> Next --> Select web server (IIS)
+
+Now localhost should work
+Now configure basic settings to change default folder dir
