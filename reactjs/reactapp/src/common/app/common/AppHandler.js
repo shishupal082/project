@@ -638,7 +638,7 @@ AppHandler.extend({
                     tableData[request[i].apiName] = {};
                 }
                 tableData[request[i].apiName]["request"] = request[i];
-                tableData[request[i].apiName]["tableName"] = request[i].apiName;
+                tableData[request[i].apiName]["tableName"] = request[i].tableName;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 if ($S.isArray(request[i].response)) {
                     for (j=0; j<request[i].response.length; j++) {
@@ -651,7 +651,7 @@ AppHandler.extend({
         return tableData;
     },
     GenerateDatabaseV2: function(request, dbTableDataIndex) {
-        var tableData = {}, i, temp;
+        var tableData = {}, finalTableData = {}, i, temp, tableName;
         var wordBreak, dataIndex;
         if (!$S.isObject(dbTableDataIndex)) {
             dbTableDataIndex = {};
@@ -664,36 +664,54 @@ AppHandler.extend({
                 if (!$S.isString(request[i].apiName) || request[i].apiName.length < 1) {
                     continue;
                 }
+                if (!$S.isString(request[i].tableName) || request[i].tableName.length < 1) {
+                    continue;
+                }
                 if ($S.isUndefined(tableData[request[i].apiName])) {
                     tableData[request[i].apiName] = {};
                 }
+                tableName = request[i].tableName;
                 dataIndex = request[i].dataIndex;
                 if (!$S.isArrayV2(dataIndex)) {
-                    if ($S.isStringV2(request[i].apiName) && $S.isArray(dbTableDataIndex[request[i].apiName])) {
-                        dataIndex = dbTableDataIndex[request[i].apiName];
+                    if ($S.isStringV2(tableName) && $S.isArray(dbTableDataIndex[tableName])) {
+                        dataIndex = dbTableDataIndex[tableName];
                     }
                 }
                 tableData[request[i].apiName]["request"] = request[i];
-                tableData[request[i].apiName]["tableName"] = request[i].apiName;
+                tableData[request[i].apiName]["tableName"] = tableName;
                 tableData[request[i].apiName]["dataIndex"] = dataIndex;
                 tableData[request[i].apiName]["apis"] = request[i].apis;
                 tableData[request[i].apiName]["wordBreak"] = request[i].wordBreak;
                 tableData[request[i].apiName]["skipEmpty"] = request[i].skipEmpty;
                 tableData[request[i].apiName]["response"] = request[i].response;
+                tableData[request[i].apiName]["responseType"] = request[i].responseType;
             }
         }
-        for(var key in tableData) {
-            tableData[key]["responseJson"] = [];
-            wordBreak = tableData[key].wordBreak;
-            if ($S.isArray(tableData[key]["response"])) {
-                for(i=0; i<tableData[key]["response"].length; i++) {
-                    temp = this.ParseTextData(tableData[key]["response"][i], wordBreak, tableData[key].skipEmpty, true, tableData[key]["request"]);
-                    tableData[key]["responseJson"] = tableData[key]["responseJson"].concat(temp);
+        for(var apiName in tableData) {
+            tableName = tableData[apiName]["tableName"];
+            if ($S.isUndefined(finalTableData[tableName])) {
+                finalTableData[tableName] = {};
+                finalTableData[tableName]["tableData"] = [];
+            }
+            if (tableData[apiName]["responseType"] === "json") {
+                if ($S.isArray(tableData[apiName]["response"])) {
+                    for(i=0; i<tableData[apiName]["response"].length; i++) {
+                        finalTableData[tableName]["tableData"] = finalTableData[tableName]["tableData"].concat(tableData[apiName]["response"][i]);
+                    }
                 }
+            } else {
+                tableData[apiName]["responseJson"] = [];
+                wordBreak = tableData[apiName].wordBreak;
+                if ($S.isArray(tableData[apiName]["response"])) {
+                    for(i=0; i<tableData[apiName]["response"].length; i++) {
+                        temp = this.ParseTextData(tableData[apiName]["response"][i], wordBreak, tableData[apiName].skipEmpty, true, tableData[apiName]["request"]);
+                        tableData[apiName]["responseJson"] = tableData[apiName]["responseJson"].concat(temp);
+                    }
+                }
+                finalTableData[tableName]["tableData"] = finalTableData[tableName]["tableData"].concat(this.ConvertJsonToTable(tableData[apiName]["responseJson"], tableData[apiName]["dataIndex"]));
             }
-            tableData[key]["tableData"] = this.ConvertJsonToTable(tableData[key]["responseJson"], tableData[key]["dataIndex"]);
         }
-        return tableData;
+        return finalTableData;
     },
     GenerateDatabase: function(request, dbTableDataIndex) {
         var i, tableName, apiName;
@@ -807,9 +825,13 @@ AppHandler.extend({
                 temp.dataIndex = dbDataApis[i].dataIndex;
                 temp.wordBreak = dbDataApis[i].wordBreak;
                 temp.singleLineComment = dbDataApis[i].singleLineComment;
-                temp.apiName = dbDataApis[i].tableName.trim();
+                temp.apiName = dbDataApis[i].apiName;
+                temp.tableName = dbDataApis[i].tableName;
                 temp.requestMethod = ajaxApiCallMethod;
                 temp.url = urls;
+                if (!$S.isStringV2(temp.apiName)) {
+                    temp.apiName = temp.tableName;
+                }
                 request.push(temp);
             }
         }
@@ -1138,6 +1160,9 @@ AppHandler.extend({
                 return false;
             }
             if (!$S.isString(el.apiName)) {
+                return false;
+            }
+            if ($S.isStringV2(el.responseType) && el.responseType !== "json") {
                 return false;
             }
             if (!$S.isFunction(el.requestMethod)) {
@@ -1651,7 +1676,11 @@ AppHandler.extend({
                         }
                         if (temp[j][searchParam] === filterIndex) {
                             searchByPattern = this.getSearchByPattern(filterOptions[k].text, filterValue, isRevert);
-                            temp2 = $S.searchItems([filterValue], [temp[j]["value"]], searchByPattern, isRevert);
+                            if (temp[j]["value"] === null || $S.isUndefined(temp[j]["value"])) {
+                                temp2 = $S.searchItems([filterValue], [""], searchByPattern, isRevert);
+                            } else {
+                                temp2 = $S.searchItems([filterValue], [temp[j]["value"]], searchByPattern, isRevert);
+                            }
                             if (temp2.length > 0) {
                                 temp3.push(temp);
                                 break;

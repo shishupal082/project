@@ -141,14 +141,16 @@ li code{
             <li><code tabindex="1">use db1;</code></li>
             <li><code tabindex="1">show tables;</code></li>
             <li><code tabindex="1">desc [table_name];</code></li>
+            <li><code tabindex="1">describe ftpapp.file_path; (Use without database selection)</code></li>
             <li><code tabindex="1">drop database db1;</code></li>
             <li><code tabindex="1">drop table users;</code></li>
             <li><code tabindex="1">DROP TABLE IF EXISTS `users`;</code></li>
-            <li><code tabindex="1">select * from city limit 10;</code></li>
+            <li><code tabindex="1">select * from city order by id desc limit 10;</code></li>
+            <li><code tabindex="1">select * from city order by id asc limit 10;</code></li>
             <li><code tabindex="1">select * from city limit 2, 10; (10 result starting from 3)</code></li>
             <li><code tabindex="1">select * from [table_name];</code></li>
             <li><code tabindex="1">select * from [table_name] where [column_name] is NULL;</code></li>
-            <li><code tabindex="1"> INSERT INTO book (id, name, email) values(1,"name","name@domain.com");</code></li>
+            <li><code tabindex="1">INSERT INTO book (id, name, email) values(1,"name","name@domain.com"), (2,"name2","name2@domain.com");</code></li>
             <li><code tabindex="1">UPDATE book SET id=2 where id=0;</code></li>
             <li><code tabindex="1">DELETE FROM book where id=0;</code></li>
             <li><code tabindex="1">ALTER TABLE users RENAME TO users_2018;</code></li>

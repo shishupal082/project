@@ -384,13 +384,21 @@
                 "tableName": "table1",
                 "wordBreak": ",",
                 "singleLineComment": "//",
+                "apiName": 1,
                 "dataIndex": ["date", "team", "station", "designation", "userId", "name", "description"],
                 "apis": ["/app/attendance/static/csv/user_data.csv"]
             },
             {
                 "tableName": "table2",
+                "apiName": 2,
                 "dataIndex": ["entryTime", "userId", "date", "username", "type", "updatedBy", "description"],
                 "apis": ["/app/attendance/static/csv/attendance.csv"]
+            },
+            {
+                "tableName": "table3",
+                "responseType": "json",
+                "apiName": 3,
+                "apis": ["/app/attendance/static/csv/user_data.json"]
             }
         ],
         "attendanceDataApis": [

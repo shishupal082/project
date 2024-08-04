@@ -238,7 +238,11 @@ CommonDataHandler.extend({
             metaDataApi = [];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
+            if (el.split("?").length > 1) {
+                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion;
+            } else {
+                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
+            }
         });
         var metaDataRequest = {
                             "url": metaDataApi,

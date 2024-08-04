@@ -103,18 +103,8 @@ ApiHandler.extend({
                 temp.apis = dbDataApis[i].apis;
                 temp.dataIndex = dbDataApis[i].dataIndex;
                 temp.wordBreak = dbDataApis[i].wordBreak;
-                temp.apiName = dbDataApis[i].apiName;
-                temp.tableName = dbDataApis[i].tableName;
-                temp.singleLineComment = dbDataApis[i].singleLineComment;
-                temp.responseType = dbDataApis[i]["responseType"];
-                if (temp.responseType === "json") {
-                    temp.requestMethod = Api.getAjaxApiCallMethod();
-                } else {
-                    temp.requestMethod = Api.getAjaxApiCallMethodV2();
-                }
-                if (!$S.isStringV2(temp.apiName)) {
-                    temp.apiName = temp.tableName;
-                }
+                temp.apiName = dbDataApis[i].tableName.trim();
+                temp.requestMethod = Api.getAjaxApiCallMethodV2();
                 temp.url = urls;
                 request.push(temp);
             }
