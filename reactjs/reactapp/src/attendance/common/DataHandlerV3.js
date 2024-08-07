@@ -244,6 +244,21 @@ DataHandlerV3.extend({
         finalTable = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, resultCriteria, requiredDataTable);
         DataHandler.setData("dbViewDataTable", finalTable);
     },
+    _formateRequestResponse: function(request) {
+        var i, j;
+        if ($S.isArray(request)) {
+            for(i=0; i<request.length; i++) {
+                if ($S.isObject(request[i]) && $S.isArray(request[i]["response"])) {
+                    for(j=0; j<request[i]["response"].length; j++) {
+                        if ($S.isObject(request[i]["response"][j]) && $S.isArray(request[i]["response"][j]["data"])) {
+                            request[i]["response"][j] = request[i]["response"][j]["data"];
+                        }
+                    }
+                }
+            }
+        }
+        return request;
+    },
     handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = DataHandler.getDataLoadStatusByKey(keys);
@@ -254,6 +269,7 @@ DataHandlerV3.extend({
             if (status === "not-started") {
                 DataHandler.setData("dbDataLoadStatus", "in_progress");
                 this._loadDBViewData(dbDataApis, function(request) {
+                    request = self._formateRequestResponse(request);
                     tableData = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
                     self._callTcpService(function(jsonResponse) {
                         DataHandler.setData("dbDataLoadStatus", "completed");
