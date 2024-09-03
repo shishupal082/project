@@ -1,0 +1,230 @@
+Required generic table in ftp-app for smms
+-------------------------------------------
+create table smms_assets(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    file_date varchar(255) default null,
+    sub_section varchar(255) default null,
+    section_officer varchar(255) default null,
+    s_no varchar(255) default null,
+    asset_type varchar(255) default null,
+    asset_code varchar(255) default null,
+
+    gear_name varchar(255) default null,
+    rfid varchar(255) default null,
+    make varchar(255) default null,
+    model varchar(255) default null,
+    serial_no varchar(255) default null,
+    latitude varchar(255) default null,
+    longitude varchar(255) default null,
+    installation_date varchar(255) default null,
+    waranty_expiry_date varchar(255) default null,
+
+    location varchar(255) default null,
+    location_type varchar(255) default null,
+    section varchar(255) default null,
+    division varchar(255) default null,
+    zone varchar(255) default null,
+    status varchar(255) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+create table sia_data(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    unit varchar(127) default null,
+    sub_unit varchar(127) default null,
+
+    incident_date varchar(63) default null,
+    division varchar(127) default null,
+    station varchar(127) default null,
+    failure_description varchar(1023) default null,
+
+    failure_time varchar(63) default null,
+    rectification_time varchar(63) default null,
+
+    icms_type varchar(127) default null,
+    rb_case varchar(127) default null,
+    affected_trains varchar(255) default null,
+    affected_trains_goods_count varchar(255) default null,
+    train_discription varchar(1023) default null,
+    remarks varchar(4095) default null,
+    device varchar(127) default null,
+    sub_device varchar(127) default null,
+    department varchar(127) default null,
+
+    department_reason varchar(127) default null,
+    department_reason_detail varchar(127) default null,
+    punctuality_loss_train varchar(127) default null,
+    asset_damage varchar(127) default null,
+    asset_damage_cost varchar(127) default null,
+    device_make varchar(127) default null,
+
+    de_number varchar(127) default null,
+    de_date varchar(127) default null,
+    failue_memo_no varchar(127) default null,
+    disconnection_memo_no varchar(127) default null,
+    attended_by varchar(127) default null,
+    disconnection_required_at varchar(63) default null,
+    disconnection_allowed varchar(255) default null,
+    disconnection_allowed_at varchar(63) default null,
+    reconnection_given_at varchar(255) default null,
+    data_entered_at varchar(63) default null,
+    data_entered_by varchar(127) default null,
+    data_edited_at varchar(63) default null,
+    data_edited_by varchar(127) default null,
+    updated_reason varchar(127) default null,
+    row_id varchar(127) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+
+ALTER TABLE sia_data MODIFY remarks varchar(4095) default null;
+ALTER TABLE sia_data MODIFY failure_description varchar(1023) default null;
+
+create table staff_rnc (
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    file_date varchar(31) default null,
+    s_no varchar(15) default null,
+    pf_no varchar(15) default null,
+
+    hrms_id varchar(15) default null,
+    name varchar(127) default null,
+    designation varchar(63) default null,
+    department varchar(31) default null,
+
+    gender varchar(15) default null,
+    category varchar(63) default null,
+    mobile varchar(31) default null,
+    email varchar(127) default null,
+
+    dob varchar(31) default null,
+    doa varchar(31) default null,
+    dop varchar(31) default null,
+    hq varchar(63) default null,
+    unit varchar(63) default null,
+    section varchar(63) default null,
+    sub_section varchar(63) default null,
+    education_qualification varchar(127) default null,
+    remarks varchar(255) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+create table bill_details (
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    file_date varchar(31) default null,
+    bill_date varchar(31) default null,
+    material_received_date varchar(31) default null,
+    co7_date varchar(31) default null,
+    bill_allocation varchar(63) default null,
+    bill_type varchar(63) default null,
+    s_no varchar(15) default null,
+    org_bill_date varchar(31) default null,
+    req_no varchar(63) default null,
+    description varchar(511) default null,
+    detail_escription varchar(1023) default null,
+    org_material_received_date varchar(31) default null,
+    qty varchar(15) default null,
+    amount varchar(15) default null,
+    po_no varchar(63) default null,
+    consignee varchar(63) default null,
+    agency varchar(63) default null,
+    crn_detail varchar(63) default null,
+    org_co7_date varchar(31) default null,
+    co7_number varchar(63) default null,
+    remarks varchar(511) default null,
+    project_id varchar(31) default null,
+    allocation varchar(31) default null,
+    billing_work_id varchar(63) default null,
+    bill_allocation_org varchar(63) default null,
+    work_id varchar(63) default null,
+    bill_unique_number varchar(63) default null,
+    irpsm_amount varchar(31) default null,
+    executing_agency varchar(63) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+create table requisition_status (
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    req_date varchar(31) default null,
+    dp_date varchar(31) default null,
+    remark_date varchar(31) default null,
+    material_status varchar(63) default null,
+    file_date varchar(31) default null,
+    department varchar(31) default null,
+    s_no varchar(31) default null,
+    items varchar(255) default null,
+    unit varchar(15) default null,
+    qty varchar(15) default null,
+    demand_no varchar(63) default null,
+    demand_date varchar(31) default null,
+    budget varchar(15) default null,
+    req_rate varchar(31) default null,
+    req_amount varchar(31) default null,
+    allocation varchar(31) default null,
+    project_id varchar(31) default null,
+    work_id varchar(63) default null,
+    estimate_no varchar(255) default null,
+    estimate_item_no varchar(31) default null,
+    po_number varchar(63) default null,
+    dp varchar(31) default null,
+    po_rate varchar(31) default null,
+    po_amount varchar(31) default null,
+    material_received_remark varchar(31) default null,
+    bill_paid varchar(31) default null,
+    co7_number varchar(31) default null,
+    req_remark varchar(1023) default null,
+    row_unique_number varchar(255) default null,
+    project_id_item_no varchar(63) default null,
+
+    estimate_ref_count varchar(15) default null,
+    estimate_remark varchar(511) default null,
+    indent_status varchar(127) default null,
+    category varchar(127) default null,
+    sub_category varchar(127) default null,
+    make varchar(127) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+ALTER TABLE requisition_status ADD material_status varchar(63) default null AFTER id;
+ALTER TABLE requisition_status ADD remark_date varchar(31) default null AFTER id;
+ALTER TABLE requisition_status ADD dp_date varchar(31) default null AFTER id;
+ALTER TABLE requisition_status ADD req_date varchar(31) default null AFTER id;
+
+ALTER TABLE requisition_status MODIFY estimate_no varchar(255) default null;
+
+ALTER TABLE requisition_status rename column material_received_date to material_received_remark;
+

@@ -167,6 +167,24 @@ body.theme-grey {
 .w-300px {
     width: 300px;
 }
+.w-400px {
+    width: 400px;
+}
+.w-500px {
+    width: 500px;
+}
+.w-600px {
+    width: 600px;
+}
+.min-w-120px {
+    min-width: 120px;
+}
+.min-w-160px {
+    min-width: 160px;
+}
+.min-w-200px {
+    min-width: 200px;
+}
 .max-w-120px {
     max-width: 120px;
 }
