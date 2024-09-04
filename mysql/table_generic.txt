@@ -145,11 +145,11 @@ create table bill_details (
     description varchar(511) default null,
     detail_escription varchar(1023) default null,
     org_material_received_date varchar(31) default null,
-    qty varchar(15) default null,
-    amount varchar(15) default null,
-    po_no varchar(63) default null,
+    qty varchar(127) default null,
+    amount varchar(127) default null,
+    po_no varchar(127) default null,
     consignee varchar(63) default null,
-    agency varchar(63) default null,
+    agency varchar(255) default null,
     crn_detail varchar(63) default null,
     org_co7_date varchar(31) default null,
     co7_number varchar(63) default null,
@@ -169,6 +169,12 @@ create table bill_details (
     -- boolean (tinyint, 1 byte, max = 127)
     deleted boolean default false
 );
+
+ALTER TABLE bill_details MODIFY qty varchar(127) default null;
+ALTER TABLE bill_details MODIFY amount varchar(127) default null;
+ALTER TABLE bill_details MODIFY po_no varchar(127) default null;
+ALTER TABLE bill_details MODIFY agency varchar(255) default null;
+
 
 create table requisition_status (
     -- auto-generated primary key
@@ -223,8 +229,6 @@ ALTER TABLE requisition_status ADD material_status varchar(63) default null AFTE
 ALTER TABLE requisition_status ADD remark_date varchar(31) default null AFTER id;
 ALTER TABLE requisition_status ADD dp_date varchar(31) default null AFTER id;
 ALTER TABLE requisition_status ADD req_date varchar(31) default null AFTER id;
-
-ALTER TABLE requisition_status MODIFY estimate_no varchar(255) default null;
 
 ALTER TABLE requisition_status rename column material_received_date to material_received_remark;
 

@@ -130,48 +130,58 @@ JavaExcelService.extend({
     },
     getNextWorkId: function(_container, fileMapping) {
         if (FINAL_CALLING_CONFIG[_container["WORK_ID"]]) {
-            return FINAL_CALLING_CONFIG[_container["WORK_ID"]];
+            return {"id": FINAL_CALLING_CONFIG[_container["WORK_ID"]], "type": "csv_update"};
         }
         var fileMappingEntry;
         var requiredColIndex;
         var csvRequestIdIndex, callNext;
+        var updateMysqlIndex;
         if ($S.isArray(fileMapping) && fileMapping.length >= 0 && $S.isObject(fileMapping[0])) {
             fileMappingEntry = fileMapping[0];
             requiredColIndex = fileMappingEntry["requiredColIndex"];
-            if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 7) {
+            if ($S.isArray(requiredColIndex) && requiredColIndex.length >= 8) {
                 csvRequestIdIndex = requiredColIndex[5];
                 callNext = requiredColIndex[6];
-                if ($S.isNumeric(csvRequestIdIndex) && $S.isNumeric(callNext)) {
+                updateMysqlIndex = requiredColIndex[7];
+                if ($S.isNumeric(csvRequestIdIndex)) {
                     csvRequestIdIndex = csvRequestIdIndex*1;
+                } else {
+                    csvRequestIdIndex = -1;
+                }
+                if ($S.isNumeric(updateMysqlIndex)) {
+                    updateMysqlIndex = updateMysqlIndex*1;
+                } else {
+                    updateMysqlIndex = -1;
+                }
+                if ($S.isNumeric(callNext) && $S.isArray(fileMappingEntry["data"])) {
                     callNext = callNext * 1;
-                    if (csvRequestIdIndex >= 0 && callNext >= 0 && $S.isArray(fileMappingEntry["data"])) {
-                        if (fileMappingEntry["data"].length > csvRequestIdIndex) {
-                            if (fileMappingEntry["data"].length > callNext) {
-                                if (fileMappingEntry["data"][callNext] === "TRUE") {
-                                    if (fileMappingEntry["data"][csvRequestIdIndex]) {
-                                        return fileMappingEntry["data"][csvRequestIdIndex];
-                                    } else {
-                                        // console.log("next work id not defined for: " + _container["WORK_ID"]);
-                                        // console.log("Invalid config for next work id.");
-                                        return;
-                                    }
-                                }
-                            }
+                    if (callNext >= 0 && fileMappingEntry["data"].length > callNext && fileMappingEntry["data"][callNext] === "TRUE") {
+                        if (updateMysqlIndex >= 0 && fileMappingEntry["data"].length > updateMysqlIndex && $S.isStringV2(fileMappingEntry["data"][updateMysqlIndex])) {
+                            return {"id": fileMappingEntry["data"][updateMysqlIndex], "type": "csv_mysql_update"};
+                        }
+                        if (csvRequestIdIndex >= 0 && fileMappingEntry["data"].length > csvRequestIdIndex && $S.isStringV2(fileMappingEntry["data"][csvRequestIdIndex])) {
+                            return {"id": fileMappingEntry["data"][csvRequestIdIndex], "type": "csv_update"};
                         }
                     }
                 }
             }
 
         }
-        return "";
+        return {};
     },
     sendNextRequest: function(_container, fileMapping, callback) {
-        var nextWorkId = this.getNextWorkId(_container, fileMapping);
-        if ($S.isStringV2(nextWorkId)) {
+        var nextWork = this.getNextWorkId(_container, fileMapping);
+        if ($S.isObject(nextWork) && $S.isStringV2(nextWork["id"])) {
             setTimeout(function(){
-                ReadConfigData.callApi(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/update_excel_data?requestId=" + nextWorkId, function() {
-                    $S.callMethodV1(callback, "SUCCESS");
-                });
+                if (nextWork["type"] === "csv_mysql_update") {
+                    ReadConfigData.callApi(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/update_mysql_table_data_from_csv?table_config_id=" + nextWork["id"], function() {
+                        $S.callMethodV1(callback, "SUCCESS");
+                    });
+                } else {
+                    ReadConfigData.callApi(_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/update_excel_data?requestId=" + nextWork["id"], function() {
+                        $S.callMethodV1(callback, "SUCCESS");
+                    });
+                }
             }, 3000);
         } else {
             $S.callMethodV1(callback, "SUCCESS");

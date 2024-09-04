@@ -85,3 +85,5 @@ for each cell
     It will append into new row data as per original rowData
     Here, After creating new row using cellMappingConfig it will append cell no. 3 to 10 and 12 to end
 
+It will either call update_csv or update_mysql but not both.
+

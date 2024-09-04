@@ -24,6 +24,8 @@ keys.push("metaData");
 keys.push("metaDataLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("firstTimeDataLoadStatus");
+keys.push("configDataApiStatusInprogress");//[]
+keys.push("configDataApiStatusCompleted");//[]
 
 
 keys.push("loginUserDetailsLoadStatus");
@@ -62,6 +64,73 @@ CommonDataHandler.extend({
             CurrentData.setKeys(keys);
         }
         return isUpdated;
+    },
+    _updateConfigDataApiStatus: function(key, value) {
+        var completedStatus = CurrentData.getData("configDataApiStatusCompleted", [], true);
+        var inProgressStatus = CurrentData.getData("configDataApiStatusInprogress", [], true);
+        if (!$S.isArray(completedStatus)) {
+            completedStatus = [];
+        }
+        if (!$S.isArray(inProgressStatus)) {
+            inProgressStatus = [];
+        }
+        if ($S.isStringV2(key) && $S.isStringV2(value)) {
+            if (value === "completed") {
+                if (inProgressStatus.indexOf(key) >= 0) {
+                    inProgressStatus = inProgressStatus.filter(function(el, i, arr) {
+                        if (el === key) {
+                            return false;
+                        }
+                        return true;
+                    });
+                }
+                if (completedStatus.indexOf(key) >= 0) {
+                    return false;
+                }
+                completedStatus.push(key);
+            } else if (value === "in_progress") {
+                if (completedStatus.indexOf(key) >= 0) {
+                    completedStatus = completedStatus.filter(function(el, i, arr) {
+                        if (el === key) {
+                            return false;
+                        }
+                        return true;
+                    });
+                }
+                if (inProgressStatus.indexOf(key) >= 0) {
+                    return false;
+                }
+                inProgressStatus.push(key);
+            }
+        }
+        CurrentData.setData("configDataApiStatusCompleted", completedStatus, true);
+        CurrentData.setData("configDataApiStatusInprogress", inProgressStatus, true);
+        return true;
+    },
+    updateConfigDataApiStatusCompleted: function(key) {
+        return this._updateConfigDataApiStatus(key, "completed");
+    },
+    updateConfigDataApiStatusInProgress: function(key) {
+        return this._updateConfigDataApiStatus(key, "in_progress");
+    },
+    getConfigDataApiStatus: function(key) {
+        var completedStatus = CurrentData.getData("configDataApiStatusCompleted", [], true);
+        var inProgressStatus = CurrentData.getData("configDataApiStatusInprogress", [], true);
+        if (!$S.isArray(completedStatus)) {
+            completedStatus = [];
+        }
+        if (!$S.isArray(inProgressStatus)) {
+            inProgressStatus = [];
+        }
+        if ($S.isStringV2(key)) {
+            if (completedStatus.indexOf(key) >= 0) {
+                return "completed";
+            }
+            if (inProgressStatus.indexOf(key) >= 0) {
+                return "in_progress";
+            }
+        }
+        return "";
     },
     setData: function(key, value, isDirect) {
         return CurrentData.setData(key, value, isDirect);
@@ -162,12 +231,47 @@ CommonDataHandler.extend({
     clearMetaData: function() {
         this.setData("metaData", {});
     },
-    _handleMetaDataLoad: function(defaultMetaData, metaDataResponse) {
+    mergeResponseObject: function(obj1, obj2, obj3, currentResponse) {
+        var finalObj = {}, i, tempMetaData, temp;
+        var metaData = {};//DataHandler.getMetaData({});
+        var appControlMetaData = {};
+        if ($S.isObject(obj1)) {
+            finalObj = obj1;
+        }
+        if (!$S.isObject(metaData)) {
+            metaData = {};
+        }
+        if ($S.isObject(appControlMetaData)) {
+            finalObj = Object.assign(finalObj, appControlMetaData);
+        }
+        if ($S.isObject(metaData)) {
+            finalObj = Object.assign(finalObj, metaData);
+        }
+        if ($S.isArray(currentResponse)) {
+            for (i=0; i<currentResponse.length; i++) {
+                if ($S.isObject(currentResponse[i])) {
+                    tempMetaData = currentResponse[i];
+                    temp = tempMetaData.metaData;
+                    if ($S.isObject(temp)) {
+                        temp = Object.keys(temp);
+                        if (temp.length > 0) {
+                            tempMetaData = tempMetaData.metaData;
+                        }
+                    }
+                    finalObj = Object.assign(finalObj, tempMetaData);
+                }
+            }
+        }
+        return finalObj;
+    },
+    _handleMetaDataLoad: function(defaultMetaData, appControlMetaData, existingData, metaDataResponse) {
         var finalMetaData = {}, i, tempMetaData, temp;
-        var appControlMetaData = this.getData("appControlMetaData", {});
-        var metaData = this.getData("metaData", {});
+        var metaData = existingData;
         if ($S.isObject(defaultMetaData)) {
             finalMetaData = defaultMetaData;
+        }
+        if (!$S.isObject(metaData)) {
+            metaData = {};
         }
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = Object.assign(finalMetaData, appControlMetaData);
@@ -190,7 +294,7 @@ CommonDataHandler.extend({
                 }
             }
         }
-        this.setData("metaData", finalMetaData);
+        return finalMetaData;
     },
     setDateSelectParameter: function(appId) {
         var currentAppControlData = this.getAppDataById(appId, {});
@@ -234,6 +338,7 @@ CommonDataHandler.extend({
     },
     loadMetaDataByMetaDataApi: function(defaultMetaData, metaDataApi, callback) {
         var request = [];
+        var appControlMetaData, self;
         if (!$S.isArray(metaDataApi)) {
             metaDataApi = [];
         }
@@ -253,11 +358,38 @@ CommonDataHandler.extend({
         AppHandler.LoadDataFromRequestApi(request, function() {
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
-                    CommonDataHandler._handleMetaDataLoad(defaultMetaData, request[i].response);
+                    appControlMetaData = self.getData("appControlMetaData", {});
+                    defaultMetaData = self.getData("metaData", {});
+                    CommonDataHandler._handleMetaDataLoad(defaultMetaData, appControlMetaData, request[i].response);
                 }
             }
             CommonDataHandler.setData("metaDataLoadStatus", "completed");
             $S.log("metaData load complete");
+            $S.callMethod(callback);
+        });
+    },
+    loadConfigDataByApi: function(defaultConfigData, metaDataApi, callback) {
+        // apiType = configDataLoadStatus
+        var request = [];
+        if (!$S.isArray(metaDataApi)) {
+            metaDataApi = [];
+        }
+        metaDataApi = metaDataApi.map(function(el, i, arr) {
+            if (el.split("?").length > 1) {
+                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion;
+            } else {
+                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
+            }
+        });
+        var metaDataRequest = {
+                            "url": metaDataApi,
+                            "apiName": "configDataLoad",
+                            "requestMethod": Api.getAjaxApiCallMethod()};
+        request.push(metaDataRequest);
+        this.updateConfigDataApiStatusInProgress("configDataLoadStatus");
+        AppHandler.LoadDataFromRequestApi(request, function() {
+            this.updateConfigDataApiStatusCompleted("configDataLoadStatus");
+            $S.log("configData load complete");
             $S.callMethod(callback);
         });
     },

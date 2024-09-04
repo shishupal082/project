@@ -300,6 +300,33 @@ DBViewTemplateHandler.extend({
             }
         }
     },
+    _searchCount: function(trsData) {
+        if (!$S.isArray(trsData)) {
+            return 0;
+        }
+        var count = 0;
+        var countFound = false;
+        for (var i=0; i<trsData.length; i++) {
+            if (!$S.isArray(trsData[i])) {
+                continue;
+            }
+            for (var j=0; j<trsData[i].length; j++) {
+                if (!$S.isObject(trsData[i][j])) {
+                    continue;
+                }
+                if (trsData[i][j]["name"] === "count") {
+                    if ($S.isNumeric(trsData[i][j]["value"])) {
+                        countFound = true;
+                        count = count + (trsData[i][j]["value"] * 1);
+                    }
+                }
+            }
+        }
+        if (countFound) {
+            return count;
+        }
+        return trsData.length;
+    },
     _generateSummaryData: function(trsData, sortingFields) {
         var trData = [], temp, totalCount = 0;
         if ($S.isArray(trsData) && trsData.length > 0) {
@@ -316,14 +343,14 @@ DBViewTemplateHandler.extend({
                 if ($S.isArray(trsData[i].text) && trsData[i].text.length > 0) {
                     if ($S.isObject(trsData[i].text[0])) {
                         if ($S.isArray(trsData[i].text[0].text)) {
-                            temp["count"] = trsData[i].text[0].text.length;
+                            temp["count"] = this._searchCount(trsData[i].text[0].text);
                             totalCount += temp["count"];
                         } else {
-                            temp["count"] = trsData[i].text.length;
+                            temp["count"] = this._searchCount(trsData[i].text);
                             totalCount += temp["count"];
                         }
                     } else {
-                        temp["count"] = trsData[i].text.length;
+                        temp["count"] = this._searchCount(trsData[i].text);
                         totalCount += temp["count"];
                     }
                 } else {

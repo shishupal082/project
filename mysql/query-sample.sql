@@ -3,9 +3,8 @@ use ftpapp;
 
 show tables;
 
-
-
 desc staff_rnc;
+
 
 select * from requisition_status;
 
@@ -53,6 +52,7 @@ Select * from smms_assets where deleted=0 and division like "Test Ranchi";
 Select * from smms_assets where deleted=0 and (asset_code like "OIPBKPR00001" or asset_code like "OIPBKPR00002" 
 or asset_code like "OIPBLRG00001" or asset_code like "OIPBLRG00002");
 SELECT asset_code, COUNT(asset_code) FROM smms_assets where deleted=0 GROUP BY asset_code HAVING COUNT(asset_code) > 1;
+desc smms_assets;
 
 Select * from history_book;
 Select * from history_book order by added_time desc limit 10;
