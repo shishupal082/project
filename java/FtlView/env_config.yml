@@ -1,0 +1,18 @@
+logging:
+  level: INFO
+  loggers:
+    com.todo: INFO
+  appenders:
+    - type: console
+      logFormat: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{X-Session-Id} - %X{X-Request-Id}] - %c{15} - %msg%n%rEx"
+      threshold: ALL
+      timeZone: UTC
+
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+  connector:
+    port: 8080
+    type: http
+  rootPath: /*
