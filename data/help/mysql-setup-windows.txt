@@ -36,3 +36,26 @@ $ mysql -u root -p
 root@123
 show databases;
 
+
+07.09.2024
+--------------
+oracle database express edition download
+https://www.oracle.com/in/database/technologies/xe-downloads.html
+
+Oracle Database 21c Express Edition for Windows x64
+Download 1.8GB zip file
+Extract and install setup.exe
+- Enter database password: admin
+
+-----------------------------------------------------------------------
+oracle sql develper
+https://www.oracle.com/database/sqldeveloper/technologies/download/
+Windows 32-bit/64-bit (Windows 64-bit with JDK 11 included)
+
+Download 486Mb zip file (437Mb)
+Extract and install sqldeveloper.exe
+
+Give jdk folder path (Not jdk/bin folder path)
+C:\Program Files\Java\jdk-22
+
+SYS, SYSTEM, PDBADMIN

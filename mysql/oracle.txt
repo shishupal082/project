@@ -1,0 +1,110 @@
+(1)
+create table smms_assets(
+    id NUMBER(8) primary key not null,
+    file_date varchar(255) default null,
+    sub_section varchar(255) default null,
+    section_officer varchar(255) default null,
+    s_no varchar(255) default null,
+    asset_type varchar(255) default null,
+    asset_code varchar(255) default null,
+    asset_code_v2 varchar(1023) default null,
+
+    gear_name varchar(255) default null,
+    rfid varchar(255) default null,
+    make varchar(255) default null,
+    model varchar(255) default null,
+    serial_no varchar(1023) default null,
+    latitude varchar(255) default null,
+    longitude varchar(255) default null,
+    installation_date varchar(255) default null,
+    waranty_expiry_date varchar(255) default null,
+
+    location varchar(255) default null,
+    location_type varchar(255) default null,
+    section varchar(255) default null,
+    division varchar(255) default null,
+    zone varchar(255) default null,
+    status varchar(255) default null,
+    deleted varchar(3) default 'NO',
+    added_time timestamp default systimestamp,
+    updated_time timestamp default systimestamp
+);
+
+ALTER TABLE smms_assets rename to smms_assets_2024_09_18;
+
+
+ALTER TABLE smms_assets ADD deleted NUMBER(1);
+ALTER TABLE smms_assets DROP COLUMN id;
+ALTER TABLE smms_assets MODIFY deleted NUMBER(1) default 0;
+ALTER TABLE smms_assets ADD added_time timestamp default systimestamp;
+
+DROP TABLE smms_assets;
+
+(2)
+
+create table history_book (
+    id NUMBER(8) primary key not null,
+
+    table_name varchar(255) default null,
+    unique_column varchar(255) default null,
+    unique_parameter varchar(255) default null,
+    column_name varchar(255) default null,
+    old_value varchar(4000) default null,
+    new_value varchar(4000) default null,
+
+    added_time TIMESTAMP NOT NULL,
+    updated_time TIMESTAMP NOT NULL,
+    deleted NUMBER(1) default 0
+);
+
+Corrected using oracle sqldeveloper
+(1) For added_time and updated_time: set default = systimestamp
+(2) For id auto_increment
+Goto Identity Column
+ --> Select Type = Column Sequence
+ Trigger (automatically written as): HISTORY_BOOK_TRG
+ Sequence Schema: SYSTEM (DROPDOWN)
+ Sequence (automatically written as) : SMMS_ASSETS_SEQ
+
+Same can be verified in Triggers
+
+(3)
+create table smms_asset_count (
+    id NUMBER(8) primary key not null,
+
+    file_date varchar(255) default null,
+
+    zone varchar(255) default null,
+    division varchar(255) default null,
+    section_officer varchar(255) default null,
+    section varchar(255) default null,
+    sub_section varchar(255) default null,
+    location varchar(255) default null,
+    asset_type varchar(255) default null,
+    division_asset_count NUMBER(5) default null,
+
+    added_time TIMESTAMP NOT NULL default systimestamp,
+    updated_time TIMESTAMP NOT NULL default systimestamp,
+    deleted varchar(3) default 'NO'
+);
+
+Update default value or (i) added_time and (ii) updated_time using sql developer console
+-- Edit table
+
+DEFAULT systimestamp
+
+Add auto increment feature for id
+
+(4)
+
+create table t1 (
+    id NUMBER(3) primary key not null,
+    item varchar(255) default null,
+    id_t2 NUMBER(3) default 0
+);
+
+create table t2 (
+    id NUMBER(3) primary key not null,
+    item varchar(255) default null,
+    id_t1 NUMBER(3) default 0
+);

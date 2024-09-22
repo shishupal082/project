@@ -1,6 +1,7 @@
 show databases;
 use ftpapp;
 
+
 show tables;
 
 desc staff_rnc;
@@ -26,7 +27,13 @@ ALTER TABLE staff_rnc ADD sub_section varchar(63) DEFAULT NULL AFTER section;
 
 
 select * from history_book where table_name="staff_rnc";
-select * from history_book;
+select * from history_book where table_name="requisition_status";
+select * from history_book where table_name="smms_assets" order by added_time desc;
+
+select * from history_book where deleted=0 and table_name="smms_assets" order by id desc;
+UPDATE history_book set deleted=1 where table_name="smms_assets" and unique_column="mysql_error";
+
+desc history_book;
 
 
 select * from history_book where table_name="smms_assets" and added_time like "2024-09-01 21%" order by added_time desc;
@@ -45,14 +52,22 @@ select * from smms_assets where deleted=0 and asset_code like "Test%";
 select Count(*) from smms_assets where deleted=0 and added_time > "2024-08-27 08:00" order by updated_time desc;
 select * from smms_assets where deleted=0 and added_time > "2024-08-27 08:00" order by updated_time desc;
 
-UPDATE smms_assets SET deleted=1 where deleted=0 and file_date = "2024-08-26" and division="Ranchi";
+UPDATE smms_assets SET deleted=1 where deleted=0 and file_date = "2024-09-01" and division="Ranchi";
 Select * from smms_assets where deleted=0 and file_date = "2024-08-26" and division="Ranchi";
 
 Select * from smms_assets where deleted=0 and division like "Test Ranchi";
 Select * from smms_assets where deleted=0 and (asset_code like "OIPBKPR00001" or asset_code like "OIPBKPR00002" 
 or asset_code like "OIPBLRG00001" or asset_code like "OIPBLRG00002");
+Select * from smms_assets where deleted=0 order by updated_time desc;
+Select * from smms_assets where deleted=1 and asset_code="BCBAG TN-1-TIS-NKM00001";
+Select * from smms_assets where deleted=1 and location="AG TN-1-Tatisilwai-Namkom";
 SELECT asset_code, COUNT(asset_code) FROM smms_assets where deleted=0 GROUP BY asset_code HAVING COUNT(asset_code) > 1;
+
 desc smms_assets;
+UPDATE smms_assets_v2 SET deleted=1;
+select * from smms_assets_v2;
+
+SELECT id, division, COUNT(division) FROM smms_assets where deleted=0 and division = "Ranchi" GROUP BY id, division, sub_section order by id desc;
 
 Select * from history_book;
 Select * from history_book order by added_time desc limit 10;
@@ -63,7 +78,14 @@ select location, added_time, updated_time from smms_assets where added_time > "2
 select DATE_FORMAT(added_time, "%Y-%m-%d-%H") as added_date_hour, added_time, concat(DATE(added_time), ":", MINUTE(added_time)) as h from smms_assets where added_time > "2024-08-26 22:00" order by updated_time desc;
 
 desc smms_assets;
-drop table smms_assets;
+
+ALTER TABLE smms_assets MODIFY serial_no varchar(1023) default null;
+
+
+select asset_code_v2, count(*) as count from smms_assets where deleted=0 group by asset_code_v2 having count(asset_code_v2)>1 order by count desc;
+
+UPDATE smms_assets SET asset_code_v2=concat(COALESCE(asset_type,""),"--",COALESCE(location,""),"--",COALESCE(gear_name,""),"--",
+COALESCE(serial_no,""),"--",COALESCE(latitude,""),"--",COALESCE(longitude,""));
 
 select * from sia_data;
 desc sia_data;
@@ -72,6 +94,8 @@ ALTER TABLE sia_data MODIFY failure_description varchar(1023) default null;
 
 
 select * from event_data where event!="table_data" order by id asc;
+
+select * from bill_details where bill_unique_number="PO-Mani-bhusan-ranchi-revenue-24";
 
 select * from file_path order by id asc;
 DROP TABLE file_path;

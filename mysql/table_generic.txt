@@ -10,12 +10,13 @@ create table smms_assets(
     s_no varchar(255) default null,
     asset_type varchar(255) default null,
     asset_code varchar(255) default null,
+    asset_code_v2 varchar(1023) default null,
 
     gear_name varchar(255) default null,
     rfid varchar(255) default null,
     make varchar(255) default null,
     model varchar(255) default null,
-    serial_no varchar(255) default null,
+    serial_no varchar(1023) default null,
     latitude varchar(255) default null,
     longitude varchar(255) default null,
     installation_date varchar(255) default null,
@@ -34,6 +35,12 @@ create table smms_assets(
     -- boolean (tinyint, 1 byte, max = 127)
     deleted boolean default false
 );
+
+
+ALTER TABLE smms_assets ADD asset_code_v2 varchar(1023) default null AFTER asset_code;
+ALTER TABLE smms_assets_v2 MODIFY asset_code varchar(1023) default null;
+ALTER TABLE smms_assets MODIFY serial_no varchar(1023) default null;
+
 
 create table sia_data(
     -- auto-generated primary key
