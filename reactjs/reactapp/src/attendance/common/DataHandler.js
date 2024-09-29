@@ -651,7 +651,7 @@ DataHandler.extend({
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateArray = dateParameters[dateSelect];
         }
-        var renderData = [], i, currentList3Data, tempRenderData, currentList3DataItems, isAdded;
+        var renderData = [], i, currentList3Data, tempRenderData, currentList3DataItems, isAdded, dbviewSummaryAggregatePattern;
         var currentAppData = DataHandler.getCurrentAppData({});
         var metaData = DataHandler.getMetaData({});
         var userData = DataHandler.getData("dbViewDataTable", []);
@@ -662,7 +662,6 @@ DataHandler.extend({
         // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
-
         if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.ta].indexOf(pageName) >= 0) {
@@ -711,7 +710,8 @@ DataHandler.extend({
                         } else {
                             isAdded = true;
                             if (pageName === "dbview_summary") {
-                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true));
+                                dbviewSummaryAggregatePattern = DataHandler.getAppData("resultPattern.dbview_summary_aggregate", []);
+                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true, dbviewSummaryAggregatePattern));
                             } else {
                                 renderData.push(DBViewTemplateHandler.GenerateDbViewRenderField(tempRenderData, currentList3DataItems[i], sortingFields, true));
                             }

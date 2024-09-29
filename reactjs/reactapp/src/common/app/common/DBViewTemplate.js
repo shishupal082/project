@@ -243,4 +243,36 @@ DBViewTemplate["dbviewSummaryField.tr"] = [
         ]
     }
 ];
+DBViewTemplate["dbviewSummaryFieldV3"] = [
+    {
+        "tag": "table.tbody",
+        "className": "table table-striped table-padded-px-5",
+        "name": "dbviewSummaryField",
+        "text": [
+            {
+                "tag": "tr",
+                "name": "dbviewSummaryFieldV3.heading",
+                "text": [
+                    {
+                        "tag": "td.b",
+                        "text": "S.No."
+                    }
+                ]
+            }
+        ]
+    }
+];
+DBViewTemplate["dbviewSummaryFieldV3.tr"] = [
+    {
+        "tag": "tr",
+        "name": "dbviewSummaryFieldV3.tr.tds",
+        "text": [
+            {
+                "tag": "td",
+                "name": "s_no",
+                "text": ""
+            }
+        ]
+    }
+];
 export default DBViewTemplate;

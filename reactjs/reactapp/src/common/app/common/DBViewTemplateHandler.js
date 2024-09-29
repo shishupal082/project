@@ -300,35 +300,38 @@ DBViewTemplateHandler.extend({
             }
         }
     },
-    _searchCount: function(trsData) {
+    _searchCountV2: function(trsData, aggregateOption) {
         if (!$S.isArray(trsData)) {
             return 0;
         }
-        var count = 0;
-        var countFound = false;
-        for (var i=0; i<trsData.length; i++) {
-            if (!$S.isArray(trsData[i])) {
-                continue;
-            }
-            for (var j=0; j<trsData[i].length; j++) {
-                if (!$S.isObject(trsData[i][j])) {
+        if (!$S.isObject(aggregateOption)) {
+            return trsData.length;
+        }
+        var aggregateValue = 0;
+        if (aggregateOption["aggregate_method"] === "sum" && $S.isStringV2(aggregateOption["name"])) {
+            for (var i=0; i<trsData.length; i++) {
+                if (!$S.isArray(trsData[i])) {
                     continue;
                 }
-                if (trsData[i][j]["name"] === "count") {
-                    if ($S.isNumeric(trsData[i][j]["value"])) {
-                        countFound = true;
-                        count = count + (trsData[i][j]["value"] * 1);
+                for (var j=0; j<trsData[i].length; j++) {
+                    if (!$S.isObject(trsData[i][j])) {
+                        continue;
+                    }
+                    if (trsData[i][j]["name"] === aggregateOption["name"]) {
+                        if ($S.isNumeric(trsData[i][j]["value"])) {
+                            aggregateValue = aggregateValue + (trsData[i][j]["value"] * 1);
+                        }
                     }
                 }
             }
+            return aggregateValue;
+        } else {
+            return trsData.length;
         }
-        if (countFound) {
-            return count;
-        }
-        return trsData.length;
     },
-    _generateSummaryData: function(trsData, sortingFields) {
-        var trData = [], temp, totalCount = 0;
+    _generateSummaryData: function(trsData, sortingFields, aggregateOptions) {
+        var trData = [], temp, tempTrData;
+        var totalRowData = {};
         if ($S.isArray(trsData) && trsData.length > 0) {
             for(var i=0; i<trsData.length; i++) {
                 temp = {};
@@ -343,33 +346,65 @@ DBViewTemplateHandler.extend({
                 if ($S.isArray(trsData[i].text) && trsData[i].text.length > 0) {
                     if ($S.isObject(trsData[i].text[0])) {
                         if ($S.isArray(trsData[i].text[0].text)) {
-                            temp["count"] = this._searchCount(trsData[i].text[0].text);
-                            totalCount += temp["count"];
+                            tempTrData = trsData[i].text[0].text;
                         } else {
-                            temp["count"] = this._searchCount(trsData[i].text);
-                            totalCount += temp["count"];
+                            tempTrData = trsData[i].text;
                         }
                     } else {
-                        temp["count"] = this._searchCount(trsData[i].text);
-                        totalCount += temp["count"];
+                        tempTrData = trsData[i].text;
+                    }
+                }
+                if ($S.isArrayV2(aggregateOptions)) {
+                    for (var j=0; j<aggregateOptions.length; j++) {
+                        if ($S.isObject(aggregateOptions[j]) && $S.isStringV2(aggregateOptions[j]["name"])) {
+                            if (["description"].indexOf(aggregateOptions[j]["name"]) >= 0) {
+                                totalRowData[aggregateOptions[j]["name"]] = temp[aggregateOptions[j]["name"]];
+                                continue;
+                            }
+                            temp[aggregateOptions[j]["name"]] = this._searchCountV2(tempTrData, aggregateOptions[j]);
+                            if ($S.isNumber(totalRowData[aggregateOptions[j]["name"]])) {
+                                totalRowData[aggregateOptions[j]["name"]] = totalRowData[aggregateOptions[j]["name"]] + temp[aggregateOptions[j]["name"]];
+                            } else {
+                                totalRowData[aggregateOptions[j]["name"]] = temp[aggregateOptions[j]["name"]];
+                            }
+                        }
                     }
                 } else {
-                    temp["count"] = 0;
+                    temp["count"] = this._searchCountV2(tempTrData);
+                    if ($S.isNumber(totalRowData["count"])) {
+                        totalRowData["count"] = totalRowData["count"] + temp["count"];
+                    } else {
+                        totalRowData["count"] = temp["count"];
+                    }
                 }
                 trData.push(temp);
             }
         }
         trData = $S.sortResultV2(trData, sortingFields, "name");
         if (trData.length > 1) {
-            trData.push({"description": {"tag": "b", "text": "Total"}, "count": totalCount});
+            totalRowData["description"] = {"tag": "b", "text": "Total"};
+            trData.push(totalRowData);
         }
         return trData;
     },
-    _highlightSortingButton: function(field, sortingFields) {
+    _highlightSortingButton: function(field, sortingFields, aggregateOptions) {
         var sortingKeys = ["description", "count"];
         var countButton = {"tag": "button", "name": "sortable","value": "count","text": "Count","isSortable": true};
         var descriptionButton = {"tag": "button", "name": "sortable","value": "description","text": "Description","isSortable": true};
         var btn = {"description": descriptionButton, "count": countButton};
+        if ($S.isArrayV2(aggregateOptions)) {
+            sortingKeys = [];
+            btn = {};
+            for(var k=0; k<aggregateOptions.length; k++) {
+                if (!$S.isObject(aggregateOptions[k])) {
+                    continue;
+                }
+                if ($S.isBooleanTrue(aggregateOptions[k]["isSortable"])) {
+                    sortingKeys.push(aggregateOptions[k]["name"]);
+                    btn[aggregateOptions[k]["name"]] = {"tag": "button", "name": "sortable","value": aggregateOptions[k]["name"],"text": aggregateOptions[k]["heading"],"isSortable": aggregateOptions[k]["isSortable"]};
+                }
+            }
+        }
         if (!$S.isArray(sortingFields)) {
             sortingFields = [];
         }
@@ -398,35 +433,72 @@ DBViewTemplateHandler.extend({
             }
         }
     },
-    _generateDbViewSummaryTr: function(trsData, sortingFields) {
-        var field = this.getTemplate("dbviewSummaryField");
+    _generateDbViewSummaryTr: function(trsData, sortingFields, dbviewSummaryAggregatePattern) {
+        var field, tempData, trField;
+        var aggregateOptions = dbviewSummaryAggregatePattern;
+        var isValidAggregateOption = $S.isArrayV2(aggregateOptions);
         if ($S.isArray(sortingFields)) {
-            field = this.getTemplate("dbviewSummaryFieldV2");
-            this._highlightSortingButton(field, sortingFields);
+            if (isValidAggregateOption) {
+                field = this.getTemplate("dbviewSummaryFieldV3");
+                for (var k=0; k<aggregateOptions.length; k++) {
+                    if (!$S.isObject(aggregateOptions[k])) {
+                        continue;
+                    }
+                    if (aggregateOptions[k]["hidden"] === true) {
+                        if ($S.isStringV2(aggregateOptions[k]["className"])) {
+                            aggregateOptions[k]["className"] = aggregateOptions[k]["className"] + " d-none";
+                        } else {
+                            aggregateOptions[k]["className"] = "d-none";
+                        }
+                    }
+                    tempData = $S.clone(aggregateOptions[k]);
+                    tempData["tag"] = "td.b";
+                    tempData["text"] = tempData["heading"];
+                    tempData["name"] = tempData["name"]+"Button";
+                    TemplateHelper.addItemInTextArray(field, "dbviewSummaryFieldV3.heading", tempData);
+                }
+            } else {
+                field = this.getTemplate("dbviewSummaryFieldV2");
+            }
+            this._highlightSortingButton(field, sortingFields, aggregateOptions);
+        } else {
+            field = this.getTemplate("dbviewSummaryField");
         }
-        var trField, temp;
-        var summaryData = this._generateSummaryData(trsData, sortingFields);
+        var summaryData = this._generateSummaryData(trsData, sortingFields, aggregateOptions);
         if ($S.isArray(summaryData) && summaryData.length > 0) {
             for(var i=0; i<summaryData.length; i++) {
-                trField = this.getTemplate("dbviewSummaryField.tr");
-                temp = {};
-                temp["dbviewSummaryField.tr.s_no"] = i+1;
-                if (!$S.isObject(summaryData[i])) {
-                    continue;
-                }
-                temp["dbviewSummaryField.tr.description"] = summaryData[i]["description"];
-                if ($S.isNumeric(summaryData[i]["count"])) {
-                    temp["dbviewSummaryField.tr.count"] = summaryData[i]["count"];
+                tempData = {};
+                if (isValidAggregateOption) {
+                    trField = this.getTemplate("dbviewSummaryFieldV3.tr");
+                    if (!$S.isObject(summaryData[i])) {
+                        continue;
+                    }
+                    for (var j=0; j<aggregateOptions.length; j++) {
+                        aggregateOptions[j]["tag"] = "td";
+                        TemplateHelper.addItemInTextArray(trField, "dbviewSummaryFieldV3.tr.tds", $S.clone(aggregateOptions[j]));
+                    }
+                    summaryData[i]["s_no"] = i+1;
+                    tempData = summaryData[i];
                 } else {
-                    temp["dbviewSummaryField.tr.count"] = 0;
+                    trField = this.getTemplate("dbviewSummaryField.tr");
+                    tempData["dbviewSummaryField.tr.s_no"] = i+1;
+                    if (!$S.isObject(summaryData[i])) {
+                        continue;
+                    }
+                    tempData["dbviewSummaryField.tr.description"] = summaryData[i]["description"];
+                    if ($S.isNumeric(summaryData[i]["count"])) {
+                        tempData["dbviewSummaryField.tr.count"] = summaryData[i]["count"];
+                    } else {
+                        tempData["dbviewSummaryField.tr.count"] = 0;
+                    }
                 }
-                TemplateHelper.updateTemplateText(trField, temp);
+                TemplateHelper.updateTemplateText(trField, tempData);
                 TemplateHelper.addItemInTextArray(field, "dbviewSummaryField", trField);
             }
         }
         return field;
     },
-    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton) {
+    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern) {
         if (!$S.isArray(tempRenderData) || tempRenderData.length < 1) {
             return;
         }
@@ -437,7 +509,7 @@ DBViewTemplateHandler.extend({
             }
             for(var j=0; j<tempRenderData[i].text.length; j++) {
                 if (!$S.isObject(tempRenderData[i].text[j]) || !$S.isString(tempRenderData[i].text[j].key)) {
-                    renderField.push(this._generateDbViewSummaryTr(tempRenderData, sortingFields));
+                    renderField.push(this._generateDbViewSummaryTr(tempRenderData, sortingFields, dbviewSummaryAggregatePattern));
                     isBreak = true;
                     break;
                 }
@@ -447,7 +519,7 @@ DBViewTemplateHandler.extend({
                 break;
             }
             renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data, showReloadButton));
-            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data, sortingFields, showReloadButton));
+            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern));
         }
     },
     generateDbViewRenderFieldV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {
@@ -499,10 +571,10 @@ DBViewTemplateHandler.extend({
         }
         return renderField;
     },
-    GenerateDbViewSummaryRenderFieldV2: function(renderData, currentList3Data, sortingFields, showReloadButton) {
+    GenerateDbViewSummaryRenderFieldV2: function(renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern) {
         var renderField = [];
         if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton);
+            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern);
         } else {
             renderField = this.getTemplate("noDataFound");
         }

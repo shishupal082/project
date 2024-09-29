@@ -1,4 +1,37 @@
 {
+    "resultPattern.dbview_summary_aggregate": [
+        {
+            "name": "description",
+            "heading": "Description",
+            "isSortable": false,
+            "className": "",
+            "hidden": false
+        },
+        {
+            "name": "count",
+            "heading": "Entry count",
+            "aggregate_method": "count",
+            "isSortable": true,
+            "className": "",
+            "hidden": false
+        },
+        {
+            "name": "division_asset_count",
+            "heading": "Division Sum",
+            "aggregate_method": "sum",
+            "isSortable": true,
+            "className": "",
+            "hidden": false
+        },
+        {
+            "name": "smms_count",
+            "heading": "SMMS Sum",
+            "aggregate_method": "sum",
+            "isSortable": true,
+            "className": "",
+            "hidden": false
+        }
+    ],
     "resultPatternDbview": [
         {
             "tableName": "table1",
