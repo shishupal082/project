@@ -4,6 +4,9 @@ create table smms_assets(
     file_date varchar(255) default null,
     sub_section varchar(255) default null,
     section_officer varchar(255) default null,
+    section_incharge varchar(255) default null,
+    asset_group1 varchar(63) default null,
+    asset_group2 varchar(63) default null,
     s_no varchar(255) default null,
     asset_type varchar(255) default null,
     asset_code varchar(255) default null,
@@ -37,6 +40,10 @@ ALTER TABLE smms_assets ADD deleted NUMBER(1);
 ALTER TABLE smms_assets DROP COLUMN id;
 ALTER TABLE smms_assets MODIFY deleted NUMBER(1) default 0;
 ALTER TABLE smms_assets ADD added_time timestamp default systimestamp;
+ALTER TABLE smms_assets ADD asset_group1 varchar(63) default null;
+ALTER TABLE smms_assets ADD asset_group2 varchar(63) default null;
+
+ALTER TABLE smms_assets ADD section_incharge varchar(255) default null;
 
 DROP TABLE smms_assets;
 
@@ -77,8 +84,11 @@ create table smms_asset_count (
     zone varchar(255) default null,
     division varchar(255) default null,
     section_officer varchar(255) default null,
+    section_incharge varchar(255) default null,
     section varchar(255) default null,
     sub_section varchar(255) default null,
+    asset_group1 varchar(63) default null,
+    asset_group2 varchar(63) default null,
     location varchar(255) default null,
     asset_type varchar(255) default null,
     division_asset_count NUMBER(5) default null,
@@ -87,6 +97,11 @@ create table smms_asset_count (
     updated_time TIMESTAMP NOT NULL default systimestamp,
     deleted varchar(3) default 'NO'
 );
+
+ALTER TABLE smms_asset_count ADD section_incharge varchar(255) default null;
+
+ALTER TABLE smms_asset_count ADD asset_group1 varchar(63) default null;
+ALTER TABLE smms_asset_count ADD asset_group2 varchar(63) default null;
 
 Update default value or (i) added_time and (ii) updated_time using sql developer console
 -- Edit table
@@ -100,11 +115,32 @@ Add auto increment feature for id
 create table t1 (
     id NUMBER(3) primary key not null,
     item varchar(255) default null,
-    id_t2 NUMBER(3) default 0
+    id_t2 NUMBER(3) default 0,
+    added_time TIMESTAMP NOT NULL,
+    updated_time TIMESTAMP NOT NULL
 );
 
 create table t2 (
     id NUMBER(3) primary key not null,
     item varchar(255) default null,
-    id_t1 NUMBER(3) default 0
+    id_t1 NUMBER(3) default 0,
+    added_time TIMESTAMP NOT NULL,
+    updated_time TIMESTAMP NOT NULL
 );
+
+
+Common command
+---------------------------------------------
+SELECT * FROM ALL_USERS;
+
+(1) Create new user:
+
+Enter username: sys as sysdba
+Password: admin
+> alter session set "_oracle_script"=true;
+> CREATE USER ORACLE identified by ORACLE;
+> grant resource, connect, dba to ORACLE;
+
+(2)
+
+Copy table data using sql developer --> Tool (Top bar) --> Database copy

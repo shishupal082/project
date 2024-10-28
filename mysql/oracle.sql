@@ -1,12 +1,41 @@
-ALTER TABLE smms_assets
-MODIFY id NUMBER(6) primary key NOT NULL AUTO_INCREMENT;
+SELECT * FROM USER_SYS_PRIVS;
+SELECT * FROM USER_ROLE_PRIVS;
+SELECT * FROM USER_TAB_PRIVS;
+SELECT * FROM DBA_SYS_PRIVS;
+
+Test-DCTMURI00002--96BTF-2--23.3698176--85.8660553
+Test-DCTMURI00002--96BTF-1--23.3698176--85.8660553
+
+SELECT * from smms_assets order by id desc FETCH FIRST 10 rows only;
+SELECT * from smms_assets where asset_code not IN ('Test-DCTMURI00001') and division='Test Ranchi' and DELETED='NO' order by id desc FETCH FIRST 10 rows only;
+SELECT * from smms_assets where asset_code not IN ('Test-DCTMURI00002') and division='Test Ranchi' and DELETED='NO' order by id desc FETCH FIRST 10 rows only;
+
+
+select file_date,to_char(cast(added_time as date),'YYYY-MM-DD') as added_date,COUNT(*) as count 
+from smms_assets  where (division='Ranchi' and deleted='NO') 
+group by file_date,to_char(cast(added_time as date),'YYYY-MM-DD') order by count desc
+
+
+
+UPDATE SMMS_ASSETS SET asset_code_v2=gear_name 
+where asset_code not IN ('Test-DCTMURI00002') and division='Test Ranchi' and DELETED='NO';
+
+SELECT * from smms_assets where division='Chakradhar Pur' and DELETED='NO' order by id desc FETCH FIRST 10 rows only;
+
+UPDATE SMMS_ASSETS SET asset_code_v2=asset_code 
+where division='Chakradhar Pur' and DELETED='NO';
+
+
 
 select * from history_book where (deleted='0' and table_name='smms_assets') order by added_time desc FETCH FIRST 5 rows only;
 
 
-SELECT asset_code,file_date,zone,division,sub_section,section_officer,section,location,deleted,COUNT(asset_code) as count FROM smms_assets where deleted='NO' GROUP BY asset_code,file_date,zone,division,sub_section,section_officer,section,location,deleted HAVING COUNT(asset_code) > 1;
+SELECT file_date,location,deleted,COUNT(asset_code) as count FROM smms_assets where deleted='NO' GROUP BY asset_code,file_date,zone,division,sub_section,section_officer,section,location,deleted HAVING COUNT(asset_code) > 1;
 
-select file_date,location,COUNT(asset_code) as count from smms_assets  where deleted='NO' group by file_date,zone,division,sub_section,section_officer,section,location HAVING COUNT(asset_code)>1 order by count desc
+
+SELECT file_date,location,deleted, COUNT(asset_code) FROM smms_assets where deleted='NO';
+
+select file_date,location,COUNT(asset_code) as count from smms_assets  where deleted='NO' group by file_date,zone,division,sub_section,section_officer,section,asset_code,location HAVING COUNT(asset_code)>1 order by count desc
 
 SELECT * from history_book where table_name="smms_asset_count";
 
@@ -46,7 +75,6 @@ WHERE SMMS_ASSETS.DELETED=0 AND SMMS_ASSET_COUNT.DELETED=0 GROUP BY SMMS_ASSETS.
 ORDER BY COUNT DESC;
 
 SELECT location from smms_assets where location='Lohardaga  BS' and deleted='NO';
-
 
 
 select SMMS_ASSETS.LOCATION as location,SMMS_ASSETS.ASSET_TYPE  as asset_type,SMMS_ASSET_COUNT.division_asset_count as division_asset_count,COUNT(*) AS COUNT 
@@ -135,14 +163,17 @@ select TO_DATE(added_time,'DD-MM-YYYY') as added_date from smms_assets;
 select ASSET_CODE, DELETED, ADDED_TIME from smms_assets;
 select * from smms_assets where deleted=0;
 select * from smms_assets where deleted=0 and asset_code='Test-DCTMURI00002';
-UPDATE SMMS_ASSETS SET DELETED='YES' where division='Ranchi';
+SELECT * from SMMS_ASSETS where DELETED='NO' and DIVISION='Ranchi' and FILE_DATE='2024-09-26';
+UPDATE SMMS_ASSETS SET DELETED='YES' WHERE DELETED='NO' and DIVISION='Ranchi' and FILE_DATE='2024-09-26';
 
 ALTER TABLE smms_assets_2024_09_18 rename to smms_assets_;
 ALTER TABLE smms_assets_ rename to smms_assets;
 
-select COUNT(*) from smms_assets where deleted='NO' and division='Ranchi' and file_date='2024-09-18';
+select COUNT(*) from smms_assets where deleted='NO' and division='Ranchi' and file_date='2024-10-01';
+UPDATE smms_assets SET deleted='YES' where deleted='NO' and division='Ranchi' and file_date='2024-10-01';
 
-UPDATE smms_assets SET deleted='YES' where deleted='NO' and division='Ranchi' and file_date='2024-09-18';
+select COUNT(*) from smms_assets where deleted='NO' and file_date='2024-09-23';
+UPDATE smms_assets SET deleted='YES' where deleted='NO' and file_date='2024-09-23';
 
 select file_date,zone,division,sub_section,section_officer,section,location,deleted,COUNT(*) as count
 from smms_assets  where (division='Ranchi' and deleted='NO') 
@@ -188,10 +219,12 @@ MODIFY deleted NUMBER(1) default 0;
 
 ALTER TABLE smms_assets ADD updated_time timestamp default systimestamp on_update systimestamp;
 
-create table t1 (
+create table t2 (
     id NUMBER(3) primary key not null,
     item varchar(255) default null,
-    id_t2 NUMBER(3) default 0
+    id_t1 NUMBER(3) default 0,
+    added_time TIMESTAMP NOT NULL,
+    updated_time TIMESTAMP NOT NULL
 );
 
 create table t2 (
@@ -202,7 +235,9 @@ create table t2 (
 
 SELECT * from T1;
 
-INSERT into T2 (ITEM, ID_T1) values('t2.item-5', 2);
+INSERT into T1 (ITEM, ID_T2) values('t1.item-2', 2);
+
+INSERT into T2 (ITEM, ID_T1) values('t2.item-2', 2);
 
 select added_time, to_char(cast(added_time as date),'YYYY-MM-DD') as added_date from t2;
 

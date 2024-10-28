@@ -1,13 +1,23 @@
 show databases;
 use ftpapp;
+show tables;
+select * from bill_details order by file_date asc;
+ALTER TABLE staff_rnc rename column section to section_incharge;
 
-
+ALTER TABLE staff_rnc ADD section_officer varchar(63) default null AFTER unit;
+select * from staff_rnc;
 show tables;
 
 desc staff_rnc;
 
+ALTER TABLE staff_rnc ADD staff_group varchar(15) default null AFTER designation;
+
+
 
 select * from requisition_status;
+
+select * from expenditure_register;
+
 
 ALTER TABLE requisition_status MODIFY row_unique_number varchar(255) default null;
 INSERT INTO requisition_status (req_date,dp_date,remark_date,material_status,file_date,department,s_no,items,unit,

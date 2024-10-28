@@ -112,6 +112,7 @@ create table staff_rnc (
     hrms_id varchar(15) default null,
     name varchar(127) default null,
     designation varchar(63) default null,
+    employee_group varchar(15) default null,
     department varchar(31) default null,
 
     gender varchar(15) default null,
@@ -124,7 +125,8 @@ create table staff_rnc (
     dop varchar(31) default null,
     hq varchar(63) default null,
     unit varchar(63) default null,
-    section varchar(63) default null,
+    section_officer varchar(63) default null,
+    section_incharge varchar(63) default null,
     sub_section varchar(63) default null,
     education_qualification varchar(127) default null,
     remarks varchar(255) default null,
@@ -135,6 +137,11 @@ create table staff_rnc (
     -- boolean (tinyint, 1 byte, max = 127)
     deleted boolean default false
 );
+
+ALTER TABLE staff_rnc rename column section to section_incharge;
+ALTER TABLE staff_rnc ADD section_officer varchar(63) default null AFTER unit;
+ALTER TABLE staff_rnc ADD employee_group varchar(15) default null AFTER designation;
+
 
 create table bill_details (
     -- auto-generated primary key
@@ -238,4 +245,41 @@ ALTER TABLE requisition_status ADD dp_date varchar(31) default null AFTER id;
 ALTER TABLE requisition_status ADD req_date varchar(31) default null AFTER id;
 
 ALTER TABLE requisition_status rename column material_received_date to material_received_remark;
+
+
+create table expenditure_register (
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    file_date varchar(31) default null,
+    budget_date varchar(31) default null,
+    bill_allocation varchar(63) default null,
+    type varchar(31) default null,
+    s_no varchar(31) default null,
+
+    date_org varchar(63) default null,
+    req_no varchar(127) default null,
+
+    bill_no varchar(255) default null,
+    description varchar(1023) default null,
+    allocation varchar(255) default null,
+    qty varchar(63) default null,
+    unique_row_id varchar(255) default null,
+    amount varchar(31) default null,
+    irpsm_amount varchar(31) default null,
+    project_id varchar(31) default null,
+    co7_date varchar(31) default null,
+    work_id varchar(63) default null,
+    work varchar(1023) default null,
+    combined_allocation varchar(255) default null,
+    ph varchar(15) default null,
+    combined_description varchar(2047) default null,
+
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
 
