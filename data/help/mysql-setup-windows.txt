@@ -59,3 +59,5 @@ Give jdk folder path (Not jdk/bin folder path)
 C:\Program Files\Java\jdk-22
 
 SYS, SYSTEM, PDBADMIN
+
+Reset password sql plus using cmd

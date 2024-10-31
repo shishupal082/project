@@ -168,3 +168,14 @@ Rename node_modules folder as temp_node_modules and try
 
 Restart system --> it should be working now
 
+31.10.2024
+--------------------------
+Command
+>> npm start
+
+Error
+'react-scripts' is not recognized as an internal or external command,
+
+Solution
+npm install react-scripts --save
+

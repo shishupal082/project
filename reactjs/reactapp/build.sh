@@ -35,6 +35,7 @@ distDir=dist-attendance-app
 # distDir=dist-google_login-app
 # distDir=dist-track-plan-app
 # distDir=dist-mastersheet-app
+# distDir=dist-scan-dir-app
 
 
 
