@@ -18,6 +18,7 @@ class App extends React.Component {
         };
         this.appData = {
             "addContainerClass": true,
+            "appComponentClassName": "",
             "firstTimeDataLoadStatus": "",
 
             "selectFilterComponentClass": "",
@@ -201,7 +202,6 @@ class App extends React.Component {
         var methods = this.methods;
         var commonData = this.appData;
         var pageUrl = Config.pageUrl;
-        commonData.appComponentClassName = DataHandler.getAppComponentClassName();
         return (<BrowserRouter>
             <Switch>
                 <Route exact path={pageUrl.projectHome}

@@ -190,10 +190,17 @@ DataHandler.extend({
     },
     getAppComponentClassName: function() {
         var pageName = this.getPathParamsData("pageName", "");
-        if ($S.isStringV2(pageName)) {
-            return pageName;
+        var appComponentClassName = this.getAppData("appComponentClassName", "");
+        if (!$S.isString(pageName)) {
+            pageName = "";
         }
-        return this.getData("pageName", "");
+        if (!$S.isString(appComponentClassName)) {
+            appComponentClassName = "";
+        }
+        if ($S.isStringV2(appComponentClassName)) {
+            pageName += " ";
+        }
+        return pageName + appComponentClassName;
     },
     setAppData: function(appStateCallback, appDataCallback) {
         var pageName = this.getData("pageName", "");
@@ -764,6 +771,7 @@ DataHandler.extend({
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("list1Data", list1Data);
+        appDataCallback("appComponentClassName", this.getAppComponentClassName());
         appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);
         appDataCallback("enableFooter", this.getBooleanParam("enableFooter", false));

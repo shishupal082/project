@@ -119,6 +119,7 @@ create table staff_rnc (
     category varchar(63) default null,
     mobile varchar(31) default null,
     email varchar(127) default null,
+    id_card_number varchar(15) default null,
 
     dob varchar(31) default null,
     doa varchar(31) default null,
@@ -141,6 +142,7 @@ create table staff_rnc (
 ALTER TABLE staff_rnc rename column section to section_incharge;
 ALTER TABLE staff_rnc ADD section_officer varchar(63) default null AFTER unit;
 ALTER TABLE staff_rnc ADD employee_group varchar(15) default null AFTER designation;
+ALTER TABLE staff_rnc ADD id_card_number varchar(15) default null AFTER email;
 
 
 create table bill_details (
