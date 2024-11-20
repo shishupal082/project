@@ -12,7 +12,7 @@
     background-color: #c3e6cb;
 }
 .APP-COMPONENT.container.entry,
-.APP-COMPONENT.container.upload,
+.APP-COMPONENT.container.update,
 .APP-COMPONENT.container.summary {
     max-width: 100%;
 }
@@ -30,6 +30,12 @@
 .APP-COMPONENT.custom_dbview .SELECT-FILTER [name="list3-select"],
 .APP-COMPONENT.custom_dbview .PAGE-FILTER {
     display: none;
+}
+.APP-COMPONENT.custom-table-bordered .PAGE-FIELDS table > thead > tr > th,
+.APP-COMPONENT.custom-table-bordered .PAGE-FIELDS table > thead > tr > td,
+.APP-COMPONENT.custom-table-bordered .PAGE-FIELDS table > tbody > tr > th,
+.APP-COMPONENT.custom-table-bordered .PAGE-FIELDS table > tbody > tr > td  {
+    border: 1px solid;
 }
 select.form-control {
     min-width: 120px;

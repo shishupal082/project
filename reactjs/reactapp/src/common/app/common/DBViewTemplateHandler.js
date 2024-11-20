@@ -300,7 +300,7 @@ DBViewTemplateHandler.extend({
             }
         }
     },
-    _searchCountV2: function(trsData, aggregateOption) {
+    _searchCountV2: function(trsData, rowData, aggregateOption, isExpressionEnabled) {
         if (!$S.isArray(trsData)) {
             return 0;
         }
@@ -308,8 +308,23 @@ DBViewTemplateHandler.extend({
             return trsData.length;
         }
         var aggregateValue = 0;
-        if (aggregateOption["aggregate_method"] === "sum" && $S.isStringV2(aggregateOption["name"])) {
-            for (var i=0; i<trsData.length; i++) {
+        var arithmeticToken = ["(",")","+","-","*","/"];
+        var infixExpression, tokens, posixExpression;
+        var name, i;
+        if (isExpressionEnabled === true && $S.isStringV2(aggregateOption["artimetic_expression"])) {
+            infixExpression = aggregateOption["artimetic_expression"];
+            tokens = $S.tokenize(infixExpression, arithmeticToken);
+            posixExpression = $S.createPosixTree(tokens);
+            for (i=0; i<posixExpression.length; i++) {
+                name = posixExpression[i];
+                if (arithmeticToken.indexOf(name) >= 0) {
+                    continue;
+                }
+                posixExpression[i] = rowData[name];
+            }
+            return $S.calNumerical(posixExpression, "--");
+        } else if (aggregateOption["aggregate_method"] === "sum" && $S.isStringV2(aggregateOption["name"])) {
+            for (i=0; i<trsData.length; i++) {
                 if (!$S.isArray(trsData[i])) {
                     continue;
                 }
@@ -329,7 +344,7 @@ DBViewTemplateHandler.extend({
             return trsData.length;
         }
     },
-    _generateSummaryData: function(trsData, sortingFields, aggregateOptions) {
+    _generateSummaryData: function(trsData, sortingFields, aggregateOptions, isExpressionEnabled) {
         var trData = [], temp, tempTrData;
         var totalRowData = {};
         if ($S.isArray(trsData) && trsData.length > 0) {
@@ -361,7 +376,7 @@ DBViewTemplateHandler.extend({
                                 totalRowData[aggregateOptions[j]["name"]] = temp[aggregateOptions[j]["name"]];
                                 continue;
                             }
-                            temp[aggregateOptions[j]["name"]] = this._searchCountV2(tempTrData, aggregateOptions[j]);
+                            temp[aggregateOptions[j]["name"]] = this._searchCountV2(tempTrData, temp, aggregateOptions[j], isExpressionEnabled);
                             if ($S.isNumber(totalRowData[aggregateOptions[j]["name"]])) {
                                 totalRowData[aggregateOptions[j]["name"]] = totalRowData[aggregateOptions[j]["name"]] + temp[aggregateOptions[j]["name"]];
                             } else {
@@ -433,7 +448,7 @@ DBViewTemplateHandler.extend({
             }
         }
     },
-    _generateDbViewSummaryTr: function(trsData, sortingFields, dbviewSummaryAggregatePattern) {
+    _generateDbViewSummaryTr: function(trsData, sortingFields, dbviewSummaryAggregatePattern, isExpressionEnabled) {
         var field, tempData, trField;
         var aggregateOptions = dbviewSummaryAggregatePattern;
         var isValidAggregateOption = $S.isArrayV2(aggregateOptions);
@@ -464,7 +479,7 @@ DBViewTemplateHandler.extend({
         } else {
             field = this.getTemplate("dbviewSummaryField");
         }
-        var summaryData = this._generateSummaryData(trsData, sortingFields, aggregateOptions);
+        var summaryData = this._generateSummaryData(trsData, sortingFields, aggregateOptions, isExpressionEnabled);
         if ($S.isArray(summaryData) && summaryData.length > 0) {
             for(var i=0; i<summaryData.length; i++) {
                 tempData = {};
@@ -498,7 +513,7 @@ DBViewTemplateHandler.extend({
         }
         return field;
     },
-    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern) {
+    _recursiveGenerateHeadingV4: function(renderField, tempRenderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern, isExpressionEnabled) {
         if (!$S.isArray(tempRenderData) || tempRenderData.length < 1) {
             return;
         }
@@ -509,7 +524,7 @@ DBViewTemplateHandler.extend({
             }
             for(var j=0; j<tempRenderData[i].text.length; j++) {
                 if (!$S.isObject(tempRenderData[i].text[j]) || !$S.isString(tempRenderData[i].text[j].key)) {
-                    renderField.push(this._generateDbViewSummaryTr(tempRenderData, sortingFields, dbviewSummaryAggregatePattern));
+                    renderField.push(this._generateDbViewSummaryTr(tempRenderData, sortingFields, dbviewSummaryAggregatePattern, isExpressionEnabled));
                     isBreak = true;
                     break;
                 }
@@ -519,7 +534,7 @@ DBViewTemplateHandler.extend({
                 break;
             }
             renderField.push(this._generateHeading(tempRenderData[i].name, tempRenderData[i].key, currentList3Data, showReloadButton));
-            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern));
+            renderField.push(this._recursiveGenerateHeadingV4(renderField, tempRenderData[i].text, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern, isExpressionEnabled));
         }
     },
     generateDbViewRenderFieldV2: function(renderData, isSortableFieldRequired, tableTemplateName, sortingFields) {
@@ -565,16 +580,16 @@ DBViewTemplateHandler.extend({
     GenerateDbViewSummaryRenderField: function(renderData, currentList3Data, showReloadButton) {
         var renderField = [], sortingFields = null;
         if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton);
+            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton, false);
         } else {
             renderField = this.getTemplate("noDataFound");
         }
         return renderField;
     },
-    GenerateDbViewSummaryRenderFieldV2: function(renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern) {
+    GenerateDbViewSummaryRenderFieldV2: function(renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern, isExpressionEnabled) {
         var renderField = [];
         if ($S.isArray(renderData) && renderData.length > 0) {
-            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern);
+            this._recursiveGenerateHeadingV4(renderField, renderData, currentList3Data, sortingFields, showReloadButton, dbviewSummaryAggregatePattern, isExpressionEnabled);
         } else {
             renderField = this.getTemplate("noDataFound");
         }

@@ -294,6 +294,13 @@ DataHandler.extend({
         }
         return {};
     },
+    isExpressionEnabled: function(pageName) {
+        var expressionEnabledPage = DataHandler.getAppData("expression_enabled_page", []);
+        if ($S.isArray(expressionEnabledPage) && expressionEnabledPage.indexOf(pageName) >= 0) {
+            return true;
+        }
+        return false;
+    },
     applyResetFilter: function() {
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
@@ -669,6 +676,7 @@ DataHandler.extend({
         // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
+        var isExpressionEnabled = DataHandler.isExpressionEnabled(pageName);
         if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.ta].indexOf(pageName) >= 0) {
@@ -718,7 +726,7 @@ DataHandler.extend({
                             isAdded = true;
                             if (pageName === "dbview_summary") {
                                 dbviewSummaryAggregatePattern = DataHandler.getAppData("resultPattern.dbview_summary_aggregate", []);
-                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true, dbviewSummaryAggregatePattern));
+                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true, dbviewSummaryAggregatePattern, isExpressionEnabled));
                             } else {
                                 renderData.push(DBViewTemplateHandler.GenerateDbViewRenderField(tempRenderData, currentList3DataItems[i], sortingFields, true));
                             }

@@ -2204,7 +2204,7 @@ Stack.extend({
         It does not support Exponent
         It support other things, Bracket, Division, Multiplication, Addition and Subtraction
     */
-    calNumerical: function(postfix) {
+    calNumerical: function(postfix, defaultValue) {
         var st = new St();
         var A, op, B;
         var val, result;
@@ -2221,6 +2221,9 @@ Stack.extend({
                 var logText = "Invalid operator or value for numerical calculation: " + op;
                 logText += ", in postfix:" + postfix.toString();
                 Logger.log(logText);
+                if (Stack.isStringV2(defaultValue)) {
+                    return defaultValue;
+                }
                 throw logText;
             }
         }

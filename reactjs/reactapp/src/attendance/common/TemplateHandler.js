@@ -40,7 +40,7 @@ TemplateHandler.extend({
         var validPages = Config.validPages;
         var linkTemplate, toUrl;
         if (homeFields.length === 0) {
-            return this.getTemplate("noDataFound");
+            return this.getTemplate("pageDisabled");
         }
         for (var i = 0; i< homeFields.length; i++) {
             toUrl = "";

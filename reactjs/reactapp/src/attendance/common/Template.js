@@ -31,6 +31,14 @@ Template["templateNotFound"] = [{
         "text": "Template not Found"
     }
 }];
+Template["pageDisabled"] = [{
+    "tag": "center.h1",
+    "text": {
+        "tag": "span",
+        "className": "badge badge-primary",
+        "text": "Enabled pages not defined"
+    }
+}];
 Template["heading"] = [
     {
         "tag": "center.h2",

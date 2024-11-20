@@ -25,10 +25,10 @@ var syncData = {
     },
     "react": {
         "src": "../static/libs/bootstrap-react-v3.1.1.css",
-        "destinationDir": "../reactjs/reactapp-2/src/libs/"
+        "destinationDir": "../reactjs/reactapp/src/libs/"
     },
     "react-base-1.0.0": {
-        "src": "../reactjs/reactapp-2/dist-react-base-1.0.0/script1.js",
+        "src": "../reactjs/reactapp/dist-react-base-1.0.0/script1.js",
         "destinationDir": "../../ftp-application/FTP/src/main/resources/assets/static/dist-react-base-1.0.0/"
     },
     "stack": {
@@ -36,7 +36,7 @@ var syncData = {
             "../static/js/stack.js",
         ],
         "destinationDir": [
-            "../reactjs/reactapp-2/src/libs/",
+            "../reactjs/reactapp/src/libs/",
             "../nodejs/src/libs/",
             "../../ftp-application/FTP/src/main/resources/assets/static/js/"
         ]
@@ -46,7 +46,7 @@ var syncData = {
             "../static/js/model.js"
         ],
         "destinationDir": [
-            "../reactjs/reactapp-2/src/libs/"
+            "../reactjs/reactapp/src/libs/"
         ]
     },
     "modelV2": {
@@ -54,8 +54,8 @@ var syncData = {
             "../static/js/modelV2.js"
         ],
         "destinationDir": [
-            "../reactjs/reactapp-2/src/libs/",
-            "../reactjs/reactapp-2/src/libs/nodejs/"
+            "../reactjs/reactapp/src/libs/",
+            "../reactjs/reactapp/src/libs/nodejs/"
         ]
     },
     "ml2": {
@@ -63,13 +63,13 @@ var syncData = {
             "../static/js/parser/ML2.js"
         ],
         "destinationDir": [
-            "../reactjs/reactapp-2/src/libs/"
+            "../reactjs/reactapp/src/libs/"
         ]
     },
     "yardApiModel": {
         "src": "../static/js/yard/yardApiModel.js",
         "destinationDir": [
-            "../reactjs/reactapp-2/src/libs/"
+            "../reactjs/reactapp/src/libs/"
         ]
     },
     "img-to-ftp-application": {
@@ -102,8 +102,8 @@ var syncData = {
     "dist-auth-app-to-ftp-application": {
         "src": [
             "../app/auth/auth-style.css",
-            "../reactjs/reactapp-2/dist-auth-app/script2.js",
-            "../reactjs/reactapp-2/dist-auth-app/script3.js"
+            "../reactjs/reactapp/dist-auth-app/script2.js",
+            "../reactjs/reactapp/dist-auth-app/script3.js"
         ],
         "destinationDir": [
             "../../ftp-application/FTP/src/main/resources/assets/static/dist-auth-app/"
