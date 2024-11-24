@@ -1,0 +1,4 @@
+id,data_type,filepath,sheet_name
+1,text,test-data/text-file-1.txt
+2,csv,./test-data/text-file-2.csv
+3,excel,./test-data/excel-file-3.xlsx,data

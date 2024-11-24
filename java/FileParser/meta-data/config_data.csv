@@ -1,0 +1,4 @@
+id,data_type,filepath,sheet_name
+1,text,D:/workspace/project/java/FileParser/meta-data/test-data/text-file-1.txt
+2,csv,D:/workspace/project/java/FileParser/meta-data/test-data/text-file-2.csv
+3,excel,D:/workspace/project/java/FileParser/meta-data/test-data/excel-file-3.xlsx,data
