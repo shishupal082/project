@@ -265,7 +265,7 @@ DBViewTemplateHandler.extend({
         }
         if (!isFound) {
             if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
-                if (i === 0 && currentList3Data.value.length === 1) {
+                if (i === 0 && currentList3Data.value.length <= 2) {
                     heading = this.getTemplate("dbViewHeading1-1" + reloadOption);
                 } else if (i === 0 && currentList3Data.value.length > 1) {
                     heading = this.getTemplate("dbViewHeading1-many");
