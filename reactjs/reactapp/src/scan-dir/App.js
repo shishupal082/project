@@ -149,9 +149,9 @@ class App extends React.Component {
         var params = arg["params"];
         var isComponentUpdate = false;
         var oldIndex = DataHandler.getPathParamsData("index");
-        var oldPid = DataHandler.getPathParamsData("pid");
-        var oldId1 = DataHandler.getPathParamsData("id1");
-        var oldPageId = DataHandler.getPathParamsData("pageId");
+        // var oldPid = DataHandler.getPathParamsData("pid");
+        // var oldId1 = DataHandler.getPathParamsData("id1");
+        // var oldPageId = DataHandler.getPathParamsData("pageId");
         var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
@@ -161,15 +161,15 @@ class App extends React.Component {
                 if ($S.isStringV2(oldIndex) && $S.isStringV2(params.index) && oldIndex !== params.index) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("index", oldIndex, params.index);
-                } else if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pid", oldPid, params.pid);
-                } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("id1");
-                } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("pageId", oldPageId, params.pageId);
+                // } else if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
+                //     isComponentUpdate = true;
+                //     DataHandler.HandleComponentChange("pid", oldPid, params.pid);
+                // } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
+                //     isComponentUpdate = true;
+                //     DataHandler.HandleComponentChange("id1");
+                // } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
+                //     isComponentUpdate = true;
+                //     DataHandler.HandleComponentChange("pageId", oldPageId, params.pageId);
                 } else if ($S.isStringV2(oldViewPageName) && $S.isStringV2(params.viewPageName) && oldViewPageName !== params.viewPageName) {
                     isComponentUpdate = true;
                     DataHandler.HandleComponentChange("viewPageName", oldViewPageName, params.viewPageName);
@@ -211,29 +211,9 @@ class App extends React.Component {
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.home}/>
                     )}
                 />
-                <Route exact path={pages.projectId}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.projectId}/>
-                    )}
-                />
-                <Route exact path={pages.id1Page}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.id1Page}/>
-                    )}
-                />
                 <Route exact path={pages.viewPage}
                     render={props => (
                         <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.viewPage}/>
-                    )}
-                />
-                <Route exact path={pages.displayPage}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.displayPage}/>
-                    )}
-                />
-                <Route exact path={pages.manageFiles}
-                    render={props => (
-                        <AppComponent {...props} data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow} currentPageName={Config.manageFiles}/>
                     )}
                 />
                 <Route

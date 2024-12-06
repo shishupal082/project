@@ -4,7 +4,10 @@ import DataHandlerV2 from "../DataHandlerV2";
 import TemplateHandler from "../template/TemplateHandler";
 // import Config from "../Config";
 
+
+import Api from "../../../common/Api";
 import AppHandler from "../../../common/app/common/AppHandler";
+import CommonConfig from "../../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
 import TemplateHelper from "../../../common/TemplateHelper";
 // import FormHandler from "../forms/FormHandler";
@@ -218,9 +221,98 @@ ScanDir.extend({
         result.push(fieldHtml);
         return result;
     },
+    _isValidTableEntry: function(dbApi) {
+        if (!$S.isObject(dbApi)) {
+            return false;
+        }
+        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
+            return false;
+        }
+        if (!$S.isArray(dbApi.apis)) {
+            return false;
+        }
+        return true;
+    },
+    _loadDBViewData: function(dbDataApis, callback) {
+        var request = [], i, j, el, temp, urls;
+        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
+            for(i=0; i<dbDataApis.length; i++) {
+                if (!this._isValidTableEntry(dbDataApis[i])) {
+                    continue;
+                }
+                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
+                    if ($S.isString(el) && el.length > 0) {
+                        return true;
+                    }
+                    return false;
+                });
+                for (j=0; j<urls.length; j++) {
+                    el = urls[j];
+                    if ($S.isString(el) && el.split("?").length > 1) {
+                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                    } else {
+                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                    }
+                }
+                if (urls.length < 1) {
+                    continue;
+                }
+                temp = {};
+                temp.apis = dbDataApis[i].apis;
+                temp.dataIndex = dbDataApis[i].dataIndex;
+                temp.wordBreak = dbDataApis[i].wordBreak;
+                temp.apiName = dbDataApis[i].apiName;
+                temp.tableName = dbDataApis[i].tableName;
+                temp.singleLineComment = dbDataApis[i].singleLineComment;
+                temp.responseType = dbDataApis[i]["responseType"];
+                if (temp.responseType === "json") {
+                    temp.requestMethod = Api.getAjaxApiCallMethod();
+                } else {
+                    temp.requestMethod = Api.getAjaxApiCallMethodV2();
+                }
+                if (!$S.isStringV2(temp.apiName)) {
+                    temp.apiName = temp.tableName;
+                }
+                temp.url = urls;
+                request.push(temp);
+            }
+        }
+        if (request.length < 1) {
+            $S.callMethod(callback);
+        } else {
+            AppHandler.LoadDataFromRequestApi(request, function() {
+                if ($S.isFunction(callback)) {
+                    callback(request);
+                }
+            });
+        }
+    },
+    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
+        var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
+        var status = CommonDataHandler.getDataLoadStatusByKey(keys);
+        var database;
+        if (status === "completed") {
+            status = DataHandler.getData("dbViewDataLoadStatus");
+            if (status === "not-started") {
+                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                var dbViewData;
+                this._loadDBViewData(dbDataApis, function(request) {
+                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    database = AppHandler.GenerateDatabase(request, dbTableDataIndex);
+                    dbViewData = DataHandler.getData("dbViewData", {});
+                    dbViewData = AppHandler.MergeDatabase(dbViewData, database);
+                    DataHandler.setData("dbViewData", dbViewData);
+                    $S.callMethod(callback);
+                });
+            } else {
+                $S.callMethod(callback);
+            }
+        }
+    },
     loadScanDirConfigDataApi: function(callback) {
         var scanDirConfigDataApi = DataHandler.getAppData("scanDirConfigDataApi");
-        callback();
+        this.handlePageLoad(scanDirConfigDataApi, null, callback);
+        // callback();
     }
 });
 })($S);

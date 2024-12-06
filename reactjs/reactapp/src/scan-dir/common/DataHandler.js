@@ -12,6 +12,7 @@ import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 import DisplayPage from "./pages/DisplayPage";
+import ScanDir from "./pages/ScanDir";
 
 var DataHandler;
 
@@ -193,15 +194,18 @@ DataHandler.extend({
         return link;
     },
     isDataLoadComplete: function() {
+        var pageName = this.getData("pageName", "");
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        dataLoadStatusKey.push("metaDataLoadStatus");
-        if(CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
-            return false;
+        if (pageName === "home") {
+            dataLoadStatusKey.push("metaDataLoadStatus");
+        }
+        var status = CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey);
+        if (["origin","home"].indexOf(pageName)>=0) {
+            return status === "completed";
         }
         dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
-        var pageName = this.getData("pageName", "");
         if (pageName === "manageFiles") {
             dataLoadStatusKey.push("filesInfoLoadStatus");
         }
@@ -277,8 +281,9 @@ DataHandler.extend({
         }
         var currentAppData = this.getCurrentAppData();
         var metaData = CommonDataHandler.getData("metaData", {});
+        var appControlMetaData = CommonDataHandler.getData("appControlMetaData", {});
         var tempConfig = Config.tempConfig;
-        return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
+        return $S.findParam([currentAppData, metaData, appControlMetaData, tempConfig], key, defaultValue);
     },
     getCustomePageDataByKey: function(key, defaultValue) {
         return CommonDataHandler.getCustomePageDataByKey(key, defaultValue);
@@ -287,24 +292,25 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadDataByPage: function(callback) {
-        DataHandlerV2.findCurrentList3Id();
-        this.setData("local.loadDataByParamsStatus", "in_progress");
-        this.setData("local.loadDbTableDataStatus", "in_progress");
-        var temp;
-        DataHandler.loadDbTableData(function() {
-            DataHandler.setData("local.loadDbTableDataStatus", "completed");
-            temp = DataHandler.getDataLoadStatusByKey(["local.loadDataByParamsStatus"]);
-            if (temp === "completed") {
-                $S.callMethod(callback);
-            }
-        });
-        ApiHandler.loadDataByParams(function() {
-            DataHandler.setData("local.loadDataByParamsStatus", "completed");
-            temp = DataHandler.getDataLoadStatusByKey(["local.loadDbTableDataStatus"]);
-            if (temp === "completed") {
-                $S.callMethod(callback);
-            }
-        });
+        // DataHandlerV2.findCurrentList3Id();
+        // this.setData("local.loadDataByParamsStatus", "in_progress");
+        // this.setData("local.loadDbTableDataStatus", "in_progress");
+        // var temp;
+        // DataHandler.loadDbTableData(function() {
+        //     DataHandler.setData("local.loadDbTableDataStatus", "completed");
+        //     temp = DataHandler.getDataLoadStatusByKey(["local.loadDataByParamsStatus"]);
+        //     if (temp === "completed") {
+        //         $S.callMethod(callback);
+        //     }
+        // });
+        // ApiHandler.loadDataByParams(function() {
+        //     DataHandler.setData("local.loadDataByParamsStatus", "completed");
+        //     temp = DataHandler.getDataLoadStatusByKey(["local.loadDbTableDataStatus"]);
+        //     if (temp === "completed") {
+        //         $S.callMethod(callback);
+        //     }
+        // });
+        $S.callMethod(callback);
     },
     setHeaderAndFooterData: function() {
         var afterLoginLinkJson = DataHandler.getAppData("afterLoginLinkJson", {});
@@ -315,23 +321,25 @@ DataHandler.extend({
         var addBasepathLinkName = this.getAppData("addBasepathLinkName", []);
         DataHandlerV2.updateLinkIndex(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage)
         CommonDataHandler.setHeaderAndFooterData(addBasepathLinkName, afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage, enabledPages);
-        Config.headingJson = AppHandler.GetStaticData("headingJson", [], "json");
+        Config.headingJson = [];//AppHandler.GetStaticData("headingJson", [], "json");
         Config.afterLoginLinkJson = afterLoginLinkJson;
         Config.footerLinkJsonAfterLogin = footerLinkJsonAfterLogin;
     },
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getPathParamsData("index", "");
-        var status = CommonDataHandler.getData("metaDataLoadStatus", "");
+        var metaDataLoadStatus = CommonDataHandler.getData("metaDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
-        if (status !== "completed") {
-            if (pageName === Config.manageFiles) {
-                currentList1Id = this.getCustomePageDataByKey("pageName:manageFiles.appIndex", "");
-            }
-            CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
-                CommonDataHandler.setDateSelectParameter(currentList1Id);
-                DataHandler.setHeaderAndFooterData();
+        if (pageName === "home") {
+            if (metaDataLoadStatus !== "completed") {
+                CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
+                    CommonDataHandler.setDateSelectParameter(currentList1Id);
+                    ScanDir.loadScanDirConfigDataApi(function() {
+                        DataHandler.loadDataByPage(callback);
+                    });
+                });
+            } else {
                 DataHandler.loadDataByPage(callback);
-            });
+            }
         } else {
             DataHandler.loadDataByPage(callback);
         }
@@ -372,10 +380,6 @@ DataHandler.extend({
 DataHandler.extend({
     AppDidMount: function(appStateCallback, appDataCallback) {
         var pageName = DataHandler.getData("pageName", "");
-        if (pageName === Config.origin) {
-            AppHandler.LazyRedirect(CommonConfig.basepathname + "/0", 250);
-            return;
-        }
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
         CommonDataHandler.loadLoginUserDetailsData(function() {
             AppHandler.TrackPageView(pageName);
@@ -386,6 +390,7 @@ DataHandler.extend({
                         if ($S.isStringV2(title) && CommonConfig.JQ) {
                             CommonConfig.JQ("title").html(title);
                         }
+                        DataHandler.setHeaderAndFooterData();
                         DataHandler.loadDataByAppId(function() {
                             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
                         });
@@ -419,11 +424,7 @@ DataHandler.extend({
         var isReset = false;
         if (type === "index" || type === "pageName") {
             if (type === "pageName") {
-                if ($S.isStringV2(oldValue) && $S.isStringV2(newValue)) {
-                    if ([oldValue, newValue].indexOf(Config.manageFiles) >= 0) {
-                        isReset = true;
-                    }
-                }
+                
             } else {
                 isReset = true;
             }
@@ -535,6 +536,7 @@ DataHandler.extend({
 DataHandler.extend({
     getRenderData: function(pageName, pageId, viewPageName) {
         var renderData;
+        var appControlData = CommonDataHandler.getData("appControlData", []);
         var currentAppData = this.getCurrentAppData();
         var metaData = CommonDataHandler.getData("metaData");
         var currentList3Data = this.getCurrentList3Data();
@@ -543,6 +545,9 @@ DataHandler.extend({
         var filterOptions = null;
         var dateParameterField, tableName;
         switch(pageName) {
+            case "origin":
+                renderData = appControlData;
+            break;
             case "home":
                 tableName = this.getTableName("projectTable");
                 renderData = DataHandlerV2.getTableData(tableName);
@@ -589,6 +594,7 @@ DataHandler.extend({
         return renderData;
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
+        var pageName= DataHandler.getData("pageName", "");
         var dataLoadStatus = this.isDataLoadComplete();
         var renderData = null;
         var appHeading = null;
@@ -596,7 +602,6 @@ DataHandler.extend({
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
-        var pageName= DataHandler.getData("pageName", "");
         var pageId = DataHandler.getPathParamsData("pageId", "");
         var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
         if (dataLoadStatus) {

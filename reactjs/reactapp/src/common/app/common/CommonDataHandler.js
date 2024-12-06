@@ -264,20 +264,13 @@ CommonDataHandler.extend({
         }
         return finalObj;
     },
-    _handleMetaDataLoad: function(defaultMetaData, appControlMetaData, existingData, metaDataResponse) {
+    _handleMetaDataLoad: function(defaultMetaData, appControlMetaData, metaDataResponse) {
         var finalMetaData = {}, i, tempMetaData, temp;
-        var metaData = existingData;
         if ($S.isObject(defaultMetaData)) {
             finalMetaData = defaultMetaData;
         }
-        if (!$S.isObject(metaData)) {
-            metaData = {};
-        }
         if ($S.isObject(appControlMetaData)) {
             finalMetaData = Object.assign(finalMetaData, appControlMetaData);
-        }
-        if ($S.isObject(metaData)) {
-            finalMetaData = Object.assign(finalMetaData, metaData);
         }
         if ($S.isArray(metaDataResponse)) {
             for (i=0; i<metaDataResponse.length; i++) {
@@ -330,7 +323,6 @@ CommonDataHandler.extend({
         AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
             CommonDataHandler.setData("appControlData", appControlData);
             CommonDataHandler.setData("appControlMetaData", metaData);
-            CommonDataHandler._handleMetaDataLoad(defaultMetaData, null);
             $S.log("appControlData load complete");
             CommonDataHandler.setData("appControlDataLoadStatus", "completed");
             $S.callMethod(callback);
@@ -338,7 +330,7 @@ CommonDataHandler.extend({
     },
     loadMetaDataByMetaDataApi: function(defaultMetaData, metaDataApi, callback) {
         var request = [];
-        var appControlMetaData, self;
+        var appControlMetaData, finalMetaData, self = this;
         if (!$S.isArray(metaDataApi)) {
             metaDataApi = [];
         }
@@ -359,8 +351,8 @@ CommonDataHandler.extend({
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
                     appControlMetaData = self.getData("appControlMetaData", {});
-                    defaultMetaData = self.getData("metaData", {});
-                    CommonDataHandler._handleMetaDataLoad(defaultMetaData, appControlMetaData, request[i].response);
+                    finalMetaData = CommonDataHandler._handleMetaDataLoad(defaultMetaData, appControlMetaData, request[i].response);
+                    self.setData("metaData", finalMetaData);
                 }
             }
             CommonDataHandler.setData("metaDataLoadStatus", "completed");

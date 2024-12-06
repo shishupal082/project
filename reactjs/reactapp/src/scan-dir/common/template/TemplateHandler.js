@@ -37,15 +37,15 @@ $S.extendObject(TemplateHandler);
 DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
     generateHomeRenderField: function(pageName, renderData) {
-        // pageName = "home"
+        // pageName = "origin"
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
             for (i=0; i<renderData.length; i++) {
                 if (!$S.isObject(renderData[i])) {
                     continue;
                 }
-                homeFields.push({"toUrl": this._getLink("projectId", renderData[i].tableUniqueId),
-                        "toText": renderData[i].pName});
+                homeFields.push({"toUrl": this._getLink("origin", i),
+                        "toText": renderData[i].name});
             }
         }
         var template = this.getHomeTemplatePartial("home");
@@ -91,7 +91,10 @@ TemplateHandler.extend({
     _getLink: function(pageName, pid) {
         var link = "";
         var index = DataHandler.getPathParamsData("index", "0");
-        if (pageName === "projectId") {
+        if (pageName === "origin") {
+            // Here pid = index
+            link = CommonConfig.basepathname + "/" + pid;
+        } else if (pageName === "projectId") {
             link = CommonConfig.basepathname + "/" + index + "/pid/" + pid;
         } else {
             link = CommonConfig.basepathname + "/" + index;
@@ -249,8 +252,11 @@ TemplateHandler.extend({
             return this._getInvalidField(renderData.reason);
         } else {
             switch(pageName) {
-                case "home":
+                case "origin":
                     renderField = this.generateHomeRenderField(pageName, renderData);
+                break;
+                case "home":
+                    renderField = [];//this.generateHomeRenderField(pageName, renderData);
                 break;
                 case "projectId":
                     renderField = this.generateProjectDetailsPage(pageName, renderData);
@@ -292,7 +298,11 @@ TemplateHandler.extend({
         return renderField;
     },
     GetHeadingField: function(headingText) {
-        return [$S.clone(Config.headingJson), {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
+        var headingJson = $S.clone(Config.headingJson);
+        if ($S.isArray(headingJson)) {
+            headingJson.push({"tag": "div.center.b", "text": headingText});
+        }
+        return [headingJson, {"tag": "div.center", "text": $S.clone(Config.afterLoginLinkJson)}];
     }
 });
 
