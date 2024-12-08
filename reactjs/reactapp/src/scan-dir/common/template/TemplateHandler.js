@@ -145,7 +145,6 @@ TemplateHandler.extend({
     },
     getLink: function(pageName, index, rowData) {
         var link = "";
-        var urlAttr = "";
         if ($S.isStringV2(index)) {
             link = CommonConfig.basepathname + "/" + index;
         } else {

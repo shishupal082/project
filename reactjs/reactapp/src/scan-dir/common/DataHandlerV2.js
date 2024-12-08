@@ -333,7 +333,7 @@ DataHandlerV2.extend({
     //     }
     // },
     updateLinkIndex: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
-        var i, temp;
+        // var i, temp;
         var index = DataHandler.getPathParamsData("index", "");
         var pageName = DataHandler.getData("pageName");
         var originLink = TemplateHandler.getLink(pageName);
