@@ -96,6 +96,35 @@ DBViewDataHandler.extend({
         }
         return finalTable;
     },
+    ApplyResultPatternV2: function(apiTableData, resultPattern) {
+        if (!$S.isArray(apiTableData) || !$S.isArray(resultPattern)) {
+            return [];
+        }
+        var i, j, k, finalRowData, finalTable = [], value, valueArr;
+        for (i = 0; i < apiTableData.length; i++) {
+            finalRowData = $S.clone(resultPattern);
+            for (j=0; j<finalRowData.length; j++) {
+                if (!$S.isStringV2(finalRowData[j].name)) {
+                    continue;
+                }
+                value = apiTableData[i][finalRowData[j].name];
+                valueArr = [];
+                if ($S.isArray(finalRowData[j].combineDataFields) && finalRowData[j].combineDataFields.length > 0) {
+                    for (k=0; k<finalRowData[j].combineDataFields.length; k++) {
+                        if ($S.isStringV2(apiTableData[i][finalRowData[j].combineDataFields[k]])) {
+                            valueArr.push(apiTableData[i][finalRowData[j].combineDataFields[k]]);
+                        }
+                    }
+                    if (valueArr.length > 0) {
+                        value = valueArr.join(",");
+                    }
+                }
+                finalRowData[j].value = value;
+            }
+            finalTable.push(finalRowData);
+        }
+        return finalTable;
+    },
     _generateTempDbViewData: function(dbViewData, tempTableData, resultCriteria) {
         if (!$S.isObject(dbViewData)) {
             dbViewData = {};

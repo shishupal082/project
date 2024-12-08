@@ -34,9 +34,8 @@ TemplateHandler.fn = TemplateHandler.prototype = {
 };
 
 $S.extendObject(TemplateHandler);
-DBViewTemplateHandler.UpdateTemplate("noDataFound", []);
 TemplateHandler.extend({
-    generateHomeRenderField: function(pageName, renderData) {
+    generateOriginRenderField: function(pageName, renderData) {
         // pageName = "origin"
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
@@ -44,8 +43,40 @@ TemplateHandler.extend({
                 if (!$S.isObject(renderData[i])) {
                     continue;
                 }
-                homeFields.push({"toUrl": this._getLink("origin", i),
+                homeFields.push({"toUrl": this._getLink(pageName, i, renderData[i]),
                         "toText": renderData[i].name});
+            }
+        }
+        var template = this.getHomeTemplatePartial("home");
+        var genericTemplate;
+        for (i = 0; i< homeFields.length; i++) {
+            linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
+            TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
+        }
+        genericTemplate = FormHandler.getGenericTemplate(pageName, DataHandler.getAppData("form_type", ""), "generic_form0");
+        if (!$S.isArrayV2(homeFields) && !$S.isArray(genericTemplate) && !$S.isObject(genericTemplate)) {
+            template = this.getTemplate("noDataFound");
+        } else {
+            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
+        }
+        return template;
+    },
+    _getDisplayTextLinkHomePage: function(rowData) {
+        if ($S.isObject(rowData)) {
+            return rowData["id"];
+        }
+        return "";
+    },
+    generateHomeRenderField: function(pageName, renderData) {
+        // pageName = "home"
+        var homeFields = [], i, linkTemplate;
+        if ($S.isArray(renderData)) {
+            for (i=0; i<renderData.length; i++) {
+                if (!$S.isObject(renderData[i])) {
+                    continue;
+                }
+                homeFields.push({"toUrl": this._getLink(pageName, i, renderData[i]),
+                        "toText": this._getDisplayTextLinkHomePage(renderData[i])});
             }
         }
         var template = this.getHomeTemplatePartial("home");
@@ -88,19 +119,40 @@ TemplateHandler.extend({
         TemplateHelper.updateTemplateText(linkTemplate, {"link-field.url": text});
         return linkTemplate;
     },
-    _getLink: function(pageName, pid) {
+    _getLink: function(pageName, index, rowData) {
         var link = "";
-        var index = DataHandler.getPathParamsData("index", "0");
+        var pathParamIndex = DataHandler.getPathParamsData("index", "0");
+        var urlAttr = "";
         if (pageName === "origin") {
-            // Here pid = index
-            link = CommonConfig.basepathname + "/" + pid;
-        } else if (pageName === "projectId") {
-            link = CommonConfig.basepathname + "/" + index + "/pid/" + pid;
+            link = CommonConfig.basepathname + "/" + index;
+        } else if (pageName === "home") {
+            link = CommonConfig.basepathname + "/" + pathParamIndex;
+            if ($S.isObject(rowData)) {
+                if ($S.isStringV2(rowData["id"])) {
+                    urlAttr += "id=" + rowData["id"];
+                }
+            }
+            if ($S.isStringV2(urlAttr)) {
+                link += "?" + urlAttr;
+            }
         } else {
             link = CommonConfig.basepathname + "/" + index;
             if (link === "") {
                 link = "/" + index;
             }
+        }
+        return link;
+    },
+    getLink: function(pageName, index, rowData) {
+        var link = "";
+        var urlAttr = "";
+        if ($S.isStringV2(index)) {
+            link = CommonConfig.basepathname + "/" + index;
+        } else {
+            link = CommonConfig.basepathname;
+        }
+        if (link === "") {
+            link = "/";
         }
         return link;
     },
@@ -253,10 +305,13 @@ TemplateHandler.extend({
         } else {
             switch(pageName) {
                 case "origin":
-                    renderField = this.generateHomeRenderField(pageName, renderData);
+                    renderField = this.generateOriginRenderField(pageName, renderData);
                 break;
                 case "home":
-                    renderField = [];//this.generateHomeRenderField(pageName, renderData);
+                    renderField = this.generateHomeRenderField(pageName, renderData);
+                break;
+                case "home_view":
+                    renderField = renderData;
                 break;
                 case "projectId":
                     renderField = this.generateProjectDetailsPage(pageName, renderData);

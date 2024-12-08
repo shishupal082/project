@@ -1836,6 +1836,9 @@ Stack.extend({
         var UrlParser = new UrlParserObj(url);
         return UrlParser.getData(name, defaultValue);
     },
+    getUrlParserObject: function(url) {
+        return new UrlParserObj(url);
+    },
     getPlatform: function() {
         return Platform;
     },

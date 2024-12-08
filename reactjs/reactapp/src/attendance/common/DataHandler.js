@@ -10,7 +10,8 @@ import TemplateHandler from "./TemplateHandler";
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
-import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+// import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+import DBViewAttendanceInterface from "../../common/app/common/DBViewAttendanceInterface";
 
 var DataHandler;
 
@@ -665,18 +666,16 @@ DataHandler.extend({
         if ($S.isObject(dateParameters) && $S.isArray(dateParameters[dateSelect])) {
             dateArray = dateParameters[dateSelect];
         }
-        var renderData = [], i, currentList3Data, tempRenderData, currentList3DataItems, isAdded, dbviewSummaryAggregatePattern;
+        var renderData = [], i, currentList3Data;
         var currentAppData = DataHandler.getCurrentAppData({});
         var metaData = DataHandler.getMetaData({});
         var userData = DataHandler.getData("dbViewDataTable", []);
         var filterOptions = DataHandler.getData("filterOptions", []);
         var dateParameterField = this.getDateParameterField();
         var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name", dateParameterField);
-        // var sortableValue = DataHandler.getData("sortableValue", "");
-        // var sortableName = DataHandler.getData("sortable", "");
         var sortingFields = DataHandler.getData("sortingFields", []);
         var displayDateSummary = DataHandler.getBooleanParam("displayDateSummary", false);
-        var isExpressionEnabled = DataHandler.isExpressionEnabled(pageName);
+        var dbviewSummaryAggregatePattern, isExpressionEnabled;
         if ([Config.summary].indexOf(pageName) >= 0) {
             filteredUserData = this._generateSummaryUserData(filteredUserData);
         } else if ([Config.ta].indexOf(pageName) >= 0) {
@@ -706,36 +705,14 @@ DataHandler.extend({
             break;
             case "dbview":
             case "custom_dbview":
-            case "dbview_summary":
-                isAdded = false;
                 currentList3Data = this.getCurrentList3Data();
-                currentList3DataItems = DBViewDataHandler.bifercateCurrentList3DataItems(currentList3Data);
-                if ($S.isArray(currentList3DataItems) && currentList3DataItems.length > 0) {
-                    for(i=0; i<currentList3DataItems.length; i++) {
-                        if (currentList3DataItems.length > 1) {
-                            if ($S.isObject(currentList3DataItems[i])) {
-                                if ($S.isStringV2(currentList3DataItems[i]["headingText"]) || $S.isObject(currentList3DataItems[i]["headingText"]) || $S.isArray(currentList3DataItems[i]["headingText"])) {
-                                    renderData.push({"tag": "div", "text": currentList3DataItems[i]["headingText"]});
-                                }
-                            }
-                        }
-                        tempRenderData = DBViewDataHandler.GenerateFinalDBViewData(filteredUserData, currentList3DataItems[i], dateParameterField, dateSelect);
-                        tempRenderData = DBViewDataHandler.SortDbViewResult(tempRenderData, sortingFields, dateParameterField);
-                        if (tempRenderData === null || ($S.isArray(tempRenderData) && tempRenderData.length === 0)) {
-                        } else {
-                            isAdded = true;
-                            if (pageName === "dbview_summary") {
-                                dbviewSummaryAggregatePattern = DataHandler.getAppData("resultPattern.dbview_summary_aggregate", []);
-                                renderData.push(DBViewTemplateHandler.GenerateDbViewSummaryRenderFieldV2(tempRenderData, currentList3DataItems[i], sortingFields, true, dbviewSummaryAggregatePattern, isExpressionEnabled));
-                            } else {
-                                renderData.push(DBViewTemplateHandler.GenerateDbViewRenderField(tempRenderData, currentList3DataItems[i], sortingFields, true));
-                            }
-                        }
-                    }
-                }
-                if (isAdded === false) {
-                    renderData = DBViewTemplateHandler.getTemplate("noDataFound");
-                }
+                renderData = DBViewAttendanceInterface.getDBViewRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect);
+            break;
+            case "dbview_summary":
+                currentList3Data = this.getCurrentList3Data();
+                dbviewSummaryAggregatePattern = DataHandler.getAppData("resultPattern.dbview_summary_aggregate", []);
+                isExpressionEnabled = DataHandler.isExpressionEnabled(pageName);
+                renderData = DBViewAttendanceInterface.getDBViewSummaryRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect, dbviewSummaryAggregatePattern, isExpressionEnabled);
             break;
             default:
                 renderData = [];

@@ -10,6 +10,8 @@ import AppHandler from "../../common/app/common/AppHandler";
 import CommonConfig from "../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
+// import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
+import DBViewAttendanceInterface from "../../common/app/common/DBViewAttendanceInterface";
 // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 import DisplayPage from "./pages/DisplayPage";
 import ScanDir from "./pages/ScanDir";
@@ -20,6 +22,7 @@ var DataHandler;
 // var DT = $S.getDT();
 
 var CurrentData = $S.getDataObj();
+var URlPaser = $S.getUrlParserObject(window.location.href);
 var keys = [];
 
 keys.push("renderData");
@@ -51,6 +54,7 @@ keys.push("loginUserDetailsLoadStatus");
 keys.push("appControlDataLoadStatus");
 keys.push("appRelatedDataLoadStatus");
 keys.push("dbViewDataLoadStatus");
+keys.push("dbViewConfigDataLoadStatus");
 keys.push("dbTableDataLoadStatus");
 keys.push("local.loadDataByParamsStatus");
 keys.push("local.loadDbTableDataStatus");
@@ -58,6 +62,7 @@ keys.push("filesInfoLoadStatus");
 
 keys.push("sortingFields");
 keys.push("dbViewData");
+keys.push("dbViewDataTable");
 keys.push("filesInfoData");
 
 keys.push("firstTimeDataLoadStatus");
@@ -66,6 +71,7 @@ keys.push("dateParameters");
 
 keys.push("fieldsData");
 keys.push("pathParams");
+keys.push("queryParams");
 
 keys.push(Config.fieldsKey.UploadFile);
 
@@ -79,6 +85,7 @@ CurrentData.setKeys(keys);
 CurrentData.setData("loginUserDetailsLoadStatus", "not-started");
 CurrentData.setData("appControlDataLoadStatus", "not-started");
 CurrentData.setData("appRelatedDataLoadStatus", "not-started");
+CurrentData.setData("dbViewConfigDataLoadStatus", "not-started");
 CurrentData.setData("dbViewDataLoadStatus", "not-started");
 CurrentData.setData("dbTableDataLoadStatus", "not-started");
 CurrentData.setData("filesInfoLoadStatus", "not-started");
@@ -106,7 +113,15 @@ DataHandler.extend({
         return CurrentData.setData(key, value, isDirect);
     },
     getData: function(key, defaultValue, isDirect) {
-        return CurrentData.getData(key, defaultValue, isDirect);
+        var value = CurrentData.getData(key, defaultValue, isDirect);
+        var scanDirId;
+        if (key === "pageName" && value === "home") {
+            scanDirId = this.getUrlQueryParameter("id");
+            if ($S.isStringV2(scanDirId)) {
+                value += "_view";
+            }
+        }
+        return value;
     },
     clearFieldsData: function() {
         this.setData("fieldsData", {});
@@ -138,6 +153,15 @@ DataHandler.extend({
     },
     getPathParamsData: function(key, defaultValue) {
         return CommonDataHandler.getPathParamsData(key, defaultValue);
+    },
+    getQueryParam: function(key, defaultValue) {
+        return URlPaser.getData(key, defaultValue);
+    },
+    getCurrentUrl: function() {
+        return window.location.href;
+    },
+    getUrlQueryParameter: function(key, defaultValue) {
+        return $S.getUrlAttribute(this.getCurrentUrl(), key, defaultValue);
     },
     getDataLoadStatusByKey: function(keys) {
         var dataLoadStatus = [], i;
@@ -198,11 +222,11 @@ DataHandler.extend({
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        if (pageName === "home") {
+        if (["home","home_view"].indexOf(pageName)>=0) {
             dataLoadStatusKey.push("metaDataLoadStatus");
         }
         var status = CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey);
-        if (["origin","home"].indexOf(pageName)>=0) {
+        if (["origin","home", "home_view"].indexOf(pageName)>=0) {
             return status === "completed";
         }
         dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
@@ -329,7 +353,7 @@ DataHandler.extend({
         var currentList1Id = DataHandler.getPathParamsData("index", "");
         var metaDataLoadStatus = CommonDataHandler.getData("metaDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
-        if (pageName === "home") {
+        if (["home","home_view"].indexOf(pageName)>=0) {
             if (metaDataLoadStatus !== "completed") {
                 CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                     CommonDataHandler.setDateSelectParameter(currentList1Id);
@@ -370,6 +394,7 @@ DataHandler.extend({
         this.clearFieldsData();
         this.setData("dbViewData", {});
         this.setData("appRelatedDataLoadStatus", "not-started");
+        this.setData("dbViewConfigDataLoadStatus", "not-started");
         this.setData("dbViewDataLoadStatus", "not-started");
         this.setData("dbTableDataLoadStatus", "not-started");
         this.setData("filesInfoLoadStatus", "not-started");
@@ -428,6 +453,8 @@ DataHandler.extend({
             } else {
                 isReset = true;
             }
+        } else if (type === "id") {
+            isReset = true;
         }
         if (isReset) {
             this.resetAllFields();
@@ -549,8 +576,12 @@ DataHandler.extend({
                 renderData = appControlData;
             break;
             case "home":
-                tableName = this.getTableName("projectTable");
+                tableName = "scan_dir_config_data";
                 renderData = DataHandlerV2.getTableData(tableName);
+            break;
+            case "home_view":
+                renderData = this.getData("dbViewDataTable");
+                renderData = DBViewAttendanceInterface.getDBViewRenderField(renderData);
             break;
             case "projectId":
                 renderData = DataHandlerV2.getProjectDataV2(pageName);

@@ -5,7 +5,7 @@ import TemplateHandler from "../template/TemplateHandler";
 // import Config from "../Config";
 
 
-import Api from "../../../common/Api";
+// import Api from "../../../common/Api";
 import AppHandler from "../../../common/app/common/AppHandler";
 import CommonConfig from "../../../common/app/common/CommonConfig";
 import CommonDataHandler from "../../../common/app/common/CommonDataHandler";
@@ -31,27 +31,6 @@ ScanDir.fn = ScanDir.prototype = {
 };
 $S.extendObject(ScanDir);
 ScanDir.extend({
-    // _getFinalDbTable: function(dbViewData) {
-    //     var finalDbTable = [], temp;
-    //     var requiredTableName = "";
-    //     if ($S.isArray(dbViewData)) {
-    //         for (var i=0; i<dbViewData.length; i++) {
-    //             if (!$S.isObject(dbViewData[i])) {
-    //                 continue;
-    //             }
-    //             temp = {};
-    //             for (var tableName in dbViewData[i]) {
-    //                 if ($S.isObject(dbViewData[i][tableName])) {
-    //                     temp = Object.assign(temp, dbViewData[i][tableName]);
-    //                 }
-    //             }
-    //             if (Object.keys(temp).length > 0) {
-    //                 finalDbTable.push(temp);
-    //             }
-    //         }
-    //     }
-    //     return finalDbTable;
-    // },
     getRenderData: function(pageName, pageId, sortingFields) {
         var requiredDataTable = DataHandler.getAppData("pageId:" + pageId + ".requiredDataTable");
         var filterKeyMapping = DataHandler.getAppData("pageId:" + pageId + ".filterKeyMapping");
@@ -221,84 +200,21 @@ ScanDir.extend({
         result.push(fieldHtml);
         return result;
     },
-    _isValidTableEntry: function(dbApi) {
-        if (!$S.isObject(dbApi)) {
-            return false;
-        }
-        if (!$S.isString(dbApi.tableName) || dbApi.tableName.trim().length < 1) {
-            return false;
-        }
-        if (!$S.isArray(dbApi.apis)) {
-            return false;
-        }
-        return true;
-    },
-    _loadDBViewData: function(dbDataApis, callback) {
-        var request = [], i, j, el, temp, urls;
-        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
-            for(i=0; i<dbDataApis.length; i++) {
-                if (!this._isValidTableEntry(dbDataApis[i])) {
-                    continue;
-                }
-                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
-                    if ($S.isString(el) && el.length > 0) {
-                        return true;
-                    }
-                    return false;
-                });
-                for (j=0; j<urls.length; j++) {
-                    el = urls[j];
-                    if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
-                    } else {
-                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
-                    }
-                }
-                if (urls.length < 1) {
-                    continue;
-                }
-                temp = {};
-                temp.apis = dbDataApis[i].apis;
-                temp.dataIndex = dbDataApis[i].dataIndex;
-                temp.wordBreak = dbDataApis[i].wordBreak;
-                temp.apiName = dbDataApis[i].apiName;
-                temp.tableName = dbDataApis[i].tableName;
-                temp.singleLineComment = dbDataApis[i].singleLineComment;
-                temp.responseType = dbDataApis[i]["responseType"];
-                if (temp.responseType === "json") {
-                    temp.requestMethod = Api.getAjaxApiCallMethod();
-                } else {
-                    temp.requestMethod = Api.getAjaxApiCallMethodV2();
-                }
-                if (!$S.isStringV2(temp.apiName)) {
-                    temp.apiName = temp.tableName;
-                }
-                temp.url = urls;
-                request.push(temp);
-            }
-        }
-        if (request.length < 1) {
-            $S.callMethod(callback);
-        } else {
-            AppHandler.LoadDataFromRequestApi(request, function() {
-                if ($S.isFunction(callback)) {
-                    callback(request);
-                }
-            });
-        }
-    },
-    handlePageLoad: function(dbDataApis, dbTableDataIndex, callback) {
+    loadDBViewConfigData: function(callback) {
+        var scanDirConfigDataApi = DataHandler.getAppData("scanDirConfigDataApi");
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var database;
+        var dbTableDataIndex = null;
         if (status === "completed") {
-            status = DataHandler.getData("dbViewDataLoadStatus");
+            status = DataHandler.getData("dbViewConfigDataLoadStatus");
             if (status === "not-started") {
-                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                DataHandler.setData("dbViewConfigDataLoadStatus", "in-progress");
                 var dbViewData;
-                this._loadDBViewData(dbDataApis, function(request) {
-                    DataHandler.setData("dbViewDataLoadStatus", "completed");
-                    database = AppHandler.GenerateDatabase(request, dbTableDataIndex);
+                CommonDataHandler.LoadDBViewData(scanDirConfigDataApi, function(request) {
+                    DataHandler.setData("dbViewConfigDataLoadStatus", "completed");
+                    CommonDataHandler.FormateApiResponseInRequest(request);
+                    database = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);
                     DataHandler.setData("dbViewData", dbViewData);
@@ -309,10 +225,115 @@ ScanDir.extend({
             }
         }
     },
+    _getScanDirDataApi: function(tableName) {
+        var url = "/api/read_scan_dir_json?";
+        var scanDirId = DataHandler.getUrlQueryParameter("id", "");
+        var pathname = DataHandler.getUrlQueryParameter("pathname", "");
+        var temp = {"responseType": "json", "apiName": "scanDirApiData"};
+        url = url+"scan_dir_id="+scanDirId;
+        if ($S.isStringV2(pathname)) {
+            url = url + "&pathname=" + pathname;
+        }
+        temp["tableName"] = tableName;
+        temp["apis"] = [url];
+        return [temp];
+    },
+    _getTableName: function(resultPattern) {
+        var tableName = "";
+        if ($S.isArray(resultPattern) && resultPattern.length > 0) {
+            return resultPattern[0]["tableName"];
+        }
+        return tableName;
+    },
+    _generateFolderLink: function(folderPath) {
+        var folderLink = CommonConfig.basepathname + "/" + DataHandler.getPathParamsData("index", "");
+        folderLink += "?id=" + DataHandler.getUrlQueryParameter("id", "");
+        if ($S.isStringV2(folderPath)) {
+            folderLink += "&pathname=" + folderPath;
+        }
+        return folderLink;
+    },
+    _getFileDetailsLink: function(rowData) {
+        var fileDetailsLink = {};
+        var folderLink;
+        if ($S.isObject(rowData)) {
+            if (rowData["filepath_type"] === "FILE") {
+                fileDetailsLink = {
+                    "tag": "a",
+                    "isTargetBlank": true,
+                    "href": CommonConfig.baseApi + rowData["file_url"],
+                    "text": rowData["filepath"]
+                };
+            } else if (rowData["filepath_type"] === "FOLDER") {
+                folderLink = this._generateFolderLink(rowData["filepath"]);
+                fileDetailsLink = {
+                    "tag": "div",
+                    "className": "list-group",
+                    "text": [
+                        {
+                            "tag": "link",
+                            "className": "list-group-item2 list-group-item-action list-group-item-primary",
+                            "href": folderLink,
+                            "text": rowData["filepath"]
+                        }
+                    ]
+                };
+            }
+        }
+        return fileDetailsLink;
+    },
+    _updateFileDetails: function(database) {
+        var tableData, rowData;
+        if ($S.isObject(database)) {
+            for(var tableName in database) {
+                if ($S.isObject(database[tableName]) && $S.isArray(database[tableName]["tableData"])) {
+                    tableData = database[tableName]["tableData"];
+                    for(var i=0; i<tableData.length; i++) {
+                        rowData = tableData[i];
+                        rowData["file_details"] = this._getFileDetailsLink(rowData);
+                        tableData[i] = rowData;
+                    }
+                }
+            }
+        }
+        return;
+    },
+    loadDBViewData: function(callback) {
+        var pageName= DataHandler.getData("pageName", "");
+        var resultPattern = DataHandler.getAppData("resultPattern." + pageName);
+        var tableName = this._getTableName(resultPattern);
+        var dbDataApis = this._getScanDirDataApi(tableName);
+        var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
+        var status = CommonDataHandler.getDataLoadStatusByKey(keys);
+        var database;
+        var dbTableDataIndex = null, self = this;
+        if (status === "completed") {
+            status = DataHandler.getData("dbViewDataLoadStatus");
+            if (status === "not-started") {
+                DataHandler.setData("dbViewDataLoadStatus", "in-progress");
+                var dbViewData;
+                CommonDataHandler.LoadDBViewData(dbDataApis, function(request) {
+                    DataHandler.setData("dbViewDataLoadStatus", "completed");
+                    CommonDataHandler.FormateApiResponseInRequest(request);
+                    database = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
+                    self._updateFileDetails(database);
+                    dbViewData = DataHandler.getData("dbViewData", {});
+                    dbViewData = AppHandler.MergeDatabase(dbViewData, database);
+                    DataHandler.setData("dbViewData", dbViewData);
+                    dbViewData = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, null, [tableName]);
+                    DataHandler.setData("dbViewDataTable", dbViewData);
+                    $S.callMethod(callback);
+                });
+            } else {
+                $S.callMethod(callback);
+            }
+        }
+    },
     loadScanDirConfigDataApi: function(callback) {
-        var scanDirConfigDataApi = DataHandler.getAppData("scanDirConfigDataApi");
-        this.handlePageLoad(scanDirConfigDataApi, null, callback);
-        // callback();
+        var self = this;
+        this.loadDBViewConfigData(function() {
+            self.loadDBViewData(callback);
+        });
     }
 });
 })($S);

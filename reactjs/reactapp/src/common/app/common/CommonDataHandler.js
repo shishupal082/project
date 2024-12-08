@@ -2,8 +2,8 @@ import $S from "../../../interface/stack.js";
 
 import Api from "../../Api";
 import TemplateHelper from "../../TemplateHelper";
-import AppHandler from "../../app/common/AppHandler";
 
+import AppHandler from "./AppHandler";
 import CommonConfig from "./CommonConfig";
 
 
@@ -1039,6 +1039,97 @@ CommonDataHandler.extend({
             }
         }
         return defaultValue;
+    }
+});
+CommonDataHandler.extend({
+    _isValidTableEntry: function(dbApi) {
+        if (!$S.isObject(dbApi)) {
+            return false;
+        }
+        if (!$S.isArray(dbApi.apis)) {
+            return false;
+        }
+        return true;
+    },
+    FormateApiResponseInRequest: function(request) {
+        if ($S.isArray(request)) {
+            for(var i=0; i<request.length; i++) {
+                if (!$S.isObject(request[i])) {
+                    continue;
+                }
+                if (request[i]["responseType"] !== "json") {
+                    continue;
+                }
+                if ($S.isArray(request[i]["response"])) {
+                    for (var j=0; j<request[i]["response"].length; j++) {
+                        if ($S.isObject(request[i]["response"][j])) {
+                            if (request[i]["response"][j]["status"] === "SUCCESS" && $S.isArray(request[i]["response"][j]["data"])) {
+                                request[i]["response"][j] = request[i]["response"][j]["data"];
+                            } else {
+                                request[i]["response"][j] = [];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    LoadDBViewData: function(dbDataApis, callback) {
+        var request = [], i, j, el, temp, urls;
+        if ($S.isArray(dbDataApis) && dbDataApis.length > 0) {
+            for(i=0; i<dbDataApis.length; i++) {
+                if (!this._isValidTableEntry(dbDataApis[i])) {
+                    continue;
+                }
+                urls = dbDataApis[i].apis.filter(function(el, j, arr) {
+                    if ($S.isString(el) && el.length > 0) {
+                        return true;
+                    }
+                    return false;
+                });
+                for (j=0; j<urls.length; j++) {
+                    el = urls[j];
+                    if ($S.isString(el) && el.split("?").length > 1) {
+                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                    } else {
+                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                    }
+                }
+                if (urls.length < 1) {
+                    continue;
+                }
+                temp = {};
+                temp.apis = dbDataApis[i].apis;
+                temp.dataIndex = dbDataApis[i].dataIndex;
+                temp.wordBreak = dbDataApis[i].wordBreak;
+                temp.apiName = dbDataApis[i].apiName;
+                temp.tableName = dbDataApis[i].tableName;
+                temp.singleLineComment = dbDataApis[i].singleLineComment;
+                temp.responseType = dbDataApis[i]["responseType"];
+                if (temp.responseType === "json") {
+                    temp.requestMethod = Api.getAjaxApiCallMethod();
+                } else {
+                    temp.requestMethod = Api.getAjaxApiCallMethodV2();
+                }
+                if (!$S.isStringV2(temp.apiName) && $S.isStringV2(temp.tableName)) {
+                    temp.apiName = temp.tableName;
+                }
+                if (!$S.isStringV2(temp.tableName) && $S.isStringV2(temp.apiName)) {
+                    temp.tableName = temp.apiName;
+                }
+                temp.url = urls;
+                request.push(temp);
+            }
+        }
+        if (request.length < 1) {
+            $S.callMethod(callback);
+        } else {
+            AppHandler.LoadDataFromRequestApi(request, function() {
+                if ($S.isFunction(callback)) {
+                    callback(request);
+                }
+            });
+        }
     }
 });
 })($S);

@@ -1,7 +1,7 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
-// import TemplateHandler from "./template/TemplateHandler";
+import TemplateHandler from "./template/TemplateHandler";
 import DisplayPage from "./pages/DisplayPage";
 import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
@@ -326,35 +326,40 @@ DataHandlerV2.extend({
         }
         return result;
     },
-    _addIndex: function(index, obj) {
-        var field = TemplateHelper(obj).searchFieldV3("tag", "link");
-        if ($S.isString(field["href"])) {
-            field["href"] = "/" + index + field["href"];
-        }
-    },
+    // _addIndex: function(index, obj) {
+    //     var field = TemplateHelper(obj).searchFieldV3("tag", "link");
+    //     if ($S.isString(field["href"])) {
+    //         field["href"] = "/" + index + field["href"];
+    //     }
+    // },
     updateLinkIndex: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
         var i, temp;
-        var index = DataHandler.getPathParamsData("index", "0");
-        if ($S.isArray(enabledPageId)) {
-            for(i=0; i<enabledPageId.length; i++) {
-                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);
-                this._addIndex(index, temp);
-                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageId:" + enabledPageId[i]);
-                this._addIndex(index, temp);
-            }
-        }
-        if ($S.isArray(enabledViewPage)) {
-            for(i=0; i<enabledViewPage.length; i++) {
-                temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("viewPageName:" + enabledViewPage[i]);
-                this._addIndex(index, temp);
-                temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("viewPageName:" + enabledViewPage[i]);
-                this._addIndex(index, temp);
-            }
-        }
-        temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageName:home");
-        this._addIndex(index, temp);
-        temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageName:home");
-        this._addIndex(index, temp);
+        var index = DataHandler.getPathParamsData("index", "");
+        var pageName = DataHandler.getData("pageName");
+        var originLink = TemplateHandler.getLink(pageName);
+        var homeLink = TemplateHandler.getLink(pageName, index);
+        TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.originLink", "href", originLink);
+        TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.homeLink", "href", homeLink);
+        // if ($S.isArray(enabledPageId)) {
+        //     for(i=0; i<enabledPageId.length; i++) {
+        //         temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);
+        //         this._addIndex(index, temp);
+        //         temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageId:" + enabledPageId[i]);
+        //         this._addIndex(index, temp);
+        //     }
+        // }
+        // if ($S.isArray(enabledViewPage)) {
+        //     for(i=0; i<enabledViewPage.length; i++) {
+        //         temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+        //         this._addIndex(index, temp);
+        //         temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("viewPageName:" + enabledViewPage[i]);
+        //         this._addIndex(index, temp);
+        //     }
+        // }
+        // temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageName:home");
+        // this._addIndex(index, temp);
+        // temp = TemplateHelper(footerLinkJsonAfterLogin).searchFieldV2("pageName:home");
+        // this._addIndex(index, temp);
     }
 });
 
