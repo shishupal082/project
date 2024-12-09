@@ -227,13 +227,23 @@ ScanDir.extend({
     },
     _getScanDirDataApi: function(tableName) {
         var url = "/api/read_scan_dir_json?";
-        var scanDirId = DataHandler.getUrlQueryParameter("id", "");
+        var scanDirId = DataHandler.getPathParamsData("id", "");
         var pathname = DataHandler.getUrlQueryParameter("pathname", "");
+        var queryRecursiveParamter = DataHandler.getUrlQueryParameter("recursive", "");
+        var appDataRecursive = DataHandler.getAppData("recursive", "");
+        var finalRecursive = "false";
         var temp = {"responseType": "json", "apiName": "scanDirApiData"};
         url = url+"scan_dir_id="+scanDirId;
         if ($S.isStringV2(pathname)) {
             url = url + "&pathname=" + pathname;
         }
+        if ($S.isStringV2(appDataRecursive)) {
+            finalRecursive = appDataRecursive;
+        }
+        if ($S.isStringV2(queryRecursiveParamter)) {
+            finalRecursive = queryRecursiveParamter;
+        }
+        url = url + "&recursive=" + finalRecursive;
         temp["tableName"] = tableName;
         temp["apis"] = [url];
         return [temp];
@@ -246,10 +256,21 @@ ScanDir.extend({
         return tableName;
     },
     _generateFolderLink: function(folderPath) {
+        var queryRecursiveParamter = DataHandler.getUrlQueryParameter("recursive", "");
         var folderLink = CommonConfig.basepathname + "/" + DataHandler.getPathParamsData("index", "");
-        folderLink += "?id=" + DataHandler.getUrlQueryParameter("id", "");
+        folderLink += "/id/" + DataHandler.getPathParamsData("id", "");
+        var queryParam = "";
         if ($S.isStringV2(folderPath)) {
-            folderLink += "&pathname=" + folderPath;
+            queryParam += "pathname=" + folderPath;
+        }
+        if ($S.isStringV2(queryRecursiveParamter)) {
+            if ($S.isStringV2(queryParam)) {
+                queryParam += "&";
+            }
+            queryParam += "recursive=" + queryRecursiveParamter;
+        }
+        if ($S.isStringV2(queryParam)) {
+            folderLink += "?"+queryParam;
         }
         return folderLink;
     },
@@ -299,8 +320,8 @@ ScanDir.extend({
         return;
     },
     loadDBViewData: function(callback) {
-        var pageName= DataHandler.getData("pageName", "");
-        var resultPattern = DataHandler.getAppData("resultPattern." + pageName);
+        // var pageName= DataHandler.getData("pageName", "");
+        var resultPattern = DataHandler.getAppData("resultPattern.data_view");
         var tableName = this._getTableName(resultPattern);
         var dbDataApis = this._getScanDirDataApi(tableName);
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
@@ -329,11 +350,15 @@ ScanDir.extend({
             }
         }
     },
-    loadScanDirConfigDataApi: function(callback) {
-        var self = this;
-        this.loadDBViewConfigData(function() {
-            self.loadDBViewData(callback);
-        });
+    loadScanDirConfigDataApi: function(pageName, callback) {
+        this.loadDBViewConfigData(callback);
+    },
+    loadScanDirDataApi: function(pageName, callback) {
+        if (["home_id","home_view"].indexOf(pageName) >= 0) {
+            this.loadDBViewData(callback);
+        } else {
+            callback();
+        }
     }
 });
 })($S);

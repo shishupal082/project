@@ -335,11 +335,14 @@ DataHandlerV2.extend({
     updateLinkIndex: function(afterLoginLinkJson, footerLinkJsonAfterLogin, enabledPageId, enabledViewPage) {
         // var i, temp;
         var index = DataHandler.getPathParamsData("index", "");
+        var id = DataHandler.getPathParamsData("id", "");
         var pageName = DataHandler.getData("pageName");
         var originLink = TemplateHandler.getLink(pageName);
         var homeLink = TemplateHandler.getLink(pageName, index);
+        var homeIdLink = TemplateHandler.getLink(pageName, index, id);
         TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.originLink", "href", originLink);
         TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.homeLink", "href", homeLink);
+        TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.homeIdLink", "href", homeIdLink);
         // if ($S.isArray(enabledPageId)) {
         //     for(i=0; i<enabledPageId.length; i++) {
         //         temp = TemplateHelper(afterLoginLinkJson).searchFieldV2("pageId:" + enabledPageId[i]);

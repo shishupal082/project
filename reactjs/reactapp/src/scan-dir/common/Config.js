@@ -44,20 +44,21 @@ Config.footerLinkJsonAfterLogin = [];
 
 var pages = {
     "origin": basepathname+"/",
-    "home": basepathname+"/:index",
-    "viewPage": basepathname+"/:index/view/:viewPageName"
+    "home_index": basepathname+"/:index",
+    "home_id": basepathname+"/:index/id/:id"
 };
 
 
 Config.pages = pages;
 
 Config.origin = "origin";
-Config.home = "home";
+Config.home_index = "home_index";
+Config.home_id = "home_id";
 Config.noMatch = "noMatch";
 // Config.projectId = "projectId";
 // Config.id1Page = "id1Page";
 // Config.displayPage = "displayPage";
-Config.viewPage = "viewPage";
+// Config.viewPage = "viewPage";
 // Config.manageFiles = "manageFiles";
 
 

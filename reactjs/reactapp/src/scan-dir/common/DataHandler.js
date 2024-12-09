@@ -115,7 +115,7 @@ DataHandler.extend({
     getData: function(key, defaultValue, isDirect) {
         var value = CurrentData.getData(key, defaultValue, isDirect);
         var scanDirId;
-        if (key === "pageName" && value === "home") {
+        if (key === "pageName" && value === "home_id") {
             scanDirId = this.getUrlQueryParameter("id");
             if ($S.isStringV2(scanDirId)) {
                 value += "_view";
@@ -222,16 +222,16 @@ DataHandler.extend({
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        if (["home","home_view"].indexOf(pageName)>=0) {
+        if (["home_index","home_id","home_view"].indexOf(pageName)>=0) {
             dataLoadStatusKey.push("metaDataLoadStatus");
         }
         var status = CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey);
-        if (["origin","home", "home_view"].indexOf(pageName)>=0) {
+        if (["origin"].indexOf(pageName)>=0) {
             return status === "completed";
         }
-        dataLoadStatusKey = ["dbViewDataLoadStatus", "dbTableDataLoadStatus"];
-        if (pageName === "manageFiles") {
-            dataLoadStatusKey.push("filesInfoLoadStatus");
+        dataLoadStatusKey = ["dbViewConfigDataLoadStatus"];
+        if (["home_id", "home_view"].indexOf(pageName)>=0) {
+            dataLoadStatusKey.push("dbViewDataLoadStatus");
         }
         if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
@@ -352,14 +352,28 @@ DataHandler.extend({
     loadDataByAppId: function(callback) {
         var currentList1Id = DataHandler.getPathParamsData("index", "");
         var metaDataLoadStatus = CommonDataHandler.getData("metaDataLoadStatus", "");
+        var dbViewConfigDataLoadStatus = this.getData("dbViewConfigDataLoadStatus", "");
+        var dbViewDataLoadStatus = this.getData("dbViewDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
-        if (["home","home_view"].indexOf(pageName)>=0) {
+        if (["home_index", "home_id","home_view"].indexOf(pageName)>=0) {
             if (metaDataLoadStatus !== "completed") {
                 CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                     CommonDataHandler.setDateSelectParameter(currentList1Id);
-                    ScanDir.loadScanDirConfigDataApi(function() {
+                    ScanDir.loadScanDirConfigDataApi(pageName, function() {
+                        ScanDir.loadScanDirDataApi(pageName, function() {
+                            DataHandler.loadDataByPage(callback);
+                        });
+                    });
+                });
+            } else if (dbViewConfigDataLoadStatus !== "completed") {
+                ScanDir.loadScanDirConfigDataApi(pageName, function() {
+                    ScanDir.loadScanDirDataApi(pageName, function() {
                         DataHandler.loadDataByPage(callback);
                     });
+                });
+            } else if (dbViewDataLoadStatus !== "completed") {
+                ScanDir.loadScanDirDataApi(pageName, function() {
+                    DataHandler.loadDataByPage(callback);
                 });
             } else {
                 DataHandler.loadDataByPage(callback);
@@ -461,6 +475,7 @@ DataHandler.extend({
         }
     },
     PageComponentDidUpdate: function(appStateCallback, appDataCallback, pageName, changeType) {
+        this.setHeaderAndFooterData();
         this.loadDataByAppId(function() {
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
@@ -575,10 +590,11 @@ DataHandler.extend({
             case "origin":
                 renderData = appControlData;
             break;
-            case "home":
+            case "home_index":
                 tableName = "scan_dir_config_data";
                 renderData = DataHandlerV2.getTableData(tableName);
             break;
+            case "home_id":
             case "home_view":
                 renderData = this.getData("dbViewDataTable");
                 renderData = DBViewAttendanceInterface.getDBViewRenderField(renderData);

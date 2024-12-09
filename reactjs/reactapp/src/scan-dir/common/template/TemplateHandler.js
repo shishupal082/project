@@ -68,7 +68,7 @@ TemplateHandler.extend({
         return "";
     },
     generateHomeRenderField: function(pageName, renderData) {
-        // pageName = "home"
+        // pageName = "home_index"
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
             for (i=0; i<renderData.length; i++) {
@@ -125,11 +125,11 @@ TemplateHandler.extend({
         var urlAttr = "";
         if (pageName === "origin") {
             link = CommonConfig.basepathname + "/" + index;
-        } else if (pageName === "home") {
+        } else if (pageName === "home_index") {
             link = CommonConfig.basepathname + "/" + pathParamIndex;
             if ($S.isObject(rowData)) {
                 if ($S.isStringV2(rowData["id"])) {
-                    urlAttr += "id=" + rowData["id"];
+                    link += "/id/" + rowData["id"];
                 }
             }
             if ($S.isStringV2(urlAttr)) {
@@ -143,9 +143,11 @@ TemplateHandler.extend({
         }
         return link;
     },
-    getLink: function(pageName, index, rowData) {
+    getLink: function(pageName, index, id) {
         var link = "";
-        if ($S.isStringV2(index)) {
+        if ($S.isStringV2(index) && $S.isStringV2(id)) {
+            link = CommonConfig.basepathname + "/" + index + "/id/" + id;
+        } else if ($S.isStringV2(index)) {
             link = CommonConfig.basepathname + "/" + index;
         } else {
             link = CommonConfig.basepathname;
@@ -306,9 +308,10 @@ TemplateHandler.extend({
                 case "origin":
                     renderField = this.generateOriginRenderField(pageName, renderData);
                 break;
-                case "home":
+                case "home_index":
                     renderField = this.generateHomeRenderField(pageName, renderData);
                 break;
+                case "home_id":
                 case "home_view":
                     renderField = renderData;
                 break;
