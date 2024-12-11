@@ -56,7 +56,7 @@ class App extends React.Component {
         this.appDataCallback = this.appDataCallback.bind(this);
         this.isComponentUpdate = this.isComponentUpdate.bind(this);
         this.pageComponentDidMount = this.pageComponentDidMount.bind(this);
-        this.pageComponentDidUpdate =  this.pageComponentDidUpdate.bind(this);
+        this._pageComponentDidUpdate =  this._pageComponentDidUpdate.bind(this);
         this.registerChildAttribute = this.registerChildAttribute.bind(this);
         this.childAttribute = {};
         this.methods = {
@@ -66,7 +66,6 @@ class App extends React.Component {
             onFormSubmit: this.onFormSubmit,
             isComponentUpdate: this.isComponentUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
-            pageComponentDidUpdate: this.pageComponentDidUpdate,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -144,48 +143,70 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     isComponentUpdate(arg) {
-        var currentPageName = arg["currentPageName"];
-        var prevPageName = arg["prevPageName"];
-        var params = arg["params"];
+        var prevPageName = DataHandler.getData("pageName", "");
+        var prevPathParam = DataHandler.getData("pathParams", "");
+        var prevQueryParam = DataHandler.getData("queryParams", "");
+        var currentPageName = arg["pageName"];
+        var currentPathParam = arg["pathParams"];
+        var currentQueryParam = $S.getAllQueryData(window.location.href);
         var isComponentUpdate = false;
-        var oldIndex = DataHandler.getPathParamsData("index");
-        // var oldPid = DataHandler.getPathParamsData("pid");
-        // var oldId1 = DataHandler.getPathParamsData("id1");
-        // var oldPageId = DataHandler.getPathParamsData("pageId");
-        var oldViewPageName = DataHandler.getPathParamsData("viewPageName");
-        if (currentPageName !== prevPageName) {
-            isComponentUpdate = true;
-            DataHandler.HandleComponentChange("pageName", prevPageName, currentPageName);
-        } else {
-            if ($S.isObject(params)) {
-                if ($S.isStringV2(oldIndex) && $S.isStringV2(params.index) && oldIndex !== params.index) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("index", oldIndex, params.index);
-                // } else if ($S.isStringV2(oldPid) && $S.isStringV2(params.pid) && oldPid !== params.pid) {
-                //     isComponentUpdate = true;
-                //     DataHandler.HandleComponentChange("pid", oldPid, params.pid);
-                // } else if ($S.isStringV2(oldId1) && $S.isStringV2(params.id1) && oldId1 !== params.id1) {
-                //     isComponentUpdate = true;
-                //     DataHandler.HandleComponentChange("id1");
-                // } else if ($S.isStringV2(oldPageId) && $S.isStringV2(params.pageId) && oldPageId !== params.pageId) {
-                //     isComponentUpdate = true;
-                //     DataHandler.HandleComponentChange("pageId", oldPageId, params.pageId);
-                } else if ($S.isStringV2(oldViewPageName) && $S.isStringV2(params.viewPageName) && oldViewPageName !== params.viewPageName) {
-                    isComponentUpdate = true;
-                    DataHandler.HandleComponentChange("viewPageName", oldViewPageName, params.viewPageName);
-                }
-            }
+        $S.log("App:isComponentUpdate:?");
+        if (!$S.isObject(currentPathParam)) {
+            currentPathParam = {};
         }
-        return isComponentUpdate;
+        if (!$S.isObject(prevPathParam)) {
+            prevPathParam = {};
+        }
+        if (!$S.isObject(currentQueryParam)) {
+            currentQueryParam = {};
+        }
+        if (!$S.isObject(prevQueryParam)) {
+            prevQueryParam = {};
+        }
+        var name, oldValue, newValue;
+        if (prevPageName !== currentPageName) {
+            isComponentUpdate = true;
+            name = "pageName";
+            oldValue = prevPageName;
+            newValue = currentPageName;
+        } else if (prevPathParam["index"] !== currentPathParam["index"]) {
+            isComponentUpdate = true;
+            name = "index";
+            oldValue = prevPathParam["index"];
+            newValue = currentPathParam["index"];
+        } else if (prevPathParam["id"] !== currentPathParam["id"]) {
+            isComponentUpdate = true;
+            name = "scanDirId";
+            oldValue = prevPathParam["id"];
+            newValue = currentPathParam["id"];
+        } else if (prevQueryParam["pathname"] !== currentQueryParam["pathname"]) {
+            isComponentUpdate = true;
+            name = "query.pathname";
+            oldValue = prevQueryParam["pathname"];
+            newValue = currentQueryParam["pathname"];
+        }
+        if (isComponentUpdate) {
+            console.log("Change parameter name: " + name);
+            console.log("pageName: " + prevPageName + "/" + currentPageName);
+            console.log("pathParams: " + JSON.stringify(prevPathParam) + "/" + JSON.stringify(currentPathParam));
+            console.log("queryParams: " + JSON.stringify(prevQueryParam) + "/" + JSON.stringify(currentQueryParam));
+            DataHandler.HandleComponentChange(name, oldValue, newValue);
+            this._pageComponentDidUpdate(currentPageName, currentPathParam, currentQueryParam);
+        }
     }
     pageComponentDidMount(pageName, pathParams) {//#1
+        var queryParams = $S.getAllQueryData(window.location.href);
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
+        DataHandler.setData("queryParams", queryParams);
+        $S.log("App:pageComponentDidMount");
         CommonDataHandler.setData("pathParams", pathParams);
     }
-    pageComponentDidUpdate(pageName, pathParams) {//#3
+    _pageComponentDidUpdate(pageName, pathParams, queryParams) {//#3
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
+        DataHandler.setData("queryParams", queryParams);
+        $S.log("App:_pageComponentDidUpdate:true");
         CommonDataHandler.setData("pathParams", pathParams);
         DataHandler.PageComponentDidUpdate(this.appStateCallback, this.appDataCallback, pageName);
     }

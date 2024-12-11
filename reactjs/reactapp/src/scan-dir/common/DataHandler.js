@@ -461,14 +461,9 @@ DataHandler.extend({
     HandleComponentChange: function(type, oldValue, newValue) {
         DataHandler.setData("componentChangeType", type);
         var isReset = false;
-        if (type === "index" || type === "pageName") {
-            if (type === "pageName") {
-                
-            } else {
-                isReset = true;
-            }
-        } else if (type === "id") {
-            isReset = true;
+        if (type === "query.pathname") {
+            this.setData("dbViewDataLoadStatus", "not-started");
+            this.setData("dbViewData", {});
         }
         if (isReset) {
             this.resetAllFields();

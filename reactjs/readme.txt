@@ -179,3 +179,12 @@ Error
 Solution
 npm install react-scripts --save
 
+React.js life-cycle
+------------------------------------
+AppComponent:componentDidMount
+App:componentDidMount
+
+
+After appStateCallback
+*********************************
+AppComponent:componentDidUpdate
