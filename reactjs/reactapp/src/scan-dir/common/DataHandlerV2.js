@@ -2,13 +2,13 @@ import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandler from "./DataHandler";
 import TemplateHandler from "./template/TemplateHandler";
-import DisplayPage from "./pages/DisplayPage";
-import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
+// import DisplayPage from "./pages/DisplayPage";
+// import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
 
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
 import CommonDataHandler from "../../common/app/common/CommonDataHandler";
-import FormHandler from "./forms/FormHandler";
+// import FormHandler from "./forms/FormHandler";
 import TemplateHelper from "../../common/TemplateHelper";
 // import CommonConfig from "../../common/app/common/CommonConfig";
 
@@ -171,13 +171,13 @@ DataHandlerV2.extend({
 });
 DataHandlerV2.extend({
     _updateFileInfo: function(pageName, uploadedFileData) {
-        var loginUsername = AppHandler.GetUserData("username", "");
+        // var loginUsername = AppHandler.GetUserData("username", "");
         if ($S.isArray(uploadedFileData)) {
             for(var i=0; i<uploadedFileData.length; i++) {
                 if (!$S.isObject(uploadedFileData[i])) {
                     continue;
                 }
-                uploadedFileData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, uploadedFileData[i], loginUsername);
+                // uploadedFileData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(pageName, uploadedFileData[i], loginUsername);
             }
         }
         return uploadedFileData;
@@ -309,18 +309,18 @@ DataHandlerV2.extend({
         return "pageName:" + formNameKey + ".resultPattern";
     },
     handlePageByPageId: function(pageName, pageId, dbViewData) {
-        var i, loginUsername, fileTableName, tempData;
+        var i, fileTableName, tempData;
         var result = [];
         switch(pageId) {
             case "displayUploadedFiles":
-                loginUsername = AppHandler.GetUserData("username", "");
+                // loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
                 if ($S.isArray(dbViewData)) {
                     for (i=0; i < dbViewData.length; i++) {
                         if (!$S.isObject(dbViewData[i]) || !$S.isObject(dbViewData[i][fileTableName])) {
                             continue;
                         }
-                        dbViewData[i][fileTableName]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, dbViewData[i][fileTableName], loginUsername);
+                        // dbViewData[i][fileTableName]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplate(null, dbViewData[i][fileTableName], loginUsername);
                         tempData = {};
                         tempData[fileTableName] = dbViewData[i][fileTableName];
                         result.push(tempData);
@@ -333,18 +333,18 @@ DataHandlerV2.extend({
         return result;
     },
     handlePageByPageName: function(pageName, dbViewData) {
-        var i, loginUsername, fileTableName, tempData, tempData2;
-        var fileInfoData, fileInfoTableName, projectTable;
+        var i, fileTableName, tempData, tempData2;
+        var fileInfoData, fileInfoTableName;
         var result = [];
         var addedFilePid = [];
         var availableOn;
         switch(pageName) {
             case "manageFiles":
-                loginUsername = AppHandler.GetUserData("username", "");
+                // loginUsername = AppHandler.GetUserData("username", "");
                 fileTableName = DataHandler.getTableName("fileTable");
                 fileInfoData = DataHandler.getData("filesInfoData");
                 fileInfoTableName = DataHandler.getTableName("pageName:manageFiles.fileInfoTable");
-                projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
+                // projectTable = DataHandlerV2.getTableData(DataHandler.getTableName("projectTable"));
                 if ($S.isStringV2(fileInfoTableName)) {
                     if ($S.isArray(fileInfoData)) {
                         for(i=0; i<fileInfoData.length; i++) {
@@ -352,9 +352,9 @@ DataHandlerV2.extend({
                                 continue;
                             }
                             tempData = {};
-                            fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, fileInfoData[i].filepath, loginUsername);
-                            fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], dbViewData, loginUsername, addedFilePid);
-                            fileInfoData[i]["add_projects"] = FormHandler.getAddProjectFilesTemplate(pageName, fileInfoData[i], projectTable);
+                            // fileInfoData[i]["file_details"] = DisplayUploadedFiles.getFileDisplayTemplateV2(pageName, fileInfoData[i].filepath, loginUsername);
+                            // fileInfoData[i]["available_on"] = DisplayPage.getFileAvailableProjects(fileInfoData[i], dbViewData, loginUsername, addedFilePid);
+                            // fileInfoData[i]["add_projects"] = FormHandler.getAddProjectFilesTemplate(pageName, fileInfoData[i], projectTable);
                             tempData[fileInfoTableName] = fileInfoData[i];
                             result.push(tempData);
                         }
@@ -368,7 +368,7 @@ DataHandlerV2.extend({
                         if (addedFilePid.indexOf(dbViewData[i][[fileTableName]].tableUniqueId) >= 0) {
                             continue;
                         }
-                        availableOn = DisplayPage.getFileAvailableProjectsV2(dbViewData[i][[fileTableName]], loginUsername, addedFilePid);
+                        // availableOn = DisplayPage.getFileAvailableProjectsV2(dbViewData[i][[fileTableName]], loginUsername, addedFilePid);
                         if (!$S.isArray(availableOn) || availableOn.length === 0) {
                             continue;
                         }

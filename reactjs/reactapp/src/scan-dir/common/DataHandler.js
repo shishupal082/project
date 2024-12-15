@@ -1,9 +1,9 @@
 import $S from "../../interface/stack.js";
 import Config from "./Config";
 import DataHandlerV2 from "./DataHandlerV2";
-import FormHandler from "./forms/FormHandler";
+// import FormHandler from "./forms/FormHandler";
 import TemplateHandler from "./template/TemplateHandler";
-import ApiHandler from "./api/ApiHandler";
+// import ApiHandler from "./api/ApiHandler";
 
 // import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
@@ -412,18 +412,18 @@ DataHandler.extend({
             DataHandler.loadDataByPage(callback);
         }
     },
-    loadDbTableData: function(callback) {
-        var tableFilterParam = this.getAppData("tableFilterParam", {});
-        var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", "");
-        var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
-        var combineTableData = DataHandler.getAppData("combineTableData", []);
-        var dbDataApis = DataHandler.getAppData("dbDataApis", {});
-        ApiHandler.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
-            ApiHandler.handlePageLoadV2(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
-                $S.callMethod(callback);
-            });
-        });
-    },
+    // loadDbTableData: function(callback) {
+    //     var tableFilterParam = this.getAppData("tableFilterParam", {});
+    //     var getTableDataApiNameKey = this.getAppData("getTableDataApiNameKey", "");
+    //     var dbTableDataIndex = DataHandler.getAppData("dbTableDataIndex", {});
+    //     var combineTableData = DataHandler.getAppData("combineTableData", []);
+    //     var dbDataApis = DataHandler.getAppData("dbDataApis", {});
+    //     ApiHandler.handlePageLoad(dbDataApis, dbTableDataIndex, function() {
+    //         ApiHandler.handlePageLoadV2(getTableDataApiNameKey, tableFilterParam, dbTableDataIndex, combineTableData, function() {
+    //             $S.callMethod(callback);
+    //         });
+    //     });
+    // },
     checkForRedirect: function(callback) {
         var isLogin = AppHandler.GetUserData("login", false);
         if ($S.isBooleanTrue(CommonConfig.forceLogin) && isLogin === false) {
@@ -531,36 +531,36 @@ DataHandler.extend({
         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
     },
     OnFormSubmit: function(appStateCallback, appDataCallback, name, value) {
-        var pageName = DataHandler.getData("pageName", "");
-        if (name === "upload_file_form") {
-            FormHandler.submitUploadFile(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "upload_file_form_link") {
-            FormHandler.submitAddLink(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "add-project-comment-form") {
-            FormHandler.submitAddProjectComment(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "delete_file.form") {
-            FormHandler.submitDeleteFile(pageName, value, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else if (name === "add-project-files-form") {
-            FormHandler.submitAddProjectFiles(pageName, function() {
-                DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-            });
-        } else {
-            var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
-            if (configFormName === name) {
-                var formType = DataHandlerV2.getFormTypeByPageName(pageName);
-                FormHandler.submitGenericForm(pageName, name, formType, function() {
-                    DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
-                });
-            }
-        }
+        // var pageName = DataHandler.getData("pageName", "");
+        // if (name === "upload_file_form") {
+        //     FormHandler.submitUploadFile(pageName, function() {
+        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //     });
+        // } else if (name === "upload_file_form_link") {
+        //     FormHandler.submitAddLink(pageName, function() {
+        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //     });
+        // } else if (name === "add-project-comment-form") {
+        //     FormHandler.submitAddProjectComment(pageName, function() {
+        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //     });
+        // } else if (name === "delete_file.form") {
+        //     FormHandler.submitDeleteFile(pageName, value, function() {
+        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //     });
+        // } else if (name === "add-project-files-form") {
+        //     FormHandler.submitAddProjectFiles(pageName, function() {
+        //         DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //     });
+        // } else {
+        //     var configFormName = DataHandlerV2.getFormNameByPageName(pageName);
+        //     if (configFormName === name) {
+        //         var formType = DataHandlerV2.getFormTypeByPageName(pageName);
+        //         FormHandler.submitGenericForm(pageName, name, formType, function() {
+        //             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+        //         });
+        //     }
+        // }
     },
     ViewFileClick: function(appStateCallback, appDataCallback, name, value) {
         console.log(name + ":" + value);

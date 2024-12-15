@@ -4,10 +4,10 @@ import Template from "./Template";
 import Config from "../Config";
 import DataHandler from "../DataHandler";
 import DataHandlerV2 from "../DataHandlerV2";
-import FormHandler from "../forms/FormHandler";
+// import FormHandler from "../forms/FormHandler";
 
-import PidPage from "../pages/PidPage";
-import FeedbackPage from "../pages/FeedbackPage";
+// import PidPage from "../pages/PidPage";
+// import FeedbackPage from "../pages/FeedbackPage";
 
 
 import TemplateHelper from "../../../common/TemplateHelper";
@@ -176,15 +176,15 @@ TemplateHandler.extend({
         var uploadFileTableData = DataHandlerV2.getRenderTableDataV1(pageName);
         var generic1FormUploadedData = DataHandlerV2.getTableDataByAttr(tableName2, "pid", renderData["pidRow"]["tableUniqueId"]);
         generic1FormUploadedData = CommonDataHandler.applyRoleFilter(currentAppId, generic1FormUploadedData, "pageName:" + pageName + ".section.mapping");
-        PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
+        // PidPage.updateDependentAttr(pageName, generic1FormUploadedData);
         generic1FormUploadedData = DataHandlerV2.generateFilterOptionAndApplyFilter(pageName, generic1FormUploadedData);
-        var resultPatternName = DataHandlerV2.getResultPatternNameByPageName(pageName);
+        // var resultPatternName = "";//DataHandlerV2.getResultPatternNameByPageName(pageName);
         var uploadFileData = this._generateFieldTable(uploadFileTableData, tableName, "pageName:projectId.resultPatternUploadedFiles");
-        var generic1FormUploadedTable = PidPage.getRenderTable(pageName, tableName2, resultPatternName, generic1FormUploadedData);
-        var uploadFileTemplate = FormHandler.getUploadFileTemplate(pageName);
-        var addCommentTemplate = FormHandler.getAddProjectCommentTemplate(pageName);
-        var genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["pidRow"]["form_type"], "generic_form1");
-        var addLinkTemplate = FormHandler.getAddLinkTemplate(pageName);
+        var generic1FormUploadedTable = "";//PidPage.getRenderTable(pageName, tableName2, resultPatternName, generic1FormUploadedData);
+        var uploadFileTemplate = "";//FormHandler.getUploadFileTemplate(pageName);
+        var addCommentTemplate = "";//FormHandler.getAddProjectCommentTemplate(pageName);
+        var genericTemplate = "";//FormHandler.getGenericTemplate(pageName, renderData["pidRow"]["form_type"], "generic_form1");
+        var addLinkTemplate = "";//FormHandler.getAddLinkTemplate(pageName);
         if (!(($S.isArray(uploadFileTableData) && uploadFileTableData.length > 0) || ($S.isArray(generic1FormUploadedData) && generic1FormUploadedData.length > 0))) {
             if (uploadFileTemplate === null && addLinkTemplate === null && addCommentTemplate === null && genericTemplate === null) {
                 return this.getTemplate("noDataFound");
@@ -223,10 +223,10 @@ TemplateHandler.extend({
         var tableName = DataHandler.getTableName(formName + ".tableName", "");
         var generic2FormUploadedData = DataHandlerV2.getTableDataV4(pageName, tableName);
         var genericTemplate = null;
-        if (FeedbackPage.isFormDisplayEnable(renderData["pidRow"], renderData["id1Row"], generic2FormUploadedData)) {
-            genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["id1Row"]["form_type"], "generic_form2");
-        }
-        var preDefinedPattern = FeedbackPage.getPreDefinedPattern(renderData["id1Row"]);
+        // if (FeedbackPage.isFormDisplayEnable(renderData["pidRow"], renderData["id1Row"], generic2FormUploadedData)) {
+        //     genericTemplate = FormHandler.getGenericTemplate(pageName, renderData["id1Row"]["form_type"], "generic_form2");
+        // }
+        var preDefinedPattern = "";//FeedbackPage.getPreDefinedPattern(renderData["id1Row"]);
         if (!($S.isArray(generic2FormUploadedData) && generic2FormUploadedData.length > 0)) {
             if (genericTemplate === null && preDefinedPattern === null) {
                 return this.getTemplate("noDataFound");
@@ -300,8 +300,7 @@ TemplateHandler.extend({
             $S.log("loadingCount: " + (loadingCount++));
             return renderField;
         }
-        var temp;
-        var currentAppId = DataHandler.getPathParamsData("index", "");
+        // var currentAppId = DataHandler.getPathParamsData("index", "");
         if ($S.isObject(renderData) && renderData.status === "FAILURE") {
             return this._getInvalidField(renderData.reason);
         } else {
@@ -312,28 +311,6 @@ TemplateHandler.extend({
                 case "home":
                 case "scanDirPage":
                     renderField = renderData;
-                break;
-                case "projectId":
-                    renderField = this.generateProjectDetailsPage(pageName, renderData);
-                break;
-                case "id1Page":
-                    if ($S.isObject(renderData["id1Row"])) {
-                        temp = CommonDataHandler.applyRoleFilter(currentAppId, [renderData["id1Row"]], "pageName:projectId.section.mapping");
-                        if (!$S.isArray(temp) || temp.length === 0) {
-                            return this.getTemplate("noDataFound");
-                        }
-                        PidPage.updateDependentAttr(pageName, [renderData["id1Row"]]);
-                    }
-                    renderField = this.generateId1Page(pageName, renderData);
-                break;
-                case "displayPage":
-                    renderField = this.getViewPageTemplate(renderData);
-                break;
-                case "viewPage":
-                    renderField = this.getViewPageTemplate(renderData);
-                break;
-                case "manageFiles":
-                    renderField = this.getViewPageTemplate(renderData);
                 break;
                 case "noMatch":
                 default:
