@@ -216,13 +216,31 @@ DataHandler.extend({
         }
         return url;
     },
-    getLinkV3: function(pid, id1) {
-        var index = this.getPathParamsData("index", "0");
-        var link = CommonConfig.basepathname  + "/" + index + "/pid/" + pid;
-        if ($S.isStringV2(id1)) {
-            link += "/id1/" + id1;
+    getLinkV3: function(selectedRecursive) {
+        var currentRecusrive = this.getQueryParam("recursive", "");
+        if (currentRecusrive === selectedRecursive) {
+            return "";
         }
-        return link;
+        var index = this.getPathParamsData("index");
+        var scanDirId = this.getPathParamsData("id");
+        var scanDirPageName = this.getPathParamsData("scanDirPage")
+        var url = TemplateHandler.getHeaderLink(index, scanDirId, scanDirPageName);
+        var pathnameQuery = this.getQueryParam("pathname", "");
+        var queryParam = "";
+        if ($S.isStringV2(pathnameQuery)) {
+            queryParam = "pathname=" + pathnameQuery;
+        }
+        if ($S.isStringV2(selectedRecursive)) {
+            if ($S.isStringV2(queryParam)) {
+                queryParam += "&recursive=" + selectedRecursive;
+            } else {
+                queryParam += "recursive=" + selectedRecursive;
+            }
+        }
+        if ($S.isStringV2(queryParam)) {
+            url += "?" + queryParam;
+        }
+        return url;
     },
     isDataLoadComplete: function() {
         var pageName = this.getData("pageName", "");
@@ -464,6 +482,9 @@ DataHandler.extend({
     },
     OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
         AppHandler.TrackDropdownChange("list2Id", list2Id);
+    },
+    OnRecursiveChange: function(appStateCallback, appDataCallback, name, value) {
+        AppHandler.TrackDropdownChange("recursive", value);
     },
     OnList3Change: function(appStateCallback, appDataCallback, name, list3Id) {
         AppHandler.TrackDropdownChange("list3", list3Id);

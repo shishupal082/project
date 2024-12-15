@@ -121,6 +121,7 @@ class App extends React.Component {
                 filterNames.push(filterOptions[i].selectName);
             }
         }
+        var nextUrl = "";
         if (name === "list1-select") {
             this.gotoPageV2(DataHandler.getLinkByIndex(value));
             DataHandler.OnList1Change(this.appStateCallback, this.appDataCallback, name, value);
@@ -130,7 +131,15 @@ class App extends React.Component {
         } else if (name === "list3-select") {
             DataHandler.OnList3Change(this.appStateCallback, this.appDataCallback, name, value);
         } else if (filterNames.indexOf(name) >= 0) {
-            DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
+            if (name === "recursive?Selected") {
+                nextUrl = DataHandler.getLinkV3(value);
+                if ($S.isStringV2(nextUrl)) {
+                    this.gotoPageV2(nextUrl);
+                    DataHandler.OnRecursiveChange(this.appStateCallback, this.appDataCallback, name, value);
+                }
+            } else {
+                DataHandler.OnFilterChange(this.appStateCallback, this.appDataCallback, name, value);
+            }
         } else {
             DataHandler.OnDropdownChange(this.appStateCallback, this.appDataCallback, name, value);
         }
@@ -189,6 +198,11 @@ class App extends React.Component {
             name = "query.pathname";
             oldValue = prevQueryParam["pathname"];
             newValue = currentQueryParam["pathname"];
+        } else if (prevQueryParam["recursive"] !== currentQueryParam["recursive"]) {
+            isComponentUpdate = true;
+            name = "query.recursive";
+            oldValue = prevQueryParam["recursive"];
+            newValue = currentQueryParam["recursive"];
         }
         if (isComponentUpdate) {
             console.log("Change parameter name: " + name);
