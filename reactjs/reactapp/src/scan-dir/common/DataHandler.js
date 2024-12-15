@@ -13,7 +13,7 @@ import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewAttendanceInterface from "../../common/app/common/DBViewAttendanceInterface";
 // import DisplayUploadedFiles from "./pages/DisplayUploadedFiles";
-import DisplayPage from "./pages/DisplayPage";
+// import DisplayPage from "./pages/DisplayPage";
 import ScanDir from "./pages/ScanDir";
 
 var DataHandler;
@@ -63,6 +63,7 @@ keys.push("filesInfoLoadStatus");
 keys.push("sortingFields");
 keys.push("dbViewData");
 keys.push("dbViewDataTable");
+keys.push("dbViewConfigDataTable");
 keys.push("filesInfoData");
 
 keys.push("firstTimeDataLoadStatus");
@@ -205,10 +206,16 @@ DataHandler.extend({
         }
         return link;
     },
-    // getLinkV2: function(id1) {
-    //     var pid = this.getPathParamsData("pid");
-    //     return this.getLinkV3(pid, id1);
-    // },
+    getLinkV2: function(scanDirPageName) {
+        var index = this.getPathParamsData("index");
+        var scanDirId = this.getPathParamsData("id");
+        var url = TemplateHandler.getHeaderLink(index, scanDirId, scanDirPageName);
+        var queryParam = ScanDir.getQueryParamUrl();
+        if ($S.isStringV2(queryParam)) {
+            return url + "?" + queryParam;
+        }
+        return url;
+    },
     getLinkV3: function(pid, id1) {
         var index = this.getPathParamsData("index", "0");
         var link = CommonConfig.basepathname  + "/" + index + "/pid/" + pid;
@@ -219,10 +226,14 @@ DataHandler.extend({
     },
     isDataLoadComplete: function() {
         var pageName = this.getData("pageName", "");
+        var scanDirPage = this.getAppData("scanDirPage", "");
+        if (pageName === Config.noMatch) {
+            return true;
+        }
         var dataLoadStatusKey = [];
         dataLoadStatusKey.push("loginUserDetailsLoadStatus");
         dataLoadStatusKey.push("appControlDataLoadStatus");
-        if (["home_index","home_id","home_view"].indexOf(pageName)>=0) {
+        if (["home"].indexOf(pageName)>=0) {
             dataLoadStatusKey.push("metaDataLoadStatus");
         }
         var status = CommonDataHandler.getDataLoadStatusByKey(dataLoadStatusKey);
@@ -230,10 +241,10 @@ DataHandler.extend({
             return status === "completed";
         }
         dataLoadStatusKey = ["dbViewConfigDataLoadStatus"];
-        if (["home_id", "home_view"].indexOf(pageName)>=0) {
+        if (["dbview","dbview_summary"].indexOf(scanDirPage)>=0) {
             dataLoadStatusKey.push("dbViewDataLoadStatus");
         }
-        if(DataHandler.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
+        if(this.getDataLoadStatusByKey(dataLoadStatusKey) !== "completed") {
             return false;
         }
         CommonDataHandler.setData("firstTimeDataLoadStatus", "completed");
@@ -334,6 +345,7 @@ DataHandler.extend({
         //         $S.callMethod(callback);
         //     }
         // });
+        DataHandlerV2.findCurrentList3Id();
         $S.callMethod(callback);
     },
     setHeaderAndFooterData: function() {
@@ -355,7 +367,7 @@ DataHandler.extend({
         var dbViewConfigDataLoadStatus = this.getData("dbViewConfigDataLoadStatus", "");
         var dbViewDataLoadStatus = this.getData("dbViewDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
-        if (["home_index", "home_id","home_view"].indexOf(pageName)>=0) {
+        if (["home", "scanDirPage"].indexOf(pageName)>=0) {
             if (metaDataLoadStatus !== "completed") {
                 CommonDataHandler.loadMetaDataByAppId(Config.getConfigData("defaultMetaData", {}), currentList1Id, function() {
                     CommonDataHandler.setDateSelectParameter(currentList1Id);
@@ -407,12 +419,12 @@ DataHandler.extend({
         CommonDataHandler.setData("metaDataLoadStatus", "not-started");
         this.clearFieldsData();
         this.setData("dbViewData", {});
-        this.setData("appRelatedDataLoadStatus", "not-started");
+        // this.setData("appRelatedDataLoadStatus", "not-started");
         this.setData("dbViewConfigDataLoadStatus", "not-started");
         this.setData("dbViewDataLoadStatus", "not-started");
-        this.setData("dbTableDataLoadStatus", "not-started");
-        this.setData("filesInfoLoadStatus", "not-started");
-        this.setData("addentry.submitStatus", "not-started");
+        // this.setData("dbTableDataLoadStatus", "not-started");
+        // this.setData("filesInfoLoadStatus", "not-started");
+        // this.setData("addentry.submitStatus", "not-started");
         this.setData("firstTimeDataLoadStatus", "not-started");
     }
 });
@@ -450,9 +462,9 @@ DataHandler.extend({
         // AppHandler.TrackDropdownChange("list1", list1Id);
         // this.OnReloadClick(appStateCallback, appDataCallback);
     },
-    // OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
-    //     AppHandler.TrackDropdownChange("list2Id", list2Id);
-    // },
+    OnList2Change: function(appStateCallback, appDataCallback, name, list2Id) {
+        AppHandler.TrackDropdownChange("list2Id", list2Id);
+    },
     OnList3Change: function(appStateCallback, appDataCallback, name, list3Id) {
         AppHandler.TrackDropdownChange("list3", list3Id);
         DataHandler.setData("currentList3Id", list3Id);
@@ -461,10 +473,27 @@ DataHandler.extend({
     HandleComponentChange: function(type, oldValue, newValue) {
         DataHandler.setData("componentChangeType", type);
         var isReset = false;
-        if (type === "query.pathname") {
-            this.setData("dbViewDataLoadStatus", "not-started");
+        var resultPattern = DataHandler.getAppData("resultPattern.dbview");
+        var tableName = ScanDir.getTableName(resultPattern);
+        if (type === "pageName" && [oldValue,newValue].indexOf(Config.origin) >= 0) {
+            isReset = true;
+        } else if (type === "pageName" && [oldValue,newValue].indexOf(Config.scanDirPage) >= 0) {
             this.setData("dbViewData", {});
+            this.setData("dbViewConfigDataTable", []);
+            this.setData("dbViewConfigDataLoadStatus", "not-started");
+        } else if (type === "index") {
+            this.setData("dbViewData", {});
+            this.setData("dbViewConfigDataTable", []);
+            this.setData("dbViewConfigDataLoadStatus", "not-started");
+        } else if (type === "scanDirId") {
+            this.setData("dbViewData", {});
+            this.setData("dbViewConfigDataTable", []);
+            this.setData("dbViewConfigDataLoadStatus", "not-started");
+        } else if (type === "query.pathname") {
         }
+        this.setData("dbViewDataTable", {});
+        this.setData("dbViewDataLoadStatus", "not-started");
+        DataHandlerV2.clearTableData(tableName);
         if (isReset) {
             this.resetAllFields();
         }
@@ -571,63 +600,34 @@ DataHandler.extend({
     }
 });
 DataHandler.extend({
-    getRenderData: function(pageName, pageId, viewPageName) {
+    getRenderData: function(pageName, viewPageName) {
         var renderData;
         var appControlData = CommonDataHandler.getData("appControlData", []);
         var currentAppData = this.getCurrentAppData();
         var metaData = CommonDataHandler.getData("metaData");
         var currentList3Data = this.getCurrentList3Data();
-        var dateSelect = CommonDataHandler.getData("date-select", "");
         var sortingFields = this.getData("sortingFields", []);
-        var filterOptions = null;
-        var dateParameterField, tableName;
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var dateSelect = CommonDataHandler.getData("date-select", "");
+        var dateParameterField = DataHandlerV2.getDateParameterField();
+        var userData = this.getData("dbViewDataTable");
+        var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name", dateParameterField);
         switch(pageName) {
             case "origin":
                 renderData = appControlData;
             break;
-            case "home_index":
-                tableName = "scan_dir_config_data";
-                renderData = DataHandlerV2.getTableData(tableName);
+            case "home":
+                renderData = this.getData("dbViewConfigDataTable");
+                renderData = DBViewAttendanceInterface.getDBViewRenderField(renderData, currentList3Data, sortingFields);
             break;
-            case "home_id":
-            case "home_view":
-                renderData = this.getData("dbViewDataTable");
-                renderData = DBViewAttendanceInterface.getDBViewRenderField(renderData);
-            break;
-            case "projectId":
-                renderData = DataHandlerV2.getProjectDataV2(pageName);
-            break;
-            case "id1Page":
-                renderData = DataHandlerV2.getProjectDataV3(pageName);
-            break;
-            case "displayPage":
-                if (DataHandlerV2.isDisabled("pageId", pageId)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
+            case "scanDirPage":
+                if (viewPageName === "dbview") {
+                    renderData = DBViewAttendanceInterface.getDBViewRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect);
+                } else if (viewPageName === "dbview_summary") {
+                    renderData = DBViewAttendanceInterface.getDBViewSummaryRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect);
+                } else {
+                    renderData = TemplateHandler.getTemplate("noMatch");
                 }
-                dateParameterField = DataHandlerV2.getDateParameterField("pageId", pageId);
-                renderData = DisplayPage.getRenderData(pageName, pageId, sortingFields);
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
-            case "viewPage":
-                if (DataHandlerV2.isDisabled("viewPage", viewPageName)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
-                }
-                dateParameterField = DataHandlerV2.getDateParameterField("viewPage", viewPageName);
-                renderData = DisplayPage.getRenderDataV2(pageName, viewPageName, sortingFields);
-                filterOptions = this.getData("filterOptions");
-                renderData = AppHandler.getFilteredData(currentAppData, metaData, renderData, filterOptions, "name", dateParameterField);
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
-            break;
-            case "manageFiles":
-                if (DataHandlerV2.isDisabled("pageName", pageName)) {
-                    return {"status": "FAILURE", "reason": "Requested page disabled"};
-                }
-                dateParameterField = DataHandlerV2.getDateParameterField("pageName", pageName);
-                renderData = DisplayPage.getRenderDataV3(pageName, sortingFields);
-                renderData = DBViewDataHandler.GenerateFinalDBViewData(renderData, currentList3Data, dateParameterField, dateSelect);
-                DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
             break;
             default:
                 renderData = [];
@@ -641,28 +641,31 @@ DataHandler.extend({
         var renderData = null;
         var appHeading = null;
         var list1Data = null;
+        var list2Data = null;
         var list3Data = null;
         var filterOptions = null;
         var dateSelectionRequiredPages = [];
-        var pageId = DataHandler.getPathParamsData("pageId", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var viewPageName = DataHandler.getPathParamsData("scanDirPage", "");
         if (dataLoadStatus) {
-            renderData = this.getRenderData(pageName, pageId, viewPageName);
+            renderData = this.getRenderData(pageName, viewPageName);
             appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
         var renderFieldRow = TemplateHandler.GetPageRenderField(dataLoadStatus, renderData, pageName);
         if (dataLoadStatus) {
             list1Data = DataHandlerV2.getList1Data();
+            list2Data = DataHandlerV2.getList2Data();
             list3Data = DataHandlerV2.getList3Data();
-            if (DataHandlerV2.isFilterEnabled(pageName, pageId, viewPageName)) {
+            if (DataHandlerV2.isFilterEnabled(pageName, viewPageName)) {
                 filterOptions = DataHandler.getData("filterOptions");
             }
-            if (DataHandlerV2.isDateSelectionEnable(pageName, pageId, viewPageName)) {
+            if (DataHandlerV2.isDateSelectionEnable(pageName, viewPageName)) {
                 dateSelectionRequiredPages.push(pageName);
             }
         }
         appDataCallback("list1Data", list1Data);
         appDataCallback("currentList1Id", DataHandler.getPathParamsData("index", ""));
+        appDataCallback("list2Data", list2Data);
+        appDataCallback("currentList2Id", DataHandler.getPathParamsData("scanDirPage", ""));
         appDataCallback("list3Data", list3Data);
         appDataCallback("currentList3Id", DataHandler.getData("currentList3Id", ""));
         appDataCallback("enableReloadButton", DataHandler.getAppData("enableReloadButton", false));

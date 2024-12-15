@@ -39,21 +39,80 @@ DataHandlerV2.extend({
         }
         return [];
     },
+    getList2Data: function() {
+        var pageName = DataHandler.getData("pageName", "");
+        if (Config.scanDirPage !== pageName) {
+            return [];
+        }
+        // var scanDirPageName = DataHandler.getPathParamsData("scanDirPage", "");
+        var enabledPages = DataHandler.getAppData("enabledPages");
+        var redirectPages = DataHandler.getAppData("redirectPages");
+        var linkText = DataHandler.getAppData("linkText");
+        if (!$S.isArray(enabledPages)) {
+            enabledPages = [];
+        }
+        if (!$S.isObject(linkText)) {
+            linkText = {};
+        }
+        var list2Data = [];
+        var temp, i, key;
+        var pageOrder = [];
+        for(i=0; i<enabledPages.length; i++) {
+            pageOrder.push(enabledPages[i]);
+        }
+        for(i=0; i<pageOrder.length; i++) {
+            key = pageOrder[i];
+            if ([Config.origin, Config.home].indexOf(key) < 0) {
+                if ($S.isString(linkText[key])) {
+                    temp = linkText[key];
+                } else {
+                    temp = $S.capitalize(key);
+                }
+                list2Data.push({"name": key, "toText": temp, "pageName": key});
+            }
+        }
+        if ($S.isArray(redirectPages)) {
+            for(i=0; i<redirectPages.length; i++) {
+                temp = redirectPages[i];
+                if (!$S.isObject(temp)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.name)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toText)) {
+                    continue;
+                }
+                if (!$S.isStringV2(temp.toUrl)) {
+                    continue;
+                }
+                list2Data.push({"name": temp.name, "toText": temp.toText, "toUrl": temp.toUrl});
+            }
+        }
+        return list2Data;
+    },
     getList3Data: function() {
         var pageName = DataHandler.getData("pageName", "");
-        var pageId = DataHandler.getPathParamsData("pageId", "");
-        var viewPageName = DataHandler.getPathParamsData("viewPageName", "");
+        var scanDirPageName = DataHandler.getPathParamsData("scanDirPage", "");
         var key = "";
-        if (Config.displayPage === pageName) {
-            key = "pageId:" + pageId;
-        } else if (Config.viewPage === pageName) {
-            key = "viewPageName:" + viewPageName;
-        }
-        if (!$S.isStringV2(key)) {
+        if (Config.scanDirPage === pageName) {
+            key = scanDirPageName;
+        } else if (Config.home === pageName) {
+            key = pageName;
+        } else {
             return [];
         }
         key += ".list3DataKey";
-        var name = DataHandler.getAppData(key, false);
+        var name = DataHandler.getAppData(key, "");
+        if (!$S.isStringV2(name)) {
+            if (scanDirPageName === "dbview_summary") {
+                key = "dbview.list3DataKey";
+                name = DataHandler.getAppData(key, "");
+            }
+        }
+        if (!$S.isStringV2(name)) {
+            return [];
+        }
         var list3Data = DataHandler.getAppData(name, []);
         if ($S.isArray(list3Data)) {
             for (var i = 0; i < list3Data.length; i++) {
@@ -336,10 +395,13 @@ DataHandlerV2.extend({
         // var i, temp;
         var index = DataHandler.getPathParamsData("index", "");
         var id = DataHandler.getPathParamsData("id", "");
-        var pageName = DataHandler.getData("pageName");
-        var originLink = TemplateHandler.getLink(pageName);
-        var homeLink = TemplateHandler.getLink(pageName, index);
-        var homeIdLink = TemplateHandler.getLink(pageName, index, id);
+        var pageName = DataHandler.getPathParamsData("scanDirPage");
+        if (["dbview","dbview_summary"].indexOf(pageName) < 0) {
+            pageName = "";
+        }
+        var originLink = TemplateHandler.getHeaderLink();
+        var homeLink = TemplateHandler.getHeaderLink(index);
+        var homeIdLink = TemplateHandler.getHeaderLink(index, id, pageName);
         TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.originLink", "href", originLink);
         TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.homeLink", "href", homeLink);
         TemplateHelper.setTemplateAttr(afterLoginLinkJson, "pageHeading.homeIdLink", "href", homeIdLink);
@@ -379,6 +441,17 @@ DataHandlerV2.extend({
             }
         }
         return tableData;
+    },
+    clearTableData: function(tableName) {
+        if (!$S.isStringV2(tableName)) {
+            return [];
+        }
+        var dbViewData = DataHandler.getData("dbViewData", {});
+        if ($S.isObject(dbViewData) && $S.isObject(dbViewData[tableName])) {
+            dbViewData[tableName] = {};
+            DataHandler.setData("dbViewData", dbViewData);
+        }
+        return true;
     },
     getTableDataByAttr: function(tableName, attrName, attrValue) {
         var attr = {};
@@ -508,20 +581,10 @@ DataHandlerV2.extend({
         }
         return true;
     },
-    isFilterEnabled: function(pageName, pageId, viewPageName) {
+    isFilterEnabled: function(pageName, viewPageName) {
         var status = false;
-        if ([Config.projectId].indexOf(pageName) >= 0) {
+        if ([Config.scanDirPage].indexOf(pageName) >= 0) {
             status = true;
-        } else if ([Config.manageFiles].indexOf(pageName) >= 0) {
-            status = true;
-        } else if ([Config.displayPage].indexOf(pageName) >= 0) {
-            if (!this.isDisabled("pageId", pageId)) {
-                status = true;
-            }
-        } else if ([Config.viewPage].indexOf(pageName) >= 0) {
-            if (!this.isDisabled("viewPage", viewPageName)) {
-                status = true;
-            }
         }
         if (status) {
             var filterOptions = DataHandler.getData("filterOptions", []);
@@ -536,48 +599,18 @@ DataHandlerV2.extend({
         var currentList3Data = DataHandler.getCurrentList3Data();
         if ($S.isObjectV2(currentList3Data) && $S.isObjectV2(currentList3Data["dateParameterField"])) {
             dateParameterField = currentList3Data["dateParameterField"];
-        } else if (identifier === "pageId") {
-            dateParameterField = DataHandler.getAppData("pageId:" + value + ".dateParameterField", {});
-        } else if (identifier === "viewPage") {
-            dateParameterField = DataHandler.getAppData("viewPageName:" + value + ".dateParameterField", {});
-        } else if (identifier === "pageName") {
-            dateParameterField = DataHandler.getAppData("pageName:" + value + ".dateParameterField", {});
+        } else {
+            dateParameterField = DataHandler.getAppData("dateParameterField", {});
         }
         return dateParameterField;
     },
-    isDateSelectionEnable: function(pageName, pageId, viewPageName) {
-        var status, dateParameterField, currentList3Data;
-        if ([Config.home, Config.projectId, Config.id1Page].indexOf(pageName) < 0) {
-            status = false;
+    isDateSelectionEnable: function(pageName, viewPageName) {
+        var status;
+        if ([Config.origin, Config.home].indexOf(pageName) >= 0) {
+            return false;
         }
-        if ([Config.displayPage].indexOf(pageName) >= 0) {
-            if (!this.isDisabled("pageId", pageId)) {
-                status = true;
-                dateParameterField = this.getDateParameterField("pageId", pageId);
-            }
-        }
-        if ([Config.viewPage].indexOf(pageName) >= 0) {
-            if (!this.isDisabled("viewPage", viewPageName)) {
-                status = true;
-                dateParameterField = this.getDateParameterField("viewPage", viewPageName);
-            }
-        }
-        if (status && $S.isObjectV2(dateParameterField)) {
-            status = false;
-            currentList3Data = DataHandler.getCurrentList3Data();
-            if ($S.isObject(currentList3Data) && $S.isArray(currentList3Data.value)) {
-                if ($S.isObjectV2(dateParameterField) && $S.isStringV2(dateParameterField.fieldName)) {
-                    for (var i=0; i<currentList3Data.value.length; i++) {
-                        if ($S.isObject(currentList3Data.value[i])) {
-                            if (currentList3Data.value[i].key === dateParameterField.fieldName) {
-                                status = true;
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            status = false;
+        if ([Config.scanDirPage].indexOf(pageName) >= 0) {
+            status = true;
         }
         return status;
     }

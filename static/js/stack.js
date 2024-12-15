@@ -676,6 +676,7 @@ var UrlParserObj = (function(){
         if (!isString(href)) {
             href = "";
         }
+        data = {};
         var hrefObj = href.split("?");
         if (hrefObj.length) {
             data["hrefPath"] = hrefObj[0];

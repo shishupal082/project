@@ -48,16 +48,12 @@ TemplateHandler.extend({
             }
         }
         var template = this.getHomeTemplatePartial("home");
-        var genericTemplate;
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
         }
-        genericTemplate = FormHandler.getGenericTemplate(pageName, DataHandler.getAppData("form_type", ""), "generic_form0");
-        if (!$S.isArrayV2(homeFields) && !$S.isArray(genericTemplate) && !$S.isObject(genericTemplate)) {
+        if (!$S.isArrayV2(homeFields)) {
             template = this.getTemplate("noDataFound");
-        } else {
-            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
         }
         return template;
     },
@@ -68,7 +64,7 @@ TemplateHandler.extend({
         return "";
     },
     generateHomeRenderField: function(pageName, renderData) {
-        // pageName = "home_index"
+        // pageName = "home"
         var homeFields = [], i, linkTemplate;
         if ($S.isArray(renderData)) {
             for (i=0; i<renderData.length; i++) {
@@ -80,16 +76,9 @@ TemplateHandler.extend({
             }
         }
         var template = this.getHomeTemplatePartial("home");
-        var genericTemplate;
         for (i = 0; i< homeFields.length; i++) {
             linkTemplate = this._getLinkTemplate(homeFields[i].toUrl, homeFields[i].toText);
             TemplateHelper.addItemInTextArray(template, "home.link", linkTemplate);
-        }
-        genericTemplate = FormHandler.getGenericTemplate(pageName, DataHandler.getAppData("form_type", ""), "generic_form0");
-        if (!$S.isArrayV2(homeFields) && !$S.isArray(genericTemplate) && !$S.isObject(genericTemplate)) {
-            template = this.getTemplate("noDataFound");
-        } else {
-            TemplateHelper.addItemInTextArray(template, "home.template", genericTemplate);
         }
         return template;
     }
@@ -125,7 +114,7 @@ TemplateHandler.extend({
         var urlAttr = "";
         if (pageName === "origin") {
             link = CommonConfig.basepathname + "/" + index;
-        } else if (pageName === "home_index") {
+        } else if (pageName === "home") {
             link = CommonConfig.basepathname + "/" + pathParamIndex;
             if ($S.isObject(rowData)) {
                 if ($S.isStringV2(rowData["id"])) {
@@ -143,10 +132,22 @@ TemplateHandler.extend({
         }
         return link;
     },
-    getLink: function(pageName, index, id) {
+    getHomePageLink: function(index, scanDirId, pageName) {
         var link = "";
-        if ($S.isStringV2(index) && $S.isStringV2(id)) {
-            link = CommonConfig.basepathname + "/" + index + "/id/" + id;
+        if (!$S.isStringV2(index) || !$S.isStringV2(scanDirId) || !$S.isStringV2(pageName)) {
+            link = CommonConfig.basepathname;
+        } else if (index) {
+            link = CommonConfig.basepathname + "/" + index + "/id/" + scanDirId + "/" + pageName;
+        }
+        if (link === "") {
+            link = "/";
+        }
+        return link;
+    },
+    getHeaderLink: function(index, scanDirId, pageName) {
+        var link = "";
+        if ($S.isStringV2(index) && $S.isStringV2(scanDirId) && $S.isStringV2(pageName)) {
+            link = CommonConfig.basepathname + "/" + index + "/id/" + scanDirId + "/" + pageName;
         } else if ($S.isStringV2(index)) {
             link = CommonConfig.basepathname + "/" + index;
         } else {
@@ -308,11 +309,8 @@ TemplateHandler.extend({
                 case "origin":
                     renderField = this.generateOriginRenderField(pageName, renderData);
                 break;
-                case "home_index":
-                    renderField = this.generateHomeRenderField(pageName, renderData);
-                break;
-                case "home_id":
-                case "home_view":
+                case "home":
+                case "scanDirPage":
                     renderField = renderData;
                 break;
                 case "projectId":

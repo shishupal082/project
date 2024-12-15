@@ -200,12 +200,47 @@ ScanDir.extend({
         result.push(fieldHtml);
         return result;
     },
+    _updateHomeLink: function(request) {
+        var rowData;
+        var dbViewLink, dbViewLinkSummary;
+        var index = DataHandler.getPathParamsData("index", "");
+        if ($S.isArray(request)) {
+            for(var i=0; i<request.length; i++) {
+                if (!$S.isObject(request[i])) {
+                    continue;
+                }
+                if (!$S.isArray(request[i]["response"])) {
+                    continue;
+                }
+                for (var j=0; j<request[i]["response"].length; j++) {
+                    if (!$S.isArray(request[i]["response"][j])) {
+                        continue;
+                    }
+                    for (var k=0; k<request[i]["response"][j].length; k++) {
+                        rowData = request[i]["response"][j][k];
+                        if ($S.isObject(rowData)) {
+                            dbViewLink = TemplateHandler.getHomePageLink(index, rowData["id"], "dbview");
+                            dbViewLinkSummary = TemplateHandler.getHomePageLink(index, rowData["id"], "dbview_summary");
+                            dbViewLink = {"tag": "link", "href": dbViewLink, "text": "View details"};
+                            dbViewLinkSummary = {"tag": "link", "href": dbViewLinkSummary, "text": "Summary"};
+                            rowData["dbview_link"] = dbViewLink;
+                            rowData["dbview_summary_link"] = dbViewLinkSummary;
+                        }
+                        request[i]["response"][j][k] = rowData;
+                    }
+                }
+            }
+        }
+    },
     loadDBViewConfigData: function(callback) {
         var scanDirConfigDataApi = DataHandler.getAppData("scanDirConfigDataApi");
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var database;
         var dbTableDataIndex = null;
+        var resultPattern = DataHandler.getAppData("resultPattern.home");
+        var tableName = "scan_dir_config_data";
+        var self = this;
         if (status === "completed") {
             status = DataHandler.getData("dbViewConfigDataLoadStatus");
             if (status === "not-started") {
@@ -214,10 +249,13 @@ ScanDir.extend({
                 CommonDataHandler.LoadDBViewData(scanDirConfigDataApi, function(request) {
                     DataHandler.setData("dbViewConfigDataLoadStatus", "completed");
                     CommonDataHandler.FormateApiResponseInRequest(request);
+                    self._updateHomeLink(request);
                     database = AppHandler.GenerateDatabaseV2(request, dbTableDataIndex);
                     dbViewData = DataHandler.getData("dbViewData", {});
                     dbViewData = AppHandler.MergeDatabase(dbViewData, database);
                     DataHandler.setData("dbViewData", dbViewData);
+                    dbViewData = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, null, [tableName]);
+                    DataHandler.setData("dbViewConfigDataTable", dbViewData);
                     $S.callMethod(callback);
                 });
             } else {
@@ -248,17 +286,32 @@ ScanDir.extend({
         temp["apis"] = [url];
         return [temp];
     },
-    _getTableName: function(resultPattern) {
+    getTableName: function(resultPattern) {
         var tableName = "";
         if ($S.isArray(resultPattern) && resultPattern.length > 0) {
             return resultPattern[0]["tableName"];
         }
         return tableName;
     },
-    _generateFolderLink: function(folderPath) {
+    getQueryParamUrl: function() {
+        var recursive = DataHandler.getUrlQueryParameter("recursive", "");
+        var pathname = DataHandler.getUrlQueryParameter("pathname", "");
+        var queryParam = "";
+        if ($S.isStringV2(pathname)) {
+            queryParam += "pathname=" + pathname;
+        }
+        if ($S.isStringV2(recursive)) {
+            if ($S.isStringV2(queryParam)) {
+                queryParam += "&";
+            }
+            queryParam += "recursive=" + recursive;
+        }
+        return queryParam;
+    },
+    _generateFolderLink: function(folderPath, scanDirPageName) {
         var queryRecursiveParamter = DataHandler.getUrlQueryParameter("recursive", "");
         var folderLink = CommonConfig.basepathname + "/" + DataHandler.getPathParamsData("index", "");
-        folderLink += "/id/" + DataHandler.getPathParamsData("id", "");
+        folderLink += "/id/" + DataHandler.getPathParamsData("id", "") + "/" + scanDirPageName;
         var queryParam = "";
         if ($S.isStringV2(folderPath)) {
             queryParam += "pathname=" + folderPath;
@@ -274,7 +327,7 @@ ScanDir.extend({
         }
         return folderLink;
     },
-    _getFileDetailsLink: function(rowData) {
+    _getFileDetailsLink: function(rowData, scanDirPageName) {
         var fileDetailsLink = {};
         var folderLink;
         if ($S.isObject(rowData)) {
@@ -286,7 +339,7 @@ ScanDir.extend({
                     "text": rowData["filepath"]
                 };
             } else if (rowData["filepath_type"] === "FOLDER") {
-                folderLink = this._generateFolderLink(rowData["filepath"]);
+                folderLink = this._generateFolderLink(rowData["filepath"], scanDirPageName);
                 fileDetailsLink = {
                     "tag": "div",
                     "className": "list-group",
@@ -305,13 +358,14 @@ ScanDir.extend({
     },
     _updateFileDetails: function(database) {
         var tableData, rowData;
+        var scanDirPageName = DataHandler.getPathParamsData("scanDirPage", "");
         if ($S.isObject(database)) {
             for(var tableName in database) {
                 if ($S.isObject(database[tableName]) && $S.isArray(database[tableName]["tableData"])) {
                     tableData = database[tableName]["tableData"];
                     for(var i=0; i<tableData.length; i++) {
                         rowData = tableData[i];
-                        rowData["file_details"] = this._getFileDetailsLink(rowData);
+                        rowData["file_details"] = this._getFileDetailsLink(rowData, scanDirPageName);
                         tableData[i] = rowData;
                     }
                 }
@@ -320,14 +374,15 @@ ScanDir.extend({
         return;
     },
     loadDBViewData: function(callback) {
-        // var pageName= DataHandler.getData("pageName", "");
-        var resultPattern = DataHandler.getAppData("resultPattern.data_view");
-        var tableName = this._getTableName(resultPattern);
+        var pageName = DataHandler.getData("pageName", "");
+        var resultPattern = DataHandler.getAppData("resultPattern.dbview");
+        var tableName = this.getTableName(resultPattern);
         var dbDataApis = this._getScanDirDataApi(tableName);
         var keys = ["appControlDataLoadStatus", "metaDataLoadStatus"];
         var status = CommonDataHandler.getDataLoadStatusByKey(keys);
         var database;
         var dbTableDataIndex = null, self = this;
+        var filterKeyMapping;
         if (status === "completed") {
             status = DataHandler.getData("dbViewDataLoadStatus");
             if (status === "not-started") {
@@ -343,6 +398,7 @@ ScanDir.extend({
                     DataHandler.setData("dbViewData", dbViewData);
                     dbViewData = DBViewDataHandler.GetFinalTable(dbViewData, resultPattern, null, [tableName]);
                     DataHandler.setData("dbViewDataTable", dbViewData);
+                    DataHandlerV2.generateFilterOptions(pageName, dbViewData, filterKeyMapping);
                     $S.callMethod(callback);
                 });
             } else {
@@ -354,7 +410,7 @@ ScanDir.extend({
         this.loadDBViewConfigData(callback);
     },
     loadScanDirDataApi: function(pageName, callback) {
-        if (["home_id","home_view"].indexOf(pageName) >= 0) {
+        if (["scanDirPage"].indexOf(pageName) >= 0) {
             this.loadDBViewData(callback);
         } else {
             callback();
