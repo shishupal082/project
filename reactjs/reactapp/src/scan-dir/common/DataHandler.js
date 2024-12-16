@@ -274,6 +274,13 @@ DataHandler.extend({
             return tableNames[key];
         }
         return null;
+    },
+    isExpressionEnabled: function(pageName, viewPageName) {
+        var expressionEnabledPage = DataHandler.getAppData("expression_enabled_page", []);
+        if ($S.isArray(expressionEnabledPage) && expressionEnabledPage.indexOf(viewPageName) >= 0) {
+            return true;
+        }
+        return false;
     }
 });
 DataHandler.extend({
@@ -633,6 +640,7 @@ DataHandler.extend({
         var dateParameterField = DataHandlerV2.getDateParameterField();
         var userData = this.getData("dbViewDataTable");
         var filteredUserData = AppHandler.getFilteredData(currentAppData, metaData, userData, filterOptions, "name", dateParameterField);
+        var dbviewSummaryAggregatePattern, isExpressionEnabled;
         switch(pageName) {
             case "origin":
                 renderData = appControlData;
@@ -645,7 +653,9 @@ DataHandler.extend({
                 if (viewPageName === "dbview") {
                     renderData = DBViewAttendanceInterface.getDBViewRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect);
                 } else if (viewPageName === "dbview_summary") {
-                    renderData = DBViewAttendanceInterface.getDBViewSummaryRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect);
+                    dbviewSummaryAggregatePattern = DataHandler.getAppData("resultPattern.dbview_summary_aggregate", []);
+                    isExpressionEnabled = DataHandler.isExpressionEnabled(pageName, viewPageName);
+                    renderData = DBViewAttendanceInterface.getDBViewSummaryRenderField(filteredUserData, currentList3Data, sortingFields, dateParameterField, dateSelect, dbviewSummaryAggregatePattern, isExpressionEnabled);
                 } else {
                     renderData = TemplateHandler.getTemplate("noMatch");
                 }
