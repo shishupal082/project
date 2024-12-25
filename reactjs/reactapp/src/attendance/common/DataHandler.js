@@ -203,6 +203,10 @@ DataHandler.extend({
         }
         return pageName + appComponentClassName;
     },
+    isContainerClassRequired: function() {
+        var addContainerClass = this.getAppData("addContainerClass", "");
+        return !$S.isBooleanFalse(addContainerClass);
+    },
     setAppData: function(appStateCallback, appDataCallback) {
         var pageName = this.getData("pageName", "");
         if ([Config.projectHome, Config.noMatch].indexOf(pageName) >= 0) {
@@ -756,6 +760,7 @@ DataHandler.extend({
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("list1Data", list1Data);
+        appDataCallback("addContainerClass", this.isContainerClassRequired());
         appDataCallback("appComponentClassName", this.getAppComponentClassName());
         appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);

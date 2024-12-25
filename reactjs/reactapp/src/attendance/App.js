@@ -66,7 +66,6 @@ class App extends React.Component {
             onFormSubmit: this.onFormSubmit,
             isComponentUpdate: this.isComponentUpdate,
             pageComponentDidMount: this.pageComponentDidMount,
-            pageComponentDidUpdate: this.pageComponentDidUpdate,
             registerChildAttribute: this.registerChildAttribute
         };
     }
@@ -149,9 +148,10 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     isComponentUpdate(arg) {
-        var currentPageName = arg["currentPageName"];
-        var prevPageName = arg["prevPageName"];
-        var params = arg["params"];
+        var prevPageName = DataHandler.getData("pageName", "");
+        var currentPageName = arg["pageName"];
+        var params = arg["pathParams"];
+
         var isComponentUpdate = false;
         var oldAppId = DataHandler.getPathParamsData("pid", "");
         var oldPageName = DataHandler.getPathParamsData("pageName");
@@ -178,6 +178,9 @@ class App extends React.Component {
             }
         }
         DataHandler.setData("displayLoading", displayLoading);
+        if (isComponentUpdate) {
+            this.pageComponentDidUpdate(currentPageName, params);
+        }
         return isComponentUpdate;
     }
     pageComponentDidMount(pageName, pathParams) {
@@ -193,7 +196,7 @@ class App extends React.Component {
         DataHandler.AppDidMount(appStateCallback, appDataCallback);
     }
     pageComponentDidUpdate(pageName, pathParams) {
-        $S.log("App:pageComponentDidUpdate"); //#3
+        $S.log("App:pageComponentDidUpdate");
         DataHandler.setData("pageName", pageName);
         DataHandler.setData("pathParams", pathParams);
         DataHandler.PageComponentDidMount(this.appStateCallback, this.appDataCallback);
