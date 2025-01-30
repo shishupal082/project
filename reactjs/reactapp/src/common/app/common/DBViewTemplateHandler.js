@@ -173,20 +173,22 @@ DBViewTemplateHandler.extend({
 });
 
 DBViewTemplateHandler.extend({
-    _getTotalValue: function(renderData, name) {
-        var total = 0, i, j;
+    _getTotalValue: function(renderData, name, index) {
+        var i, temp;
+        var total = 0;
         if ($S.isArray(renderData) && renderData.length > 0 && $S.isStringV2(name)) {
             for (i=0; i<renderData.length; i++) {
                 if ($S.isArray(renderData[i])) {
-                    for(j=0; j<renderData[i].length; j++) {
-                        if (!$S.isObject(renderData[i][j])) {
+                    if (index < renderData[i].length) {
+                        temp = renderData[i][index];
+                        if (!$S.isObject(temp)) {
                             continue;
                         }
-                        if (renderData[i][j].name !== name) {
+                        if (temp.name !== name) {
                             continue;
                         }
-                        if ($S.isNumeric(renderData[i][j]["value"])) {
-                            total = $S.numberToFixed(total + (1* renderData[i][j]["value"]), 3);
+                        if ($S.isNumeric(temp["value"])) {
+                            total = $S.numberToFixed(total + (1* temp["value"]), 3);
                         }
                     }
                 }
@@ -208,7 +210,7 @@ DBViewTemplateHandler.extend({
                 }
                 if ($S.isBooleanTrue(temp.isTotalRow)) {
                     isTotalRow = temp.isTotalRow;
-                    temp.value = this._getTotalValue(renderData, temp.name);
+                    temp.value = this._getTotalValue(renderData, temp.name, i);
                 } else {
                     temp.value = temp.totalRowText;
                 }
