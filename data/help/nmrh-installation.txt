@@ -1,0 +1,44 @@
+Software required:
+(1) ORACLE 11G
+(2) InstallShield 3.2
+Final running config files required
+(1) 5 Folders (Chart, Dlls, Exe, NEWCHART, Newusers)
+(2) 2 Files (tnsnames.org, sqlnet.org)
+
+Step-1
+Install 11G
+>> Select runtime option radio button
+Many files may be required to be downloaded from internet related to .NET 2.0 and .NET 3.0
+It will create app folder
+
+Step-2
+Install IB6
+NMRH/InstallShield 3.2/IB6/server/Setup.exe
+
+Step-3
+
+NMRH/InstallShield 3.2/WindowsXP/setup.exe
+It will create C:/Nmrh folder
+
+Step-4
+NMRH/InstallShield 3.2/INSTALL.exe
+Only 2 option to be follow here
+Select Update Additional Setup Files --> Update Latest S/W
+All installation completed
+
+Step-5
+Now copy running folder and files related to division
+Copy 5 folders in C:/Nmrh/ folder	Chart, Dlls, Exe, NEWCHART, Newusers
+Copy 2 files in	C:/app/shish/product/11.2.0/client_1/network/admin/ tnsnames.org, sqlnet.org
+
+When running first time
+Database select window will open
+Choose DB Connection --> Oracle
+Choose Date format --> mm/dd/yyyy
+Unslected 3 items (Alternate database, Safety point report, NF Railway)
+
+Automatic load chart from server
+Open simulation -->	Online simulation (Open any one station) ->	Open config (Bottom left) -->	Simulation extra setting (bottom) -->	Check (Load Charts From Database) -->	Save
+
+Copy Dlls files to Nmrh folder
+It will be required when we change report.exe

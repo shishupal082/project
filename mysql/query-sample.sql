@@ -5,13 +5,17 @@ select * from bill_details order by file_date asc;
 ALTER TABLE staff_rnc rename column section to section_incharge;
 
 ALTER TABLE staff_rnc ADD section_officer varchar(63) default null AFTER unit;
-select * from staff_rnc;
+select * from staff_rnc where deleted=0 and file_date='2024-11-28';
+select * from staff_rnc where deleted=0 and department='Safety';
+
+ALTER TABLE staff_rnc ADD id_card_number varchar(15) default null AFTER email;
 show tables;
 
 desc staff_rnc;
 
-ALTER TABLE staff_rnc ADD staff_group varchar(15) default null AFTER designation;
+select * from udm_transaction;
 
+ select * from udm_transaction  where (deleted=0) order by id desc;
 
 
 select * from requisition_status;
@@ -36,7 +40,7 @@ ALTER TABLE staff_rnc ADD sub_section varchar(63) DEFAULT NULL AFTER section;
 
 
 
-select * from history_book where table_name="staff_rnc";
+select * from history_book where table_name="staff_rnc" order by added_time desc;
 select * from history_book where table_name="requisition_status";
 select * from history_book where table_name="smms_assets" order by added_time desc;
 
@@ -55,7 +59,7 @@ INSERT INTO users (username, passcode) values ("Shishupal3","12345"), ("Shishupa
 
 select * from users where deleted=0 order by id desc limit 100;
 
-select * from sia_data;
+select * from sia_data order by updated_time asc;
 
 select * from smms_assets where deleted=0 and asset_code like "Test%";
 
@@ -80,6 +84,7 @@ select * from smms_assets_v2;
 SELECT id, division, COUNT(division) FROM smms_assets where deleted=0 and division = "Ranchi" GROUP BY id, division, sub_section order by id desc;
 
 Select * from history_book;
+Select * from history_book order by id desc;
 Select * from history_book order by added_time desc limit 10;
 
 select location, added_time, updated_time from smms_assets where added_time > "2024-08-26 22:00" order by updated_time desc;

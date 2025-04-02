@@ -16,7 +16,15 @@ Download java installer (Not x64 Compressed Archive	 or x64 MSI Installer)
 
 If we are installing jdk then we don't need to download jre seprately.
 
-Now install it and configure as below
+jdk = jre + jvm
+
+Now install it after installation
+Now you can check
+
+>> java -version (It should work properly)
+>> javac -version (It will not work, because JAVA_HOME setting not done)
+
+Configure as below
 
 Set System environment variable
 1) Path (C:\Program Files\Java\jdk-22\bin; or %Java_HOME%\bin; or C:\Program Files\Oracle\;)

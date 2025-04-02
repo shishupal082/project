@@ -1,0 +1,80 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+<%= render '/posts/header' %>
+<h1>New Post</h1>
+<form action="/posts" method="post" onsubmit="return false;">
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><input data-id="title" class="data" name="post[title]" type="text" value="Title"></div>
+	</div>
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><textarea data-id="text" cols="40" class="data" name="post[text]" rows="6">Text</textarea></div>
+	</div>
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><input type="submit" value="Submit"></div>
+	</div>
+</form>
+<script type="text/javascript">
+$(document).ready(function(){
+var api_call = {
+    _ajax : function(cfg){
+        var ajax_object = cfg["ajax_object"],
+            callback = cfg["callback"],
+            self = this;
+
+        var request = $.ajax(ajax_object);
+
+        request.success(function(response){
+            callback(response, "success",self);
+        });
+        request.fail(function(response){
+            callback(response, "fail",self);
+        }); 
+    },
+    _submit_callback : function(response, status, self){
+        if(status == "success"){
+            console.log("Your Data successfully saved.");
+            if(response.navigate){
+            	window.location.href = response.navigate;
+            }
+        }else{  
+            console.log("Fail to get region data");
+        }
+    },
+    submit : function(data, url, type){
+        var ajax_object = {},
+            callback = this._submit_callback;
+
+        ajax_object["url"] = url;
+        ajax_object["type"] = type;
+        ajax_object["data"] = {"post":data};
+        ajax_object["headers"] = { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('value')};
+        this._ajax({"ajax_object" : ajax_object, "callback" : callback});
+    }
+};
+var clicked = {
+	submit : function(current_target){
+		var form = current_target.parents("form"),
+			all_fields = form.find(".data"),
+			data = {}, id, val, data_field;
+
+		for(var i=0; i < all_fields.length; i++){
+			data_field = $(all_fields[i]);
+
+			id = data_field.attr("data-id");
+			val = data_field.val();
+			data[id] = val;
+		}
+        // data["msgid"] = "10";
+		var url = form.attr("action"),
+			type = form.attr("method");
+		api_call.submit(data, url, type);
+	}
+};
+$('input[type="submit"]').on("click", function(e){
+	var current_target = $(e.currentTarget);
+	clicked.submit(current_target);
+});
+});
+</script>

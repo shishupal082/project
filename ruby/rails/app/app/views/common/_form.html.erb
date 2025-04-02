@@ -1,0 +1,36 @@
+<form accept-charset="UTF-8" action="<%= @form.action %>" method="<%= @form.method %>">
+	<div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="o1U9WBup1soz/RvpXXRXWNW6RtaeaeiXYugoKSxfWv0="></div>
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><input id="post_title" name="post[title]" type="text" value="Title"></div>
+	</div>
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><textarea id="post_text" cols="40" name="post[text]" rows="6">Text</textarea></div>
+	</div>
+	<div class="field">
+		<div class="label"></div>
+		<div class="value"><input type="submit" value="Submit"></div>
+	</div>
+</form>
+
+class FORM_DATA
+	def initialize(action, method, form_path, x = "Not Found")
+		@action = action
+		@method = method
+		@form_path = form_path
+		@x = x
+	end
+	def action
+		"#{@action}"
+	end
+	def method
+		"#{@method}"
+	end
+	def form_path
+		"#{@form_path}"
+	end
+	def x
+		"#{@x}"
+	end
+end

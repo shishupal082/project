@@ -1,0 +1,4 @@
+Download and copy past extracted file in
+C:\Program-Files folder
+>> During first time start, it will for jdk path (not jdk bin path)
+In JAVA_HOME in user variable path, only jdk path to be given not jdk-bin path

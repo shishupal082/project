@@ -1,0 +1,52 @@
+#!/bin/bash
+configFilePath=/custom/cmd-config.txt
+venvFolder=$(sed -n "1p" $configFilePath)
+cmdLogFile=$(sed -n "2p" $configFilePath)
+
+from=$(sed -n "1p" "$venvFolder"cmd-config.txt)
+to=$(sed -n "2p" "$venvFolder"cmd-config.txt)
+
+ZERO=0
+
+current_date_time="`date "+%Y-%m-%d %H:%M:%S"`";
+
+cd $from
+regex="*-201[4-9]-[0-1][0-9]-[0-3][0-9]-*"
+totalFile=$(find . -name "$regex" | wc -l)
+firstArg=$1
+
+
+if [ "$firstArg" == "count" ]
+then
+	log="$current_date_time  : Total file count : $totalFile"
+	echo $log
+	echo $log >> $cmdLogFile
+	exit
+fi
+
+
+if [ ${#firstArg} -gt $ZERO ]
+then
+	log="$current_date_time : Invalid args"
+	echo $log
+	echo $log >> $cmdLogFile
+	log="$current_date_time : Total file count : $totalFile"
+	echo $log
+	echo $log >> $cmdLogFile
+	exit
+fi
+
+if [ $totalFile == $ZERO ]
+then
+   log="$current_date_time  : No file to move"
+   echo $log
+   echo $log >> $cmdLogFile
+else
+   log="$current_date_time : Moving $totalFile files"
+   echo $log
+   echo $log >> $cmdLogFile
+   mv $from$regex $to
+   log="`date "+%Y-%m-%d %H:%M:%S"` : Moved  $totalFile files success"
+   echo $log
+   echo $log >> $cmdLogFile
+fi

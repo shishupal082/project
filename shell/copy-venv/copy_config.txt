@@ -1,0 +1,15 @@
+/Users/shishupal/final_data/3_venv/
+venv
+../
+/Users/shishupal/final_data/1_app/
+iriset
+../project/app/
+../project/shell/
+copy_command_v2.0.sh
+
+/Users/shishupal/final_data/4_custom
+/custom
+
+/Users/shishupal/final_data/2_pvt/
+pvt
+../project/

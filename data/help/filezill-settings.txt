@@ -10,8 +10,14 @@ Enable ftp-server
 Download and install
 https://filezilla-project.org/download.php?type=server
 
-After intallation start filezila server
->> Open Services --> Filezilla server and start
+FileZilla Server administrator password
+admin@123 (Set during installation)
+
+After intallation start FileZilla Server
+>> Open Services --> FileZilla server and start
+or
+>> Goto FileZilla Server installed folder and open FileZilla Server
+
  
 To create relevent user and folders
 

@@ -1,0 +1,4 @@
+#!/bin/bash
+firstArg=$1
+x=$(du -ch $firstArg | grep total)
+echo $x

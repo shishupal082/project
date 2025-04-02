@@ -1,0 +1,13 @@
+<% version = '2014-09-06';%>
+<!DOCTYPE html>
+<html>
+<head>
+  	<title>App</title>
+  	<meta name="csrf-token" value="<%= form_authenticity_token %>?v=<%= version%>">
+</head>
+<body>
+<div class="wrap-div">
+<%= yield %>
+</div>
+</body>
+</html>

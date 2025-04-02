@@ -1,0 +1,16 @@
+<%= render '/posts/header' %>
+<h1>Listing posts</h1>
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Text</th>
+  </tr>
+  <% @posts.each do |item| %>
+    <tr>
+      <td><%= item.id %></td>
+      <td><%= item.title %></td>
+      <td><%= item.text %></td>
+      <td><a href='<%= posts_path + "/" + item.id.to_s %>'>Show</a></td>
+    </tr>
+  <% end %>
+</table>

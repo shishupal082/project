@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<base href="<%= BASEURL %>"></base>
+	<title><%= @title %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta name="author" content="shishupal kumar">
+	<meta name="server_name" content="sanitra">
+	<meta name="environment" content="<%= ENVIRONMENT %>">
+	<meta name="keywords" content="<%= @file_name %>">
+  	<meta name="keyphrase" content="__KEYPHRASE__">
+	<meta name="csrf-param" content="authenticity_token">
+	<meta name="csrf-token" content="__CSRF_TOKEN__">
+	<link rel="stylesheet" type="text/css" href="<%= STATICPATH %>css/style.css">
+	<% for file in @css %>
+		<link rel="stylesheet" type="text/css" href='<%= STATICPATH %><%="#{file}"%>'>
+	<% end %>
+	<% for file in @js %>
+		<script type="text/javascript" src='<%= STATICPATH %><%="#{file}"%>' ></script>
+	<% end %>
+	<script type="text/javascript" src='<%= STATICPATH %>js/test_helper.js' ></script>
+</head>
+<body>
+	<div class="wrap-div"><%= @body_html %></div>
+</body>
+</html>

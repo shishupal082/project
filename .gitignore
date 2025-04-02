@@ -1,6 +1,9 @@
 
 ---- Temp path above this line ----
 
+android/.metadata/*
+android/appcompat_v7/*
+
 nodejs/node_modules/
 nodejs/build/
 nodejs/package-lock.json
@@ -25,22 +28,6 @@ reactjs/reactapp/src/react-auth-app/build/
 */*/.DS_Store
 */*/*/.DS_Store
 
-pvt/
-uploaded_files/
-
-todo-app/
-todo-app-old/
-todo-nocommit/
-yard-app/
-yard-app-zip/
-app-vb/
-app-data-entry/
-app-station-data/
-app-mrdc/
-app-attendance/
-pdf-app/
-web-app/
-comm-app/
 
 java/step1/.idea/
 java/step1/out/
@@ -57,13 +44,18 @@ java/step2/step2.iml
 
 
 ftp-app/ftp-app-*
+ftp-app/dropwizard-sample-project-*
 ftp-app/app-data-v8/config-files/specific/
 ftp-app/app-data-v8/saved-files/
-
 
 java/step5/.idea/
 java/step5/out/
 java/step5/step5.iml
+
+java/step6/.idea/
+java/step6/out/
+java/step6/step6.iml
+
 
 java/step7/.idea/
 java/step7/out/
@@ -83,7 +75,6 @@ java/*/*.iml
 java/*/target/
 java/*/meta-data/*-*.jar
 
-java/yard/readme.pdf
 
 java/pdf/.idea/
 java/pdf/src/main/main.iml
@@ -106,6 +97,11 @@ java/mavenProject/target/
 java/mavenProjectAnnotation/.idea/
 java/mavenProjectAnnotation/mavenProjectAnnotation.iml
 java/mavenProjectAnnotation/target/
+
+java/FileParser/.idea/
+java/FileParser/target/
+java/FileParser/final_copy/FileParser-*.jar
+
 
 
 java/Hibernate/.idea/
@@ -145,4 +141,5 @@ python/*/*/*/*/__pycache__/
 python/*/*/*/*/__pycache__/
 
 
-java/Communication/meta-data/env_config-dl.yml
+java/DropWizardSampleProject/DropWizardSampleProject-*/
+

@@ -1,0 +1,57 @@
+<div class="hide">
+<%= form_for :post do |f| %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+ 
+  <p>
+    <%= f.label :text %><br>
+    <%= f.text_area :text %>
+  </p>
+<% end %>
+</div>
+<div class="hide">
+<%= form_for :post, url: posts_path do |f| %>
+  <p>
+    <label for="post_title">Title</label><br>
+    <input id="post_title" name="post[title]" size="30" type="text" value="Hello">
+  </p>
+  <p>
+    <label for="post_text">Text</label><br>
+    <textarea cols="40" id="post_text" name="post[text]" rows="20">World</textarea>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+</div>
+<%= form_for :post, url: posts_path do |f| %>
+  <% if @post.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@post.errors.count, "error") %> prohibited
+      this post from being saved:</h2>
+    <ul>
+    <% @post.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <p>
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </p>
+ 
+  <p>
+    <%= f.label :text %><br>
+    <%= f.text_area :text %>
+  </p>
+ 
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+ 
+<%= link_to 'Back', posts_path %>

@@ -24,6 +24,9 @@ create index.php and add below line
 
 
 Configure php 5 properly with apache
+
+Apache installation help setting available in: server-apache-windows.txt
+
 To configure change conf/httpd.conf in apache
 --------------------------------------------------
 /*Configure php with apache */

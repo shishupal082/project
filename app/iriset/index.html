@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/app/iriset/static/style.css">
+	<title>IRISET</title>
+</head>
+<body>
+	<div class="container">
+		<center>IRISET</center>
+		<div>
+			<button value="S1-GNR=1,MT-UNR=1" class="evt signal_route_btn">S1-MT</button>
+			<button value="S1-GNR=1,LT-UNR=1" class="evt signal_route_btn">S1-LT</button>
+			<button value="S13-GNR=1,MT-UNR=1" class="evt signal_route_btn">S13-MT</button>
+			<button value="S13-GNR=1,LT-UNR=1" class="evt signal_route_btn">S13-LT</button>
+			<button value="S2-GNR=1,9-UNR=1" class="evt signal_route_btn">S2-9</button>
+			<button value="S3-GNR=1,9-UNR=1" class="evt signal_route_btn">S3-9</button>
+			<button value="S4-GNR=1,4-UNR=1" class="evt signal_route_btn">S4-4</button>
+			<button value="S14-GNR=1,8-UNR=1" class="evt signal_route_btn">S14-8</button>
+			<button value="S15-GNR=1,8-UNR=1" class="evt signal_route_btn">S15-8</button>
+			<button value="S16-GNR=1,16-UNR=1" class="evt signal_route_btn">S16-16</button>
+		</div>
+		<div>
+			<table>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="text-right">S2</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td class="text-right"><button class="btn btn-primary">|</button></td>
+					<td>
+						<button id="8-TPR-A" value="8-TPR-A=0" class="btn tpr evt" style="width: 100px;">
+							<span class="badge">8A-TPR</span></button>
+						<button id="8-TPR-1" value="8-TPR-1=0" class="btn tpr evt"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-2" value="8-TPR-2=0" class="btn tpr evt"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-3" value="8-TPR-3=0" class="btn tpr evt"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-B" value="8-TPR-B=0" class="btn evt tpr" style="width: 100px;">
+							<span class="badge">8A-TPR</span></button>
+					</td>
+					<td><button id="L-TPR-1" value="L-TPR=0" class="btn evt tpr">L-TPR-1</button></td>
+					<td><button id="L-TPR-2" value="L-TPR=0" class="btn evt tpr">L-TPR-2</button></td>
+					<td><button id="L-TPR-3" value="L-TPR=0" class="btn evt tpr">L-TPR-3</button></td>
+					<td><button id="9A-TPR" value="9A-TPR=0" class="btn evt tpr" style="width: 85px;"><span id="9A-TPR-badge-NWKR" class="badge">9A-TPR</span></button></td>
+					<td><button class="btn btn-primary">|</button></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td class="signal">
+						<span>S1</span>
+						<span class="badge s1-signal-red">&nbsp;</span>
+						<span class="badge s1-signal-yellow">&nbsp;</span>
+						<span class="badge s1-signal-green">&nbsp;</span>
+					</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-center">
+						<button id="8-TPR-4" value="8-NWKR-request=1" class="btn evt point-change-request"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-5" value="8-TPR-5=0" class="btn evt tpr"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-6" value="8-RWKR-request=1" class="btn evt point-change-request"><span class="badge">&nbsp;</span></button>
+					</td>
+					<td>S14</td>
+					<td class="text-right"></td>
+					<td class="signal">
+						<span>S3</span>
+						<span class="badge s3-signal-red">&nbsp;</span>
+						<span class="badge s3-signal-yellow">&nbsp;</span>
+						<span class="badge s3-signal-green">&nbsp;</span>
+					</td>
+					<td class="text-center"><button id="9B-TPR-1" value="9B-TPR=0" class="btn evt tpr">&nbsp;<span id="9B-TPR-badge-RWKR" class="badge">\</span></button></td>
+					<td></td>
+					<td>S4</td>
+				</tr>
+				<tr>
+					<td><button id="1-TPR" value="1-TPR=0" class="btn evt tpr" style="width: 85px;">1-TPR</button></td>
+					<td><button id="16-TPR" value="16-TPR=0" class="btn evt tpr">16-TPR</button></td>
+					<td><button id="8-TPR" value="8-TPR=0" class="btn evt tpr"><span class="badge">8-TPR</span></button></td>
+					<td>
+						<button id="8-TPR-C" value="8-TPR-C=0" class="btn evt tpr" style="width: 100px;">
+							<span class="badge">8C-TPR</span></button>
+						<button id="8-TPR-7" value="8-TPR-7=0" class="btn evt tpr"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-8" value="8-TPR-8=0" class="btn evt tpr"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-9" value="8-TPR-9=0" class="btn evt tpr"><span class="badge">&nbsp;</span></button>
+						<button id="8-TPR-D" value="8-TPR-D=0" class="btn evt tpr" style="width: 100px;">
+							<span class="badge">8D-TPR</span></button>
+					</td>
+					<td><button id="M-TPR-1" value="M-TPR=0" class="btn evt tpr">M-TPR-1</button></td>
+					<td><button id="M-TPR-2" value="M-TPR=0" class="btn evt tpr">M-TPR-2</button></td>
+					<td><button id="M-TPR-3" value="M-TPR=0" class="btn evt tpr">M-TPR-3</button></td>
+					<td><button id="9B-TPR" value="9B-TPR=0" class="btn evt tpr" style="width: 85px;"><span id="9B-TPR-badge-NWKR" class="badge">9B-TPR</span></button></td>
+					<td><button id="9-TPR" value="9-TPR=0" class="btn evt tpr"><span class="badge">9-TPR</span></button></td>
+					<td><button id="4-TPR" value="4-TPR=0" class="btn evt tpr">4-TPR</button></td>
+					<td><button id="13-TPR" value="13-TPR=0" class="btn evt tpr">13-TPR</button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="text-right">S16</td>
+					<td></td>
+					<td></td>
+					<td>S15</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td>S13</td>
+				</tr>
+			</table>
+		</div>
+		<div id="currentValues"></div>
+	</div>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="/app/iriset/model/model.js"></script>
+<script type="text/javascript" src="/app/iriset/controller/pointController.js"></script>
+<script type="text/javascript" src="/app/iriset/controller/indicationController.js"></script>
+<script type="text/javascript" src="/app/iriset/controller/componentController.js"></script>
+<script type="text/javascript" src="/app/iriset/setValuesMethods.js"></script>
+<script type="text/javascript" src="/app/iriset/data.js"></script>
+<script type="text/javascript" src="/app/iriset/source.js"></script>
+</body>
+</html>

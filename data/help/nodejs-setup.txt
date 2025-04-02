@@ -1,3 +1,8 @@
+Check nodejs installed or not
+------------------------------
+>> node -v
+>> npm -v
+
 Download and installation
 -------------------------
 If node is not installed already then download and install from

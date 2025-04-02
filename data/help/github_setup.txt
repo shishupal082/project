@@ -1,3 +1,6 @@
+Check wether ssh key added or not on github
+ssh -T git@github.com
+
 Generate ssh key
 - ssh-keygen -t rsa -C "shishupal082@gmail.com"
 This will create both id_rsa and id_rsa.pub files.
@@ -11,5 +14,7 @@ Do github config setting
 - git config --global user.email "shishupal082@gmail.com"
 - git config --global user.name "Shishupal Kumar"
 - git config --global core.autocrlf false
+- git config --global --add safe.directory D:/workspace/project
+- git config --global --add safe.directory D:/workspace/ftp-application
 
 https://github.com/sk6957187

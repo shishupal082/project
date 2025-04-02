@@ -17,6 +17,7 @@ Now run exe file
 -- Select MySQL Workbench 8.0.37 x64
 -- Select MySQL Shell 8.0.37 x64
 Note: router not required
+C++ distributable is also required
 
 -- Click on next
 
