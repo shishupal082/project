@@ -1,6 +1,0 @@
-{
-    "config": {
-        "uploadFileInstruction": "(Supported type: pdf and max size < 10MB)",
-        "uploadFileRedirectUrl": "/"
-    }
-}
