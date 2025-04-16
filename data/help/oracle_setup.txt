@@ -1,4 +1,13 @@
 Download and copy past extracted file in
 C:\Program-Files folder
 >> During first time start, it will for jdk path (not jdk bin path)
-In JAVA_HOME in user variable path, only jdk path to be given not jdk-bin path
+In JAVA_HOME in user variable path, only jdk path to be given (not jdk-bin path)
+
+16.04.2025
+------------
+If password expired
+Login Oracle SQL Developer console using admin account
+Username >> sys as sysdba
+Password >> admin
+Run command >> alter user ORACLE identified by ORACLE replace ORACLE;
+i.e. Old password and new password can be same.

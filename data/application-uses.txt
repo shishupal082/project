@@ -1,0 +1,29 @@
+Localhost 8082
+---------------------------------
+For any url mapping check: file_not_found_config.yml
+
+Accounting application
+---------------------------------
+IRISET FTP app
+---------------------------------
+Mastersheet app
+---------------------------------
+http://localhost:8082/app/mastersheet
+For test page: http://localhost:8082/app/mastersheet/0
+
+RCC app
+---------------------------------
+http://localhost:8082/app/rcc
+
+
+Localhost 8081
+---------------------------------
+FTP application
+---------------------------------
+http://localhost:8081/app/project-tracking
+
+Accountal application
+---------------------------------
+http://localhost:8081/app/project-tracking/0
+Account: Shishupal6
+Corresponding save file directory to be set properly

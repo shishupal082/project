@@ -1,6 +1,8 @@
 
 ---- Temp path above this line ----
 
+pvt/*
+
 android/.metadata/*
 android/appcompat_v7/*
 
@@ -43,10 +45,6 @@ java/step2/step2.iml
 
 
 
-ftp-app/ftp-app-*
-ftp-app/dropwizard-sample-project-*
-ftp-app/app-data-v8/config-files/specific/
-ftp-app/app-data-v8/saved-files/
 
 java/step5/.idea/
 java/step5/out/

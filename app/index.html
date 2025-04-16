@@ -16,7 +16,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-var dataUrl = "/pvt/app-data/appData.json?"+$S.getRequestId();
+var dataUrl = "http://localhost:8082/view/any-file?filepath=D:/workspace/app-data/pvt/app-data/appData.json&"+$S.getRequestId();
 $S.loadJsonData($, [dataUrl], function(response) {
     var tableHtml = "";
     var table = $S.getTable(response, "dashboard");

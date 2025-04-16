@@ -19,22 +19,22 @@
     angular.module('app').directive('pvtLinksDirective', function() {
       return {
         restrict : "A",
-        templateUrl: '/pvt/links/pvt_link.html'
+        templateUrl: '/pvt/angular-links/pvt_link.html'
       };
     }).directive('tsLinksDirective', function() {
       return {
         restrict : "A",
-        templateUrl: '/pvt/links/ts_link.html'
+        templateUrl: '/pvt/angular-links/ts_link.html'
       };
     }).directive('gssLinksDirective', function() {
       return {
         restrict : "A",
-        templateUrl: '/pvt/links/gss_link.html'
+        templateUrl: '/pvt/angular-links/gss_link.html'
       };
     }).directive('personalQoatesDirective', function() {
       return {
         restrict : "A",
-        templateUrl: '/pvt/links/personal_qoates.html'
+        templateUrl: '/pvt/angular-links/personal_qoates.html'
       };
     });
 }());
