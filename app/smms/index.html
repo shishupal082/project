@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Single thread status</title>
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v4.4.1.css"/>
+</head>
+<body class="theme-grey">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div>
+        <center id="status">Loading...</center>
+        <div id="status-data"></div>
+    </div>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+var basepath = $S.getUrlAttribute(location.href, "basepath", "");
+var baseUrl = "http://10.130.4.50:8083";
+if ($S.isStringV2(basepath)) {
+    baseUrl = "http://" + basepath + ":8083";
+}
+var dataUrl = baseUrl + "/api/get_single_thread_status?"+$S.getRequestId();
+var API_STATUS = "not-started";
+var dataReceiveCount = 0;
+var dataReeiveTime = "data-receive-time";
+var statusData = "";
+var dt = $S.getDT();
+var currentTime = dt.getDateTime("hh/:/mm/:/ss","/");
+function setHtml(id, html) {
+    $("#" + id).html(html);
+}
+function updateHtml() {
+    var statusText = "Waiting...";
+    if (API_STATUS === "timer-close") {
+        statusText = "Timer closed";
+    } else if (API_STATUS === "in-progress") {
+        statusText = "Waiting for receive ...";
+    } else if (API_STATUS === "completed") {
+        statusText = "Waiting for send ...";
+    } else if (API_STATUS === "not-started") {
+        statusText = "Timer not started";
+    }
+    setHtml("status", currentTime + " - " + dataReceiveCount + " - " + dataReeiveTime + " - " + statusText);
+    setHtml("status-data", statusData);
+}
+function updateData() {
+    API_STATUS = "in-progress";
+    $S.loadJsonData($, [dataUrl], function(response) {
+        API_STATUS = "completed";
+        if ($S.isObject(response) && $S.isObject(response["data"]) && $S.isString(response["data"]["item"])) {
+            if (response["data"]["item"].length < 3) {
+                API_STATUS = "timer-close";
+            }
+            dataReceiveCount++;
+            dataReeiveTime = dt.getDateTime("hh/:/mm/:/ss","/");
+            statusData = JSON.stringify(response["data"]);
+        } else {
+            dataReceiveCount++;
+            dataReeiveTime = dt.getDateTime("hh/:/mm/:/ss","/");
+            statusData = JSON.stringify(response);
+        }
+        updateHtml();
+    });
+}
+var secondCount = 0;
+function secondsInterval() {
+    if (secondCount%5 === 0) {
+        if (["completed", "not-started"].indexOf(API_STATUS) >= 0) {
+            updateData();
+        }
+    }
+    currentTime = dt.getDateTime("hh/:/mm/:/ss","/");
+    updateHtml();
+    secondCount++;
+}
+setInterval(function() {
+    secondsInterval();
+}, 1000);
+updateHtml();
+});
+</script>
+</body>
+</html>
