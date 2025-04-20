@@ -42,7 +42,7 @@ function updateHtml() {
         statusText = "Timer not started";
     }
     setHtml("status", currentTime + " - " + dataReceiveCount + " - " + dataReeiveTime + " - " + statusText);
-    setHtml("status-data", statusData);
+    setHtml("status-data", statusData +  "-" + baseUrl);
 }
 function updateData() {
     API_STATUS = "in-progress";

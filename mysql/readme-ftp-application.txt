@@ -1,0 +1,78 @@
+Database required for ftp-application:
+-------------------------------------------
+username: mysql
+password: mysql
+
+mysql user details under: mysql --> readme.txt
+
+ftpapp database
+----------------------
+
+create database ftpapp;
+use ftpapp;
+create table event_data(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+    username varchar(255) default null,
+    event varchar(127) default null,
+    status varchar(63) default null,
+    -- current timestamp
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    reason varchar(255) default null,
+    comment varchar(511) default null,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+create table users(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+    username varchar(255) not null unique,
+    password varchar(63) default null,
+    mobile varchar(15) default null,
+    email varchar(255) default null,
+    name varchar(255) default null,
+    passcode varchar(15) default null,
+    create_password_otp varchar(15) default null,
+    -- smallint (2 byte, 16 bit, max = 32767)
+    change_password_count smallint default 0,
+    method varchar(255) default null,
+    -- current timestamp
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);
+
+org_username,entry_time,login_username,table_name,table_unique_id,ui_entry_time,
+device_name,scan_dir_mapping_id,type,size_in_kb,size,scanned_date,detected_at,edited_at,deleted_at,remark,parent_path,pathname,filename
+
+
+create table file_path(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+    org_username varchar(255) default null,
+    entry_time TIMESTAMP default null,
+    login_username varchar(255) default null,
+    table_name varchar(31) default null,
+    table_unique_id varchar(63) default null,
+    ui_entry_time varchar(31) default null,
+
+    device_name varchar(31) default null,
+    scan_dir_mapping_id varchar(511) default null,
+    type varchar(31) default null,
+    size_in_kb double default null,
+    size varchar(31) default null,
+    scanned_date varchar(31) default null,
+    detected_at TIMESTAMP default null,
+    edited_at TIMESTAMP default null,
+    deleted_at TIMESTAMP default null,
+
+    remark varchar(511) default null,
+    parent_path varchar(511) default null,
+    pathname varchar(511) default null,
+    filename varchar(127) default null,
+
+    -- current timestamp
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    -- boolean (tinyint, 1 byte, max = 127)
+    deleted boolean default false
+);

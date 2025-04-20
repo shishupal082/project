@@ -1,0 +1,37 @@
+(1)
+create table udm_transaction(
+    id bigint primary key not null auto_increment,
+    dmtr_reference_number varchar(255) default null,
+    unique_id varchar(63) default null,
+    consignee_code varchar(15) default null,
+    year varchar(15) default null,
+    txn_s_no varchar(63) default null,
+    date_time varchar(63) default null,
+    consignee_name varchar(255) default null,
+    txn_detail varchar(255) default null,
+    txn_type varchar(255) default null,
+    txn_with varchar(255) default null,
+
+    ledger varchar(255) default null,
+    folio varchar(255) default null,
+    pl_item_no varchar(63) default null,
+    item_description varchar(1023) default null,
+    txn_description varchar(1023) default null,
+    qty_unit_combined varchar(127) default null,
+    qty varchar(127) default null,
+    unit varchar(127) default null,
+    amount_value varchar(127) default null,
+
+    udm_remark varchar(1023) default null,
+    material_identifier varchar(255) default null,
+    category varchar(255) default null,
+    sub_category varchar(255) default null,
+    make varchar(255) default null,
+    dste_remark varchar(255) default null,
+    deleted varchar(3) default '0',
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE udm_transaction RENAME COLUMN transaction_s_no TO txn_s_no;
+ALTER TABLE udm_transaction RENAME COLUMN transaction_description TO txn_description;
