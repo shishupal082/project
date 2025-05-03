@@ -49,7 +49,7 @@
     "lscache": "^1.0.5",
     "page": "^1.6.3",
     "q": "^1.4.1",
-    "react": "^0.13.0",
+    "react": "^0.14.9",
     "react-google-charts": "^0.1.4",
     "react-router": "^0.13.3",
     "reactify": "^1.1.1",
