@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap/bootstrap-v3.1.1/css/bootstrap.css">
+    <title>Pivot table</title>
+</head>
+<body>
+    <div class="container">
+        <div><center><h2>Conversion from 2d to 1d</h2></center></div>
+        <hr></hr>
+        <div id="tableHtml"></div>
+    </div>
+<script type="text/javascript" src="/static/js/stack.js"></script>
+<script type="text/javascript" src="/static/libs/jquery-2.1.3.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+var dataUrl = "http://localhost:8082/api/get_excel_data_json?requestId=csv-test&"+$S.getRequestId();
+var iterator = ["col_3","col_4","col_5","col_6","col_7","col_8","col_9","col_10","col_11","col_12","col_13","col_14","col_15","col_16","col_17","col_18","col_19","col_20","col_21","col_22","col_23","col_24","col_25","col_26","col_27","col_28","col_29","col_30","col_31","col_32","col_33","col_34","col_35","col_36","col_37","col_38","col_39","col_40","col_41","col_42","col_43","col_44","col_45","col_46","col_47","col_48","col_49","col_50"];
+var fixedCol = ["col_1", "col_2", "station"];
+var newColName = "station";
+var printCol = ["col_1","col_2", "station", "data"];
+var dataColName = "data";
+var firstRowData = {};
+function _getRequiredColData(rowData) {
+    var cellData = "";
+    var colIndex = "";
+    if ($S.isObject(rowData)) {
+        if ($S.isString(rowData[newColName])) {
+            for(var i=0; i<iterator.length; i++) {
+                if (firstRowData[iterator[i]] === rowData[newColName]) {
+                    colIndex = iterator[i];
+                    break;
+                }
+            }
+            if ($S.isStringV2(colIndex)) {
+                cellData = rowData[colIndex];
+            }
+        }
+    }
+    return cellData;
+}
+function generateFinalData(req) {
+    var finalData = [];
+    var row;
+    if ($S.isArray(req) && req.length > 0) {
+        for (var i=0; i<req.length; i++) {
+            row = {};
+            for (var j=0; j<fixedCol.length; j++) {
+                row[fixedCol[j]] = req[i][fixedCol[j]];
+            }
+            row[dataColName] = _getRequiredColData(req[i]);
+            finalData.push(row);
+        }
+    }
+    return finalData;
+}
+// Generate heading column index as new data
+function _getNewColData(req) {
+    var newColData = [];
+    if ($S.isArray(req) && req.length > 0) {
+        firstRowData = req[0];
+        if ($S.isObject(firstRowData)) {
+            for(var i=0; i<iterator.length; i++) {
+                if ($S.isString(firstRowData[iterator[i]])) {
+                    newColData.push(firstRowData[iterator[i]]);
+                }
+            }
+        }
+    }
+    newColData = $S.removeDuplicate(newColData);
+    return newColData;
+}
+function addColAsData(req) {
+    var res = [], row;
+    var tempRow;
+    var newColData = _getNewColData(req);
+    if ($S.isArray(req)) {
+        for(var i=1; i<req.length; i++) {
+            if ($S.isObject(req[i])) {
+                for(var j=0;j<newColData.length;j++) {
+                    tempRow = $S.clone(req[i]);
+                    tempRow[newColName] = newColData[j];
+                    res.push(tempRow);
+                }
+            }
+        }
+    }
+    return res;
+}
+function generatePrintData(jsonData, colIndex) {
+    var printData = [];
+    var row;
+    if ($S.isArray(jsonData) && $S.isArray(colIndex)) {
+        for(var i=0; i<jsonData.length; i++) {
+            if (!$S.isObject(jsonData[i])) {
+                continue;
+            }
+            row = [];
+            for(var j=0;j<colIndex.length; j++) {
+                if ($S.isString(colIndex[j])) {
+                    if ($S.isString(jsonData[i][colIndex[j]])) {
+                        row.push(jsonData[i][colIndex[j]]);
+                    } else {
+                        row.push("");
+                    }
+                } else {
+                    row.push("");
+                }
+            }
+            printData.push(row);
+        }
+    }
+    return printData;
+}
+$S.loadJsonData($, [dataUrl], function(response) {
+    if ($S.isObject(response)) {
+        response = response["data"];
+    }
+    response = addColAsData(response);
+    response = generateFinalData(response);
+    response = generatePrintData(response, printCol);
+    var tableHtml = "";
+    var table = $S.getTable(response, "dashboard");
+    // table.addColIndex(1);
+    // table.addRowIndex(0);
+    // table.updateTableContent(0,0,"");
+    tableHtml += table.getHtml();
+
+    $("#tableHtml").html(tableHtml);
+    $("#tableHtml table").addClass("table table-bordered");
+});
+});
+</script>
+</body>
+</html>
