@@ -2,11 +2,14 @@ Assumption:
 (1) No initiation indication
 (2) No seprate overlap (overlap is shown with H/S ASR)
 
-Expression is added in js file only yard.json is used for creation of yard
+Expression is added in .js file only yard.json is used for creation of yard
 
 Point and point zone track circuit indication
 ----------------------------------------------
 normal + reverse + nke x 2 + rke x 2 + cke x 2 = total 8 indication required
+
+Total LED required
+Yellow 8 + Red 6 = 14
 
 8AT
 8AT(1-4): 8AT-nke (Overlap indication)

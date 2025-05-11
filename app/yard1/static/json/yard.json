@@ -117,7 +117,7 @@
                 "<button class='evt yellow btn tpr 9A-TPR-c' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt yellow btn tpr 9A-TPR-c' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt yellow btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "","","",
@@ -132,7 +132,7 @@
                 "<span class='label label-primary'>|</span>"
             ],
             [
-                "<button class='evt yellow btn tpr 9A-TPR-n' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 9A-TPR' value='9A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='label label-primary'>|</span>",
@@ -339,8 +339,8 @@
                 "<button class='evt btn tpr green btn-rotate positive 9B-TPR-r' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
-                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n2' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt green btn tpr 9B-TPR-n2' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 9B-TPR-n' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 9B-TPR-c' value='9B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt green btn tpr 9B-TPR-c' value='9B-TPR'><span class='badge'>&nbsp;</span></button>"
