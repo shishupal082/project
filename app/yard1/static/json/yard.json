@@ -45,18 +45,18 @@
                 "<div class='text-right'>8A-</div>","<div class='text-left'>tpr</div>"
             ],
             [
-                "<button class='evt btn green tpr 8A-TPR' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8A-TPR' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn yellow tpr 8A-TPR-n' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn yellow tpr 8A-TPR-nke 8AT-1' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-nke 8AT-2' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-nke 8AT-3' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr 8A-TPR-nke 8AT-4' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn yellow tpr point-8-normal 8AT-5' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "<span class='label label-primary'>--</span>",
                 "",
                 "",
                 "<span class='badge yellow indication 8-WFK active'>&nbsp;</span>",
-                "<button class='evt btn tpr yellow btn-rotate 8A-TPR-r' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr yellow btn-rotate point-8-reverse 8AT-8' value='8A-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "s14-tpr": [
@@ -64,8 +64,8 @@
                 "<button class='btn'></button>"
             ],
             [
-                "<button class='evt yellow btn tpr 8A-TPR-c' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt yellow btn tpr 8A-TPR-c' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 8A-TPR-cke 8AT-6' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt yellow btn tpr 8A-TPR-cke 8AT-7' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt blue btn tpr L-TPR' value='L-TPR'><span class='badge'>&nbsp;</span></button>"
@@ -149,18 +149,18 @@
         "8-point-mid": [
             [
                 "","","",
-                "<button class='evt btn tpr yellow btn-rotate 8A-TPR-r' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr yellow btn-rotate 8A-TPR-rke 8AT-9' value='8A-TPR'><span class='badge'>&nbsp;</span></button>",
                 ""
             ],
             [
                 "",
                 "<button class='evt btn point-change-request' value='8-WNR=1,RWWNR=1'><span class='badge'>R</span></button>",
-                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green btn-rotate 8B-TPR-rke 8BT-10' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn point-change-request' value='8-WNR=1,NWWNR=1'><span class='badge'>N</span></button>"
             ],
             [
                 "",
-                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn tpr green btn-rotate 8B-TPR-rke 8BT-9' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ]
         ],
         "9-point-mid-1": [
@@ -240,8 +240,8 @@
                 "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<button class='evt btn blue tpr 8-TPR' value='8-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-c' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-c' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn green tpr 8B-TPR-cke 8BT-1' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-cke 8BT-2' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "",
@@ -250,15 +250,15 @@
         ],
         "8c-tpr": [
             [
-                "<button class='evt btn tpr green btn-rotate 8B-TPR-r' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn tpr green btn-rotate point-8-reverse 8BT-8' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
                 "<span class='badge yellow indication 8-WFK active'>&nbsp;</span>"
             ],
             [
-                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n2' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
-                "<button class='evt btn green tpr 8B-TPR-n2' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
+                "<button class='evt btn green tpr point-8-normal 8BT-3' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-nke 8BT-4' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-nke 8BT-5' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-nke 8BT-6' value='8B-TPR'><span class='badge'>&nbsp;</span></button>",
+                "<button class='evt btn green tpr 8B-TPR-nke 8BT-7' value='8B-TPR'><span class='badge'>&nbsp;</span></button>"
             ],
             [
                 "",

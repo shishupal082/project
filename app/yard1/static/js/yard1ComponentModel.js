@@ -51,20 +51,28 @@ var availableTPRs = ["1-TPR", "16-TPR", "4-TPR", "13-TPR", "M-TPR", "L-TPR",
                     "8-TPR", "9-TPR",
                     "8A-TPR", "8B-TPR", "9A-TPR", "9B-TPR"
                     ];
+
+var availableIndications = [
+    "point-8-normal", "point-8-reverse",
+    "8A-TPR-nke","8A-TPR-rke","8A-TPR-cke",
+    "8B-TPR-nke","8B-TPR-rke","8B-TPR-cke"
+];
+
 var tprIndications = [
     "1-TPR-R", "16-TPR-R", "4-TPR-R", "13-TPR-R", "M-TPR-R", "L-TPR-R",
     "1-TPR-Y", "16-TPR-Y", "4-TPR-Y", "13-TPR-Y", "M-TPR-Y", "L-TPR-Y",
     "8-TPR-R", "9-TPR-R",
     "8-TPR-Y", "9-TPR-Y",
 
-    "8A-TPR-n", "8A-TPR-n-R", "8A-TPR-n-Y",
-    "8A-TPR-r", "8A-TPR-r-R", "8A-TPR-r-Y",
-    "8A-TPR-c", "8A-TPR-c-R", "8A-TPR-c-Y",
+    "point-8-normal-Y", "point-8-reverse-Y",
 
-    "8B-TPR-n", "8B-TPR-n-R", "8B-TPR-n-Y",
-    "8B-TPR-n2", "8B-TPR-n2-R", "8B-TPR-n2-Y",
-    "8B-TPR-r", "8B-TPR-r-R", "8B-TPR-r-Y",
-    "8B-TPR-c", "8B-TPR-c-R", "8B-TPR-c-Y",
+    "8A-TPR-nke-R", "8A-TPR-nke-Y",
+    "8A-TPR-rke-R", "8A-TPR-rke-Y",
+    "8A-TPR-cke-R", "8A-TPR-cke-Y",
+
+    "8B-TPR-nke-R", "8B-TPR-nke-Y",
+    "8B-TPR-rke-R", "8B-TPR-rke-Y",
+    "8B-TPR-cke-R", "8B-TPR-cke-Y",
 
     "9A-TPR-n", "9A-TPR-n-R", "9A-TPR-n-Y",
     "9A-TPR-r", "9A-TPR-r-R", "9A-TPR-r-Y",
@@ -76,8 +84,8 @@ var tprIndications = [
     "9B-TPR-c", "9B-TPR-c-R", "9B-TPR-c-Y"
 ];
 
-var point9InfoExt = ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"];
 var point8InfoExt = ["8-WFK", "8-NWKR", "8-RWKR", "8-WNKR", "8-WRKR", "8-NWLR", "8-RWLR"];
+var point9InfoExt = ["9-WFK", "9-NWKR", "9-RWKR", "9-WNKR", "9-WRKR", "9-NWLR", "9-RWLR"];
 
 var signalEcr = ["S1-RECR", "S1-HECR", "S1-DECR", "S2-RECR", "S2-HECR",
                 "S3-RECR", "S3-HECR", "S3-DECR", "S4-RECR", "S4-HECR",
@@ -99,6 +107,7 @@ possibleValues = possibleValues.concat(availableTSRs);
 possibleValues = possibleValues.concat(availableNRRs);
 possibleValues = possibleValues.concat(availableNNRs);
 possibleValues = possibleValues.concat(availableTPRs);
+possibleValues = possibleValues.concat(availableIndications);
 possibleValues = possibleValues.concat(tprIndications);
 possibleValues = possibleValues.concat(availableGNRs);
 possibleValues = possibleValues.concat(availableUNRs);
@@ -687,39 +696,39 @@ var tprLockExpression = {
     "13-TPR-Y": ["(~13-ASR||~S4-NNR)"],
 
     "8-TPR-R": ["~8-TPR"],
-    "8-TPR-Y": {
-        "op": "||",
-        "val": [
-            "~1-ASR","~14/15-ASR",
-            "(~13-ASR&&(9-NWKR||(9-RWKR&&8-RWKR)))"
-        ]
-    },
+    "8-TPR-Y": ["8-TPR",
+        {
+            "op": "||",
+            "val": [
+                "~1-ASR","~14/15-ASR",
+                "(~13-ASR&&(9-NWKR||(9-RWKR&&8-RWKR)))"
+            ]
+        }
+    ],
 
     "9-TPR-R": ["~9-TPR"],
-    "9-TPR-Y": {
-        "op": "||",
-        "val": [
-            "~13-ASR","~2/3-ASR",
-            "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
-        ]
-    },
+    "9-TPR-Y": ["9-TPR",
+        {
+            "op": "||",
+            "val": [
+                "~13-ASR","~2/3-ASR",
+                "(~1-ASR&&(8-NWKR||(8-RWKR&&9-RWKR)))"
+            ]
+        }
+    ],
 
-    "8A-TPR-n-R": ["8-NWKR", "~8A-TPR"],
-    "8A-TPR-n-Y": ["8-NWKR", "8A-TPR"],
-    "8B-TPR-n-R": ["8-NWKR", "~8B-TPR"],
-    "8B-TPR-n-Y": ["8-NWKR", "8B-TPR"],
+    "point-8-normal-Y": ["8-NWKR"],
+    "point-8-reverse-Y": ["8-RWKR"],
 
-    "8A-TPR-r-R": ["8-RWKR", "~8A-TPR"],
-    "8A-TPR-r-Y": ["8-RWKR", "8A-TPR"],
-    "8B-TPR-r-R": ["8-RWKR", "~8B-TPR"],
-    "8B-TPR-r-Y": ["8-RWKR", "8B-TPR"],
+    "8A-TPR-cke-R": ["~8A-TPR"],
+    "8B-TPR-cke-R": ["~8B-TPR"],
 
-    "8A-TPR-c-R": ["~8A-TPR"],
-    "8B-TPR-c-R": ["~8B-TPR"],
+    "8A-TPR-nke-R": ["8-NWKR", "~8A-TPR"],
+    "8B-TPR-nke-R": ["8-NWKR", "~8B-TPR"],
+    "8A-TPR-rke-R": ["8-RWKR", "~8A-TPR"],
+    "8B-TPR-rke-R": ["8-RWKR", "~8B-TPR"],
 
-    "8B-TPR-n2-R": ["8-NWKR", "~8B-TPR"],
-    "9B-TPR-n2-R": ["9-NWKR", "~9B-TPR"],
-    "8A-TPR-c-Y": ["8A-TPR",
+    "8A-TPR-cke-Y": ["8A-TPR",
         {
             "op": "||",
             "val": [
@@ -729,7 +738,18 @@ var tprLockExpression = {
             ]
         }
     ],
-    "8B-TPR-c-Y": ["8B-TPR",
+    "8A-TPR-rke-Y": ["8A-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(~1-ASR&&8-RWKR)",
+                "(~14/15-ASR&&8-RWKR)",
+                "(~13-ASR&&8-RWKR&&9-RWKR)"
+            ]
+        }
+    ],
+    "8A-TPR-nke-Y": ["8A-TPR","(~13-ASR&&8-NWKR&&9-RWKR)"],
+    "8B-TPR-cke-Y": ["8B-TPR",
         {
             "op": "||",
             "val": [
@@ -738,7 +758,28 @@ var tprLockExpression = {
             ]
         }
     ],
-    "8B-TPR-n2-Y": ["8-NWKR", "8B-TPR-c-Y"],
+    "8B-TPR-rke-Y": ["8B-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(~1-ASR&&8-RWKR)",
+                "(~14/15-ASR&&8-RWKR)",
+                "(~13-ASR&&8-RWKR&&9-RWKR)"
+            ]
+        }
+    ],
+    "8B-TPR-nke-Y": ["8B-TPR",
+        {
+            "op": "||",
+            "val": [
+                "(~1-ASR&&8-NWKR)",
+                "(~14/15-ASR&&8-NWKR)",
+                "(~13-ASR&&8-NWKR&&9-NWKR)"
+            ]
+        }
+    ],
+
+    "9B-TPR-n2-R": ["9-NWKR", "~9B-TPR"],
     "9B-TPR-n2-Y": ["9-NWKR", "9B-TPR-c-Y"],
 
     "9A-TPR-n-R": ["9-NWKR", "~9A-TPR"],

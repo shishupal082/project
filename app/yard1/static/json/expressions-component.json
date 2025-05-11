@@ -576,21 +576,14 @@
         ]
     },
 
-    "8A-TPR-n-R": ["8-NWKR", "~8A-TPR"],
-    "8A-TPR-n-Y": ["8-NWKR", "8A-TPR"],
-    "8B-TPR-n-R": ["8-NWKR", "~8B-TPR"],
-    "8B-TPR-n-Y": ["8-NWKR", "8B-TPR"],
+    "8A-normal-Y": ["8-NWKR"],
+    "8B-normal-Y": ["8-NWKR"],
+    "8A-reverse-Y": ["8-RWKR"],
+    "8B-reverse-Y": ["8-RWKR"],
 
+    "8A-TPR-nke-Y": ["8-NWKR", "8A-TPR"],
     "8A-TPR-r-R": ["8-RWKR", "~8A-TPR"],
     "8A-TPR-r-Y": ["8-RWKR", "8A-TPR"],
-    "8B-TPR-r-R": ["8-RWKR", "~8B-TPR"],
-    "8B-TPR-r-Y": ["8-RWKR", "8B-TPR"],
-
-    "8A-TPR-c-R": ["~8A-TPR"],
-    "8B-TPR-c-R": ["~8B-TPR"],
-
-    "8B-TPR-n2-R": ["8-NWKR", "~8B-TPR"],
-    "9B-TPR-n2-R": ["9-NWKR", "~9B-TPR"],
     "8A-TPR-c-Y": ["8A-TPR",
         {
             "op": "||",
@@ -601,6 +594,17 @@
             ]
         }
     ],
+    "8A-TPR-c-R": ["~8A-TPR"],
+    "8B-TPR-c-R": ["~8B-TPR"],
+
+    "8B-TPR-n-R": ["8-NWKR", "~8B-TPR"],
+    "8B-TPR-n-Y": ["8-NWKR", "8B-TPR"],
+
+    "8B-TPR-r-R": ["8-RWKR", "~8B-TPR"],
+    "8B-TPR-r-Y": ["8-RWKR", "8B-TPR"],
+
+    "8B-TPR-n2-R": ["8-NWKR", "~8B-TPR"],
+    "9B-TPR-n2-R": ["9-NWKR", "~9B-TPR"],
     "8B-TPR-c-Y": ["8B-TPR",
         {
             "op": "||",
