@@ -8,6 +8,12 @@
                     "value": "S1-GNR=1,O1-UNR=1",
                     "className": "evt signal_route_btn",
                     "text": "S1-O1"
+                },
+                {
+                    "tag": "button",
+                    "value": "S1-GNR=1,O2-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S1-O2"
                 }
             ]
         }

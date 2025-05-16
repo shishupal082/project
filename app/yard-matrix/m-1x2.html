@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
     <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
-    <title>Matrix 1x1</title>
+    <title>Matrix 1x2</title>
 </head>
 <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 <script type="text/javascript">
 
-var firstRow = ["","","","","","","","","1st-row-output"];
-var secondRow = ["","","","","","","","2nd-row-input-s1","2nd-row-input-s1-1"];
+var firstRow = ["","","","","","","","","1st-row-output","1st-row-output-2"];
+var secondRow = ["","","","","","","","2nd-row-input-s1","2nd-row-input-s1-1","2nd-row-input-s1-2"];
 var requiredContent = [];
 requiredContent.push(firstRow);
 requiredContent.push(secondRow);
@@ -30,8 +30,8 @@ var GLOBAL = {
         "expressions": ["/app/yard-matrix/1x1/json/expressions-point.json",
                         "/app/yard-matrix/1x1/json/expressions-signal.json"]
     },
-    appHeading: "Matrix 1x1",
-    appInfo: "1x1 Matrix",
+    appHeading: "Matrix 1x2",
+    appInfo: "1x2 Matrix",
     tprClassMapping: {},
     requiredContent: requiredContent
 };

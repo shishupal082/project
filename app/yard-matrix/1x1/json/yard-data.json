@@ -84,6 +84,21 @@
                     "text": "O1"
                 }
             ]
+        ],
+        "1st-row-output-2": [
+            [
+                {
+                    "tag": "span",
+                    "className": "",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "id": "O2-HECR",
+                    "className": "badge signal yellow",
+                    "text": "O2"
+                }
+            ]
         ]
     },
     "secondRow" : {
@@ -111,7 +126,8 @@
                 },
                 {
                     "tag": "button",
-                    "className": "evt btn yellow tpr 8A-TPR btn-rotate vertical",
+                    "className": "evt btn yellow tpr btn-rotate vertical",
+                    "value": "S1-O1-4",
                     "text": "$$BTN_SPAN_TEXT"
                 },
                 {
@@ -128,7 +144,8 @@
             [
                 {
                     "tag": "button",
-                    "className": "evt btn yellow tpr 8A-TPR",
+                    "className": "evt btn yellow tpr",
+                    "value": "S1-O1-1",
                     "text": "$$BTN_SPAN_TEXT"
                 },
                 {
@@ -139,7 +156,8 @@
                 },
                 {
                     "tag": "button",
-                    "className": "evt btn yellow tpr 8A-TPR",
+                    "className": "evt btn yellow tpr",
+                    "value": "S1-O1-3",
                     "text": "$$BTN_SPAN_TEXT"
                 }
             ],
@@ -152,11 +170,78 @@
                 },
                 {
                     "tag": "button",
-                    "className": "evt btn yellow tpr btn-rotate vertical 8A-TPR",
+                    "className": "evt btn yellow tpr btn-rotate vertical",
+                    "value": "S1-O1-2",
                     "text": "$$BTN_SPAN_TEXT"
                 },
                 {
                     "id": "S1-O1-NKRE",
+                    "tag": "span",
+                    "className": "badge yellow indication",
+                    "text": "N"
+                }
+            ]
+        ],
+        "2nd-row-input-s1-2": [
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn point-change-request",
+                    "value": "S1-O2-WR=1,RWWNR=1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge",
+                        "text": "R"
+                    }
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR btn-rotate vertical",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn point-change-request",
+                    "value": "S1-O2-WR=1,NWWNR=1",
+                    "text": {
+                        "tag": "span",
+                        "className": "badge",
+                        "text": "N"
+                    }
+                }
+            ],
+            [
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "span",
+                    "id": "S1-O2-WLKE",
+                    "className": "badge yellow indication",
+                    "text": "L"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S1-O2-RKRE",
+                    "className": "badge yellow indication",
+                    "text": "R"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr btn-rotate vertical 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "id": "S1-O2-NKRE",
                     "tag": "span",
                     "className": "badge yellow indication",
                     "text": "N"
