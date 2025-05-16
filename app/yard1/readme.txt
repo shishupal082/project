@@ -26,3 +26,7 @@ Yellow 8 + Red 6 = 14
 8BT(8): point-reverse-indication
 8BT(9-10): 8BT-RKE
 
+Point circuit
+-------------------------
+
+

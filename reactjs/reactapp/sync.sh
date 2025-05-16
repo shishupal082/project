@@ -23,7 +23,7 @@ sed -i "1s/.*/import $\\S from '.\\/stack';/" ./src/libs/model.js
 sed -i "1s/.*/import $\\S from '.\\/stack';/" ./src/libs/modelV2.js
 sed -i "2s/.*/const $\\S = require('..\\/..\\/..\\/..\\/..\\/static\\/js\\/stack.js');/" ./src/libs/nodejs/modelV2.js
 sed -i "1s/.*/import $\\S from '.\\/stack';/" ./src/libs/ML2.js
-sed -i "1s/.*/import '.\\/model'; var $\\M = window.$\\M;/" ./src/libs/yardApiModel.js
+sed -i "1s/.*/import $\\S from '.\\/stack'; import '.\\/model'; var $\\M = window.$\\M;/" ./src/libs/yardApiModel.js
 
 
 addLog "Copy file complete"

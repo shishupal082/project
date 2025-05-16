@@ -65,6 +65,7 @@ class App extends React.Component {
         var self = this;
         var valueArr = value.split(",");
         var finalValue = {};
+        var temp;
         for (var i = 0; i < valueArr.length; i++) {
             var valItem = valueArr[i].split("=");
             if (valItem.length === 2) {
@@ -86,12 +87,22 @@ class App extends React.Component {
             }, 1000);
         }
         for(var key in finalValue) {
-            $M.setValue(key, finalValue[key]);
+            temp = finalValue[key];
+            if (!$S.isStringV2(key)) {
+                continue;
+            }
+            if (temp === "toggle") {
+                $M.toggleValue(key, function() {
+
+                });
+            } else {
+                $M.setValue(key, finalValue[key]);
+                activateTimers(key);
+            }
             this.setState({key: key});
             // checkUIStyle();
             //Activate timer for signal+route button press and manual point operation
             // if (currentTarget.hasClass("signal_route_btn") || currentTarget.hasClass("point-change-request")) {
-                activateTimers(key);
             // }
         }
         clearLogData();

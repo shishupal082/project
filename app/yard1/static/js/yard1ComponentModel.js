@@ -723,10 +723,10 @@ var tprLockExpression = {
     "8A-TPR-cke-R": ["~8A-TPR"],
     "8B-TPR-cke-R": ["~8B-TPR"],
 
-    "8A-TPR-nke-R": ["8-NWKR", "~8A-TPR"],
-    "8B-TPR-nke-R": ["8-NWKR", "~8B-TPR"],
-    "8A-TPR-rke-R": ["8-RWKR", "~8A-TPR"],
-    "8B-TPR-rke-R": ["8-RWKR", "~8B-TPR"],
+    "8A-TPR-nke-R": ["~8-RWKR", "~8A-TPR"],
+    "8B-TPR-nke-R": ["~8-RWKR", "~8B-TPR"],
+    "8A-TPR-rke-R": ["~8-NWKR", "~8A-TPR"],
+    "8B-TPR-rke-R": ["~8-NWKR", "~8B-TPR"],
 
     "8A-TPR-cke-Y": ["8A-TPR",
         {

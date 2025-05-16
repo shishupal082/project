@@ -1,0 +1,90 @@
+[
+    [
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "S1-GNR=1,O1-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S1-O1"
+                },
+                {
+                    "tag": "button",
+                    "value": "S1-GNR=1,O2-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S1-O2"
+                },
+                {
+                    "tag": "button",
+                    "value": "S2-GNR=1,O1-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S2-O1"
+                },
+                {
+                    "tag": "button",
+                    "value": "S2-GNR=1,O2-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S2-O2"
+                },
+                {
+                    "tag": "button",
+                    "value": "S3-GNR=1,O1-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S3-O1"
+                },
+                {
+                    "tag": "button",
+                    "value": "S3-GNR=1,O2-UNR=1",
+                    "className": "evt signal_route_btn",
+                    "text": "S3-O2"
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": ""
+        },
+        {
+            "tag": "div",
+            "text": ""
+        }
+    ],
+    [
+        {
+            "tag": "div",
+            "text": [
+                {
+                    "tag": "button",
+                    "value": "S1-SW=toggle",
+                    "className": "evt toggle_btn",
+                    "text": "S1-SW"
+                },
+                {
+                    "tag": "button",
+                    "value": "S2-SW=toggle",
+                    "className": "evt toggle_btn",
+                    "text": "S2-SW"
+                },
+                {
+                    "tag": "button",
+                    "value": "S3-SW=toggle",
+                    "className": "evt toggle_btn",
+                    "text": "S3-SW"
+                }
+            ]
+        },
+        {
+            "tag": "div",
+            "text": ""
+        },
+        {
+            "tag": "div",
+            "text": {
+                "tag": "span",
+                "className": "alert-danger badge",
+                "text": ""
+            }
+        }
+    ]
+]

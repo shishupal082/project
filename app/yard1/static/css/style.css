@@ -18,7 +18,7 @@ hr {
 .yard .table-html td span,
 .yard .table-html td button {
     /*font-size: 10px;*/
-    line-height: 1;
+/*    line-height: 1;*/
 }
 .yard .btn {
     width: 25px;
@@ -68,6 +68,7 @@ hr {
 }
 .signal.yellow.active {
     background-color: #ff0;
+    color: #000;
 }
 .signal.red.active {
     background-color: #f00;
@@ -143,6 +144,9 @@ hr {
 }
 .yard .btn-rotate.positive {
     transform: rotate(45deg);
+}
+.yard .btn-rotate.vertical {
+    transform: rotate(90deg);
 }
 .yard .event_btn.zero,
 .yard .event_btn.one {

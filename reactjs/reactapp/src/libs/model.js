@@ -49,7 +49,7 @@ function getPlatForm(attr) {
 var platform = getPlatForm(attr);
 factory(platform, $S);
 
-}(global, function(Platform, $S) {
+}(window, function(Platform, $S) {
 
 // var loopCount = 0;
 var setValueCount = 0, setValueCountLimit = 400;
@@ -981,6 +981,9 @@ Model.extend({
 });
 Model.extend({
     getTprClass: function(name) {
+        if (!$S.isStringV2(name)) {
+            return "";
+        }
         if (Model.isValidKey(name + "-R")) {
             if (Model.isUp(name + "-R")) {
                 return "btn-danger";

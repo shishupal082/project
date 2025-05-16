@@ -1,6 +1,7 @@
-// import './model'; import './model'; var $S = window.$S; var $M = window.$M;
+// import $S from './stack'; import './model'; var $M = window.$M;
 
 /*
+    import $S from './stack'; import './model'; var $M = window.$M;
     - Load possibleValue, initialValue and expressions from api
         - It do not care about rendering yardHtml using yard api data
     - Set these values to model ($M)
@@ -137,7 +138,7 @@ function isApisLoadComplete() {
 function loadYardData(callBack) {
     var url = [];
     for (var i = 0; i < YardDataPath.length; i++) {
-        url.push(YardDataPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(YardDataPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -156,7 +157,7 @@ function loadYardData(callBack) {
 function loadYardControlData(callBack) {
     var url = [];
     for (var i = 0; i < YardControlDataPath.length; i++) {
-        url.push(YardControlDataPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(YardControlDataPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -173,7 +174,7 @@ function loadYardControlData(callBack) {
 function loadAsyncData(callBack) {
     var url = [];
     for (var i = 0; i < AsyncDataPath.length; i++) {
-        url.push(AsyncDataPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(AsyncDataPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -190,7 +191,7 @@ function loadAsyncData(callBack) {
 function loadPartialExpressions(callBack) {
     var url = [];
     for (var i = 0; i < PartialExpressionsPath.length; i++) {
-        url.push(PartialExpressionsPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(PartialExpressionsPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -210,7 +211,7 @@ function loadPartialExpressions(callBack) {
 function loadPossibleValues(callBack) {
     var url = [];
     for (var i = 0; i < PossibleValuePath.length; i++) {
-        url.push(PossibleValuePath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(PossibleValuePath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -239,10 +240,20 @@ function loadPossibleValues(callBack) {
         }
     }, callBack, null, ajaxApiCall);
 }
+function addRequestIdInUrl(url) {
+    if ($S.isString(url)) {
+        if (url.split("?").length>1) {
+            url = url + "&requestId=" + RequestId;
+        } else {
+            url = url + "?requestId=" + RequestId;
+        }
+    }
+    return url;
+}
 function loadInitialValues(callBack) {
     var url = [];
     for (var i = 0; i < InitialValuePath.length; i++) {
-        url.push(InitialValuePath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(InitialValuePath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);
@@ -258,7 +269,7 @@ function loadInitialValues(callBack) {
 function loadTimerBits(callback) {
     var url = [];
     for (var i = 0; i < TimerBitsPath.length; i++) {
-        url.push(TimerBitsPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(TimerBitsPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callback);
@@ -313,7 +324,7 @@ function loadExpressions(callBack) {
     }
     var url = [];
     for (var i = 0; i < ExpressionsPath.length; i++) {
-        url.push(ExpressionsPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(ExpressionsPath[i]));
     }
     if (url.length === 0) {
         expressionLoadComplete();
@@ -331,7 +342,7 @@ function loadExpressions(callBack) {
 function loadTxtExpressions(callBack) {
     var url = [];
     for (var i = 0; i < ExpressionsTxtPath.length; i++) {
-        url.push(ExpressionsTxtPath[i]+"?"+RequestId);
+        url.push(addRequestIdInUrl(ExpressionsTxtPath[i]));
     }
     if (url.length === 0) {
         return $M.callMethod(callBack);

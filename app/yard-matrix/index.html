@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/libs/bootstrap-v3.1.1.css">
+    <link rel="stylesheet" type="text/css" href="/app/yard1/static/css/style.css">
+    <title>Matrix 3x2</title>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+<script type="text/javascript">
+
+var topLoopLine = ["","","","","","","","","","8-point-top"];
+var requiredContent = [];
+requiredContent.push(topLoopLine);
+
+
+var GLOBAL = {
+    UISetValueCountLimit: 800,
+    onSetValueRecheckAll: true,
+    baseapi: "",
+    UICommonPath: {
+        "yard-control-btn-data": ["/app/yard-matrix/static/json/yard-control.json"],
+        "yard-data": ["/app/yard-matrix/static/json/yard-data.json"],
+        "possible-value": ["/app/yard-matrix/static/json/possible-values.json"],
+        "initial-value": ["/app/yard-matrix/static/json/initial-value.json"],
+        "expressions": ["/app/yard-matrix/static/json/expressions-point.json",
+                        "/app/yard-matrix/static/json/expressions-component.json"]
+    },
+    appHeading: "Matrix 3x2",
+    appInfo: "3x2 Matrix",
+    tprClassMapping: {},
+    requiredContent: requiredContent
+};
+window.GLOBAL = GLOBAL;
+</script>
+
+<script type="text/javascript" src="/reactjs/reactapp/dist-yard-app/script1.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-yard-app/script2.js"></script>
+<script type="text/javascript" src="/reactjs/reactapp/dist-yard-app/script3.js"></script>
+
+</body>
+</html>

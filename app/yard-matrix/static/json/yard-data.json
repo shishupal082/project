@@ -1,0 +1,149 @@
+{
+    "sampleDomino" : {
+        "tc": [
+            [
+                {
+                    "tag": "span",
+                    "text": "1"
+                },
+                {
+                    "tag": "span",
+                    "text": "2"
+                },
+                {
+                    "tag": "span",
+                    "text": "3"
+                },
+                {
+                    "tag": "span",
+                    "text": "4"
+                },
+                {
+                    "tag": "span",
+                    "text": "5"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "text": "6"
+                },
+                {
+                    "tag": "span",
+                    "text": "7"
+                },
+                {
+                    "tag": "span",
+                    "text": "8"
+                },
+                {
+                    "tag": "span",
+                    "text": "9"
+                },
+                {
+                    "tag": "span",
+                    "text": "10"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "text": "11"
+                },
+                {
+                    "tag": "span",
+                    "text": "12"
+                },
+                {
+                    "tag": "span",
+                    "text": "13"
+                },
+                {
+                    "tag": "span",
+                    "text": "14"
+                },
+                {
+                    "tag": "span",
+                    "text": "15"
+                }
+            ]
+        ]
+    },
+    "firstRow" : {
+        "8-point-top": [
+            [
+                {
+                    "tag": "span",
+                    "className": "",
+                    "text": ""
+                },
+                {
+                    "tag": "span",
+                    "id": "O1-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "O1"
+                },
+                {
+                    "tag": "span",
+                    "id": "O2-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "O2"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S1-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "S1"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR-n",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S2-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "S2"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR-n",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ],
+            [
+                {
+                    "tag": "span",
+                    "id": "S3-HECR",
+                    "className": "badge signal active yellow",
+                    "text": "S3"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR",
+                    "text": "$$BTN_SPAN_TEXT"
+                },
+                {
+                    "tag": "button",
+                    "className": "evt btn yellow tpr 8A-TPR-n",
+                    "text": "$$BTN_SPAN_TEXT"
+                }
+            ]
+        ]
+    }
+}
