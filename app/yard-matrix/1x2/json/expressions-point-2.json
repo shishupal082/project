@@ -1,0 +1,35 @@
+{
+    "S1-O2-WLR": ["S1-O2-ALSR"],
+    "S1-O2-L_N_R": [
+        "S1-O2-WLR",
+        "~S1-O2-L_R_R",
+        "S1-O2-L_N_R || (NWWNR&&S1-O2-WR)",
+        "(~RWWNR||~S1-O2-WR)"
+    ],
+    "S1-O2-L_R_R": [
+        "S1-O2-WLR",
+        "~S1-O2-L_N_R",
+        "S1-O2-L_R_R || (RWWNR&&S1-O2-WR)",
+        "(~NWWNR||~S1-O2-WR)"
+    ],
+    "S1-O2-RCR": [
+        "~S1-O2-NCR","~S1-O2-L_N_R",
+        "(S1-O2-L_R_R || S1-O2-RCR)"
+    ],
+    "S1-O2-NCR": [
+        "~S1-O2-RCR","~S1-O2-L_R_R",
+        "(S1-O2-L_N_R || S1-O2-NCR)"
+    ],
+    "S1-O2-RWR": [
+        "S1-O2-RCR","S1-O2-L_R_R",
+        "~S1-O2-RWKR","~S1-O2-NWKR",
+        "S1-O2-WLR"
+    ],
+    "S1-O2-NWR": [
+        "S1-O2-NCR","S1-O2-L_N_R",
+        "~S1-O2-NWKR","~S1-O2-RWKR",
+        "S1-O2-WLR"
+    ],
+    "S1-O2-RWKR": ["S1-O2-RKR","~S1-O2-NWKR","S1-O2-RCR"],
+    "S1-O2-NWKR": ["S1-O2-NKR","~S1-O2-RWKR","S1-O2-NCR"]
+}

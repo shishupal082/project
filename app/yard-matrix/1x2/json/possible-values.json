@@ -1,13 +1,11 @@
 {
-    "availableGNRs": ["S1-GNR"],
+    "availableGNRs": ["S1-O1-GNR","S1-O2-GNR"],
     "availableUNRs": ["O1-UNR","O2-UNR"],
 
-    "availableNNRs": ["S1-O1-NNR","S1-O2-NNR"],
+    "S1-O1": ["S1-O1-NNR","S1-O1-NRR","S1-O1-UCR","S1-O1-ALSR","S1-O1-EGNR"],
 
-    "availableNRRs": ["S1-O1-NRR","S1-O2-NRR"],
+    "S1-O2": ["S1-O2-NNR","S1-O2-NRR","S1-O2-UCR","S1-O2-ALSR","S1-O2-EGNR"],
 
-    "availableALSRs": ["S1-ALSR"],
-    "availableTSRs": ["S1-TSR"],
     "point-internal-s1-o1": [
         "S1-O1-WR","S1-O1-L_N_R","S1-O1-L_R_R","S1-O1-NLR","S1-O1-RLR",
         "S1-O1-NWKR", "S1-O1-RWKR",
@@ -22,16 +20,7 @@
         "S1-O2-NWR","S1-O2-RWR",
         "S1-O2-WLR"
     ],
-    "miscs": ["NWWNR", "RWWNR", "S1-UCR"],
-    "external-input": [
-        "S1-SW",
-        "S1-O1-NKR", "S1-O1-RKR",
-        "S1-O2-NKR", "S1-O2-RKR"
-    ],
     "signal-indication": ["S1-HECR", "O1-HECR", "O2-HECR"],
-    "point-indication": [
-        "S1-O2-WLKE","S1-O2-NKRE","S1-O2-RKRE"
-    ],
     "sw-s1-o1-indications": [
         "S1-O1-WLKE","S1-O1-NKRE","S1-O1-RKRE",
         "S1-O1-1","S1-O1-1-Y", "S1-O1-1-R",
@@ -39,8 +28,21 @@
         "S1-O1-3","S1-O1-3-Y", "S1-O1-3-R",
         "S1-O1-4","S1-O1-4-Y", "S1-O1-4-R"
     ],
-    "miscsExt": [
+    "sw-s1-o2-indications": [
+        "S1-O2-WLKE","S1-O2-NKRE","S1-O2-RKRE",
+        "S1-O2-1","S1-O2-1-Y", "S1-O2-1-R",
+        "S1-O2-2","S1-O2-2-Y", "S1-O2-2-R",
+        "S1-O2-3","S1-O2-3-Y", "S1-O2-3-R",
+        "S1-O2-4","S1-O2-4-Y", "S1-O2-4-R"
+    ],
+    "miscs": ["NWWNR", "RWWNR", "EGGNR"],
+    "external-input": [
         "SMR",
+        "S1-SW",
+        "S1-O1-NKR", "S1-O1-RKR",
+        "S1-O2-NKR", "S1-O2-RKR"
+    ],
+    "external-output": [
         "S1-HR",
         "O1-HR",
         "O2-HR"

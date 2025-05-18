@@ -1,8 +1,5 @@
 {
-    "S1-O1-WLR": ["~S1-UCR"],
-    "S1-O1-WLKE": ["~S1-O1-WLR"],
-    "S1-O1-NKRE": ["S1-O1-NWKR"],
-    "S1-O1-RKRE": ["S1-O1-RWKR"],
+    "S1-O1-WLR": ["S1-O1-ALSR"],
     "S1-O1-L_N_R": [
         "S1-O1-WLR",
         "~S1-O1-L_R_R",
@@ -34,9 +31,5 @@
         "S1-O1-WLR"
     ],
     "S1-O1-RWKR": ["S1-O1-RKR","~S1-O1-NWKR","S1-O1-RCR"],
-    "S1-O1-NWKR": ["S1-O1-NKR","~S1-O1-RWKR","S1-O1-NCR"],
-    "S1-O1-RKR": ["~S1-O1-NWR && (S1-O1-RKR || S1-O1-RWR)"],
-    "S1-O1-NKR": ["~S1-O1-RWR && (S1-O1-NKR || S1-O1-NWR)"],
-    "S1-O1-1-Y": ["S1-O1-NRR || S1-O2-NRR"],
-    "S1-O1-4-Y": ["O1-HR"]
+    "S1-O1-NWKR": ["S1-O1-NKR","~S1-O1-RWKR","S1-O1-NCR"]
 }
