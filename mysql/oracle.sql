@@ -1,3 +1,6 @@
+select Count(*) from cugdata where full_month='2025-04-Apr';
+select * from cugdata order by id desc;
+
 SELECT * FROM USER_SYS_PRIVS;
 SELECT * FROM USER_ROLE_PRIVS;
 SELECT * FROM USER_TAB_PRIVS;

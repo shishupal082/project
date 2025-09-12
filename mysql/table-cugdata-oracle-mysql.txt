@@ -1,0 +1,97 @@
+(1)
+create table cugdata(
+    id NUMBER(12) primary key not null,
+    file_date varchar(255) default null,
+    unique_entry_id varchar(255) default null,
+
+    bill_number varchar(15) default null,
+    msisdn varchar(15) default null,
+    employee_code varchar(15) default null,
+    section varchar(255) default null,
+    sub_section varchar(255) default null,
+    description varchar(255) default null,
+    country varchar(255) default null,
+    s_no varchar(63) default null,
+    start_date_time varchar(31) default null,
+    end_date_time varchar(31) default null,
+    destination varchar(31) default null,
+    used_usage_mb varchar(63) default null,
+    billed_usage_mb varchar(63) default null,
+    free_usage_mb varchar(63) default null,
+    chargeable_usage_mb varchar(63) default null,
+    mobile_number varchar(31) default null,
+    used_usage_sec varchar(63) default null,
+    billed_usage_sec varchar(63) default null,
+    free_usage_sec varchar(63) default null,
+    chargeable_usage_sec varchar(63) default null,
+    used_usage_nos varchar(63) default null,
+    billed_usage_nos varchar(63) default null,
+    free_usage_nos varchar(63) default null,
+    chargeable_usage_nos varchar(63) default null,
+    amount varchar(15) default null,
+
+    call_by varchar(15) default null,
+    call_from varchar(15) default null,
+    date_str varchar(15) default null,
+    month varchar(15) default null,
+    full_month varchar(15) default null,
+    year varchar(15) default null,
+    fy varchar(15) default null,
+
+    deleted varchar(3) default 'NO',
+    added_time timestamp default systimestamp,
+    updated_time timestamp default systimestamp
+);
+
+Unique id = msisdn + section + s_no + used_usage_mb + used_usage_sec
+
+>> for auto increment setup check oracle-table-smms.txt
+
+(2)
+
+create table cugdata(
+    -- auto-generated primary key
+    id bigint primary key not null auto_increment,
+
+    file_date varchar(255) default null,
+    unique_entry_id varchar(255) default null,
+
+    bill_number varchar(15) default null,
+    msisdn varchar(15) default null,
+    employee_code varchar(15) default null,
+    section varchar(255) default null,
+    sub_section varchar(255) default null,
+    description varchar(255) default null,
+    country varchar(255) default null,
+    s_no varchar(63) default null,
+    start_date_time varchar(31) default null,
+    end_date_time varchar(31) default null,
+    destination varchar(31) default null,
+    used_usage_mb varchar(63) default null,
+    billed_usage_mb varchar(63) default null,
+    free_usage_mb varchar(63) default null,
+    chargeable_usage_mb varchar(63) default null,
+    mobile_number varchar(31) default null,
+    used_usage_sec varchar(63) default null,
+    billed_usage_sec varchar(63) default null,
+    free_usage_sec varchar(63) default null,
+    chargeable_usage_sec varchar(63) default null,
+    used_usage_nos varchar(63) default null,
+    billed_usage_nos varchar(63) default null,
+    free_usage_nos varchar(63) default null,
+    chargeable_usage_nos varchar(63) default null,
+    amount varchar(15) default null,
+
+    call_by varchar(15) default null,
+    call_from varchar(15) default null,
+    date_str varchar(15) default null,
+    month varchar(15) default null,
+    full_month varchar(15) default null,
+    year varchar(15) default null,
+    fy varchar(15) default null,
+
+    deleted varchar(3) default 'NO',
+    -- current timestamp
+    added_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

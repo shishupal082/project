@@ -12,7 +12,9 @@ If it is giving error "the import javax.servlet cannot be resolved"
 Java installation
 -----------------------------
 Download java installer (Not x64 Compressed Archive	 or x64 MSI Installer)
+- https://www.oracle.com/in/java/technologies/downloads/#jdk24-windows
 - https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.exe (sha256)
+
 
 If we are installing jdk then we don't need to download jre seprately.
 

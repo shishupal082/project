@@ -14,3 +14,11 @@ Password: admin
 (2)
 
 Copy table data using sql developer --> Tool (Top bar) --> Database copy
+
+(3)
+SELECT * FROM dba_tables where owner='USERNAME';
+OWNER, TABLE_NAME, TABLESPACE_NAME, CLUSTER_NAME, ...
+Total 84 column (index 0 to 83)
+
+
+

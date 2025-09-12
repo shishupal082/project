@@ -67,7 +67,7 @@ create table history_book (
 Corrected using oracle sqldeveloper
 (1) For added_time and updated_time: set default = systimestamp
 (2) For id auto_increment
-Goto Identity Column
+Goto Identity Column (Right click on table --> Edit ...)
  --> Select Type = Column Sequence
  Trigger (automatically written as): HISTORY_BOOK_TRG
  Sequence Schema: SYSTEM (DROPDOWN)
