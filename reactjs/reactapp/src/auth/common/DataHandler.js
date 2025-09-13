@@ -62,8 +62,6 @@ keys.push("permission_control.validPermissionList"); // Use for marshaling permi
 keys.push("compare_control.allUsername");
 
 keys.push("rolesConfig");
-keys.push("appControlDataApi");
-keys.push("appControlData");
 
 keys.push("list1Data");
 keys.push("currentList1Id");
@@ -205,29 +203,7 @@ DataHandler.extend({
         }
         TemplateHandler.setFooterTemplate();
     },
-    handleAppControlDataLoad: function(pageName) {
-        var appControlData = DataHandler.getData("appControlData", {});
-        var list1Data = [];
-        if ($S.isObject(appControlData)) {
-            if (pageName === Config.permission_control) {
-                list1Data = appControlData.permissionControlList;
-            } else if (pageName === Config.compare_control) {
-                list1Data = appControlData.compareControlList;
-            }
-        }
-        this.setList1Data(list1Data);
-    },
     handleStaticDataLoad: function(pageName) {
-        var jsonFileData = AppHandler.GetStaticData("jsonFileData", {});
-        var appControlDataApi = null;
-        if ($S.isObject(jsonFileData)) {
-            if (pageName === Config.permission_control) {
-                appControlDataApi = jsonFileData.permissionControlApi;
-            } else if (pageName === Config.compare_control) {
-                appControlDataApi = jsonFileData.compareControlApi;
-            }
-        }
-        Config.setApiUrl("appControlDataApi", appControlDataApi);
     },
     getCurrentList1Data: function() {
         var currentList1Id = DataHandler.getData("currentList1Id", "");
@@ -288,7 +264,6 @@ DataHandler.extend({
             AppHandler.LoadStaticData(staticDataUrl, function() {
                 DataHandler.handleStaticDataLoad(pageName);
                 PermissionControl.loadRolesConfig(function() {
-                    DataHandler.handleAppControlDataLoad(pageName);
                     if (pageName === Config.permission_control) {
                         PermissionControl.setFinalTableData();
                     } else if (pageName === Config.compare_control) {

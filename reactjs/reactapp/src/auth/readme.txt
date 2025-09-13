@@ -13,6 +13,6 @@ It contains only auth ui
 
 To enable ui link from template: each object shall have unique name and corresponding roleAccessMapping
 
-logout page:
+(2) logout page:
 If user is login, it will redirect to /login_other_user
 If user is not login, it will redirect to /login

@@ -5,7 +5,7 @@ Template["noPageFound"] = [
         "text": {
             "tag": "span",
             "className": "",
-            "name": "date",
+            "name": "page-not-found",
             "text": "Page not found"
         }
     }

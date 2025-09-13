@@ -1,7 +1,6 @@
 import $S from "../../interface/stack.js";
 
 import Api from '../../common/Api.js';
-import AppHandler from '../../common/app/common/AppHandler.js';
 import Config from "../common/Config";
 import DataHandler from "../common/DataHandler";
 import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
@@ -27,7 +26,6 @@ $S.extendObject(PermissionControl);
 PermissionControl.extend({
     loadRolesConfig: function(callback) {
         var url = Config.getApiUrl("getRolesConfig", null, true);
-        var appControlApi = Config.getApiUrl("appControlDataApi", null, true);
         if (!$S.isString(url)) {
             return $S.callMethod(callback);
         }
@@ -35,10 +33,6 @@ PermissionControl.extend({
             if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
                 DataHandler.setData("rolesConfig", response["data"]);
             }
-            AppHandler.loadAppControlData(appControlApi, null, null, null, function(list1Data, metaData) {
-                DataHandler.setData("appControlData", metaData);
-                $S.callMethod(callback);
-            });
         }, function() {
             $S.log("Load rolesConfig complete.");
         }, "rolesConfig", Api.getAjaxApiCallMethod());
