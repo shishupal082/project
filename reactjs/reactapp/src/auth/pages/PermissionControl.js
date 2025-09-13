@@ -33,6 +33,7 @@ PermissionControl.extend({
             if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
                 DataHandler.setData("rolesConfig", response["data"]);
             }
+            $S.callMethod(callback);
         }, function() {
             $S.log("Load rolesConfig complete.");
         }, "rolesConfig", Api.getAjaxApiCallMethod());
