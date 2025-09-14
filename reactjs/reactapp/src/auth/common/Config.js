@@ -73,6 +73,7 @@ var pages = {
     "users_control": basepathname+"/users_control",
     "permission_control": basepathname+"/permission_control",
     "compare_control": basepathname+"/compare_control",
+    "api_role_mapping": basepathname+"/api_role_mapping",
     "database_files": basepathname+"/database_files"
 };
 
@@ -88,6 +89,7 @@ Config.register = "register";
 Config.change_password = "change_password";
 Config.forgot_password = "forgot_password";
 Config.create_password = "create_password";
+Config.api_role_mapping = "api_role_mapping";
 Config.database_files = "database_files";
 Config.noMatch = "noMatch";
 Config.authPages = [Config.login, Config.register, Config.forgot_password, Config.create_password];
@@ -114,6 +116,56 @@ Config.UserData = UserData;
 Config.PageData = PageData;
 
 Config.defaultMetaData = {
+    "apiRoleMapping.pattern": [
+        {
+            "tableName": "table1",
+            "name": "api_name",
+            "heading": "Api Name",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "role",
+            "heading": "Role",
+            "isSortable": true
+        },
+        {
+            "tableName": "table1",
+            "name": "source",
+            "heading": "Source",
+            "isSortable": true
+        }
+    ],
+    "pageName:api_role_mapping.list1Data": [
+        {
+            "name": "Show All"
+        },
+        {
+            "name": "Order by Role",
+            "value": [{"key": "role"}]
+        },
+        {
+            "name": "Order by Source",
+            "value": [{"key": "source"}]
+        },
+        {
+            "name": "Order by Api name",
+            "value": [{"key": "api_name"}]
+        },
+        {
+            "name": "Order by Role -- Source",
+            "value": [{"key": "role"}, {"key": "source"}]
+        },
+        {
+            "name": "Order by Source -- Role",
+            "value": [{"key": "source"}, {"key": "role"}]
+        }
+    ],
+
+    "pageName:api_role_mapping.filterKeyMapping": {
+        "pageName:api_role_mapping.filterKeys": "filterKeys"
+    },
+    "pageName:api_role_mapping.filterKeys": ["api_name", "role", "source", "reset"],
     "userControlPattern": [
         {
             "tableName": "table1",
@@ -247,6 +299,7 @@ apiMapping["reset_count"] = "/api/reset_count";
 apiMapping["track_event"] = "/api/track_event";
 apiMapping["getDatabaseFilesInfoApi"] = "/api/get_database_files_info";
 apiMapping["getRolesConfig"] = "/api/get_roles_config";
+apiMapping["api_role_mapping"] = "/api/get_api_role_mapping";
 
 
 Config.setApiUrl = function(key, value) {

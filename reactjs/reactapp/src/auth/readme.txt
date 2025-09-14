@@ -9,7 +9,8 @@ It contains only auth ui
 (8) users_control
 (9) permission_control
 (10) compare_control
-(11) database_files
+(11) api_role_mapping
+(12) database_files
 
 To enable ui link from template: each object shall have unique name and corresponding roleAccessMapping
 

@@ -62,6 +62,7 @@ keys.push("permission_control.validPermissionList"); // Use for marshaling permi
 keys.push("compare_control.allUsername");
 
 keys.push("rolesConfig");
+keys.push("apiRoleMappingData");
 
 keys.push("list1Data");
 keys.push("currentList1Id");
@@ -252,14 +253,6 @@ DataHandler.extend({
             UserControl.loadRelatedUsersData(function() {
                 $S.callMethod(callback);
             });
-        } else if (pageName === Config.database_files) {
-            DatabaseFiles.loadData(function() {
-                DataHandler.setList1Data(DatabaseFiles.getList1Data(pageName));
-                filterKeyMapping = DatabaseFiles.getFilterKeyMapping(pageName);
-                data = DataHandler.getData("database_files.response", []);
-                DataHandler.generateFilterOptions(pageName, data, filterKeyMapping);
-                $S.callMethod(callback);
-            });
         } else if ([Config.permission_control, Config.compare_control].indexOf(pageName) >= 0) {
             AppHandler.LoadStaticData(staticDataUrl, function() {
                 DataHandler.handleStaticDataLoad(pageName);
@@ -272,6 +265,22 @@ DataHandler.extend({
                     $S.callMethod(callback);
                 });
             });
+        } else if (pageName === Config.database_files) {
+            DatabaseFiles.loadDatabaseFiles(function() {
+                DataHandler.setList1Data(DatabaseFiles.getList1Data(pageName));
+                filterKeyMapping = DatabaseFiles.getFilterKeyMapping(pageName);
+                data = DataHandler.getData("database_files.response", []);
+                DataHandler.generateFilterOptions(pageName, data, filterKeyMapping);
+                $S.callMethod(callback);
+            });
+        } else if (pageName === Config.api_role_mapping) {
+            DatabaseFiles.loadApiRoleMappingConfig(function() {
+                DataHandler.setList1Data(DatabaseFiles.getList1Data(pageName));
+                filterKeyMapping = DatabaseFiles.getFilterKeyMapping(pageName);
+                data = DataHandler.getData("apiRoleMappingData", []);
+                DataHandler.generateFilterOptions(pageName, data, filterKeyMapping);
+                $S.callMethod(callback);
+            });
         }
     }
 });
@@ -281,7 +290,7 @@ DataHandler.extend({
         AppHandler.TrackPageView(pageName);
         var redirectStatus = this.checkForRedirect();
         if (!redirectStatus) {
-            if ([Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
+            if ([Config.login_other_user, Config.users_control, Config.permission_control, Config.compare_control, Config.api_role_mapping, Config.database_files].indexOf(pageName) >= 0) {
                 DataHandler.loadPageData(pageName, function() {
                     DataHandler.reRenderApp(appStateCallback, appDataCallback);
                 });
@@ -321,7 +330,11 @@ DataHandler.extend({
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
-                filterOptions[i].selectedValue = "";
+                if ($S.isStringV2(filterOptions[i].allFieldValue)) {
+                    filterOptions[i].selectedValue = filterOptions[i].allFieldValue;
+                } else {
+                    filterOptions[i].selectedValue = "";
+                }
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
@@ -384,7 +397,7 @@ DataHandler.extend({
 DataHandler.extend({
     getRenderData: function(pageName) {
         var renderData = {};
-        if ([Config.users_control, Config.permission_control, Config.compare_control, Config.database_files].indexOf(pageName) >= 0) {
+        if ([Config.users_control, Config.permission_control, Config.compare_control, Config.api_role_mapping, Config.database_files].indexOf(pageName) >= 0) {
             return renderData;
         }
         renderData = {"guest-login-status": false, "is_guest_enable": false,
@@ -442,7 +455,6 @@ DataHandler.extend({
         if ($S.isBooleanTrue(isLogin)) {
             appHeading.push(TemplateHandler.getLinkTemplate());
         }
-
         appDataCallback("filterOptions", DataHandler.getData("filterOptions", []));
         appDataCallback("list1Data", DataHandler.getData("list1Data", []));
         appDataCallback("currentList1Id", DataHandler.getData("currentList1Id", "0"));

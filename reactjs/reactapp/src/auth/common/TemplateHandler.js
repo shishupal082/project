@@ -12,6 +12,7 @@ import PermissionControl from "../pages/PermissionControl";
 import CompareControl from "../pages/CompareControl";
 import DatabaseFiles from "../pages/DatabaseFiles";
 
+
 var TemplateHandler;
 
 (function($S){
@@ -60,7 +61,7 @@ TemplateHandler.extend({
     getLoginOtherUserTemplate: function() {
         var isLoginOtherUserEnable = AppHandler.GetUserData("isLoginOtherUserEnable", false);
         if (!$S.isBooleanTrue(isLoginOtherUserEnable)) {
-            return null;
+            return AppHandler.getTemplate(Template, "noDataFound", "No Data Found");
         }
         var template = AppHandler.getTemplate(Template, "login_other_user", "Page Not Found");
         var relatedUsersData = DataHandler.getData("relatedUsersData", []);
@@ -119,6 +120,7 @@ TemplateHandler.extend({
         };
         var googleLoginClientId = "";
         var loginWithGmailEnable = "false";
+        var tableData, displayPattern;
         switch(pageName) {
             case "login":
                 renderFieldRow = AppHandler.getTemplate(Template, pageName, "Page Not Found");
@@ -149,8 +151,15 @@ TemplateHandler.extend({
             case "compare_control":
                 renderFieldRow = CompareControl.getRenderFieldRow();
             break;
+            case "api_role_mapping":
+                tableData = DataHandler.getData("apiRoleMappingData", []);
+                displayPattern = DataHandler.getAppData("apiRoleMapping.pattern", []);
+                renderFieldRow = DatabaseFiles.getRenderFieldRow(tableData, displayPattern);
+            break;
             case "database_files":
-                renderFieldRow = DatabaseFiles.getRenderFieldRow();
+                tableData = DataHandler.getData("database_files.response", []);
+                displayPattern = DataHandler.getAppData("database_files_info.pattern", []);
+                renderFieldRow = DatabaseFiles.getRenderFieldRow(tableData, displayPattern);
             break;
             case "logout":
             case "noMatch":

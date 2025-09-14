@@ -4,7 +4,7 @@ Template["noPageFound"] = [
         "tag": "center.h1",
         "text": {
             "tag": "span",
-            "className": "",
+            "className": "badge badge-primary",
             "name": "page-not-found",
             "text": "Page not found"
         }
@@ -13,7 +13,11 @@ Template["noPageFound"] = [
 Template["noDataFound"] = [
     {
         "tag": "center.h1",
-        "text": "No data found"
+        "text": {
+            "tag": "span",
+            "className": "badge badge-primary",
+            "text": "No Data Found"
+        }
     }
 ];
 Template["loading"] = [

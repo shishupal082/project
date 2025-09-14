@@ -153,6 +153,9 @@ class App extends React.Component {
         const create_password = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.create_password}/>);
+        const api_role_mapping = (props) => (<AppComponent {...props}
+                            data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
+                            currentPageName={Config.api_role_mapping}/>);
         const database_files = (props) => (<AppComponent {...props}
                             data={commonData} methods={methods} renderFieldRow={this.appData.renderFieldRow}
                             currentPageName={Config.database_files}/>);
@@ -171,6 +174,7 @@ class App extends React.Component {
                 <Route path={pages.users_control} component={users_control}/>
                 <Route path={pages.permission_control} component={permission_control}/>
                 <Route path={pages.compare_control} component={compare_control}/>
+                <Route path={pages.api_role_mapping} component={api_role_mapping}/>
                 <Route path={pages.database_files} component={database_files}/>
                 <Route component={noMatch}/>
             </Switch>

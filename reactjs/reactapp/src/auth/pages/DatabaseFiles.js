@@ -25,15 +25,36 @@ DatabaseFiles.fn = DatabaseFiles.prototype = {
 $S.extendObject(DatabaseFiles);
 
 DatabaseFiles.extend({
-    getList1Data: function(pageName) {
-        var list1Data = DataHandler.getAppData("pageName:" + pageName + ".list1Data");
-        return list1Data;
+    loadApiRoleMappingConfig: function(callback) {
+        var url = Config.getApiUrl("api_role_mapping", null, true);
+        if (!$S.isString(url)) {
+            return $S.callMethod(callback);
+        }
+        var apiMappingData = [], roleData;
+        $S.loadJsonData(null, [url], function(response, apiName, ajax){
+            if ($S.isObject(response) && response["status"] === "SUCCESS" && $S.isObject(response["data"])) {
+                for (var api_url in response["data"]) {
+                    if (api_url) {
+                        roleData = response["data"][api_url];
+                        if ($S.isArray(roleData)) {
+                            for (var i=0; i<roleData.length; i++) {
+                                if ($S.isObject(roleData[i])) {
+                                    //2 parameter role and source is coming from backend
+                                    roleData[i]["api_name"] = api_url;
+                                    apiMappingData.push(roleData[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+                DataHandler.setData("apiRoleMappingData", apiMappingData);
+            }
+            $S.callMethod(callback);
+        }, function() {
+            $S.log("Load api_role_mapping complete.");
+        }, "api_role_mapping", Api.getAjaxApiCallMethod());
     },
-    getFilterKeyMapping: function(pageName) {
-        var filterKeyMapping = DataHandler.getAppData("pageName:" + pageName + ".filterKeyMapping");
-        return filterKeyMapping;
-    },
-    loadData: function(callback) {
+    loadDatabaseFiles: function(callback) {
         var url = Config.getApiUrl("getDatabaseFilesInfoApi", null, true);
         if (!$S.isString(url)) {
             return $S.callMethod(callback);
@@ -50,23 +71,40 @@ DatabaseFiles.extend({
 });
 
 DatabaseFiles.extend({
-    getRenderData: function(currentList3Data) {
+    getList1Data: function(pageName) {
+        var tableData = [];
+        if (pageName === Config.api_role_mapping) {
+            tableData = DataHandler.getData("apiRoleMappingData", []);
+        } else if (pageName === Config.database_files) {
+            tableData = DataHandler.getData("database_files.response", []);
+        }
+        if (tableData && tableData.length >= 1) {
+            return DataHandler.getAppData("pageName:" + pageName + ".list1Data");
+        }
+        return null;
+    },
+    getFilterKeyMapping: function(pageName) {
+        var filterKeyMapping = DataHandler.getAppData("pageName:" + pageName + ".filterKeyMapping");
+        return filterKeyMapping;
+    }
+});
+
+DatabaseFiles.extend({
+    getRenderData: function(tableData,displayPattern,currentList3Data) {
         var resultCriteria = null, requiredDataTable = null, dateParameterField = null, dateSelect = null;
-        var response = DataHandler.getData("database_files.response", []);
-        var databaseFilesPattern = DataHandler.getAppData("database_files_info.pattern", []);
-        if (!$S.isArray(response)) {
-            response = [];
+        if (!$S.isArray(tableData)) {
+            tableData = [];
         }
         var filterOptions = DataHandler.getData("filterOptions", []);
-        response = AppHandler.getFilteredData({}, {}, response, filterOptions, "name");
-        var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": response}}, databaseFilesPattern, resultCriteria, requiredDataTable);
+        tableData = AppHandler.getFilteredData({}, {}, tableData, filterOptions, "name");
+        var finalTable = DBViewDataHandler.GetFinalTable({"table1": {"tableData": tableData}}, displayPattern, resultCriteria, requiredDataTable);
         var renderData = DBViewDataHandler.GenerateFinalDBViewData(finalTable, currentList3Data, dateParameterField, dateSelect);
         return renderData;
     },
-    getRenderFieldRow: function() {
+    getRenderFieldRow: function(tableData, displayPattern) {
         var dateParameterField = null, showReloadButton = false;
         var currentList3Data = DataHandler.getCurrentList1Data();
-        var renderData = this.getRenderData(currentList3Data);
+        var renderData = this.getRenderData(tableData,displayPattern,currentList3Data);
         var sortingFields = DataHandler.getData("sortingFields", []);
         renderData = DBViewDataHandler.SortDbViewResult(renderData, sortingFields, dateParameterField);
         var renderFieldRow = DBViewTemplateHandler.GenerateDbViewRenderField(renderData, currentList3Data, sortingFields, showReloadButton);
