@@ -46,6 +46,22 @@ DataHandlerV2.extend({
         }
         return tempFilterOptions;
     },
+    getAllFilterValue: function(dataKey) {
+        var filterOptions = DataHandler.getData("filterOptions", []);
+        var tempFilterOptions = [];
+        var allFilterValue = "allFilterValue:" + dataKey;
+        if ($S.isArray(filterOptions)) {
+            for (var i=0; i<filterOptions.length; i++) {
+                if (!$S.isObject(filterOptions[i])) {
+                    continue;
+                }
+                if (filterOptions[i]["dataKey"] === dataKey) {
+                    return filterOptions[i]["allFieldValue"];
+                }
+            }
+        }
+        return allFilterValue;
+    },
     getFilterSelectedValuesByKey: function(key) {
         var selectedAccountName, selectedAccountArray = [];
         if (!$S.isStringV2(key)) {
@@ -70,11 +86,12 @@ DataHandlerV2.extend({
     },
     applyAccountNameFilter: function(dataByCompanyV2) {
         var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var allAccountName = this.getAllFilterValue("accountName");
         var dataByCompanyV3 = [];
         if ($S.isArrayV2(selectedAccountArray) && $S.isArrayV2(dataByCompanyV2)) {
             for (var i=0; i<dataByCompanyV2.length; i++) {
                 if ($S.isObject(dataByCompanyV2[i]) && $S.isStringV2(dataByCompanyV2[i]["accountName"])) {
-                    if (selectedAccountArray.indexOf(dataByCompanyV2[i]["accountName"]) >= 0) {
+                    if (selectedAccountArray.indexOf(allAccountName) >= 0 || selectedAccountArray.indexOf(dataByCompanyV2[i]["accountName"]) >= 0) {
                         dataByCompanyV3.push(dataByCompanyV2[i]);
                     }
                 }
@@ -86,11 +103,12 @@ DataHandlerV2.extend({
     },
     applyAccountNameFilterV2: function(dataByCompany) {
         var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var allAccountName = this.getAllFilterValue("accountName");
         var dataByCompanyV2 = {};
         if ($S.isArrayV2(selectedAccountArray) && $S.isObject(dataByCompany)) {
             for (var accountName in dataByCompany) {
                 if ($S.isStringV2(accountName)) {
-                    if (selectedAccountArray.indexOf(accountName) >= 0) {
+                    if (selectedAccountArray.indexOf(allAccountName) >= 0 || selectedAccountArray.indexOf(accountName) >= 0) {
                         dataByCompanyV2[accountName] = dataByCompany[accountName];
                     }
                 }
@@ -102,6 +120,7 @@ DataHandlerV2.extend({
     },
     _applyAccountNameFilterV2: function(dbViewDataTable) {
         var selectedAccountArray = this.getFilterSelectedValuesByKey("accountName");
+        var allAccountName = this.getAllFilterValue("accountName");
         var drMatched, crMatched;
         var tempDbViewDataTable = [];
         if ($S.isArrayV2(dbViewDataTable) && $S.isArrayV2(selectedAccountArray)) {
@@ -112,12 +131,12 @@ DataHandlerV2.extend({
                     for (var j=0; j<dbViewDataTable[i].length; j++) {
                         if ($S.isObject(dbViewDataTable[i][j]) && ["cr_account", "dr_account"].indexOf(dbViewDataTable[i][j]["name"]) >= 0) {
                             if (dbViewDataTable[i][j]["name"] === "cr_account") {
-                                if (selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
+                                if (selectedAccountArray.indexOf(allAccountName) >= 0 || selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
                                     crMatched = true;
                                     break;
                                 }
                             } else if (dbViewDataTable[i][j]["name"] === "dr_account") {
-                                if (selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
+                                if (selectedAccountArray.indexOf(allAccountName) >= 0 || selectedAccountArray.indexOf(dbViewDataTable[i][j]["value"]) >= 0) {
                                     drMatched = true;
                                     break;
                                 }
@@ -332,9 +351,9 @@ DataHandlerV2.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId;
+                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&role_id=" + Config.roleId;
                     } else {
-                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId;
+                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&role_id=" + Config.roleId;
                     }
                 }
                 if (urls.length < 1) {

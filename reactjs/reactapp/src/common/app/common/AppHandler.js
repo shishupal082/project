@@ -1,8 +1,7 @@
 import $S from '../../../interface/stack.js';
 import Api from '../../Api.js';
 import TemplateHelper from '../../TemplateHelper.js';
-
-// import CommonConfig from './CommonConfig.js';
+import CommonConfig from './CommonConfig.js';
 
 
 var AppHandler;
@@ -1125,7 +1124,11 @@ AppHandler.extend({
             queryParam += key + "=" + tableFilterParam[key];
         }
         if ($S.isStringV2(queryParam)) {
-            url += "?" + queryParam;
+            if ($S.isString(url) && url.split("?").length > 1) {
+                url += "&" + queryParam;
+            } else {
+                url += "?" + queryParam;
+            }
         }
         var request = [], database = null;
         var requestApi = {
@@ -1266,7 +1269,7 @@ AppHandler.extend({
         if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
             for(var i=0; i<validAppControl.length; i++) {
                 if (this.GetUserData(validAppControl[i])) {
-                    appControlApi = baseApi + appControlDataPath + validAppControl[i] + ".json?v=" + requestId;
+                    appControlApi = baseApi + appControlDataPath + validAppControl[i] + ".json?v=" + requestId + "&role_id=" + CommonConfig.roleId;
                     break;
                 }
             }

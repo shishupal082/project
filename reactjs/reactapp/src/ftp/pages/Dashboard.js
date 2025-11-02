@@ -385,6 +385,7 @@ Dashboard.extend({
         var url = Config.getApiUrl("delete_file", "", true);
         var postData = {};
         postData["filename"] = filename;
+        postData["role_id"] = Config.roleId;
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             console.log(response);
             if (status === "FAILURE") {

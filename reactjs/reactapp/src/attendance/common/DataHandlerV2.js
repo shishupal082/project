@@ -67,6 +67,7 @@ DataHandlerV2.extend({
         postData["tableName"] = tableName;
         postData["filename"] = tableFilename;
         postData["uiEntryTime"] = uiEntryTime;
+        postData["role_id"] = Config.roleId;
         var msg = "Error in saving data, Please Try again.";
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {
             if (status === "FAILURE" || ($S.isObject(response) && response.status === "FAILURE")) {

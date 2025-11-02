@@ -3,7 +3,7 @@
 # receive distDir as argument
 
 distDir=$1
-reactBase="dist-react-base-1.0.0"
+# reactBase="dist-react-base-1.0.0"
 
 key=$(($RANDOM%99999+10000))
 logFile=/var/log/project/shell_log/cmdlog.log
@@ -28,11 +28,11 @@ if [[ ! (-d "${distDir}") ]]; then
   exit;
 fi
 
-if [[ ! (-d "${reactBase}") ]]; then
-  echo "React base dir: ${reactBase}, is missing.";
-  echo "Copying file failed.";
-  exit;
-fi
+# if [[ ! (-d "${reactBase}") ]]; then
+#   echo "React base dir: ${reactBase}, is missing.";
+#   echo "Copying file failed.";
+#   exit;
+# fi
 
 
 rm -rf ${distDir}/*

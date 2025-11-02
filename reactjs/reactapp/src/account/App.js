@@ -146,13 +146,16 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     isComponentUpdate(arg) {
-        var currentPageName = arg["currentPageName"];
-        var prevPageName = arg["prevPageName"];
-        var params = arg["params"];
-        var isComponentUpdate = false;
+        var prevPageName = DataHandler.getData("pageName", "");
+        var currentPageName = arg["pageName"];
+        var params = arg["pathParams"];
+
         var oldAppId = DataHandler.getPathParamsData("pid", "");
         var oldPageName = DataHandler.getPathParamsData("pageName");
+
         var displayLoading = false;
+        var isComponentUpdate = false;
+
         if (currentPageName !== prevPageName) {
             isComponentUpdate = true;
             if (prevPageName === Config.projectHome && currentPageName === Config.home) {
@@ -185,6 +188,9 @@ class App extends React.Component {
             }
         }
         DataHandler.setData("displayLoading", displayLoading);
+        if (isComponentUpdate) {
+            this.pageComponentDidUpdate(currentPageName, params);
+        }
         return isComponentUpdate;
     }
     pageComponentDidMount(pageName, pathParams) {

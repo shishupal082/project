@@ -109,6 +109,7 @@ DataHandlerAddFieldReport.extend({
         postData["filename"] = addTextFilename;
         postData["tableName"] = tableName;
         postData["uiEntryTime"] = uiEntryTime;
+        postData["role_id"] = Config.roleId;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {

@@ -1,0 +1,8 @@
+[
+    {
+        "id": "remove-files",
+        "trash_path": "C:/2020-09-13/trash/",
+        "source_api": "http://localhost:8082/api/get_excel_data_array?requestId=csv-remove-files",
+        "data_source": [{"type":"json","name":"data"},{"type":"json","name":"sheetData"}]
+    }
+]

@@ -221,7 +221,7 @@ DataHandler.extend({
         var filterOptions = DataHandler.getData("filterOptions", []);
         if ($S.isArray(filterOptions)) {
             for (var i = 0; i<filterOptions.length; i++) {
-                filterOptions[i].selectedValue = "";
+                filterOptions[i].selectedValue = filterOptions[i].allFieldValue;
             }
         }
         DataHandler.setData("filterOptions", filterOptions);
@@ -541,7 +541,7 @@ DataHandler.extend({
             metaDataApi = appControlData["metaDataApi"];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el + "?v=" + Config.appVersion;
+            return Config.baseApi + el + "?v=" + Config.appVersion + "&role_id=" + Config.roleId;
         });
         var metaDataRequest = {
                             "url": metaDataApi,
@@ -580,17 +580,28 @@ DataHandler.extend({
         // }
     },
     AppDidMount: function(appStateCallback, appDataCallback) {
-        var pageName1, pageName2;
+        // var pageName1, pageName2;
         DataHandler.loadUserRelatedData(function() {
             DataHandler.loadAppControlData(function() {
-                pageName1 = DataHandler.getData("pageName", "");
-                if (pageName1 === Config.otherPages) {
-                    pageName2 = DataHandler.getPathParamsData("pageName", "");
-                    AppHandler.TrackPageView(pageName2);
-                } else {
-                    AppHandler.TrackPageView(pageName1);
-                }
-                appStateCallback();
+                DataHandler.loadDataByAppId(function() {
+                    var dataLoadStatus = DataHandler.getDataLoadStatus();
+                    if (dataLoadStatus) {
+                        DataHandler.FirePageChange();
+                        DataHandlerV2.generateFilterOptions();
+                        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                    }
+                    // AppHandler.TrackPageView(DataHandler.getData("pageName", ""));
+                    // DataHandler.handleApiDataLoad();
+                    // DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+                });
+                // pageName1 = DataHandler.getData("pageName", "");
+                // if (pageName1 === Config.otherPages) {
+                //     pageName2 = DataHandler.getPathParamsData("pageName", "");
+                //     AppHandler.TrackPageView(pageName2);
+                // } else {
+                //     AppHandler.TrackPageView(pageName1);
+                // }
+                // appStateCallback();
             });
         });
     },

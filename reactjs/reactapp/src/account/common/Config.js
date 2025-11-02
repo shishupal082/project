@@ -11,6 +11,7 @@ Config.baseApi = CommonConfig.baseApi;
 Config.basepathname = CommonConfig.basepathname;
 Config.appVersion = CommonConfig.appVersion;
 Config.gtag = CommonConfig.gtag;
+Config.roleId = CommonConfig.roleId;
 Config.projectHeading = $$$.projectHeading;
 
 Config.appControlDataPath = CommonConfig.appControlDataPath;

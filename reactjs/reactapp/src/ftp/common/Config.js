@@ -1,5 +1,6 @@
 import $$$ from '../../interface/global';
 import $S from "../../interface/stack.js";
+import CommonConfig from "../../common/app/common/CommonConfig";
 
 var RequestId = $S.getRequestId();
 
@@ -13,6 +14,7 @@ Config.basepathname = basepathname;
 Config.forceLogin = $$$.forceLogin;
 Config.appVersion = $$$.appVersion;
 Config.gtag = $$$.gtag;
+Config.roleId = CommonConfig.roleId;
 Config.JQ = $$$.JQ;
 Config.disabledPages = $$$.disabledPages;
 Config.navigator = $$$.navigator;
@@ -38,12 +40,12 @@ Config.dateSelectionRequired = [];
 Config.defaultPageFields = [];
 
 var apiMapping = {};
-apiMapping["getStaticDataApi"] = "/api/get_static_data";
-apiMapping["getLoginUserDetails"] = "/api/get_login_user_details";
-apiMapping["upload_file"] = "/api/upload_file";
+apiMapping["getStaticDataApi"] = "/api/get_static_data?role_id=" + Config.roleId;
+apiMapping["getLoginUserDetails"] = "/api/get_login_user_details?role_id=" + Config.roleId;
+apiMapping["upload_file"] = "/api/upload_file?role_id=" + Config.roleId;
 apiMapping["delete_file"] = "/api/delete_file";
-apiMapping["track_event"] = "/api/track_event";
-apiMapping["get_files"] = "/api/get_files_info?v=" + RequestId;
+apiMapping["track_event"] = "/api/track_event?role_id=" + Config.roleId;
+apiMapping["get_files"] = "/api/get_files_info?v=" + RequestId + "&role_id=" + Config.roleId;
 apiMapping["loginRedirectUrl"] = "/login";
 
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {

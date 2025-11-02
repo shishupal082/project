@@ -54,9 +54,9 @@ DataHandlerV3.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId;
+                        urls[j] = Config.baseApi + el + "&requestId=" + Config.requestId + "&role_id=" + Config.roleId;
                     } else {
-                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId;
+                        urls[j] = Config.baseApi + el + "?requestId=" + Config.requestId + "&role_id=" + Config.roleId;
                     }
                 }
                 if (urls.length < 1) {
@@ -109,7 +109,7 @@ DataHandlerV3.extend({
     // },
     _loadTcpFileData: function(filepath, callback) {
         var tcpFileDataRequest = {
-                            "url": [Config.baseApi + "/view/file/" + filepath + "?iframe=false&u=" + AppHandler.GetUserData("username", "")],
+                            "url": [Config.baseApi + "/view/file/" + filepath + "?iframe=false&u=" + AppHandler.GetUserData("username", "") + "&role_id=" + Config.roleId],
                             "apiName": "tcpFileData",
                             "requestMethod": Api.getAjaxApiCallMethod()};
         var request = [];
@@ -147,7 +147,7 @@ DataHandlerV3.extend({
     _callTcpService: function(callback) {
         var tcpConfig = DataHandler.getAppData("tcpConfig", {});
         var apiUrl = CommonConfig.getApiUrl("tcpServicePostApi", "", true);
-        var postData = {};
+        var postData = {"role_id": Config.roleId};
         var jsonResponse = {"tcp_table": {"tableData": []}};
         var self = this;
         var username = AppHandler.GetUserData("username", "");

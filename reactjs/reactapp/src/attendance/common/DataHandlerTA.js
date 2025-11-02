@@ -31,6 +31,7 @@ DataHandlerTA.extend({
         var postData = {};
         postData["text"] = finalText;
         postData["filename"] = addTextFilename;
+        postData["role_id"] = Config.roleId;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethod(callback);
         $S.sendPostRequest(Config.JQ, url, postData, function(ajax, status, response) {

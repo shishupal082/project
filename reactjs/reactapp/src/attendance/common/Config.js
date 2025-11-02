@@ -15,6 +15,7 @@ Config.basepathname = basepathname;
 Config.appVersion = appVersion;
 Config.forceLogin = $$$.forceLogin;
 Config.gtag = $$$.gtag;
+Config.roleId = $$$.roleId;
 Config.JQ = $$$.JQ;
 Config.appControlDataPath = $$$.appControlDataPath;
 Config.validAppControl = $$$.validAppControl;
@@ -27,11 +28,8 @@ Config.tempConfig = {
 };
 
 
-var loginUserDetailsApi = $$$.loginUserDetailsApi;
-var relatedUsersDataApi = $$$.relatedUsersDataApi;
 var headingJson = $$$.headingJson;
 var appControlDataApi = $$$.appControlApi;
-
 
 try {
     headingJson = JSON.parse(headingJson);
@@ -86,11 +84,7 @@ Config.dateSelection = [
 Config.defaultDateSelect = "monthly";
 
 var apiMapping = {};
-apiMapping["getLoginUserDetails"] = loginUserDetailsApi;
-apiMapping["getRelatedUsersData"] = relatedUsersDataApi;
-apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion;
-apiMapping["addTextApi"] = "/api/add_text";
-apiMapping["loginRedirectUrl"] = "/login";
+apiMapping["appControlData"] = appControlDataApi + "?v=" + appVersion + "&role_id=" + Config.roleId;
 Config.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
         if ($S.isBooleanTrue(addBaseUrl)) {

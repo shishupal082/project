@@ -43,7 +43,7 @@ create table users(
 );
 
 org_username,entry_time,login_username,table_name,table_unique_id,ui_entry_time,
-device_name,scan_dir_mapping_id,type,size_in_kb,size,scanned_date,detected_at,edited_at,deleted_at,remark,parent_path,pathname,filename
+device_name,scan_dir_mapping_id,type,size_in_kb,size,md5_hash,scanned_date,detected_at,edited_at,deleted_at,remark,parent_path,pathname,filename
 
 
 create table file_path(
@@ -61,6 +61,7 @@ create table file_path(
     type varchar(31) default null,
     size_in_kb double default null,
     size varchar(31) default null,
+    md5_hash varchar(32) default null,
     scanned_date varchar(31) default null,
     detected_at TIMESTAMP default null,
     edited_at TIMESTAMP default null,
@@ -76,3 +77,5 @@ create table file_path(
     -- boolean (tinyint, 1 byte, max = 127)
     deleted boolean default false
 );
+
+ALTER TABLE file_path ADD md5_hash varchar(32) default null AFTER size;

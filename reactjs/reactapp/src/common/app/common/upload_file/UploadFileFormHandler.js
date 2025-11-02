@@ -3,8 +3,6 @@ import TemplateHelper from "../../../TemplateHelper";
 import AppHandler from "../AppHandler";
 import UploadFileTemplate from "./UploadFileTemplate";
 
-
-
 var UploadFileFormHandler;
 
 (function($S){

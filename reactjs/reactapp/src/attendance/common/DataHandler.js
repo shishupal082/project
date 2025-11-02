@@ -9,6 +9,7 @@ import TemplateHandler from "./TemplateHandler";
 
 import Api from "../../common/Api";
 import AppHandler from "../../common/app/common/AppHandler";
+import CommonConfig from "../../common/app/common/CommonConfig";
 import DBViewDataHandler from "../../common/app/common/DBViewDataHandler";
 // import DBViewTemplateHandler from "../../common/app/common/DBViewTemplateHandler";
 import DBViewAttendanceInterface from "../../common/app/common/DBViewAttendanceInterface";
@@ -324,13 +325,13 @@ DataHandler.extend({
 
 DataHandler.extend({
     loadUserRelatedData: function(callback) {
-        var loginUserDetailsApi = Config.getApiUrl("getLoginUserDetails", null, true);
+        var loginUserDetailsApi = CommonConfig.getApiUrl("getLoginUserDetailsApi", null, true);
         if ($S.isString(loginUserDetailsApi)) {
             DataHandler.setData("loginUserDetailsLoadStatus", "in_progress");
-            AppHandler.LoadLoginUserDetails(Config.getApiUrl("getLoginUserDetails", null, true), function() {
+            AppHandler.LoadLoginUserDetails(loginUserDetailsApi, function() {
                 var isLogin = AppHandler.GetUserData("login", false);
                 if ($S.isBooleanTrue(Config.forceLogin) && isLogin === false) {
-                    AppHandler.LazyRedirect(Config.getApiUrl("loginRedirectUrl", "", true), 250);
+                    AppHandler.LazyRedirect(CommonConfig.getApiUrl("loginRedirectUrl", "", true), 250);
                     return;
                 }
                 TemplateHandler.SetHeadingUsername(AppHandler.GetUserData("username", ""));
@@ -384,7 +385,7 @@ DataHandler.extend({
             metaDataApi = appControlData["metaDataApi"];
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el + "?v=" + Config.appVersion;
+            return Config.baseApi + el + "?v=" + Config.appVersion + "&role_id=" + Config.roleId;
         });
         var metaDataRequest = {
                             "url": metaDataApi,

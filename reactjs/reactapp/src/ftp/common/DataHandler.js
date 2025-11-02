@@ -121,15 +121,15 @@ DataHandler.extend({
 });
 DataHandler.extend({
     getPdfDownloadLink: function(filename) {
-        return Config.baseApi + "/download/file/" + filename + "?u=" + AppHandler.GetUserData("username", "");
+        return Config.baseApi + "/download/file/" + filename + "?role_id=" + Config.roleId + "&u=" + AppHandler.GetUserData("username", "");
     },
     getPdfViewLink: function(filename) {
-        return Config.baseApi + "/view/file/" + filename + "?u=" + AppHandler.GetUserData("username", "");
+        return Config.baseApi + "/view/file/" + filename + "?role_id=" + Config.roleId + "&u=" + AppHandler.GetUserData("username", "");
     },
     getCurrentPdfLink: function(Data) {
         var pdfLink = CurrentFormData.getData("dashboard.currentPdfLink", null);
         if (pdfLink !== null) {
-            pdfLink = DataHandler.getPdfViewLink(pdfLink)+"&container=iframe";
+            pdfLink = DataHandler.getPdfViewLink(pdfLink) + "&container=iframe&role_id=" + Config.roleId;
         }
         return pdfLink;
     }

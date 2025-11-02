@@ -23,25 +23,26 @@ ReadConfigData.extend({
     readData: function(configFilePath, callback) {
         if ($S.isStringV2(configFilePath)) {
             FS.readJsonFile(configFilePath, {}, function(jsonData) {
-                if ($S.isObject(jsonData)) {
+                if ($S.isObject(jsonData) || $S.isArray(jsonData)) {
                     ConfigData = jsonData;
                     Logger.log("ReadConfigData: Config data read success.");
                 } else {
-                    Logger.log("Invalid config data.");
+                    Logger.log("Invalid config data: " + configFilePath);
                 }
                 $S.callMethod(callback);
             });
         } else {
-            Logger.log("Invalid config path.");
+            Logger.log("Config file path is not string.");
+            Logger.log(configFilePath);
             $S.callMethod(callback);
         }
     },
     readApiData: function(api, callback) {
         if ($S.isStringV2(api)) {
-            Get.api(api, "requestId", function(jsonData) {
+            Get.api(api, "api", function(jsonData) {
                 Logger.log("---------------");
                 if ($S.isObject(jsonData) && $S.isArray(jsonData["data"])) {
-                    Logger.log("ReadConfigData: Config data read success.");
+                    // Logger.log("ReadConfigData: Config data read success.");
                     $S.callMethodV1(callback, jsonData["data"]);
                 } else {
                     Logger.log("Invalid api data.");

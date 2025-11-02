@@ -11,6 +11,7 @@ CommonConfig.projectHeading = $$$.projectHeading;//String = "Project Tracking"
 CommonConfig.appControlDataPath = $$$.appControlDataPath;//String = "/project-tracking/json/"
 CommonConfig.customPageData = $$$.customPageData;
 CommonConfig.validAppControl = [];
+CommonConfig.roleId = $$$.roleId;
 
 var validAppControl = $$$.validAppControl;
 var baseApi = $$$.baseApi;
@@ -50,23 +51,23 @@ CommonConfig.COMPLETED = "completed";
 
 var apiMapping = {};
 if ($S.isStringV2(appControlApi)) {
-    apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion;
+    apiMapping["getAppControlApi"] = appControlApi + "?v=" + appVersion + "&role_id=" + CommonConfig.roleId;
 } else {
     apiMapping["getAppControlApi"] = null;
 }
-apiMapping["getStaticDataApi"] = "/api/get_static_data";
-apiMapping["getLoginUserDetailsApi"] = "/api/get_login_user_details";
-apiMapping["getRelatedUsersDataApi"] = "/api/get_related_users_data";
-apiMapping["getRelatedUsersDataV2Api"] = "/api/get_related_users_data_v2";
-apiMapping["getFilesInfoApi"] = "/api/get_files_info";
-apiMapping["getAddTextApi"] = "/api/add_text";
-apiMapping["getAddTextApiV2"] = "/api/add_text_v2";
-apiMapping["getTableData"] = "/api/get_table_data";
-apiMapping["getTableDataV2"] = "/api/get_table_data_v2";
-apiMapping["tcpServicePostApi"] = "/api/call_tcp";
-apiMapping["upload_file"] = "/api/upload_file";
-apiMapping["delete_file"] = "/api/delete_file";
-apiMapping["deleteText"] = "/api/delete_text";
+apiMapping["getStaticDataApi"] = "/api/get_static_data?role_id=" + CommonConfig.roleId;
+apiMapping["getLoginUserDetailsApi"] = "/api/get_login_user_details?role_id=" + CommonConfig.roleId;
+apiMapping["getRelatedUsersDataApi"] = "/api/get_related_users_data?role_id=" + CommonConfig.roleId;
+apiMapping["getRelatedUsersDataV2Api"] = "/api/get_related_users_data_v2?role_id=" + CommonConfig.roleId;
+apiMapping["getFilesInfoApi"] = "/api/get_files_info?role_id=" + CommonConfig.roleId;
+apiMapping["getAddTextApi"] = "/api/add_text";//post method
+apiMapping["getAddTextApiV2"] = "/api/add_text_v2";//post method
+apiMapping["getTableData"] = "/api/get_table_data?role_id=" + CommonConfig.roleId;
+apiMapping["getTableDataV2"] = "/api/get_table_data_v2?role_id=" + CommonConfig.roleId;
+apiMapping["tcpServicePostApi"] = "/api/call_tcp?role_id=" + CommonConfig.roleId;
+apiMapping["upload_file"] = "/api/upload_file?role_id=" + CommonConfig.roleId;
+apiMapping["delete_file"] = "/api/delete_file";//post method
+apiMapping["deleteText"] = "/api/delete_text";//post method
 apiMapping["loginRedirectUrl"] = "/login";
 CommonConfig.getApiUrl = function(key, defaultValue, addBaseUrl) {
     if ($S.isString(apiMapping[key])) {
