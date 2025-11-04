@@ -133,6 +133,7 @@ FormHandlerUploadFile.extend({
         var url = CommonConfig.getApiUrl("delete_file", "", true);
         var postData = {};
         postData["filename"] = filePath;
+        postData["role_id"] = Config.roleId;
         var message = "Error in delete file, Please Try again.";
         var fileTableName = DataHandler.getTableName("fileTable");
         var fileTable = DataHandlerV2.getTableDataByAttr(fileTableName, "filename", filePath);

@@ -100,8 +100,8 @@ DisplayUploadedFiles.extend({
                 TemplateHelper.addClassTemplate(fileTemplate, buttonName, "text-danger");
             }
         }
-        hrefReplaceParam["open_in_new_tab.href"] = CommonConfig.baseApi + "/view/file/" + filePath + "?u=" + loginUsername;
-        hrefReplaceParam["download.href"] = CommonConfig.baseApi + "/download/file/" + filePath + "?u=" + loginUsername;
+        hrefReplaceParam["open_in_new_tab.href"] = CommonConfig.baseApi + "/view/file/" + filePath + "?u=" + loginUsername + "&role_id=" + Config.roleId;
+        hrefReplaceParam["download.href"] = CommonConfig.baseApi + "/download/file/" + filePath + "?u=" + loginUsername + "&role_id=" + Config.roleId;
         TemplateHelper.updateTemplateText(fileTemplate, textReplaceParam);
         if (isValidFileData) {
             for(key in hrefReplaceParam) {

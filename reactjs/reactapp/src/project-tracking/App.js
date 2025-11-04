@@ -144,9 +144,9 @@ class App extends React.Component {
         $S.updateDataObj(this.appData, name, data, "checkType");
     }
     isComponentUpdate(arg) {
-        var currentPageName = arg["currentPageName"];
-        var prevPageName = arg["prevPageName"];
-        var params = arg["params"];
+        var prevPageName = DataHandler.getData("pageName", "");
+        var currentPageName = arg["pageName"];
+        var params = arg["pathParams"];
         var isComponentUpdate = false;
         var oldIndex = DataHandler.getPathParamsData("index");
         var oldPid = DataHandler.getPathParamsData("pid");
@@ -175,6 +175,9 @@ class App extends React.Component {
                     DataHandler.HandleComponentChange("viewPageName", oldViewPageName, params.viewPageName);
                 }
             }
+        }
+        if (isComponentUpdate) {
+            this.pageComponentDidUpdate(currentPageName, params);
         }
         return isComponentUpdate;
     }

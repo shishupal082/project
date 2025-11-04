@@ -91,9 +91,9 @@ ApiHandler.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j + "&role_id=" + CommonConfig.roleId;
                     } else {
-                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j + "&role_id=" + CommonConfig.roleId;
                     }
                 }
                 if (urls.length < 1) {

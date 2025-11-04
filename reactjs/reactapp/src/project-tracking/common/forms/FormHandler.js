@@ -198,6 +198,7 @@ FormHandler.extend({
         }
         var postData = {};
         postData["deleteId"] = deleteId;
+        postData["role_id"] = Config.roleId;
         $S.callMethodV2(this._handleDeleteResponse, callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, CommonConfig.getApiUrl("deleteText", null, true), postData, function(ajax, status, response) {
             DataHandler.setData("addentry.submitStatus", "completed");
@@ -240,6 +241,7 @@ FormHandler.extend({
         postData["text"] = [resultData.join(",")];
         postData["tableName"] = tableName;
         postData["filename"] = filename;
+        postData["role_id"] = Config.roleId;
         DataHandler.setData("addentry.submitStatus", "in_progress");
         $S.callMethodV1(callback, "in_progress");
         $S.sendPostRequest(CommonConfig.JQ, url, postData, function(ajax, status, response) {

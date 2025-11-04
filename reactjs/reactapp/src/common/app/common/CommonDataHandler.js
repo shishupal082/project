@@ -336,9 +336,9 @@ CommonDataHandler.extend({
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
             if (el.split("?").length > 1) {
-                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion;
+                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion + "&role_id=" + CommonConfig.roleId;
             } else {
-                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
+                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion + "&role_id=" + CommonConfig.roleId;
             }
         });
         var metaDataRequest = {
@@ -368,9 +368,9 @@ CommonDataHandler.extend({
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
             if (el.split("?").length > 1) {
-                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion;
+                return CommonConfig.baseApi + el + "&v=" + CommonConfig.appVersion + "&role_id=" + CommonConfig.roleId;
             } else {
-                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion;
+                return CommonConfig.baseApi + el + "?v=" + CommonConfig.appVersion + "&role_id=" + CommonConfig.roleId;
             }
         });
         var metaDataRequest = {
@@ -572,6 +572,7 @@ CommonDataHandler.extend({
         postData["tableName"] = tableName;
         postData["filename"] = filename;
         postData["uiEntryTime"] = uiEntryTime;
+        postData["role_id"] = CommonConfig.roleId;
         if ($S.isFunction(callback)) {
             callback(CommonConfig.IN_PROGRESS);
         }
@@ -1090,9 +1091,9 @@ CommonDataHandler.extend({
                 for (j=0; j<urls.length; j++) {
                     el = urls[j];
                     if ($S.isString(el) && el.split("?").length > 1) {
-                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "&requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j + "&role_id=" + CommonConfig.roleId;
                     } else {
-                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j;
+                        urls[j] = CommonConfig.baseApi + el + "?requestId=" + CommonConfig.requestId + "&temp_file_name=" + i + j + "&role_id=" + CommonConfig.roleId;
                     }
                 }
                 if (urls.length < 1) {

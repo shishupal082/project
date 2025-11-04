@@ -7,6 +7,7 @@ var Config = {};
 var basepathname = CommonConfig.basepathname;
 
 Config.uploadFileInstruction = $$$.uploadFileInstruction;
+Config.roleId = $$$.roleId;
 
 Config.tempConfig = {
     "form_type": "Project",
