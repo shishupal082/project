@@ -851,7 +851,6 @@ DataHandler.extend({
     //     DataHandler.setCurrentPageData(appStateCallback, appDataCallback);
     // },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
-        console.log("handleDataLoadComplete: " + count++);
         var dataLoadStatus = DataHandler.getDataLoadStatus();
         var list1Data = [], list2Data = [], list3Data = [];
         var dateSelectionRequired = Config.dateSelectionRequired;
