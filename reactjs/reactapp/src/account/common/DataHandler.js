@@ -280,14 +280,16 @@ DataHandler.extend({
         return $S.findParam([currentAppData, metaData, tempConfig], key, defaultValue);
     },
     getMetaData: function(defaultMetaData) {
-        var pageName = this.getData("pageName", "");
-        if (pageName === Config.projectHome) {
-            return this.getData("appControlMetaData", {});;
-        }
+        // var pageName = this.getData("pageName", "");
+        // if (pageName === Config.projectHome) {
+        //     return this.getData("appControlMetaData", {});;
+        // }
         var currentAppData = this.getCurrentAppData({});
         var currentAppId = this.getPathParamsData("pid", "");
         var metaData = defaultMetaData;
         if ($S.isObject(currentAppData) && currentAppData.id === currentAppId) {
+            metaData = this.getData("metaData", {});
+        } else {
             metaData = this.getData("metaData", {});
         }
         return metaData;
@@ -519,13 +521,46 @@ DataHandler.extend({
         DataHandler.setData("selectedDateType", dateSelect);
         TemplateHandler.SetCustomHeadingField();
     },
+    loadMetaDataFromApi: function(metaDataApi, callback) {
+        if (!$S.isArrayV2(metaDataApi)) {
+            $S.callMethod(callback);
+            return;
+        }
+        metaDataApi = metaDataApi.map(function(el, i, arr) {
+            return Config.baseApi + el + "?v=" + Config.appVersion + "&role_id=" + Config.roleId;
+        });
+        var request = [];
+        var metaDataRequest = {
+                            "url": metaDataApi,
+                            "apiName": "metaData",
+                            "requestMethod": Api.getAjaxApiCallMethod()};
+        request.push(metaDataRequest);
+        AppHandler.LoadDataFromRequestApi(request, function() {
+            for(var i=0; i<request.length; i++) {
+                if (request[i].apiName === "metaData") {
+                    DataHandler.handleMetaDataLoad(request[i].response);
+                }
+            }
+            $S.log("currentAppData load complete");
+            $S.callMethod(callback);
+        });
+    },
     loadDataByAppId: function(callback) {
         var metaDataLoadStatus = this.getData("metaDataLoadStatus", "");
         var pageName = this.getData("pageName", "");
+        var metaDataApi = [];
         if ([Config.projectHome].indexOf(pageName) >= 0) {
-            TemplateHandler.SetCustomHeadingField();
-            DataHandler.loadDbData(callback);
-            DataHandler.loadTableData(callback);
+            var appControlMetaData = this.getData("appControlMetaData", {});
+            if ($S.isArray(appControlMetaData["metaDataApi"])) {
+                metaDataApi = appControlMetaData["metaDataApi"];
+            }
+            // this.setData("metaDataLoadStatus", "in_progress");
+            this.loadMetaDataFromApi(metaDataApi, function() {
+                // DataHandler.setData("metaDataLoadStatus", "completed");
+                TemplateHandler.SetCustomHeadingField();
+                DataHandler.loadDbData(callback);
+                DataHandler.loadTableData(callback);
+            });
             return;
         }
         if (["completed"].indexOf(metaDataLoadStatus) >= 0) {
@@ -536,27 +571,12 @@ DataHandler.extend({
             return;
         }
         var appControlData = DataHandler.getCurrentAppData({});
-        var request = [], metaDataApi = [];
         if ($S.isArray(appControlData["metaDataApi"])) {
             metaDataApi = appControlData["metaDataApi"];
         }
-        metaDataApi = metaDataApi.map(function(el, i, arr) {
-            return Config.baseApi + el + "?v=" + Config.appVersion + "&role_id=" + Config.roleId;
-        });
-        var metaDataRequest = {
-                            "url": metaDataApi,
-                            "apiName": "metaData",
-                            "requestMethod": Api.getAjaxApiCallMethod()};
-        request.push(metaDataRequest);
-        DataHandler.setData("metaDataLoadStatus", "in_progress");
-        AppHandler.LoadDataFromRequestApi(request, function() {
-            for(var i=0; i<request.length; i++) {
-                if (request[i].apiName === "metaData") {
-                    DataHandler.handleMetaDataLoad(request[i].response);
-                }
-            }
+        this.setData("metaDataLoadStatus", "in_progress");
+        this.loadMetaDataFromApi(metaDataApi, function() {
             DataHandler.setData("metaDataLoadStatus", "completed");
-            $S.log("currentAppData load complete");
             DataHandler.loadDbData(callback);
             DataHandler.loadTableData(callback);
         });
@@ -789,7 +809,6 @@ DataHandler.extend({
     //     }
     // }
 });
-var count = 0;
 DataHandler.extend({
     // getApiJournalData: function() {
     //     var apiJournalDataJson = DataHandler.getData("apiJournalDataJson", []);

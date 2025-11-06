@@ -40,6 +40,8 @@ keys.push("filterOptions");
 
 keys.push("appControlData");
 keys.push("appControlMetaData");
+keys.push("appControlDataId");
+keys.push("appControlDataMappingId");
 keys.push("metaData");
 keys.push("userData");
 keys.push("filteredUserData");
@@ -282,6 +284,12 @@ DataHandler.extend({
     },
     getCustomePageDataByKey: function(key, defaultValue) {
         return CommonDataHandler.getCustomePageDataByKey(key, defaultValue);
+    },
+    setCurrentAppControl: function() {
+        var appControlDataId = AppHandler.getAppControlId(CommonConfig.validAppControl);
+        var appControlDataMappingId = CommonDataHandler.getCustomePageDataByKey(appControlDataId, null);
+        this.setData("appControlDataId", appControlDataId);
+        this.setData("appControlDataMappingId", appControlDataMappingId);
     }
 });
 
@@ -377,11 +385,16 @@ DataHandler.extend({
             return;
         }
         var staticDataUrl = CommonConfig.getApiUrl("getStaticDataApi", null, true);
+        var appControlId;
+        var defaultMetaData;
         CommonDataHandler.loadLoginUserDetailsData(function() {
             AppHandler.TrackPageView(pageName);
             DataHandler.checkForRedirect(function() {
                 AppHandler.LoadStaticData(staticDataUrl, function() {
-                    CommonDataHandler.loadAppControlData(Config.getConfigData("defaultMetaData", {}), function() {
+                    DataHandler.setCurrentAppControl();
+                    appControlId = DataHandler.getData("appControlDataId", null);
+                    defaultMetaData = Config.getConfigData("defaultMetaData", {});
+                    CommonDataHandler.loadAppControlData(appControlId, defaultMetaData, function() {
                         var title = DataHandler.getAppData("title", "");
                         if ($S.isStringV2(title) && CommonConfig.JQ) {
                             CommonConfig.JQ("title").html(title);

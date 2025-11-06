@@ -52,13 +52,19 @@
 <script type="text/javascript" src="http://localhost/static/libs/jquery-2.1.3.js"></script>
 
 <script type="text/javascript">
+var localDataMapping = {
+  "saveAccountPubV2": ["/project-tracking-v2/json/", "/project-tracking-v2/json/appControlData.json"],
+  "saveV2PubV2": ["/project-tracking-v3/json/", "/project-tracking-v2/json/appControlData.json"],
+  "saveE2.1PubV2": ["/project-tracking/json/", "/project-tracking/json/appControlData.json"]
+};
+var currentRoleId = "saveV2PubV2";
 var GLOBAL = {
     baseApi: "http://localhost:8082",
-    basepathname: "",
+    basepathname: "/test",
     projectHeading: "Project Tracking",
-    appControlDataPath: "/project-tracking-v2/json/",
-    appControlApi: "/project-tracking-v2/json/appControlData.json",
-    roleId: "appDataV2AppAccounting",//"appDataV2App","appDataV2AppProjTracking",
+    appControlDataPath: localDataMapping[currentRoleId][0],
+    appControlApi: localDataMapping[currentRoleId][0],
+    roleId: currentRoleId,
     forceLogin: true
 };
 GLOBAL.appVersion = "v1.0.0";
@@ -69,14 +75,18 @@ GLOBAL.validAppControl = [
   "appControlDataTeam01",
   "appControlDataTeam02",
   "appControlDataTeam03",
-  "appControlDataTeam04",
-  "appControlDataTeam06",
-  "appControlDataTeam07",
+  "appControlDataTeam08",
   "appControlDataTeam09",
   "appControlDataTeam10",
 ];
 GLOBAL.customPageData = {
     "pageName:manageFiles.appIndex": 1,
+    "appControlDataTeam01": "enablePageGroup01",
+    "appControlDataTeam02": "enablePageGroup02",
+    "appControlDataTeam03": "enablePageGroup03",
+    "appControlDataTeam08": "enablePageGroup08",
+    "appControlDataTeam09": "enablePageGroup09",
+    "appControlDataTeam10": "enablePageGroup10"
 };
 window.GLOBAL = GLOBAL;
 </script>

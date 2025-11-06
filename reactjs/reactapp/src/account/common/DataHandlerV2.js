@@ -48,7 +48,6 @@ DataHandlerV2.extend({
     },
     getAllFilterValue: function(dataKey) {
         var filterOptions = DataHandler.getData("filterOptions", []);
-        var tempFilterOptions = [];
         var allFilterValue = "allFilterValue:" + dataKey;
         if ($S.isArray(filterOptions)) {
             for (var i=0; i<filterOptions.length; i++) {

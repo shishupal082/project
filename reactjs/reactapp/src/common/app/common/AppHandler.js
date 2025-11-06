@@ -1265,14 +1265,19 @@ AppHandler.extend({
         });
         return {"appControlData": appControlData, "metaData": metaData};
     },
-    loadAppControlData: function(appControlApi, baseApi, appControlDataPath, validAppControl, callback) {
-        if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isArray(validAppControl)) {
+    getAppControlId: function(validAppControl) {
+        if ($S.isArray(validAppControl)) {
             for(var i=0; i<validAppControl.length; i++) {
                 if (this.GetUserData(validAppControl[i])) {
-                    appControlApi = baseApi + appControlDataPath + validAppControl[i] + ".json?v=" + requestId + "&role_id=" + CommonConfig.roleId;
-                    break;
+                    return validAppControl[i];
                 }
             }
+        }
+        return null;
+    },
+    loadAppControlData: function(appControlApi, baseApi, appControlDataPath, appControlId, callback) {
+        if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isStringV2(appControlId)) {
+            appControlApi = baseApi + appControlDataPath + appControlId + ".json?v=" + requestId + "&role_id=" + CommonConfig.roleId;
         }
         if (!$S.isString(appControlApi) || appControlApi.length < 1) {
             return callback();

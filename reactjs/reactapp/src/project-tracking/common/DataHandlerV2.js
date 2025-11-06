@@ -431,14 +431,12 @@ DataHandlerV2.extend({
     _getDynamicEnabledData: function() {
         var dynamicEnabling = DataHandler.getAppData("dynamicEnabling");
         if (!$S.isObject(dynamicEnabling)) {
-            return true;
+            return null;
         }
-        var dynamicEnablingData;
-        for(var key in dynamicEnabling) {
-            if (AppHandler.GetUserData(key)) {
-                dynamicEnablingData = dynamicEnabling[key];
-                break;
-            }
+        var dynamicEnablingData = null;
+        var appControlDataMappingId = DataHandler.getData("appControlDataMappingId", null);
+        if ($S.isStringV2(appControlDataMappingId)) {
+            dynamicEnablingData = dynamicEnabling[appControlDataMappingId];
         }
         return dynamicEnablingData;
     },

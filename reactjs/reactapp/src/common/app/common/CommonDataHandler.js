@@ -317,10 +317,10 @@ CommonDataHandler.extend({
             $S.callMethod(callback);
         }
     },
-    loadAppControlData: function(defaultMetaData, callback) {
+    loadAppControlData: function(appControlId, defaultMetaData, callback) {
         var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
         this.setData("appControlDataLoadStatus", "in_progress");
-        AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, CommonConfig.validAppControl, function(appControlData, metaData) {
+        AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, appControlId, function(appControlData, metaData) {
             CommonDataHandler.setData("appControlData", appControlData);
             CommonDataHandler.setData("appControlMetaData", metaData);
             $S.log("appControlData load complete");

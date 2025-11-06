@@ -42,21 +42,26 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 <script type="text/javascript">
-
+var localDataMapping = {
+  "saveAccountPubV2": ["/account/json/", "/account/json/appControlData.json"],
+  "saveV2PubV2": ["/account/json/", "/account/json/appControlData.json"],
+  "defaultRole": ["/account/json/", "/account/json/appControlData.json"]
+};
+var currentRoleId = "saveAccountPubV2";
 var GLOBAL = {
     baseApi: "http://localhost:8082",
     basepathname: "",
-    appControlDataPath: "/account/json/",
-    appControlApi: "/account/json/appControlData.json",
     projectHeading: "Accounting",
-    roleId: "accountV3App",
+    appControlDataPath: localDataMapping[currentRoleId][0],
+    appControlApi: localDataMapping[currentRoleId][1],
+    roleId: currentRoleId,
     forceLogin: true
 };
 GLOBAL.appVersion = "8.0.2.010";
 GLOBAL.JQ = null;
 GLOBAL.gaTrackingEnable = false;
 GLOBAL.gtag = null;
-GLOBAL.validAppControl = ["appControlDataTeam04","appControlDataTeam07",
+GLOBAL.validAppControl = ["appControlDataTeam03","appControlDataTeam07",
   "appControlDataTeam10","appControlDataTeam11",];
 GLOBAL.customPageData = {
     loginUserDetailsApi: "/api/get_login_user_details",
