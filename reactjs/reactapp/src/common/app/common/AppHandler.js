@@ -1247,12 +1247,19 @@ AppHandler.extend({
     _addAppId: function(response) {
         var metaData = {};
         var appControlData = [];
+        var appControlDataFound = false;
+        var metaDataFound = false;
         if ($S.isObject(response)) {
-            if ($S.isArray(response.list1Data)) {
-                appControlData = response.list1Data;
+            if ($S.isArray(response["list1Data"])) {
+                appControlData = response["list1Data"];
+                appControlDataFound = true;
             }
-            if ($S.isObject(response.metaData)) {
-                metaData = response.metaData;
+            if ($S.isObject(response["metaData"])) {
+                metaData = response["metaData"];
+                metaDataFound = true;
+            }
+            if (!appControlDataFound && !metaDataFound) {
+                metaData = response;
             }
         } else if ($S.isArray(response)) {
             appControlData = response;
@@ -1263,6 +1270,12 @@ AppHandler.extend({
             }
             return el;
         });
+        if (appControlData.length < 1) {
+            appControlData = null;
+        }
+        if (Object.keys(metaData).length < 1) {
+            metaData = null;
+        }
         return {"appControlData": appControlData, "metaData": metaData};
     },
     getAppControlId: function(validAppControl) {

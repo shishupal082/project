@@ -320,19 +320,43 @@ CommonDataHandler.extend({
     loadAppControlData: function(appControlId, defaultMetaData, callback) {
         var appControlApi = CommonConfig.getApiUrl("getAppControlApi", null, true);
         this.setData("appControlDataLoadStatus", "in_progress");
-        AppHandler.loadAppControlData(appControlApi, CommonConfig.baseApi, CommonConfig.appControlDataPath, appControlId, function(appControlData, metaData) {
-            CommonDataHandler.setData("appControlData", appControlData);
-            CommonDataHandler.setData("appControlMetaData", metaData);
-            $S.log("appControlData load complete");
-            CommonDataHandler.setData("appControlDataLoadStatus", "completed");
-            $S.callMethod(callback);
+        var baseApi, appControlDataPath;
+        baseApi = CommonConfig.baseApi;
+        appControlDataPath = CommonConfig.appControlDataPath;
+        var isValidUserDefineApi = false;
+        if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isStringV2(appControlId)) {
+            isValidUserDefineApi = true;
+        }
+        AppHandler.loadAppControlData(appControlApi, baseApi, appControlDataPath, appControlId, function(appControlData, metaData) {
+            if (isValidUserDefineApi && !$S.isArray(appControlData) && !$S.isObject(metaData)) {
+                $S.log("appControlData not found, getting from appControlApi");
+                AppHandler.loadAppControlData(appControlApi, baseApi, appControlDataPath, null, function(appControlData, metaData) {
+                    CommonDataHandler.setData("appControlData", appControlData);
+                    CommonDataHandler.setData("appControlMetaData", metaData);
+                    $S.log("appControlData load complete");
+                    CommonDataHandler.setData("appControlDataLoadStatus", "completed");
+                    $S.callMethod(callback);
+                });
+            } else {
+                CommonDataHandler.setData("appControlData", appControlData);
+                CommonDataHandler.setData("appControlMetaData", metaData);
+                $S.log("appControlData load complete");
+                CommonDataHandler.setData("appControlDataLoadStatus", "completed");
+                $S.callMethod(callback);
+            }
         });
     },
     loadMetaDataByMetaDataApi: function(defaultMetaData, metaDataApi, callback) {
         var request = [];
-        var appControlMetaData, finalMetaData, self = this;
+        var finalMetaData, self = this;
+        var appControlMetaData = this.getData("appControlMetaData", {});
         if (!$S.isArray(metaDataApi)) {
             metaDataApi = [];
+        }
+        if (!$S.isArrayV2(metaDataApi)) {
+            if ($S.isObject(appControlMetaData) && $S.isArrayV2(appControlMetaData["metaDataApi"])) {
+                metaDataApi = appControlMetaData["metaDataApi"];
+            }
         }
         metaDataApi = metaDataApi.map(function(el, i, arr) {
             if (el.split("?").length > 1) {
@@ -350,7 +374,6 @@ CommonDataHandler.extend({
         AppHandler.LoadDataFromRequestApi(request, function() {
             for(var i=0; i<request.length; i++) {
                 if (request[i].apiName === "metaData") {
-                    appControlMetaData = self.getData("appControlMetaData", {});
                     finalMetaData = CommonDataHandler._handleMetaDataLoad(defaultMetaData, appControlMetaData, request[i].response);
                     self.setData("metaData", finalMetaData);
                 }
@@ -388,7 +411,7 @@ CommonDataHandler.extend({
     loadMetaDataByAppId: function(defaultMetaData, appId, callback) {
         var currentAppControlData = this.getAppDataById(appId, {});//{}
         var metaDataApi = [];
-        if ($S.isArray(currentAppControlData["metaDataApi"])) {
+        if ($S.isObject(currentAppControlData) && $S.isArray(currentAppControlData["metaDataApi"])) {
             metaDataApi = currentAppControlData["metaDataApi"];
         }
         this.loadMetaDataByMetaDataApi(defaultMetaData, metaDataApi, callback);

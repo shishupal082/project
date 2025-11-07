@@ -53,9 +53,9 @@
 
 <script type="text/javascript">
 var localDataMapping = {
-  "saveAccountPubV2": ["/project-tracking-v2/json/", "/project-tracking-v2/json/appControlData.json"],
-  "saveV2PubV2": ["/project-tracking-v3/json/", "/project-tracking-v2/json/appControlData.json"],
-  "saveE2.1PubV2": ["/project-tracking/json/", "/project-tracking/json/appControlData.json"]
+  "saveAccountPubV2": ["/project-tracking-v2/json/", "/project-tracking-v3/json/defaultAppControlApi.json"],
+  "saveV2PubV2": ["/project-tracking-v3/json/", "/project-tracking-v3/json/defaultAppControlApi.json"],
+  "saveE2.1PubV2": ["/project-tracking/json/", "/project-tracking-v3/json/defaultAppControlApi.json"]
 };
 var currentRoleId = "saveV2PubV2";
 var GLOBAL = {
@@ -63,7 +63,7 @@ var GLOBAL = {
     basepathname: "/test",
     projectHeading: "Project Tracking",
     appControlDataPath: localDataMapping[currentRoleId][0],
-    appControlApi: localDataMapping[currentRoleId][0],
+    appControlApi: localDataMapping[currentRoleId][1],
     roleId: currentRoleId,
     forceLogin: true
 };
@@ -80,7 +80,7 @@ GLOBAL.validAppControl = [
   "appControlDataTeam10",
 ];
 GLOBAL.customPageData = {
-    "pageName:manageFiles.appIndex": 1,
+    "pageName:manageFiles.appIndex": "1",
     "appControlDataTeam01": "enablePageGroup01",
     "appControlDataTeam02": "enablePageGroup02",
     "appControlDataTeam03": "enablePageGroup03",
