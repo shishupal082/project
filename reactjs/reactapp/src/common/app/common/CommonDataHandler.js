@@ -327,10 +327,10 @@ CommonDataHandler.extend({
         if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isStringV2(appControlId)) {
             isValidUserDefineApi = true;
         }
-        AppHandler.loadAppControlData(appControlApi, baseApi, appControlDataPath, appControlId, function(appControlData, metaData) {
+        AppHandler.loadAppControlDataV2(appControlApi, baseApi, appControlDataPath, appControlId, function(appControlData, metaData) {
             if (isValidUserDefineApi && !$S.isArray(appControlData) && !$S.isObject(metaData)) {
                 $S.log("appControlData not found, getting from appControlApi");
-                AppHandler.loadAppControlData(appControlApi, baseApi, appControlDataPath, null, function(appControlData, metaData) {
+                AppHandler.loadAppControlDataV2(appControlApi, baseApi, appControlDataPath, null, function(appControlData, metaData) {
                     CommonDataHandler.setData("appControlData", appControlData);
                     CommonDataHandler.setData("appControlMetaData", metaData);
                     $S.log("appControlData load complete");

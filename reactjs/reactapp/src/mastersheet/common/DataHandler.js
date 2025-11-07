@@ -321,7 +321,7 @@ DataHandler.extend({
             AppHandler.TrackPageView(pageName);
             DataHandler.checkForRedirect(function() {
                 AppHandler.LoadStaticData(staticDataUrl, function() {
-                    CommonDataHandler.loadAppControlData(Config.getConfigData("defaultMetaData", {}), function() {
+                    CommonDataHandler.loadAppControlData(null, Config.getConfigData("defaultMetaData", {}), function() {
                         var title = DataHandler.getAppData("title", "");
                         if ($S.isStringV2(title) && CommonConfig.JQ) {
                             CommonConfig.JQ("title").html(title);

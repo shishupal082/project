@@ -1288,7 +1288,7 @@ AppHandler.extend({
         }
         return null;
     },
-    loadAppControlData: function(appControlApi, baseApi, appControlDataPath, appControlId, callback) {
+    loadAppControlDataV2: function(appControlApi, baseApi, appControlDataPath, appControlId, callback) {
         if ($S.isString(baseApi) && $S.isString(appControlDataPath) && $S.isStringV2(appControlId)) {
             appControlApi = baseApi + appControlDataPath + appControlId + ".json?v=" + requestId + "&role_id=" + CommonConfig.roleId;
         }
@@ -1311,6 +1311,10 @@ AppHandler.extend({
                 callback(result.appControlData, result.metaData);
             }
         });
+    },
+    loadAppControlData: function(appControlApi, baseApi, appControlDataPath, validAppControl, callback) {
+        var appControlId = this.getAppControlId(CommonConfig.validAppControl);
+        return this.loadAppControlDataV2(appControlApi, baseApi, appControlDataPath, appControlId, callback);
     }
 });
 AppHandler.extend({
