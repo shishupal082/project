@@ -81,13 +81,12 @@ public class RoleService {
         if (roleConfigPath != null) {
             if (!roleConfigPath.isEmpty()) {
                 for (String filename: roleConfigPath) {
+                    if (filename == null || filename.isEmpty()) {
+                        continue;
+                    }
                     rolesConfigPath.add(roleConfigDir+filename);
                 }
-            } else {
-                rolesConfigPath.add(roleConfigDir+BridgeConstant.ROLES);
             }
-        } else {
-            rolesConfigPath.add(roleConfigDir+BridgeConstant.ROLES);
         }
         return rolesConfigPath;
     }

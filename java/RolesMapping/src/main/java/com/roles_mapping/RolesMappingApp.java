@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RolesMappingApp {
-    private final String roleConfigDir;
     private final RoleService roleService;
-    public RolesMappingApp(final String roleConfigDir) {
-        this.roleConfigDir = roleConfigDir;
+    public RolesMappingApp() {
         this.roleService = new RoleService(new Db());
     }
-    public boolean updateRoleConfig(final ArrayList<String> roleConfigPath) {
-        ArrayList<String> rolesConfigPath = this.roleService.getRolesConfigPath(this.roleConfigDir, roleConfigPath);
+    public boolean updateRoleConfig(final String roleConfigDir, final ArrayList<String> roleConfigPath) {
+        ArrayList<String> rolesConfigPath = this.roleService.getRolesConfigPath(roleConfigDir, roleConfigPath);
         return this.roleService.updateRoles(rolesConfigPath);
     }
     public boolean isRoleAuthorised(String apiName, String userName) {
