@@ -101,6 +101,8 @@ java/FileParser/target/
 java/FileParser/final_copy/FileParser-*.jar
 
 
+java/RolesMapping/current-build/*
+
 
 java/Hibernate/.idea/
 java/Hibernate/target/
