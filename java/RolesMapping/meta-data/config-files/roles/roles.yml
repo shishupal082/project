@@ -1,0 +1,80 @@
+roleAccess:
+  admin:
+    - Admin
+    - adminAndDev
+  dev:
+    - U1
+    - adminAndDev
+#  true: notRequiredAnyUserName
+  UsersControlGroup:
+    - Admin
+    - U1
+  userGroup1:
+    - U1
+    - U2
+    - U3
+  userGroup2:
+    - U1
+    - U4
+    - U5
+  userGroup4:
+    - U15
+    - U16
+  userGroup5:
+    - U17
+    - U18
+  individualUser3:
+    - U3
+  U_without_related_user:
+    - UX
+  Group1_users:
+    - Group1Login
+roleAccessMapping:
+  isAdminUser: admin
+  isDevUser: (dev|admin)
+  isDevUser2: (dev|admin)
+  isDevUser3: (dev|admin)
+  isDevUser4: (dev|admin)
+  isUploadFileEnable: true
+  isAddTextEnable: true
+  isDeleteTextEnable: true
+  isUsersControlEnable: UsersControlGroup
+  isLoginOtherUserEnable: Group1_users
+  isAdminTextDisplayEnable: admin
+  isAdminOrDevUser: (admin|dev)
+  inValidRoleEntry: (admin1|dev)
+  inValidRoleEntry2: (&dev)
+  isAdminAndDevUser: (admin&dev)
+  isBooleanTrue: true
+  getAllUsersEnable: true
+  isLogin: true
+
+# Duplicate entry will be removed from final coRelatedUsers and relatedUsers calculation
+
+coRelatedUsers:
+  - userGroup1
+  - userGroup2
+groupRelatedUsers:
+  userGroup4:
+    - userGroup5
+  userGroup5:
+    - userGroup1
+    - userGroup4
+relatedUsers:
+  U6:
+    - individualUser3
+  U5:
+    - userGroup1
+  U_without_role_access:
+    - userGroup1
+  Group1Login:
+    - userGroup1
+# final output
+# tempCoRelatedUsers: {U5=[U5, U4, U1, U3, U2], U9=[U9], U13=[U13, U12], U12=[U13, U12], U1=[U5, U4, U1, U3, U2], U2=[U5, U4, U1, U3, U2], U3=[U5, U4, U1, U3, U2], U4=[U5, U4, U1, U3, U2]}
+# tempRelatedUsers: {U5=[U1, U2, U3, U5], U6=[U3, U6], U11=[U3, U11], U14=[U3, U14, U1, U2, U3, U14]}
+# relatedUsers after merging: {U5=[U1, U2, U3, U5, U4], U6=[U3, U6], U11=[U3, U11], U9=[U9], U13=[U13, U12], U12=[U13, U12], U14=[U3, U14, U1, U2, U3, U14], U1=[U5, U4, U1, U3, U2], U2=[U5, U4, U1, U3, U2], U3=[U5, U4, U1, U3, U2], U4=[U5, U4, U1, U3, U2]}
+# finalRelatedUsers after duplicate removal: {U5=[U5, U4, U3, U2, U1], U6=[U6, U3], U11=[U3, U11], U9=[U9], U13=[U13, U12], U12=[U13, U12], U14=[U3, U2, U14, U1], U1=[U5, U4, U3, U2, U1], U2=[U5, U4, U3, U2, U1], U3=[U5, U4, U3, U2, U1], U4=[U5, U4, U3, U2, U1]}
+
+
+
+# Note: no final entry for U8 and U10

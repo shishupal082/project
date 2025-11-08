@@ -1,0 +1,31 @@
+roleAccess:
+  userGroup3:
+    - U12
+    - U13
+  individualUser7:
+    - U7
+  individualUser9:
+    - U9
+  infiniteTTLLoginUser:
+    - admin
+
+roleAccessMapping:
+  isAdminOrDevUser: (admin|dev)
+  localSystemUser: individualUser9
+  isInfiniteTTLLoginUser: infiniteTTLLoginUser
+
+
+coRelatedUsers:
+  - userGroup3
+  - invalidUserGroup
+  - individualUser9
+relatedUsers:
+  U8:
+    - individualUser31
+  U10:
+  U11:
+    - individualUser3
+  U14:
+    - individualUser31
+    - individualUser3
+    - userGroup1

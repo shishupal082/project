@@ -7,3 +7,15 @@ add => project name (Test) and project direvctory
 mainclass => Path of application class
 programm argument => server yml_file_path env
 working directory => let it by default
+
+
+for new Maven project
+---------------------------------------
+File --> New --> Project
+Left tab: Java
+Center tab: Build system Maven
+Bottom tab:
+Advance system:
+(1) Group id: com.roles_mapping
+(2) ArtifactId: RolesMapping
+
