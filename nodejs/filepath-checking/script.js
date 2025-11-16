@@ -74,7 +74,7 @@ FilepathChecking.extend({
         var self = this;
         var id = request["workId"];
         if ($S.isStringV2(currentData["filepathApi"])) {
-            Get.api(currentData["filepathApi"] + id, requestId, function(response) {
+            Get.api(currentData["filepathApi"] + id, requestId, true, function(response) {
                 console.log("---------------------------------------------");
                 var result = [];
                 if ($S.isObject(response) && response["status"] === "SUCCESS") {

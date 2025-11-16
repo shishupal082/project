@@ -3,6 +3,7 @@ Open link: https://nssm.cc/ (Non sucking service manager)
 Download nssm-2.24.zip --> Extract this folder
 Open cmd as administrator
 go to nssm.exe folder (i.e. extarcted folder)
+C:\Program-Files\nssm-2.24\win64
 
 For intstalling new service:
 >> .\nssm.exe install <ServiceName>
@@ -11,6 +12,7 @@ It will open a configuration window
 
 For removing that service:
 >> .\nssm.exe remove <ServiceName>
+ServiceName: Can be found in services left window after selection
 
 To check status of service
 Open Window Service App

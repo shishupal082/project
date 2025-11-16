@@ -189,7 +189,7 @@ JavaExcelService.extend({
     },
     readApiData: function(_container, callback) {
         var api = _self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/get_excel_data_config?requestId=" + _container["WORK_ID"];
-        ReadConfigData.readApiDataV2(api, _container, function(excelConfig, __container) {
+        ReadConfigData.readApiDataV2(api, _container, true, function(excelConfig, __container) {
             var request = {"appId": __container["APP_ID"], "workId": __container["WORK_ID"]};
             var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
             ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status, result) {

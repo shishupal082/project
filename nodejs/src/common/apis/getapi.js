@@ -1,12 +1,12 @@
 //gapi : Get api
 const https = require('https');
-const http = require('http')
+const http = require('http');
 const $S = require("../../libs/stack.js");
 const Logger = require("../logger-v2.js");
 const AppConstant = require("../AppConstant.js");
 
 const Get = {
-    api: function(api, requestId, callback) {
+    api: function(api, requestId, isAddResponseLog, callback) {
         function addLog(requestId, message) {
             // message = message.substring(0, 100);
             Logger.log(`${requestId}:${message}`);
@@ -30,7 +30,11 @@ const Get = {
             resp.on('data', (chunk) => {data += chunk;});
             // The whole response has been received. Print out the result.
             resp.on('end', () => {
-                addLog(requestId, `Get response(${api}):(${data})`);
+                if ($S.isBooleanTrue(isAddResponseLog)) {
+                    addLog(requestId, `Get response(${api}):(${data})`);
+                } else {
+                    addLog(requestId, `Get response(${api}):Received`);
+                }
                 if ($S.isFunction(callback)) {
                     callback(JSON.parse(data));
                 } else {

@@ -1,6 +1,7 @@
 const ReadConfigData = require("../src/common/ReadConfigData.js");
 const RemoveFilesController = require("../src/remove-files/RemoveFilesController.js");
 const $S = require("../src/libs/stack.js");
+
 var arg = process.argv;
 
 /**
@@ -17,13 +18,18 @@ if (arg.length >= 4) {
     workId = arg[3];
 }
 
+
 function main() {
     ReadConfigData.readData(configPath, function() {
         var configData = ReadConfigData.getData();
         RemoveFilesController.setConfigData(configData);
-        RemoveFilesController.removeFile(workId, function(status, result) {
-            console.log("---"+status+"---");
-            console.log(result);
+        RemoveFilesController.removeFile(workId, function(MODEL) {
+            console.log("---"+MODEL.getResultStatus()+"---");
+            RemoveFilesController.removeFileV2(workId, MODEL, MODEL.getResult(), function() {
+                console.log("---Deletion complete.---");
+            });
+            // console.log(result);
+
         });
         // console.log(model.getTrashPath());
         // model.isValidTrashPath();

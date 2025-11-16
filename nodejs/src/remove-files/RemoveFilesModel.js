@@ -12,6 +12,7 @@ function RemoveFilesModelObj(configData) {
     this.configData = configData;
     this.currentId = "";
     this.currentConfigData = {};
+    //Method 1/1
     this.setCurrentConfigData = function(id) {
         if (!$S.isStringV2(id)) {
             Logger.log("Invalid request workId: " + id);
@@ -31,13 +32,7 @@ function RemoveFilesModelObj(configData) {
             Logger.log("Config data provided is not array.");
         }
     };
-    this.getTrashPath = function() {
-        var trashPath = this.currentConfigData["trash_path"];
-        if ($S.isStringV2(trashPath)) {
-            return trashPath;
-        }
-        return null;
-    };
+    //Method 1/1
     this.isValidTrashPath = function() {
         var trashPath = this.getTrashPath();
         if ($S.isStringV2(trashPath)) {
@@ -45,13 +40,7 @@ function RemoveFilesModelObj(configData) {
         }
         return false;
     };
-    this.getSourceApi = function() {
-        var sourceApi = this.currentConfigData["source_api"];
-        if ($S.isStringV2(sourceApi)) {
-            return sourceApi;
-        }
-        return null;
-    };
+    //Setter method
     this.changeStatus = function(currentStatus, currentResult) {
         if ($S.isStringV2(currentStatus)) {
             status = currentStatus;
@@ -62,6 +51,29 @@ function RemoveFilesModelObj(configData) {
             result = currentResult;
         }
     };
+    //Get currentConfigData
+    this.getSourceApi = function() {
+        var sourceApi = this.currentConfigData["source_api"];
+        if ($S.isStringV2(sourceApi)) {
+            return sourceApi;
+        }
+        return null;
+    };
+    this.getMoveFileApi = function() {
+        var moveFileApi = this.currentConfigData["move_file_api"];
+        if ($S.isStringV2(moveFileApi)) {
+            return moveFileApi;
+        }
+        return null;
+    };
+    this.getTrashPath = function() {
+        var trashPath = this.currentConfigData["trash_path"];
+        if ($S.isStringV2(trashPath)) {
+            return trashPath;
+        }
+        return null;
+    };
+    //Getter method
     this.getResultStatus = function() {
         return status;
     };

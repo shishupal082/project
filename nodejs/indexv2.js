@@ -106,7 +106,7 @@ app.get('/twitter', function(req, res, next){
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
 
     var response = {"status": "SUCCESS"};
-    Get.api(api, $S.getUniqueNumber(), function(resp) {
+    Get.api(api, $S.getUniqueNumber(), true, function(resp) {
         res.end(JSON.stringify(resp));
     });
 });
@@ -115,7 +115,7 @@ app.get('/nasa', function(req, res, next){
     var api = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY';
     res.statusCode = 200;
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
-    Get.api(api, $S.getUniqueNumber(), function(resp) {
+    Get.api(api, $S.getUniqueNumber(), true, function(resp) {
         res.end(JSON.stringify(resp));
     });
 });
@@ -126,7 +126,7 @@ app.get('/api', function(req, res, next) {
     res.setHeader(AppConstant.CONTENT_TYPE, AppConstant.APPLICATION_JSON);
     var response = {};
     if (api) {
-        Get.api(api, $S.getUniqueNumber(), function(resp) {
+        Get.api(api, $S.getUniqueNumber(), true, function(resp) {
             response["response"]=resp;
             res.end(JSON.stringify(response));
         });

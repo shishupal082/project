@@ -1,6 +1,7 @@
 const $S = require("../libs/stack.js");
 const FS = require("../common/fsmodule.js");
 const Logger = require("../common/logger-v2.js");
+const Post = require("../common/apis/apipost.js");
 
 const ReadConfigData = require("../common/ReadConfigData.js");
 const ConvertGoogleSheetsToCsv = require("../google-sheets/ConvertGoogleSheetsToCsv.js");
@@ -194,53 +195,14 @@ RemoveFilesController.extend({
     readApiDataV2: function(sourceApi, model, callback) {
         var api = sourceApi;//_self.getBaseUrl() + ":" + _self.getPortNumber() + "/api/get_excel_data_config?requestId=" + _container["WORK_ID"];
         var __container = {};
-        ReadConfigData.readApiData(api, function(response) {
+        ReadConfigData.readApiDataV2(api, {}, false, function(response, request) {
             if ($S.isArray(response)) {
                 Logger.log("Total response length: " + response.length);
+            } else {
+                Logger.log("Total response length: 0");
             }
-            // var request = {"appId": __container["APP_ID"], "workId": __container["WORK_ID"]};
-            // var requiredColIndex, spreadsheetIdIndex, sheetNameIndex;
-            // ConvertGoogleSheetsToCsv.convert(request, excelConfig, function(status, result) {
-            //   if (status === "SUCCESS") {
-            //     if ($S.isArray(result)) {
-            //       for (var i=0; i<result.length; i++) {
-            //         if ($S.isObject(result[i]) && $S.isArray(result[i]["data"])) {
-            //           requiredColIndex = result[i]["requiredColIndex"];
-            //           if (requiredColIndex.length >= 3) {
-            //              spreadsheetIdIndex = requiredColIndex[1];
-            //              sheetNameIndex = requiredColIndex[2];
-            //           }
-            //           if (result[i]["data"].length > spreadsheetIdIndex && result[i]["data"].length > sheetNameIndex) {
-            //             __container["FINAL_DATA"].push({
-            //               "status": "PENDING",
-            //               "fileMappingData": result[i]["data"],
-            //               "excelConfigSpreadsheets": {
-            //                 "spreadsheetId": result[i]["data"][spreadsheetIdIndex],
-            //                 "sheetName": result[i]["data"][sheetNameIndex]
-            //               },
-            //               "requiredColIndex": requiredColIndex,
-            //               "excelData": []
-            //             });
-            //           } else {
-            //             console.log("Invalid file-mapping data: 1");
-            //             console.log(result[i]);
-            //           }
-            //         } else {
-            //           console.log("Invalid file-mapping data: 2");
-            //         }
-            //       }
-            //       console.log("--------FINAL_DATA length------------- " + __container["WORK_ID"] + "  " + __container["FINAL_DATA"].length);
-            //         _self.generateFinalResult(__container, function() {
-            //             _self.sendNextRequest(__container, result, callback);
-            //         });
-            //     } else {
-            //       console.log("Invalid config parameter generated.");
-            //       $S.callMethodV1(callback, "FAILURE");
-            //     }
-            //   } else {
-            //     $S.callMethodV1(callback, "FAILURE");
-            //   }
-            // });
+            model.changeStatus("SUCCESS", response);
+            $S.callMethod(callback);
         });
     }
 });
@@ -284,7 +246,7 @@ RemoveFilesController.extend({
     }
 });
 RemoveFilesController.extend({
-    handleRequestV2: function(sourceApi, model, callback) {
+    _handleRequestV2: function(sourceApi, model, callback) {
         var workId = model.currentId;
         if (runningIds.indexOf(workId) >= 0) {
             model.changeStatus("IN_PROGRESS", []);
@@ -313,15 +275,51 @@ RemoveFilesController.extend({
             var sourceApi = model.getSourceApi();
             if (sourceApi === null) {
                 Logger.log("Invalid source_api in configData.");
-                $S.callMethodV2(callback, model.getResultStatus(), model.getResult());
+                $S.callMethodV1(callback, model);
             } else {
-                this.handleRequestV2(sourceApi, model, function() {
-                    $S.callMethodV2(callback, model.getResultStatus(), model.getResult());
+                this._handleRequestV2(sourceApi, model, function() {
+                    $S.callMethodV1(callback, model);
                 });
             }
         } else {
             Logger.log("Invalid trash path in configData: " + model.getTrashPath());
-            $S.callMethodV2(callback, model.getResultStatus(), model.getResult());
+            $S.callMethodV1(callback, model);
+        }
+    },
+    removeFileV2: function(workId, MODEL, resultData, callback) {
+        var _self = this;
+        var api = MODEL.getMoveFileApi();
+        var postData = {"filepath": "", "move_dir": MODEL.getTrashPath(), "role_id": "defaultRole"};
+        var requestId = $S.getRequestId();
+        var uniqueRowId;
+        var rowData;
+        var request;
+        if ($S.isArray(resultData)) {
+            for (var i=0; i<resultData.length; i++) {
+                rowData = resultData[i];
+                if ($S.isArray(rowData) && rowData.length > 0) {
+                    uniqueRowId = rowData[0];
+                } else {
+                    continue;
+                }
+                if (runningIds.indexOf(uniqueRowId) >= 0) {
+                    continue;
+                }
+                if (rowData.length < 3) {
+                    continue;
+                }
+                runningIds.push(uniqueRowId);
+                postData["filepath"] = rowData[2];
+                Logger.log(i + ": " + JSON.stringify(postData));
+                Post.api(api, postData, "", false, function(response) {
+                    Logger.log(JSON.stringify(response));
+                    _self.removeFileV2(workId, MODEL, resultData, callback);
+                });
+                return;
+            }
+            $S.callMethod(callback);
+        } else {
+            $S.callMethod(callback);
         }
     }
 });

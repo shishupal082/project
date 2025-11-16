@@ -37,9 +37,9 @@ ReadConfigData.extend({
             $S.callMethod(callback);
         }
     },
-    readApiData: function(api, callback) {
+    readApiData: function(api, isAddResponseLog, callback) {
         if ($S.isStringV2(api)) {
-            Get.api(api, "api", function(jsonData) {
+            Get.api(api, "api", isAddResponseLog, function(jsonData) {
                 Logger.log("---------------");
                 if ($S.isObject(jsonData) && $S.isArray(jsonData["data"])) {
                     // Logger.log("ReadConfigData: Config data read success.");
@@ -54,14 +54,14 @@ ReadConfigData.extend({
             $S.callMethodV1(callback, {});
         }
     },
-    readApiDataV2: function(api, request, callback) {
-        this.readApiData(api, function(response) {
+    readApiDataV2: function(api, request, isAddResponseLog, callback) {
+        this.readApiData(api, isAddResponseLog, function(response) {
             $S.callMethodV2(callback, response, request);
         });
     },
     callApi: function(api, callback) {
         if ($S.isStringV2(api)) {
-            Get.api(api, "requestId", function(jsonData) {
+            Get.api(api, "requestId", true, function(jsonData) {
                 Logger.log("---------------");
                 $S.callMethodV1(callback, jsonData);
             });

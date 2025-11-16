@@ -25,7 +25,8 @@
     "xlsx": "^0.17.4"
   },
   "devDependencies": {
-    "g-sheets-api": "^2.1.2"
+    "g-sheets-api": "^2.1.2",
+    "request": "^2.88.2"
   },
   "keywords": []
 }
