@@ -1,5 +1,11 @@
 package com.roles_mapping.service;
 
+import com.roles_mapping.config.BridgeConstant;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class BridgeStaticService {
     public static String replaceChar(String str, String find, String replace) {
         if (str == null || find == null || replace == null) {
@@ -51,5 +57,45 @@ public class BridgeStaticService {
          * for limit = 3, result = []:  [, d, workspace/project//ftp/application/],3
          * */
         return str.split(regex, limit);
+    }
+    public static boolean isPatternMatching(String str, String pattern, boolean exactMatch) {
+        if (str == null || pattern == null) {
+            return false;
+        }
+        if (str.isEmpty() || pattern.trim().isEmpty()) {
+            return false;
+        }
+        if (exactMatch) {
+            pattern = "^" + pattern + "$";
+        }
+        Pattern regexPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = regexPattern.matcher(str);
+        return matcher.find();
+    }
+    public static Boolean isValidCondition(String cellData, ArrayList<String> range, ArrayList<String> notInRange,
+                                    Boolean isEmpty, String regex) {
+        if (range == null && notInRange == null && isEmpty == null && regex == null) {
+            return null;
+        }
+        if (range != null && range.contains(cellData)) {
+            return true;
+        }
+        if (notInRange != null && !notInRange.contains(cellData)) {
+            return true;
+        }
+        if (regex != null && BridgeStaticService.isPatternMatching(cellData, regex, false)) {
+            return true;
+        }
+        if (isEmpty != null) {
+            if (cellData == null) {
+                cellData = BridgeConstant.EMPTY;
+            }
+            if (isEmpty) {
+                return cellData.isEmpty();
+            } else {
+                return !cellData.isEmpty();
+            }
+        }
+        return false;
     }
 }

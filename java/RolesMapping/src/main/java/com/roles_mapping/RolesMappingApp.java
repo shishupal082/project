@@ -1,6 +1,7 @@
 package com.roles_mapping;
 
 import com.roles_mapping.config.Db;
+import com.roles_mapping.service.BridgeStaticService;
 import com.roles_mapping.service.RoleService;
 
 import java.util.ArrayList;
@@ -32,6 +33,14 @@ public class RolesMappingApp {
     }
     public Object getRolesConfig() {
         return this.roleService.getRolesConfig();
+    }
+
+    public Boolean isValidCondition(String cellData, ArrayList<String> range, ArrayList<String> notInRange,
+                                    Boolean isEmpty, String regex) {
+        return BridgeStaticService.isValidCondition(cellData,range,notInRange,isEmpty,regex);
+    }
+    public boolean isPatternMatching(String str, String pattern, boolean exactMatch) {
+        return BridgeStaticService.isPatternMatching(str,pattern,exactMatch);
     }
     public static void main(String[] args) {
         System.out.println("Roles mapping app.");
