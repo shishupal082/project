@@ -30,11 +30,15 @@ public class TestIsValidCondition {
         Assert.assertNull(result);
         //Is empty check
         result = rolesMappingApp.isValidCondition(null, null, null, true, null);
-        Assert.assertTrue(result);
+        Assert.assertFalse(result);
         result = rolesMappingApp.isValidCondition("", null, null, true, null);
         Assert.assertTrue(result);
+        result = rolesMappingApp.isValidCondition(" ", null, null, true, null);
+        Assert.assertFalse(result);
         result = rolesMappingApp.isValidCondition("test", null, null, true, null);
         Assert.assertFalse(result);
+        result = rolesMappingApp.isValidCondition("test", null, null, false, null);
+        Assert.assertTrue(result);
         //Range check
         range = new ArrayList<>();
         result = rolesMappingApp.isValidCondition(null, range, null, null, null);
@@ -46,10 +50,26 @@ public class TestIsValidCondition {
         range.add("");
         result = rolesMappingApp.isValidCondition("", range, null, null, null);
         Assert.assertTrue(result);
+        result = rolesMappingApp.isValidCondition(" ", range, null, null, null);
+        Assert.assertFalse(result);
         range.add(null);
         result = rolesMappingApp.isValidCondition(null, range, null, null, null);
         Assert.assertTrue(result);
         result = rolesMappingApp.isValidCondition("test", range, null, null, null);
+        Assert.assertFalse(result);
+        range.add(" ");
+        result = rolesMappingApp.isValidCondition(" ", range, null, null, null);
+        Assert.assertTrue(result);
+        result = rolesMappingApp.isValidCondition("  ", range, null, null, null);
+        Assert.assertFalse(result);
+        range.add("test");
+        result = rolesMappingApp.isValidCondition("test", range, null, null, null);
+        Assert.assertTrue(result);
+        result = rolesMappingApp.isValidCondition("test ", range, null, null, null);
+        Assert.assertFalse(result);
+        result = rolesMappingApp.isValidCondition(" test", range, null, null, null);
+        Assert.assertFalse(result);
+        result = rolesMappingApp.isValidCondition(" test  ", range, null, null, null);
         Assert.assertFalse(result);
     }
 }

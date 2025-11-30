@@ -87,13 +87,10 @@ public class BridgeStaticService {
             return true;
         }
         if (isEmpty != null) {
-            if (cellData == null) {
-                cellData = BridgeConstant.EMPTY;
-            }
             if (isEmpty) {
-                return cellData.isEmpty();
+                return BridgeConstant.EMPTY.equals(cellData);
             } else {
-                return !cellData.isEmpty();
+                return !BridgeConstant.EMPTY.equals(cellData);
             }
         }
         return false;
