@@ -62,8 +62,8 @@ public class BridgeStaticService {
         if (str == null || pattern == null) {
             return false;
         }
-        if (str.isEmpty() || pattern.trim().isEmpty()) {
-            return false;
+        if (BridgeConstant.EMPTY.equals(pattern)) {
+            exactMatch = true;
         }
         if (exactMatch) {
             pattern = "^" + pattern + "$";
@@ -83,8 +83,11 @@ public class BridgeStaticService {
         if (notInRange != null && !notInRange.contains(cellData)) {
             return true;
         }
-        if (regex != null && BridgeStaticService.isPatternMatching(cellData, regex, false)) {
-            return true;
+        if (regex != null) {
+            boolean status = BridgeStaticService.isPatternMatching(cellData, regex, false);
+            if (status) {
+                return true;
+            }
         }
         if (isEmpty != null) {
             if (isEmpty) {
