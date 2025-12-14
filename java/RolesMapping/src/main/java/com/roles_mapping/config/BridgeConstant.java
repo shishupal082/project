@@ -20,4 +20,8 @@ public class BridgeConstant {
     public static final String PROD = "*";
     public static final String PRODExp = "\\*";
     public static final String DIV = "/";
+    public static final String ASC = "ASC";
+    public static final String DESC = "DESC";
+    public static final String INT = "INT";
+    public static final String STRING = "STRING";
 }

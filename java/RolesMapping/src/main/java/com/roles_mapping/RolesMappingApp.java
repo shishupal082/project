@@ -3,14 +3,17 @@ package com.roles_mapping;
 import com.roles_mapping.config.Db;
 import com.roles_mapping.service.BridgeStaticService;
 import com.roles_mapping.service.RoleService;
+import com.roles_mapping.service.SortingService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RolesMappingApp {
     private final RoleService roleService;
+    private final SortingService sortingService;
     public RolesMappingApp() {
         this.roleService = new RoleService(new Db());
+        this.sortingService = new SortingService();
     }
     public boolean updateRoleConfig(final String roleConfigDir, final ArrayList<String> roleConfigPath) {
         ArrayList<String> rolesConfigPath = this.roleService.getRolesConfigPath(roleConfigDir, roleConfigPath);
@@ -41,6 +44,10 @@ public class RolesMappingApp {
     }
     public boolean isPatternMatching(String str, String pattern, boolean exactMatch) {
         return BridgeStaticService.isPatternMatching(str,pattern,exactMatch);
+    }
+    public ArrayList<ArrayList<String>> sortExcelData(ArrayList<ArrayList<String>> excelData, Integer index,
+                                                      String order, String dataType, String defaultData) {
+        return this.sortingService.sortExcelData(excelData, index, order, dataType, defaultData);
     }
     public static void main(String[] args) {
         System.out.println("Roles mapping app.");
