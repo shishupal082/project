@@ -46,8 +46,8 @@ public class RolesMappingApp {
         return BridgeStaticService.isPatternMatching(str,pattern,exactMatch);
     }
     public ArrayList<ArrayList<String>> sortExcelData(ArrayList<ArrayList<String>> excelData, Integer index,
-                                                      String order, String dataType, String defaultData) {
-        return this.sortingService.sortExcelData(excelData, index, order, dataType, defaultData);
+                                                      ArrayList<Integer> skipRowIndex, String order, String dataType, String defaultData) {
+        return this.sortingService.sortExcelData(excelData, index, skipRowIndex, order, dataType, defaultData);
     }
     public static void main(String[] args) {
         System.out.println("Roles mapping app.");
