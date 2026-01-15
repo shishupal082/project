@@ -1,13 +1,15 @@
 package com.roles_mapping;
 
+import com.roles_mapping.annotation.version;
 import com.roles_mapping.config.Db;
+import com.roles_mapping.service.AnnotationService;
 import com.roles_mapping.service.BridgeStaticService;
 import com.roles_mapping.service.RoleService;
 import com.roles_mapping.service.SortingService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+@version(app_version="1.0.0")
 public class RolesMappingApp {
     private final RoleService roleService;
     private final SortingService sortingService;
@@ -49,7 +51,13 @@ public class RolesMappingApp {
                                                       ArrayList<Integer> skipRowIndex, String order, String dataType, String defaultData) {
         return this.sortingService.sortExcelData(excelData, index, skipRowIndex, order, dataType, defaultData);
     }
+    public <T> String getAppVersion(Class<T> clazz) {
+        return AnnotationService.getAppVersion(clazz);
+    }
+    public <T> String getAppVersion(Class<T> clazz, String defaultData) {
+        return AnnotationService.getAppVersion(clazz, defaultData);
+    }
     public static void main(String[] args) {
-        System.out.println("Roles mapping app.");
+        System.out.println("Roles mapping app version: " + AnnotationService.getAppVersion(RolesMappingApp.class));
     }
 }

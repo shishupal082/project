@@ -3,6 +3,7 @@ package com.roles_mapping.config;
 public class BridgeConstant {
     public static final String SUCCESS = "SUCCESS";
     public static final String FAILURE = "FAILURE";
+    public static final String NULL_STR = "null";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String AND = "&";
