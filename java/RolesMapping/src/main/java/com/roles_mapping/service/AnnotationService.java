@@ -6,6 +6,9 @@ import com.roles_mapping.config.BridgeConstant;
 public class AnnotationService {
     public AnnotationService() {}
     public static <T> String getAppVersion(Class<T> clazz, String defaultData) {
+        if (clazz == null) {
+            return defaultData;
+        }
         // Check if the annotation is present
         if (clazz.isAnnotationPresent(version.class)) {
             // Retrieve the specific annotation
