@@ -9,7 +9,7 @@ import com.roles_mapping.service.SortingService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-@version(app_version="1.0.0")
+@version("1.0.0")
 public class RolesMappingApp {
     private final RoleService roleService;
     private final SortingService sortingService;

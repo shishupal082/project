@@ -10,7 +10,7 @@ public class AnnotationService {
         if (clazz.isAnnotationPresent(version.class)) {
             // Retrieve the specific annotation
             version annotation = clazz.getAnnotation(version.class);
-            return annotation.app_version();
+            return annotation.value();
         }
         return defaultData;
     }
