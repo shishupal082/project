@@ -207,7 +207,10 @@ DataHandler.extend({
         }
         return pageName + appComponentClassName;
     },
-    isContainerClassRequired: function() {
+    isContainerClassRequired: function(isDisplayOnlyDataTable) {
+        if ($S.isBooleanTrue(isDisplayOnlyDataTable)) {
+            return false;
+        }
         var addContainerClass = this.getAppData("addContainerClass", "");
         return !$S.isBooleanFalse(addContainerClass);
     },
@@ -777,7 +780,7 @@ DataHandler.extend({
         appDataCallback("renderFieldRow", renderFieldRow);
         appDataCallback("appHeading", appHeading);
         appDataCallback("list1Data", list1Data);
-        appDataCallback("addContainerClass", this.isContainerClassRequired());
+        appDataCallback("addContainerClass", this.isContainerClassRequired(isDisplayOnlyDataTable));
         appDataCallback("appComponentClassName", this.getAppComponentClassName());
         appDataCallback("currentList1Id", this.getPathParamsData("pid", ""));
         appDataCallback("filterOptions", filterOptions);
