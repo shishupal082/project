@@ -182,6 +182,33 @@ TemplateHandler.extend({
         }
         return $S.clone(Template["templateNotFound"]);
     },
+    isDisplayOnlyDataTable: function() {
+        var toggleClickStatus = DataHandler.getData("toggleClickStatus", false);
+        if (!$S.isBooleanTrue(toggleClickStatus)) {
+            return false;
+        }
+        var toggleButtonConfig = DataHandler.getAppData("toggleButtonConfig", []);
+        var pageName = DataHandler.getPathParamsData("pageName", "");
+        var implementToggleWithDataTableDisplay = false;
+        if ($S.isArray(toggleButtonConfig)) {
+            for(var i=0; i<toggleButtonConfig.length; i++) {
+                if (!$S.isObjectV2(toggleButtonConfig[i])) {
+                    continue;
+                }
+                if (!$S.isArrayV2(toggleButtonConfig[i]["pageName"])) {
+                    continue;
+                }
+                if (toggleButtonConfig[i]["pageName"].indexOf(pageName) >= 0) {
+                    implementToggleWithDataTableDisplay = toggleButtonConfig[i]["implementToggleWithDataTableDisplay"];
+                    break;
+                }
+            }
+        }
+        if ($S.isBooleanTrue(implementToggleWithDataTableDisplay)) {
+            return true;
+        }
+        return false;
+    },
     SetHeadingUsername: function(username) {
         var heading = this.getTemplate("heading");
         if ($S.isString(username)) {

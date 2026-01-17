@@ -25,7 +25,6 @@ var keys = [];
 keys.push("renderData");
 keys.push("renderFieldRow");
 
-
 keys.push("currentList3Id");
 keys.push("pageName");
 keys.push("pathParams");
@@ -63,6 +62,8 @@ keys.push("fieldsData");
 
 keys.push("tableDataLoadStatus");
 
+keys.push("toggleClickStatus");
+
 //TA page
 //Add Field Report Page
 keys.push("addentry.submitStatus");
@@ -80,6 +81,8 @@ CurrentData.setData("tableDataLoadStatus", "not-started");
 CurrentData.setData("addentry.submitStatus", "not-started");
 
 CurrentData.setData("firstTimeDataLoadStatus", "not-started");
+
+CurrentData.setData("toggleClickStatus", false);
 
 DataHandler = function(arg) {
     return new DataHandler.fn.init(arg);
@@ -508,6 +511,16 @@ DataHandler.extend({
             DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
         });
     },
+    OnToggleClick: function(appStateCallback, appDataCallback) {
+        var toggleClickStatus = DataHandler.getData("toggleClickStatus", false);
+        if ($S.isBooleanTrue(toggleClickStatus)) {
+            toggleClickStatus = false;
+        } else {
+            toggleClickStatus = true;
+        }
+        DataHandler.setData("toggleClickStatus", toggleClickStatus);
+        DataHandler.handleDataLoadComplete(appStateCallback, appDataCallback);
+    },
     OnList1Change: function(appStateCallback, appDataCallback, list1Id) {
         AppHandler.TrackDropdownChange("list1", list1Id);
         DataHandler.setData("metaDataLoadStatus", "not-started");
@@ -727,6 +740,7 @@ DataHandler.extend({
     },
     handleDataLoadComplete: function(appStateCallback, appDataCallback) {
         var dataLoadStatus = this.isDataLoadComplete();
+        var isDisplayOnlyDataTable = TemplateHandler.isDisplayOnlyDataTable();
         var renderData = null;
         var footerData = null;
         var appHeading = null;
@@ -734,8 +748,10 @@ DataHandler.extend({
         if (dataLoadStatus) {
             renderData = this.getRenderData();
             footerData = AppHandler.GetFooterData(this.getMetaData({}));
-            appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
             dateSelection = Config.dateSelection;
+        }
+        if (dataLoadStatus && !isDisplayOnlyDataTable) {
+            appHeading = TemplateHandler.GetHeadingField(this.getHeadingText());
         }
         var pageName1 = DataHandler.getData("pageName", "");
         var pageName2 = DataHandler.getPathParamsData("pageName", "");
@@ -744,7 +760,7 @@ DataHandler.extend({
         var list2Data = [];
         var list3Data = [];
         var filterOptions = [];
-        if (dataLoadStatus && [Config.home, Config.projectHome].indexOf(pageName1) < 0) {
+        if (dataLoadStatus && !isDisplayOnlyDataTable && [Config.home, Config.projectHome].indexOf(pageName1) < 0) {
             list1Data = this.getData("appControlData", []);
             list2Data = DataHandlerV3.getList2Data();
             list3Data = DataHandlerV3.getList3Data();

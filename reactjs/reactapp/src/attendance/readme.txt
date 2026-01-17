@@ -268,3 +268,12 @@ appControlDataTeam06: (enablePageGroup08)
 Reload attendance data after changing list3Data for page [update,entry,summary]
 It is controlled by "attendance.realodOnDateRangeChange": true/false
 Attendance data save as tableData
+
+17-01-2026
+----------------------------------
+"toggleButtonConfig": [
+    {
+        "pageName": ["dbview"],
+        "implementToggleWithDataTableDisplay": true
+    }
+]
