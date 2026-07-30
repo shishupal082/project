@@ -271,29 +271,45 @@ RemoveFilesController.extend({
         model.setCurrentConfigData(workId);
         model.changeStatus("FAILURE", []);
         Logger.log("currentConfigData: " + JSON.stringify(model.currentConfigData));
-        if (model.isValidTrashPath()) {
-            var sourceApi = model.getSourceApi();
-            if (sourceApi === null) {
-                Logger.log("Invalid source_api in configData.");
-                $S.callMethodV1(callback, model);
-            } else {
-                this._handleRequestV2(sourceApi, model, function() {
-                    $S.callMethodV1(callback, model);
-                });
-            }
-        } else {
-            Logger.log("Invalid trash path in configData: " + model.getTrashPath());
+        var sourceApi = model.getSourceApi();
+        if (sourceApi === null) {
+            Logger.log("Invalid source_api in configData.");
             $S.callMethodV1(callback, model);
+        } else {
+            this._handleRequestV2(sourceApi, model, function() {
+                $S.callMethodV1(callback, model);
+            });
         }
     },
     removeFileV2: function(workId, MODEL, resultData, callback) {
         var _self = this;
         var api = MODEL.getMoveFileApi();
-        var postData = {"filepath": "", "move_dir": MODEL.getTrashPath(), "role_id": "defaultRole"};
+        var postData = {"filepath": "", "move_dir": "", "create_move_dir": "true", "role_id": "defaultRole"};
         var requestId = $S.getRequestId();
         var uniqueRowId;
         var rowData;
         var request;
+        /**
+         * Result data pattern
+         * (0) Unique serial number
+         * (1) Parent path
+         * (2) File path
+         * (3) File name
+         * (4) File name wuthout extension
+         * (5) File extension
+         * (6) MD5 hash
+         * (7) Path type (FILE / FOLDER)
+         * (8) Size in kb
+         * (9) Size
+         * (10) Relative trash dir
+         * (11) MD5 count
+         * (12) MD5 serial no
+         * (13) MD5 serial sequence
+         * (14) Row id
+         * (15) View file link
+         * (16) Trash folder path
+         * (17) Is remove?
+         * */
         if ($S.isArray(resultData)) {
             for (var i=0; i<resultData.length; i++) {
                 rowData = resultData[i];
@@ -305,11 +321,13 @@ RemoveFilesController.extend({
                 if (runningIds.indexOf(uniqueRowId) >= 0) {
                     continue;
                 }
-                if (rowData.length < 3) {
+                if (rowData.length < 18) {
+                    Logger.log("Invalid row data: " + i + ":" + JSON.stringify(response));
                     continue;
                 }
                 runningIds.push(uniqueRowId);
                 postData["filepath"] = rowData[2];
+                postData["move_dir"] = rowData[16];
                 Logger.log(i + ": " + JSON.stringify(postData));
                 Post.api(api, postData, "", false, function(response) {
                     Logger.log(JSON.stringify(response));
