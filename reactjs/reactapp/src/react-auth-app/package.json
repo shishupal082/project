@@ -34,7 +34,7 @@
   "homepage": "https://github.com/bottega-code-school/js-builder",
   "dependencies": {
     "acorn": "^7.3.1",
-    "ajv": "^5.5.2",
+    "ajv": "^6.12.3",
     "autoprefixer": "^9.1.0",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
